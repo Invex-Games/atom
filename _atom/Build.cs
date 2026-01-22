@@ -68,6 +68,12 @@ internal partial class Build : BuildDefinition,
                         .WithGithubRunsOnMatrix(PlatformNames)
                         .WithMatrixDimensions(TestFrameworkMatrix)
                         .WithOptions(WorkflowOptions.SetupDotnet.Dotnet80X, WorkflowOptions.SetupDotnet.Dotnet90X),
+                    WorkflowTargets.CheckPrForBreakingChanges.WithGithubTokenInjection(new()
+                    {
+                        IdToken = GithubTokenPermission.Write,
+                        Contents = GithubTokenPermission.Write,
+                        PullRequests = GithubTokenPermission.Write,
+                    }),
                 ],
                 WorkflowTypes = [Github.WorkflowType],
                 Options = [WorkflowOptions.Github.TokenPermissions.NoneAll],
@@ -93,12 +99,6 @@ internal partial class Build : BuildDefinition,
                         .WithGithubRunsOnMatrix(PlatformNames)
                         .WithMatrixDimensions(TestFrameworkMatrix)
                         .WithOptions(WorkflowOptions.SetupDotnet.Dotnet80X, WorkflowOptions.SetupDotnet.Dotnet90X),
-                    WorkflowTargets.CheckPrForBreakingChanges.WithGithubTokenInjection(new()
-                    {
-                        IdToken = GithubTokenPermission.Write,
-                        Contents = GithubTokenPermission.Write,
-                        PullRequests = GithubTokenPermission.Write,
-                    }),
                     WorkflowTargets.PushToNuget,
                     WorkflowTargets
                         .PushToRelease
