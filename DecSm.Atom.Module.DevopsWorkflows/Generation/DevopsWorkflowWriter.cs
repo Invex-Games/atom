@@ -4,6 +4,7 @@ internal sealed partial class DevopsWorkflowWriter(
     IAtomFileSystem fileSystem,
     IBuildDefinition buildDefinition,
     BuildModel buildModel,
+    IWorkflowExpressionGenerator workflowExpressionGenerator,
     ILogger<DevopsWorkflowWriter> logger
 ) : WorkflowFileWriter<DevopsWorkflowType>(fileSystem, logger)
 {
@@ -263,19 +264,27 @@ internal sealed partial class DevopsWorkflowWriter(
                                  .Concat(workflow.Options)
                                  .OfType<DevopsPool>()
                                  .FirstOrDefault() ??
-                             DevopsPool.UbuntuLatest;
+                             WorkflowOptions.Devops.DevopsPool.Ubuntu_Latest;
 
             using (WriteSection("pool:"))
             {
-                if (poolOption.Hosted is { Length: > 0 })
-                    WriteLine($"vmImage: {poolOption.Hosted}");
-                else if (poolOption.Name is { Length: > 0 })
-                    WriteLine($"name: {poolOption.Name}");
+                var hostedImage = workflowExpressionGenerator.Write(poolOption.HostedImage);
+                var name = workflowExpressionGenerator.Write(poolOption.Name);
 
-                if (poolOption.Demands.Count > 0)
+                var demands = poolOption
+                    .Demands
+                    .Select(workflowExpressionGenerator.Write)
+                    .ToArray();
+
+                if (hostedImage is { Length: > 0 })
+                    WriteLine($"vmImage: {hostedImage}");
+                else if (name is { Length: > 0 })
+                    WriteLine($"name: {name}");
+
+                if (demands.Length > 0)
                     using (WriteSection("demands:"))
                     {
-                        foreach (var demand in poolOption.Demands)
+                        foreach (var demand in demands)
                             WriteLine($"- {demand}");
                     }
             }
@@ -288,7 +297,7 @@ internal sealed partial class DevopsWorkflowWriter(
 
             if (environmentOption is not null)
                 using (WriteSection("environment:"))
-                    WriteLine($"name: {environmentOption.Value}");
+                    WriteLine($"name: {workflowExpressionGenerator.Write(environmentOption.EnvironmentName)}");
 
             var variables = new Dictionary<string, string>();
 
@@ -344,16 +353,16 @@ internal sealed partial class DevopsWorkflowWriter(
                 .Options
                 .Concat(step.Options)
                 .OfType<DevopsCheckoutOption>()
-                .FirstOrDefault() is { Value: not null } checkoutOption)
+                .FirstOrDefault() is { } checkoutOption)
             using (WriteSection("- checkout: self"))
             {
                 WriteLine("fetchDepth: 0");
 
-                if (checkoutOption.Value.Lfs)
+                if (checkoutOption.Lfs)
                     WriteLine("lfs: true");
 
-                if (!string.IsNullOrWhiteSpace(checkoutOption.Value.Submodules))
-                    WriteLine($"submodules: {checkoutOption.Value.Submodules}");
+                if (!string.IsNullOrWhiteSpace(checkoutOption.Submodules))
+                    WriteLine($"submodules: {checkoutOption.Submodules}");
             }
         else
             using (WriteSection("- checkout: self"))
@@ -623,9 +632,10 @@ internal sealed partial class DevopsWorkflowWriter(
 
             if (requiredSecrets.Any(x => x.Param.IsSecret))
             {
-                foreach (var injectedSecret in workflow.Options.OfType<WorkflowSecretsSecretInjection>())
+                foreach (var injectedSecret in workflow.Options.OfType<WorkflowSecretInjectionForSecretProvider>())
                 {
-                    if (injectedSecret.Value is null)
+                    // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract - Better UX
+                    if (injectedSecret.SecretName is null)
                     {
                         logger.LogWarning(
                             "Workflow {WorkflowName} command {CommandName} has a secret injection with a null value",
@@ -635,15 +645,16 @@ internal sealed partial class DevopsWorkflowWriter(
                         continue;
                     }
 
-                    var paramDefinition = buildDefinition.ParamDefinitions.GetValueOrDefault(injectedSecret.Value);
+                    var paramDefinition = buildDefinition.ParamDefinitions.GetValueOrDefault(injectedSecret.SecretName);
 
                     if (paramDefinition is not null)
-                        env[paramDefinition.ArgName] = $"$({paramDefinition.ArgName.ToUpper().Replace('-', '_')})";
+                        env[paramDefinition.ArgName] = $"$({paramDefinition.EnvVarName})";
                 }
 
-                foreach (var injectedEnvVar in workflow.Options.OfType<WorkflowSecretsEnvironmentInjection>())
+                foreach (var injectedEnvVar in workflow.Options.OfType<WorkflowSecretsInjectionFromEnvironment>())
                 {
-                    if (injectedEnvVar.Value is null)
+                    // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract - Better UX
+                    if (injectedEnvVar.SecretName is null)
                     {
                         logger.LogWarning(
                             "Workflow {WorkflowName} command {CommandName} has a secret environment variable injection with a null value",
@@ -653,10 +664,10 @@ internal sealed partial class DevopsWorkflowWriter(
                         continue;
                     }
 
-                    var paramDefinition = buildDefinition.ParamDefinitions.GetValueOrDefault(injectedEnvVar.Value);
+                    var paramDefinition = buildDefinition.ParamDefinitions.GetValueOrDefault(injectedEnvVar.SecretName);
 
                     if (paramDefinition is not null)
-                        env[paramDefinition.ArgName] = $"$({paramDefinition.ArgName.ToUpper().Replace('-', '_')})";
+                        env[paramDefinition.ArgName] = $"$({paramDefinition.EnvVarName})";
                 }
             }
 
@@ -669,17 +680,16 @@ internal sealed partial class DevopsWorkflowWriter(
                     .FirstOrDefault(x => x.Value == requiredSecret.Param.Name);
 
                 if (injectedSecret is not null)
-                    env[requiredSecret.Param.ArgName] =
-                        $"$({requiredSecret.Param.ArgName.ToUpper().Replace('-', '_')})";
+                    env[requiredSecret.Param.ArgName] = $"$({requiredSecret.Param.EnvVarName})";
             }
 
-            var environmentInjections = workflow.Options.OfType<WorkflowEnvironmentInjection>();
+            var environmentInjections = workflow.Options.OfType<WorkflowParamInjectionFromEnvironment>();
             var paramInjections = workflow.Options.OfType<WorkflowParamInjection>();
             environmentInjections = environmentInjections.Where(e => paramInjections.All(p => p.Name != e.Value));
 
-            foreach (var environmentInjection in environmentInjections.Where(e => e.Value is not null))
+            foreach (var environmentInjection in environmentInjections)
             {
-                if (!buildDefinition.ParamDefinitions.TryGetValue(environmentInjection.Value!, out var paramDefinition))
+                if (!buildDefinition.ParamDefinitions.TryGetValue(environmentInjection.Value, out var paramDefinition))
                 {
                     logger.LogWarning(
                         "Workflow {WorkflowName} command {CommandName} has an injection for parameter {ParamName} that does not exist",
@@ -690,7 +700,7 @@ internal sealed partial class DevopsWorkflowWriter(
                     continue;
                 }
 
-                env[paramDefinition.ArgName] = $"$({paramDefinition.ArgName.ToUpper().Replace('-', '_')})";
+                env[paramDefinition.ArgName] = $"$({paramDefinition.EnvVarName})";
             }
 
             foreach (var paramInjection in paramInjections)
@@ -706,7 +716,7 @@ internal sealed partial class DevopsWorkflowWriter(
                     continue;
                 }
 
-                env[paramDefinition.ArgName] = paramInjection.Value;
+                env[paramDefinition.ArgName] = workflowExpressionGenerator.Write(paramInjection.InjectionExpression);
             }
 
             var validEnv = env
