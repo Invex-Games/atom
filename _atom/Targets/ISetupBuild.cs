@@ -4,7 +4,7 @@ using Repository = LibGit2Sharp.Repository;
 
 namespace Atom.Targets;
 
-public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper, ISetupBuildInfo
+internal interface ISetupBuild : ISetupBuildInfo, IGithubHelper, IPullRequestHelper
 {
     private static readonly string[] FilesToCheck =
     [
@@ -12,10 +12,10 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
         "DecSm.Atom/Paths/AtomFileSystem.cs",
     ];
 
-    Target CheckPrForBreakingChanges =>
+    new Target SetupBuildInfo =>
         t => t
+            .Extends<ISetupBuildInfo>(x => x.SetupBuildInfo, true)
             .RequiresParam(nameof(GithubToken), nameof(PullRequestNumber))
-            .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildVersion))
             .Executes(async cancellationToken =>
             {
                 var actor = Github.Variables.Actor;
