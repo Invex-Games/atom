@@ -331,10 +331,7 @@ internal sealed class ParamService(
             envVar = Environment.GetEnvironmentVariable(paramDefinition.ArgName);
 
         if (string.IsNullOrEmpty(envVar))
-            envVar = Environment.GetEnvironmentVariable(paramDefinition
-                .ArgName
-                .ToUpperInvariant()
-                .Replace('-', '_'));
+            envVar = Environment.GetEnvironmentVariable(paramDefinition.EnvVarName);
 
         if (string.IsNullOrEmpty(envVar))
             return (false, default);

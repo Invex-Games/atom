@@ -12,6 +12,15 @@ public sealed record ParamDefinition(string Name)
     /// </summary>
     public required string ArgName { get; init; }
 
+    [JsonIgnore]
+    public string EnvVarName =>
+        ArgName
+            .Trim()
+            .ToUpperInvariant()
+            .Replace('-', '_')
+            .Replace('.', '_')
+            .Replace(' ', '_');
+
     /// <summary>
     ///     Gets the description of the parameter, used for generating help text.
     /// </summary>
