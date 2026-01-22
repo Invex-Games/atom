@@ -1,3 +1,4 @@
+global using System.Diagnostics.CodeAnalysis;
 global using System.Text;
 global using System.Text.RegularExpressions;
 global using DecSm.Atom.Artifacts;
@@ -15,8 +16,10 @@ global using DecSm.Atom.Variables;
 global using DecSm.Atom.Workflows.Definition;
 global using DecSm.Atom.Workflows.Definition.Options;
 global using DecSm.Atom.Workflows.Definition.Triggers;
+global using DecSm.Atom.Workflows.Expressions;
 global using DecSm.Atom.Workflows.Model;
 global using DecSm.Atom.Workflows.Options;
+global using DecSm.Atom.Workflows.Options.Injections;
 global using DecSm.Atom.Workflows.Writer;
 global using JetBrains.Annotations;
 global using Microsoft.Extensions.DependencyInjection;

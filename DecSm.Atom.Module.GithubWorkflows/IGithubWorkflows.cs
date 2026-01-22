@@ -36,6 +36,10 @@ public partial interface IGithubWorkflows : IJobRunsOn
             typeof(GithubVariableProvider),
             ServiceLifetime.Singleton));
 
+        builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(IWorkflowExpressionWriter),
+            typeof(GithubExpressionWriter),
+            ServiceLifetime.Singleton));
+
         if (!Github.IsGithubActions)
             return;
 
