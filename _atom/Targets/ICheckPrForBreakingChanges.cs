@@ -10,7 +10,6 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
         "DecSm.Atom.Tests" /
         "ApiSurfaceTests" /
         "PublicApiSurfaceTests.VerifyPublicApiSurface.verified.txt",
-        FileSystem.AtomRootDirectory / "DecSm.Atom" / "Paths" / "AtomFileSystem.cs",
     ];
 
     Target CheckPrForBreakingChanges =>
@@ -56,19 +55,7 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
 
                            The major version has already been appropriately incremented to reflect these breaking changes.
                            """
-                        : $"""
-                           ⚠️ **Major Breaking Changes Detected - Action Required**
-
-                           This pull request contains major breaking changes to the public API surface, but the major version has not been bumped.
-
-                           **Current Version:** `{currentVersion}`
-                           **Latest Release:** `{latestReleaseInfo.Version}`
-
-                           **Files with breaking changes:**
-                           {string.Join("\n", breakingChanges.MajorChanges.Select(x => $"- `{x.Path}` ({x.DeletedLines.Count} lines removed)"))}
-
-                           **Required Action:** Please increment the major version number before merging this pull request.
-                           """
+                        : string.Empty
                     : breakingChanges.MinorChanges.Count > 0
                         ? currentVersion.Minor > latestReleaseInfo.Version.Minor
                             ? $"""
@@ -83,90 +70,16 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
 
                                The minor version has already been appropriately incremented to reflect these changes.
                                """
-                            : $"""
-                               ℹ️ **Minor Breaking Changes Detected - Action Required**
-
-                               This pull request contains minor breaking changes to the public API surface, but the minor version has not been bumped.
-
-                               **Current Version:** `{currentVersion}`
-                               **Latest Release:** `{latestReleaseInfo.Version}`
-
-                               **Files with breaking changes:**
-                               {string.Join("\n", breakingChanges.MinorChanges.Select(x => $"- `{x.Path}` ({x.AddedLines.Count} lines added)"))}
-
-                               **Required Action:** Please increment the minor version number before merging this pull request.
-                               """
-                        : """
-                          ✅ **No Breaking Changes Detected**
-
-                          This pull request does not contain any breaking changes to the public API surface.
-                          Safe to merge without version bump considerations.
-                          """;
-
-                var hasInvalidChanges = breakingChanges switch
-                {
-                    { MajorChanges.Count: > 0 } when currentVersion.Major <= latestReleaseInfo.Version.Major => true,
-                    { MinorChanges.Count: > 0 } when currentVersion.Minor <= latestReleaseInfo.Version.Minor => true,
-                    _ => false,
-                };
-
-                if (hasInvalidChanges)
-                    await AddPrComment(owner, body, cancellationToken);
+                            : string.Empty
+                        : string.Empty;
 
                 await AddCheckStatus(owner,
-                    hasInvalidChanges
+                    body.Length > 0
                         ? "failure"
                         : "success",
                     body,
                     cancellationToken);
             });
-
-    private async Task AddPrComment(string owner, string body, CancellationToken cancellationToken)
-    {
-        var repository = Github.Variables
-            .Repository
-            .Split('/')
-            .Last();
-
-        Logger.LogDebug("Target repository: {Repository}", repository);
-
-        var productHeader = new ProductHeaderValue("Atom");
-        var connection = new Connection(productHeader, new InMemoryCredentialStore(GithubToken));
-
-        var prQuery = new Query()
-            .Repository(repository, owner)
-            .PullRequest(PullRequestNumber)
-            .Select(p => new
-            {
-                p.Id,
-                p.HeadRefOid,
-            })
-            .Compile();
-
-        var prQueryResult = await connection.Run(prQuery, cancellationToken: cancellationToken);
-
-        if (prQueryResult.Id.Value is null)
-            throw new StepFailedException("Could not find pull request.");
-
-        var addCommentMutation = new Mutation()
-            .AddComment(new AddCommentInput
-            {
-                SubjectId = prQueryResult.Id,
-                Body = body,
-            })
-            .Select(x => new
-            {
-                x.ClientMutationId,
-            })
-            .Compile();
-
-        await connection.Run(addCommentMutation, cancellationToken: cancellationToken);
-
-        var addCommentResult = await connection.Run(addCommentMutation, cancellationToken: cancellationToken);
-
-        if (addCommentResult is null)
-            throw new StepFailedException("Could not add comment.");
-    }
 
     private async Task AddCheckStatus(
         string owner,
