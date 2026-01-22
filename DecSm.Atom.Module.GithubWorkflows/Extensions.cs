@@ -19,17 +19,18 @@ public static class Extensions
         /// <returns>The modified <see cref="WorkflowTargetDefinition" /> for chaining.</returns>
         /// <remarks>
         ///     This method sets up a matrix dimension for the `JobRunsOn` parameter, allowing the job
-        ///     to execute on multiple runner environments. It also adds the <see cref="GithubRunsOn.SetByMatrix" />
+        ///     to execute on multiple runner environments. It also adds the
+        ///     <see cref="WorkflowOptionsExtensions.GithubRunsOnOptions.SetByMatrix" />
         ///     option to indicate that the runner is determined by the matrix.
         /// </remarks>
         [PublicAPI]
-        public WorkflowTargetDefinition WithGithubRunnerMatrix(string[] labels) =>
+        public WorkflowTargetDefinition WithGithubRunsOnMatrix(string[] labels) =>
             workflowTargetDefinition
                 .WithMatrixDimensions(new MatrixDimension(nameof(IJobRunsOn.JobRunsOn))
                 {
                     Values = labels,
                 })
-                .WithOptions(GithubRunsOn.SetByMatrix);
+                .WithOptions(WorkflowOptions.Github.RunsOn.SetByMatrix);
 
         /// <summary>
         ///     Configures the workflow target to inject the GitHub token as a secret.
@@ -41,12 +42,10 @@ public static class Extensions
         /// </remarks>
         [PublicAPI]
         public WorkflowTargetDefinition WithGithubTokenInjection(GithubTokenPermissionsOption? permissions = null) =>
-            permissions is not null
-                ? workflowTargetDefinition.WithOptions(
-                    WorkflowSecretInjection.Create(nameof(IGithubHelper.GithubToken)),
-                    permissions)
-                : workflowTargetDefinition.WithOptions(
-                    WorkflowSecretInjection.Create(nameof(IGithubHelper.GithubToken)));
+            permissions is null
+                ? workflowTargetDefinition.WithOptions(WorkflowOptions.Inject.Secret(nameof(IGithubHelper.GithubToken)))
+                : workflowTargetDefinition.WithOptions(WorkflowOptions.Inject.Secret(nameof(IGithubHelper.GithubToken)),
+                    permissions);
 
         /// <summary>
         ///     Configures the workflow target to set specific permissions for the injected GitHub token.
