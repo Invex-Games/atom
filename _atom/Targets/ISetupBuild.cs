@@ -163,9 +163,6 @@ internal interface ISetupBuild : ISetupBuildInfo, IGithubHelper, IPullRequestHel
                           Safe to merge without version bump considerations.
                           """;
 
-                if (suspiciousChanges.Count is not 0)
-                    return;
-
                 var addCommentMutation = new Mutation()
                     .AddComment(new AddCommentInput
                     {
@@ -184,7 +181,6 @@ internal interface ISetupBuild : ISetupBuildInfo, IGithubHelper, IPullRequestHel
 
                 if (addCommentResult is null)
                     throw new StepFailedException("Could not add comment.");
-                // Add a comment describing that there are no breaking changes
             });
 
     private (Tag Tag, SemVer Version)? FindLatestReleaseInfo(Repository repo, SemVer currentVersion)
