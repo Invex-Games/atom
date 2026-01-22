@@ -17,7 +17,7 @@ public partial class GithubCustomStepBuild : MinimalBuildDefinition, IGithubWork
     [
         new("github-custom-step-workflow")
         {
-            Triggers = [ManualTrigger.Empty],
+            Triggers = [WorkflowTriggers.Manual],
             Targets = [WorkflowTargets.CustomStepTarget],
             Options =
             [

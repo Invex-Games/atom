@@ -1,6 +1,6 @@
 namespace Atom.Targets;
 
-public interface IApproveDependabotPr : IGithubHelper
+public interface IApproveDependabotPr : IGithubHelper, IPullRequestHelper
 {
     const string DependabotActorName = "dependabot[bot]";
 

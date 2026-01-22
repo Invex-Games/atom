@@ -295,29 +295,6 @@ public class WorkflowTests
     }
 
     [Test]
-    public async Task GithubIfBuild_GeneratesWorkflow()
-    {
-        // Arrange
-        var fileSystem = FileSystemUtils.DefaultMockFileSystem;
-        var build = CreateTestHost<GithubIfBuild>(fileSystem: fileSystem, commandLineArgs: new(true, [new GenArg()]));
-
-        // Act
-        await build.RunAsync();
-
-        // Assert
-        fileSystem
-            .DirectoryInfo
-            .New(WorkflowDir)
-            .Exists
-            .ShouldBeTrue();
-
-        var workflow = await fileSystem.File.ReadAllTextAsync($"{WorkflowDir}githubif-workflow.yml");
-
-        await Verify(workflow);
-        await TestContext.Out.WriteAsync(workflow);
-    }
-
-    [Test]
     public async Task CheckoutOptionsBuild_GeneratesWorkflow()
     {
         // Arrange

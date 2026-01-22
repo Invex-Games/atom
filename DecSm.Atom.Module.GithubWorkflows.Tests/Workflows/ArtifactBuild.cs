@@ -69,7 +69,7 @@ public partial class CustomArtifactBuild : MinimalBuildDefinition,
                     }),
             ],
             WorkflowTypes = [new GithubWorkflowType()],
-            Options = [UseCustomArtifactProvider.Enabled],
+            Options = [WorkflowOptions.Artifacts.UseCustomProvider],
         },
     ];
 }

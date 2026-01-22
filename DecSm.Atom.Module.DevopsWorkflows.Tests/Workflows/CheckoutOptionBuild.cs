@@ -7,11 +7,11 @@ public partial class CheckoutOptionBuild : MinimalBuildDefinition, IDevopsWorkfl
     [
         new("checkoutoption-workflow")
         {
-            Triggers = [ManualTrigger.Empty],
+            Triggers = [WorkflowTriggers.Manual],
             Targets =
             [
                 WorkflowTargets.CheckoutOptionTarget.WithOptions(
-                    DevopsCheckoutOption.Create(new(true, "recursive"))),
+                    WorkflowOptions.Devops.ConfigureCheckout(true, "recursive")),
             ],
             WorkflowTypes = [Devops.WorkflowType],
         },

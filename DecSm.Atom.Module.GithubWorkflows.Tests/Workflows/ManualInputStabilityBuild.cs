@@ -13,13 +13,13 @@ public partial class ManualInputStabilityBuild : BuildDefinition, IGithubWorkflo
                 {
                     Inputs =
                     [
-                        ManualStringInput.ForParam(Params.StringParamWithoutDefault),
-                        ManualStringInput.ForParam(Params.StringParamWithDefault),
-                        ManualBoolInput.ForParam(Params.BoolParamWithoutDefault),
-                        ManualBoolInput.ForParam(Params.BoolParamWithDefault),
-                        ManualChoiceInput.ForParam(Params.ChoiceParamWithoutDefault,
+                        ManualStringInput.ForParam(WorkflowParams.StringParamWithoutDefault),
+                        ManualStringInput.ForParam(WorkflowParams.StringParamWithDefault),
+                        ManualBoolInput.ForParam(WorkflowParams.BoolParamWithoutDefault),
+                        ManualBoolInput.ForParam(WorkflowParams.BoolParamWithDefault),
+                        ManualChoiceInput.ForParam(WorkflowParams.ChoiceParamWithoutDefault,
                             ["choice 1", "choice 2", "choice 3"]),
-                        ManualChoiceInput.ForParam(Params.ChoiceParamWithDefault,
+                        ManualChoiceInput.ForParam(WorkflowParams.ChoiceParamWithDefault,
                             ["choice 1", "choice 2", "choice 3"]),
                     ],
                 },
