@@ -161,3 +161,4 @@ jobs:
           azure-vault-tenant-id: ${{ vars.AZURE_VAULT_TENANT_ID }}
           azure-vault-app-id: ${{ vars.AZURE_VAULT_APP_ID }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ github.event.number }}
