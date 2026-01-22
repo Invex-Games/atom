@@ -29,57 +29,6 @@ public sealed record GithubTokenPermissionsOption : IWorkflowOption
 
     public GithubTokenPermission? Statuses { get; init; }
 
-    public static GithubTokenPermissionsOption NoneAll { get; } = new()
-    {
-        Actions = GithubTokenPermission.None,
-        Attestations = GithubTokenPermission.None,
-        Checks = GithubTokenPermission.None,
-        Contents = GithubTokenPermission.None,
-        Deployments = GithubTokenPermission.None,
-        IdToken = GithubTokenPermission.None,
-        Issues = GithubTokenPermission.None,
-        Discussions = GithubTokenPermission.None,
-        Packages = GithubTokenPermission.None,
-        Pages = GithubTokenPermission.None,
-        PullRequests = GithubTokenPermission.None,
-        SecurityEvents = GithubTokenPermission.None,
-        Statuses = GithubTokenPermission.None,
-    };
-
-    public static GithubTokenPermissionsOption ReadAll { get; } = new()
-    {
-        Actions = GithubTokenPermission.Read,
-        Attestations = GithubTokenPermission.Read,
-        Checks = GithubTokenPermission.Read,
-        Contents = GithubTokenPermission.Read,
-        Deployments = GithubTokenPermission.Read,
-        IdToken = GithubTokenPermission.Read,
-        Issues = GithubTokenPermission.Read,
-        Discussions = GithubTokenPermission.Read,
-        Packages = GithubTokenPermission.Read,
-        Pages = GithubTokenPermission.Read,
-        PullRequests = GithubTokenPermission.Read,
-        SecurityEvents = GithubTokenPermission.Read,
-        Statuses = GithubTokenPermission.Read,
-    };
-
-    public static GithubTokenPermissionsOption WriteAll { get; } = new()
-    {
-        Actions = GithubTokenPermission.Write,
-        Attestations = GithubTokenPermission.Write,
-        Checks = GithubTokenPermission.Write,
-        Contents = GithubTokenPermission.Write,
-        Deployments = GithubTokenPermission.Write,
-        IdToken = GithubTokenPermission.Write,
-        Issues = GithubTokenPermission.Write,
-        Discussions = GithubTokenPermission.Write,
-        Packages = GithubTokenPermission.Write,
-        Pages = GithubTokenPermission.Write,
-        PullRequests = GithubTokenPermission.Write,
-        SecurityEvents = GithubTokenPermission.Write,
-        Statuses = GithubTokenPermission.Write,
-    };
-
     public List<(string, string)> GetStrings =>
         new List<(string, string?)>
             {

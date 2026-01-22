@@ -5,8 +5,8 @@
 /// </summary>
 /// <typeparam name="TSelf">The concrete type implementing this toggle option.</typeparam>
 /// <remarks>
-///     This class provides a foundation for creating boolean workflow options with predefined <see cref="Enabled" />
-///     and <see cref="Disabled" /> states, along with a helper method for checking the enabled state.
+///     This class provides a foundation for creating boolean workflow options with a helper method for checking the
+///     enabled state.
 /// </remarks>
 /// <example>
 ///     <code>
@@ -17,24 +17,10 @@
 ///     </code>
 /// </example>
 [PublicAPI]
-public abstract record ToggleWorkflowOption<TSelf> : WorkflowOption<bool, TSelf>
-    where TSelf : WorkflowOption<bool, TSelf>, new()
+public abstract record ToggleWorkflowOption<TSelf> : IWorkflowOption
+    where TSelf : ToggleWorkflowOption<TSelf>
 {
-    /// <summary>
-    ///     Gets a predefined instance representing the enabled state (<c>true</c>).
-    /// </summary>
-    public static readonly TSelf Enabled = new()
-    {
-        Value = true,
-    };
-
-    /// <summary>
-    ///     Gets a predefined instance representing the disabled state (<c>false</c>).
-    /// </summary>
-    public static readonly TSelf Disabled = new()
-    {
-        Value = false,
-    };
+    public bool Value { get; init; }
 
     /// <summary>
     ///     Determines whether this toggle option is enabled within a collection of workflow options.

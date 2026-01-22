@@ -1,11 +1,11 @@
-﻿namespace DecSm.Atom.Workflows.Definition.Options;
+﻿namespace DecSm.Atom.Workflows.Options.Injections;
 
 /// <summary>
 ///     Represents a workflow option that injects an environment variable into the workflow execution context.
 /// </summary>
 /// <remarks>
 ///     This allows workflows to access custom environment variables that are not part of the default runtime environment.
-///     For sensitive values, consider using <see cref="WorkflowSecretsEnvironmentInjection" />.
+///     For sensitive values, consider using <see cref="WorkflowSecretsInjectionFromEnvironment" />.
 /// </remarks>
 /// <example>
 ///     <code>
@@ -16,10 +16,10 @@
 ///     </code>
 /// </example>
 [PublicAPI]
-public sealed record WorkflowEnvironmentInjection : WorkflowOption<string, WorkflowEnvironmentInjection>
+public sealed record WorkflowParamInjectionFromEnvironment(string Value) : IWorkflowOption
 {
     /// <summary>
     ///     Gets a value indicating that multiple instances of this option are allowed.
     /// </summary>
-    public override bool AllowMultiple => true;
+    public bool AllowMultiple => true;
 }

@@ -1,10 +1,10 @@
-﻿namespace DecSm.Atom.Workflows.Definition.Options;
+﻿namespace DecSm.Atom.Workflows.Options.Injections;
 
 /// <summary>
 ///     Represents a workflow option that injects a parameter value into the workflow execution context.
 /// </summary>
 /// <param name="Name">The name of the parameter to inject.</param>
-/// <param name="Value">The value to inject for the specified parameter.</param>
+/// <param name="InjectionExpression">The value to inject for the specified parameter.</param>
 /// <remarks>
 ///     This allows workflows to set specific parameter values that take precedence over other sources
 ///     like command-line arguments or environment variables.
@@ -18,7 +18,7 @@
 ///     </code>
 /// </example>
 [PublicAPI]
-public sealed record WorkflowParamInjection(string Name, string Value) : IWorkflowOption
+public sealed record WorkflowParamInjection(string Name, WorkflowExpression InjectionExpression) : IWorkflowOption
 {
     /// <summary>
     ///     Gets a value indicating that multiple instances of this option are allowed.

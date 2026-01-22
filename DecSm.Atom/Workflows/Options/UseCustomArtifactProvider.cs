@@ -1,11 +1,11 @@
-﻿namespace DecSm.Atom.Artifacts;
+﻿namespace DecSm.Atom.Workflows.Options;
 
 /// <summary>
 ///     A workflow option that enables a custom <see cref="IArtifactProvider" /> for artifact management.
 /// </summary>
 /// <remarks>
 ///     <para>
-///         When <see cref="ToggleWorkflowOption{TSelf}.Enabled" />, the workflow will use the
+///         When <see cref="ToggleWorkflowOption{TSelf}.Value" />, the workflow will use the
 ///         <see cref="IStoreArtifact.StoreArtifact" /> and <see cref="IRetrieveArtifact.RetrieveArtifact" /> targets,
 ///         which delegate to the registered <see cref="IArtifactProvider" /> implementation.
 ///     </para>
