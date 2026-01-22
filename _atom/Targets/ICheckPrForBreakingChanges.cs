@@ -91,28 +91,60 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
                 if (prQueryResult.Id.Value is null)
                     throw new StepFailedException("Could not find pull request.");
 
-                var addCommentMutation = new Mutation()
-                    .AddComment(new AddCommentInput
+                if (breakingChanges.Count is 0)
+                {
+                    // Add a comment describing that there are no breaking changes
+                    var addCommentMutation = new Mutation()
+                        .AddComment(new AddCommentInput
+                        {
+                            SubjectId = prQueryResult.Id,
+                            Body = """
+                                   ✅ **No Breaking Changes Detected**
+
+                                   This pull request does not contain any breaking changes to the public API surface.
+                                   Safe to merge without version bump considerations.
+                                   """,
+                        })
+                        .Select(x => new
+                        {
+                            x.ClientMutationId,
+                        })
+                        .Compile();
+
+                    await connection.Run(addCommentMutation, cancellationToken: cancellationToken);
+
+                    var addCommentResult =
+                        await connection.Run(addCommentMutation, cancellationToken: cancellationToken);
+
+                    if (addCommentResult is null)
+                        throw new StepFailedException("Could not add comment.");
+
+                    return;
+                }
+
+                // Add a review comment that must be acknowledged, describing that there are breaking changes
+                var breakingChangesDescription = string.Join("\n",
+                    breakingChanges.Select(x => $"- `{x.Path}`: {x.DeletedLines.Count} line(s) removed or modified"));
+
+                var addPullRequestReviewThread = new Mutation()
+                    .AddPullRequestReview(new AddPullRequestReviewInput
                     {
-                        SubjectId = prQueryResult.Id,
-                        Body = breakingChanges.Any()
-                            ? $"""
-                               ⚠️ **BREAKING CHANGES DETECTED!** ⚠️
+                        PullRequestId = prQueryResult.Id,
+                        Body = $"""
+                                ⚠️ **Breaking Changes Detected**
 
-                               This pull request contains breaking changes to the public API surface.
-                               Found {breakingChanges.Count} file(s) with modifications that may affect consumers.
+                                This pull request contains breaking changes to the public API surface.
+                                Please review the following changes carefully:
 
-                               **Action Required:** Please review these changes carefully before merging. Consider:
-                               - Updating major version number
-                               - Documenting migration path
-                               - Notifying consumers of breaking changes
-                               """
-                            : """
-                              ✅ **No Breaking Changes Detected**
+                                {breakingChangesDescription}
 
-                              This pull request does not contain any breaking changes to the public API surface.
-                              Safe to merge without version bump considerations.
-                              """,
+                                **Action Required:**
+                                - Ensure the version bump is appropriate (major version for breaking changes)
+                                - Update migration documentation if necessary
+                                - Verify all consumers can handle these changes
+                                """,
+                        Event = PullRequestReviewEvent.RequestChanges,
+                        Threads = null,
                     })
                     .Select(x => new
                     {
@@ -120,13 +152,13 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
                     })
                     .Compile();
 
-                await connection.Run(addCommentMutation, cancellationToken: cancellationToken);
+                await connection.Run(addPullRequestReviewThread, cancellationToken: cancellationToken);
 
-                var enableAutoMergeResult =
-                    await connection.Run(addCommentMutation, cancellationToken: cancellationToken);
+                var addPullRequestReviewThreadResult =
+                    await connection.Run(addPullRequestReviewThread, cancellationToken: cancellationToken);
 
-                if (enableAutoMergeResult is null)
-                    throw new StepFailedException("Could not add comment.");
+                if (addPullRequestReviewThreadResult is null)
+                    throw new StepFailedException("Could not add review comment.");
             });
 
     IReadOnlyList<(RootedPath Path, IReadOnlyList<string> DeletedLines)> ContainsChangedOrDeletedLines(
