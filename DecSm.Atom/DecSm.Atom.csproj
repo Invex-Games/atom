@@ -38,4 +38,19 @@
     <None Include="DecSm.Atom.targets" Pack="true" PackagePath="buildTransitive/" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Workflows\Expressions\WorkflowExpression.Values.cs">
+      <DependentUpon>WorkflowExpression.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Workflows\Expressions\WorkflowExpression.Functions.cs">
+      <DependentUpon>WorkflowExpression.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Workflows\Expressions\WorkflowExpression.LogicOperators.cs">
+      <DependentUpon>WorkflowExpression.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Workflows\Expressions\WorkflowExpression.WorkflowRun.cs">
+      <DependentUpon>WorkflowExpression.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>

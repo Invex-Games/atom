@@ -97,12 +97,14 @@ public static class HostExtensions
             .AddSingletonWithStaticAccessor<IFileSystem>((x, _) => x.GetRequiredService<IAtomFileSystem>());
 
         builder.Services.AddSingleton<BuildExecutor>();
-        builder.Services.AddSingleton<WorkflowGenerator>();
         builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
         builder.Services.AddSingleton<IOutcomeReportWriter, ConsoleOutcomeReportWriter>();
-        builder.Services.AddSingleton<IWorkflowVariableProvider, AtomWorkflowVariableProvider>();
 
+        builder.Services.AddSingleton<WorkflowGenerator>();
+        builder.Services.AddSingleton<IWorkflowExpressionGenerator, WorkflowExpressionGenerator>();
+        builder.Services.AddSingleton<IWorkflowVariableProvider, AtomWorkflowVariableProvider>();
         builder.Services.TryAddSingleton<IWorkflowVariableService, WorkflowVariableService>();
+
         builder.Services.TryAddSingleton<IBuildTimestampProvider, DefaultBuildTimestampProvider>();
         builder.Services.TryAddSingleton<IBuildVersionProvider, DefaultBuildVersionProvider>();
         builder.Services.TryAddSingleton<IHelpService, HelpService>();
