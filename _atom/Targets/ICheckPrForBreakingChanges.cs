@@ -103,17 +103,20 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
                           Safe to merge without version bump considerations.
                           """;
 
-                await AddPrComment(owner, body, cancellationToken);
+                var hasInvalidChanges = breakingChanges switch
+                {
+                    { MajorChanges.Count: > 0 } when currentVersion.Major <= latestReleaseInfo.Version.Major => true,
+                    { MinorChanges.Count: > 0 } when currentVersion.Minor <= latestReleaseInfo.Version.Minor => true,
+                    _ => false,
+                };
+
+                if (hasInvalidChanges)
+                    await AddPrComment(owner, body, cancellationToken);
 
                 await AddCheckStatus(owner,
-                    breakingChanges switch
-                    {
-                        { MajorChanges.Count: > 0 } when currentVersion.Major <= latestReleaseInfo.Version.Major =>
-                            "failure",
-                        { MinorChanges.Count: > 0 } when currentVersion.Minor <= latestReleaseInfo.Version.Minor =>
-                            "failure",
-                        _ => "success",
-                    },
+                    hasInvalidChanges
+                        ? "failure"
+                        : "success",
                     body,
                     cancellationToken);
             });
@@ -194,20 +197,34 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
         if (repoQueryResult.Id.Value is null)
             throw new StepFailedException("Could not find repository.");
 
+        var prQuery = new Query()
+            .Repository(repository, owner)
+            .PullRequest(PullRequestNumber)
+            .Select(p => new
+            {
+                p.Id,
+                p.HeadRefOid,
+            })
+            .Compile();
+
+        var prQueryResult = await connection.Run(prQuery, cancellationToken: cancellationToken);
+
+        if (prQueryResult.Id.Value is null)
+            throw new StepFailedException("Could not find pull request.");
+
         using var repo = new Repository(FileSystem.AtomRootDirectory);
-        var currentCommitHash = repo.Head.Tip.Sha;
 
         var checkRunMutation = new Mutation()
             .CreateCheckRun(new CreateCheckRunInput
             {
                 RepositoryId = repoQueryResult.Id,
                 Name = "API Surface Breaking Changes Check",
-                HeadSha = currentCommitHash,
+                HeadSha = prQueryResult.HeadRefOid,
                 Status = RequestableCheckStatusState.Completed,
                 Conclusion = status == "success"
                     ? CheckConclusionState.Success
                     : CheckConclusionState.Failure,
-                CompletedAt = null,
+                CompletedAt = DateTimeOffset.UtcNow,
                 Output = new()
                 {
                     Title = "Breaking Changes Analysis",
