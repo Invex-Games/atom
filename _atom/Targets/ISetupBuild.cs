@@ -13,14 +13,6 @@ internal interface ISetupBuild : ISetupBuildInfo, IGithubHelper, IPullRequestHel
         "DecSm.Atom/Paths/AtomFileSystem.cs",
     ];
 
-    private enum VersionBump
-    {
-        Major,
-        Minor,
-        Patch,
-        None,
-    }
-
     new Target SetupBuildInfo =>
         t => t
             .Extends<ISetupBuildInfo>(x => x.SetupBuildInfo, true)
@@ -30,32 +22,50 @@ internal interface ISetupBuild : ISetupBuildInfo, IGithubHelper, IPullRequestHel
                 var targetFiles = FormatTargetFiles();
 
                 var owner = Github.Variables.RepositoryOwner;
+                Logger.LogDebug("Target repository owner: {Owner}", owner);
 
                 var repository = Github.Variables
                     .Repository
                     .Split('/')
                     .Last();
 
+                Logger.LogDebug("Target repository: {Repository}", repository);
+
                 using var repo = new Repository(FileSystem.AtomRootDirectory);
+
                 var currentCommitHash = repo.Head.Tip.Sha;
+                Logger.LogDebug("Current commit hash: {CommitHash}", currentCommitHash);
 
                 var currentVersion = BuildVersion;
+                Logger.LogDebug("Current version: {Version}", currentVersion);
+
                 var latestReleaseInfo = FindLatestReleaseInfo(repo, currentVersion);
+                Logger.LogDebug("Latest release info: {ReleaseInfo}", latestReleaseInfo);
 
                 if (latestReleaseInfo is null)
                     return;
 
                 var releaseCommitHash = latestReleaseInfo.Value.Tag.Target.Sha!;
+                Logger.LogDebug("Release commit hash: {CommitHash}", releaseCommitHash);
 
                 var oldCommit = repo.Lookup<Commit>(releaseCommitHash);
                 var newCommit = repo.Lookup<Commit>(currentCommitHash);
                 var changes = repo.Diff.Compare<Patch>(oldCommit.Tree, newCommit.Tree);
 
-                IReadOnlyList<(RootedPath Path, List<Line> AddedLines, List<Line> DeletedLines)> suspiciousChanges =
-                    changes
-                        .Where(x => targetFiles.Contains(x.Path) && x.LinesDeleted > 0)
-                        .Select(x => (FileSystem.AtomRootDirectory / x.Path, x.AddedLines, x.DeletedLines))
-                        .ToList();
+                Logger.LogDebug("Changes: {@Changes}",
+                    new
+                    {
+                        changes.Content,
+                        changes.LinesDeleted,
+                        changes.LinesAdded,
+                    });
+
+                IReadOnlyList<Change> suspiciousChanges = changes
+                    .Where(x => targetFiles.Contains(x.Path) && x.LinesDeleted > 0)
+                    .Select(x => new Change(FileSystem.AtomRootDirectory / x.Path, x.AddedLines, x.DeletedLines))
+                    .ToList();
+
+                Logger.LogDebug("Suspicious changes: {@SuspiciousChanges}", suspiciousChanges);
 
                 var majorChanges = suspiciousChanges
                     .Where(x => x.DeletedLines.Count > 0 &&
@@ -65,15 +75,14 @@ internal interface ISetupBuild : ISetupBuildInfo, IGithubHelper, IPullRequestHel
                                     .All(deletedLine => !deletedLine.StartsWith(',') && !deletedLine.EndsWith(',')))
                     .ToList();
 
+                Logger.LogDebug("Major changes: {@MajorChanges}", majorChanges);
+
                 var minorChanges = suspiciousChanges
                     .Except(majorChanges)
                     .Where(x => x.AddedLines.Count > 0)
                     .ToList();
 
-                foreach (var breakingChange in suspiciousChanges)
-                    Logger.LogWarning("[WARNING] {ChangePath} has {ChangeLinesDeleted} lines removed or modified.",
-                        breakingChange.Path,
-                        breakingChange.DeletedLines);
+                Logger.LogDebug("Minor changes: {@MinorChanges}", minorChanges);
 
                 var productHeader = new ProductHeaderValue("Atom");
                 var connection = new Connection(productHeader, new InMemoryCredentialStore(GithubToken));
@@ -226,3 +235,5 @@ internal interface ISetupBuild : ISetupBuildInfo, IGithubHelper, IPullRequestHel
         return targetFiles;
     }
 }
+
+internal sealed record Change(RootedPath Path, List<Line> AddedLines, List<Line> DeletedLines);
