@@ -164,7 +164,8 @@ internal interface ISetupBuild : ISetupBuildInfo, IGithubHelper, IPullRequestHel
                                 var path = FileSystem
                                     .Path
                                     .GetRelativePath(FileSystem.AtomRootDirectory, x.Path)
-                                    .Replace("\\", "/");
+                                    .Replace("\\", "/")
+                                    .Trim();
 
                                 Logger.LogInformation("Requesting changes for breaking change in {Path}: {Join}...",
                                     path,
@@ -172,7 +173,7 @@ internal interface ISetupBuild : ISetupBuildInfo, IGithubHelper, IPullRequestHel
 
                                 return new DraftPullRequestReviewThread
                                 {
-                                    Path = path,
+                                    Path = $"'{path}'",
                                     Body = $"""
                                             ⚠️ Breaking changes detected in this file:
 
