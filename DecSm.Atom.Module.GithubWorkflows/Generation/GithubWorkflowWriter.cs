@@ -791,6 +791,7 @@ internal sealed class GithubWorkflowWriter(
                 .Options
                 .Concat(workflowStep.Options)
                 .OfType<WorkflowParamInjection>();
+
             environmentInjections = environmentInjections.Where(e => paramInjections.All(p => p.Name != e.Value));
 
             foreach (var environmentInjection in environmentInjections)
