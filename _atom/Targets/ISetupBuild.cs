@@ -159,19 +159,28 @@ internal interface ISetupBuild : ISetupBuildInfo, IGithubHelper, IPullRequestHel
                                     - Verify all consumers can handle these changes
                                     """,
                             Event = PullRequestReviewEvent.RequestChanges,
-                            Threads = breakingChanges.Select(x => new DraftPullRequestReviewThread
+                            Threads = breakingChanges.Select(x =>
                             {
-                                Path = FileSystem
+                                var path = FileSystem
                                     .Path
                                     .GetRelativePath(FileSystem.AtomRootDirectory, x.Path)
-                                    .Replace("\\", "/"),
-                                Body = $"""
-                                        ⚠️ Breaking changes detected in this file:
+                                    .Replace("\\", "/");
 
-                                        {string.Join("\n", x.DeletedLines.Select((line, index) => $"Line {index + 1}: {line.TrimEnd()}"))}
+                                Logger.LogInformation("Requesting changes for breaking change in {Path}: {Join}...",
+                                    path,
+                                    string.Join(", ", x.DeletedLines));
 
-                                        These lines were removed or modified, which may break existing consumers.
-                                        """,
+                                return new DraftPullRequestReviewThread
+                                {
+                                    Path = path,
+                                    Body = $"""
+                                            ⚠️ Breaking changes detected in this file:
+
+                                            {string.Join("\n", x.DeletedLines.Select((line, index) => $"Line {index + 1}: {line.TrimEnd()}"))}
+
+                                            These lines were removed or modified, which may break existing consumers.
+                                            """,
+                                };
                             }),
                         })
                         .Select(x => new
