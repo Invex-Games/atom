@@ -5,7 +5,8 @@ internal sealed class GithubWorkflowWriter(
     IBuildDefinition buildDefinition,
     BuildModel buildModel,
     IParamService paramService,
-    ILogger<GithubWorkflowWriter> logger
+    ILogger<GithubWorkflowWriter> logger,
+    IWorkflowExpressionGenerator workflowExpressionGenerator
 ) : WorkflowFileWriter<GithubWorkflowType>(fileSystem, logger)
 {
     private readonly IAtomFileSystem _fileSystem = fileSystem;
@@ -300,20 +301,22 @@ internal sealed class GithubWorkflowWriter(
                                            .Concat(workflow.Options)
                                            .OfType<GithubRunsOn>()
                                            .FirstOrDefault() ??
-                                       GithubRunsOn.UbuntuLatest;
+                                       WorkflowOptions.Github.RunsOn.Ubuntu_Latest;
 
-            var labelsDisplay = githubPlatformOption.Labels.Count is 1
-                ? githubPlatformOption.Labels[0]
-                : $"[ {string.Join(", ", githubPlatformOption.Labels)} ]";
+            var runOnLabels = githubPlatformOption.Labels.Count is 1
+                ? workflowExpressionGenerator.Write(githubPlatformOption.Labels[0])
+                : string.Join(", ", githubPlatformOption.Labels.Select(workflowExpressionGenerator.Write));
 
-            if (githubPlatformOption.Group is { Length: > 0 })
+            var runOnGroup = workflowExpressionGenerator.Write(githubPlatformOption.Group);
+
+            if (runOnGroup is { Length: > 0 })
                 using (WriteSection("runs-on:"))
                 {
-                    WriteLine($"group: {githubPlatformOption.Group}");
-                    WriteLine($"labels: {labelsDisplay}");
+                    WriteLine($"group: {runOnGroup}");
+                    WriteLine($"labels: {runOnLabels}");
                 }
             else
-                WriteLine($"runs-on: {labelsDisplay}");
+                WriteLine($"runs-on: {runOnLabels}");
 
             var snapshotImageOption = job
                 .Options
@@ -321,13 +324,13 @@ internal sealed class GithubWorkflowWriter(
                 .OfType<GithubSnapshotImageOption>()
                 .FirstOrDefault();
 
-            if (snapshotImageOption?.Value is not null)
+            if (snapshotImageOption is not null)
                 using (WriteSection("snapshot:"))
                 {
-                    WriteLine($"image-name: {snapshotImageOption.Value.ImageName}");
+                    WriteLine($"image-name: {snapshotImageOption.ImageName}");
 
-                    if (!string.IsNullOrWhiteSpace(snapshotImageOption.Value.Version))
-                        WriteLine($"version: {snapshotImageOption.Value.Version}");
+                    if (!string.IsNullOrWhiteSpace(snapshotImageOption.Version))
+                        WriteLine($"version: {snapshotImageOption.Version}");
                 }
 
             var environmentOptions = job
@@ -337,16 +340,16 @@ internal sealed class GithubWorkflowWriter(
                 .ToList();
 
             foreach (var environmentOption in environmentOptions)
-                WriteLine($"environment: {environmentOption.Value}");
+                WriteLine($"environment: {workflowExpressionGenerator.Write(environmentOption.EnvironmentName)}");
 
             var githubIfOptions = job
                 .Options
                 .Concat(workflow.Options)
-                .OfType<GithubIf>()
+                .OfType<RunTargetIf>()
                 .ToList();
 
             foreach (var githubIfOption in githubIfOptions)
-                WriteLine($"if: {githubIfOption.Value}");
+                WriteLine($"if: {workflowExpressionGenerator.Write(githubIfOption.Condition)}");
 
             WritePermissions(job.Options);
 
@@ -384,11 +387,11 @@ internal sealed class GithubWorkflowWriter(
         if (githubPermissionsOption is null)
             return;
 
-        if (githubPermissionsOption == GithubTokenPermissionsOption.WriteAll)
+        if (githubPermissionsOption == WorkflowOptions.Github.TokenPermissions.WriteAll)
             WriteLine("permissions: write-all");
-        else if (githubPermissionsOption == GithubTokenPermissionsOption.ReadAll)
+        else if (githubPermissionsOption == WorkflowOptions.Github.TokenPermissions.ReadAll)
             WriteLine("permissions: read-all");
-        else if (githubPermissionsOption == GithubTokenPermissionsOption.NoneAll)
+        else if (githubPermissionsOption == WorkflowOptions.Github.TokenPermissions.NoneAll)
             WriteLine("permissions: { }");
         else
             using (WriteSection("permissions:"))
@@ -404,23 +407,23 @@ internal sealed class GithubWorkflowWriter(
                 .Options
                 .Concat(step.Options)
                 .OfType<GithubCheckoutOption>()
-                .FirstOrDefault() is { Value: not null } checkoutOption)
+                .FirstOrDefault() is { } checkoutOption)
             using (WriteSection("- name: Checkout"))
             {
-                WriteLine($"uses: actions/checkout@{checkoutOption.Value.Version}");
+                WriteLine($"uses: actions/checkout@{checkoutOption.Version}");
 
                 using (WriteSection("with:"))
                 {
                     WriteLine("fetch-depth: 0");
 
-                    if (checkoutOption.Value.Lfs)
+                    if (checkoutOption.Lfs)
                         WriteLine("lfs: true");
 
-                    if (!string.IsNullOrWhiteSpace(checkoutOption.Value.Submodules))
-                        WriteLine($"submodules: {checkoutOption.Value.Submodules}");
+                    if (!string.IsNullOrWhiteSpace(checkoutOption.Submodules))
+                        WriteLine($"submodules: {checkoutOption.Submodules}");
 
-                    if (!string.IsNullOrWhiteSpace(checkoutOption.Value.Token))
-                        WriteLine($"token: {checkoutOption.Value.Token}");
+                    if (!string.IsNullOrWhiteSpace(checkoutOption.Token))
+                        WriteLine($"token: {checkoutOption.Token}");
                 }
             }
         else
@@ -750,42 +753,20 @@ internal sealed class GithubWorkflowWriter(
 
             if (requiredSecrets.Any(x => x.Param.IsSecret))
             {
-                foreach (var injectedSecret in workflow.Options.OfType<WorkflowSecretsSecretInjection>())
+                foreach (var injectedSecret in workflow.Options.OfType<WorkflowSecretInjectionForSecretProvider>())
                 {
-                    if (injectedSecret.Value is null)
-                    {
-                        logger.LogWarning(
-                            "Workflow {WorkflowName} command {CommandName} has a secret injection with a null value",
-                            workflow.Name,
-                            workflowStep.Name);
-
-                        continue;
-                    }
-
-                    var paramDefinition = buildDefinition.ParamDefinitions.GetValueOrDefault(injectedSecret.Value);
+                    var paramDefinition = buildDefinition.ParamDefinitions.GetValueOrDefault(injectedSecret.SecretName);
 
                     if (paramDefinition is not null)
-                        env[paramDefinition.ArgName] =
-                            $"${{{{ secrets.{paramDefinition.ArgName.ToUpper().Replace('-', '_')} }}}}";
+                        env[paramDefinition.ArgName] = $"${{{{ secrets.{paramDefinition.EnvVarName} }}}}";
                 }
 
-                foreach (var injectedEvVar in workflow.Options.OfType<WorkflowSecretsEnvironmentInjection>())
+                foreach (var injectedEvVar in workflow.Options.OfType<WorkflowSecretsInjectionFromEnvironment>())
                 {
-                    if (injectedEvVar.Value is null)
-                    {
-                        logger.LogWarning(
-                            "Workflow {WorkflowName} command {CommandName} has a secret provider environment variable injection with a null value",
-                            workflow.Name,
-                            workflowStep.Name);
-
-                        continue;
-                    }
-
-                    var paramDefinition = buildDefinition.ParamDefinitions.GetValueOrDefault(injectedEvVar.Value);
+                    var paramDefinition = buildDefinition.ParamDefinitions.GetValueOrDefault(injectedEvVar.SecretName);
 
                     if (paramDefinition is not null)
-                        env[paramDefinition.ArgName] =
-                            $"${{{{ vars.{paramDefinition.ArgName.ToUpper().Replace('-', '_')} }}}}";
+                        env[paramDefinition.ArgName] = $"${{{{ vars.{paramDefinition.EnvVarName} }}}}";
                 }
             }
 
@@ -798,17 +779,16 @@ internal sealed class GithubWorkflowWriter(
                     .FirstOrDefault(x => x.Value == requiredSecret.Param.Name);
 
                 if (injectedSecret is not null)
-                    env[requiredSecret.Param.ArgName] =
-                        $"${{{{ secrets.{requiredSecret.Param.ArgName.ToUpper().Replace('-', '_')} }}}}";
+                    env[requiredSecret.Param.ArgName] = $"${{{{ secrets.{requiredSecret.Param.EnvVarName} }}}}";
             }
 
-            var environmentInjections = workflow.Options.OfType<WorkflowEnvironmentInjection>();
+            var environmentInjections = workflow.Options.OfType<WorkflowParamInjectionFromEnvironment>();
             var paramInjections = workflow.Options.OfType<WorkflowParamInjection>();
             environmentInjections = environmentInjections.Where(e => paramInjections.All(p => p.Name != e.Value));
 
-            foreach (var environmentInjection in environmentInjections.Where(e => e.Value is not null))
+            foreach (var environmentInjection in environmentInjections)
             {
-                if (!buildDefinition.ParamDefinitions.TryGetValue(environmentInjection.Value!, out var paramDefinition))
+                if (!buildDefinition.ParamDefinitions.TryGetValue(environmentInjection.Value, out var paramDefinition))
                 {
                     logger.LogWarning(
                         "Workflow {WorkflowName} command {CommandName} has an injection for parameter {ParamName} that does not exist",
@@ -819,7 +799,7 @@ internal sealed class GithubWorkflowWriter(
                     continue;
                 }
 
-                env[paramDefinition.ArgName] = $"${{{{ vars.{paramDefinition.ArgName.ToUpper().Replace('-', '_')} }}}}";
+                env[paramDefinition.ArgName] = $"${{{{ vars.{paramDefinition.EnvVarName} }}}}";
             }
 
             foreach (var paramInjection in paramInjections)
@@ -835,7 +815,8 @@ internal sealed class GithubWorkflowWriter(
                     continue;
                 }
 
-                env[paramDefinition.ArgName] = paramInjection.Value;
+                env[paramDefinition.ArgName] =
+                    $"${{{{ {workflowExpressionGenerator.Write(paramInjection.InjectionExpression)} }}}}";
             }
 
             var validEnv = env
