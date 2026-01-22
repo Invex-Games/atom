@@ -44,7 +44,7 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
                 var body = breakingChanges.MajorChanges.Count > 0
                     ? currentVersion.Major > latestReleaseInfo.Version.Major
                         ? $"""
-                           ⚠️ **Major Breaking Changes Detected**
+                           ℹ️ **Major Breaking Changes Detected**
 
                            This pull request contains major breaking changes to the public API surface.
 
@@ -55,7 +55,19 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
 
                            The major version has already been appropriately incremented to reflect these breaking changes.
                            """
-                        : string.Empty
+                        : $"""
+                           ⚠️ **Major Breaking Changes Detected - Action Required**
+
+                           This pull request contains major breaking changes to the public API surface, but the major version has not been bumped.
+
+                           **Current Version:** `{currentVersion}`
+                           **Latest Release:** `{latestReleaseInfo.Version}`
+
+                           **Files with breaking changes:**
+                           {string.Join("\n", breakingChanges.MajorChanges.Select(x => $"- `{x.Path}` ({x.DeletedLines.Count} lines removed)"))}
+
+                           **Required Action:** Please increment the major version number before merging this pull request.
+                           """
                     : breakingChanges.MinorChanges.Count > 0
                         ? currentVersion.Minor > latestReleaseInfo.Version.Minor
                             ? $"""
@@ -70,11 +82,35 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
 
                                The minor version has already been appropriately incremented to reflect these changes.
                                """
-                            : string.Empty
-                        : string.Empty;
+                            : $"""
+                               ⚠️ **Minor Breaking Changes Detected - Action Required**
+
+                               This pull request contains minor breaking changes to the public API surface, but the minor version has not been bumped.
+
+                               **Current Version:** `{currentVersion}`
+                               **Latest Release:** `{latestReleaseInfo.Version}`
+
+                               **Files with breaking changes:**
+                               {string.Join("\n", breakingChanges.MinorChanges.Select(x => $"- `{x.Path}` ({x.AddedLines.Count} lines added)"))}
+
+                               **Required Action:** Please increment the minor version number before merging this pull request.
+                               """
+                        : """
+                          ✅ **No Breaking Changes Detected**
+
+                          This pull request does not contain any breaking changes to the public API surface.
+                          Safe to merge without version bump considerations.
+                          """;
+
+                var hasInvalidChanges = breakingChanges switch
+                {
+                    { MajorChanges.Count: > 0 } when currentVersion.Major <= latestReleaseInfo.Version.Major => true,
+                    { MinorChanges.Count: > 0 } when currentVersion.Minor <= latestReleaseInfo.Version.Minor => true,
+                    _ => false,
+                };
 
                 await AddCheckStatus(owner,
-                    body.Length > 0
+                    hasInvalidChanges
                         ? "failure"
                         : "success",
                     body,
