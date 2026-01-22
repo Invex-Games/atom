@@ -186,6 +186,7 @@ internal sealed class BuildResolver(
                      .Where(state => state.Status is not TargetRunState.PendingRun))
             state.Status = TargetRunState.Skipped;
 
+        // ReSharper disable once InvertIf
         if (logger.IsEnabled(LogLevel.Debug))
         {
             var endTime = Stopwatch.GetTimestamp();
