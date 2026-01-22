@@ -15,7 +15,7 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
 
     Target CheckPrForBreakingChanges =>
         t => t
-            // .RequiresParam(nameof(GithubToken), nameof(PullRequestNumber))
+            .RequiresParam(nameof(GithubToken), nameof(PullRequestNumber))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildVersion))
             .Executes(async cancellationToken =>
             {
@@ -104,6 +104,18 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
                           """;
 
                 await AddPrComment(owner, body, cancellationToken);
+
+                await AddCheckStatus(owner,
+                    breakingChanges switch
+                    {
+                        { MajorChanges.Count: > 0 } when currentVersion.Major <= latestReleaseInfo.Version.Major =>
+                            "failure",
+                        { MinorChanges.Count: > 0 } when currentVersion.Minor <= latestReleaseInfo.Version.Minor =>
+                            "failure",
+                        _ => "success",
+                    },
+                    body,
+                    cancellationToken);
             });
 
     private async Task AddPrComment(string owner, string body, CancellationToken cancellationToken)
@@ -151,5 +163,66 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
 
         if (addCommentResult is null)
             throw new StepFailedException("Could not add comment.");
+    }
+
+    private async Task AddCheckStatus(
+        string owner,
+        string status,
+        string description,
+        CancellationToken cancellationToken)
+    {
+        var repository = Github.Variables
+            .Repository
+            .Split('/')
+            .Last();
+
+        Logger.LogDebug("Target repository: {Repository}", repository);
+
+        var productHeader = new ProductHeaderValue("Atom");
+        var connection = new Connection(productHeader, new InMemoryCredentialStore(GithubToken));
+
+        var repoQuery = new Query()
+            .Repository(repository, owner)
+            .Select(r => new
+            {
+                r.Id,
+            })
+            .Compile();
+
+        var repoQueryResult = await connection.Run(repoQuery, cancellationToken: cancellationToken);
+
+        if (repoQueryResult.Id.Value is null)
+            throw new StepFailedException("Could not find repository.");
+
+        using var repo = new Repository(FileSystem.AtomRootDirectory);
+        var currentCommitHash = repo.Head.Tip.Sha;
+
+        var checkRunMutation = new Mutation()
+            .CreateCheckRun(new CreateCheckRunInput
+            {
+                RepositoryId = repoQueryResult.Id,
+                Name = "API Surface Breaking Changes Check",
+                HeadSha = currentCommitHash,
+                Status = RequestableCheckStatusState.Completed,
+                Conclusion = status == "success"
+                    ? CheckConclusionState.Success
+                    : CheckConclusionState.Failure,
+                CompletedAt = null,
+                Output = new()
+                {
+                    Title = "Breaking Changes Analysis",
+                    Summary = description,
+                },
+            })
+            .Select(x => new
+            {
+                x.ClientMutationId,
+            })
+            .Compile();
+
+        var checkRunResult = await connection.Run(checkRunMutation, cancellationToken: cancellationToken);
+
+        if (checkRunResult is null)
+            throw new StepFailedException("Could not create check run.");
     }
 }
