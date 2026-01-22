@@ -161,7 +161,10 @@ internal interface ISetupBuild : ISetupBuildInfo, IGithubHelper, IPullRequestHel
                             Event = PullRequestReviewEvent.RequestChanges,
                             Threads = breakingChanges.Select(x => new DraftPullRequestReviewThread
                             {
-                                Path = x.Path.ToString(),
+                                Path = FileSystem
+                                    .Path
+                                    .GetRelativePath(FileSystem.AtomRootDirectory, x.Path)
+                                    .Replace("\\", "/"),
                                 Body = $"""
                                         ⚠️ Breaking changes detected in this file:
 
