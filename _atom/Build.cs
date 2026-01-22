@@ -84,6 +84,7 @@ internal partial class Build : BuildDefinition,
                             IdToken = GithubTokenPermission.Write,
                             Contents = GithubTokenPermission.Write,
                             PullRequests = GithubTokenPermission.Write,
+                            Checks = GithubTokenPermission.Write,
                         })
                         .WithOptions(WorkflowOptions.Inject.Param(WorkflowParams.PullRequestNumber,
                             "github.event.number")),
