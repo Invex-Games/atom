@@ -11,7 +11,8 @@ internal partial class Build : BuildDefinition,
     IBuildTargets,
     ITestTargets,
     IDeployTargets,
-    IApproveDependabotPr
+    IApproveDependabotPr,
+    ISetupBuild
 {
     public static readonly string[] PlatformNames =
     [

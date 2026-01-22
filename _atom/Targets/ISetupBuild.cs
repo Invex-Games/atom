@@ -133,54 +133,55 @@ internal interface ISetupBuild : ISetupBuildInfo, IGithubHelper, IPullRequestHel
 
                     if (addCommentResult is null)
                         throw new StepFailedException("Could not add comment.");
-
-                    return;
                 }
+                else
+                {
+                    // Add a review comment that must be acknowledged, describing that there are breaking changes
+                    var breakingChangesDescription = string.Join("\n",
+                        breakingChanges.Select(x =>
+                            $"- `{x.Path}`: {x.DeletedLines.Count} line(s) removed or modified"));
 
-                // Add a review comment that must be acknowledged, describing that there are breaking changes
-                var breakingChangesDescription = string.Join("\n",
-                    breakingChanges.Select(x => $"- `{x.Path}`: {x.DeletedLines.Count} line(s) removed or modified"));
-
-                var addPullRequestReviewThread = new Mutation()
-                    .AddPullRequestReview(new AddPullRequestReviewInput
-                    {
-                        PullRequestId = prQueryResult.Id,
-                        Body = $"""
-                                ⚠️ **Breaking Changes Detected**
-
-                                This pull request contains breaking changes to the public API surface.
-                                Please review the following changes carefully:
-
-                                {breakingChangesDescription}
-
-                                **Action Required:**
-                                - Ensure the version bump is appropriate (major version for breaking changes)
-                                - Update migration documentation if necessary
-                                - Verify all consumers can handle these changes
-                                """,
-                        Event = PullRequestReviewEvent.RequestChanges,
-                        Threads = breakingChanges.Select(x => new DraftPullRequestReviewThread
+                    var addPullRequestReviewThread = new Mutation()
+                        .AddPullRequestReview(new AddPullRequestReviewInput
                         {
-                            Path = x.Path.ToString(),
+                            PullRequestId = prQueryResult.Id,
                             Body = $"""
-                                    ⚠️ Breaking changes detected in this file:
+                                    ⚠️ **Breaking Changes Detected**
 
-                                    {string.Join("\n", x.DeletedLines.Select((line, index) => $"Line {index + 1}: {line.TrimEnd()}"))}
+                                    This pull request contains breaking changes to the public API surface.
+                                    Please review the following changes carefully:
 
-                                    These lines were removed or modified, which may break existing consumers.
+                                    {breakingChangesDescription}
+
+                                    **Action Required:**
+                                    - Ensure the version bump is appropriate (major version for breaking changes)
+                                    - Update migration documentation if necessary
+                                    - Verify all consumers can handle these changes
                                     """,
-                        }),
-                    })
-                    .Select(x => new
-                    {
-                        x.ClientMutationId,
-                    })
-                    .Compile();
+                            Event = PullRequestReviewEvent.RequestChanges,
+                            Threads = breakingChanges.Select(x => new DraftPullRequestReviewThread
+                            {
+                                Path = x.Path.ToString(),
+                                Body = $"""
+                                        ⚠️ Breaking changes detected in this file:
 
-                var addPullRequestReviewThreadResult =
-                    await connection.Run(addPullRequestReviewThread, cancellationToken: cancellationToken);
+                                        {string.Join("\n", x.DeletedLines.Select((line, index) => $"Line {index + 1}: {line.TrimEnd()}"))}
 
-                if (addPullRequestReviewThreadResult is null)
-                    throw new StepFailedException("Could not add review comment.");
+                                        These lines were removed or modified, which may break existing consumers.
+                                        """,
+                            }),
+                        })
+                        .Select(x => new
+                        {
+                            x.ClientMutationId,
+                        })
+                        .Compile();
+
+                    var addPullRequestReviewThreadResult = await connection.Run(addPullRequestReviewThread,
+                        cancellationToken: cancellationToken);
+
+                    if (addPullRequestReviewThreadResult is null)
+                        throw new StepFailedException("Could not add review comment.");
+                }
             });
 }
