@@ -855,6 +855,7 @@ internal sealed class GithubWorkflowWriter(
             .OrderBy(x => x.Priority)
             .ToList();
 
+        // ReSharper disable once InvertIf
         if (customPostTargetSteps.Count > 0)
         {
             var writer = new GithubStepWriter(StringBuilder, IndentLevel);
