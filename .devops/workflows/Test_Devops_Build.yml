@@ -24,10 +24,6 @@ jobs:
       - script: dotnet run --project _atom/_atom.csproj SetupBuildInfo --skip --headless
         name: SetupBuildInfo
         env:
-          azure-vault-app-secret: $(AZURE_VAULT_APP_SECRET)
-          azure-vault-address: $(AZURE_VAULT_ADDRESS)
-          azure-vault-tenant-id: $(AZURE_VAULT_TENANT_ID)
-          azure-vault-app-id: $(AZURE_VAULT_APP_ID)
           nuget-dry-run: true
   
   - job: PackProjects
