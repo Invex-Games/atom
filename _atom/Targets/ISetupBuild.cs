@@ -1,6 +1,7 @@
 using LibGit2Sharp;
 using Commit = LibGit2Sharp.Commit;
 using Repository = LibGit2Sharp.Repository;
+using Tag = LibGit2Sharp.Tag;
 
 namespace Atom.Targets;
 
@@ -12,13 +13,22 @@ internal interface ISetupBuild : ISetupBuildInfo, IGithubHelper, IPullRequestHel
         "DecSm.Atom/Paths/AtomFileSystem.cs",
     ];
 
+    private enum VersionBump
+    {
+        Major,
+        Minor,
+        Patch,
+        None,
+    }
+
     new Target SetupBuildInfo =>
         t => t
             .Extends<ISetupBuildInfo>(x => x.SetupBuildInfo, true)
             .RequiresParam(nameof(GithubToken), nameof(PullRequestNumber))
             .Executes(async cancellationToken =>
             {
-                var actor = Github.Variables.Actor;
+                var targetFiles = FormatTargetFiles();
+
                 var owner = Github.Variables.RepositoryOwner;
 
                 var repository = Github.Variables
@@ -26,64 +36,41 @@ internal interface ISetupBuild : ISetupBuildInfo, IGithubHelper, IPullRequestHel
                     .Split('/')
                     .Last();
 
-                Logger.LogInformation("Github API action context: {Context}",
-                    new
-                    {
-                        Actor = actor,
-                        Owner = owner,
-                        Repo = repository,
-                    });
-
                 using var repo = new Repository(FileSystem.AtomRootDirectory);
                 var currentCommitHash = repo.Head.Tip.Sha;
 
                 var currentVersion = BuildVersion;
+                var latestReleaseInfo = FindLatestReleaseInfo(repo, currentVersion);
 
-                var latestReleaseVersion = repo
-                    .Tags
-                    .Select(x => new
-                    {
-                        Tag = x,
-                        Version = !x.FriendlyName.StartsWith('v')
-                            ? null
-                            : !SemVer.TryParse(x.FriendlyName[1..], out var version)
-                                ? null
-                                : version,
-                    })
-                    .Where(x => x.Version is not null && x.Version < currentVersion)
-                    .ToList();
-
-                if (latestReleaseVersion.Count is 0)
-                {
-                    Logger.LogWarning("No release found for current version {CurrentVersion}.", currentVersion);
-
+                if (latestReleaseInfo is null)
                     return;
-                }
 
-                var releaseCommitHash = latestReleaseVersion.MaxBy(x => x.Version)!.Tag.Target.Sha!;
+                var releaseCommitHash = latestReleaseInfo.Value.Tag.Target.Sha!;
 
                 var oldCommit = repo.Lookup<Commit>(releaseCommitHash);
                 var newCommit = repo.Lookup<Commit>(currentCommitHash);
-
                 var changes = repo.Diff.Compare<Patch>(oldCommit.Tree, newCommit.Tree);
 
-                var targetFiles = FilesToCheck
-                    .Select(x => FileSystem.Path.IsPathRooted(x)
-                        ? FileSystem.Path.GetRelativePath(FileSystem.AtomRootDirectory, x)
-                        : x)
-                    .Select(x => x.Replace("\\", "/"))
-                    .Select(x => x.StartsWith('/')
-                        ? x[1..]
-                        : x)
-                    .ToHashSet();
+                IReadOnlyList<(RootedPath Path, List<Line> AddedLines, List<Line> DeletedLines)> suspiciousChanges =
+                    changes
+                        .Where(x => targetFiles.Contains(x.Path) && x.LinesDeleted > 0)
+                        .Select(x => (FileSystem.AtomRootDirectory / x.Path, x.AddedLines, x.DeletedLines))
+                        .ToList();
 
-                var breakingChanges = (IReadOnlyList<(RootedPath Path, IReadOnlyList<string> DeletedLines)>)changes
-                    .Where(x => targetFiles.Contains(x.Path) && x.LinesDeleted > 0)
-                    .Select(change => (FileSystem.AtomRootDirectory / change.Path,
-                        (IReadOnlyList<string>)change.DeletedLines.ConvertAll(l => l.Content)))
+                var majorChanges = suspiciousChanges
+                    .Where(x => x.DeletedLines.Count > 0 &&
+                                x
+                                    .DeletedLines
+                                    .Select(l => l.Content.Trim())
+                                    .All(deletedLine => !deletedLine.StartsWith(',') && !deletedLine.EndsWith(',')))
                     .ToList();
 
-                foreach (var breakingChange in breakingChanges)
+                var minorChanges = suspiciousChanges
+                    .Except(majorChanges)
+                    .Where(x => x.AddedLines.Count > 0)
+                    .ToList();
+
+                foreach (var breakingChange in suspiciousChanges)
                     Logger.LogWarning("[WARNING] {ChangePath} has {ChangeLinesDeleted} lines removed or modified.",
                         breakingChange.Path,
                         breakingChange.DeletedLines);
@@ -106,95 +93,136 @@ internal interface ISetupBuild : ISetupBuildInfo, IGithubHelper, IPullRequestHel
                 if (prQueryResult.Id.Value is null)
                     throw new StepFailedException("Could not find pull request.");
 
-                if (breakingChanges.Count is 0)
-                {
-                    // Add a comment describing that there are no breaking changes
-                    var addCommentMutation = new Mutation()
-                        .AddComment(new AddCommentInput
-                        {
-                            SubjectId = prQueryResult.Id,
-                            Body = """
-                                   ✅ **No Breaking Changes Detected**
+                var body = majorChanges.Count > 0
+                    ? currentVersion.Major > latestReleaseInfo.Value.Version.Major
+                        ? $"""
+                           ⚠️ **Major Breaking Changes Detected**
 
-                                   This pull request does not contain any breaking changes to the public API surface.
-                                   Safe to merge without version bump considerations.
-                                   """,
-                        })
-                        .Select(x => new
-                        {
-                            x.ClientMutationId,
-                        })
-                        .Compile();
+                           This pull request contains major breaking changes to the public API surface.
 
-                    await connection.Run(addCommentMutation, cancellationToken: cancellationToken);
+                           **Version Bump Status:** ✅ Major version has been bumped from `{latestReleaseInfo.Value.Version.Major}` to `{currentVersion.Major}`
 
-                    var addCommentResult =
-                        await connection.Run(addCommentMutation, cancellationToken: cancellationToken);
+                           **Files with breaking changes:**
+                           {string.Join("\n", majorChanges.Select(x => $"- `{x.Path}`"))}
 
-                    if (addCommentResult is null)
-                        throw new StepFailedException("Could not add comment.");
-                }
-                else
-                {
-                    // Add a review comment that must be acknowledged, describing that there are breaking changes
-                    var breakingChangesDescription = string.Join("\n",
-                        breakingChanges.Select(x =>
-                            $"- `{x.Path}`: {x.DeletedLines.Count} line(s) removed or modified"));
+                           The major version has already been appropriately incremented to reflect these breaking changes.
+                           """
+                        : $"""
+                           ⚠️ **Major Breaking Changes Detected - Action Required**
 
-                    var addPullRequestReviewThread = new Mutation()
-                        .AddPullRequestReview(new AddPullRequestReviewInput
-                        {
-                            PullRequestId = prQueryResult.Id,
-                            Body = $"""
-                                    ⚠️ **Breaking Changes Detected**
+                           This pull request contains major breaking changes to the public API surface, but the major version has not been bumped.
 
-                                    This pull request contains breaking changes to the public API surface.
-                                    Please review the following changes carefully:
+                           **Current Version:** `{currentVersion}`
+                           **Latest Release:** `{latestReleaseInfo.Value.Version}`
 
-                                    {breakingChangesDescription}
+                           **Files with breaking changes:**
+                           {string.Join("\n", majorChanges.Select(x => $"- `{x.Path}` ({x.DeletedLines.Count} lines removed)"))}
 
-                                    **Action Required:**
-                                    - Ensure the version bump is appropriate (major version for breaking changes)
-                                    - Update migration documentation if necessary
-                                    - Verify all consumers can handle these changes
-                                    """,
-                            Event = PullRequestReviewEvent.RequestChanges,
-                            Threads = breakingChanges.Select(x =>
-                            {
-                                var path = FileSystem
-                                    .Path
-                                    .GetRelativePath(FileSystem.AtomRootDirectory, x.Path)
-                                    .Replace("\\", "/")
-                                    .Trim();
+                           **Required Action:** Please increment the major version number before merging this pull request.
+                           """
+                    : minorChanges.Count > 0
+                        ? currentVersion.Minor > latestReleaseInfo.Value.Version.Minor
+                            ? $"""
+                               ℹ️ **Minor Breaking Changes Detected**
 
-                                Logger.LogInformation("Requesting changes for breaking change in {Path}: {Join}...",
-                                    path,
-                                    string.Join(", ", x.DeletedLines));
+                               This pull request contains minor breaking changes to the public API surface.
 
-                                return new DraftPullRequestReviewThread
-                                {
-                                    Path = $"'{path}'",
-                                    Body = $"""
-                                            ⚠️ Breaking changes detected in this file:
+                               **Version Bump Status:** ✅ Minor version has been bumped from `{latestReleaseInfo.Value.Version.Minor}` to `{currentVersion.Minor}`
 
-                                            {string.Join("\n", x.DeletedLines.Select((line, index) => $"Line {index + 1}: {line.TrimEnd()}"))}
+                               **Files with breaking changes:**
+                               {string.Join("\n", minorChanges.Select(x => $"- `{x.Path}`"))}
 
-                                            These lines were removed or modified, which may break existing consumers.
-                                            """,
-                                };
-                            }),
-                        })
-                        .Select(x => new
-                        {
-                            x.ClientMutationId,
-                        })
-                        .Compile();
+                               The minor version has already been appropriately incremented to reflect these changes.
+                               """
+                            : $"""
+                               ℹ️ **Minor Breaking Changes Detected - Action Required**
 
-                    var addPullRequestReviewThreadResult = await connection.Run(addPullRequestReviewThread,
-                        cancellationToken: cancellationToken);
+                               This pull request contains minor breaking changes to the public API surface, but the minor version has not been bumped.
 
-                    if (addPullRequestReviewThreadResult is null)
-                        throw new StepFailedException("Could not add review comment.");
-                }
+                               **Current Version:** `{currentVersion}`
+                               **Latest Release:** `{latestReleaseInfo.Value.Version}`
+
+                               **Files with breaking changes:**
+                               {string.Join("\n", minorChanges.Select(x => $"- `{x.Path}` ({x.AddedLines.Count} lines added)"))}
+
+                               **Required Action:** Please increment the minor version number before merging this pull request.
+                               """
+                        : """
+                          ✅ **No Breaking Changes Detected**
+
+                          This pull request does not contain any breaking changes to the public API surface.
+                          Safe to merge without version bump considerations.
+                          """;
+
+                if (suspiciousChanges.Count is not 0)
+                    return;
+
+                var addCommentMutation = new Mutation()
+                    .AddComment(new AddCommentInput
+                    {
+                        SubjectId = prQueryResult.Id,
+                        Body = body,
+                    })
+                    .Select(x => new
+                    {
+                        x.ClientMutationId,
+                    })
+                    .Compile();
+
+                await connection.Run(addCommentMutation, cancellationToken: cancellationToken);
+
+                var addCommentResult = await connection.Run(addCommentMutation, cancellationToken: cancellationToken);
+
+                if (addCommentResult is null)
+                    throw new StepFailedException("Could not add comment.");
+                // Add a comment describing that there are no breaking changes
             });
+
+    private (Tag Tag, SemVer Version)? FindLatestReleaseInfo(Repository repo, SemVer currentVersion)
+    {
+        var releaseVersions = repo
+            .Tags
+            .Select(x => new
+            {
+                Tag = x,
+                Version = !x.FriendlyName.StartsWith('v')
+                    ? null
+                    : !SemVer.TryParse(x.FriendlyName[1..], out var version)
+                        ? null
+                        : version,
+            })
+            .Where(x => x.Version is not null && x.Version < currentVersion)
+            .Select(x => new
+            {
+                Tag = x.Tag!,
+                Version = x.Version!,
+            })
+            .ToList();
+
+        if (releaseVersions.Count is 0)
+        {
+            Logger.LogWarning("No release found for current version {CurrentVersion}.", currentVersion);
+
+            return null;
+        }
+
+        var version = releaseVersions.MaxBy(x => x.Version)!;
+
+        return (version.Tag, version.Version);
+    }
+
+    private HashSet<string> FormatTargetFiles()
+    {
+        var targetFiles = FilesToCheck
+            .Select(x => FileSystem.Path.IsPathRooted(x)
+                ? FileSystem.Path.GetRelativePath(FileSystem.AtomRootDirectory, x)
+                : x)
+            .Select(x => x.Replace("\\", "/"))
+            .Select(x => x.StartsWith('/')
+                ? x[1..]
+                : x)
+            .ToHashSet();
+
+        return targetFiles;
+    }
 }
