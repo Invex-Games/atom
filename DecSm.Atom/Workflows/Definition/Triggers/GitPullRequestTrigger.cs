@@ -47,12 +47,4 @@ public sealed record GitPullRequestTrigger : IWorkflowTrigger
     ///     Gets the list of pull request event types that should activate this trigger (e.g., "opened", "synchronize").
     /// </summary>
     public IReadOnlyList<string> Types { get; init; } = [];
-
-    /// <summary>
-    ///     Gets a pre-configured trigger instance that activates on pull requests targeting the main branch.
-    /// </summary>
-    public static GitPullRequestTrigger IntoMain { get; } = new()
-    {
-        IncludedBranches = ["main"],
-    };
 }

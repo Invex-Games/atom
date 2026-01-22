@@ -53,12 +53,4 @@ public sealed record GitPushTrigger : IWorkflowTrigger
     ///     <see cref="IncludedTags" />.
     /// </summary>
     public IReadOnlyList<string> ExcludedTags { get; init; } = [];
-
-    /// <summary>
-    ///     Gets a predefined trigger that activates only on pushes to the main branch.
-    /// </summary>
-    public static GitPushTrigger ToMain { get; } = new()
-    {
-        IncludedBranches = ["main"],
-    };
 }

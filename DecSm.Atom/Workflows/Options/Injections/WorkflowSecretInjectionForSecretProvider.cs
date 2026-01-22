@@ -1,4 +1,4 @@
-﻿namespace DecSm.Atom.Workflows.Definition.Options;
+﻿namespace DecSm.Atom.Workflows.Options.Injections;
 
 /// <summary>
 ///     Represents a workflow option for injecting a secret value that is specifically intended for
@@ -19,10 +19,10 @@
 ///     </code>
 /// </example>
 [PublicAPI]
-public sealed record WorkflowSecretsSecretInjection : WorkflowOption<string, WorkflowSecretsSecretInjection>
+public sealed record WorkflowSecretInjectionForSecretProvider(string SecretName) : IWorkflowOption
 {
     /// <summary>
     ///     Gets a value indicating that multiple instances of this option are allowed.
     /// </summary>
-    public override bool AllowMultiple => true;
+    public bool AllowMultiple => true;
 }

@@ -3,29 +3,9 @@
 [PublicAPI]
 public sealed record DevopsPool : IWorkflowOption
 {
-    public IReadOnlyList<string> Demands { get; init; } = [];
+    public IReadOnlyList<WorkflowExpression> Demands { get; init; } = [];
 
-    public string? Name { get; init; }
+    public WorkflowExpression? Name { get; init; }
 
-    public string? Hosted { get; init; }
-
-    public static DevopsPool WindowsLatest { get; } = new()
-    {
-        Hosted = IJobRunsOn.WindowsLatestTag,
-    };
-
-    public static DevopsPool UbuntuLatest { get; } = new()
-    {
-        Hosted = IJobRunsOn.UbuntuLatestTag,
-    };
-
-    public static DevopsPool MacOsLatest { get; } = new()
-    {
-        Hosted = IJobRunsOn.MacOsLatestTag,
-    };
-
-    public static DevopsPool SetByMatrix { get; } = new()
-    {
-        Hosted = "$(job-runs-on)",
-    };
+    public WorkflowExpression? HostedImage { get; init; }
 }

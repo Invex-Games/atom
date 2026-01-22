@@ -5,10 +5,4 @@
 /// </summary>
 /// <param name="Inputs">A read-only list of manual inputs required when the workflow is triggered.</param>
 [PublicAPI]
-public sealed record ManualTrigger(IReadOnlyList<ManualInput>? Inputs = null) : IWorkflowTrigger
-{
-    /// <summary>
-    ///     Gets an instance of <see cref="ManualTrigger" /> with no inputs, representing a simple manual trigger.
-    /// </summary>
-    public static ManualTrigger Empty { get; } = new();
-}
+public sealed record ManualTrigger(IReadOnlyList<ManualInput>? Inputs = null) : IWorkflowTrigger;

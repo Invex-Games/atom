@@ -1,4 +1,4 @@
-﻿namespace DecSm.Atom.Workflows.Definition.Options;
+﻿namespace DecSm.Atom.Workflows.Options.Injections;
 
 /// <summary>
 ///     Represents a workflow option for injecting secrets into the environment during workflow execution.
@@ -16,10 +16,10 @@
 ///     </code>
 /// </example>
 [PublicAPI]
-public sealed record WorkflowSecretsEnvironmentInjection : WorkflowOption<string, WorkflowSecretsEnvironmentInjection>
+public sealed record WorkflowSecretsInjectionFromEnvironment(string SecretName) : IWorkflowOption
 {
     /// <summary>
     ///     Gets a value indicating that multiple instances of this option are allowed.
     /// </summary>
-    public override bool AllowMultiple => true;
+    public bool AllowMultiple => true;
 }
