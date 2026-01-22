@@ -9,6 +9,7 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
     private static readonly string[] FilesToCheck =
     [
         "DecSm.Atom.Tests/ApiSurfaceTests/PublicApiSurfaceTests.VerifyPublicApiSurface.verified.txt",
+        "DecSm.Atom/Paths/AtomFileSystem.cs",
     ];
 
     Target CheckPrForBreakingChanges =>
