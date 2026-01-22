@@ -145,15 +145,23 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
                                 - Verify all consumers can handle these changes
                                 """,
                         Event = PullRequestReviewEvent.RequestChanges,
-                        Threads = null,
+                        Threads = breakingChanges.Select(x => new DraftPullRequestReviewThread
+                        {
+                            Path = x.Path,
+                            Body = $"""
+                                    ⚠️ Breaking changes detected in this file:
+
+                                    {string.Join("\n", x.DeletedLines.Select((line, index) => $"Line {index + 1}: {line.TrimEnd()}"))}
+
+                                    These lines were removed or modified, which may break existing consumers.
+                                    """,
+                        }),
                     })
                     .Select(x => new
                     {
                         x.ClientMutationId,
                     })
                     .Compile();
-
-                await connection.Run(addPullRequestReviewThread, cancellationToken: cancellationToken);
 
                 var addPullRequestReviewThreadResult =
                     await connection.Run(addPullRequestReviewThread, cancellationToken: cancellationToken);
