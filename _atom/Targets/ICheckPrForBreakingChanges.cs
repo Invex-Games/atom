@@ -2,6 +2,8 @@ using Repository = LibGit2Sharp.Repository;
 
 namespace Atom.Targets;
 
+public sealed record ReleaseInfo(string CommitHash, SemVer Version);
+
 public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper, ISetupBuildInfo, IApiSurfaceHelper
 {
     private RootedPath[] FilesToCheck =>
@@ -116,6 +118,39 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
                     body,
                     cancellationToken);
             });
+
+    ReleaseInfo? FindLatestReleaseInfo(Repository repo, SemVer currentVersion)
+    {
+        var releaseVersions = repo
+            .Tags
+            .Select(x => new
+            {
+                Tag = x,
+                Version = !x.FriendlyName.StartsWith('v')
+                    ? null
+                    : !SemVer.TryParse(x.FriendlyName[1..], out var version)
+                        ? null
+                        : version,
+            })
+            .Where(x => x.Version is not null && x.Version < currentVersion)
+            .Select(x => new
+            {
+                Tag = x.Tag!,
+                Version = x.Version!,
+            })
+            .ToList();
+
+        if (releaseVersions.Count is 0)
+        {
+            Logger.LogWarning("No release found for current version {CurrentVersion}.", currentVersion);
+
+            return null;
+        }
+
+        var version = releaseVersions.MaxBy(x => x.Version)!;
+
+        return new(version.Tag.Target.Sha, version.Version);
+    }
 
     private async Task AddCheckStatus(
         string owner,

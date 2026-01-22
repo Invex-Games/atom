@@ -9,8 +9,6 @@ public sealed record BreakingChanges(IReadOnlyList<Change> MajorChanges, IReadOn
 
 public sealed record Change(RootedPath Path, List<Line> AddedLines, List<Line> DeletedLines);
 
-public sealed record ReleaseInfo(string CommitHash, SemVer Version);
-
 public interface IApiSurfaceHelper : IBuildAccessor
 {
     BreakingChanges IdentifyBreakingChanges(
@@ -83,39 +81,6 @@ public interface IApiSurfaceHelper : IBuildAccessor
         Logger.LogDebug("Minor changes: {@MinorChanges}", minorChanges);
 
         return new(majorChanges, minorChanges);
-    }
-
-    ReleaseInfo? FindLatestReleaseInfo(Repository repo, SemVer currentVersion)
-    {
-        var releaseVersions = repo
-            .Tags
-            .Select(x => new
-            {
-                Tag = x,
-                Version = !x.FriendlyName.StartsWith('v')
-                    ? null
-                    : !SemVer.TryParse(x.FriendlyName[1..], out var version)
-                        ? null
-                        : version,
-            })
-            .Where(x => x.Version is not null && x.Version < currentVersion)
-            .Select(x => new
-            {
-                Tag = x.Tag!,
-                Version = x.Version!,
-            })
-            .ToList();
-
-        if (releaseVersions.Count is 0)
-        {
-            Logger.LogWarning("No release found for current version {CurrentVersion}.", currentVersion);
-
-            return null;
-        }
-
-        var version = releaseVersions.MaxBy(x => x.Version)!;
-
-        return new(version.Tag.Target.Sha, version.Version);
     }
 
     private HashSet<string> FormatTargetFiles(RootedPath[] filesToCheck)
