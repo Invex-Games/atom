@@ -782,8 +782,15 @@ internal sealed class GithubWorkflowWriter(
                     env[requiredSecret.Param.ArgName] = $"${{{{ secrets.{requiredSecret.Param.EnvVarName} }}}}";
             }
 
-            var environmentInjections = workflow.Options.OfType<WorkflowParamInjectionFromEnvironment>();
-            var paramInjections = workflow.Options.OfType<WorkflowParamInjection>();
+            var environmentInjections = workflow
+                .Options
+                .Concat(workflowStep.Options)
+                .OfType<WorkflowParamInjectionFromEnvironment>();
+
+            var paramInjections = workflow
+                .Options
+                .Concat(workflowStep.Options)
+                .OfType<WorkflowParamInjection>();
             environmentInjections = environmentInjections.Where(e => paramInjections.All(p => p.Name != e.Value));
 
             foreach (var environmentInjection in environmentInjections)
