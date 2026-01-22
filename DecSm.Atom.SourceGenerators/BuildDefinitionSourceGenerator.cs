@@ -73,7 +73,7 @@ public sealed class BuildDefinitionSourceGenerator : IIncrementalGenerator
                     GetParamDefinitionsProperty(allParams),
                     GetParamsDataClass(allParams),
                     GetParamsField(),
-                    GetParamsProperty(allParams),
+                    GetWorkflowParamsProperty(allParams),
                     GetAccessParamMethod(allParams),
                 ]),
                 new("Host", [configureHostText, configureHostBuilderText]),
@@ -391,10 +391,10 @@ public sealed class BuildDefinitionSourceGenerator : IIncrementalGenerator
         return sb.ToString();
     }
 
-    private static string GetParamsProperty(ImmutableArray<ParamData> allParams) =>
+    private static string GetWorkflowParamsProperty(ImmutableArray<ParamData> allParams) =>
         allParams.IsEmpty
-            ? "    public ParamsData Params => _params ??= new();"
-            : "    public ParamsData Params => _params ??= new(this);";
+            ? "    public ParamsData WorkflowParams => _params ??= new();"
+            : "    public ParamsData WorkflowParams => _params ??= new(this);";
 
     private static string GetAccessParamMethod(ImmutableArray<ParamData> allParams)
     {

@@ -7,8 +7,11 @@ public partial class EnvironmentBuild : MinimalBuildDefinition, IGithubWorkflows
     [
         new("environment-workflow")
         {
-            Triggers = [ManualTrigger.Empty],
-            Targets = [WorkflowTargets.EnvironmentTarget.WithOptions(DeployToEnvironment.Create("test-env-1"))],
+            Triggers = [WorkflowTriggers.Manual],
+            Targets =
+            [
+                WorkflowTargets.EnvironmentTarget.WithOptions(WorkflowOptions.Deploy.ToEnvironment("test-env-1")),
+            ],
             WorkflowTypes = [new GithubWorkflowType()],
         },
     ];

@@ -7,7 +7,7 @@ public partial class SetupDotnetBuild : MinimalBuildDefinition, IGithubWorkflows
     [
         new("setup-dotnet")
         {
-            Triggers = [GitPushTrigger.ToMain],
+            Triggers = [WorkflowTriggers.PushToMain],
             Targets = [WorkflowTargets.SetupDotnetTarget.WithOptions(new SetupDotnetStep("9.0.x"))],
             WorkflowTypes = [Github.WorkflowType],
         },

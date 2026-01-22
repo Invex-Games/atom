@@ -13,13 +13,13 @@ public partial class ManualInputBuild : MinimalBuildDefinition, IGithubWorkflows
                 {
                     Inputs =
                     [
-                        ManualStringInput.ForParam(ParamDefinitions[Params.StringParamWithoutDefault]),
-                        ManualStringInput.ForParam(ParamDefinitions[Params.StringParamWithDefault]),
-                        ManualBoolInput.ForParam(ParamDefinitions[Params.BoolParamWithoutDefault]),
-                        ManualBoolInput.ForParam(ParamDefinitions[Params.BoolParamWithDefault]),
-                        ManualChoiceInput.ForParam(ParamDefinitions[Params.ChoiceParamWithoutDefault],
+                        ManualStringInput.ForParam(ParamDefinitions[WorkflowParams.StringParamWithoutDefault]),
+                        ManualStringInput.ForParam(ParamDefinitions[WorkflowParams.StringParamWithDefault]),
+                        ManualBoolInput.ForParam(ParamDefinitions[WorkflowParams.BoolParamWithoutDefault]),
+                        ManualBoolInput.ForParam(ParamDefinitions[WorkflowParams.BoolParamWithDefault]),
+                        ManualChoiceInput.ForParam(ParamDefinitions[WorkflowParams.ChoiceParamWithoutDefault],
                             ["choice 1", "choice 2", "choice 3"]),
-                        ManualChoiceInput.ForParam(ParamDefinitions[Params.ChoiceParamWithDefault],
+                        ManualChoiceInput.ForParam(ParamDefinitions[WorkflowParams.ChoiceParamWithDefault],
                             ["choice 1", "choice 2", "choice 3"]),
                     ],
                 },

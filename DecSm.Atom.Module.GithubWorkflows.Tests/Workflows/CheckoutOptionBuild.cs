@@ -7,13 +7,11 @@ public partial class CheckoutOptionBuild : MinimalBuildDefinition, IGithubWorkfl
     [
         new("checkoutoption-workflow")
         {
-            Triggers = [ManualTrigger.Empty],
+            Triggers = [WorkflowTriggers.Manual],
             Targets =
             [
-                WorkflowTargets.CheckoutOptionTarget.WithOptions(GithubCheckoutOption.Create(new("v4",
-                    true,
-                    "recursive",
-                    "some-token"))),
+                WorkflowTargets.CheckoutOptionTarget.WithOptions(
+                    WorkflowOptions.Github.ConfigureCheckout("v4", true, "recursive", "some-token")),
             ],
             WorkflowTypes = [new GithubWorkflowType()],
         },

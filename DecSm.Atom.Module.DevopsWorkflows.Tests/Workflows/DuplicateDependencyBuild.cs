@@ -3,13 +3,16 @@
 [BuildDefinition]
 public partial class DuplicateDependencyBuild : MinimalBuildDefinition, IDevopsWorkflows, IDuplicateDependencyTarget
 {
-    public override IReadOnlyList<IWorkflowOption> GlobalWorkflowOptions => [UseCustomArtifactProvider.Enabled];
+    public override IReadOnlyList<IWorkflowOption> GlobalWorkflowOptions =>
+    [
+        WorkflowOptions.Artifacts.UseCustomProvider,
+    ];
 
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [
         new("duplicatedependency-workflow")
         {
-            Triggers = [ManualTrigger.Empty],
+            Triggers = [WorkflowTriggers.Manual],
             Targets = [WorkflowTargets.DuplicateDependencyTarget1],
             WorkflowTypes = [Devops.WorkflowType],
         },

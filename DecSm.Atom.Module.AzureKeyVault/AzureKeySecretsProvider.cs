@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Module.AzureKeyVault;
+﻿using DecSm.Atom.Workflows.Options;
+
+namespace DecSm.Atom.Module.AzureKeyVault;
 
 /// <summary>
 ///     Provides an implementation of <see cref="ISecretsProvider" /> and <see cref="IWorkflowOptionProvider" />
@@ -83,12 +85,14 @@ public sealed class AzureKeySecretsProvider(
             {
                 case AzureKeyVaultValueInjectionType.EnvironmentVariable:
                     valueInjections.Add(
-                        WorkflowSecretsEnvironmentInjection.Create(nameof(IAzureKeyVault.AzureVaultAddress)));
+                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretFromWorkflowEnvironment(
+                            nameof(IAzureKeyVault.AzureVaultAddress)));
 
                     break;
                 case AzureKeyVaultValueInjectionType.Secret:
                     valueInjections.Add(
-                        WorkflowSecretsSecretInjection.Create(nameof(IAzureKeyVault.AzureVaultAddress)));
+                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretForSecretProvider(
+                            nameof(IAzureKeyVault.AzureVaultAddress)));
 
                     break;
                 case AzureKeyVaultValueInjectionType.None:
@@ -103,12 +107,14 @@ public sealed class AzureKeySecretsProvider(
             {
                 case AzureKeyVaultValueInjectionType.EnvironmentVariable:
                     valueInjections.Add(
-                        WorkflowSecretsEnvironmentInjection.Create(nameof(IAzureKeyVault.AzureVaultTenantId)));
+                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretFromWorkflowEnvironment(
+                            nameof(IAzureKeyVault.AzureVaultTenantId)));
 
                     break;
                 case AzureKeyVaultValueInjectionType.Secret:
                     valueInjections.Add(
-                        WorkflowSecretsSecretInjection.Create(nameof(IAzureKeyVault.AzureVaultTenantId)));
+                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretForSecretProvider(
+                            nameof(IAzureKeyVault.AzureVaultTenantId)));
 
                     break;
                 case AzureKeyVaultValueInjectionType.None:
@@ -123,11 +129,14 @@ public sealed class AzureKeySecretsProvider(
             {
                 case AzureKeyVaultValueInjectionType.EnvironmentVariable:
                     valueInjections.Add(
-                        WorkflowSecretsEnvironmentInjection.Create(nameof(IAzureKeyVault.AzureVaultAppId)));
+                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretFromWorkflowEnvironment(
+                            nameof(IAzureKeyVault.AzureVaultAppId)));
 
                     break;
                 case AzureKeyVaultValueInjectionType.Secret:
-                    valueInjections.Add(WorkflowSecretsSecretInjection.Create(nameof(IAzureKeyVault.AzureVaultAppId)));
+                    valueInjections.Add(
+                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretForSecretProvider(
+                            nameof(IAzureKeyVault.AzureVaultAppId)));
 
                     break;
                 case AzureKeyVaultValueInjectionType.None:
@@ -142,12 +151,14 @@ public sealed class AzureKeySecretsProvider(
             {
                 case AzureKeyVaultValueInjectionType.EnvironmentVariable:
                     valueInjections.Add(
-                        WorkflowSecretsEnvironmentInjection.Create(nameof(IAzureKeyVault.AzureVaultAppSecret)));
+                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretFromWorkflowEnvironment(
+                            nameof(IAzureKeyVault.AzureVaultAppSecret)));
 
                     break;
                 case AzureKeyVaultValueInjectionType.Secret:
                     valueInjections.Add(
-                        WorkflowSecretsSecretInjection.Create(nameof(IAzureKeyVault.AzureVaultAppSecret)));
+                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretForSecretProvider(
+                            nameof(IAzureKeyVault.AzureVaultAppSecret)));
 
                     break;
                 case AzureKeyVaultValueInjectionType.None:

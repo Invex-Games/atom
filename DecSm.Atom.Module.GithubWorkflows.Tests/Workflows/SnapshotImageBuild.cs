@@ -7,11 +7,11 @@ public partial class SnapshotImageBuild : MinimalBuildDefinition, IGithubWorkflo
     [
         new("snapshotimageoption-workflow")
         {
-            Triggers = [ManualTrigger.Empty],
+            Triggers = [WorkflowTriggers.Manual],
             Targets =
             [
                 WorkflowTargets.SnapshotImageTarget.WithOptions(
-                    GithubSnapshotImageOption.Create(new("snapshot-image-test", "1.*.*"))),
+                    WorkflowOptions.Github.CreateImageSnapshot("snapshot-image-test", "1.*.*")),
             ],
             WorkflowTypes = [new GithubWorkflowType()],
         },

@@ -139,7 +139,7 @@ partial class DefaultTestDefinition : DecSm.Atom.Build.Definition.IBuildDefiniti
 
     private ParamsData? _params;
 
-    public ParamsData Params => _params ??= new(this);
+    public ParamsData WorkflowParams => _params ??= new(this);
 
     public override object? AccessParam(string paramName) =>
         paramName switch

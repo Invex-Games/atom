@@ -22,7 +22,7 @@ public partial class PermissionsBuild : MinimalBuildDefinition, IGithubWorkflows
                 }),
             ],
             WorkflowTypes = [Github.WorkflowType],
-            Options = [GithubTokenPermissionsOption.ReadAll],
+            Options = [WorkflowOptions.Github.TokenPermissions.ReadAll],
         },
     ];
 }

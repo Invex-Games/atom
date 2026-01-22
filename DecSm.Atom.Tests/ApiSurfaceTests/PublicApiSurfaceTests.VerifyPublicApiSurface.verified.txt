@@ -310,29 +310,6 @@
     ]
   },
   {
-    Name: DecSm.Atom.Artifacts.UseCustomArtifactProvider,
-    Members: [
-      {
-        Name: <Clone>$
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: GetHashCode
-      },
-      {
-        Name: ToString
-      }
-    ]
-  },
-  {
     Name: DecSm.Atom.Build.Definition.BuildDefinition
   },
   {
@@ -1045,6 +1022,9 @@
         Name: Description
       },
       {
+        Name: EnvVarName
+      },
+      {
         Name: Equals
       },
       {
@@ -1107,6 +1087,9 @@
       },
       {
         Name: Description
+      },
+      {
+        Name: EnvVarName
       },
       {
         Name: Equals
@@ -2032,15 +2015,6 @@
         Name: <Clone>$
       },
       {
-        Name: Disabled
-      },
-      {
-        Name: Enabled
-      },
-      {
-        Name: Equals
-      },
-      {
         Name: Equals
       },
       {
@@ -2054,58 +2028,6 @@
       },
       {
         Name: ToString
-      }
-    ]
-  },
-  {
-    Name: DecSm.Atom.Workflows.Definition.Options.WorkflowEnvironmentInjection,
-    Members: [
-      {
-        Name: <Clone>$
-      },
-      {
-        Name: AllowMultiple
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: GetHashCode
-      },
-      {
-        Name: ToString
-      }
-    ]
-  },
-  {
-    Name: DecSm.Atom.Workflows.Definition.Options.WorkflowOption`2,
-    Members: [
-      {
-        Name: <Clone>$
-      },
-      {
-        Name: AllowMultiple
-      },
-      {
-        Name: Create
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: GetHashCode
-      },
-      {
-        Name: ToString
       },
       {
         Name: Value
@@ -2113,117 +2035,7 @@
     ]
   },
   {
-    Name: DecSm.Atom.Workflows.Definition.Options.WorkflowParamInjection,
-    Members: [
-      {
-        Name: <Clone>$
-      },
-      {
-        Name: AllowMultiple
-      },
-      {
-        Name: Deconstruct
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: GetHashCode
-      },
-      {
-        Name: MergeWith
-      },
-      {
-        Name: Name
-      },
-      {
-        Name: ToString
-      },
-      {
-        Name: Value
-      }
-    ]
-  },
-  {
-    Name: DecSm.Atom.Workflows.Definition.Options.WorkflowSecretInjection,
-    Members: [
-      {
-        Name: <Clone>$
-      },
-      {
-        Name: AllowMultiple
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: GetHashCode
-      },
-      {
-        Name: ToString
-      }
-    ]
-  },
-  {
-    Name: DecSm.Atom.Workflows.Definition.Options.WorkflowSecretsEnvironmentInjection,
-    Members: [
-      {
-        Name: <Clone>$
-      },
-      {
-        Name: AllowMultiple
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: GetHashCode
-      },
-      {
-        Name: ToString
-      }
-    ]
-  },
-  {
-    Name: DecSm.Atom.Workflows.Definition.Options.WorkflowSecretsSecretInjection,
-    Members: [
-      {
-        Name: <Clone>$
-      },
-      {
-        Name: AllowMultiple
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: GetHashCode
-      },
-      {
-        Name: ToString
-      }
-    ]
+    Name: DecSm.Atom.Workflows.Definition.Options.WorkflowOptions
   },
   {
     Name: DecSm.Atom.Workflows.Definition.Triggers.GithubScheduleTrigger,
@@ -2279,9 +2091,6 @@
         Name: IncludedPaths
       },
       {
-        Name: IntoMain
-      },
-      {
         Name: ToString
       },
       {
@@ -2321,9 +2130,6 @@
       },
       {
         Name: IncludedTags
-      },
-      {
-        Name: ToMain
       },
       {
         Name: ToString
@@ -2474,9 +2280,6 @@
         Name: Deconstruct
       },
       {
-        Name: Empty
-      },
-      {
         Name: Equals
       },
       {
@@ -2490,6 +2293,35 @@
       },
       {
         Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Definition.Triggers.WorkflowTriggers,
+    Members: [
+      {
+        Name: Manual
+      },
+      {
+        Name: ManualWithInputs
+      },
+      {
+        Name: PullInto
+      },
+      {
+        Name: PullIntoMain
+      },
+      {
+        Name: PullRequest
+      },
+      {
+        Name: Push
+      },
+      {
+        Name: PushTo
+      },
+      {
+        Name: PushToMain
       }
     ]
   },
@@ -2530,6 +2362,9 @@
         Name: WorkflowTypes
       }
     ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Definition.WorkflowLabels
   },
   {
     Name: DecSm.Atom.Workflows.Definition.WorkflowTargetDefinition,
@@ -2575,6 +2410,1154 @@
       },
       {
         Name: WithSuppressedArtifactPublishing
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.AndExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Source
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.BooleanExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: ToString
+      },
+      {
+        Name: Value
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.CoalesceExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Source
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.ContainsExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Pattern
+      },
+      {
+        Name: Source
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.EndsWithExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Pattern
+      },
+      {
+        Name: Source
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.EqualExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Left
+      },
+      {
+        Name: Right
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.EvaluateExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Expression
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.FormatExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Arguments
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Source
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.GreaterThanExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Left
+      },
+      {
+        Name: Right
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.GreaterThanOrEqualExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Left
+      },
+      {
+        Name: Right
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.HashFilesExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Source
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.IndexAccessExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Array
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Index
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.IWorkflowExpressionGenerator,
+    Members: [
+      {
+        Name: Write
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.IWorkflowExpressionWriter,
+    Members: [
+      {
+        Name: Enabled
+      },
+      {
+        Name: Priority
+      },
+      {
+        Name: Write
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.JoinExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: OptionalSeparator
+      },
+      {
+        Name: Source
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.LessThanExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Left
+      },
+      {
+        Name: Right
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.LessThanOrEqualExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Left
+      },
+      {
+        Name: Right
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.LiteralExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: ToString
+      },
+      {
+        Name: Value
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.NotEqualExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Left
+      },
+      {
+        Name: Right
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.NotExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Source
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.NullExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.NumberExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: ToString
+      },
+      {
+        Name: Value
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.OrExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Source
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.PropertyAccessExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Object
+      },
+      {
+        Name: Property
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.StartsWithExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Pattern
+      },
+      {
+        Name: Source
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.StepOutcomeExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: StepName
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.StepOutcomeTypeExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: ToString
+      },
+      {
+        Name: Type
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.StepOutputExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: OutputName
+      },
+      {
+        Name: StepName
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.StringExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: ToString
+      },
+      {
+        Name: Value
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.TargetOutcomeExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Target
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.TargetOutcomeTypeExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: ToString
+      },
+      {
+        Name: Type
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.TargetOutputExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: OutputName
+      },
+      {
+        Name: TargetName
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.ToJsonExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Source
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.WorkflowExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: And
+      },
+      {
+        Name: Coalesce
+      },
+      {
+        Name: CoalesceString
+      },
+      {
+        Name: ContainedIn
+      },
+      {
+        Name: ContainedInString
+      },
+      {
+        Name: Contains
+      },
+      {
+        Name: ContainsString
+      },
+      {
+        Name: EndsWith
+      },
+      {
+        Name: EndsWithString
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: EqualTo
+      },
+      {
+        Name: EqualTo
+      },
+      {
+        Name: EqualToString
+      },
+      {
+        Name: Evaluate
+      },
+      {
+        Name: Format
+      },
+      {
+        Name: FormatString
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: GreaterThan
+      },
+      {
+        Name: GreaterThan
+      },
+      {
+        Name: GreaterThanOrEqual
+      },
+      {
+        Name: GreaterThanOrEqual
+      },
+      {
+        Name: GreaterThanOrEqualString
+      },
+      {
+        Name: GreaterThanString
+      },
+      {
+        Name: HashFiles
+      },
+      {
+        Name: IsEndOf
+      },
+      {
+        Name: IsEndOfString
+      },
+      {
+        Name: IsStartOf
+      },
+      {
+        Name: IsStartOfString
+      },
+      {
+        Name: Item
+      },
+      {
+        Name: Item
+      },
+      {
+        Name: Join
+      },
+      {
+        Name: JoinString
+      },
+      {
+        Name: LessThan
+      },
+      {
+        Name: LessThan
+      },
+      {
+        Name: LessThanOrEqualTo
+      },
+      {
+        Name: LessThanOrEqualTo
+      },
+      {
+        Name: LessThanOrEqualToString
+      },
+      {
+        Name: LessThanString
+      },
+      {
+        Name: Not
+      },
+      {
+        Name: NotEqualTo
+      },
+      {
+        Name: NotEqualTo
+      },
+      {
+        Name: NotEqualToString
+      },
+      {
+        Name: Or
+      },
+      {
+        Name: StartsWith
+      },
+      {
+        Name: StartsWithString
+      },
+      {
+        Name: ToJson
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.WorkflowExpressionExtensions,
+    Members: [
+      {
+        Name: From
+      },
+      {
+        Name: From
+      },
+      {
+        Name: From
+      },
+      {
+        Name: From
+      },
+      {
+        Name: From
+      },
+      {
+        Name: From
+      },
+      {
+        Name: From
+      },
+      {
+        Name: From
+      },
+      {
+        Name: get_False
+      },
+      {
+        Name: get_Null
+      },
+      {
+        Name: get_True
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.WorkflowExpressionGenerator,
+    Members: [
+      {
+        Name: Write
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.WorkflowExpressions,
+    Members: [
+      {
+        Name: Literal
       }
     ]
   },
@@ -2727,7 +3710,10 @@
         Name: <Clone>$
       },
       {
-        Name: Equals
+        Name: Deconstruct
+      },
+      {
+        Name: EnvironmentName
       },
       {
         Name: Equals
@@ -2748,15 +3734,183 @@
     Members: [
       {
         Name: JobRunsOn
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Options.Injections.WorkflowParamInjection,
+    Members: [
+      {
+        Name: <Clone>$
       },
       {
-        Name: MacOsLatestTag
+        Name: AllowMultiple
       },
       {
-        Name: UbuntuLatestTag
+        Name: Deconstruct
       },
       {
-        Name: WindowsLatestTag
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: InjectionExpression
+      },
+      {
+        Name: MergeWith
+      },
+      {
+        Name: Name
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Options.Injections.WorkflowParamInjectionFromEnvironment,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: AllowMultiple
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: ToString
+      },
+      {
+        Name: Value
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Options.Injections.WorkflowSecretInjection,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: AllowMultiple
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: ToString
+      },
+      {
+        Name: Value
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Options.Injections.WorkflowSecretInjectionForSecretProvider,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: AllowMultiple
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: SecretName
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Options.Injections.WorkflowSecretsInjectionFromEnvironment,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: AllowMultiple
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: SecretName
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Options.RunTargetIf,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Condition
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Expression
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: ToString
       }
     ]
   },
@@ -2789,6 +3943,49 @@
       },
       {
         Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Options.UseCustomArtifactProvider,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Options.WorkflowOptionsExtensions,
+    Members: [
+      {
+        Name: get_Artifacts
+      },
+      {
+        Name: get_Deploy
+      },
+      {
+        Name: get_Inject
+      },
+      {
+        Name: get_SetupDotnet
+      },
+      {
+        Name: get_Target
       }
     ]
   },
