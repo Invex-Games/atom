@@ -4,7 +4,6 @@
 [![Build](https://github.com/DecSmith42/atom/actions/workflows/Build.yml/badge.svg)](https://github.com/DecSmith42/atom/actions/workflows/Build.yml)
 [![Dependabot Updates](https://github.com/DecSmith42/atom/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/DecSmith42/atom/actions/workflows/dependabot/dependabot-updates)
 [![CodeQL](https://github.com/DecSmith42/atom/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/DecSmith42/atom/actions/workflows/github-code-scanning/codeql)
-[![Automatic Dependency Submission](https://github.com/DecSmith42/atom/actions/workflows/dependency-graph/auto-submission/badge.svg)](https://github.com/DecSmith42/atom/actions/workflows/dependency-graph/auto-submission)
 
 Atom is an opinionated, type-safe build automation framework for .NET. It enables you to define your build logic in C#,
 debug it like standard code, and automatically generate CI/CD configuration files for GitHub Actions and Azure DevOps.
