@@ -16,6 +16,10 @@ jobs:
   
   SetupBuildInfo:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
     outputs:
       build-name: ${{ steps.SetupBuildInfo.outputs.build-name }}
       build-id: ${{ steps.SetupBuildInfo.outputs.build-id }}
@@ -34,6 +38,8 @@ jobs:
       - name: SetupBuildInfo
         id: SetupBuildInfo
         run: dotnet run --project _atom/_atom.csproj SetupBuildInfo --skip --headless
+        env:
+          pull-request-number: ${{ github.event.number }}
   
   PackProjects:
     runs-on: ubuntu-latest
