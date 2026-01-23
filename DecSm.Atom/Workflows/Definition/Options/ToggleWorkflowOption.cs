@@ -12,8 +12,8 @@
 ///     <code>
 /// public sealed record UseCustomFeature : ToggleWorkflowOption&lt;UseCustomFeature&gt;;
 /// // Usage:
-/// var options = new List&lt;IWorkflowOption&gt; { UseCustomFeature.Enabled };
-/// bool isEnabled = UseCustomFeature.IsEnabled(options); // true
+/// var options = new List&lt;IWorkflowOption&gt; { new UseCustomFeature { Value = true } };
+/// bool isEnabled = options.HasEnabledToggle&lt;UseCustomFeature&gt;(); // true
 ///     </code>
 /// </example>
 [PublicAPI]
@@ -21,16 +21,18 @@ public abstract record ToggleWorkflowOption<TSelf> : IWorkflowOption
     where TSelf : ToggleWorkflowOption<TSelf>
 {
     public bool Value { get; init; }
+}
 
-    /// <summary>
-    ///     Determines whether this toggle option is enabled within a collection of workflow options.
-    /// </summary>
-    /// <param name="options">The collection of workflow options to check.</param>
-    /// <returns><c>true</c> if an enabled instance of this option exists in the collection; otherwise, <c>false</c>.</returns>
-#pragma warning disable RCS1158
-    public static bool IsEnabled(IEnumerable<IWorkflowOption> options) =>
-        options
-            .OfType<TSelf>()
-            .Any(x => x.Value);
-#pragma warning restore RCS1158
+[PublicAPI]
+public static class ToggleWorkflowOptionExtensions
+{
+    extension(IEnumerable<IWorkflowOption> options)
+    {
+        [PublicAPI]
+        public bool HasEnabledToggle<T>()
+            where T : ToggleWorkflowOption<T> =>
+            options
+                .OfType<T>()
+                .Any(x => x.Value);
+    }
 }
