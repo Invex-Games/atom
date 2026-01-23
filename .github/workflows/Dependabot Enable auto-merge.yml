@@ -22,7 +22,7 @@ jobs:
         with:
           dotnet-version: '10.0.x'
           cache: true
-          cache-dependency-path: _atom/packagess.lock.json
+          cache-dependency-path: _atom/packages.lock.json
       
       - name: ApproveDependabotPr
         id: ApproveDependabotPr
