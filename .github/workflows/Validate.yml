@@ -26,33 +26,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
-      
-      - name: cache-restore-nuget-packages
-        id: cache-restore-nuget-packages
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            '${{ github.workspace }}/.nuget-packages'
-          key: 'nuget-packages'
       
       - name: SetupBuildInfo
         id: SetupBuildInfo
         run: dotnet run --project _atom/_atom.csproj SetupBuildInfo --skip --headless
         env:
           pull-request-number: ${{ github.event.number }}
-          NUGET_PACKAGES: '${{ github.workspace }}/.nuget-packages'
-      
-      - name: cache-save-nuget-packages
-        id: cache-save-nuget-packages
-        uses: actions/cache/save@v4
-        if: steps.cache-restore-nuget-packages.outputs.cache-hit != true
-        with:
-          path: |
-            '${{ github.workspace }}/.nuget-packages'
-          key: 'nuget-packages'
   
   PackProjects:
     runs-on: ubuntu-latest
@@ -62,32 +45,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
       
-      - name: cache-restore-nuget-packages
-        id: cache-restore-nuget-packages
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            '${{ github.workspace }}/.nuget-packages'
-          key: 'nuget-packages'
-      
       - name: PackProjects
         id: PackProjects
         run: dotnet run --project _atom/_atom.csproj PackProjects --skip --headless
-        env:
-          NUGET_PACKAGES: '${{ github.workspace }}/.nuget-packages'
-      
-      - name: cache-save-nuget-packages
-        id: cache-save-nuget-packages
-        uses: actions/cache/save@v4
-        if: steps.cache-restore-nuget-packages.outputs.cache-hit != true
-        with:
-          path: |
-            '${{ github.workspace }}/.nuget-packages'
-          key: 'nuget-packages'
   
   PackTool:
     strategy:
@@ -100,34 +65,17 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
-      
-      - name: cache-restore-nuget-packages
-        id: cache-restore-nuget-packages
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            '${{ github.workspace }}/.nuget-packages'
-          key: 'nuget-packages'
       
       - name: PackTool
         id: PackTool
         run: dotnet run --project _atom/_atom.csproj PackTool --skip --headless
         env:
-          NUGET_PACKAGES: '${{ github.workspace }}/.nuget-packages'
           job-runs-on: ${{ matrix.job-runs-on }}
           build-slice: ${{ matrix.job-runs-on }}
-      
-      - name: cache-save-nuget-packages
-        id: cache-save-nuget-packages
-        uses: actions/cache/save@v4
-        if: steps.cache-restore-nuget-packages.outputs.cache-hit != true
-        with:
-          path: |
-            '${{ github.workspace }}/.nuget-packages'
-          key: 'nuget-packages'
   
   TestProjects:
     strategy:
@@ -141,41 +89,26 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
+      
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
+      
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
-      
-      - name: cache-restore-nuget-packages
-        id: cache-restore-nuget-packages
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            '${{ github.workspace }}/.nuget-packages'
-          key: 'nuget-packages'
       
       - name: TestProjects
         id: TestProjects
         run: dotnet run --project _atom/_atom.csproj TestProjects --skip --headless
         env:
-          NUGET_PACKAGES: '${{ github.workspace }}/.nuget-packages'
           job-runs-on: ${{ matrix.job-runs-on }}
           test-framework: ${{ matrix.test-framework }}
           build-slice: ${{ matrix.job-runs-on }}-${{ matrix.test-framework }}
-      
-      - name: cache-save-nuget-packages
-        id: cache-save-nuget-packages
-        uses: actions/cache/save@v4
-        if: steps.cache-restore-nuget-packages.outputs.cache-hit != true
-        with:
-          path: |
-            '${{ github.workspace }}/.nuget-packages'
-          key: 'nuget-packages'
       
       - name: Upload DecSm.Atom.Tests
         uses: actions/upload-artifact@v4
@@ -227,17 +160,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
-      
-      - name: cache-restore-nuget-packages
-        id: cache-restore-nuget-packages
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            '${{ github.workspace }}/.nuget-packages'
-          key: 'nuget-packages'
       
       - name: CheckPrForBreakingChanges
         id: CheckPrForBreakingChanges
@@ -250,13 +176,3 @@ jobs:
           azure-vault-app-id: ${{ vars.AZURE_VAULT_APP_ID }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pull-request-number: ${{ github.event.number }}
-          NUGET_PACKAGES: '${{ github.workspace }}/.nuget-packages'
-      
-      - name: cache-save-nuget-packages
-        id: cache-save-nuget-packages
-        uses: actions/cache/save@v4
-        if: steps.cache-restore-nuget-packages.outputs.cache-hit != true
-        with:
-          path: |
-            '${{ github.workspace }}/.nuget-packages'
-          key: 'nuget-packages'
