@@ -11,6 +11,7 @@
 ///     to identify the correct artifacts to download.
 ///     This target is hidden by default, primarily for internal use or custom artifact workflows.
 /// </remarks>
+[PublicAPI]
 public interface IRetrieveArtifact : IAtomArtifactsParam, ISetupBuildInfo
 {
     /// <summary>

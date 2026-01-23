@@ -1,6 +1,9 @@
 ﻿namespace DecSm.Atom;
 
-/// <summary>See <see cref="SetupBuildInfo" /></summary>
+/// <summary>
+///     See <see cref="SetupBuildInfo" />
+/// </summary>
+[PublicAPI]
 public interface ISetupBuildInfo : IBuildInfo, IVariablesHelper, IReportsHelper
 {
     /// <summary>

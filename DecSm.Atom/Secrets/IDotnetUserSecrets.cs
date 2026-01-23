@@ -26,6 +26,7 @@
 /// </example>
 /// <seealso cref="DotnetUserSecretsProvider" />
 /// <seealso cref="ISecretsProvider" />
+[PublicAPI]
 [ConfigureHostBuilder]
 public partial interface IDotnetUserSecrets
 {

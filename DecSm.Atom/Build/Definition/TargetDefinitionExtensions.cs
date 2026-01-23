@@ -3,6 +3,7 @@
 /// <summary>
 ///     Provides extension methods for <see cref="TargetDefinition" /> to simplify adding multiple dependencies.
 /// </summary>
+[PublicAPI]
 public static class TargetDefinitionExtensions
 {
     extension(TargetDefinition targetDefinition)

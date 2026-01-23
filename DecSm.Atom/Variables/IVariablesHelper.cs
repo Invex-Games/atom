@@ -16,6 +16,7 @@
 /// </example>
 /// <seealso cref="IBuildAccessor" />
 /// <seealso cref="IWorkflowVariableService" />
+[PublicAPI]
 public interface IVariablesHelper : IBuildAccessor
 {
     /// <summary>

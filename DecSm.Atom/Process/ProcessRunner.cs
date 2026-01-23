@@ -3,6 +3,7 @@
 /// <summary>
 ///     Defines a service for executing external processes with comprehensive logging and error handling.
 /// </summary>
+[PublicAPI]
 public interface IProcessRunner
 {
     /// <summary>
