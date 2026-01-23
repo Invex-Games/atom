@@ -308,7 +308,8 @@ internal sealed partial class DevopsWorkflowWriter(
                 var target = buildModel.GetTarget(commandStep.Name);
                 targetsForConsumedVariableDeclaration.Add(target);
 
-                if (!UseCustomArtifactProvider.IsEnabled(workflow.Options) || commandStep.SuppressArtifactPublishing)
+                if (!workflow.Options.HasEnabledToggle<UseCustomArtifactProvider>() ||
+                    commandStep.SuppressArtifactPublishing)
                     continue;
 
                 if (target.ConsumedArtifacts.Count > 0)
@@ -484,7 +485,7 @@ internal sealed partial class DevopsWorkflowWriter(
                         consumedArtifact.ArtifactName,
                         consumedArtifact.TargetName);
 
-            if (UseCustomArtifactProvider.IsEnabled(workflow.Options))
+            if (workflow.Options.HasEnabledToggle<UseCustomArtifactProvider>())
             {
                 WriteCommandStep(workflow,
                     new(nameof(IRetrieveArtifact.RetrieveArtifact)),
@@ -530,7 +531,7 @@ internal sealed partial class DevopsWorkflowWriter(
         // ReSharper disable once InvertIf
         if (commandStepTarget.ProducedArtifacts.Count > 0 && !step.SuppressArtifactPublishing)
         {
-            if (UseCustomArtifactProvider.IsEnabled(workflow.Options))
+            if (workflow.Options.HasEnabledToggle<UseCustomArtifactProvider>())
             {
                 WriteLine();
 

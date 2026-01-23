@@ -584,7 +584,7 @@ internal sealed class GithubWorkflowWriter(
                         consumedArtifact.ArtifactName,
                         consumedArtifact.TargetName);
 
-            if (UseCustomArtifactProvider.IsEnabled(workflow.Options))
+            if (workflow.Options.HasEnabledToggle<UseCustomArtifactProvider>())
                 foreach (var slice in commandStepTarget.ConsumedArtifacts.GroupBy(a => a.BuildSlice))
                 {
                     WriteLine();
@@ -634,7 +634,7 @@ internal sealed class GithubWorkflowWriter(
         // ReSharper disable once InvertIf
         if (commandStepTarget.ProducedArtifacts.Count > 0 && !step.SuppressArtifactPublishing)
         {
-            if (UseCustomArtifactProvider.IsEnabled(workflow.Options))
+            if (workflow.Options.HasEnabledToggle<UseCustomArtifactProvider>())
                 foreach (var slice in commandStepTarget.ProducedArtifacts.GroupBy(a => a.BuildSlice))
                 {
                     WriteLine();

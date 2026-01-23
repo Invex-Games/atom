@@ -73,8 +73,11 @@ public sealed class AzureKeySecretsProvider(
     {
         get
         {
-            if (!UseAzureKeyVault.IsEnabled(
-                    buildDefinition.GlobalWorkflowOptions.Concat(buildDefinition.Workflows.SelectMany(x => x.Options))))
+            if (!buildDefinition
+                    .GlobalWorkflowOptions
+                    .Concat(buildDefinition.Workflows.SelectMany(x => x.Options))
+                    .HasEnabledToggle<UseAzureKeyVault>())
+
                 return [];
 
             var injections = keyVault.AzureKeyVaultValueInjections;

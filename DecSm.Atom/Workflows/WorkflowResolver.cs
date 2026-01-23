@@ -63,7 +63,7 @@ internal sealed class WorkflowResolver(
         // If this workflow uses a custom artifact provider, we need to ensure that steps that
         // consume or produce artifacts are dependent on the Setup step.
         // It will be up to the WorkflowWriter to implement the download/upload steps.
-        if (UseCustomArtifactProvider.IsEnabled(workflowOptions))
+        if (workflowOptions.HasEnabledToggle<UseCustomArtifactProvider>())
             definedCommandJobs = definedCommandJobs.ConvertAll(job => job
                 .Steps
                 .Where(step => step is { SuppressArtifactPublishing: false })

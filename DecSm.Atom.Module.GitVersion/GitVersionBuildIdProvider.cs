@@ -34,7 +34,9 @@ internal sealed class GitVersionBuildIdProvider(
     {
         get
         {
-            if (!UseGitVersionForBuildId.IsEnabled(IWorkflowOption.GetOptionsForCurrentTarget(buildDefinition)))
+            if (!IWorkflowOption
+                    .GetOptionsForCurrentTarget(buildDefinition)
+                    .HasEnabledToggle<UseGitVersionForBuildId>())
                 throw new InvalidOperationException(
                     "GitVersion is not enabled for build ID generation. Ensure UseGitVersionForBuildId is enabled.");
 
