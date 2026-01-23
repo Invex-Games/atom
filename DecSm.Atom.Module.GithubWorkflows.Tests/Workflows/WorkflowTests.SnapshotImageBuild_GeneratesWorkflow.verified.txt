@@ -19,4 +19,4 @@ jobs:
       
       - name: SnapshotImageTarget
         id: SnapshotImageTarget
-        run: dotnet run --project AtomTest/AtomTest.csproj SnapshotImageTarget --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- SnapshotImageTarget --skip --headless

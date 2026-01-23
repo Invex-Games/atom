@@ -843,6 +843,124 @@
     ]
   },
   {
+    Name: DecSm.Atom.Experimental.AtomArguments,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Arguments
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Experimental.WorkflowCacheOptions,
+    Members: [
+      {
+        Name: get_Cache
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Experimental.WorkflowCacheRestoreOption,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Key
+      },
+      {
+        Name: Name
+      },
+      {
+        Name: Paths
+      },
+      {
+        Name: RunIf
+      },
+      {
+        Name: StepId
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Experimental.WorkflowCacheSaveOption,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Key
+      },
+      {
+        Name: Name
+      },
+      {
+        Name: Paths
+      },
+      {
+        Name: RunIf
+      },
+      {
+        Name: RunOnlyIfMatchingNameCacheMissed
+      },
+      {
+        Name: StepId
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Experimental.WorkflowCacheUtil,
+    Members: [
+      {
+        Name: ConvertNameToId
+      },
+      {
+        Name: SanitizeRegex
+      }
+    ]
+  },
+  {
     Name: DecSm.Atom.Help.IHelpService,
     Members: [
       {
@@ -2024,13 +2142,18 @@
         Name: GetHashCode
       },
       {
-        Name: IsEnabled
-      },
-      {
         Name: ToString
       },
       {
         Name: Value
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Definition.Options.ToggleWorkflowOptionExtensions,
+    Members: [
+      {
+        Name: HasEnabledToggle
       }
     ]
   },
@@ -3738,6 +3861,35 @@
     ]
   },
   {
+    Name: DecSm.Atom.Workflows.Options.Injections.WorkflowEnvironmentVariableInjection,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Name
+      },
+      {
+        Name: ToString
+      },
+      {
+        Name: Value
+      }
+    ]
+  },
+  {
     Name: DecSm.Atom.Workflows.Options.Injections.WorkflowParamInjection,
     Members: [
       {
@@ -3921,6 +4073,9 @@
         Name: <Clone>$
       },
       {
+        Name: Cache
+      },
+      {
         Name: Deconstruct
       },
       {
@@ -3937,6 +4092,9 @@
       },
       {
         Name: GetHashCode
+      },
+      {
+        Name: LockFile
       },
       {
         Name: Quality

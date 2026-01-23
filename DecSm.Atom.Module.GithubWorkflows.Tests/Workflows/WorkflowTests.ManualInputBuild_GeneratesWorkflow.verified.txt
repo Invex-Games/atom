@@ -52,4 +52,4 @@ jobs:
       
       - name: ManualInputTarget
         id: ManualInputTarget
-        run: dotnet run --project AtomTest/AtomTest.csproj ManualInputTarget --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ManualInputTarget --skip --headless

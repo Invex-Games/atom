@@ -17,4 +17,4 @@ jobs:
       
       - name: EnvironmentTarget
         id: EnvironmentTarget
-        run: dotnet run --project AtomTest/AtomTest.csproj EnvironmentTarget --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- EnvironmentTarget --skip --headless

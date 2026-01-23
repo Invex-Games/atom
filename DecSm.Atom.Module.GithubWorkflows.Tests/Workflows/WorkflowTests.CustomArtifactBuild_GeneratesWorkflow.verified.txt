@@ -23,7 +23,7 @@ jobs:
       
       - name: SetupBuildInfo
         id: SetupBuildInfo
-        run: dotnet run --project AtomTest/AtomTest.csproj SetupBuildInfo --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- SetupBuildInfo --skip --headless
   
   ArtifactTarget1:
     needs: [ SetupBuildInfo ]
@@ -37,10 +37,10 @@ jobs:
       
       - name: ArtifactTarget1
         id: ArtifactTarget1
-        run: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget1 --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ArtifactTarget1 --skip --headless
       
       - name: StoreArtifact
-        run: dotnet run --project AtomTest/AtomTest.csproj StoreArtifact --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- StoreArtifact --skip --headless
         env:
           build-name: ${{ needs.SetupBuildInfo.outputs.build-name }}
           build-id: ${{ needs.SetupBuildInfo.outputs.build-id }}
@@ -56,19 +56,19 @@ jobs:
         with:
           fetch-depth: 0
       
+      
       - name: RetrieveArtifact
-        run: dotnet run --project AtomTest/AtomTest.csproj RetrieveArtifact --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- RetrieveArtifact --skip --headless
         env:
           build-name: ${{ needs.SetupBuildInfo.outputs.build-name }}
           build-id: ${{ needs.SetupBuildInfo.outputs.build-id }}
           atom-artifacts: TestArtifact1
-      
       - name: ArtifactTarget2
         id: ArtifactTarget2
-        run: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget2 --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ArtifactTarget2 --skip --headless
       
       - name: StoreArtifact
-        run: dotnet run --project AtomTest/AtomTest.csproj StoreArtifact --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- StoreArtifact --skip --headless
         env:
           build-name: ${{ needs.SetupBuildInfo.outputs.build-name }}
           build-id: ${{ needs.SetupBuildInfo.outputs.build-id }}
@@ -76,7 +76,7 @@ jobs:
           build-slice: Slice1
       
       - name: StoreArtifact
-        run: dotnet run --project AtomTest/AtomTest.csproj StoreArtifact --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- StoreArtifact --skip --headless
         env:
           build-name: ${{ needs.SetupBuildInfo.outputs.build-name }}
           build-id: ${{ needs.SetupBuildInfo.outputs.build-id }}
@@ -93,15 +93,16 @@ jobs:
         with:
           fetch-depth: 0
       
+      
       - name: RetrieveArtifact
-        run: dotnet run --project AtomTest/AtomTest.csproj RetrieveArtifact --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- RetrieveArtifact --skip --headless
         env:
           build-name: ${{ needs.SetupBuildInfo.outputs.build-name }}
           build-id: ${{ needs.SetupBuildInfo.outputs.build-id }}
           atom-artifacts: TestArtifact1
       
       - name: RetrieveArtifact
-        run: dotnet run --project AtomTest/AtomTest.csproj RetrieveArtifact --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- RetrieveArtifact --skip --headless
         env:
           build-name: ${{ needs.SetupBuildInfo.outputs.build-name }}
           build-id: ${{ needs.SetupBuildInfo.outputs.build-id }}
@@ -109,16 +110,15 @@ jobs:
           build-slice: Slice1
       
       - name: RetrieveArtifact
-        run: dotnet run --project AtomTest/AtomTest.csproj RetrieveArtifact --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- RetrieveArtifact --skip --headless
         env:
           build-name: ${{ needs.SetupBuildInfo.outputs.build-name }}
           build-id: ${{ needs.SetupBuildInfo.outputs.build-id }}
           atom-artifacts: TestArtifact2
           build-slice: Slice2
-      
       - name: ArtifactTarget3
         id: ArtifactTarget3
-        run: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget3 --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ArtifactTarget3 --skip --headless
   
   ArtifactTarget4:
     needs: [ ArtifactTarget2, SetupBuildInfo ]
@@ -133,17 +133,17 @@ jobs:
         with:
           fetch-depth: 0
       
+      
       - name: RetrieveArtifact
-        run: dotnet run --project AtomTest/AtomTest.csproj RetrieveArtifact --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- RetrieveArtifact --skip --headless
         env:
           build-name: ${{ needs.SetupBuildInfo.outputs.build-name }}
           build-id: ${{ needs.SetupBuildInfo.outputs.build-id }}
           atom-artifacts: TestArtifact2
           build-slice: ${{ matrix.slice }}
-      
       - name: ArtifactTarget4
         id: ArtifactTarget4
-        run: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget4 --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ArtifactTarget4 --skip --headless
         env:
           slice: ${{ matrix.slice }}
           build-slice: ${{ matrix.slice }}

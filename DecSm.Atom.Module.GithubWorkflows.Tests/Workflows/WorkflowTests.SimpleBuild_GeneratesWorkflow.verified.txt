@@ -18,4 +18,4 @@ jobs:
       
       - name: SimpleTarget
         id: SimpleTarget
-        run: dotnet run --project AtomTest/AtomTest.csproj SimpleTarget --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- SimpleTarget --skip --headless

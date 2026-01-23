@@ -18,7 +18,7 @@ jobs:
       
       - name: ArtifactTarget1
         id: ArtifactTarget1
-        run: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget1 --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ArtifactTarget1 --skip --headless
       
       - name: Upload TestArtifact1
         uses: actions/upload-artifact@v4
@@ -36,15 +36,15 @@ jobs:
         with:
           fetch-depth: 0
       
+      
       - name: Download TestArtifact1
         uses: actions/download-artifact@v4
         with:
           name: TestArtifact1
           path: "${{ github.workspace }}/.github/artifacts/TestArtifact1"
-      
       - name: ArtifactTarget2
         id: ArtifactTarget2
-        run: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget2 --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ArtifactTarget2 --skip --headless
       
       - name: Upload TestArtifact2
         uses: actions/upload-artifact@v4
@@ -68,6 +68,7 @@ jobs:
         with:
           fetch-depth: 0
       
+      
       - name: Download TestArtifact1
         uses: actions/download-artifact@v4
         with:
@@ -85,10 +86,9 @@ jobs:
         with:
           name: TestArtifact2-Slice2
           path: "${{ github.workspace }}/.github/artifacts/TestArtifact2"
-      
       - name: ArtifactTarget3
         id: ArtifactTarget3
-        run: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget3 --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ArtifactTarget3 --skip --headless
   
   ArtifactTarget4:
     needs: [ ArtifactTarget2 ]
@@ -103,15 +103,15 @@ jobs:
         with:
           fetch-depth: 0
       
+      
       - name: Download TestArtifact2
         uses: actions/download-artifact@v4
         with:
           name: TestArtifact2-${{ matrix.slice }}
           path: "${{ github.workspace }}/.github/artifacts/TestArtifact2"
-      
       - name: ArtifactTarget4
         id: ArtifactTarget4
-        run: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget4 --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ArtifactTarget4 --skip --headless
         env:
           slice: ${{ matrix.slice }}
           build-slice: ${{ matrix.slice }}

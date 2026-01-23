@@ -18,4 +18,4 @@ jobs:
       
       - name: ReleaseTriggerTarget
         id: ReleaseTriggerTarget
-        run: dotnet run --project AtomTest/AtomTest.csproj ReleaseTriggerTarget --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ReleaseTriggerTarget --skip --headless
