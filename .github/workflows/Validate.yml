@@ -36,7 +36,7 @@ jobs:
         with:
           path: |
             '${{ github.workspace }}/.nuget-packages'
-          key: nuget-packages
+          key: 'nuget-packages'
       
       - name: SetupBuildInfo
         id: SetupBuildInfo
@@ -52,7 +52,7 @@ jobs:
         with:
           path: |
             '${{ github.workspace }}/.nuget-packages'
-          key: nuget-packages
+          key: 'nuget-packages'
   
   PackProjects:
     runs-on: ubuntu-latest
@@ -72,7 +72,7 @@ jobs:
         with:
           path: |
             '${{ github.workspace }}/.nuget-packages'
-          key: nuget-packages
+          key: 'nuget-packages'
       
       - name: PackProjects
         id: PackProjects
@@ -87,7 +87,7 @@ jobs:
         with:
           path: |
             '${{ github.workspace }}/.nuget-packages'
-          key: nuget-packages
+          key: 'nuget-packages'
   
   PackTool:
     strategy:
@@ -110,7 +110,7 @@ jobs:
         with:
           path: |
             '${{ github.workspace }}/.nuget-packages'
-          key: nuget-packages
+          key: 'nuget-packages'
       
       - name: PackTool
         id: PackTool
@@ -127,7 +127,7 @@ jobs:
         with:
           path: |
             '${{ github.workspace }}/.nuget-packages'
-          key: nuget-packages
+          key: 'nuget-packages'
   
   TestProjects:
     strategy:
@@ -157,7 +157,7 @@ jobs:
         with:
           path: |
             '${{ github.workspace }}/.nuget-packages'
-          key: nuget-packages
+          key: 'nuget-packages'
       
       - name: TestProjects
         id: TestProjects
@@ -175,7 +175,7 @@ jobs:
         with:
           path: |
             '${{ github.workspace }}/.nuget-packages'
-          key: nuget-packages
+          key: 'nuget-packages'
       
       - name: Upload DecSm.Atom.Tests
         uses: actions/upload-artifact@v4
@@ -237,7 +237,7 @@ jobs:
         with:
           path: |
             '${{ github.workspace }}/.nuget-packages'
-          key: nuget-packages
+          key: 'nuget-packages'
       
       - name: CheckPrForBreakingChanges
         id: CheckPrForBreakingChanges
@@ -259,4 +259,4 @@ jobs:
         with:
           path: |
             '${{ github.workspace }}/.nuget-packages'
-          key: nuget-packages
+          key: 'nuget-packages'
