@@ -50,7 +50,7 @@ internal partial class Build : BuildDefinition,
             WorkflowOptions.UseGitVersionForBuildId.Enabled,
             WorkflowOptions.SetupDotnet.Dotnet100X(cache: true, lockFile: "'**/packages.lock.json'"),
             new RestoreLockedModeStep(GithubCustomStepOrder.BeforeTarget),
-            new AtomArguments("--no-restore ${{ runner.debug && '--verbose' || '' }}"),
+            new AtomArguments("--no-restore ${{ runner.debug && '-v d' || '' }}"),
         ];
 
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
