@@ -8,6 +8,7 @@
 ///     GitHub Actions workflow files, providing GitHub-specific workflow variables,
 ///     and adapting build paths and reporting when running within GitHub Actions.
 /// </remarks>
+[PublicAPI]
 [ConfigureHostBuilder]
 public partial interface IGithubWorkflows : IJobRunsOn
 {

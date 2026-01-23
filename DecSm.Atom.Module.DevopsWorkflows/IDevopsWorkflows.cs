@@ -8,6 +8,7 @@
 ///     Azure DevOps Pipeline YAML files, providing Azure DevOps-specific workflow variables,
 ///     and adapting build paths and reporting when running within Azure DevOps Pipelines.
 /// </remarks>
+[PublicAPI]
 [ConfigureHostBuilder]
 public partial interface IDevopsWorkflows : IJobRunsOn
 {
