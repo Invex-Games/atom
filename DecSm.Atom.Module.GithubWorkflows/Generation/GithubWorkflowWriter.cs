@@ -485,6 +485,9 @@ internal sealed class GithubWorkflowWriter(
 
                         if (setupDotnetStep.Cache)
                             WriteLine("cache: true");
+
+                        if (setupDotnetStep.LockFile is { Length: > 0 })
+                            WriteLine($"cache-dependency-path: {setupDotnetStep.LockFile}");
                     }
                 }
 
