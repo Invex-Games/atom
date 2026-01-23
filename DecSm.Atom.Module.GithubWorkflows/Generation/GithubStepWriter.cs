@@ -1,7 +1,12 @@
 namespace DecSm.Atom.Module.GithubWorkflows.Generation;
 
 [PublicAPI]
-public sealed record GithubStepWriter(StringBuilder Builder, int BaseIndentLevel)
+public sealed record GithubStepWriter(
+    IWorkflowExpressionGenerator WorkflowExpressionGenerator,
+    IAtomFileSystem FileSystem,
+    StringBuilder Builder,
+    int BaseIndentLevel
+)
 {
     private const int TabSize = 2;
     private int _indentLevel = BaseIndentLevel;

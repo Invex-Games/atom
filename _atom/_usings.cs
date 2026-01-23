@@ -2,6 +2,7 @@ global using System.Runtime.InteropServices;
 global using Atom.Targets;
 global using DecSm.Atom;
 global using DecSm.Atom.Build.Definition;
+global using DecSm.Atom.Experimental;
 global using DecSm.Atom.Hosting;
 global using DecSm.Atom.Module.AzureKeyVault;
 global using DecSm.Atom.Module.DevopsWorkflows;

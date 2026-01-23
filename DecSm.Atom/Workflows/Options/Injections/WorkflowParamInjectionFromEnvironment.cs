@@ -23,3 +23,6 @@ public sealed record WorkflowParamInjectionFromEnvironment(string Value) : IWork
     /// </summary>
     public bool AllowMultiple => true;
 }
+
+[PublicAPI]
+public sealed record WorkflowEnvironmentVariableInjection(string Name, WorkflowExpression Value) : IWorkflowOption;

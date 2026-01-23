@@ -7,6 +7,7 @@ global using DecSm.Atom.Artifacts;
 global using DecSm.Atom.Build;
 global using DecSm.Atom.Build.Definition;
 global using DecSm.Atom.Build.Model;
+global using DecSm.Atom.Experimental;
 global using DecSm.Atom.Hosting;
 global using DecSm.Atom.Logging;
 global using DecSm.Atom.Module.GithubWorkflows.Generation;
