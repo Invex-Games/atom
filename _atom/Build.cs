@@ -53,10 +53,10 @@ internal partial class Build : BuildDefinition,
             WorkflowOptions.Inject.EnvironmentVariable("NUGET_PACKAGES",
                 WorkflowExpressions.From("${{ github.workspace }}/.nuget-packages")),
             WorkflowOptions.Cache.Save("nuget-packages",
-                "nuget-packages",
+                WorkflowExpressions.From("nuget-packages"),
                 [WorkflowExpressions.From("${{ github.workspace }}/.nuget-packages")]),
             WorkflowOptions.Cache.Restore("nuget-packages",
-                "nuget-packages",
+                WorkflowExpressions.From("nuget-packages"),
                 [WorkflowExpressions.From("${{ github.workspace }}/.nuget-packages")]),
         ];
 

@@ -27,7 +27,7 @@ jobs:
         with:
           path: |
             '${{ github.workspace }}/.nuget-packages'
-          key: nuget-packages
+          key: 'nuget-packages'
       
       - name: ApproveDependabotPr
         id: ApproveDependabotPr
@@ -48,4 +48,4 @@ jobs:
         with:
           path: |
             '${{ github.workspace }}/.nuget-packages'
-          key: nuget-packages
+          key: 'nuget-packages'
