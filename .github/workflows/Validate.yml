@@ -31,7 +31,7 @@ jobs:
         with:
           dotnet-version: '10.0.x'
           cache: true
-          cache-dependency-path: _atom/packagess.lock.json
+          cache-dependency-path: _atom/packages.lock.json
       
       - name: SetupBuildInfo
         id: SetupBuildInfo
@@ -52,7 +52,7 @@ jobs:
         with:
           dotnet-version: '10.0.x'
           cache: true
-          cache-dependency-path: _atom/packagess.lock.json
+          cache-dependency-path: _atom/packages.lock.json
       
       - name: PackProjects
         id: PackProjects
@@ -74,7 +74,7 @@ jobs:
         with:
           dotnet-version: '10.0.x'
           cache: true
-          cache-dependency-path: _atom/packagess.lock.json
+          cache-dependency-path: _atom/packages.lock.json
       
       - name: PackTool
         id: PackTool
@@ -100,7 +100,7 @@ jobs:
         with:
           dotnet-version: '10.0.x'
           cache: true
-          cache-dependency-path: _atom/packagess.lock.json
+          cache-dependency-path: _atom/packages.lock.json
       
       - uses: actions/setup-dotnet@v4
         with:
@@ -173,7 +173,7 @@ jobs:
         with:
           dotnet-version: '10.0.x'
           cache: true
-          cache-dependency-path: _atom/packagess.lock.json
+          cache-dependency-path: _atom/packages.lock.json
       
       - name: CheckPrForBreakingChanges
         id: CheckPrForBreakingChanges

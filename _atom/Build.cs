@@ -48,7 +48,7 @@ internal partial class Build : BuildDefinition,
         [
             WorkflowOptions.AzureKeyVault.Use,
             WorkflowOptions.UseGitVersionForBuildId.Enabled,
-            WorkflowOptions.SetupDotnet.Dotnet100X(cache: true, lockFile: "_atom/packagess.lock.json"),
+            WorkflowOptions.SetupDotnet.Dotnet100X(cache: true, lockFile: "_atom/packages.lock.json"),
         ];
 
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
