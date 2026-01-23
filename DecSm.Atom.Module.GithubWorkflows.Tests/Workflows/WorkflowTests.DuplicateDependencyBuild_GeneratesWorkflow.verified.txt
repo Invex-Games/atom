@@ -21,7 +21,7 @@ jobs:
       
       - name: SetupBuildInfo
         id: SetupBuildInfo
-        run: dotnet run --project AtomTest/AtomTest.csproj SetupBuildInfo --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- SetupBuildInfo --skip --headless
   
   DuplicateDependencyTarget1:
     needs: [ SetupBuildInfo ]
@@ -35,13 +35,13 @@ jobs:
       
       - name: DuplicateDependencyTarget1
         id: DuplicateDependencyTarget1
-        run: dotnet run --project AtomTest/AtomTest.csproj DuplicateDependencyTarget1 --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- DuplicateDependencyTarget1 --skip --headless
         env:
           build-name: ${{ needs.SetupBuildInfo.outputs.build-name }}
           build-id: ${{ needs.SetupBuildInfo.outputs.build-id }}
       
       - name: StoreArtifact
-        run: dotnet run --project AtomTest/AtomTest.csproj StoreArtifact --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- StoreArtifact --skip --headless
         env:
           build-name: ${{ needs.SetupBuildInfo.outputs.build-name }}
           build-id: ${{ needs.SetupBuildInfo.outputs.build-id }}

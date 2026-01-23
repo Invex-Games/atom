@@ -18,7 +18,7 @@ jobs:
       
       - name: DependentTarget1
         id: DependentTarget1
-        run: dotnet run --project AtomTest/AtomTest.csproj DependentTarget1 --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- DependentTarget1 --skip --headless
   
   DependentTarget2:
     needs: [ DependentTarget1 ]
@@ -32,4 +32,4 @@ jobs:
       
       - name: DependentTarget2
         id: DependentTarget2
-        run: dotnet run --project AtomTest/AtomTest.csproj DependentTarget2 --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- DependentTarget2 --skip --headless

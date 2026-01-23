@@ -25,7 +25,7 @@ jobs:
       
       - name: CustomStepTarget
         id: CustomStepTarget
-        run: dotnet run --project AtomTest/AtomTest.csproj CustomStepTarget --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- CustomStepTarget --skip --headless
       
       - name: Test step
         run: echo "Post step 1"

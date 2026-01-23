@@ -9,6 +9,8 @@
 /// <param name="Quality">
 ///     The quality of the .NET SDK to install (e.g., Preview, GA). If null, the default quality is used.
 /// </param>
+/// <param name="Cache">Whether to cache the installed .NET SDK.</param>
+/// <param name="LockFile">The path to the project's lock file (e.g., "**/packages.lock.json")</param>
 [PublicAPI]
 public sealed record SetupDotnetStep(
     string? DotnetVersion = null,

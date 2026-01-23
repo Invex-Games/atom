@@ -21,4 +21,4 @@ jobs:
       
       - name: PermissionsTarget
         id: PermissionsTarget
-        run: dotnet run --project AtomTest/AtomTest.csproj PermissionsTarget --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- PermissionsTarget --skip --headless

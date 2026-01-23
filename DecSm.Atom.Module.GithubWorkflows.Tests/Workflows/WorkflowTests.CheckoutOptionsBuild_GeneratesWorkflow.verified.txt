@@ -19,4 +19,4 @@ jobs:
       
       - name: CheckoutOptionTarget
         id: CheckoutOptionTarget
-        run: dotnet run --project AtomTest/AtomTest.csproj CheckoutOptionTarget --skip --headless
+        run: dotnet run --project AtomTest/AtomTest.csproj -- CheckoutOptionTarget --skip --headless

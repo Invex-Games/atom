@@ -31,7 +31,7 @@ jobs:
         with:
           dotnet-version: '10.0.x'
           cache: true
-          cache-dependency-path: _atom/packages.lock.json
+          cache-dependency-path: **/packages.lock.json
       
       - run: dotnet restore _atom --locked-mode
       
@@ -54,7 +54,7 @@ jobs:
         with:
           dotnet-version: '10.0.x'
           cache: true
-          cache-dependency-path: _atom/packages.lock.json
+          cache-dependency-path: **/packages.lock.json
       
       - run: dotnet restore _atom --locked-mode
       
@@ -78,7 +78,7 @@ jobs:
         with:
           dotnet-version: '10.0.x'
           cache: true
-          cache-dependency-path: _atom/packages.lock.json
+          cache-dependency-path: **/packages.lock.json
       
       - run: dotnet restore _atom --locked-mode
       
@@ -106,7 +106,7 @@ jobs:
         with:
           dotnet-version: '10.0.x'
           cache: true
-          cache-dependency-path: _atom/packages.lock.json
+          cache-dependency-path: **/packages.lock.json
       
       - uses: actions/setup-dotnet@v4
         with:
@@ -181,7 +181,7 @@ jobs:
         with:
           dotnet-version: '10.0.x'
           cache: true
-          cache-dependency-path: _atom/packages.lock.json
+          cache-dependency-path: **/packages.lock.json
       
       - run: dotnet restore _atom --locked-mode
       
