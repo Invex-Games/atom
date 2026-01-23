@@ -48,7 +48,7 @@ internal partial class Build : BuildDefinition,
         [
             WorkflowOptions.AzureKeyVault.Use,
             WorkflowOptions.UseGitVersionForBuildId.Enabled,
-            WorkflowOptions.SetupDotnet.Dotnet100XWithCache,
+            WorkflowOptions.SetupDotnet.Dotnet100X(cache: true, lockFile: "_atom/packagess.lock.json"),
         ];
 
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
@@ -76,7 +76,7 @@ internal partial class Build : BuildDefinition,
                         .TestProjects
                         .WithGithubRunsOnMatrix(PlatformNames)
                         .WithMatrixDimensions(TestFrameworkMatrix)
-                        .WithOptions(WorkflowOptions.SetupDotnet.Dotnet80X, WorkflowOptions.SetupDotnet.Dotnet90X),
+                        .WithOptions(WorkflowOptions.SetupDotnet.Dotnet80X(), WorkflowOptions.SetupDotnet.Dotnet90X()),
                     WorkflowTargets
                         .CheckPrForBreakingChanges
                         .WithGithubTokenInjection(new()
@@ -121,7 +121,7 @@ internal partial class Build : BuildDefinition,
                         .TestProjects
                         .WithGithubRunsOnMatrix(PlatformNames)
                         .WithMatrixDimensions(TestFrameworkMatrix)
-                        .WithOptions(WorkflowOptions.SetupDotnet.Dotnet80X, WorkflowOptions.SetupDotnet.Dotnet90X),
+                        .WithOptions(WorkflowOptions.SetupDotnet.Dotnet80X(), WorkflowOptions.SetupDotnet.Dotnet90X()),
                     WorkflowTargets.PushToNuget,
                     WorkflowTargets
                         .PushToRelease
@@ -154,7 +154,7 @@ internal partial class Build : BuildDefinition,
                         .TestProjects
                         .WithDevopsPoolMatrix(DevopsPlatformNames)
                         .WithMatrixDimensions(TestFrameworkMatrix)
-                        .WithOptions(WorkflowOptions.SetupDotnet.Dotnet80X, WorkflowOptions.SetupDotnet.Dotnet90X),
+                        .WithOptions(WorkflowOptions.SetupDotnet.Dotnet80X(), WorkflowOptions.SetupDotnet.Dotnet90X()),
                     WorkflowTargets.PushToNugetDevops,
                 ],
                 WorkflowTypes = [Devops.WorkflowType],

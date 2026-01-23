@@ -13,9 +13,9 @@
 public sealed record SetupDotnetStep(
     string? DotnetVersion = null,
     SetupDotnetStep.DotnetQuality? Quality = null,
-    bool Cache = false
-)
-    : CustomStep
+    bool Cache = false,
+    string? LockFile = null
+) : CustomStep
 {
     /// <summary>
     ///     Specifies the quality of the .NET SDK version to install.
