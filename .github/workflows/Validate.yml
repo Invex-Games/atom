@@ -30,6 +30,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
+          cache: true
       
       - name: SetupBuildInfo
         id: SetupBuildInfo
@@ -49,6 +50,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
+          cache: true
       
       - name: PackProjects
         id: PackProjects
@@ -69,6 +71,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
+          cache: true
       
       - name: PackTool
         id: PackTool
@@ -93,6 +96,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
+          cache: true
       
       - uses: actions/setup-dotnet@v4
         with:
@@ -164,6 +168,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
+          cache: true
       
       - name: CheckPrForBreakingChanges
         id: CheckPrForBreakingChanges

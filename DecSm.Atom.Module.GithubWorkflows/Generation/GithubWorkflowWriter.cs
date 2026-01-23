@@ -482,6 +482,9 @@ internal sealed class GithubWorkflowWriter(
                         if (setupDotnetStep.Quality is not null)
                             WriteLine(
                                 $"dotnet-quality: {qualityQuote}{setupDotnetStep.Quality.ToString()!.ToLower()}{qualityQuote}");
+
+                        if (setupDotnetStep.Cache)
+                            WriteLine("cache: true");
                     }
                 }
 
