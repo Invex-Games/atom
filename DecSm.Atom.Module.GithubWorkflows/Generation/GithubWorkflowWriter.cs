@@ -686,6 +686,8 @@ internal sealed class GithubWorkflowWriter(
         (string name, string value)[] extraParams,
         bool includeId)
     {
+        var stepWriter = new GithubStepWriter(workflowExpressionGenerator, _fileSystem, StringBuilder, IndentLevel);
+
         var customPreTargetSteps = workflowStep
             .Options
             .Concat(workflow.Options)
@@ -696,12 +698,29 @@ internal sealed class GithubWorkflowWriter(
 
         if (customPreTargetSteps.Count > 0)
         {
-            var writer = new GithubStepWriter(StringBuilder, IndentLevel);
-
             foreach (var customPostStep in customPreTargetSteps)
             {
-                customPostStep.WriteStep(writer);
-                writer.ResetIndent();
+                customPostStep.WriteStep(stepWriter);
+                stepWriter.ResetIndent();
+                WriteLine();
+            }
+        }
+
+        if (workflow
+            .Options
+            .Concat(workflowStep.Options)
+            .HasEnabledToggle<UseGithubForAtomBuildCache>())
+        {
+            var buildCacheRestoreSteps = workflow
+                .Options
+                .Concat(workflowStep.Options)
+                .OfType<WorkflowCacheRestoreOption>()
+                .ToList();
+
+            foreach (var buildCacheRestoreStep in buildCacheRestoreSteps)
+            {
+                UseGithubForAtomBuildCache.WriteRestoreStep(stepWriter, buildCacheRestoreStep);
+                stepWriter.ResetIndent();
                 WriteLine();
             }
         }
@@ -785,12 +804,20 @@ internal sealed class GithubWorkflowWriter(
             var environmentInjections = workflow
                 .Options
                 .Concat(workflowStep.Options)
-                .OfType<WorkflowParamInjectionFromEnvironment>();
+                .OfType<WorkflowParamInjectionFromEnvironment>()
+                .Distinct();
 
             var paramInjections = workflow
                 .Options
                 .Concat(workflowStep.Options)
-                .OfType<WorkflowParamInjection>();
+                .OfType<WorkflowParamInjection>()
+                .Distinct();
+
+            var environmentVariableInjections = workflow
+                .Options
+                .Concat(workflowStep.Options)
+                .OfType<WorkflowEnvironmentVariableInjection>()
+                .Distinct();
 
             environmentInjections = environmentInjections.Where(e => paramInjections.All(p => p.Name != e.Value));
 
@@ -827,6 +854,11 @@ internal sealed class GithubWorkflowWriter(
                     $"${{{{ {workflowExpressionGenerator.Write(paramInjection.InjectionExpression)} }}}}";
             }
 
+            foreach (var environmentVariableInjection in environmentVariableInjections)
+                env[environmentVariableInjection.Name] = environmentVariableInjection.Value is LiteralExpression
+                    ? $"${{{{ {workflowExpressionGenerator.Write(environmentVariableInjection.Value)} }}}}"
+                    : workflowExpressionGenerator.Write(environmentVariableInjection.Value);
+
             var validEnv = env
                 .Where(static x => x.Value is { Length: > 0 })
                 .ToList();
@@ -858,13 +890,32 @@ internal sealed class GithubWorkflowWriter(
         // ReSharper disable once InvertIf
         if (customPostTargetSteps.Count > 0)
         {
-            var writer = new GithubStepWriter(StringBuilder, IndentLevel);
+            var writer = new GithubStepWriter(workflowExpressionGenerator, _fileSystem, StringBuilder, IndentLevel);
 
             foreach (var customPostStep in customPostTargetSteps)
             {
                 WriteLine();
                 customPostStep.WriteStep(writer);
                 writer.ResetIndent();
+            }
+        }
+
+        if (workflow
+            .Options
+            .Concat(workflowStep.Options)
+            .HasEnabledToggle<UseGithubForAtomBuildCache>())
+        {
+            var buildCacheSaveSteps = workflow
+                .Options
+                .Concat(workflowStep.Options)
+                .OfType<WorkflowCacheSaveOption>()
+                .ToList();
+
+            foreach (var buildCacheSaveStep in buildCacheSaveSteps)
+            {
+                WriteLine();
+                UseGithubForAtomBuildCache.WriteSaveStep(stepWriter, buildCacheSaveStep);
+                stepWriter.ResetIndent();
             }
         }
     }

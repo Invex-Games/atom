@@ -49,6 +49,15 @@ internal partial class Build : BuildDefinition,
             WorkflowOptions.AzureKeyVault.Use,
             WorkflowOptions.UseGitVersionForBuildId.Enabled,
             WorkflowOptions.SetupDotnet.Dotnet100X,
+            WorkflowOptions.Cache.UseGithubActionsCaching,
+            WorkflowOptions.Inject.EnvironmentVariable("NUGET_PACKAGES",
+                WorkflowExpressions.From("${{ github.workspace }}/.nuget-packages")),
+            WorkflowOptions.Cache.Save("nuget-packages",
+                "nuget-packages",
+                [WorkflowExpressions.From("${{ github.workspace }}/.nuget-packages")]),
+            WorkflowOptions.Cache.Restore("nuget-packages",
+                "nuget-packages",
+                [WorkflowExpressions.From("${{ github.workspace }}/.nuget-packages")]),
         ];
 
     public override IReadOnlyList<WorkflowDefinition> Workflows =>

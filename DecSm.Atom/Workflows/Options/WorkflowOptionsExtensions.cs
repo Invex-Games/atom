@@ -18,6 +18,9 @@ public static class WorkflowOptionsExtensions
         public WorkflowParamInjectionFromEnvironment ParamFromWorkflowEnvironment(string name) =>
             new(name);
 
+        public WorkflowEnvironmentVariableInjection EnvironmentVariable(string name, WorkflowExpression value) =>
+            new(name, value);
+
         public WorkflowSecretInjection Secret(string secretName) =>
             new(secretName);
 
