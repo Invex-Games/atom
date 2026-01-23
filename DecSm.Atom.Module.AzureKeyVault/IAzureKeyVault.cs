@@ -7,6 +7,7 @@
 ///     This interface defines the parameters required to connect to an Azure Key Vault
 ///     and configures the necessary services for retrieving secrets.
 /// </remarks>
+[PublicAPI]
 [ConfigureHostBuilder]
 public partial interface IAzureKeyVault : IBuildAccessor
 {
@@ -93,6 +94,7 @@ public partial interface IAzureKeyVault : IBuildAccessor
 /// <param name="TenantId">The injection type for the Azure Vault Tenant ID.</param>
 /// <param name="AppId">The injection type for the Azure Vault Application ID.</param>
 /// <param name="AppSecret">The injection type for the Azure Vault Application Secret.</param>
+[PublicAPI]
 public sealed record AzureKeyVaultValueInjections(
     AzureKeyVaultValueInjectionType Address = AzureKeyVaultValueInjectionType.EnvironmentVariable,
     AzureKeyVaultValueInjectionType TenantId = AzureKeyVaultValueInjectionType.EnvironmentVariable,

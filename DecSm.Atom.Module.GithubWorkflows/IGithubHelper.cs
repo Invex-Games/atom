@@ -7,6 +7,7 @@ namespace DecSm.Atom.Module.GithubWorkflows;
 ///     Implementing this interface makes the GitHub token available as a secret parameter,
 ///     which is often required for interacting with the GitHub API within workflows.
 /// </remarks>
+[PublicAPI]
 public interface IGithubHelper : IBuildAccessor
 {
     /// <summary>

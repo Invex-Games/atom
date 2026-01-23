@@ -7,6 +7,7 @@
 ///     This interface extends <see cref="IStoreArtifact" /> and <see cref="IRetrieveArtifact" />,
 ///     enabling the build to both upload and download artifacts from Azure Blob Storage.
 /// </remarks>
+[PublicAPI]
 [ConfigureHostBuilder]
 public partial interface IAzureArtifactStorage : IStoreArtifact, IRetrieveArtifact
 {
