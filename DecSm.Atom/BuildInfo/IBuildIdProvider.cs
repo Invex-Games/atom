@@ -3,6 +3,7 @@
 /// <summary>
 ///     Defines a provider for generating a unique build identifier.
 /// </summary>
+[PublicAPI]
 public interface IBuildIdProvider
 {
     /// <summary>

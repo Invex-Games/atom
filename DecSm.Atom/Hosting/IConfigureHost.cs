@@ -9,6 +9,7 @@
 ///     It provides hooks for modifying the host builder and the host itself. This interface is intended for internal
 ///     framework use.
 /// </remarks>
+[PublicAPI]
 public interface IConfigureHost
 {
     /// <summary>

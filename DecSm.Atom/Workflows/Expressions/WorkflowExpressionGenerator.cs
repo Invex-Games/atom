@@ -1,10 +1,12 @@
 namespace DecSm.Atom.Workflows.Expressions;
 
+[PublicAPI]
 public interface IWorkflowExpressionGenerator
 {
     string Write(WorkflowExpression? expression);
 }
 
+[PublicAPI]
 public sealed class WorkflowExpressionGenerator(IEnumerable<IWorkflowExpressionWriter> writers)
     : IWorkflowExpressionGenerator
 {

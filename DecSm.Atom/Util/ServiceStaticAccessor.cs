@@ -22,6 +22,7 @@
 ///     </code>
 /// </example>
 /// <seealso cref="ServiceAccessorExtensions" />
+[PublicAPI]
 public static class ServiceStaticAccessor<T>
     where T : notnull
 {

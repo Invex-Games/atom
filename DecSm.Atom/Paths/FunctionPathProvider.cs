@@ -3,6 +3,7 @@
 /// <summary>
 ///     A concrete implementation of <see cref="IPathProvider" /> that uses a delegate to locate paths.
 /// </summary>
+[PublicAPI]
 public sealed class FunctionPathProvider : IPathProvider
 {
     /// <summary>

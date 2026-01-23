@@ -32,6 +32,7 @@
 ///     </code>
 /// </example>
 /// <seealso cref="IWorkflowVariableService" />
+[PublicAPI]
 public interface IWorkflowVariableProvider
 {
     /// <summary>

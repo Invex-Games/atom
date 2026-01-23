@@ -3,6 +3,7 @@
 /// <summary>
 ///     Defines a service for displaying help information about the build system.
 /// </summary>
+[PublicAPI]
 public interface IHelpService
 {
     /// <summary>

@@ -9,6 +9,7 @@
 ///     <see cref="ISetupBuildInfo" />. This ensures that a stable value is captured at the start of the workflow and
 ///     reused across all targets, providing consistency.
 /// </remarks>
+[PublicAPI]
 public interface IBuildInfo : IBuildAccessor
 {
     /// <summary>

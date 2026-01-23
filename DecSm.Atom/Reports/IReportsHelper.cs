@@ -3,6 +3,7 @@
 /// <summary>
 ///     Provides a helper for adding data to the build report.
 /// </summary>
+[PublicAPI]
 public interface IReportsHelper : IBuildAccessor
 {
     /// <summary>

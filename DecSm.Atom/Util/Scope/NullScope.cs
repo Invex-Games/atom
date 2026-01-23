@@ -6,6 +6,7 @@ namespace DecSm.Atom.Util.Scope;
 /// <remarks>
 ///     This is useful in scenarios where a disposable object is required but no cleanup is necessary.
 /// </remarks>
+[PublicAPI]
 public readonly struct NullScope : IDisposable
 {
     /// <summary>
