@@ -28,7 +28,7 @@ jobs:
       
       - name: ApproveDependabotPr
         id: ApproveDependabotPr
-        run: dotnet run --project _atom/_atom.csproj --no-restore ${{ runner.debug && '--verbose' || '' }} -- ApproveDependabotPr --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore ${{ runner.debug && '-v d' || '' }} -- ApproveDependabotPr --skip --headless
         env:
           azure-vault-app-secret: ${{ secrets.AZURE_VAULT_APP_SECRET }}
           azure-vault-address: ${{ vars.AZURE_VAULT_ADDRESS }}

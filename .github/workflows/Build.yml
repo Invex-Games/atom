@@ -42,7 +42,7 @@ jobs:
       
       - name: SetupBuildInfo
         id: SetupBuildInfo
-        run: dotnet run --project _atom/_atom.csproj --no-restore ${{ runner.debug && '--verbose' || '' }} -- SetupBuildInfo --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore ${{ runner.debug && '-v d' || '' }} -- SetupBuildInfo --skip --headless
         env:
           pull-request-number: ${{ github.event.number }}
   
@@ -65,7 +65,7 @@ jobs:
       
       - name: PackProjects
         id: PackProjects
-        run: dotnet run --project _atom/_atom.csproj --no-restore ${{ runner.debug && '--verbose' || '' }} -- PackProjects --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore ${{ runner.debug && '-v d' || '' }} -- PackProjects --skip --headless
       
       - name: Upload DecSm.Atom
         uses: actions/upload-artifact@v4
@@ -131,7 +131,7 @@ jobs:
       
       - name: PackTool
         id: PackTool
-        run: dotnet run --project _atom/_atom.csproj --no-restore ${{ runner.debug && '--verbose' || '' }} -- PackTool --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore ${{ runner.debug && '-v d' || '' }} -- PackTool --skip --headless
         env:
           job-runs-on: ${{ matrix.job-runs-on }}
           build-slice: ${{ matrix.job-runs-on }}
@@ -173,7 +173,7 @@ jobs:
       
       - name: TestProjects
         id: TestProjects
-        run: dotnet run --project _atom/_atom.csproj --no-restore ${{ runner.debug && '--verbose' || '' }} -- TestProjects --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore ${{ runner.debug && '-v d' || '' }} -- TestProjects --skip --headless
         env:
           job-runs-on: ${{ matrix.job-runs-on }}
           test-framework: ${{ matrix.test-framework }}
@@ -313,7 +313,7 @@ jobs:
       
       - name: PushToNuget
         id: PushToNuget
-        run: dotnet run --project _atom/_atom.csproj --no-restore ${{ runner.debug && '--verbose' || '' }} -- PushToNuget --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore ${{ runner.debug && '-v d' || '' }} -- PushToNuget --skip --headless
         env:
           build-id: ${{ needs.SetupBuildInfo.outputs.build-id }}
           azure-vault-app-secret: ${{ secrets.AZURE_VAULT_APP_SECRET }}
@@ -1070,7 +1070,7 @@ jobs:
       
       - name: PushToRelease
         id: PushToRelease
-        run: dotnet run --project _atom/_atom.csproj --no-restore ${{ runner.debug && '--verbose' || '' }} -- PushToRelease --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore ${{ runner.debug && '-v d' || '' }} -- PushToRelease --skip --headless
         env:
           build-version: ${{ needs.SetupBuildInfo.outputs.build-version }}
           azure-vault-app-secret: ${{ secrets.AZURE_VAULT_APP_SECRET }}
