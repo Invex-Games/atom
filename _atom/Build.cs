@@ -144,7 +144,7 @@ internal partial class Build : BuildDefinition,
                                 TargetName = nameof(WorkflowTargets.SetupBuildInfo),
                             }
                             .ContainsString("-")
-                            .Not())),
+                            .NotEqualTo(true))),
                 ],
                 WorkflowTypes = [Github.WorkflowType],
                 Options = [WorkflowOptions.Github.TokenPermissions.NoneAll],

@@ -388,7 +388,7 @@ jobs:
   PushToRelease:
     needs: [ PackProjects, PackTool, TestProjects, SetupBuildInfo ]
     runs-on: ubuntu-latest
-    if: !contains(needs.SetupBuildInfo.outputs.build-version, '-')
+    if: contains(needs.SetupBuildInfo.outputs.build-version, '-') != true
     permissions:
       contents: write
     steps:
