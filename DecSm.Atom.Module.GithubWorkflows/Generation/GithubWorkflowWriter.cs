@@ -699,24 +699,6 @@ internal sealed class GithubWorkflowWriter(
     {
         var stepWriter = new GithubStepWriter(workflowExpressionGenerator, _fileSystem, StringBuilder, IndentLevel);
 
-        var customPreTargetSteps = workflowStep
-            .Options
-            .Concat(workflow.Options)
-            .OfType<IGithubCustomStepOption>()
-            .Where(x => x.Order is GithubCustomStepOrder.BeforeTarget)
-            .OrderBy(x => x.Priority)
-            .ToList();
-
-        if (customPreTargetSteps.Count > 0)
-        {
-            foreach (var customPostStep in customPreTargetSteps)
-            {
-                customPostStep.WriteStep(stepWriter);
-                stepWriter.ResetIndent();
-                WriteLine();
-            }
-        }
-
         if (workflow
             .Options
             .Concat(workflowStep.Options)
@@ -736,10 +718,38 @@ internal sealed class GithubWorkflowWriter(
             }
         }
 
+        var customPreTargetSteps = workflowStep
+            .Options
+            .Concat(workflow.Options)
+            .OfType<IGithubCustomStepOption>()
+            .Where(x => x.Order is GithubCustomStepOrder.BeforeTarget)
+            .OrderBy(x => x.Priority)
+            .ToList();
+
+        if (customPreTargetSteps.Count > 0)
+            foreach (var customPostStep in customPreTargetSteps)
+            {
+                customPostStep.WriteStep(stepWriter);
+                stepWriter.ResetIndent();
+                WriteLine();
+            }
+
         using (WriteSection($"- name: {workflowStep.Name}"))
         {
             if (includeId)
                 WriteLine($"id: {workflowStep.Name}");
+
+            var atomArguments = workflow
+                .Options
+                .Concat(workflowStep.Options)
+                .OfType<AtomArguments>()
+                .SelectMany(x => x.Arguments)
+                .Distinct()
+                .ToList();
+
+            var atomArgumentsString = atomArguments.Count > 0
+                ? $"{string.Join(" ", atomArguments)} "
+                : string.Empty;
 
             if (_fileSystem.IsFileBasedApp)
             {
@@ -749,12 +759,15 @@ internal sealed class GithubWorkflowWriter(
                 var filePathRelativeToRoot =
                     _fileSystem.FileSystem.Path.GetRelativePath(_fileSystem.AtomRootDirectory, fileName);
 
-                WriteLine($"run: dotnet run --file {filePathRelativeToRoot} {workflowStep.Name} --skip --headless");
+                WriteLine(
+                    $"run: dotnet run --file {filePathRelativeToRoot} {atomArgumentsString}-- {workflowStep.Name} --skip --headless");
             }
             else
             {
                 var projectPath = FindProjectPath(_fileSystem, _fileSystem.ProjectName);
-                WriteLine($"run: dotnet run --project {projectPath} {workflowStep.Name} --skip --headless");
+
+                WriteLine(
+                    $"run: dotnet run --project {projectPath} {atomArgumentsString}-- {workflowStep.Name} --skip --headless");
             }
 
             var env = new Dictionary<string, string>();

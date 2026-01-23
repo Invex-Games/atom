@@ -33,9 +33,11 @@ jobs:
           cache: true
           cache-dependency-path: _atom/packages.lock.json
       
+      - run: dotnet restore _atom --locked-mode
+      
       - name: SetupBuildInfo
         id: SetupBuildInfo
-        run: dotnet run --project _atom/_atom.csproj SetupBuildInfo --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore -- SetupBuildInfo --skip --headless
         env:
           pull-request-number: ${{ github.event.number }}
   
@@ -54,9 +56,11 @@ jobs:
           cache: true
           cache-dependency-path: _atom/packages.lock.json
       
+      - run: dotnet restore _atom --locked-mode
+      
       - name: PackProjects
         id: PackProjects
-        run: dotnet run --project _atom/_atom.csproj PackProjects --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore -- PackProjects --skip --headless
   
   PackTool:
     strategy:
@@ -76,9 +80,11 @@ jobs:
           cache: true
           cache-dependency-path: _atom/packages.lock.json
       
+      - run: dotnet restore _atom --locked-mode
+      
       - name: PackTool
         id: PackTool
-        run: dotnet run --project _atom/_atom.csproj PackTool --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore -- PackTool --skip --headless
         env:
           job-runs-on: ${{ matrix.job-runs-on }}
           build-slice: ${{ matrix.job-runs-on }}
@@ -110,9 +116,11 @@ jobs:
         with:
           dotnet-version: '9.0.x'
       
+      - run: dotnet restore _atom --locked-mode
+      
       - name: TestProjects
         id: TestProjects
-        run: dotnet run --project _atom/_atom.csproj TestProjects --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore -- TestProjects --skip --headless
         env:
           job-runs-on: ${{ matrix.job-runs-on }}
           test-framework: ${{ matrix.test-framework }}
@@ -175,9 +183,11 @@ jobs:
           cache: true
           cache-dependency-path: _atom/packages.lock.json
       
+      - run: dotnet restore _atom --locked-mode
+      
       - name: CheckPrForBreakingChanges
         id: CheckPrForBreakingChanges
-        run: dotnet run --project _atom/_atom.csproj CheckPrForBreakingChanges --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore -- CheckPrForBreakingChanges --skip --headless
         env:
           build-version: ${{ needs.SetupBuildInfo.outputs.build-version }}
           azure-vault-app-secret: ${{ secrets.AZURE_VAULT_APP_SECRET }}

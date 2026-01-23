@@ -38,9 +38,11 @@ jobs:
           cache: true
           cache-dependency-path: _atom/packages.lock.json
       
+      - run: dotnet restore _atom --locked-mode
+      
       - name: SetupBuildInfo
         id: SetupBuildInfo
-        run: dotnet run --project _atom/_atom.csproj SetupBuildInfo --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore -- SetupBuildInfo --skip --headless
         env:
           pull-request-number: ${{ github.event.number }}
   
@@ -59,9 +61,11 @@ jobs:
           cache: true
           cache-dependency-path: _atom/packages.lock.json
       
+      - run: dotnet restore _atom --locked-mode
+      
       - name: PackProjects
         id: PackProjects
-        run: dotnet run --project _atom/_atom.csproj PackProjects --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore -- PackProjects --skip --headless
       
       - name: Upload DecSm.Atom
         uses: actions/upload-artifact@v4
@@ -123,9 +127,11 @@ jobs:
           cache: true
           cache-dependency-path: _atom/packages.lock.json
       
+      - run: dotnet restore _atom --locked-mode
+      
       - name: PackTool
         id: PackTool
-        run: dotnet run --project _atom/_atom.csproj PackTool --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore -- PackTool --skip --headless
         env:
           job-runs-on: ${{ matrix.job-runs-on }}
           build-slice: ${{ matrix.job-runs-on }}
@@ -163,9 +169,11 @@ jobs:
         with:
           dotnet-version: '9.0.x'
       
+      - run: dotnet restore _atom --locked-mode
+      
       - name: TestProjects
         id: TestProjects
-        run: dotnet run --project _atom/_atom.csproj TestProjects --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore -- TestProjects --skip --headless
         env:
           job-runs-on: ${{ matrix.job-runs-on }}
           test-framework: ${{ matrix.test-framework }}
@@ -301,9 +309,11 @@ jobs:
         with:
           name: DecSm.Atom.Tool-macos-latest
           path: "${{ github.workspace }}/.github/artifacts/DecSm.Atom.Tool"
+      - run: dotnet restore _atom --locked-mode
+      
       - name: PushToNuget
         id: PushToNuget
-        run: dotnet run --project _atom/_atom.csproj PushToNuget --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore -- PushToNuget --skip --headless
         env:
           build-id: ${{ needs.SetupBuildInfo.outputs.build-id }}
           azure-vault-app-secret: ${{ secrets.AZURE_VAULT_APP_SECRET }}
@@ -1056,9 +1066,11 @@ jobs:
         with:
           name: DecSm.Atom.Tool.Tests-macos-latest-net10.0
           path: "${{ github.workspace }}/.github/artifacts/DecSm.Atom.Tool.Tests"
+      - run: dotnet restore _atom --locked-mode
+      
       - name: PushToRelease
         id: PushToRelease
-        run: dotnet run --project _atom/_atom.csproj PushToRelease --skip --headless
+        run: dotnet run --project _atom/_atom.csproj --no-restore -- PushToRelease --skip --headless
         env:
           build-version: ${{ needs.SetupBuildInfo.outputs.build-version }}
           azure-vault-app-secret: ${{ secrets.AZURE_VAULT_APP_SECRET }}
