@@ -48,7 +48,7 @@ internal partial class Build : BuildDefinition,
         [
             WorkflowOptions.AzureKeyVault.Use,
             WorkflowOptions.UseGitVersionForBuildId.Enabled,
-            WorkflowOptions.SetupDotnet.Dotnet100X(cache: true, lockFile: "**/packages.lock.json"),
+            WorkflowOptions.SetupDotnet.Dotnet100X(cache: true, lockFile: "'**/packages.lock.json'"),
             new RestoreLockedModeStep(GithubCustomStepOrder.BeforeTarget),
             new AtomArguments("--no-restore"),
         ];
