@@ -435,6 +435,8 @@ internal sealed class GithubWorkflowWriter(
                     WriteLine("fetch-depth: 0");
             }
 
+        WriteLine();
+
         var commandStepTarget = buildModel.GetTarget(step.Name);
 
         var matrixParams = job
@@ -458,6 +460,7 @@ internal sealed class GithubWorkflowWriter(
 
         if (setupDotnetSteps.Count > 0)
             foreach (var setupDotnetStep in setupDotnetSteps)
+            {
                 using (WriteSection("- uses: actions/setup-dotnet@v4"))
                 {
                     if (setupDotnetStep.DotnetVersion is not { Length: > 0 })
@@ -481,6 +484,9 @@ internal sealed class GithubWorkflowWriter(
                                 $"dotnet-quality: {qualityQuote}{setupDotnetStep.Quality.ToString()!.ToLower()}{qualityQuote}");
                     }
                 }
+
+                WriteLine();
+            }
 
         var setupNugetSteps = workflow
             .Options
@@ -628,7 +634,6 @@ internal sealed class GithubWorkflowWriter(
                 }
         }
 
-        WriteLine();
         WriteCommandStep(workflow, step, commandStepTarget, matrixParams, true);
 
         // ReSharper disable once InvertIf

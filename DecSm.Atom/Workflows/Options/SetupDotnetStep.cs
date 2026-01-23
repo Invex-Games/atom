@@ -10,7 +10,11 @@
 ///     The quality of the .NET SDK to install (e.g., Preview, GA). If null, the default quality is used.
 /// </param>
 [PublicAPI]
-public sealed record SetupDotnetStep(string? DotnetVersion = null, SetupDotnetStep.DotnetQuality? Quality = null)
+public sealed record SetupDotnetStep(
+    string? DotnetVersion = null,
+    SetupDotnetStep.DotnetQuality? Quality = null,
+    bool Cache = false
+)
     : CustomStep
 {
     /// <summary>

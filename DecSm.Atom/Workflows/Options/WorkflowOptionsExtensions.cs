@@ -81,14 +81,25 @@ public static class WorkflowOptionsExtensions
 
         public SetupDotnetStep Dotnet80X => field ??= new("8.0.x");
 
+        public SetupDotnetStep Dotnet80XWithCache => field ??= new("8.0.x", Cache: true);
+
         public SetupDotnetStep Dotnet90X => field ??= new("9.0.x");
+
+        public SetupDotnetStep Dotnet90XWithCache => field ??= new("9.0.x", Cache: true);
 
         public SetupDotnetStep Dotnet100X => field ??= new("10.0.x");
 
+        public SetupDotnetStep Dotnet100XWithCache => field ??= new("10.0.x", Cache: true);
+
         public SetupDotnetStep Default => field ??= new();
 
-        public SetupDotnetStep From(string? dotnetVersion = null, SetupDotnetStep.DotnetQuality? quality = null) =>
-            new(dotnetVersion, quality);
+        public SetupDotnetStep DefaultWithCache => field ??= new(Cache: true);
+
+        public SetupDotnetStep From(
+            string? dotnetVersion = null,
+            SetupDotnetStep.DotnetQuality? quality = null,
+            bool cache = false) =>
+            new(dotnetVersion, quality, cache);
     }
 
     extension(WorkflowOptions)
