@@ -21,13 +21,13 @@ public sealed record CustomAtomCommand : IWorkflowOption
             var filePathRelativeToRoot =
                 fileSystem.FileSystem.Path.GetRelativePath(fileSystem.AtomRootDirectory, fileName);
 
-            cacheMissCommand = $"'dotnet run --file {filePathRelativeToRoot}-- {workflowStep.Name} --skip --headless'";
+            cacheMissCommand = $"'dotnet run --file {filePathRelativeToRoot} -- {workflowStep.Name} --skip --headless'";
         }
         else
         {
             var projectPath = FindProjectPath(fileSystem, fileSystem.ProjectName);
 
-            cacheMissCommand = $"'dotnet run --project {projectPath}-- {workflowStep.Name} --skip --headless'";
+            cacheMissCommand = $"'dotnet run --project {projectPath} -- {workflowStep.Name} --skip --headless'";
         }
 
         // return $"run: ${{{{ steps.cache-restore-atom-build.outputs.cache-hit == 'true' }}}}";
