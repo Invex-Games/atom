@@ -958,7 +958,9 @@ internal sealed class GithubWorkflowWriter(
                      .OfType<CleanAtomDirectory>())
         {
             WriteLine();
-            WriteLine($"- run: rm -rf '{cleanAtomDirectory.AtomDirectory}'");
+            WriteLine("- run: |");
+            WriteLine("    git reset --hard HEAD");
+            WriteLine("    git clean -xdf \"_atom\"");
         }
 
         if (workflow
