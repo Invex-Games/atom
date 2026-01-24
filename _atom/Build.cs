@@ -128,6 +128,11 @@ internal partial class Build : BuildDefinition,
                         })
                         .WithOptions(WorkflowOptions.Inject.Param(WorkflowParams.PullRequestNumber,
                             "github.event.number")),
+                    WorkflowTargets.BuildAtom.WithOptions(new CleanAtomDirectory("_atom/bin"),
+                        new CleanAtomDirectory("_atom/obj"),
+                        WorkflowOptions.Cache.Save("atom-build",
+                            "${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}",
+                            [WorkflowExpressions.From(".atom")])),
                     WorkflowTargets.PackProjects,
                     WorkflowTargets.PackTool.WithGithubRunsOnMatrix(PlatformNames),
                     WorkflowTargets
