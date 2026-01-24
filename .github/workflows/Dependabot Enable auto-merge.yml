@@ -27,7 +27,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: |
-            '.atom'
+            ${{ github.workspace }}/.atom
           key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}
       
       - name: ApproveDependabotPr

@@ -41,7 +41,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: |
-            '.atom'
+            ${{ github.workspace }}/.atom
           key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}
       
       - name: SetupBuildInfo
@@ -68,7 +68,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: |
-            '.atom'
+            ${{ github.workspace }}/.atom
           key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}
       
       - name: BuildAtom
@@ -106,7 +106,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: |
-            '.atom'
+            ${{ github.workspace }}/.atom
           key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}
       
       - name: PackProjects
@@ -176,7 +176,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: |
-            '.atom'
+            ${{ github.workspace }}/.atom
           key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}
       
       - name: PackTool
@@ -222,7 +222,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: |
-            '.atom'
+            ${{ github.workspace }}/.atom
           key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}
       
       - name: TestProjects
@@ -366,7 +366,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: |
-            '.atom'
+            ${{ github.workspace }}/.atom
           key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}
       
       - name: PushToNuget
@@ -1127,7 +1127,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: |
-            '.atom'
+            ${{ github.workspace }}/.atom
           key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}
       
       - name: PushToRelease
