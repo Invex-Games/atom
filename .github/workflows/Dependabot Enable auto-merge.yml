@@ -28,7 +28,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/.atom
-          key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
+          key: ${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
       
       - name: ApproveDependabotPr
         id: ApproveDependabotPr

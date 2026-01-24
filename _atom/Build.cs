@@ -43,6 +43,13 @@ internal partial class Build : BuildDefinition,
         Values = FrameworkNames,
     };
 
+    private const string AtomBuildCacheName = "atom-build";
+
+    private const string AtomBuildCacheKey =
+        "${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}";
+
+    private static readonly WorkflowExpression[] AtomBuildCachePaths = ["${{ github.workspace }}/.atom"];
+
     public override IReadOnlyList<IWorkflowOption> GlobalWorkflowOptions =>
         field ??=
         [
@@ -54,9 +61,7 @@ internal partial class Build : BuildDefinition,
                 Value = true,
             },
             new CustomAtomCommand(),
-            WorkflowOptions.Cache.Restore("atom-build",
-                "${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}",
-                ["${{ github.workspace }}/.atom"]),
+            WorkflowOptions.Cache.Restore(AtomBuildCacheName, AtomBuildCacheKey, AtomBuildCachePaths),
         ];
 
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
@@ -82,9 +87,7 @@ internal partial class Build : BuildDefinition,
                         .BuildAtom
                         .WithGithubRunsOnMatrix(PlatformNames)
                         .WithOptions(new CleanAtomDirectory(),
-                            WorkflowOptions.Cache.Save("atom-build",
-                                "${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}",
-                                ["${{ github.workspace }}/.atom"])),
+                            WorkflowOptions.Cache.Save(AtomBuildCacheName, AtomBuildCacheKey, AtomBuildCachePaths)),
                     WorkflowTargets.PackProjects.WithSuppressedArtifactPublishing,
                     WorkflowTargets.PackTool.WithSuppressedArtifactPublishing.WithGithubRunsOnMatrix(PlatformNames),
                     WorkflowTargets
@@ -134,9 +137,7 @@ internal partial class Build : BuildDefinition,
                         .BuildAtom
                         .WithGithubRunsOnMatrix(PlatformNames)
                         .WithOptions(new CleanAtomDirectory(),
-                            WorkflowOptions.Cache.Save("atom-build",
-                                "${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}",
-                                ["${{ github.workspace }}/.atom"])),
+                            WorkflowOptions.Cache.Save(AtomBuildCacheName, AtomBuildCacheKey, AtomBuildCachePaths)),
                     WorkflowTargets.PackProjects,
                     WorkflowTargets.PackTool.WithGithubRunsOnMatrix(PlatformNames),
                     WorkflowTargets
