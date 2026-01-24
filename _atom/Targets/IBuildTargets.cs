@@ -87,6 +87,10 @@ internal interface IBuildTargets : IDotnetPackHelper, IDotnetPublishHelper
 
             FileSystem.Directory.CreateDirectory(cachedDirectory);
 
-            FileSystem.File.Move(atomExecutablePath, cachedDirectory / atomExecutableName);
+            foreach (var file in FileSystem.Directory.EnumerateFiles(
+                         FileSystem.AtomPublishDirectory / Projects._atom.Name,
+                         "*",
+                         SearchOption.TopDirectoryOnly))
+                FileSystem.File.Move(file, cachedDirectory / FileSystem.Path.GetFileName(file));
         });
 }

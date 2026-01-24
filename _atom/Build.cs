@@ -137,6 +137,9 @@ internal partial class Build : BuildDefinition,
                         .BuildAtom
                         .WithGithubRunsOnMatrix(PlatformNames)
                         .WithOptions(new CleanAtomDirectory(),
+                            new RunTargetStepIf(WorkflowExpressions
+                                .Literal("steps.cache-restore-atom-build.outputs.cache-hit")
+                                .NotEqualTo(true)),
                             WorkflowOptions.Cache.Save(AtomBuildCacheName, AtomBuildCacheKey, AtomBuildCachePaths)),
                     WorkflowTargets.PackProjects,
                     WorkflowTargets.PackTool.WithGithubRunsOnMatrix(PlatformNames),
