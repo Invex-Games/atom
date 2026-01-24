@@ -46,7 +46,7 @@ jobs:
       
       - name: SetupBuildInfo
         id: SetupBuildInfo
-        run: ${{ steps.cache-restore-atom-build.outputs.cache-hit && format('.atom/{0} SetupBuildInfo --skip --headless', runner.os == 'windows' && '_atom.exe' || '_atom') || 'dotnet run --project _atom/_atom.csproj -- SetupBuildInfo --skip --headless' }}
+        run: ${{ steps.cache-restore-atom-build.outputs.cache-hit && '.atom/_atom SetupBuildInfo --skip --headless' || 'dotnet run --project _atom/_atom.csproj -- SetupBuildInfo --skip --headless' }}
         env:
           pull-request-number: ${{ github.event.number }}
   
@@ -76,7 +76,8 @@ jobs:
       
       - name: BuildAtom
         id: BuildAtom
-        run: ${{ steps.cache-restore-atom-build.outputs.cache-hit && format('.atom/{0} BuildAtom --skip --headless', runner.os == 'windows' && '_atom.exe' || '_atom') || 'dotnet run --project _atom/_atom.csproj -- BuildAtom --skip --headless' }}
+        if: steps.cache-restore-atom-build.outputs.cache-hit != true
+        run: ${{ steps.cache-restore-atom-build.outputs.cache-hit && '.atom/_atom BuildAtom --skip --headless' || 'dotnet run --project _atom/_atom.csproj -- BuildAtom --skip --headless' }}
         env:
           job-runs-on: ${{ matrix.job-runs-on }}
           build-slice: ${{ matrix.job-runs-on }}
@@ -117,7 +118,7 @@ jobs:
       
       - name: PackProjects
         id: PackProjects
-        run: ${{ steps.cache-restore-atom-build.outputs.cache-hit && format('.atom/{0} PackProjects --skip --headless', runner.os == 'windows' && '_atom.exe' || '_atom') || 'dotnet run --project _atom/_atom.csproj -- PackProjects --skip --headless' }}
+        run: ${{ steps.cache-restore-atom-build.outputs.cache-hit && '.atom/_atom PackProjects --skip --headless' || 'dotnet run --project _atom/_atom.csproj -- PackProjects --skip --headless' }}
       
       - name: Upload DecSm.Atom
         uses: actions/upload-artifact@v4
@@ -187,7 +188,7 @@ jobs:
       
       - name: PackTool
         id: PackTool
-        run: ${{ steps.cache-restore-atom-build.outputs.cache-hit && format('.atom/{0} PackTool --skip --headless', runner.os == 'windows' && '_atom.exe' || '_atom') || 'dotnet run --project _atom/_atom.csproj -- PackTool --skip --headless' }}
+        run: ${{ steps.cache-restore-atom-build.outputs.cache-hit && '.atom/_atom PackTool --skip --headless' || 'dotnet run --project _atom/_atom.csproj -- PackTool --skip --headless' }}
         env:
           job-runs-on: ${{ matrix.job-runs-on }}
           build-slice: ${{ matrix.job-runs-on }}
@@ -233,7 +234,7 @@ jobs:
       
       - name: TestProjects
         id: TestProjects
-        run: ${{ steps.cache-restore-atom-build.outputs.cache-hit && format('.atom/{0} TestProjects --skip --headless', runner.os == 'windows' && '_atom.exe' || '_atom') || 'dotnet run --project _atom/_atom.csproj -- TestProjects --skip --headless' }}
+        run: ${{ steps.cache-restore-atom-build.outputs.cache-hit && '.atom/_atom TestProjects --skip --headless' || 'dotnet run --project _atom/_atom.csproj -- TestProjects --skip --headless' }}
         env:
           job-runs-on: ${{ matrix.job-runs-on }}
           test-framework: ${{ matrix.test-framework }}
@@ -377,7 +378,7 @@ jobs:
       
       - name: PushToNuget
         id: PushToNuget
-        run: ${{ steps.cache-restore-atom-build.outputs.cache-hit && format('.atom/{0} PushToNuget --skip --headless', runner.os == 'windows' && '_atom.exe' || '_atom') || 'dotnet run --project _atom/_atom.csproj -- PushToNuget --skip --headless' }}
+        run: ${{ steps.cache-restore-atom-build.outputs.cache-hit && '.atom/_atom PushToNuget --skip --headless' || 'dotnet run --project _atom/_atom.csproj -- PushToNuget --skip --headless' }}
         env:
           build-id: ${{ needs.SetupBuildInfo.outputs.build-id }}
           azure-vault-app-secret: ${{ secrets.AZURE_VAULT_APP_SECRET }}
@@ -1138,7 +1139,7 @@ jobs:
       
       - name: PushToRelease
         id: PushToRelease
-        run: ${{ steps.cache-restore-atom-build.outputs.cache-hit && format('.atom/{0} PushToRelease --skip --headless', runner.os == 'windows' && '_atom.exe' || '_atom') || 'dotnet run --project _atom/_atom.csproj -- PushToRelease --skip --headless' }}
+        run: ${{ steps.cache-restore-atom-build.outputs.cache-hit && '.atom/_atom PushToRelease --skip --headless' || 'dotnet run --project _atom/_atom.csproj -- PushToRelease --skip --headless' }}
         env:
           build-version: ${{ needs.SetupBuildInfo.outputs.build-version }}
           azure-vault-app-secret: ${{ secrets.AZURE_VAULT_APP_SECRET }}

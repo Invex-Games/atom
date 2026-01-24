@@ -3,13 +3,11 @@ namespace DecSm.Atom.Experimental;
 [UnstableAPI]
 public sealed record CustomAtomCommand : IWorkflowOption
 {
-    public string Write(
-        WorkflowModel workflow,
-        WorkflowStepModel workflowStep,
-        IAtomFileSystem fileSystem)
+    public string Write(WorkflowModel workflow, WorkflowStepModel workflowStep, IAtomFileSystem fileSystem)
     {
         var cacheHitCommand =
-            $"format('.atom/{{0}} {workflowStep.Name} --skip --headless', runner.os == 'windows' && '_atom.exe' || '_atom')";
+            // $"format('.atom/{{0}} {workflowStep.Name} --skip --headless', runner.os == 'windows' && '_atom.exe' || '_atom')";
+            $"'.atom/_atom {workflowStep.Name} --skip --headless'";
 
         string cacheMissCommand;
 

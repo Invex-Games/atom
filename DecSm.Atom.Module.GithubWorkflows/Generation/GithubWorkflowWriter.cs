@@ -747,11 +747,16 @@ internal sealed class GithubWorkflowWriter(
 
             if (runTargetStepIf.Count > 0)
             {
-                var condition = WorkflowExpressions.True.And(runTargetStepIf
-                    .Select(x => x.Condition)
-                    .ToArray());
+                var condition = runTargetStepIf.Count > 1
+                    ? runTargetStepIf[0]
+                        .Condition
+                        .And(runTargetStepIf
+                            .Skip(1)
+                            .Select(x => x.Condition)
+                            .ToArray())
+                    : runTargetStepIf[0].Condition;
 
-                WriteLine($"if: {condition}");
+                WriteLine($"if: {workflowExpressionGenerator.Write(condition)}");
             }
 
             var customAtomCommand = workflow
