@@ -56,7 +56,7 @@ internal partial class Build : BuildDefinition,
             new CustomAtomCommand(),
             WorkflowOptions.Cache.Restore("atom-build",
                 "${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}",
-                [WorkflowExpressions.From(".atom")]),
+                ["${{ github.workspace }}/.atom"]),
         ];
 
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
