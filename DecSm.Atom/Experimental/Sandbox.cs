@@ -6,11 +6,10 @@ public sealed record CustomAtomCommand : IWorkflowOption
     public string Write(
         WorkflowModel workflow,
         WorkflowStepModel workflowStep,
-        IAtomFileSystem fileSystem,
-        string customArgs)
+        IAtomFileSystem fileSystem)
     {
         var cacheHitCommand =
-            $"format('.atom/{{0}} {customArgs}-- {workflowStep.Name} --skip --headless', runner.os == 'windows' && '_atom.exe' || '_atom')";
+            $"format('.atom/{{0}} {workflowStep.Name} --skip --headless', runner.os == 'windows' && '_atom.exe' || '_atom')";
 
         string cacheMissCommand;
 
@@ -22,15 +21,13 @@ public sealed record CustomAtomCommand : IWorkflowOption
             var filePathRelativeToRoot =
                 fileSystem.FileSystem.Path.GetRelativePath(fileSystem.AtomRootDirectory, fileName);
 
-            cacheMissCommand =
-                $"'dotnet run --file {filePathRelativeToRoot} {customArgs}-- {workflowStep.Name} --skip --headless'";
+            cacheMissCommand = $"'dotnet run --file {filePathRelativeToRoot}-- {workflowStep.Name} --skip --headless'";
         }
         else
         {
             var projectPath = FindProjectPath(fileSystem, fileSystem.ProjectName);
 
-            cacheMissCommand =
-                $"'dotnet run --project {projectPath} {customArgs}-- {workflowStep.Name} --skip --headless'";
+            cacheMissCommand = $"'dotnet run --project {projectPath}-- {workflowStep.Name} --skip --headless'";
         }
 
         // return $"run: ${{{{ steps.cache-restore-atom-build.outputs.cache-hit == 'true' }}}}";

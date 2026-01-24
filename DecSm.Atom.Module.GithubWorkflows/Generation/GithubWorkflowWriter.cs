@@ -754,18 +754,6 @@ internal sealed class GithubWorkflowWriter(
                 WriteLine($"if: {condition}");
             }
 
-            var atomArguments = workflow
-                .Options
-                .Concat(workflowStep.Options)
-                .OfType<AtomArguments>()
-                .SelectMany(x => x.Arguments)
-                .Distinct()
-                .ToList();
-
-            var atomArgumentsString = atomArguments.Count > 0
-                ? $"{string.Join(" ", atomArguments)} "
-                : string.Empty;
-
             var customAtomCommand = workflow
                 .Options
                 .Concat(workflowStep.Options)
@@ -774,7 +762,7 @@ internal sealed class GithubWorkflowWriter(
 
             if (customAtomCommand is not null)
             {
-                WriteLine(customAtomCommand.Write(workflow, workflowStep, _fileSystem, atomArgumentsString));
+                WriteLine(customAtomCommand.Write(workflow, workflowStep, _fileSystem));
             }
             else
             {
@@ -787,14 +775,13 @@ internal sealed class GithubWorkflowWriter(
                         _fileSystem.FileSystem.Path.GetRelativePath(_fileSystem.AtomRootDirectory, fileName);
 
                     WriteLine(
-                        $"run: dotnet run --file {filePathRelativeToRoot} {atomArgumentsString}-- {workflowStep.Name} --skip --headless");
+                        $"run: dotnet run --file {filePathRelativeToRoot} -- {workflowStep.Name} --skip --headless");
                 }
                 else
                 {
                     var projectPath = FindProjectPath(_fileSystem, _fileSystem.ProjectName);
 
-                    WriteLine(
-                        $"run: dotnet run --project {projectPath} {atomArgumentsString}-- {workflowStep.Name} --skip --headless");
+                    WriteLine($"run: dotnet run --project {projectPath} -- {workflowStep.Name} --skip --headless");
                 }
             }
 
@@ -952,7 +939,7 @@ internal sealed class GithubWorkflowWriter(
             }
         }
 
-        foreach (var cleanAtomDirectory in workflow
+        foreach (var _ in workflow
                      .Options
                      .Concat(workflowStep.Options)
                      .OfType<CleanAtomDirectory>())

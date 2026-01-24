@@ -78,10 +78,13 @@ internal partial class Build : BuildDefinition,
                         })
                         .WithOptions(WorkflowOptions.Inject.Param(WorkflowParams.PullRequestNumber,
                             "github.event.number")),
-                    WorkflowTargets.BuildAtom.WithOptions(new CleanAtomDirectory(),
-                        WorkflowOptions.Cache.Save("atom-build",
-                            "${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}",
-                            ["${{ github.workspace }}/.atom"])),
+                    WorkflowTargets
+                        .BuildAtom
+                        .WithGithubRunsOnMatrix(PlatformNames)
+                        .WithOptions(new CleanAtomDirectory(),
+                            WorkflowOptions.Cache.Save("atom-build",
+                                "${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}",
+                                ["${{ github.workspace }}/.atom"])),
                     WorkflowTargets.PackProjects.WithSuppressedArtifactPublishing,
                     WorkflowTargets.PackTool.WithSuppressedArtifactPublishing.WithGithubRunsOnMatrix(PlatformNames),
                     WorkflowTargets
@@ -127,10 +130,13 @@ internal partial class Build : BuildDefinition,
                         })
                         .WithOptions(WorkflowOptions.Inject.Param(WorkflowParams.PullRequestNumber,
                             "github.event.number")),
-                    WorkflowTargets.BuildAtom.WithOptions(new CleanAtomDirectory(),
-                        WorkflowOptions.Cache.Save("atom-build",
-                            "${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}",
-                            ["${{ github.workspace }}/.atom"])),
+                    WorkflowTargets
+                        .BuildAtom
+                        .WithGithubRunsOnMatrix(PlatformNames)
+                        .WithOptions(new CleanAtomDirectory(),
+                            WorkflowOptions.Cache.Save("atom-build",
+                                "${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}",
+                                ["${{ github.workspace }}/.atom"])),
                     WorkflowTargets.PackProjects,
                     WorkflowTargets.PackTool.WithGithubRunsOnMatrix(PlatformNames),
                     WorkflowTargets
