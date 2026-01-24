@@ -1,4 +1,4 @@
 namespace DecSm.Atom.Experimental;
 
-[PublicAPI]
+[UnstableAPI]
 public sealed record AtomArguments(params string[] Arguments) : IWorkflowOption;

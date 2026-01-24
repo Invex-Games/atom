@@ -123,6 +123,9 @@ dotnet_style_prefer_collection_expression = true
 dotnet_separate_import_directive_groups = false
 dotnet_sort_system_directives_first = true
 
+# .NET code quality rules
+dotnet_code_quality.DecSm_Analyzers_ValidPublicApiAttributes = UnstableAPI
+
 [*.{received,verified}.{txt,xml,json}]
 # Verify settings
 end_of_line = lf

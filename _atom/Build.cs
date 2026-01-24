@@ -48,9 +48,15 @@ internal partial class Build : BuildDefinition,
         [
             WorkflowOptions.AzureKeyVault.Use,
             WorkflowOptions.UseGitVersionForBuildId.Enabled,
-            WorkflowOptions.SetupDotnet.Dotnet100X(cache: true, lockFile: "'**/packages.lock.json'"),
-            new RestoreLockedModeStep(GithubCustomStepOrder.BeforeTarget),
-            new AtomArguments("--no-restore ${{ runner.debug && '-v d' || '' }}"),
+            WorkflowOptions.SetupDotnet.Dotnet100X(),
+            new UseGithubForAtomBuildCache
+            {
+                Value = true,
+            },
+            new CustomAtomCommand(),
+            WorkflowOptions.Cache.Restore("atom-build",
+                "${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}",
+                [WorkflowExpressions.From(".atom")]),
         ];
 
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
@@ -72,6 +78,11 @@ internal partial class Build : BuildDefinition,
                         })
                         .WithOptions(WorkflowOptions.Inject.Param(WorkflowParams.PullRequestNumber,
                             "github.event.number")),
+                    WorkflowTargets.BuildAtom.WithOptions(new CleanAtomDirectory("_atom/bin"),
+                        new CleanAtomDirectory("_atom/obj"),
+                        WorkflowOptions.Cache.Save("atom-build",
+                            "${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}",
+                            [WorkflowExpressions.From(".atom")])),
                     WorkflowTargets.PackProjects.WithSuppressedArtifactPublishing,
                     WorkflowTargets.PackTool.WithSuppressedArtifactPublishing.WithGithubRunsOnMatrix(PlatformNames),
                     WorkflowTargets

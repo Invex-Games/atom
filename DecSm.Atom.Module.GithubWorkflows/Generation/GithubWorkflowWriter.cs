@@ -739,6 +739,21 @@ internal sealed class GithubWorkflowWriter(
             if (includeId)
                 WriteLine($"id: {workflowStep.Name}");
 
+            var runTargetStepIf = workflow
+                .Options
+                .Concat(workflowStep.Options)
+                .OfType<RunTargetStepIf>()
+                .ToList();
+
+            if (runTargetStepIf.Count > 0)
+            {
+                var condition = WorkflowExpressions.True.And(runTargetStepIf
+                    .Select(x => x.Condition)
+                    .ToArray());
+
+                WriteLine($"if: {condition}");
+            }
+
             var atomArguments = workflow
                 .Options
                 .Concat(workflowStep.Options)
@@ -751,23 +766,36 @@ internal sealed class GithubWorkflowWriter(
                 ? $"{string.Join(" ", atomArguments)} "
                 : string.Empty;
 
-            if (_fileSystem.IsFileBasedApp)
+            var customAtomCommand = workflow
+                .Options
+                .Concat(workflowStep.Options)
+                .OfType<CustomAtomCommand>()
+                .FirstOrDefault();
+
+            if (customAtomCommand is not null)
             {
-                if (AppContext.GetData("EntryPointFilePath") is not string fileName)
-                    throw new InvalidOperationException("EntryPointFilePath is null");
-
-                var filePathRelativeToRoot =
-                    _fileSystem.FileSystem.Path.GetRelativePath(_fileSystem.AtomRootDirectory, fileName);
-
-                WriteLine(
-                    $"run: dotnet run --file {filePathRelativeToRoot} {atomArgumentsString}-- {workflowStep.Name} --skip --headless");
+                WriteLine(customAtomCommand.Write(workflow, workflowStep, _fileSystem, atomArgumentsString));
             }
             else
             {
-                var projectPath = FindProjectPath(_fileSystem, _fileSystem.ProjectName);
+                if (_fileSystem.IsFileBasedApp)
+                {
+                    if (AppContext.GetData("EntryPointFilePath") is not string fileName)
+                        throw new InvalidOperationException("EntryPointFilePath is null");
 
-                WriteLine(
-                    $"run: dotnet run --project {projectPath} {atomArgumentsString}-- {workflowStep.Name} --skip --headless");
+                    var filePathRelativeToRoot =
+                        _fileSystem.FileSystem.Path.GetRelativePath(_fileSystem.AtomRootDirectory, fileName);
+
+                    WriteLine(
+                        $"run: dotnet run --file {filePathRelativeToRoot} {atomArgumentsString}-- {workflowStep.Name} --skip --headless");
+                }
+                else
+                {
+                    var projectPath = FindProjectPath(_fileSystem, _fileSystem.ProjectName);
+
+                    WriteLine(
+                        $"run: dotnet run --project {projectPath} {atomArgumentsString}-- {workflowStep.Name} --skip --headless");
+                }
             }
 
             var env = new Dictionary<string, string>();
@@ -922,6 +950,15 @@ internal sealed class GithubWorkflowWriter(
                 customPostStep.WriteStep(writer);
                 writer.ResetIndent();
             }
+        }
+
+        foreach (var cleanAtomDirectory in workflow
+                     .Options
+                     .Concat(workflowStep.Options)
+                     .OfType<CleanAtomDirectory>())
+        {
+            WriteLine();
+            WriteLine($"- run: rm -rf '{cleanAtomDirectory.AtomDirectory}'");
         }
 
         if (workflow
