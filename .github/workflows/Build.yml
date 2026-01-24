@@ -42,7 +42,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/.atom
-          key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}
+          key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
       
       - name: SetupBuildInfo
         id: SetupBuildInfo
@@ -69,7 +69,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/.atom
-          key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}
+          key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
       
       - name: BuildAtom
         id: BuildAtom
@@ -107,7 +107,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/.atom
-          key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}
+          key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
       
       - name: PackProjects
         id: PackProjects
@@ -177,7 +177,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/.atom
-          key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}
+          key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
       
       - name: PackTool
         id: PackTool
@@ -223,7 +223,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/.atom
-          key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}
+          key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
       
       - name: TestProjects
         id: TestProjects
@@ -367,7 +367,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/.atom
-          key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}
+          key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
       
       - name: PushToNuget
         id: PushToNuget
@@ -1128,7 +1128,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/.atom
-          key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**')) }}
+          key: ${{ format('{0}-atom-build-{1}', runner.os, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
       
       - name: PushToRelease
         id: PushToRelease
