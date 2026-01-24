@@ -1,6 +1,6 @@
 namespace DecSm.Atom.Experimental;
 
-[PublicAPI]
+[UnstableAPI]
 public static partial class WorkflowCacheUtil
 {
     [GeneratedRegex(@"[^a-zA-Z0-9_\.]")]
@@ -12,7 +12,7 @@ public static partial class WorkflowCacheUtil
             .ToLowerInvariant();
 }
 
-[PublicAPI]
+[UnstableAPI]
 public sealed record WorkflowCacheSaveOption : IWorkflowOption
 {
     public required string Name { get; init; }
@@ -28,7 +28,7 @@ public sealed record WorkflowCacheSaveOption : IWorkflowOption
     public string StepId => $"cache-save-{WorkflowCacheUtil.ConvertNameToId(Name)}";
 }
 
-[PublicAPI]
+[UnstableAPI]
 public sealed record WorkflowCacheRestoreOption : IWorkflowOption
 {
     public required string Name { get; init; }
@@ -42,7 +42,7 @@ public sealed record WorkflowCacheRestoreOption : IWorkflowOption
     public string StepId => $"cache-restore-{WorkflowCacheUtil.ConvertNameToId(Name)}";
 }
 
-[PublicAPI]
+[UnstableAPI]
 public static class WorkflowCacheOptions
 {
     [SuppressMessage("Performance", "CA1822:Mark members as static")]
