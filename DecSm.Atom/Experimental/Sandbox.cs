@@ -73,4 +73,4 @@ public sealed record CustomAtomCommand : IWorkflowOption
 public sealed record RunTargetStepIf(WorkflowExpression Condition) : IWorkflowOption;
 
 [UnstableAPI]
-public sealed record CleanAtomDirectory(string AtomDirectory) : IWorkflowOption;
+public sealed record CleanAtomDirectory : IWorkflowOption;
