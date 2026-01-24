@@ -15,13 +15,13 @@ public sealed record UseGithubForAtomBuildCache : ToggleWorkflowOption<UseGithub
                     ? cacheOptions.RunIf.And(WorkflowExpressions
                         .Literal(
                             $"steps.cache-restore-{WorkflowCacheUtil.ConvertNameToId(cacheOptions.Name)}.outputs.cache-hit")
-                        .NotEqualTo(true))
+                        .NotEqualToString("true"))
                     : cacheOptions.RunIf
                 : cacheOptions.RunOnlyIfMatchingNameCacheMissed
                     ? WorkflowExpressions
                         .Literal(
                             $"steps.cache-restore-{WorkflowCacheUtil.ConvertNameToId(cacheOptions.Name)}.outputs.cache-hit")
-                        .NotEqualTo(true)
+                        .NotEqualToString("true")
                     : null;
 
             if (runIfExpression is not null)

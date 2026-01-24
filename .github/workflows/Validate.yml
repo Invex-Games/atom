@@ -37,7 +37,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/.atom
-          key: ${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
+          key: ${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**')) }}
       
       - name: SetupBuildInfo
         id: SetupBuildInfo
@@ -67,10 +67,11 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/.atom
-          key: ${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
+          key: ${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**')) }}
       
       - name: BuildAtom
         id: BuildAtom
+        if: steps.cache-restore-atom-build.outputs.cache-hit != 'true'
         run: ${{ steps.cache-restore-atom-build.outputs.cache-hit && '.atom/_atom BuildAtom --skip --headless' || 'dotnet run --project _atom/_atom.csproj -- BuildAtom --skip --headless' }}
         env:
           job-runs-on: ${{ matrix.job-runs-on }}
@@ -83,11 +84,11 @@ jobs:
       - name: cache-save-atom-build
         id: cache-save-atom-build
         uses: actions/cache/save@v4
-        if: steps.cache-restore-atom-build.outputs.cache-hit != true
+        if: steps.cache-restore-atom-build.outputs.cache-hit != 'true'
         with:
           path: |
             ${{ github.workspace }}/.atom
-          key: ${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
+          key: ${{ steps.cache-restore-atom-build.outputs.cache-primary-key }}
   
   PackProjects:
     runs-on: ubuntu-latest
@@ -108,7 +109,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/.atom
-          key: ${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
+          key: ${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**')) }}
       
       - name: PackProjects
         id: PackProjects
@@ -136,7 +137,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/.atom
-          key: ${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
+          key: ${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**')) }}
       
       - name: PackTool
         id: PackTool
@@ -176,7 +177,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/.atom
-          key: ${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
+          key: ${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**')) }}
       
       - name: TestProjects
         id: TestProjects
@@ -247,7 +248,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/.atom
-          key: ${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}
+          key: ${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**')) }}
       
       - name: CheckPrForBreakingChanges
         id: CheckPrForBreakingChanges

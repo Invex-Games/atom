@@ -45,8 +45,10 @@ internal partial class Build : BuildDefinition,
 
     private const string AtomBuildCacheName = "atom-build";
 
-    private const string AtomBuildCacheKey =
-        "${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**/*.cs', '_atom/appsettings.json', '_atom/packages.lock.json')) }}";
+    private const string AtomBuildCacheRestoreKey =
+        "${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**')) }}";
+
+    private const string AtomBuildCacheSaveKey = "${{ steps.cache-restore-atom-build.outputs.cache-primary-key }}";
 
     private static readonly WorkflowExpression[] AtomBuildCachePaths = ["${{ github.workspace }}/.atom"];
 
@@ -61,7 +63,7 @@ internal partial class Build : BuildDefinition,
                 Value = true,
             },
             new CustomAtomCommand(),
-            WorkflowOptions.Cache.Restore(AtomBuildCacheName, AtomBuildCacheKey, AtomBuildCachePaths),
+            WorkflowOptions.Cache.Restore(AtomBuildCacheName, AtomBuildCacheRestoreKey, AtomBuildCachePaths),
         ];
 
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
@@ -87,7 +89,10 @@ internal partial class Build : BuildDefinition,
                         .BuildAtom
                         .WithGithubRunsOnMatrix(PlatformNames)
                         .WithOptions(new CleanAtomDirectory(),
-                            WorkflowOptions.Cache.Save(AtomBuildCacheName, AtomBuildCacheKey, AtomBuildCachePaths)),
+                            new RunTargetStepIf(WorkflowExpressions
+                                .Literal("steps.cache-restore-atom-build.outputs.cache-hit")
+                                .NotEqualToString("true")),
+                            WorkflowOptions.Cache.Save(AtomBuildCacheName, AtomBuildCacheSaveKey, AtomBuildCachePaths)),
                     WorkflowTargets.PackProjects.WithSuppressedArtifactPublishing,
                     WorkflowTargets.PackTool.WithSuppressedArtifactPublishing.WithGithubRunsOnMatrix(PlatformNames),
                     WorkflowTargets
@@ -139,8 +144,8 @@ internal partial class Build : BuildDefinition,
                         .WithOptions(new CleanAtomDirectory(),
                             new RunTargetStepIf(WorkflowExpressions
                                 .Literal("steps.cache-restore-atom-build.outputs.cache-hit")
-                                .NotEqualTo(true)),
-                            WorkflowOptions.Cache.Save(AtomBuildCacheName, AtomBuildCacheKey, AtomBuildCachePaths)),
+                                .NotEqualToString("true")),
+                            WorkflowOptions.Cache.Save(AtomBuildCacheName, AtomBuildCacheSaveKey, AtomBuildCachePaths)),
                     WorkflowTargets.PackProjects,
                     WorkflowTargets.PackTool.WithGithubRunsOnMatrix(PlatformNames),
                     WorkflowTargets
