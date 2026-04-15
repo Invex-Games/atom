@@ -91,12 +91,37 @@ public sealed class TargetDefinition
             if (extension.RunExtensionAfter)
             {
                 Tasks.AddRange(targetToExtend.Tasks);
-                Dependencies.AddRange(targetToExtend.Dependencies);
-                Params.AddRange(targetToExtend.Params);
-                ConsumedArtifacts.AddRange(targetToExtend.ConsumedArtifacts);
-                ProducedArtifacts.AddRange(targetToExtend.ProducedArtifacts);
-                ConsumedVariables.AddRange(targetToExtend.ConsumedVariables);
-                ProducedVariables.AddRange(targetToExtend.ProducedVariables);
+
+                Dependencies = Dependencies
+                    .Concat(targetToExtend.Dependencies)
+                    .Distinct()
+                    .ToList();
+
+                Params = Params
+                    .Concat(targetToExtend.Params)
+                    .GroupBy(p => p.Param)
+                    .Select(g => new DefinedParam(g.Key, g.Any(p => p.Required)))
+                    .ToList();
+
+                ConsumedArtifacts = ConsumedArtifacts
+                    .Concat(targetToExtend.ConsumedArtifacts)
+                    .Distinct()
+                    .ToList();
+
+                ProducedArtifacts = ProducedArtifacts
+                    .Concat(targetToExtend.ProducedArtifacts)
+                    .Distinct()
+                    .ToList();
+
+                ConsumedVariables = ConsumedVariables
+                    .Concat(targetToExtend.ConsumedVariables)
+                    .Distinct()
+                    .ToList();
+
+                ProducedVariables = ProducedVariables
+                    .Concat(targetToExtend.ProducedVariables)
+                    .Distinct()
+                    .ToList();
             }
             else
             {
@@ -108,31 +133,38 @@ public sealed class TargetDefinition
                 Dependencies = targetToExtend
                     .Dependencies
                     .Concat(Dependencies)
+                    .Distinct()
                     .ToList();
 
                 Params = targetToExtend
                     .Params
                     .Concat(Params)
+                    .GroupBy(p => p.Param)
+                    .Select(g => new DefinedParam(g.Key, g.Any(p => p.Required)))
                     .ToList();
 
                 ConsumedArtifacts = targetToExtend
                     .ConsumedArtifacts
                     .Concat(ConsumedArtifacts)
+                    .Distinct()
                     .ToList();
 
                 ProducedArtifacts = targetToExtend
                     .ProducedArtifacts
                     .Concat(ProducedArtifacts)
+                    .Distinct()
                     .ToList();
 
                 ConsumedVariables = targetToExtend
                     .ConsumedVariables
                     .Concat(ConsumedVariables)
+                    .Distinct()
                     .ToList();
 
                 ProducedVariables = targetToExtend
                     .ProducedVariables
                     .Concat(ProducedVariables)
+                    .Distinct()
                     .ToList();
             }
         }
