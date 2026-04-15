@@ -459,16 +459,16 @@ internal sealed class ParamService(
     private readonly record struct OverrideSourcesScope : IDisposable
     {
         private readonly ParamService _paramService;
-        private readonly ParamSource _sources;
+        private readonly ParamSource? _previousSources;
 
         public OverrideSourcesScope(ParamService paramService, ParamSource sources)
         {
             _paramService = paramService;
-            _sources = sources;
+            _previousSources = paramService._overrideSources.Value;
             paramService._overrideSources.Value = sources;
         }
 
         public void Dispose() =>
-            _paramService._overrideSources.Value = _sources;
+            _paramService._overrideSources.Value = _previousSources;
     }
 }
