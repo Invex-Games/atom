@@ -6,12 +6,6 @@ internal sealed class GithubExpressionFormatter(IBuildDefinition buildDefinition
 
     public int Priority => 1000;
 
-    private static char[] QuotedStringCharacters =>
-        field ??=
-        [
-            ':', '#', '[', ']', '{', '}', ',', '-', '>', '|', '*', '&', '!', '%', '?', '@', '`', ' ', '\'', '\"',
-        ];
-
     public WorkflowExpression? Write(IWorkflowExpressionResolver resolver, WorkflowExpression expression) =>
         expression switch
         {
