@@ -1,5 +1,3 @@
-using Environment = System.Environment;
-
 namespace Atom.Targets;
 
 internal interface IBuildTargets : IDotnetPackHelper, IDotnetPublishHelper
@@ -61,36 +59,4 @@ internal interface IBuildTargets : IDotnetPackHelper, IDotnetPublishHelper
                         cancellationToken);
                 }
             });
-
-    Target BuildAtom =>
-        t => t.Executes(async cancellationToken =>
-        {
-            await DotnetPublishAndStage(Projects._atom.Name, cancellationToken: cancellationToken);
-
-            var atomExecutableName = Environment.OSVersion.Platform is PlatformID.Win32NT
-                ? "_atom.exe"
-                : "_atom";
-
-            var atomExecutablePath = FileSystem.AtomPublishDirectory / Projects._atom.Name / atomExecutableName;
-
-            if (!atomExecutablePath.FileExists)
-            {
-                Logger.LogError("Atom executable not found at {Path}", atomExecutablePath);
-
-                return;
-            }
-
-            var cachedDirectory = FileSystem.AtomRootDirectory / ".atom";
-
-            if (cachedDirectory.DirectoryExists)
-                FileSystem.Directory.Delete(cachedDirectory, true);
-
-            FileSystem.Directory.CreateDirectory(cachedDirectory);
-
-            foreach (var file in FileSystem.Directory.EnumerateFiles(
-                         FileSystem.AtomPublishDirectory / Projects._atom.Name,
-                         "*",
-                         SearchOption.TopDirectoryOnly))
-                FileSystem.File.Move(file, cachedDirectory / FileSystem.Path.GetFileName(file));
-        });
 }

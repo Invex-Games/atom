@@ -5,13 +5,13 @@ partial record WorkflowExpression
     public WorkflowExpression Contains(WorkflowExpression pattern) =>
         new ContainsExpression(this, pattern);
 
-    public WorkflowExpression ContainsString(string pattern) =>
+    public WorkflowExpression Contains(string pattern) =>
         new ContainsExpression(this, new StringExpression(pattern));
 
     public WorkflowExpression ContainedIn(WorkflowExpression collection) =>
         new ContainsExpression(collection, this);
 
-    public WorkflowExpression ContainedInString(string collection) =>
+    public WorkflowExpression ContainedIn(string collection) =>
         new ContainsExpression(this, new StringExpression(collection));
 
     public WorkflowExpression Coalesce(params WorkflowExpression[] source) =>
@@ -19,7 +19,7 @@ partial record WorkflowExpression
             ? this
             : new CoalesceExpression([this, ..source]);
 
-    public WorkflowExpression CoalesceString(params string[] source) =>
+    public WorkflowExpression Coalesce(params string[] source) =>
         source.Length is 0
             ? this
             : new CoalesceExpression([this, ..source.Select(x => new StringExpression(x))]);
@@ -27,19 +27,19 @@ partial record WorkflowExpression
     public WorkflowExpression StartsWith(WorkflowExpression pattern) =>
         new StartsWithExpression(this, pattern);
 
-    public WorkflowExpression StartsWithString(string pattern) =>
+    public WorkflowExpression StartsWith(string pattern) =>
         new StartsWithExpression(this, new StringExpression(pattern));
 
     public WorkflowExpression IsStartOf(WorkflowExpression pattern) =>
         new StartsWithExpression(pattern, this);
 
-    public WorkflowExpression IsStartOfString(string pattern) =>
+    public WorkflowExpression IsStartOf(string pattern) =>
         new StartsWithExpression(new StringExpression(pattern), this);
 
     public WorkflowExpression EndsWith(WorkflowExpression pattern) =>
         new EndsWithExpression(this, pattern);
 
-    public WorkflowExpression EndsWithString(string pattern) =>
+    public WorkflowExpression EndsWith(string pattern) =>
         new EndsWithExpression(this, new StringExpression(pattern));
 
     public WorkflowExpression IsEndOf(WorkflowExpression pattern) =>
@@ -53,6 +53,21 @@ partial record WorkflowExpression
 
     public WorkflowExpression FormatString(params string[] arguments) =>
         new FormatExpression(this,
+            arguments
+                .Select(x => new StringExpression(x))
+                .ToArray<WorkflowExpression>());
+
+    public static FormatExpression operator +(WorkflowExpression source, WorkflowExpression argument) =>
+        new(source, argument);
+
+    public static FormatExpression operator +(WorkflowExpression source, WorkflowExpression[] arguments) =>
+        new(source, arguments);
+
+    public static FormatExpression operator +(WorkflowExpression source, string argument) =>
+        new(source, new StringExpression(argument));
+
+    public static FormatExpression operator +(WorkflowExpression source, string[] arguments) =>
+        new(source,
             arguments
                 .Select(x => new StringExpression(x))
                 .ToArray<WorkflowExpression>());

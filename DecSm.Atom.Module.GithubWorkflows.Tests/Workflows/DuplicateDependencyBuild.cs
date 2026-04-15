@@ -14,7 +14,7 @@ public partial class DuplicateDependencyBuild : MinimalBuildDefinition, IGithubW
         {
             Triggers = [WorkflowTriggers.Manual],
             Targets = [WorkflowTargets.DuplicateDependencyTarget1],
-            WorkflowTypes = [Github.WorkflowType],
+            WorkflowTypes = [WorkflowTypes.Github.Action],
         },
     ];
 }

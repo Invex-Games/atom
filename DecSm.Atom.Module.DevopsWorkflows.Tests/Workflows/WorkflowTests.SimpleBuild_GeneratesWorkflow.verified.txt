@@ -3,14 +3,14 @@
 trigger: none
 
 jobs:
-  
+
   - job: SimpleTarget
     pool:
       vmImage: ubuntu-latest
     steps:
-      
+
       - checkout: self
         fetchDepth: 0
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj SimpleTarget --skip --headless
         name: SimpleTarget

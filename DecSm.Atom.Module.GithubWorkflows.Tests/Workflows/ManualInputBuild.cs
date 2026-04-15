@@ -25,7 +25,7 @@ public partial class ManualInputBuild : MinimalBuildDefinition, IGithubWorkflows
                 },
             ],
             Targets = [WorkflowTargets.ManualInputTarget],
-            WorkflowTypes = [Github.WorkflowType],
+            WorkflowTypes = [WorkflowTypes.Github.Action],
         },
     ];
 }

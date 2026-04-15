@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
+﻿using DecSm.Atom.Module.GithubWorkflows.Workflows.Options;
+
+namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
 
 [BuildDefinition]
 public partial class PermissionsBuild : MinimalBuildDefinition, IGithubWorkflows, IPermissionsTarget
@@ -16,12 +18,12 @@ public partial class PermissionsBuild : MinimalBuildDefinition, IGithubWorkflows
             ],
             Targets =
             [
-                WorkflowTargets.PermissionsTarget.WithOptions(new GithubTokenPermissionsOption
+                WorkflowTargets.PermissionsTarget.WithOptions(new GithubTokenPermissionsOption(new PermissionsEvent
                 {
-                    Actions = GithubTokenPermission.Write,
-                }),
+                    Actions = PermissionsLevel.Write,
+                })),
             ],
-            WorkflowTypes = [Github.WorkflowType],
+            WorkflowTypes = [WorkflowTypes.Github.Action],
             Options = [WorkflowOptions.Github.TokenPermissions.ReadAll],
         },
     ];

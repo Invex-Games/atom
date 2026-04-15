@@ -8,7 +8,7 @@ public partial class SetupDotnetBuild : MinimalBuildDefinition, IDevopsWorkflows
         new("setup-dotnet")
         {
             Triggers = [WorkflowTriggers.PushToMain],
-            Targets = [WorkflowTargets.SetupDotnetTarget.WithOptions(new SetupDotnetStep("9.0.x"))],
+            Targets = [WorkflowTargets.SetupDotnetTarget.WithOptions(WorkflowOptions.Steps.SetupDotnet.Dotnet90X())],
             WorkflowTypes = [Devops.WorkflowType],
         },
     ];

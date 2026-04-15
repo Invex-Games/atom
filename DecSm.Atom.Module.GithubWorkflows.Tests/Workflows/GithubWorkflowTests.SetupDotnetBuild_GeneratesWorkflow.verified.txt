@@ -1,0 +1,28 @@
+﻿name: setup-dotnet
+
+on:
+  push:
+    branches: [ main ]
+
+permissions: { }
+
+jobs:
+
+  SetupDotnetTarget:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET 9.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 9.0.x
+
+      - name: SetupDotnetTarget
+        id: SetupDotnetTarget
+        run: dotnet run --project AtomTest/AtomTest.csproj -- SetupDotnetTarget --skip --headless
+

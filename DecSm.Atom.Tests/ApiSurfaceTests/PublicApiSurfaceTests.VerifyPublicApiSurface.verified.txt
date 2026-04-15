@@ -843,13 +843,13 @@
     ]
   },
   {
-    Name: DecSm.Atom.Experimental.AtomArguments,
+    Name: DecSm.Atom.Experimental.RunTargetStepIf,
     Members: [
       {
         Name: <Clone>$
       },
       {
-        Name: Arguments
+        Name: Condition
       },
       {
         Name: Deconstruct
@@ -867,6 +867,9 @@
         Name: ToString
       }
     ]
+  },
+  {
+    Name: DecSm.Atom.Experimental.UnstableAPIAttribute
   },
   {
     Name: DecSm.Atom.Experimental.WorkflowCacheOptions,
@@ -1047,9 +1050,6 @@
         Name: Equals
       },
       {
-        Name: Equals
-      },
-      {
         Name: FeedsToAdd
       },
       {
@@ -1057,6 +1057,9 @@
       },
       {
         Name: GetHashCode
+      },
+      {
+        Name: Order
       },
       {
         Name: SyncAtomToolVersionToLibraryVersion
@@ -2007,6 +2010,109 @@
     ]
   },
   {
+    Name: DecSm.Atom.Util.SingleOrList`1,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Match
+      },
+      {
+        Name: Match
+      },
+      {
+        Name: Match
+      },
+      {
+        Name: Match
+      },
+      {
+        Name: MatchList
+      },
+      {
+        Name: MatchList
+      },
+      {
+        Name: MatchList
+      },
+      {
+        Name: MatchList
+      },
+      {
+        Name: MatchSingle
+      },
+      {
+        Name: MatchSingle
+      },
+      {
+        Name: MatchSingle
+      },
+      {
+        Name: MatchSingle
+      },
+      {
+        Name: ToString
+      },
+      {
+        Name: UnwrapList
+      },
+      {
+        Name: UnwrapSingle
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Util.SingleOrList1MatchExtensions,
+    Members: [
+      {
+        Name: MatchAsync
+      },
+      {
+        Name: MatchAsync
+      },
+      {
+        Name: MatchAsync
+      },
+      {
+        Name: MatchAsync
+      },
+      {
+        Name: MatchListAsync
+      },
+      {
+        Name: MatchListAsync
+      },
+      {
+        Name: MatchListAsync
+      },
+      {
+        Name: MatchListAsync
+      },
+      {
+        Name: MatchSingleAsync
+      },
+      {
+        Name: MatchSingleAsync
+      },
+      {
+        Name: MatchSingleAsync
+      },
+      {
+        Name: MatchSingleAsync
+      }
+    ]
+  },
+  {
     Name: DecSm.Atom.Util.StringUtil,
     Members: [
       {
@@ -2113,6 +2219,14 @@
     ]
   },
   {
+    Name: DecSm.Atom.Workflows.Definition.Options.IToggleWorkflowOption,
+    Members: [
+      {
+        Name: Value
+      }
+    ]
+  },
+  {
     Name: DecSm.Atom.Workflows.Definition.Options.IWorkflowOption,
     Members: [
       {
@@ -2150,41 +2264,33 @@
     ]
   },
   {
-    Name: DecSm.Atom.Workflows.Definition.Options.ToggleWorkflowOptionExtensions,
+    Name: DecSm.Atom.Workflows.Definition.Options.WorkflowOptionExtensions,
     Members: [
       {
-        Name: HasEnabledToggle
+        Name: GetOption
+      },
+      {
+        Name: GetOption
+      },
+      {
+        Name: GetOption
+      },
+      {
+        Name: GetOptions
+      },
+      {
+        Name: IsOptionEnabled
+      },
+      {
+        Name: IsOptionEnabled
+      },
+      {
+        Name: IsOptionEnabled
       }
     ]
   },
   {
     Name: DecSm.Atom.Workflows.Definition.Options.WorkflowOptions
-  },
-  {
-    Name: DecSm.Atom.Workflows.Definition.Triggers.GithubScheduleTrigger,
-    Members: [
-      {
-        Name: <Clone>$
-      },
-      {
-        Name: CronExpression
-      },
-      {
-        Name: Deconstruct
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: GetHashCode
-      },
-      {
-        Name: ToString
-      }
-    ]
   },
   {
     Name: DecSm.Atom.Workflows.Definition.Triggers.GitPullRequestTrigger,
@@ -2490,6 +2596,12 @@
     Name: DecSm.Atom.Workflows.Definition.WorkflowLabels
   },
   {
+    Name: DecSm.Atom.Workflows.Definition.WorkflowPresets
+  },
+  {
+    Name: DecSm.Atom.Workflows.Definition.WorkflowSteps
+  },
+  {
     Name: DecSm.Atom.Workflows.Definition.WorkflowTargetDefinition,
     Members: [
       {
@@ -2520,9 +2632,6 @@
         Name: Options
       },
       {
-        Name: SuppressArtifactPublishing
-      },
-      {
         Name: ToString
       },
       {
@@ -2530,11 +2639,11 @@
       },
       {
         Name: WithOptions
-      },
-      {
-        Name: WithSuppressedArtifactPublishing
       }
     ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Definition.WorkflowTypes
   },
   {
     Name: DecSm.Atom.Workflows.Expressions.AndExpression,
@@ -2813,7 +2922,7 @@
     ]
   },
   {
-    Name: DecSm.Atom.Workflows.Expressions.GreaterThanOrEqualExpression,
+    Name: DecSm.Atom.Workflows.Expressions.GreaterThanOrEqualToExpression,
     Members: [
       {
         Name: <Clone>$
@@ -2906,15 +3015,7 @@
     ]
   },
   {
-    Name: DecSm.Atom.Workflows.Expressions.IWorkflowExpressionGenerator,
-    Members: [
-      {
-        Name: Write
-      }
-    ]
-  },
-  {
-    Name: DecSm.Atom.Workflows.Expressions.IWorkflowExpressionWriter,
+    Name: DecSm.Atom.Workflows.Expressions.IWorkflowExpressionFormatter,
     Members: [
       {
         Name: Enabled
@@ -2924,6 +3025,17 @@
       },
       {
         Name: Write
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.IWorkflowExpressionResolver,
+    Members: [
+      {
+        Name: Resolve
+      },
+      {
+        Name: Resolve
       }
     ]
   },
@@ -2992,7 +3104,7 @@
     ]
   },
   {
-    Name: DecSm.Atom.Workflows.Expressions.LessThanOrEqualExpression,
+    Name: DecSm.Atom.Workflows.Expressions.LessThanOrEqualToExpression,
     Members: [
       {
         Name: <Clone>$
@@ -3020,35 +3132,6 @@
       },
       {
         Name: ToString
-      }
-    ]
-  },
-  {
-    Name: DecSm.Atom.Workflows.Expressions.LiteralExpression,
-    Members: [
-      {
-        Name: <Clone>$
-      },
-      {
-        Name: Deconstruct
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: Equals
-      },
-      {
-        Name: GetHashCode
-      },
-      {
-        Name: ToString
-      },
-      {
-        Name: Value
       }
     ]
   },
@@ -3223,6 +3306,35 @@
       },
       {
         Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Expressions.RawExpression,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: ToString
+      },
+      {
+        Name: Value
       }
     ]
   },
@@ -3491,25 +3603,25 @@
         Name: Coalesce
       },
       {
-        Name: CoalesceString
+        Name: Coalesce
       },
       {
         Name: ContainedIn
       },
       {
-        Name: ContainedInString
+        Name: ContainedIn
       },
       {
         Name: Contains
       },
       {
-        Name: ContainsString
+        Name: Contains
       },
       {
         Name: EndsWith
       },
       {
-        Name: EndsWithString
+        Name: EndsWith
       },
       {
         Name: Equals
@@ -3545,13 +3657,13 @@
         Name: GreaterThan
       },
       {
-        Name: GreaterThanOrEqual
+        Name: GreaterThanOrEqualTo
       },
       {
-        Name: GreaterThanOrEqual
+        Name: GreaterThanOrEqualTo
       },
       {
-        Name: GreaterThanOrEqualString
+        Name: GreaterThanOrEqualToString
       },
       {
         Name: GreaterThanString
@@ -3569,7 +3681,7 @@
         Name: IsStartOf
       },
       {
-        Name: IsStartOfString
+        Name: IsStartOf
       },
       {
         Name: Item
@@ -3620,7 +3732,7 @@
         Name: StartsWith
       },
       {
-        Name: StartsWithString
+        Name: StartsWith
       },
       {
         Name: ToJson
@@ -3634,28 +3746,16 @@
     Name: DecSm.Atom.Workflows.Expressions.WorkflowExpressionExtensions,
     Members: [
       {
-        Name: From
+        Name: Format
       },
       {
-        Name: From
+        Name: FromBool
       },
       {
-        Name: From
+        Name: FromNumber
       },
       {
-        Name: From
-      },
-      {
-        Name: From
-      },
-      {
-        Name: From
-      },
-      {
-        Name: From
-      },
-      {
-        Name: From
+        Name: FromString
       },
       {
         Name: get_False
@@ -3665,24 +3765,37 @@
       },
       {
         Name: get_True
+      },
+      {
+        Name: Raw
       }
     ]
   },
   {
-    Name: DecSm.Atom.Workflows.Expressions.WorkflowExpressionGenerator,
+    Name: DecSm.Atom.Workflows.Expressions.WorkflowExpressionInterpolatedStringHandler,
     Members: [
       {
-        Name: Write
+        Name: AppendFormatted
+      },
+      {
+        Name: AppendFormatted
+      },
+      {
+        Name: AppendFormatted
+      },
+      {
+        Name: AppendFormatted
+      },
+      {
+        Name: AppendLiteral
+      },
+      {
+        Name: ToFormatExpression
       }
     ]
   },
   {
-    Name: DecSm.Atom.Workflows.Expressions.WorkflowExpressions,
-    Members: [
-      {
-        Name: Literal
-      }
-    ]
+    Name: DecSm.Atom.Workflows.Expressions.WorkflowExpressions
   },
   {
     Name: DecSm.Atom.Workflows.IWorkflowOptionProvider,
@@ -3720,10 +3833,7 @@
         Name: Name
       },
       {
-        Name: Options
-      },
-      {
-        Name: Steps
+        Name: TargetStep
       },
       {
         Name: ToString
@@ -3793,7 +3903,30 @@
         Name: Options
       },
       {
-        Name: SuppressArtifactPublishing
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Options.CheckoutStep,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Order
       },
       {
         Name: ToString
@@ -3849,6 +3982,14 @@
       },
       {
         Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Options.IAdditionalStepOption,
+    Members: [
+      {
+        Name: Order
       }
     ]
   },
@@ -4088,16 +4229,39 @@
         Name: Equals
       },
       {
-        Name: Equals
-      },
-      {
         Name: GetHashCode
       },
       {
         Name: LockFile
       },
       {
+        Name: Order
+      },
+      {
         Name: Quality
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Workflows.Options.SuppressArtifactPublishingOption,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
       },
       {
         Name: ToString
@@ -4140,7 +4304,7 @@
         Name: get_Inject
       },
       {
-        Name: get_SetupDotnet
+        Name: get_Steps
       },
       {
         Name: get_Target
@@ -4163,6 +4327,35 @@
   },
   {
     Name: DecSm.Atom.Workflows.Writer.IWorkflowWriter`1
+  },
+  {
+    Name: DecSm.Atom.Workflows.Writer.StructuredWriter,
+    Members: [
+      {
+        Name: Clear
+      },
+      {
+        Name: Indent
+      },
+      {
+        Name: IndentSize
+      },
+      {
+        Name: StringBuilder
+      },
+      {
+        Name: ToString
+      },
+      {
+        Name: Version
+      },
+      {
+        Name: WriteLine
+      },
+      {
+        Name: WriteSection
+      }
+    ]
   },
   {
     Name: DecSm.Atom.Workflows.Writer.WorkflowFileWriter`1,

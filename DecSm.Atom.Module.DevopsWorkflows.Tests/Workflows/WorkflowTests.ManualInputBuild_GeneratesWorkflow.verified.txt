@@ -31,14 +31,14 @@ parameters:
       - 'choice 3'
 
 jobs:
-  
+
   - job: ManualInputTarget
     pool:
       vmImage: ubuntu-latest
     steps:
-      
+
       - checkout: self
         fetchDepth: 0
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj ManualInputTarget --skip --headless
         name: ManualInputTarget

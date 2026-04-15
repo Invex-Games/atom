@@ -8,8 +8,8 @@ public partial class SetupDotnetBuild : MinimalBuildDefinition, IGithubWorkflows
         new("setup-dotnet")
         {
             Triggers = [WorkflowTriggers.PushToMain],
-            Targets = [WorkflowTargets.SetupDotnetTarget.WithOptions(new SetupDotnetStep("9.0.x"))],
-            WorkflowTypes = [Github.WorkflowType],
+            Targets = [WorkflowTargets.SetupDotnetTarget.WithOptions(WorkflowOptions.Steps.SetupDotnet.Dotnet90X())],
+            WorkflowTypes = [WorkflowTypes.Github.Action],
         },
     ];
 }

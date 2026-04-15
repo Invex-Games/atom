@@ -3,18 +3,18 @@
 trigger: none
 
 jobs:
-  
+
   - job: SetupBuildInfo
     pool:
       vmImage: ubuntu-latest
     steps:
-      
+
       - checkout: self
         fetchDepth: 0
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj SetupBuildInfo --skip --headless
         name: SetupBuildInfo
-  
+
   - job: ArtifactTarget1
     dependsOn: [ SetupBuildInfo ]
     pool:
@@ -23,19 +23,19 @@ jobs:
       build-name: $[ dependencies.SetupBuildInfo.outputs['SetupBuildInfo.build-name'] ]
       build-id: $[ dependencies.SetupBuildInfo.outputs['SetupBuildInfo.build-id'] ]
     steps:
-      
+
       - checkout: self
         fetchDepth: 0
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget1 --skip --headless
         name: ArtifactTarget1
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj StoreArtifact --skip --headless
         env:
           build-name: $(build-name)
           build-id: $(build-id)
           atom-artifacts: TestArtifact1
-  
+
   - job: ArtifactTarget2
     dependsOn: [ ArtifactTarget1, SetupBuildInfo ]
     pool:
@@ -44,25 +44,25 @@ jobs:
       build-name: $[ dependencies.SetupBuildInfo.outputs['SetupBuildInfo.build-name'] ]
       build-id: $[ dependencies.SetupBuildInfo.outputs['SetupBuildInfo.build-id'] ]
     steps:
-      
+
       - checkout: self
         fetchDepth: 0
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj RetrieveArtifact --skip --headless
         env:
           build-name: $(build-name)
           build-id: $(build-id)
           atom-artifacts: TestArtifact1
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget2 --skip --headless
         name: ArtifactTarget2
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj StoreArtifact --skip --headless
         env:
           build-name: $(build-name)
           build-id: $(build-id)
           atom-artifacts: TestArtifact2,TestArtifact2
-  
+
   - job: ArtifactTarget3
     dependsOn: [ ArtifactTarget1, ArtifactTarget2, SetupBuildInfo ]
     pool:
@@ -71,19 +71,19 @@ jobs:
       build-name: $[ dependencies.SetupBuildInfo.outputs['SetupBuildInfo.build-name'] ]
       build-id: $[ dependencies.SetupBuildInfo.outputs['SetupBuildInfo.build-id'] ]
     steps:
-      
+
       - checkout: self
         fetchDepth: 0
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj RetrieveArtifact --skip --headless
         env:
           build-name: $(build-name)
           build-id: $(build-id)
           atom-artifacts: TestArtifact1,TestArtifact2,TestArtifact2
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget3 --skip --headless
         name: ArtifactTarget3
-  
+
   - job: ArtifactTarget4
     dependsOn: [ ArtifactTarget2, SetupBuildInfo ]
     strategy:
@@ -98,17 +98,17 @@ jobs:
       build-name: $[ dependencies.SetupBuildInfo.outputs['SetupBuildInfo.build-name'] ]
       build-id: $[ dependencies.SetupBuildInfo.outputs['SetupBuildInfo.build-id'] ]
     steps:
-      
+
       - checkout: self
         fetchDepth: 0
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj RetrieveArtifact --skip --headless
         env:
           build-name: $(build-name)
           build-id: $(build-id)
           atom-artifacts: TestArtifact2
           build-slice: $(slice)
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget4 --skip --headless
         name: ArtifactTarget4
         env:

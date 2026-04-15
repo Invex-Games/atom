@@ -101,7 +101,7 @@ public static class HostExtensions
         builder.Services.AddSingleton<IOutcomeReportWriter, ConsoleOutcomeReportWriter>();
 
         builder.Services.AddSingleton<WorkflowGenerator>();
-        builder.Services.AddSingleton<IWorkflowExpressionGenerator, WorkflowExpressionGenerator>();
+        builder.Services.AddSingleton<IWorkflowExpressionResolver, WorkflowExpressionResolver>();
         builder.Services.AddSingleton<IWorkflowVariableProvider, AtomWorkflowVariableProvider>();
         builder.Services.TryAddSingleton<IWorkflowVariableService, WorkflowVariableService>();
 

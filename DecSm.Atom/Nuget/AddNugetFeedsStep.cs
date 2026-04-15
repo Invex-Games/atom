@@ -8,14 +8,14 @@
 ///     tasks run.
 /// </remarks>
 [PublicAPI]
-public sealed record AddNugetFeedsStep : CustomStep
+public sealed record AddNugetFeedsStep : IAdditionalStepOption
 {
     /// <summary>
     ///     Gets the list of NuGet feeds to be added to the build agent's configuration.
     /// </summary>
     public IReadOnlyList<NugetFeedOptions> FeedsToAdd { get; init; } = [];
 
-    public bool SyncAtomToolVersionToLibraryVersion { get; init; }
+    public bool SyncAtomToolVersionToLibraryVersion { get; init; } = true;
 
     /// <summary>
     ///     Generates a standardized environment variable name for a given NuGet feed's authentication token.
@@ -24,4 +24,6 @@ public sealed record AddNugetFeedsStep : CustomStep
     /// <returns>The conventional environment variable name for the feed's token (e.g., "NUGET_TOKEN_MY_FEED").</returns>
     public static string GetEnvVarNameForFeed(string feedName) =>
         $"NUGET_TOKEN_{feedName.Replace(" ", "_").ToUpper()}";
+
+    public int Order { get; init; } = -100;
 }

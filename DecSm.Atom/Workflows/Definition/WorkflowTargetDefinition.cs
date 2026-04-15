@@ -18,23 +18,6 @@ public sealed record WorkflowTargetDefinition(string Name)
     public IReadOnlyList<IWorkflowOption> Options { get; init; } = [];
 
     /// <summary>
-    ///     Gets a value indicating whether artifact publishing should be suppressed for this target.
-    /// </summary>
-    public bool SuppressArtifactPublishing { get; init; }
-
-    /// <summary>
-    ///     Gets a new <see cref="WorkflowTargetDefinition" /> with artifact publishing suppressed.
-    /// </summary>
-    public WorkflowTargetDefinition WithSuppressedArtifactPublishing =>
-        this with
-        {
-            SuppressArtifactPublishing = true,
-        };
-
-    public static implicit operator WorkflowTargetDefinition(string name) =>
-        new(name);
-
-    /// <summary>
     ///     Creates a <see cref="WorkflowStepModel" /> from this target definition.
     /// </summary>
     /// <returns>A new <see cref="WorkflowStepModel" /> instance.</returns>
@@ -42,7 +25,6 @@ public sealed record WorkflowTargetDefinition(string Name)
         new(Name)
         {
             MatrixDimensions = MatrixDimensions,
-            SuppressArtifactPublishing = SuppressArtifactPublishing,
             Options = Options,
         };
 

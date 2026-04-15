@@ -16,12 +16,7 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem fileSystem, ILogger<
     : IWorkflowWriter<T>
     where T : IWorkflowType
 {
-    protected StringBuilder StringBuilder { get; } = new();
-
-    /// <summary>
-    ///     Gets the current indentation level for formatting nested content.
-    /// </summary>
-    protected int IndentLevel { get; private set; }
+    protected StructuredWriter Writer => field ??= new(TabSize);
 
     /// <summary>
     ///     Gets the number of spaces to use for each indentation level. Defaults to 2.
@@ -49,8 +44,8 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem fileSystem, ILogger<
 
         WriteWorkflow(workflow);
 
-        var newText = StringBuilder.ToString();
-        StringBuilder.Clear();
+        var newText = Writer.ToString();
+        Writer.Clear();
 
         var existingText = fileSystem.File.Exists(filePath)
             ? await fileSystem.File.ReadAllTextAsync(filePath, cancellationToken)
@@ -89,11 +84,11 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem fileSystem, ILogger<
 
         WriteWorkflow(workflow);
 
-        var newText = StringBuilder
+        var newText = Writer
             .ToString()
             .ReplaceLineEndings();
 
-        StringBuilder.Clear();
+        Writer.Clear();
 
         var existingText = fileSystem.File.Exists(filePath)
             ? await fileSystem.File.ReadAllTextAsync(filePath, cancellationToken)
@@ -114,41 +109,49 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem fileSystem, ILogger<
     }
 
     /// <summary>
-    ///     Writes a line of text to the output with the current indentation.
-    /// </summary>
-    /// <param name="value">The text to write. If null, an empty line is written.</param>
-    protected void WriteLine(string? value = null)
-    {
-        if (IndentLevel > 0)
-            StringBuilder.Append(new string(' ', IndentLevel));
-
-        StringBuilder.AppendLine(value);
-    }
-
-    /// <summary>
-    ///     Writes a section header and returns a disposable scope that manages indentation for the section's content.
-    /// </summary>
-    /// <param name="header">The header text for the section.</param>
-    /// <returns>A disposable object that decreases the indentation level upon disposal.</returns>
-    /// <example>
-    ///     <code>
-    /// using (WriteSection("jobs:"))
-    /// {
-    ///     WriteLine("build:");
-    /// }
-    ///     </code>
-    /// </example>
-    protected IDisposable WriteSection(string header)
-    {
-        WriteLine(header);
-        IndentLevel += TabSize;
-
-        return new ActionScope(() => IndentLevel -= TabSize);
-    }
-
-    /// <summary>
     ///     When overridden in a derived class, writes the content of the workflow file using the provided helper methods.
     /// </summary>
     /// <param name="workflow">The workflow model to write.</param>
     protected abstract void WriteWorkflow(WorkflowModel workflow);
+
+    protected static TOption? GetOption<TOption>(WorkflowModel workflow)
+        where TOption : IWorkflowOption =>
+        workflow
+            .Options
+            .OfType<TOption>()
+            .LastOrDefault();
+
+    protected static TOption? GetOption<TOption>(WorkflowModel workflow, WorkflowStepModel step)
+        where TOption : IWorkflowOption =>
+        step
+            .Options
+            .Concat(workflow.Options)
+            .OfType<TOption>()
+            .LastOrDefault();
+
+    protected static IEnumerable<TOption> GetOptions<TOption>(WorkflowModel workflow)
+        where TOption : IWorkflowOption =>
+        workflow.Options.OfType<TOption>();
+
+    protected static IEnumerable<TOption> GetOptions<TOption>(WorkflowModel workflow, WorkflowStepModel step)
+        where TOption : IWorkflowOption =>
+        workflow
+            .Options
+            .Concat(step.Options)
+            .OfType<TOption>();
+
+    protected static bool IsOptionEnabled<TOption>(WorkflowModel workflow)
+        where TOption : ToggleWorkflowOption<TOption> =>
+        workflow
+            .Options
+            .OfType<TOption>()
+            .LastOrDefault() is { Value: true };
+
+    protected static bool IsOptionEnabled<TOption>(WorkflowModel workflow, WorkflowStepModel step)
+        where TOption : ToggleWorkflowOption<TOption> =>
+        workflow
+            .Options
+            .Concat(step.Options)
+            .OfType<TOption>()
+            .LastOrDefault() is { Value: true };
 }

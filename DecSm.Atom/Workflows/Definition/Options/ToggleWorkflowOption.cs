@@ -17,22 +17,8 @@
 ///     </code>
 /// </example>
 [PublicAPI]
-public abstract record ToggleWorkflowOption<TSelf> : IWorkflowOption
+public abstract record ToggleWorkflowOption<TSelf> : IToggleWorkflowOption
     where TSelf : ToggleWorkflowOption<TSelf>
 {
-    public bool Value { get; init; }
-}
-
-[PublicAPI]
-public static class ToggleWorkflowOptionExtensions
-{
-    extension(IEnumerable<IWorkflowOption> options)
-    {
-        [PublicAPI]
-        public bool HasEnabledToggle<T>()
-            where T : ToggleWorkflowOption<T> =>
-            options
-                .OfType<T>()
-                .Any(x => x.Value);
-    }
+    public bool Value { get; init; } = true;
 }

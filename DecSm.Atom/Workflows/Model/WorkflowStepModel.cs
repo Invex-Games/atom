@@ -7,13 +7,13 @@
 [PublicAPI]
 public sealed record WorkflowStepModel(string Name)
 {
-    /// <summary>
-    ///     Gets a value indicating whether artifact publishing should be suppressed for this step.
-    /// </summary>
-    /// <remarks>
-    ///     If <c>true</c>, any artifacts produced by this step will not be published. Defaults to <c>false</c>.
-    /// </remarks>
-    public bool SuppressArtifactPublishing { get; init; }
+    // /// <summary>
+    // ///     Gets a value indicating whether artifact publishing should be suppressed for this step.
+    // /// </summary>
+    // /// <remarks>
+    // ///     If <c>true</c>, any artifacts produced by this step will not be published. Defaults to <c>false</c>.
+    // /// </remarks>
+    // public bool SuppressArtifactPublishing { get; init; }
 
     /// <summary>
     ///     Gets the matrix dimensions for running this step in multiple configurations.

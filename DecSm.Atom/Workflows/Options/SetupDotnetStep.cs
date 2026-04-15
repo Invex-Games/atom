@@ -12,13 +12,15 @@
 /// <param name="Cache">Whether to cache the installed .NET SDK.</param>
 /// <param name="LockFile">The path to the project's lock file (e.g., "**/packages.lock.json")</param>
 [PublicAPI]
-public sealed record SetupDotnetStep(
+public record SetupDotnetStep(
     string? DotnetVersion = null,
     SetupDotnetStep.DotnetQuality? Quality = null,
     bool Cache = false,
     string? LockFile = null
-) : CustomStep
+) : IAdditionalStepOption
 {
+    public int Order { get; init; } = -200;
+
     /// <summary>
     ///     Specifies the quality of the .NET SDK version to install.
     /// </summary>

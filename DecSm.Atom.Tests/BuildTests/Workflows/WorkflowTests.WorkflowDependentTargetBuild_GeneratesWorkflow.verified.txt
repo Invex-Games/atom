@@ -12,21 +12,15 @@
     Jobs: [
       {
         Name: WorkflowDependentTarget1,
-        Steps: [
-          {
-            Name: WorkflowDependentTarget1,
-            SuppressArtifactPublishing: false
-          }
-        ]
+        TargetStep: {
+          Name: WorkflowDependentTarget1
+        }
       },
       {
         Name: WorkflowTarget2,
-        Steps: [
-          {
-            Name: WorkflowTarget2,
-            SuppressArtifactPublishing: false
-          }
-        ],
+        TargetStep: {
+          Name: WorkflowTarget2
+        },
         JobDependencies: [
           WorkflowDependentTarget1
         ]

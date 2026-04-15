@@ -67,6 +67,7 @@ public static class WorkflowCacheOptions
                 RunOnlyIfMatchingNameCacheMissed = runOnlyIfMatchingNameCacheMissed,
             };
 
+        [UnstableAPI]
         public WorkflowCacheRestoreOption Restore(
             string name,
             WorkflowExpression key,
@@ -85,6 +86,7 @@ public static class WorkflowCacheOptions
 
     extension(WorkflowOptions)
     {
+        [UnstableAPI]
         public static Options Cache => Options.Instance;
     }
 }

@@ -9,7 +9,6 @@ namespace DecSm.Atom.Workflows.Definition.Triggers;
 ///         <item><see cref="GitPullRequestTrigger" />: Triggers on pull request events.</item>
 ///         <item><see cref="GitPushTrigger" />: Triggers on code pushes to a Git repository.</item>
 ///         <item><see cref="ManualTrigger" />: Allows a workflow to be triggered manually.</item>
-///         <item><see cref="GithubScheduleTrigger" />: Triggers a workflow based on a CRON schedule.</item>
 ///     </list>
 ///     Workflows can be configured with a list of triggers, any of which can initiate execution.
 /// </remarks>

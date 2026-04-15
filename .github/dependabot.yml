@@ -6,16 +6,14 @@ registries:
     url: https://api.nuget.org/v3/index.json
 
 updates:
-  - package-ecosystem: "nuget"
-    target-branch: 'main'
-    directory: '/'
-    registries:
-      - nuget
+  - package-ecosystem: nuget
+    directory: "/"
+    schedule:
+      interval: daily
     groups:
       nuget-deps:
-        patterns:
-          - '*'
-    schedule:
-      interval:
-        daily
+        patterns: [ "*" ]
     open-pull-requests-limit: 10
+    registries: [ nuget ]
+    target-branch: main
+
