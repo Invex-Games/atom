@@ -5,7 +5,7 @@
 
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageDescription>An opinionated task and build automation framework#</PackageDescription>
+    <PackageDescription>An opinionated task and build automation framework</PackageDescription>
     <EnablePackageValidation>true</EnablePackageValidation>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
 
