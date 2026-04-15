@@ -3,86 +3,86 @@
 trigger: none
 
 jobs:
-  
+
   - job: ArtifactTarget1
     pool:
       vmImage: ubuntu-latest
     steps:
-      
+
       - checkout: self
         fetchDepth: 0
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget1 --skip --headless
         name: ArtifactTarget1
-      
+
       - task: PublishPipelineArtifact@1
         displayName: TestArtifact1
         inputs:
           artifactName: TestArtifact1
           targetPath: "$(Build.BinariesDirectory)/TestArtifact1"
-      
-  
+
+
   - job: ArtifactTarget2
     dependsOn: [ ArtifactTarget1 ]
     pool:
       vmImage: ubuntu-latest
     steps:
-      
+
       - checkout: self
         fetchDepth: 0
-      
+
       - task: DownloadPipelineArtifact@2
         displayName: TestArtifact1
         inputs:
           artifact: TestArtifact1
           path: "$(Build.ArtifactStagingDirectory)/TestArtifact1"
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget2 --skip --headless
         name: ArtifactTarget2
-      
+
       - task: PublishPipelineArtifact@1
         displayName: TestArtifact2
         inputs:
           artifactName: TestArtifact2-Slice1
           targetPath: "$(Build.BinariesDirectory)/TestArtifact2"
-      
+
       - task: PublishPipelineArtifact@1
         displayName: TestArtifact2
         inputs:
           artifactName: TestArtifact2-Slice2
           targetPath: "$(Build.BinariesDirectory)/TestArtifact2"
-      
-  
+
+
   - job: ArtifactTarget3
     dependsOn: [ ArtifactTarget1, ArtifactTarget2 ]
     pool:
       vmImage: ubuntu-latest
     steps:
-      
+
       - checkout: self
         fetchDepth: 0
-      
+
       - task: DownloadPipelineArtifact@2
         displayName: TestArtifact1
         inputs:
           artifact: TestArtifact1
           path: "$(Build.ArtifactStagingDirectory)/TestArtifact1"
-      
+
       - task: DownloadPipelineArtifact@2
         displayName: TestArtifact2
         inputs:
           artifact: TestArtifact2-Slice1
           path: "$(Build.ArtifactStagingDirectory)/TestArtifact2"
-      
+
       - task: DownloadPipelineArtifact@2
         displayName: TestArtifact2
         inputs:
           artifact: TestArtifact2-Slice2
           path: "$(Build.ArtifactStagingDirectory)/TestArtifact2"
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget3 --skip --headless
         name: ArtifactTarget3
-  
+
   - job: ArtifactTarget4
     dependsOn: [ ArtifactTarget2 ]
     strategy:
@@ -94,16 +94,16 @@ jobs:
     pool:
       vmImage: ubuntu-latest
     steps:
-      
+
       - checkout: self
         fetchDepth: 0
-      
+
       - task: DownloadPipelineArtifact@2
         displayName: TestArtifact2
         inputs:
           artifact: TestArtifact2-$(slice)
           path: "$(Build.ArtifactStagingDirectory)/TestArtifact2"
-      
+
       - script: dotnet run --project AtomTest/AtomTest.csproj ArtifactTarget4 --skip --headless
         name: ArtifactTarget4
         env:

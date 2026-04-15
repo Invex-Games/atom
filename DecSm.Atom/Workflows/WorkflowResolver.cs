@@ -49,9 +49,8 @@ internal sealed class WorkflowResolver(
             .ToList();
 
         // Turn command steps into jobs
-        var definedCommandJobs = definedSteps.ConvertAll(step => new WorkflowJobModel(step.Name, [step])
+        var definedCommandJobs = definedSteps.ConvertAll(step => new WorkflowJobModel(step.Name, step)
         {
-            Options = step.Options,
             MatrixDimensions = step.MatrixDimensions,
             JobDependencies = buildModel
                 .GetTarget(step.Name)
@@ -63,20 +62,29 @@ internal sealed class WorkflowResolver(
         // If this workflow uses a custom artifact provider, we need to ensure that steps that
         // consume or produce artifacts are dependent on the Setup step.
         // It will be up to the WorkflowWriter to implement the download/upload steps.
-        if (workflowOptions.HasEnabledToggle<UseCustomArtifactProvider>())
-            definedCommandJobs = definedCommandJobs.ConvertAll(job => job
-                .Steps
-                .Where(step => step is { SuppressArtifactPublishing: false })
-                .Select(step => buildModel.GetTarget(step.Name))
-                .Any(target => target.ConsumedArtifacts.Count > 0 || target.ProducedArtifacts.Count > 0)
-                ? job with
-                {
-                    JobDependencies = job
-                        .JobDependencies
-                        .Append(nameof(ISetupBuildInfo.SetupBuildInfo))
-                        .ToList(),
-                }
-                : job);
+        if (UseCustomArtifactProvider.IsOptionEnabled(workflowOptions))
+            definedCommandJobs = definedCommandJobs.ConvertAll(job =>
+            {
+                var suppressArtifactPublishing = workflowOptions
+                    .Concat(job.TargetStep.Options)
+                    .OfType<SuppressArtifactPublishingOption>()
+                    .LastOrDefault() is { Value: true };
+
+                if (suppressArtifactPublishing)
+                    return job;
+
+                if (buildModel.GetTarget(job.TargetStep.Name) is { ConsumedArtifacts.Count: > 0 }
+                    or { ProducedArtifacts.Count: > 0 })
+                    return job with
+                    {
+                        JobDependencies = job
+                            .JobDependencies
+                            .Append(nameof(ISetupBuildInfo.SetupBuildInfo))
+                            .ToList(),
+                    };
+
+                return job;
+            });
 
         // Check that all consumed variables are produced by the target they are consumed from to avoid errors later on
         foreach (var job in definedCommandJobs)
@@ -102,10 +110,9 @@ internal sealed class WorkflowResolver(
                 .Targets
                 .Select(target => target.Name)
                 .Where(targetName => definedCommandJobs.All(job => job.Name != targetName))
-                .Select(targetName => new WorkflowJobModel(targetName, [new(targetName)])
+                .Select(targetName => new WorkflowJobModel(targetName, new(targetName))
                 {
                     JobDependencies = [],
-                    Options = [],
                     MatrixDimensions = [],
                 }))
             .ToList();

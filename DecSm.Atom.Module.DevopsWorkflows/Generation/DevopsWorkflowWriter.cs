@@ -4,7 +4,7 @@ internal sealed partial class DevopsWorkflowWriter(
     IAtomFileSystem fileSystem,
     IBuildDefinition buildDefinition,
     BuildModel buildModel,
-    IWorkflowExpressionGenerator workflowExpressionGenerator,
+    IWorkflowExpressionResolver workflowExpressionResolver,
     ILogger<DevopsWorkflowWriter> logger
 ) : WorkflowFileWriter<DevopsWorkflowType>(fileSystem, logger)
 {
@@ -21,8 +21,8 @@ internal sealed partial class DevopsWorkflowWriter(
 
     protected override void WriteWorkflow(WorkflowModel workflow)
     {
-        WriteLine($"name: {workflow.Name}");
-        WriteLine();
+        Writer.WriteLine($"name: {workflow.Name}");
+        Writer.WriteLine();
 
         var manualTrigger = workflow
             .Triggers
@@ -30,45 +30,45 @@ internal sealed partial class DevopsWorkflowWriter(
             .FirstOrDefault();
 
         if (manualTrigger is { Inputs.Count: > 0 })
-            using (WriteSection("parameters:"))
+            using (Writer.WriteSection("parameters:"))
             {
                 foreach (var input in manualTrigger.Inputs)
-                    using (WriteSection($"- name: {input.Name}"))
+                    using (Writer.WriteSection($"- name: {input.Name}"))
                     {
-                        WriteLine($"displayName: '{input.Name} | {input.Description}'");
+                        Writer.WriteLine($"displayName: '{input.Name} | {input.Description}'");
 
                         switch (input)
                         {
                             case ManualBoolInput boolInput:
 
-                                WriteLine("type: boolean");
+                                Writer.WriteLine("type: boolean");
 
                                 if (boolInput.DefaultValue is not null)
-                                    WriteLine($"default: '{boolInput.DefaultValue.Value}'");
+                                    Writer.WriteLine($"default: '{boolInput.DefaultValue.Value}'");
 
                                 break;
 
                             case ManualStringInput stringInput:
 
-                                WriteLine("type: string");
+                                Writer.WriteLine("type: string");
 
                                 if (stringInput.DefaultValue is not null)
-                                    WriteLine($"default: '{stringInput.DefaultValue}'");
+                                    Writer.WriteLine($"default: '{stringInput.DefaultValue}'");
 
                                 break;
 
                             case ManualChoiceInput choiceInput:
 
-                                WriteLine("type: string");
+                                Writer.WriteLine("type: string");
 
-                                WriteLine(choiceInput.DefaultValue is not null
+                                Writer.WriteLine(choiceInput.DefaultValue is not null
                                     ? $"default: {choiceInput.DefaultValue}"
                                     : $"default: '{choiceInput.Choices[0]}'");
 
-                                using (WriteSection("values:"))
+                                using (Writer.WriteSection("values:"))
                                 {
                                     foreach (var choice in choiceInput.Choices)
-                                        WriteLine($"- '{choice}'");
+                                        Writer.WriteLine($"- '{choice}'");
                                 }
 
                                 break;
@@ -84,10 +84,10 @@ internal sealed partial class DevopsWorkflowWriter(
             .ToArray();
 
         if (variableGroups.Length > 0)
-            using (WriteSection("variables:"))
+            using (Writer.WriteSection("variables:"))
             {
                 foreach (var variableGroup in variableGroups)
-                    WriteLine($"- group: {variableGroup.Name}");
+                    Writer.WriteLine($"- group: {variableGroup.Name}");
             }
 
         var pushTriggers = workflow
@@ -96,77 +96,77 @@ internal sealed partial class DevopsWorkflowWriter(
             .ToArray();
 
         if (pushTriggers.Length > 0)
-            using (WriteSection("trigger:"))
+            using (Writer.WriteSection("trigger:"))
             {
                 foreach (var pushTrigger in pushTriggers)
                 {
-                    using (WriteSection("branches:"))
+                    using (Writer.WriteSection("branches:"))
                     {
                         if (pushTrigger.IncludedBranches.Count > 0)
-                            using (WriteSection("include:"))
+                            using (Writer.WriteSection("include:"))
                             {
                                 foreach (var branch in pushTrigger.IncludedBranches)
-                                    WriteLine($"- '{branch}'");
+                                    Writer.WriteLine($"- '{branch}'");
                             }
 
                         if (pushTrigger.ExcludedBranches.Count > 0)
-                            using (WriteSection("exclude:"))
+                            using (Writer.WriteSection("exclude:"))
                             {
                                 foreach (var branch in pushTrigger.ExcludedBranches)
-                                    WriteLine($"- '{branch}'");
+                                    Writer.WriteLine($"- '{branch}'");
                             }
                     }
 
                     if (pushTrigger.IncludedPaths.Count > 0 || pushTrigger.ExcludedPaths.Count > 0)
-                        using (WriteSection("paths:"))
+                        using (Writer.WriteSection("paths:"))
                         {
                             if (pushTrigger.IncludedPaths.Count > 0)
-                                using (WriteSection("include:"))
+                                using (Writer.WriteSection("include:"))
                                 {
                                     foreach (var path in pushTrigger.IncludedPaths)
-                                        WriteLine($"- '{path}'");
+                                        Writer.WriteLine($"- '{path}'");
                                 }
 
                             if (pushTrigger.ExcludedPaths.Count > 0)
-                                using (WriteSection("exclude:"))
+                                using (Writer.WriteSection("exclude:"))
                                 {
                                     foreach (var path in pushTrigger.ExcludedPaths)
-                                        WriteLine($"- '{path}'");
+                                        Writer.WriteLine($"- '{path}'");
                                 }
                         }
 
                     // ReSharper disable once InvertIf
                     if (pushTrigger.IncludedTags.Count > 0 || pushTrigger.ExcludedTags.Count > 0)
-                        using (WriteSection("tags:"))
+                        using (Writer.WriteSection("tags:"))
                         {
                             if (pushTrigger.IncludedTags.Count > 0)
-                                using (WriteSection("include:"))
+                                using (Writer.WriteSection("include:"))
                                 {
                                     foreach (var tag in pushTrigger.IncludedTags)
-                                        WriteLine($"- '{tag}'");
+                                        Writer.WriteLine($"- '{tag}'");
                                 }
 
                             // ReSharper disable once InvertIf
                             if (pushTrigger.ExcludedTags.Count > 0)
-                                using (WriteSection("exclude:"))
+                                using (Writer.WriteSection("exclude:"))
                                 {
                                     foreach (var tag in pushTrigger.ExcludedTags)
-                                        WriteLine($"- '{tag}'");
+                                        Writer.WriteLine($"- '{tag}'");
                                 }
                         }
                 }
             }
 
         if (manualTrigger is null && pushTriggers.Length is 0)
-            WriteLine("trigger: none");
+            Writer.WriteLine("trigger: none");
 
-        WriteLine();
+        Writer.WriteLine();
 
-        using (WriteSection("jobs:"))
+        using (Writer.WriteSection("jobs:"))
         {
             foreach (var job in workflow.Jobs)
             {
-                WriteLine();
+                Writer.WriteLine();
                 WriteJob(workflow, job);
             }
         }
@@ -174,16 +174,16 @@ internal sealed partial class DevopsWorkflowWriter(
 
     private void WriteJob(WorkflowModel workflow, WorkflowJobModel job)
     {
-        using (WriteSection($"- job: {job.Name}"))
+        using (Writer.WriteSection($"- job: {job.Name}"))
         {
             var jobRequirementNames = job.JobDependencies;
 
             if (jobRequirementNames.Count > 0)
-                WriteLine($"dependsOn: [ {string.Join(", ", jobRequirementNames)} ]");
+                Writer.WriteLine($"dependsOn: [ {string.Join(", ", jobRequirementNames)} ]");
 
             if (job.MatrixDimensions.Count > 0)
-                using (WriteSection("strategy:"))
-                using (WriteSection("matrix:"))
+                using (Writer.WriteSection("strategy:"))
+                using (Writer.WriteSection("matrix:"))
                 {
                     var dimensions = job
                         .MatrixDimensions
@@ -232,10 +232,10 @@ internal sealed partial class DevopsWorkflowWriter(
 
                         var dimensionValueName = $"{counter++:D3}_{string.Join("_", currentDimensionValues)}";
 
-                        using (WriteSection($"{dimensionValueName}:"))
+                        using (Writer.WriteSection($"{dimensionValueName}:"))
                         {
                             for (var i = 0; i < dimensions.Length; i++)
-                                WriteLine(
+                                Writer.WriteLine(
                                     $"{buildDefinition.ParamDefinitions[dimensionNames[i]].ArgName}: '{dimensionValues[i][dimensionValueIndices[i]]}'");
                         }
 
@@ -259,59 +259,51 @@ internal sealed partial class DevopsWorkflowWriter(
                     }
                 }
 
-            var poolOption = job
+            var poolOption = workflow
                                  .Options
-                                 .Concat(workflow.Options)
                                  .OfType<DevopsPool>()
                                  .FirstOrDefault() ??
                              WorkflowOptions.Devops.DevopsPool.Ubuntu_Latest;
 
-            using (WriteSection("pool:"))
+            using (Writer.WriteSection("pool:"))
             {
-                var hostedImage = workflowExpressionGenerator.Write(poolOption.HostedImage);
-                var name = workflowExpressionGenerator.Write(poolOption.Name);
+                var hostedImage = workflowExpressionResolver.Resolve(poolOption.HostedImage);
+                var name = workflowExpressionResolver.Resolve(poolOption.Name);
 
                 var demands = poolOption
                     .Demands
-                    .Select(workflowExpressionGenerator.Write)
+                    .Select(workflowExpressionResolver.Resolve)
                     .ToArray();
 
                 if (hostedImage is { Length: > 0 })
-                    WriteLine($"vmImage: {hostedImage}");
+                    Writer.WriteLine($"vmImage: {hostedImage}");
                 else if (name is { Length: > 0 })
-                    WriteLine($"name: {name}");
+                    Writer.WriteLine($"name: {name}");
 
                 if (demands.Length > 0)
-                    using (WriteSection("demands:"))
+                    using (Writer.WriteSection("demands:"))
                     {
                         foreach (var demand in demands)
-                            WriteLine($"- {demand}");
+                            Writer.WriteLine($"- {demand}");
                     }
             }
 
-            var environmentOption = job
-                .Options
-                .Concat(workflow.Options)
-                .OfType<DeployToEnvironment>()
-                .FirstOrDefault();
+            var environmentOption = GetOption<DeployToEnvironment>(workflow, job.TargetStep);
 
             if (environmentOption is not null)
-                using (WriteSection("environment:"))
-                    WriteLine($"name: {workflowExpressionGenerator.Write(environmentOption.EnvironmentName)}");
+                using (Writer.WriteSection("environment:"))
+                    Writer.WriteLine($"name: {workflowExpressionResolver.Resolve(environmentOption.EnvironmentName)}");
 
             var variables = new Dictionary<string, string>();
 
             var targetsForConsumedVariableDeclaration = new List<TargetModel>();
 
-            foreach (var commandStep in job.Steps)
+            var target = buildModel.GetTarget(job.TargetStep.Name);
+            targetsForConsumedVariableDeclaration.Add(target);
+
+            if (GetOption<UseCustomArtifactProvider>(workflow) is { Value: true } &&
+                GetOption<SuppressArtifactPublishingOption>(workflow, job.TargetStep) is not { Value: true })
             {
-                var target = buildModel.GetTarget(commandStep.Name);
-                targetsForConsumedVariableDeclaration.Add(target);
-
-                if (!workflow.Options.HasEnabledToggle<UseCustomArtifactProvider>() ||
-                    commandStep.SuppressArtifactPublishing)
-                    continue;
-
                 if (target.ConsumedArtifacts.Count > 0)
                     targetsForConsumedVariableDeclaration.Add(
                         buildModel.GetTarget(nameof(IRetrieveArtifact.RetrieveArtifact)));
@@ -330,20 +322,16 @@ internal sealed partial class DevopsWorkflowWriter(
             }
 
             if (variables.Count > 0)
-                using (WriteSection("variables:"))
+                using (Writer.WriteSection("variables:"))
                 {
                     foreach (var (name, value) in variables)
-                        WriteLine($"{name}: {value}");
+                        Writer.WriteLine($"{name}: {value}");
                 }
 
-            using (WriteSection("steps:"))
+            using (Writer.WriteSection("steps:"))
             {
-                foreach (var step in job.Steps)
-                {
-                    WriteLine();
-
-                    WriteStep(workflow, step, job);
-                }
+                Writer.WriteLine();
+                WriteStep(workflow, job.TargetStep, job);
             }
         }
     }
@@ -355,21 +343,21 @@ internal sealed partial class DevopsWorkflowWriter(
                 .Concat(step.Options)
                 .OfType<DevopsCheckoutOption>()
                 .FirstOrDefault() is { } checkoutOption)
-            using (WriteSection("- checkout: self"))
+            using (Writer.WriteSection("- checkout: self"))
             {
-                WriteLine("fetchDepth: 0");
+                Writer.WriteLine("fetchDepth: 0");
 
                 if (checkoutOption.Lfs)
-                    WriteLine("lfs: true");
+                    Writer.WriteLine("lfs: true");
 
                 if (!string.IsNullOrWhiteSpace(checkoutOption.Submodules))
-                    WriteLine($"submodules: {checkoutOption.Submodules}");
+                    Writer.WriteLine($"submodules: {checkoutOption.Submodules}");
             }
         else
-            using (WriteSection("- checkout: self"))
-                WriteLine("fetchDepth: 0");
+            using (Writer.WriteSection("- checkout: self"))
+                Writer.WriteLine("fetchDepth: 0");
 
-        WriteLine();
+        Writer.WriteLine();
 
         var commandStepTarget = buildModel.GetTarget(step.Name);
 
@@ -394,17 +382,17 @@ internal sealed partial class DevopsWorkflowWriter(
 
         if (setupDotnetSteps.Count > 0)
             foreach (var setupDotnetStep in setupDotnetSteps)
-                using (WriteSection("- task: UseDotNet@2"))
+                using (Writer.WriteSection("- task: UseDotNet@2"))
                 {
                     if (setupDotnetStep.DotnetVersion is not { Length: > 0 })
                         continue;
 
-                    using (WriteSection("inputs:"))
+                    using (Writer.WriteSection("inputs:"))
                     {
-                        WriteLine($"version: '{setupDotnetStep.DotnetVersion}'\n");
+                        Writer.WriteLine($"version: '{setupDotnetStep.DotnetVersion}'\n");
 
                         if (setupDotnetStep.Quality is not null)
-                            WriteLine("includePreviewVersions: 'true'");
+                            Writer.WriteLine("includePreviewVersions: 'true'");
                     }
                 }
 
@@ -426,46 +414,47 @@ internal sealed partial class DevopsWorkflowWriter(
             if (setupDotnetSteps.Any(x =>
                     SemVer.TryParse(x.DotnetVersion?.Replace("x", "0"), out var version) && version.Major >= 10))
             {
-                using (WriteSection("- script: |"))
+                using (Writer.WriteSection("- script: |"))
                 {
                     foreach (var feedToAdd in feedsToAdd)
-                        WriteLine(
+                        Writer.WriteLine(
                             $"dotnet tool exec decsm.atom.tool -y -- nuget-add --name \"{feedToAdd.FeedName}\" --url \"{feedToAdd.FeedUrl}\"");
 
-                    WriteLine("displayName: 'Setup NuGet'");
+                    Writer.WriteLine("displayName: 'Setup NuGet'");
 
-                    using (WriteSection("env:"))
+                    using (Writer.WriteSection("env:"))
                     {
                         foreach (var feedToAdd in feedsToAdd)
-                            WriteLine(
+                            Writer.WriteLine(
                                 $"{AddNugetFeedsStep.GetEnvVarNameForFeed(feedToAdd.FeedName)}: $({feedToAdd.SecretName})");
                     }
 
-                    WriteLine();
+                    Writer.WriteLine();
                 }
             }
             else
             {
-                using (WriteSection("- script: dotnet tool update --global DecSm.Atom.Tool"))
-                    WriteLine("displayName: 'Install atom tool'");
+                using (Writer.WriteSection("- script: dotnet tool update --global DecSm.Atom.Tool"))
+                    Writer.WriteLine("displayName: 'Install atom tool'");
 
-                WriteLine();
+                Writer.WriteLine();
 
-                using (WriteSection("- script: |"))
+                using (Writer.WriteSection("- script: |"))
                 {
                     foreach (var feedToAdd in feedsToAdd)
-                        WriteLine($"  atom nuget-add --name \"{feedToAdd.FeedName}\" --url \"{feedToAdd.FeedUrl}\"");
+                        Writer.WriteLine(
+                            $"  atom nuget-add --name \"{feedToAdd.FeedName}\" --url \"{feedToAdd.FeedUrl}\"");
 
-                    WriteLine("displayName: 'Setup NuGet'");
+                    Writer.WriteLine("displayName: 'Setup NuGet'");
 
-                    using (WriteSection("env:"))
+                    using (Writer.WriteSection("env:"))
                     {
                         foreach (var feedToAdd in feedsToAdd)
-                            WriteLine(
+                            Writer.WriteLine(
                                 $"{AddNugetFeedsStep.GetEnvVarNameForFeed(feedToAdd.FeedName)}: $({feedToAdd.SecretName})");
                     }
 
-                    WriteLine();
+                    Writer.WriteLine();
                 }
             }
         }
@@ -473,19 +462,17 @@ internal sealed partial class DevopsWorkflowWriter(
         if (commandStepTarget.ConsumedArtifacts.Count > 0)
         {
             foreach (var consumedArtifact in commandStepTarget.ConsumedArtifacts)
-                if (workflow
-                    .Jobs
-                    .SelectMany(x => x.Steps)
-                    .Single(x => x.Name == consumedArtifact.TargetName)
-                    .SuppressArtifactPublishing)
+            {
+                if (SuppressArtifactPublishingOption.IsOptionEnabled(workflow, step))
                     logger.LogWarning(
                         "Workflow {WorkflowName} command {CommandName} consumes artifact {ArtifactName} from target {SourceTargetName}, which has artifact publishing suppressed; this may cause the workflow to fail",
                         workflow.Name,
                         step.Name,
                         consumedArtifact.ArtifactName,
                         consumedArtifact.TargetName);
+            }
 
-            if (workflow.Options.HasEnabledToggle<UseCustomArtifactProvider>())
+            if (GetOption<UseCustomArtifactProvider>(workflow) is { Value: true })
             {
                 WriteCommandStep(workflow,
                     new(nameof(IRetrieveArtifact.RetrieveArtifact)),
@@ -499,29 +486,29 @@ internal sealed partial class DevopsWorkflowWriter(
                     ],
                     false);
 
-                WriteLine();
+                Writer.WriteLine();
             }
             else
             {
                 foreach (var artifact in commandStepTarget.ConsumedArtifacts)
                 {
-                    using (WriteSection("- task: DownloadPipelineArtifact@2"))
+                    using (Writer.WriteSection("- task: DownloadPipelineArtifact@2"))
                     {
-                        WriteLine($"displayName: {artifact.ArtifactName}");
+                        Writer.WriteLine($"displayName: {artifact.ArtifactName}");
 
-                        using (WriteSection("inputs:"))
+                        using (Writer.WriteSection("inputs:"))
                         {
-                            WriteLine(artifact.BuildSlice is { Length: > 0 }
+                            Writer.WriteLine(artifact.BuildSlice is { Length: > 0 }
                                 ? $"artifact: {artifact.ArtifactName}-{artifact.BuildSlice}"
                                 : !string.IsNullOrWhiteSpace(buildSlice.Value)
                                     ? $"artifact: {artifact.ArtifactName}-{buildSlice.Value}"
                                     : $"artifact: {artifact.ArtifactName}");
 
-                            WriteLine($"path: \"{Devops.PipelineArtifactDirectory}/{artifact.ArtifactName}\"");
+                            Writer.WriteLine($"path: \"{Devops.PipelineArtifactDirectory}/{artifact.ArtifactName}\"");
                         }
                     }
 
-                    WriteLine();
+                    Writer.WriteLine();
                 }
             }
         }
@@ -529,11 +516,12 @@ internal sealed partial class DevopsWorkflowWriter(
         WriteCommandStep(workflow, step, commandStepTarget, matrixParams, true);
 
         // ReSharper disable once InvertIf
-        if (commandStepTarget.ProducedArtifacts.Count > 0 && !step.SuppressArtifactPublishing)
+        if (commandStepTarget.ProducedArtifacts.Count > 0 &&
+            !SuppressArtifactPublishingOption.IsOptionEnabled(workflow, step))
         {
-            if (workflow.Options.HasEnabledToggle<UseCustomArtifactProvider>())
+            if (UseCustomArtifactProvider.IsOptionEnabled(workflow))
             {
-                WriteLine();
+                Writer.WriteLine();
 
                 WriteCommandStep(workflow,
                     new(nameof(IStoreArtifact.StoreArtifact)),
@@ -550,27 +538,28 @@ internal sealed partial class DevopsWorkflowWriter(
             else
             {
                 if (commandStepTarget.ProducedArtifacts.Count > 0)
-                    WriteLine();
+                    Writer.WriteLine();
 
                 foreach (var artifact in commandStepTarget.ProducedArtifacts)
                 {
-                    using (WriteSection("- task: PublishPipelineArtifact@1"))
+                    using (Writer.WriteSection("- task: PublishPipelineArtifact@1"))
                     {
-                        WriteLine($"displayName: {artifact.ArtifactName}");
+                        Writer.WriteLine($"displayName: {artifact.ArtifactName}");
 
-                        using (WriteSection("inputs:"))
+                        using (Writer.WriteSection("inputs:"))
                         {
-                            WriteLine(artifact.BuildSlice is { Length: > 0 }
+                            Writer.WriteLine(artifact.BuildSlice is { Length: > 0 }
                                 ? $"artifactName: {artifact.ArtifactName}-{artifact.BuildSlice}"
                                 : !string.IsNullOrWhiteSpace(buildSlice.Value)
                                     ? $"artifactName: {artifact.ArtifactName}-{buildSlice.Value}"
                                     : $"artifactName: {artifact.ArtifactName}");
 
-                            WriteLine($"targetPath: \"{Devops.PipelinePublishDirectory}/{artifact.ArtifactName}\"");
+                            Writer.WriteLine(
+                                $"targetPath: \"{Devops.PipelinePublishDirectory}/{artifact.ArtifactName}\"");
                         }
                     }
 
-                    WriteLine();
+                    Writer.WriteLine();
                 }
             }
         }
@@ -602,10 +591,10 @@ internal sealed partial class DevopsWorkflowWriter(
             runScript = $"- script: dotnet run --project {projectPath} {workflowStep.Name} --skip --headless";
         }
 
-        using (WriteSection(runScript))
+        using (Writer.WriteSection(runScript))
         {
             if (includeName)
-                WriteLine($"name: {workflowStep.Name}");
+                Writer.WriteLine($"name: {workflowStep.Name}");
 
             var env = new Dictionary<string, string>();
 
@@ -684,9 +673,11 @@ internal sealed partial class DevopsWorkflowWriter(
                     env[requiredSecret.Param.ArgName] = $"$({requiredSecret.Param.EnvVarName})";
             }
 
-            var environmentInjections = workflow.Options.OfType<WorkflowParamInjectionFromEnvironment>();
-            var paramInjections = workflow.Options.OfType<WorkflowParamInjection>();
-            environmentInjections = environmentInjections.Where(e => paramInjections.All(p => p.Name != e.Value));
+            var paramInjections = GetOptions<WorkflowParamInjection>(workflow, workflowStep)
+                .ToList();
+
+            var environmentInjections = GetOptions<WorkflowParamInjectionFromEnvironment>(workflow, workflowStep)
+                .Where(e => paramInjections.All(p => p.Name != e.Value));
 
             foreach (var environmentInjection in environmentInjections)
             {
@@ -717,7 +708,7 @@ internal sealed partial class DevopsWorkflowWriter(
                     continue;
                 }
 
-                env[paramDefinition.ArgName] = workflowExpressionGenerator.Write(paramInjection.InjectionExpression);
+                env[paramDefinition.ArgName] = workflowExpressionResolver.Resolve(paramInjection.InjectionExpression);
             }
 
             var validEnv = env
@@ -730,13 +721,13 @@ internal sealed partial class DevopsWorkflowWriter(
 
             // ReSharper disable once InvertIf
             if (validEnv.Count > 0 || validExtraParams.Count > 0)
-                using (WriteSection("env:"))
+                using (Writer.WriteSection("env:"))
                 {
                     foreach (var (key, value) in validEnv)
-                        WriteLine($"{key}: {value}");
+                        Writer.WriteLine($"{key}: {value}");
 
                     foreach (var (key, value) in validExtraParams)
-                        WriteLine($"{key}: {value}");
+                        Writer.WriteLine($"{key}: {value}");
                 }
         }
     }

@@ -1,0 +1,52 @@
+﻿name: manual-input-workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      string-param-without-default:
+        description: String param
+        required: true
+        type: string
+      string-param-with-default:
+        description: String param
+        required: false
+        default: default-value
+        type: string
+      bool-param-without-default:
+        description: Bool param
+        required: true
+        type: boolean
+      bool-param-with-default:
+        description: Bool param
+        required: false
+        default: true
+        type: boolean
+      choice-param-without-default:
+        description: Choice param
+        required: true
+        type: choice
+        options: [ choice 1, choice 2, choice 3 ]
+      choice-param-with-default:
+        description: Choice param
+        required: false
+        default: choice 1
+        type: choice
+        options: [ choice 1, choice 2, choice 3 ]
+
+permissions: { }
+
+jobs:
+
+  ManualInputTarget:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: ManualInputTarget
+        id: ManualInputTarget
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ManualInputTarget --skip --headless
+

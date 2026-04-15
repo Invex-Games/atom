@@ -6,15 +6,15 @@ trigger:
       - 'main'
 
 jobs:
-  
+
   - job: SetupDotnetTarget
     pool:
       vmImage: ubuntu-latest
     steps:
-      
+
       - checkout: self
         fetchDepth: 0
-      
+
       - task: UseDotNet@2
         inputs:
           version: '9.0.x'

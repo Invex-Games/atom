@@ -1,0 +1,23 @@
+﻿name: simple-workflow
+
+on:
+  pull_request:
+    branches: [ main ]
+
+permissions: { }
+
+jobs:
+
+  SimpleTarget:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: SimpleTarget
+        id: SimpleTarget
+        run: dotnet run --project AtomTest/AtomTest.csproj -- SimpleTarget --skip --headless
+

@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Module.GithubWorkflows;
+﻿using Environment = System.Environment;
+
+namespace DecSm.Atom.Module.GithubWorkflows;
 
 /// <summary>
 ///     Provides an implementation of <see cref="IWorkflowVariableProvider" /> for GitHub Actions.

@@ -10,8 +10,18 @@ public partial class CheckoutOptionBuild : MinimalBuildDefinition, IGithubWorkfl
             Triggers = [WorkflowTriggers.Manual],
             Targets =
             [
-                WorkflowTargets.CheckoutOptionTarget.WithOptions(
-                    WorkflowOptions.Github.ConfigureCheckout("v4", true, "recursive", "some-token")),
+                WorkflowTargets.CheckoutOptionTarget1,
+                WorkflowTargets.CheckoutOptionTarget2.WithOptions(WorkflowOptions.Github.Steps.Checkout(new()
+                {
+                    Submodules = WorkflowExpressions.FromString("recursive"),
+                    Token = WorkflowExpressions.FromString("some-token"),
+                    FetchDepth = 0,
+                    Lfs = true,
+                })),
+                WorkflowTargets.CheckoutOptionTarget3.WithOptions(WorkflowOptions.Github.Steps.Checkout(new()
+                {
+                    Value = false,
+                })),
             ],
             WorkflowTypes = [new GithubWorkflowType()],
         },
@@ -20,5 +30,9 @@ public partial class CheckoutOptionBuild : MinimalBuildDefinition, IGithubWorkfl
 
 public interface ICheckoutOptionTarget
 {
-    Target CheckoutOptionTarget => t => t;
+    Target CheckoutOptionTarget1 => t => t;
+
+    Target CheckoutOptionTarget2 => t => t;
+
+    Target CheckoutOptionTarget3 => t => t;
 }

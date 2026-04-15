@@ -67,6 +67,18 @@ public static class WorkflowOptionsExtensions
     {
         internal static TargetOptions Instance { get; } = new();
 
+        public SuppressArtifactPublishingOption SuppressArtifactPublishing =>
+            new()
+            {
+                Value = true,
+            };
+
+        public SuppressArtifactPublishingOption SetSuppressedArtifactPublishing(bool value) =>
+            new()
+            {
+                Value = value,
+            };
+
         public RunTargetIf RunIfWorkflowCondition(WorkflowExpression condition) =>
             new()
             {
@@ -75,48 +87,60 @@ public static class WorkflowOptionsExtensions
     }
 
     [PublicAPI]
-    public class SetupDotnetOptions
+    public sealed class StepsOptions
     {
-        internal static SetupDotnetOptions Instance { get; } = new();
+        internal static StepsOptions Instance { get; } = new();
 
-        public SetupDotnetStep Dotnet80X(string? name = null, bool cache = false, string? lockFile = null) =>
-            new("8.0.x")
-            {
-                Name = name,
-                Cache = cache,
-                LockFile = lockFile,
-            };
+        [PublicAPI]
+        public SetupDotnetOptions SetupDotnet => field ??= new();
 
-        public SetupDotnetStep Dotnet90X(string? name = null, bool cache = false, string? lockFile = null) =>
-            new("9.0.x")
-            {
-                Name = name,
-                Cache = cache,
-                LockFile = lockFile,
-            };
+        [PublicAPI]
+        public AddNugetFeedsOptions AddNugetFeeds => field ??= new();
 
-        public SetupDotnetStep Dotnet100X(string? name = null, bool cache = false, string? lockFile = null) =>
-            new("10.0.x")
-            {
-                Name = name,
-                Cache = cache,
-                LockFile = lockFile,
-            };
+        [PublicAPI]
+        public class SetupDotnetOptions
+        {
+            public SetupDotnetStep Dotnet80X(bool cache = false, string? lockFile = null) =>
+                new("8.0.x")
+                {
+                    Cache = cache,
+                    LockFile = lockFile,
+                };
 
-        public SetupDotnetStep Default(string? name = null, bool cache = false, string? lockFile = null) =>
-            new()
-            {
-                Name = name,
-                Cache = cache,
-                LockFile = lockFile,
-            };
+            public SetupDotnetStep Dotnet90X(bool cache = false, string? lockFile = null) =>
+                new("9.0.x")
+                {
+                    Cache = cache,
+                    LockFile = lockFile,
+                };
 
-        public SetupDotnetStep From(
-            string? dotnetVersion = null,
-            SetupDotnetStep.DotnetQuality? quality = null,
-            bool cache = false,
-            string? lockFile = null) =>
-            new(dotnetVersion, quality, cache, lockFile);
+            public SetupDotnetStep Dotnet100X(bool cache = false, string? lockFile = null) =>
+                new("10.0.x")
+                {
+                    Cache = cache,
+                    LockFile = lockFile,
+                };
+
+            public SetupDotnetStep From(
+                string? dotnetVersion = null,
+                SetupDotnetStep.DotnetQuality? quality = null,
+                bool cache = false,
+                string? lockFile = null) =>
+                new(dotnetVersion, quality, cache, lockFile);
+        }
+
+        [PublicAPI]
+        public sealed class AddNugetFeedsOptions
+        {
+            public AddNugetFeedsStep AddNugetFeeds(
+                IEnumerable<NugetFeedOptions> feedsToAdd,
+                bool syncAtomToolVersionToLibraryVersion = true) =>
+                new()
+                {
+                    FeedsToAdd = feedsToAdd.ToList(),
+                    SyncAtomToolVersionToLibraryVersion = syncAtomToolVersionToLibraryVersion,
+                };
+        }
     }
 
     extension(WorkflowOptions)
@@ -134,6 +158,6 @@ public static class WorkflowOptionsExtensions
         public static TargetOptions Target => TargetOptions.Instance;
 
         [PublicAPI]
-        public static SetupDotnetOptions SetupDotnet => SetupDotnetOptions.Instance;
+        public static StepsOptions Steps => StepsOptions.Instance;
     }
 }

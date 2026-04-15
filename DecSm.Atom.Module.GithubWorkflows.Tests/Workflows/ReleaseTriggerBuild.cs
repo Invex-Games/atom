@@ -7,7 +7,7 @@ public partial class ReleaseTriggerBuild : MinimalBuildDefinition, IGithubWorkfl
     [
         new("releasetrigger-workflow")
         {
-            Triggers = [WorkflowTriggers.Github.OnReleased],
+            Triggers = [WorkflowTriggers.Github.OnRelease()],
             Targets = [WorkflowTargets.ReleaseTriggerTarget],
             WorkflowTypes = [new GithubWorkflowType()],
         },

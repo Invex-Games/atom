@@ -25,7 +25,7 @@ public partial class ManualInputStabilityBuild : BuildDefinition, IGithubWorkflo
                 },
             ],
             Targets = [WorkflowTargets.ManualInputTarget],
-            WorkflowTypes = [Github.WorkflowType],
+            WorkflowTypes = [WorkflowTypes.Github.Action],
         },
     ];
 }

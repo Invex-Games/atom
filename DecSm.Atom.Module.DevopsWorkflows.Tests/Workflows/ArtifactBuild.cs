@@ -25,7 +25,7 @@ public partial class ArtifactBuild : MinimalBuildDefinition,
                 WorkflowTargets.ArtifactTarget2,
                 WorkflowTargets.ArtifactTarget3,
                 WorkflowTargets.ArtifactTarget4.WithMatrixDimensions(
-                    new MatrixDimension(nameof(IArtifactSliceTarget1.Slice))
+                    new MatrixDimension(nameof(IArtifactSliceTarget1.TestSlice))
                     {
                         Values = [IArtifactTarget2.Slice1, IArtifactTarget2.Slice2],
                     }),
@@ -63,7 +63,7 @@ public partial class CustomArtifactBuild : MinimalBuildDefinition,
                 WorkflowTargets.ArtifactTarget2,
                 WorkflowTargets.ArtifactTarget3,
                 WorkflowTargets.ArtifactTarget4.WithMatrixDimensions(
-                    new MatrixDimension(nameof(IArtifactSliceTarget1.Slice))
+                    new MatrixDimension(nameof(IArtifactSliceTarget1.TestSlice))
                     {
                         Values = [IArtifactTarget2.Slice1, IArtifactTarget2.Slice2],
                     }),
@@ -79,8 +79,8 @@ public interface IArtifactSliceTarget1 : IBuildAccessor
     const string Slice1 = "Slice1";
     const string Slice2 = "Slice2";
 
-    [ParamDefinition("slice", "Slice")]
-    string Slice => GetParam(() => Slice)!;
+    [ParamDefinition("test-slice", "Test slice")]
+    string TestSlice => GetParam(() => TestSlice)!;
 }
 
 public interface IArtifactTarget1

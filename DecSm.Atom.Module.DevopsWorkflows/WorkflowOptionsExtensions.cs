@@ -105,7 +105,7 @@ public static class WorkflowOptionsExtensions
             new()
             {
                 Demands = demands
-                    .Select(WorkflowExpressions.Literal)
+                    .Select(WorkflowExpressions.Raw)
                     .ToArray(),
             };
 
@@ -128,12 +128,12 @@ public static class WorkflowOptionsExtensions
             {
                 Name = name is null
                     ? null
-                    : WorkflowExpressions.Literal(name),
+                    : WorkflowExpressions.Raw(name),
                 HostedImage = hostedImageName is null
                     ? null
-                    : WorkflowExpressions.Literal(hostedImageName),
+                    : WorkflowExpressions.Raw(hostedImageName),
                 Demands = demands
-                    ?.Select(WorkflowExpressions.Literal)
+                    ?.Select(WorkflowExpressions.Raw)
                     .ToArray() ?? [],
             };
     }

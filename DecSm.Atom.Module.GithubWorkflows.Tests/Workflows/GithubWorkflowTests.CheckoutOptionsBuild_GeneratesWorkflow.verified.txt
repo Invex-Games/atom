@@ -1,0 +1,46 @@
+﻿name: checkoutoption-workflow
+
+on:
+  workflow_dispatch:
+
+permissions: { }
+
+jobs:
+
+  CheckoutOptionTarget1:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: CheckoutOptionTarget1
+        id: CheckoutOptionTarget1
+        run: dotnet run --project AtomTest/AtomTest.csproj -- CheckoutOptionTarget1 --skip --headless
+
+  CheckoutOptionTarget2:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          token: 'some-token'
+          fetch-depth: 0
+          lfs: true
+          submodules: 'recursive'
+
+      - name: CheckoutOptionTarget2
+        id: CheckoutOptionTarget2
+        run: dotnet run --project AtomTest/AtomTest.csproj -- CheckoutOptionTarget2 --skip --headless
+
+  CheckoutOptionTarget3:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: CheckoutOptionTarget3
+        id: CheckoutOptionTarget3
+        run: dotnet run --project AtomTest/AtomTest.csproj -- CheckoutOptionTarget3 --skip --headless
+

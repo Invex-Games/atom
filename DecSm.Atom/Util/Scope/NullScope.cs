@@ -12,7 +12,7 @@ public readonly struct NullScope : IDisposable
     /// <summary>
     ///     Gets a singleton instance of the <see cref="NullScope" />.
     /// </summary>
-    public static readonly NullScope Instance = new();
+    public static readonly NullScope Instance;
 
     /// <summary>
     ///     Performs no action.

@@ -43,27 +43,12 @@ internal partial class Build : BuildDefinition,
         Values = FrameworkNames,
     };
 
-    private const string AtomBuildCacheName = "atom-build";
-
-    private const string AtomBuildCacheRestoreKey =
-        "${{ format('{0}-{1}-atom-build-{2}', runner.os, runner.arch, hashFiles('_atom/**')) }}";
-
-    private const string AtomBuildCacheSaveKey = "${{ steps.cache-restore-atom-build.outputs.cache-primary-key }}";
-
-    private static readonly WorkflowExpression[] AtomBuildCachePaths = ["${{ github.workspace }}/.atom"];
-
     public override IReadOnlyList<IWorkflowOption> GlobalWorkflowOptions =>
         field ??=
         [
             WorkflowOptions.AzureKeyVault.Use,
             WorkflowOptions.UseGitVersionForBuildId.Enabled,
-            WorkflowOptions.SetupDotnet.Dotnet100X(),
-            new UseGithubForAtomBuildCache
-            {
-                Value = true,
-            },
-            new CustomAtomCommand(),
-            WorkflowOptions.Cache.Restore(AtomBuildCacheName, AtomBuildCacheRestoreKey, AtomBuildCachePaths),
+            WorkflowOptions.Steps.SetupDotnet.Dotnet100X(),
         ];
 
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
@@ -75,44 +60,31 @@ internal partial class Build : BuildDefinition,
                 Triggers = [WorkflowTriggers.Manual, WorkflowTriggers.PullIntoMain],
                 Targets =
                 [
+                    WorkflowTargets.SetupBuildInfo,
+                    WorkflowTargets.PackProjects.WithOptions(WorkflowOptions.Target.SuppressArtifactPublishing),
                     WorkflowTargets
-                        .SetupBuildInfo
-                        .WithGithubTokenInjection(new()
-                        {
-                            IdToken = GithubTokenPermission.Write,
-                            Contents = GithubTokenPermission.Write,
-                            PullRequests = GithubTokenPermission.Write,
-                        })
-                        .WithOptions(WorkflowOptions.Inject.Param(WorkflowParams.PullRequestNumber,
-                            "github.event.number")),
-                    WorkflowTargets
-                        .BuildAtom
-                        .WithGithubRunsOnMatrix(PlatformNames)
-                        .WithOptions(new CleanAtomDirectory(),
-                            new RunTargetStepIf(WorkflowExpressions
-                                .Literal("steps.cache-restore-atom-build.outputs.cache-hit")
-                                .NotEqualToString("true")),
-                            WorkflowOptions.Cache.Save(AtomBuildCacheName, AtomBuildCacheSaveKey, AtomBuildCachePaths)),
-                    WorkflowTargets.PackProjects.WithSuppressedArtifactPublishing,
-                    WorkflowTargets.PackTool.WithSuppressedArtifactPublishing.WithGithubRunsOnMatrix(PlatformNames),
+                        .PackTool
+                        .WithOptions(WorkflowOptions.Target.SuppressArtifactPublishing)
+                        .WithGithubRunsOnMatrix(PlatformNames),
                     WorkflowTargets
                         .TestProjects
                         .WithGithubRunsOnMatrix(PlatformNames)
                         .WithMatrixDimensions(TestFrameworkMatrix)
-                        .WithOptions(WorkflowOptions.SetupDotnet.Dotnet80X(), WorkflowOptions.SetupDotnet.Dotnet90X()),
+                        .WithOptions(WorkflowOptions.Steps.SetupDotnet.Dotnet80X(),
+                            WorkflowOptions.Steps.SetupDotnet.Dotnet90X()),
                     WorkflowTargets
                         .CheckPrForBreakingChanges
-                        .WithGithubTokenInjection(new()
+                        .WithGithubTokenInjection(new PermissionsEvent
                         {
-                            IdToken = GithubTokenPermission.Write,
-                            Contents = GithubTokenPermission.Write,
-                            PullRequests = GithubTokenPermission.Write,
-                            Checks = GithubTokenPermission.Write,
+                            IdTokens = PermissionsLevel.Write,
+                            Contents = PermissionsLevel.Write,
+                            PullRequests = PermissionsLevel.Write,
+                            Checks = PermissionsLevel.Write,
                         })
                         .WithOptions(WorkflowOptions.Inject.Param(WorkflowParams.PullRequestNumber,
-                            "github.event.number")),
+                            WorkflowExpressions.Github.GithubEvent["number"])),
                 ],
-                WorkflowTypes = [Github.WorkflowType],
+                WorkflowTypes = [WorkflowTypes.Github.Action],
                 Options = [WorkflowOptions.Github.TokenPermissions.NoneAll],
             },
             new("Build")
@@ -124,51 +96,35 @@ internal partial class Build : BuildDefinition,
                     {
                         IncludedBranches = ["main", "feature/**", "patch/**"],
                     },
-                    WorkflowTriggers.Github.OnReleased,
+                    new GithubTrigger(new On.Release([On.Release.ReleaseType.released])),
                 ],
                 Targets =
                 [
-                    WorkflowTargets
-                        .SetupBuildInfo
-                        .WithGithubTokenInjection(new()
-                        {
-                            IdToken = GithubTokenPermission.Write,
-                            Contents = GithubTokenPermission.Write,
-                            PullRequests = GithubTokenPermission.Write,
-                        })
-                        .WithOptions(WorkflowOptions.Inject.Param(WorkflowParams.PullRequestNumber,
-                            "github.event.number")),
-                    WorkflowTargets
-                        .BuildAtom
-                        .WithGithubRunsOnMatrix(PlatformNames)
-                        .WithOptions(new CleanAtomDirectory(),
-                            new RunTargetStepIf(WorkflowExpressions
-                                .Literal("steps.cache-restore-atom-build.outputs.cache-hit")
-                                .NotEqualToString("true")),
-                            WorkflowOptions.Cache.Save(AtomBuildCacheName, AtomBuildCacheSaveKey, AtomBuildCachePaths)),
+                    WorkflowTargets.SetupBuildInfo,
                     WorkflowTargets.PackProjects,
                     WorkflowTargets.PackTool.WithGithubRunsOnMatrix(PlatformNames),
                     WorkflowTargets
                         .TestProjects
                         .WithGithubRunsOnMatrix(PlatformNames)
                         .WithMatrixDimensions(TestFrameworkMatrix)
-                        .WithOptions(WorkflowOptions.SetupDotnet.Dotnet80X(), WorkflowOptions.SetupDotnet.Dotnet90X()),
+                        .WithOptions(WorkflowOptions.Steps.SetupDotnet.Dotnet80X(),
+                            WorkflowOptions.Steps.SetupDotnet.Dotnet90X()),
                     WorkflowTargets.PushToNuget,
                     WorkflowTargets
                         .PushToRelease
-                        .WithGithubTokenInjection(new()
+                        .WithGithubTokenInjection(new PermissionsEvent
                         {
-                            Contents = GithubTokenPermission.Write,
+                            Contents = PermissionsLevel.Write,
                         })
                         .WithOptions(WorkflowOptions.Target.RunIfWorkflowCondition(new TargetOutputExpression
                             {
                                 OutputName = ParamDefinitions[nameof(ISetupBuildInfo.BuildVersion)].ArgName,
                                 TargetName = nameof(WorkflowTargets.SetupBuildInfo),
                             }
-                            .ContainsString("-")
+                            .Contains("-")
                             .NotEqualTo(true))),
                 ],
-                WorkflowTypes = [Github.WorkflowType],
+                WorkflowTypes = [WorkflowTypes.Github.Action],
                 Options = [WorkflowOptions.Github.TokenPermissions.NoneAll],
             },
 
@@ -185,7 +141,8 @@ internal partial class Build : BuildDefinition,
                         .TestProjects
                         .WithDevopsPoolMatrix(DevopsPlatformNames)
                         .WithMatrixDimensions(TestFrameworkMatrix)
-                        .WithOptions(WorkflowOptions.SetupDotnet.Dotnet80X(), WorkflowOptions.SetupDotnet.Dotnet90X()),
+                        .WithOptions(WorkflowOptions.Steps.SetupDotnet.Dotnet80X(),
+                            WorkflowOptions.Steps.SetupDotnet.Dotnet90X()),
                     WorkflowTargets.PushToNugetDevops,
                 ],
                 WorkflowTypes = [Devops.WorkflowType],
@@ -197,27 +154,36 @@ internal partial class Build : BuildDefinition,
             },
 
             // Dependabot
-            Github.DependabotWorkflow(new()
+            WorkflowPresets.Github.Dependabot(new()
             {
-                Registries =
-                [
-                    new("nuget",
-                        WorkflowLabels.Github.Dependabot.NugetType,
-                        WorkflowLabels.Github.Dependabot.NugetUrl),
-                ],
+                Registries = new Dictionary<string, DependabotRegistry>
+                {
+                    ["nuget"] = new()
+                    {
+                        Type = RegistryType.NugetFeed,
+                        Url = WorkflowLabels.Github.Dependabot.NugetUrl,
+                    },
+                },
                 Updates =
                 [
-                    new(DependabotValues.NugetEcosystem)
+                    new()
                     {
-                        Registries = ["nuget"],
-                        Groups =
-                        [
-                            new("nuget-deps")
+                        Directory = "/",
+                        PackageEcosystem = WorkflowLabels.Github.Dependabot.NugetEcosystem,
+                        Registries = new DependabotRegistries.Named("nuget"),
+                        Groups = new Dictionary<string, DependabotGroup>
+                        {
+                            ["nuget-deps"] = new DependabotGroup.FromPatterns
                             {
                                 Patterns = ["*"],
                             },
-                        ],
-                        Schedule = DependabotSchedule.Daily,
+                        },
+                        Schedule = new()
+                        {
+                            Interval = ScheduleInterval.Daily,
+                        },
+                        TargetBranch = "main",
+                        OpenPullRequestsLimit = 10,
                     },
                 ],
             }),
@@ -226,21 +192,21 @@ internal partial class Build : BuildDefinition,
                 Triggers = [WorkflowTriggers.PullIntoMain],
                 Targets =
                 [
-                    WorkflowTargets.ApproveDependabotPr.WithGithubTokenInjection(new()
+                    WorkflowTargets.ApproveDependabotPr.WithGithubTokenInjection(new PermissionsEvent
                     {
-                        IdToken = GithubTokenPermission.Write,
-                        Contents = GithubTokenPermission.Write,
-                        PullRequests = GithubTokenPermission.Write,
+                        IdTokens = PermissionsLevel.Write,
+                        Contents = PermissionsLevel.Write,
+                        PullRequests = PermissionsLevel.Write,
                     }),
                 ],
-                WorkflowTypes = [Github.WorkflowType],
+                WorkflowTypes = [WorkflowTypes.Github.Action],
                 Options =
                 [
                     WorkflowOptions.Github.TokenPermissions.NoneAll,
-                    WorkflowOptions.Target.RunIfWorkflowCondition(WorkflowExpressions
-                        .Literal("github.actor")
-                        .EqualToString("dependabot[bot]")),
-                    WorkflowOptions.Inject.Param(WorkflowParams.PullRequestNumber, "github.event.number"),
+                    WorkflowOptions.Target.RunIfWorkflowCondition(
+                        WorkflowExpressions.Github.GithubActor.EqualToString("dependabot[bot]")),
+                    WorkflowOptions.Inject.Param(WorkflowParams.PullRequestNumber,
+                        WorkflowExpressions.Github.GithubEvent["number"]),
                 ],
             },
         ];

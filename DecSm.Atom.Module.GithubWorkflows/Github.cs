@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Module.GithubWorkflows;
+﻿using Environment = System.Environment;
+
+namespace DecSm.Atom.Module.GithubWorkflows;
 
 /// <summary>
 ///     Provides utility methods and properties for interacting with GitHub Actions workflows.
@@ -15,64 +17,6 @@ public static class Github
     ///     Gets a value indicating whether the current execution environment is GitHub Actions.
     /// </summary>
     public static bool IsGithubActions => Variables.Actions.Equals("true", StringComparison.CurrentCultureIgnoreCase);
-
-    /// <summary>
-    ///     Gets the default pipeline publish directory path for GitHub Actions.
-    /// </summary>
-    /// <remarks>
-    ///     This path is typically used for storing artifacts that are intended to be uploaded
-    ///     to GitHub Actions artifact storage.
-    /// </remarks>
-    public static string PipelinePublishDirectory => "${{ github.workspace }}/.github/publish";
-
-    /// <summary>
-    ///     Gets the default pipeline artifact directory path for GitHub Actions.
-    /// </summary>
-    /// <remarks>
-    ///     This path is typically used for downloading artifacts from GitHub Actions artifact storage.
-    /// </remarks>
-    public static string PipelineArtifactDirectory => "${{ github.workspace }}/.github/artifacts";
-
-    /// <summary>
-    ///     Gets an instance of <see cref="GithubWorkflowType" /> for defining GitHub-specific workflow types.
-    /// </summary>
-    public static GithubWorkflowType WorkflowType { get; } = new();
-
-    /// <summary>
-    ///     Creates a default Dependabot workflow definition with NuGet registry and update group.
-    /// </summary>
-    /// <returns>A <see cref="WorkflowDefinition" /> pre-configured for Dependabot with NuGet settings.</returns>
-    public static WorkflowDefinition DependabotDefaultWorkflow() =>
-        DependabotWorkflow(new()
-        {
-            Registries = [new("nuget", DependabotValues.NugetType, DependabotValues.NugetUrl)],
-            Updates =
-            [
-                new(DependabotValues.NugetEcosystem)
-                {
-                    Registries = ["nuget"],
-                    Groups =
-                    [
-                        new("nuget-deps")
-                        {
-                            Patterns = ["*"],
-                        },
-                    ],
-                },
-            ],
-        });
-
-    /// <summary>
-    ///     Creates a Dependabot workflow definition with custom options.
-    /// </summary>
-    /// <param name="dependabotOptions">The custom Dependabot options to apply.</param>
-    /// <returns>A <see cref="WorkflowDefinition" /> configured with the provided Dependabot options.</returns>
-    public static WorkflowDefinition DependabotWorkflow(DependabotOptions dependabotOptions) =>
-        new("dependabot")
-        {
-            Options = [dependabotOptions],
-            WorkflowTypes = [new DependabotWorkflowType()],
-        };
 
     /// <summary>
     ///     Contains constant strings for all known GitHub Actions environment variable names.

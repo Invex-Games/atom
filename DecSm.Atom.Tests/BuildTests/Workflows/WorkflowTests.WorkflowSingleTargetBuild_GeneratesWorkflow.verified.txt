@@ -12,12 +12,9 @@
     Jobs: [
       {
         Name: WorkflowSingleTarget,
-        Steps: [
-          {
-            Name: WorkflowSingleTarget,
-            SuppressArtifactPublishing: false
-          }
-        ]
+        TargetStep: {
+          Name: WorkflowSingleTarget
+        }
       }
     ]
   }
