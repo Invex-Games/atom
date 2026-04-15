@@ -214,4 +214,53 @@ public class TargetTests
         target.IsSetupExecuted2.ShouldBeTrue();
         target.IsSetupExecuted3.ShouldBeTrue();
     }
+
+    [Test]
+    public void ApplyExtensions_WithDuplicateDependencies_DeduplicatesThem()
+    {
+        // Arrange
+        var host = CreateTestHost<DuplicateDependenciesBuild>(commandLineArgs: new(true,
+            [new CommandArg(nameof(IDuplicateDependenciesTarget.DuplicateDependenciesTarget))]));
+
+        // Act
+        var build = host.Services.GetRequiredService<BuildModel>();
+
+        // Assert
+        var target =
+            build.Targets.Single(t => t.Name == nameof(IDuplicateDependenciesTarget.DuplicateDependenciesTarget));
+
+        target.Dependencies.Count.ShouldBe(1, "Dependencies should be deduplicated");
+    }
+
+    [Test]
+    public void ApplyExtensions_WithDuplicateArtifacts_DeduplicatesThem()
+    {
+        // Arrange
+        var host = CreateTestHost<DuplicateArtifactsBuild>(commandLineArgs: new(true,
+            [new CommandArg(nameof(IDuplicateArtifactsTarget.DuplicateArtifactsTarget))]));
+
+        // Act
+        var build = host.Services.GetRequiredService<BuildModel>();
+
+        // Assert
+        var target = build.Targets.Single(t => t.Name == nameof(IDuplicateArtifactsTarget.DuplicateArtifactsTarget));
+        target.ConsumedArtifacts.Count.ShouldBe(1, "Consumed artifacts should be deduplicated");
+        target.ProducedArtifacts.Count.ShouldBe(1, "Produced artifacts should be deduplicated");
+    }
+
+    [Test]
+    public void ApplyExtensions_WithDuplicateVariables_DeduplicatesThem()
+    {
+        // Arrange
+        var host = CreateTestHost<DuplicateVariablesBuild>(commandLineArgs: new(true,
+            [new CommandArg(nameof(IDuplicateVariablesTarget.DuplicateVariablesTarget))]));
+
+        // Act
+        var build = host.Services.GetRequiredService<BuildModel>();
+
+        // Assert
+        var target = build.Targets.Single(t => t.Name == nameof(IDuplicateVariablesTarget.DuplicateVariablesTarget));
+        target.ConsumedVariables.Count.ShouldBe(1, "Consumed variables should be deduplicated");
+        target.ProducedVariables.Count.ShouldBe(1, "Produced variables should be deduplicated");
+    }
 }
