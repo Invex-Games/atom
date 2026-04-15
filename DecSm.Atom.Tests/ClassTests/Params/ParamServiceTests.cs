@@ -639,6 +639,70 @@ public class ParamServiceTests
         result.ShouldBe(defaultValue);
     }
 
+    [Test]
+    public void CreateOverrideSourcesScope_WhenNested_RestoresPreviousState()
+    {
+        // Arrange
+        var paramDefinition = new ParamDefinition("TestParam")
+        {
+            ArgName = "test-param",
+            Description = "Test parameter",
+            Sources = ParamSource.All,
+            IsSecret = false,
+            ChainedParams = [],
+        };
+
+        _args = new(true, [new ParamArg("test-param", "TestParam", "ArgValue")]);
+        Environment.SetEnvironmentVariable("test-param", "EnvValue");
+
+        _config = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                { "Params:test-param", "ConfigValue" },
+            })
+            .Build();
+
+        _paramService = new(_buildDefinition, _args, _console, _config, _logger, _vaultProviders);
+
+        A
+            .CallTo(() => _buildDefinition.ParamDefinitions)
+            .Returns(new Dictionary<string, ParamDefinition>
+            {
+                { "TestParam", paramDefinition },
+            });
+
+        // Use no-cache scope to ensure each GetParam call resolves from sources instead of cache
+        using (_paramService.CreateNoCacheScope())
+        {
+            // Act & Assert
+            // Without override scope, should use CommandLineArgs (highest priority)
+            var resultNoScope = _paramService.GetParam("TestParam", "DefaultValue");
+            resultNoScope.ShouldBe("ArgValue");
+
+            using (_paramService.CreateOverrideSourcesScope(ParamSource.Configuration))
+            {
+                // In outer scope, should use Configuration only
+                var resultOuterScope = _paramService.GetParam("TestParam", "DefaultValue");
+                resultOuterScope.ShouldBe("ConfigValue");
+
+                using (_paramService.CreateOverrideSourcesScope(ParamSource.EnvironmentVariables))
+                {
+                    // In inner scope, should use EnvironmentVariables only
+                    var resultInnerScope = _paramService.GetParam("TestParam", "DefaultValue");
+                    resultInnerScope.ShouldBe("EnvValue");
+                }
+
+                // After inner scope disposed, should be back to Configuration
+                var resultAfterInnerScope = _paramService.GetParam("TestParam", "DefaultValue");
+                resultAfterInnerScope.ShouldBe("ConfigValue");
+            }
+
+            // After all scopes disposed, should be back to CommandLineArgs
+            var resultAfterAllScopes = _paramService.GetParam("TestParam", "DefaultValue");
+            resultAfterAllScopes.ShouldBe("ArgValue");
+        }
+    }
+
     private class TestSecretsProvider : ISecretsProvider
     {
         public string GetSecret(string secretName) =>
