@@ -1,0 +1,39 @@
+﻿name: duplicatedependency-workflow
+
+
+jobs:
+
+  - job: SetupBuildInfo
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+      - checkout: self
+        fetchDepth: 0
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj SetupBuildInfo --skip --headless
+        name: SetupBuildInfo
+
+  - job: DuplicateDependencyTarget1
+    dependsOn: [ SetupBuildInfo, SetupBuildInfo ]
+    pool:
+      vmImage: ubuntu-latest
+    variables:
+      build-name: $[ dependencies.SetupBuildInfo.outputs['SetupBuildInfo.build-name'] ]
+      build-id: $[ dependencies.SetupBuildInfo.outputs['SetupBuildInfo.build-id'] ]
+    steps:
+
+      - checkout: self
+        fetchDepth: 0
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj DuplicateDependencyTarget1 --skip --headless
+        name: DuplicateDependencyTarget1
+        env:
+          build-name: $(build-name)
+          build-id: $(build-id)
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj StoreArtifact --skip --headless
+        env:
+          build-name: $(build-name)
+          build-id: $(build-id)
+          atom-artifacts: artifact-name
