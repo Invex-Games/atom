@@ -41,4 +41,16 @@ public sealed record BuildModel
     /// <exception cref="ArgumentException">Thrown if no target with the specified name is found.</exception>
     public TargetModel GetTarget(string name) =>
         Targets.FirstOrDefault(t => t.Name == name) ?? throw new ArgumentException($"Target '{name}' not found.");
+
+    /// <summary>
+    ///     Gets the state of a target.
+    /// </summary>
+    /// <param name="target">The target whose state to retrieve.</param>
+    /// <returns>The <see cref="TargetState" /> for the specified target.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the target is not present in the build model target states.</exception>
+    public TargetState GetTargetState(TargetModel target) =>
+        TargetStates.TryGetValue(target, out var state)
+            ? state
+            : throw new InvalidOperationException(
+                $"Target '{target.Name}' is not present in build model target states.");
 }

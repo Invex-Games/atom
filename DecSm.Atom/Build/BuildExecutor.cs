@@ -96,7 +96,8 @@ internal sealed class BuildExecutor(
                 requiredParam.Param.ArgName,
                 target.Name);
 
-            buildModel.TargetStates[target].Status = TargetRunState.Failed;
+            buildModel.GetTargetState(target)
+                .Status = TargetRunState.Failed;
 
             return;
         }
@@ -109,17 +110,20 @@ internal sealed class BuildExecutor(
     /// <param name="cancellationToken">A cancellation token to observe.</param>
     private async Task ExecuteTarget(TargetModel target, CancellationToken cancellationToken)
     {
-        if (buildModel.TargetStates[target].Status is TargetRunState.NotRun
+        if (buildModel.GetTargetState(target)
+                .Status is TargetRunState.NotRun
             or TargetRunState.Skipped
             or TargetRunState.Succeeded
             or TargetRunState.Failed)
             return;
 
-        if (buildModel.TargetStates[target].Status is not TargetRunState.PendingRun)
+        if (buildModel.GetTargetState(target)
+                .Status is not TargetRunState.PendingRun)
         {
             logger.LogWarning("Skipping target {TargetDefinitionName} due to unexpected state {TargetState}",
                 target.Name,
-                buildModel.TargetStates[target].Status);
+                buildModel.GetTargetState(target)
+                    .Status);
 
             return;
         }
@@ -127,9 +131,11 @@ internal sealed class BuildExecutor(
         foreach (var dependency in target.Dependencies)
             await ExecuteTarget(dependency, cancellationToken);
 
-        if (target.Dependencies.Any(depTarget => buildModel.TargetStates[depTarget].Status is TargetRunState.Failed))
+        if (target.Dependencies.Any(depTarget => buildModel.GetTargetState(depTarget)
+                .Status is TargetRunState.Failed))
         {
-            buildModel.TargetStates[target].Status = TargetRunState.NotRun;
+            buildModel.GetTargetState(target)
+                .Status = TargetRunState.NotRun;
             logger.LogWarning("Skipping target {TargetDefinitionName} due to failed dependencies", target.Name);
 
             return;
@@ -147,12 +153,14 @@ internal sealed class BuildExecutor(
                 variable.TargetName,
                 target.Name);
 
-            buildModel.TargetStates[target].Status = TargetRunState.Failed;
+            buildModel.GetTargetState(target)
+                .Status = TargetRunState.Failed;
 
             return;
         }
 
-        buildModel.TargetStates[target].Status = TargetRunState.Running;
+        buildModel.GetTargetState(target)
+            .Status = TargetRunState.Running;
 
         var startTime = Stopwatch.GetTimestamp();
 
@@ -189,7 +197,8 @@ internal sealed class BuildExecutor(
                     await task(cancellationToken);
                 }
 
-                buildModel.TargetStates[target].Status = TargetRunState.Succeeded;
+                buildModel.GetTargetState(target)
+                    .Status = TargetRunState.Succeeded;
             }
             catch (StepFailedException failedCheckException)
             {
@@ -197,7 +206,8 @@ internal sealed class BuildExecutor(
                     "A check failed for target {TargetDefinitionName}",
                     target.Name);
 
-                buildModel.TargetStates[target].Status = TargetRunState.Failed;
+                buildModel.GetTargetState(target)
+                    .Status = TargetRunState.Failed;
 
                 reportService.AddReportData(new TextReportData(failedCheckException.Message)
                 {
@@ -210,10 +220,13 @@ internal sealed class BuildExecutor(
             catch (Exception ex)
             {
                 logger.LogError(ex, "An error occurred while executing target {TargetDefinitionName}", target.Name);
-                buildModel.TargetStates[target].Status = TargetRunState.Failed;
+
+                buildModel.GetTargetState(target)
+                    .Status = TargetRunState.Failed;
             }
 
-            buildModel.TargetStates[target].RunDuration =
+            buildModel.GetTargetState(target)
+                    .RunDuration =
                 TimeSpan.FromSeconds((Stopwatch.GetTimestamp() - startTime) / (double)Stopwatch.Frequency);
 
             if (args.HasHeadless)
