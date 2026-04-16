@@ -6,6 +6,7 @@
 /// <param name="buildDefinition">The build definition containing workflow configurations.</param>
 /// <param name="writers">A collection of available workflow writers.</param>
 /// <param name="workflowResolver">The resolver for transforming workflow definitions into models.</param>
+/// <param name="logger">The logger for diagnostics.</param>
 internal sealed class WorkflowGenerator(
     IBuildDefinition buildDefinition,
     IEnumerable<IWorkflowWriter> writers,
