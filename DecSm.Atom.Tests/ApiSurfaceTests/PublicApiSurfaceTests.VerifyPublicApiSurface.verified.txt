@@ -549,6 +549,9 @@
         Name: GetTarget
       },
       {
+        Name: GetTargetState
+      },
+      {
         Name: Targets
       },
       {

@@ -188,4 +188,67 @@ public class BuildModelTests
         // Assert
         Assert.Throws<ArgumentException>(Act);
     }
+
+    [Test]
+    public void GetTargetState_WhenTargetExists_ReturnsState()
+    {
+        // Arrange
+        var targetModel = TestTargetModel;
+
+        var targetState = new TargetState(targetModel.Name)
+        {
+            Status = TargetRunState.Succeeded,
+        };
+
+        var buildModel = new BuildModel
+        {
+            Targets = new List<TargetModel>
+            {
+                targetModel,
+            },
+            TargetStates = new Dictionary<TargetModel, TargetState>
+            {
+                { targetModel, targetState },
+            },
+            DeclaringAssembly = Assembly.GetExecutingAssembly(),
+        };
+
+        // Act
+        var state = buildModel.GetTargetState(targetModel);
+
+        // Assert
+        state.ShouldBe(targetState);
+    }
+
+    [Test]
+    [SuppressMessage("ReSharper", "MoveLocalFunctionAfterJumpStatement")]
+    public void GetTargetState_WhenTargetNotInStates_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var targetModel = TestTargetModel;
+
+        var otherTarget = TestTargetModel with
+        {
+            Name = "OtherTarget",
+        };
+
+        var buildModel = new BuildModel
+        {
+            Targets = new List<TargetModel>
+            {
+                targetModel,
+            },
+            TargetStates = new Dictionary<TargetModel, TargetState>(),
+            DeclaringAssembly = Assembly.GetExecutingAssembly(),
+        };
+
+        // Act
+        void Act()
+        {
+            buildModel.GetTargetState(otherTarget);
+        }
+
+        // Assert
+        Assert.Throws<InvalidOperationException>(Act);
+    }
 }
