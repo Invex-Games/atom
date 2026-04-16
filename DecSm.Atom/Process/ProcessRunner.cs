@@ -134,7 +134,7 @@ public sealed class ProcessRunner(ILogger<ProcessRunner> logger) : IProcessRunne
             return result;
         }
 
-        throw new StepFailedException($"Process {options.Name} {options.Args} failed with exit code {result.ExitCode}");
+        throw new StepFailedException(BuildProcessErrorMessage(options, result.ExitCode, error));
 
         void OnProcessOnErrorDataReceived(object _, DataReceivedEventArgs e)
         {
@@ -261,7 +261,7 @@ public sealed class ProcessRunner(ILogger<ProcessRunner> logger) : IProcessRunne
             return result;
         }
 
-        throw new StepFailedException($"Process {options.Name} {options.Args} failed with exit code {result.ExitCode}");
+        throw new StepFailedException(BuildProcessErrorMessage(options, result.ExitCode, error));
 
         void OnProcessOnErrorDataReceived(object _, DataReceivedEventArgs e)
         {
@@ -294,5 +294,25 @@ public sealed class ProcessRunner(ILogger<ProcessRunner> logger) : IProcessRunne
             outputBuilder.AppendLine(text);
             logger.Log(options.OutputLogLevel, "{Output}", text);
         }
+    }
+
+    private static string BuildProcessErrorMessage(ProcessRunOptions options, int exitCode, string error)
+    {
+        var errorMessage = new StringBuilder();
+        errorMessage.AppendLine($"Process '{options.Name}' failed with exit code {exitCode}");
+        errorMessage.AppendLine($"  Command: {options.Name} {options.Args}");
+
+        if (options.WorkingDirectory is { Length: > 0 })
+            errorMessage.AppendLine($"  Working Directory: {options.WorkingDirectory}");
+
+        if (error is { Length: > 0 })
+        {
+            errorMessage.AppendLine("  Error Output:");
+            errorMessage.AppendLine($"    {error}");
+        }
+
+        return errorMessage
+            .ToString()
+            .TrimEnd();
     }
 }

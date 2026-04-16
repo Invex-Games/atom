@@ -21,6 +21,28 @@
 public sealed record CommandLineArgs(bool IsValid, IReadOnlyList<IArg> Args)
 {
     /// <summary>
+    ///     Gets a list of validation errors for the current command-line arguments.
+    /// </summary>
+    /// <returns>A read-only list of error messages. An empty list indicates no validation errors.</returns>
+    public IReadOnlyList<string> GetValidationErrors()
+    {
+        var errors = new List<string>();
+
+        if (!IsValid)
+            errors.Add("One or more arguments could not be parsed");
+
+        errors.AddRange(Commands
+            .Where(command => string.IsNullOrWhiteSpace(command.Name))
+            .Select(_ => "Target name cannot be empty"));
+
+        errors.AddRange(Params
+            .Where(param => string.IsNullOrWhiteSpace(param.ParamName))
+            .Select(param => $"Parameter name cannot be empty for value '{param.ParamValue}'"));
+
+        return errors;
+    }
+
+    /// <summary>
     ///     Gets a value indicating whether the help argument (<c>-h</c> or <c>--help</c>) was provided.
     /// </summary>
     /// <value>true if the help argument is present; otherwise, false.</value>

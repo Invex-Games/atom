@@ -244,6 +244,7 @@ public sealed class TargetDefinition
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
     public TargetDefinition DependsOn(string targetName)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(targetName);
         Dependencies.Add(targetName);
 
         return this;
@@ -259,8 +260,11 @@ public sealed class TargetDefinition
     public TargetDefinition DependsOn(Target target, [CallerArgumentExpression("target")] string? targetName = null)
     {
         if (string.IsNullOrWhiteSpace(targetName))
-            throw new ArgumentException(
-                "Unable to infer target name from argument expression. Please use DependsOn(\"TargetName\") overload.",
+            throw new ArgumentException("""
+                                        Unable to infer target name from argument expression.
+                                        This usually happens when passing a target through a variable.
+                                        Instead of: var t = Build.MyTarget; DependsOn(t), use: DependsOn(nameof(IMyTargets.MyTarget)) or DependsOn("MyTarget")
+                                        """,
                 nameof(target));
 
         Dependencies.Add(targetName);
@@ -287,6 +291,7 @@ public sealed class TargetDefinition
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
     public TargetDefinition UsesParam(params IEnumerable<string> paramNames)
     {
+        ArgumentNullException.ThrowIfNull(paramNames);
         Params.AddRange(paramNames.Select(x => new DefinedParam(x, false)));
 
         return this;
@@ -299,6 +304,7 @@ public sealed class TargetDefinition
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
     public TargetDefinition RequiresParam(params IEnumerable<string> paramNames)
     {
+        ArgumentNullException.ThrowIfNull(paramNames);
         Params.AddRange(paramNames.Select(x => new DefinedParam(x, true)));
 
         return this;

@@ -1,7 +1,9 @@
 ﻿00-00-00 +00:00  Atom:                                                       
 00:00:00.000 ERR Stopped                                                     
                                                                              
-                 InvalidOperationException: One or more workflows are dirty. 
-                 Run 'atom -g' to regenerate them                            
-                   at async void MoveNext() in AtomService.cs:112            
+                 InvalidOperationException: One or more workflows are out of 
+                 date. To regenerate workflows, run the build with the --gen 
+                 flag.                                                       
+                   at async Task ExecuteAsync(CancellationToken              
+                      stoppingToken) in AtomService.cs:122                   
                                                                              

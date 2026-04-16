@@ -50,6 +50,9 @@
         Name: GetHashCode
       },
       {
+        Name: GetValidationErrors
+      },
+      {
         Name: HasGen
       },
       {

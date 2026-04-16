@@ -96,7 +96,7 @@ public class BuildResolverTests
 
         // Act
         // Assert
-        Assert.Throws<Exception>(() => buildResolver.Resolve());
+        Assert.Throws<InvalidOperationException>(() => buildResolver.Resolve());
     }
 
     [Test]
@@ -236,7 +236,7 @@ public class BuildResolverTests
 
         // Act
         // Assert
-        Assert.Throws<Exception>(() => buildResolver.Resolve());
+        Assert.Throws<InvalidOperationException>(() => buildResolver.Resolve());
     }
 
     [Test]
