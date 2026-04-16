@@ -403,6 +403,6 @@ FodyWeavers.xsd
 .vscode/
 
 # Atom
-!DecSm.Atom/Artifacts
-!DecSm.Atom.Tests/Artifacts
+!src/DecSm.Atom/Artifacts
+!src/DecSm.Atom.Tests/Artifacts
 atom-publish
