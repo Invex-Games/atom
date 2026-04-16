@@ -9,7 +9,8 @@
 internal sealed class WorkflowGenerator(
     IBuildDefinition buildDefinition,
     IEnumerable<IWorkflowWriter> writers,
-    WorkflowResolver workflowResolver
+    WorkflowResolver workflowResolver,
+    ILogger<WorkflowGenerator> logger
 )
 {
     private readonly List<IWorkflowWriter> _writers = writers.ToList();
@@ -32,7 +33,16 @@ internal sealed class WorkflowGenerator(
             var writer = _writers.FirstOrDefault(w => w.WorkflowType == workflowType.GetType());
 
             if (writer is null)
+            {
+                logger.LogWarning(
+                    "No workflow writer found for workflow type {WorkflowType} in workflow {WorkflowName}. " +
+                    "The workflow will not be generated. Ensure the appropriate module (e.g., DecSm.Atom.Module.GithubWorkflows) is referenced.",
+                    workflowType.GetType()
+                        .Name,
+                    workflowDefinition.Name);
+
                 continue;
+            }
 
             var workflow = workflowResolver.Resolve(workflowDefinition);
             var generateTask = writer.Generate(workflow, cancellationToken);
