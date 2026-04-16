@@ -43,7 +43,7 @@ internal sealed class GitVersionBuildVersionProvider(
                 .Output
                 .Trim();
 
-            var hashCache = fileSystem.AtomPublishDirectory / ".gitversioncache" / currentGitHash;
+            var hashCache = fileSystem.AtomRootDirectory / ".gitversioncache" / currentGitHash;
 
             JsonElement? jsonOutput = null;
 
@@ -76,7 +76,7 @@ internal sealed class GitVersionBuildVersionProvider(
                     jsonOutput = JsonSerializer.Deserialize(gitVersionResult.Output,
                         JsonElementContext.Default.JsonElement);
 
-                    fileSystem.Directory.CreateDirectory(fileSystem.AtomPublishDirectory / ".gitversioncache");
+                    fileSystem.Directory.CreateDirectory(fileSystem.AtomRootDirectory / ".gitversioncache");
                     fileSystem.File.WriteAllText(hashCache, jsonOutput.Value.GetRawText());
                 }
 
