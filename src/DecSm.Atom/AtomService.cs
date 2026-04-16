@@ -132,7 +132,6 @@ internal sealed class AtomService(
             if (ex.ArgumentName is not null)
                 logger.LogError("Problematic argument: {ArgumentName}", ex.ArgumentName);
 
-            logger.LogError("Run with --help for usage information.");
             Environment.ExitCode = 1;
         }
         catch (WorkflowOutdatedException ex)
