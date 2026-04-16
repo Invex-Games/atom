@@ -1,3 +1,5 @@
+#pragma warning disable AT0001
+
 using DecSm.Atom.Build;
 using DecSm.Atom.Build.Definition;
 using DecSm.Atom.Params;
