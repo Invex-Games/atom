@@ -81,6 +81,7 @@ internal sealed class AtomService(
     IHelpService helpService,
     WorkflowGenerator workflowGenerator,
     IHostApplicationLifetime lifetime,
+    ReportService reportService,
     ILogger<AtomService> logger
 ) : BackgroundService
 {
@@ -98,7 +99,7 @@ internal sealed class AtomService(
                     "",
                     "Run with --help for usage information.");
 
-                throw new ArgumentException(errorMessage);
+                throw new CommandLineException(errorMessage);
             }
 
             if (args is { HasHelp: false, HasHeadless: false, HasGen: false, Commands.Count: 0, Params.Count: 0 })
@@ -119,14 +120,43 @@ internal sealed class AtomService(
             if (args.HasGen || !args.HasHeadless)
                 await workflowGenerator.GenerateWorkflows(stoppingToken);
             else if (await workflowGenerator.WorkflowsDirty(stoppingToken))
-                throw new InvalidOperationException(
+                throw new WorkflowOutdatedException(
                     "One or more workflows are out of date. To regenerate workflows, run the build with the --gen flag.");
 
             await executor.Execute(stoppingToken);
         }
+        catch (CommandLineException ex)
+        {
+            logger.LogError("Invalid command-line arguments. {Message}", ex.Message);
+
+            if (ex.ArgumentName is not null)
+                logger.LogError("Problematic argument: {ArgumentName}", ex.ArgumentName);
+
+            logger.LogError("Run with --help for usage information.");
+            Environment.ExitCode = 1;
+        }
+        catch (WorkflowOutdatedException ex)
+        {
+            logger.LogCritical("{Message}", ex.Message);
+            Environment.ExitCode = 1;
+        }
+        catch (BuildConfigurationException ex)
+        {
+            logger.LogCritical("Build configuration error: {Message}", ex.Message);
+
+            if (ex.ReportData is not null)
+                reportService.AddReportData(ex.ReportData);
+
+            Environment.ExitCode = 1;
+        }
+        catch (StepFailedException)
+        {
+            // Already handled by BuildExecutor, just set exit code
+            Environment.ExitCode = 1;
+        }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Stopped");
+            logger.LogCritical(ex, "An unexpected error occurred. Please report this issue.");
             Environment.ExitCode = 1;
         }
         finally

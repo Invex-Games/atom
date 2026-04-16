@@ -849,6 +849,28 @@
     ]
   },
   {
+    Name: DecSm.Atom.Exceptions.AtomException
+  },
+  {
+    Name: DecSm.Atom.Exceptions.BuildConfigurationException,
+    Members: [
+      {
+        Name: ReportData
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Exceptions.CommandLineException,
+    Members: [
+      {
+        Name: ArgumentName
+      }
+    ]
+  },
+  {
+    Name: DecSm.Atom.Exceptions.WorkflowOutdatedException
+  },
+  {
     Name: DecSm.Atom.Experimental.RunTargetStepIf,
     Members: [
       {

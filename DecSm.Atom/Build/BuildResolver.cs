@@ -18,7 +18,9 @@ internal sealed class BuildResolver(
     ///     Resolves and constructs the <see cref="BuildModel" /> for the current build.
     /// </summary>
     /// <returns>A fully resolved <see cref="BuildModel" /> instance.</returns>
-    /// <exception cref="InvalidOperationException">Thrown if duplicate or circular target dependencies are detected.</exception>
+    /// <exception cref="Exceptions.BuildConfigurationException">Thrown when duplicate target names are detected.</exception>
+    /// <exception cref="Exceptions.BuildConfigurationException">Thrown when a target depends on a non-existent target.</exception>
+    /// <exception cref="Exceptions.BuildConfigurationException">Thrown when circular dependencies are detected between targets.</exception>
     public BuildModel Resolve()
     {
         var startTime = Stopwatch.GetTimestamp();
@@ -71,8 +73,16 @@ internal sealed class BuildResolver(
             .ToArray();
 
         if (duplicateTargetNames.Length > 0)
-            throw new InvalidOperationException(
-                $"One or more targets are defined multiple times, which is not allowed: {string.Join(", ", $"'{duplicateTargetNames}'")}.");
+            throw new BuildConfigurationException(
+                $"One or more targets are defined multiple times, which is not allowed: {string.Join(", ", duplicateTargetNames.Select(n => $"'{n}'"))}.")
+            {
+                ReportData = new ListReportData(duplicateTargetNames
+                    .Select(n => $"Target '{n}' is defined multiple times")
+                    .ToList())
+                {
+                    Title = "Duplicate Targets",
+                },
+            };
 
         // Allows mutation of target model dependencies within this scope
         var targetModelDependencyMap = new Dictionary<string, List<TargetModel>>();
@@ -121,7 +131,7 @@ internal sealed class BuildResolver(
                 var dependencyTargetDefinition = targetDefinitions.FirstOrDefault(x => x.Name == dependencyName);
 
                 if (dependencyTargetDefinition is null)
-                    throw new InvalidOperationException(
+                    throw new BuildConfigurationException(
                         $"Target '{targetModel.Name}' depends on target '{dependencyName}' which does not exist.");
 
                 targetModelDependencyMap[targetModel.Name]
@@ -227,7 +237,13 @@ internal sealed class BuildResolver(
 
                 cycle.Reverse();
 
-                throw new InvalidOperationException($"Circular dependency detected: {string.Join(" -> ", cycle)}");
+                throw new BuildConfigurationException($"Circular dependency detected: {string.Join(" -> ", cycle)}")
+                {
+                    ReportData = new TextReportData($"Dependency cycle:\n  {string.Join("\n  -> ", cycle)}")
+                    {
+                        Title = "Circular Dependency Detected",
+                    },
+                };
             }
 
             targetMarks[target] = (true, marks.Permenant);

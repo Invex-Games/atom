@@ -158,6 +158,22 @@ public class CommandLineArgParserTests
             .ShouldSatisfyAllConditions(x => x.ProjectName.ShouldBe(value));
     }
 
+    [TestCase("-p")]
+    [TestCase("--project")]
+    public void CommandLineArgsParser_ProjectArg_MissingValue_ThrowsException(string arg)
+    {
+        // Arrange
+        string[] rawArgs = [arg];
+        var build = A.Fake<IBuildDefinition>();
+        var console = new TestConsole();
+        var parser = new CommandLineArgsParser(build, console);
+
+        // Act / Assert
+        var ex = Should.Throw<CommandLineException>(() => parser.Parse(rawArgs));
+        ex.ArgumentName.ShouldBe("project");
+        ex.Message.ShouldContain("Missing value");
+    }
+
     [TestCase("--param1", "param1", "Param1")]
     [TestCase("--PARAM1", "param1", "Param1")]
     [TestCase("--param2", "param2", "Param2")]
@@ -256,7 +272,9 @@ public class CommandLineArgParserTests
         var parser = new CommandLineArgsParser(build, console);
 
         // Act / Assert
-        Should.Throw<ArgumentException>(() => parser.Parse(rawArgs));
+        var ex = Should.Throw<CommandLineException>(() => parser.Parse(rawArgs));
+        ex.ArgumentName.ShouldBe("param1");
+        ex.Message.ShouldContain("Missing value for parameter");
     }
 
     [Test]
@@ -300,7 +318,9 @@ public class CommandLineArgParserTests
         var parser = new CommandLineArgsParser(build, console);
 
         // Act / Assert
-        Should.Throw<ArgumentException>(() => parser.Parse(rawArgs));
+        var ex = Should.Throw<CommandLineException>(() => parser.Parse(rawArgs));
+        ex.ArgumentName.ShouldBe("param1");
+        ex.Message.ShouldContain("Missing value for parameter");
     }
 
     [TestCase("Command1", "Command1")]
