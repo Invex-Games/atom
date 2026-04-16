@@ -20,7 +20,7 @@ public partial record DependabotGroup
     /// <summary>
     ///     Define strings of characters that match with a dependency name to include those dependencies in the group.
     /// </summary>
-    public virtual IReadOnlyList<string> Patterns { get; init; }
+    public virtual IReadOnlyList<string> Patterns { get; init; } = [];
 
     /// <summary>
     ///     Exclude certain dependencies from the group.

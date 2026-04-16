@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="DecSm.Analyzers.PublicApiSurface" Version="0.1.0-rc.11" PrivateAssets="all" />
-    <PackageReference Include="Dunet" Version="1.13.0" />
+    <PackageReference Include="Dunet" Version="1.16.1" />
     <PackageReference Include="Octokit" Version="14.0.0" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
       <PrivateAssets>all</PrivateAssets>
