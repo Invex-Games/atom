@@ -94,9 +94,10 @@ public class BuildResolverTests
         var logger = A.Fake<ILogger<BuildResolver>>();
         var buildResolver = new BuildResolver(buildDefinition, paramService, commandLineArgs, logger);
 
-        // Act
-        // Assert
-        Assert.Throws<InvalidOperationException>(() => buildResolver.Resolve());
+        // Act & Assert
+        var ex = Assert.Throws<BuildConfigurationException>(() => buildResolver.Resolve());
+        ex.Message.ShouldContain("Circular dependency detected");
+        ex.ReportData.ShouldNotBeNull();
     }
 
     [Test]
@@ -234,9 +235,35 @@ public class BuildResolverTests
         var logger = A.Fake<ILogger<BuildResolver>>();
         var buildResolver = new BuildResolver(buildDefinition, paramService, commandLineArgs, logger);
 
-        // Act
-        // Assert
-        Assert.Throws<InvalidOperationException>(() => buildResolver.Resolve());
+        // Act & Assert
+        var ex = Should.Throw<BuildConfigurationException>(buildResolver.Resolve);
+        ex.Message.ShouldContain("depends on target 'Target2' which does not exist");
+    }
+
+    [Test]
+    public void Resolve_WithComplexCircularDependency_ThrowsException()
+    {
+        // Arrange - Three node cycle: A -> B -> C -> A
+        var buildDefinition = new TestBuildDefinition(_services)
+        {
+            ManualTargetDefinitions = new Dictionary<string, Target>
+            {
+                ["TargetA"] = t => t.DependsOn("TargetB"),
+                ["TargetB"] = t => t.DependsOn("TargetC"),
+                ["TargetC"] = t => t.DependsOn("TargetA"),
+            },
+        };
+
+        var commandLineArgs = new CommandLineArgs(true, []);
+        var paramService = A.Fake<IParamService>();
+        var logger = A.Fake<ILogger<BuildResolver>>();
+        var buildResolver = new BuildResolver(buildDefinition, paramService, commandLineArgs, logger);
+
+        // Act & Assert
+        var ex = Should.Throw<BuildConfigurationException>(buildResolver.Resolve);
+        ex.Message.ShouldContain("Circular dependency detected");
+        ex.ReportData.ShouldNotBeNull();
+        ex.ReportData.ShouldBeOfType<TextReportData>();
     }
 
     [Test]

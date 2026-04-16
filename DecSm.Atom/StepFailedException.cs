@@ -5,6 +5,7 @@
 ///     This exception provides additional reporting capabilities through custom report data.
 /// </summary>
 /// <remarks>
+///     <para>
 ///     This exception is used throughout the Atom framework to signal failures in build targets,
 ///     such as task execution errors, failed external process calls (via <see cref="IProcessRunner" />),
 ///     or unmet validation criteria within a target's logic.
@@ -12,6 +13,12 @@
 ///     and optionally provide custom report data using the <see cref="ReportData" /> property.
 ///     The <see cref="ReportData" /> property allows attaching custom reporting information that can be
 ///     used for enhanced error reporting, logging, or debugging purposes by Atom's reporting services.
+///     </para>
+///     <para>
+///     This exception inherits from <see cref="AtomException"/>. Use <see cref="BuildConfigurationException"/> for
+///     configuration errors (duplicate targets, circular dependencies); use <see cref="StepFailedException"/> for
+///     runtime target execution failures.
+///     </para>
 /// </remarks>
 /// <example>
 ///     <code>
@@ -33,9 +40,11 @@
 ///     }
 ///     </code>
 /// </example>
+/// <seealso cref="Exceptions.AtomException"/>
+/// <seealso cref="Exceptions.BuildConfigurationException"/>
 [PublicAPI]
 public sealed class StepFailedException(string message, Exception? innerException = null)
-    : Exception(message, innerException)
+    : AtomException(message, innerException!)
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="StepFailedException" /> class with an empty message.

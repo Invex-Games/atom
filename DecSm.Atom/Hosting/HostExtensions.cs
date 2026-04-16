@@ -126,9 +126,30 @@ public static class HostExtensions
         builder.Services.AddSingleton<BuildResolver>();
         builder.Services.AddSingleton<WorkflowResolver>();
 
-        builder.Services.AddSingleton<BuildModel>(services => services
-            .GetRequiredService<BuildResolver>()
-            .Resolve());
+        builder.Services.AddSingleton<BuildModel>(services =>
+        {
+            try
+            {
+                return services
+                    .GetRequiredService<BuildResolver>()
+                    .Resolve();
+            }
+            catch (BuildConfigurationException ex)
+            {
+                // Log and re-throw to prevent app startup
+                var logger = services.GetService<ILogger<BuildResolver>>();
+                logger?.LogError("Build configuration error during initialization: {Message}", ex.Message);
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                var logger = services.GetService<ILogger<BuildResolver>>();
+                logger?.LogError(ex, "Unexpected error during build model resolution");
+
+                throw;
+            }
+        });
 
         builder.Logging.ClearProviders();
 

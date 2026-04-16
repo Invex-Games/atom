@@ -18,7 +18,7 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
     ///     A <see cref="CommandLineArgs" /> object representing the parsed arguments. Check the
     ///     <see cref="CommandLineArgs.IsValid" /> property to determine if parsing was successful.
     /// </returns>
-    /// <exception cref="ArgumentException">
+    /// <exception cref="Exceptions.CommandLineException">
     ///     Thrown if an argument requiring a value is provided without one (e.g., <c>--project</c> or a defined parameter).
     /// </exception>
     /// <example>
@@ -45,7 +45,10 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
                 if (optionArg is ProjectArg)
                 {
                     if (i == rawArgs.Count - 1)
-                        throw new ArgumentException("Missing value for -[-p]roject option");
+                        throw new CommandLineException("Missing value for -[-p]roject option. Usage: --project <path>")
+                        {
+                            ArgumentName = "project",
+                        };
 
                     optionArg = new ProjectArg(rawArgs[i + 1]);
                     i++;
@@ -66,12 +69,20 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
                              string.Equals(argParam, buildParam.Value.ArgName, StringComparison.OrdinalIgnoreCase)))
                 {
                     if (i == rawArgs.Count - 1)
-                        throw new ArgumentException($"Missing value for parameter '{argParam}'");
+                        throw new CommandLineException(
+                            $"Missing value for parameter '{argParam}'. Usage: --{argParam} <value>")
+                        {
+                            ArgumentName = argParam,
+                        };
 
                     var nextArg = rawArgs[i + 1];
 
                     if (nextArg.StartsWith("--"))
-                        throw new ArgumentException($"Missing value for parameter '{argParam}'");
+                        throw new CommandLineException(
+                            $"Missing value for parameter '{argParam}'. The next argument '{nextArg}' looks like another option. Usage: --{argParam} <value>")
+                        {
+                            ArgumentName = argParam,
+                        };
 
                     args.Add(new ParamArg(buildParam.Value.ArgName, buildParam.Key, nextArg));
                     i++;
