@@ -1,0 +1,17 @@
+﻿name: checkoutoption-workflow
+
+
+jobs:
+
+  - job: CheckoutOptionTarget
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+      - checkout: self
+        fetchDepth: 0
+        lfs: true
+        submodules: recursive
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj CheckoutOptionTarget --skip --headless
+        name: CheckoutOptionTarget
