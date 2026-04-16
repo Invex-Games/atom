@@ -89,7 +89,17 @@ internal sealed class AtomService(
         try
         {
             if (!args.IsValid)
-                throw new ArgumentException("Invalid command-line arguments");
+            {
+                var errors = args.GetValidationErrors();
+
+                var errorMessage = string.Join(Environment.NewLine,
+                    "Invalid command-line arguments:",
+                    string.Join(Environment.NewLine, errors.Select(e => $"  - {e}")),
+                    "",
+                    "Run with --help for usage information.");
+
+                throw new ArgumentException(errorMessage);
+            }
 
             if (args is { HasHelp: false, HasHeadless: false, HasGen: false, Commands.Count: 0, Params.Count: 0 })
             {
@@ -110,7 +120,7 @@ internal sealed class AtomService(
                 await workflowGenerator.GenerateWorkflows(stoppingToken);
             else if (await workflowGenerator.WorkflowsDirty(stoppingToken))
                 throw new InvalidOperationException(
-                    "One or more workflows are dirty. Run 'atom -g' to regenerate them");
+                    "One or more workflows are out of date. To regenerate workflows, run the build with the --gen flag.");
 
             await executor.Execute(stoppingToken);
         }

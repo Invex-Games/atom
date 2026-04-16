@@ -71,7 +71,7 @@ internal sealed class BuildResolver(
             .ToArray();
 
         if (duplicateTargetNames.Length > 0)
-            throw new(
+            throw new InvalidOperationException(
                 $"One or more targets are defined multiple times, which is not allowed: {string.Join(", ", $"'{duplicateTargetNames}'")}.");
 
         // Allows mutation of target model dependencies within this scope
@@ -121,7 +121,7 @@ internal sealed class BuildResolver(
                 var dependencyTargetDefinition = targetDefinitions.FirstOrDefault(x => x.Name == dependencyName);
 
                 if (dependencyTargetDefinition is null)
-                    throw new(
+                    throw new InvalidOperationException(
                         $"Target '{targetModel.Name}' depends on target '{dependencyName}' which does not exist.");
 
                 targetModelDependencyMap[targetModel.Name]
@@ -132,6 +132,7 @@ internal sealed class BuildResolver(
         // Sort targets and find circular dependencies
         var depthFirstTargets = new List<TargetModel>();
         var targetMarks = targetModels.ToDictionary(x => x, _ => (Temporary: false, Permenant: false));
+        var visitStack = new Stack<string>();
 
         for (var target = targetModels.FirstOrDefault(x => !targetMarks[x].Permenant);
              target is not null;
@@ -210,14 +211,32 @@ internal sealed class BuildResolver(
                 return;
 
             if (marks.Temporary)
-                throw new(
-                    $"Circular dependency detected: {string.Join(" -> ", depthFirstTargets.Select(x => x.Name))}.");
+            {
+                var cycle = new List<string>
+                {
+                    target.Name,
+                };
+
+                foreach (var name in visitStack)
+                {
+                    cycle.Add(name);
+
+                    if (name == target.Name)
+                        break;
+                }
+
+                cycle.Reverse();
+
+                throw new InvalidOperationException($"Circular dependency detected: {string.Join(" -> ", cycle)}");
+            }
 
             targetMarks[target] = (true, marks.Permenant);
+            visitStack.Push(target.Name);
 
             foreach (var dependency in target.Dependencies)
                 Visit(dependency);
 
+            visitStack.Pop();
             targetMarks[target] = (false, true);
             depthFirstTargets.Insert(0, target);
         }

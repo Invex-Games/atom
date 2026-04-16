@@ -1,4 +1,4 @@
-﻿namespace DecSm.Atom.Build.Definition;
+namespace DecSm.Atom.Build.Definition;
 
 /// <summary>
 ///     Provides extension methods for <see cref="TargetDefinition" /> to simplify adding multiple dependencies.
@@ -21,12 +21,12 @@ public static class TargetDefinitionExtensions
         {
             if (string.IsNullOrWhiteSpace(target1Name))
                 throw new ArgumentException(
-                    "Unable to infer target name from argument expression. Please use DependsOn(\"TargetName\") overload.",
+                    "Unable to infer target name from argument expression. This usually happens when passing a target through a variable. Instead of: var t = Build.MyTarget; DependsOn(t), use: DependsOn(nameof(IMyTargets.MyTarget)) or DependsOn(\"TargetName\")",
                     nameof(target1));
 
             if (string.IsNullOrWhiteSpace(target2Name))
                 throw new ArgumentException(
-                    "Unable to infer target name from argument expression. Please use DependsOn(\"TargetName\") overload.",
+                    "Unable to infer target name from argument expression. This usually happens when passing a target through a variable. Instead of: var t = Build.MyTarget; DependsOn(t), use: DependsOn(nameof(IMyTargets.MyTarget)) or DependsOn(\"TargetName\")",
                     nameof(target2));
 
             return targetDefinition
@@ -49,17 +49,17 @@ public static class TargetDefinitionExtensions
         {
             if (string.IsNullOrWhiteSpace(target1Name))
                 throw new ArgumentException(
-                    "Unable to infer target name from argument expression. Please use DependsOn(\"TargetName\") overload.",
+                    "Unable to infer target name from argument expression. This usually happens when passing a target through a variable. Instead of: var t = Build.MyTarget; DependsOn(t), use: DependsOn(nameof(IMyTargets.MyTarget)) or DependsOn(\"TargetName\")",
                     nameof(target1));
 
             if (string.IsNullOrWhiteSpace(target2Name))
                 throw new ArgumentException(
-                    "Unable to infer target name from argument expression. Please use DependsOn(\"TargetName\") overload.",
+                    "Unable to infer target name from argument expression. This usually happens when passing a target through a variable. Instead of: var t = Build.MyTarget; DependsOn(t), use: DependsOn(nameof(IMyTargets.MyTarget)) or DependsOn(\"TargetName\")",
                     nameof(target2));
 
             if (string.IsNullOrWhiteSpace(target3Name))
                 throw new ArgumentException(
-                    "Unable to infer target name from argument expression. Please use DependsOn(\"TargetName\") overload.",
+                    "Unable to infer target name from argument expression. This usually happens when passing a target through a variable. Instead of: var t = Build.MyTarget; DependsOn(t), use: DependsOn(nameof(IMyTargets.MyTarget)) or DependsOn(\"TargetName\")",
                     nameof(target3));
 
             return targetDefinition
@@ -85,22 +85,22 @@ public static class TargetDefinitionExtensions
         {
             if (string.IsNullOrWhiteSpace(target1Name))
                 throw new ArgumentException(
-                    "Unable to infer target name from argument expression. Please use DependsOn(\"TargetName\") overload.",
+                    "Unable to infer target name from argument expression. This usually happens when passing a target through a variable. Instead of: var t = Build.MyTarget; DependsOn(t), use: DependsOn(nameof(IMyTargets.MyTarget)) or DependsOn(\"TargetName\")",
                     nameof(target1));
 
             if (string.IsNullOrWhiteSpace(target2Name))
                 throw new ArgumentException(
-                    "Unable to infer target name from argument expression. Please use DependsOn(\"TargetName\") overload.",
+                    "Unable to infer target name from argument expression. This usually happens when passing a target through a variable. Instead of: var t = Build.MyTarget; DependsOn(t), use: DependsOn(nameof(IMyTargets.MyTarget)) or DependsOn(\"TargetName\")",
                     nameof(target2));
 
             if (string.IsNullOrWhiteSpace(target3Name))
                 throw new ArgumentException(
-                    "Unable to infer target name from argument expression. Please use DependsOn(\"TargetName\") overload.",
+                    "Unable to infer target name from argument expression. This usually happens when passing a target through a variable. Instead of: var t = Build.MyTarget; DependsOn(t), use: DependsOn(nameof(IMyTargets.MyTarget)) or DependsOn(\"TargetName\")",
                     nameof(target3));
 
             if (string.IsNullOrWhiteSpace(target4Name))
                 throw new ArgumentException(
-                    "Unable to infer target name from argument expression. Please use DependsOn(\"TargetName\") overload.",
+                    "Unable to infer target name from argument expression. This usually happens when passing a target through a variable. Instead of: var t = Build.MyTarget; DependsOn(t), use: DependsOn(nameof(IMyTargets.MyTarget)) or DependsOn(\"TargetName\")",
                     nameof(target4));
 
             return targetDefinition
@@ -129,27 +129,27 @@ public static class TargetDefinitionExtensions
         {
             if (string.IsNullOrWhiteSpace(target1Name))
                 throw new ArgumentException(
-                    "Unable to infer target name from argument expression. Please use DependsOn(\"TargetName\") overload.",
+                    "Unable to infer target name from argument expression. This usually happens when passing a target through a variable. Instead of: var t = Build.MyTarget; DependsOn(t), use: DependsOn(nameof(IMyTargets.MyTarget)) or DependsOn(\"TargetName\")",
                     nameof(target1));
 
             if (string.IsNullOrWhiteSpace(target2Name))
                 throw new ArgumentException(
-                    "Unable to infer target name from argument expression. Please use DependsOn(\"TargetName\") overload.",
+                    "Unable to infer target name from argument expression. This usually happens when passing a target through a variable. Instead of: var t = Build.MyTarget; DependsOn(t), use: DependsOn(nameof(IMyTargets.MyTarget)) or DependsOn(\"TargetName\")",
                     nameof(target2));
 
             if (string.IsNullOrWhiteSpace(target3Name))
                 throw new ArgumentException(
-                    "Unable to infer target name from argument expression. Please use DependsOn(\"TargetName\") overload.",
+                    "Unable to infer target name from argument expression. This usually happens when passing a target through a variable. Instead of: var t = Build.MyTarget; DependsOn(t), use: DependsOn(nameof(IMyTargets.MyTarget)) or DependsOn(\"TargetName\")",
                     nameof(target3));
 
             if (string.IsNullOrWhiteSpace(target4Name))
                 throw new ArgumentException(
-                    "Unable to infer target name from argument expression. Please use DependsOn(\"TargetName\") overload.",
+                    "Unable to infer target name from argument expression. This usually happens when passing a target through a variable. Instead of: var t = Build.MyTarget; DependsOn(t), use: DependsOn(nameof(IMyTargets.MyTarget)) or DependsOn(\"TargetName\")",
                     nameof(target4));
 
             if (string.IsNullOrWhiteSpace(target5Name))
                 throw new ArgumentException(
-                    "Unable to infer target name from argument expression. Please use DependsOn(\"TargetName\") overload.",
+                    "Unable to infer target name from argument expression. This usually happens when passing a target through a variable. Instead of: var t = Build.MyTarget; DependsOn(t), use: DependsOn(nameof(IMyTargets.MyTarget)) or DependsOn(\"TargetName\")",
                     nameof(target5));
 
             return targetDefinition

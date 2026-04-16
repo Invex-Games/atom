@@ -92,9 +92,19 @@ internal sealed class BuildExecutor(
             if (value is { Length: > 0 })
                 continue;
 
-            logger.LogError("Missing required parameter '{ParamName}' for target {TargetDefinitionName}",
+            logger.LogError("""
+                            Missing required parameter '{ParamName}' for target {TargetName}.
+                            You can provide it via: Command line:
+                            --{ArgName} <value>,
+                            Environment variable: {EnvVarName},
+                            Configuration file (appsettings.json):
+                            Params:{ConfigParamName}, or Interactive mode: add -i or --interactive flag
+                            """,
                 requiredParam.Param.ArgName,
-                target.Name);
+                target.Name,
+                requiredParam.Param.ArgName,
+                requiredParam.Param.EnvVarName,
+                requiredParam.Param.Name);
 
             buildModel.GetTargetState(target)
                 .Status = TargetRunState.Failed;
@@ -136,6 +146,7 @@ internal sealed class BuildExecutor(
         {
             buildModel.GetTargetState(target)
                 .Status = TargetRunState.NotRun;
+
             logger.LogWarning("Skipping target {TargetDefinitionName} due to failed dependencies", target.Name);
 
             return;
