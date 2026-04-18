@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     Pull request branch name preferences.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public sealed record DependabotPullRequestBranchName
 {
     /// <summary>
@@ -15,7 +15,7 @@ public sealed record DependabotPullRequestBranchName
 /// <summary>
 ///     Branch name separator.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public enum BranchNameSeparator
 {
     Hyphen,

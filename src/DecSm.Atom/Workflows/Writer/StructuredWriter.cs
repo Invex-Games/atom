@@ -1,6 +1,6 @@
 namespace DecSm.Atom.Workflows.Writer;
 
-[UnstableAPI]
+[PublicAPI]
 public class StructuredWriter(int indentSize = 2)
 {
     public StringBuilder StringBuilder { get; } = new();

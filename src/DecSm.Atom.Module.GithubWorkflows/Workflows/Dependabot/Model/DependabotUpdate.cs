@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     Package ecosystem configuration for Dependabot updates.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public sealed record DependabotUpdate
 {
     /// <summary>

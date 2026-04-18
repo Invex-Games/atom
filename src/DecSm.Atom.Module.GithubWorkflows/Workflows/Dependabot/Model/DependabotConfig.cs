@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     GitHub Dependabot v2 configuration.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public sealed record DependabotConfig
 {
     // We deviate from the schema and add a default value of 2 for Version

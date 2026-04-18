@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     Schedule day for Dependabot updates.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public enum ScheduleDay
 {
     Monday,

@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     Private package registry configuration.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public sealed record DependabotRegistry
 {
     /// <summary>
@@ -121,7 +121,7 @@ public sealed record DependabotRegistry
 /// <summary>
 ///     Registry type for Dependabot.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public enum RegistryType
 {
     CargoRegistry,
