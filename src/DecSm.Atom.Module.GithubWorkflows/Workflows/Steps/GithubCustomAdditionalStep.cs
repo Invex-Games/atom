@@ -7,6 +7,6 @@ public sealed record GithubCustomAdditionalStep : IGithubAdditionalStepOption
 
     public required Step Step { get; init; }
 
-    public Step Build(IWorkflowExpressionResolver expressionResolver) =>
+    public Step Build() =>
         Step;
 }

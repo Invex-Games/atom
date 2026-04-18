@@ -36,14 +36,14 @@ public class WorkflowTests
     }
 
     [Test]
-    public async Task Workflows_WhenDirtyAndHeadless_RegeneratesWorkflows()
+    public async Task Workflows_WhenOutdatedAndHeadless_RegeneratesWorkflows()
     {
         // Arrange
         var console = new TestConsole();
 
         var workflowWriter = new TestWorkflowWriter
         {
-            IsDirty = true,
+            IsOutdated = true,
         };
 
         var host = CreateTestHost<WorkflowDependentTargetBuild>(console,

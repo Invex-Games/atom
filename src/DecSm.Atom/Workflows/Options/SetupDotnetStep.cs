@@ -13,7 +13,7 @@
 /// <param name="LockFile">The path to the project's lock file (e.g., "**/packages.lock.json")</param>
 [PublicAPI]
 public record SetupDotnetStep(
-    string? DotnetVersion = null,
+    WorkflowExpression? DotnetVersion = null,
     SetupDotnetStep.DotnetQuality? Quality = null,
     bool Cache = false,
     string? LockFile = null

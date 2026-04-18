@@ -19,7 +19,7 @@ public sealed record WorkflowCacheSaveOption : IWorkflowOption
 
     public required WorkflowExpression Key { get; init; }
 
-    public required IReadOnlyList<WorkflowExpression> Paths { get; init; }
+    public required WorkflowExpressionCollection Paths { get; init; }
 
     public WorkflowExpression? RunIf { get; init; }
 
@@ -35,7 +35,7 @@ public sealed record WorkflowCacheRestoreOption : IWorkflowOption
 
     public required WorkflowExpression Key { get; init; }
 
-    public required IReadOnlyList<WorkflowExpression> Paths { get; init; }
+    public required WorkflowExpressionCollection Paths { get; init; }
 
     public WorkflowExpression? RunIf { get; init; }
 
@@ -46,9 +46,9 @@ public sealed record WorkflowCacheRestoreOption : IWorkflowOption
 public static class WorkflowCacheOptions
 {
     [SuppressMessage("Performance", "CA1822:Mark members as static")]
-    public sealed class Options
+    public sealed class CacheOptions
     {
-        internal static Options Instance => field ??= new();
+        internal static CacheOptions Instance => field ??= new();
 
         public WorkflowCacheSaveOption Save(
             string name,
@@ -87,6 +87,6 @@ public static class WorkflowCacheOptions
     extension(WorkflowOptions)
     {
         [UnstableAPI]
-        public static Options Cache => Options.Instance;
+        public static CacheOptions Cache => CacheOptions.Instance;
     }
 }

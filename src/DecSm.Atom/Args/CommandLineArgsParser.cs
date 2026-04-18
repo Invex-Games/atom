@@ -30,27 +30,29 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
     ///       // commandLineArgs.HasSkip will be true
     ///     </code>
     /// </example>
-    public CommandLineArgs Parse(IReadOnlyList<string> rawArgs)
+    public CommandLineArgs Parse(IEnumerable<string> rawArgs)
     {
+        var rawArgsArray = rawArgs.ToArray();
+
         List<IArg> args = [];
 
         var isValid = true;
 
-        for (var i = 0; i < rawArgs.Count; i++)
+        for (var i = 0; i < rawArgsArray.Length; i++)
         {
-            var rawArg = rawArgs[i];
+            var rawArg = rawArgsArray[i];
 
             if (TryParseOption(rawArg) is { } optionArg)
             {
                 if (optionArg is ProjectArg)
                 {
-                    if (i == rawArgs.Count - 1)
+                    if (i == rawArgsArray.Length - 1)
                         throw new CommandLineException("Missing value for -[-p]roject option. Usage: --project <path>")
                         {
                             ArgumentName = "project",
                         };
 
-                    optionArg = new ProjectArg(rawArgs[i + 1]);
+                    optionArg = new ProjectArg(rawArgsArray[i + 1]);
                     i++;
                 }
 
@@ -68,14 +70,14 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
                 foreach (var buildParam in buildDefinition.ParamDefinitions.Where(buildParam =>
                              string.Equals(argParam, buildParam.Value.ArgName, StringComparison.OrdinalIgnoreCase)))
                 {
-                    if (i == rawArgs.Count - 1)
+                    if (i == rawArgsArray.Length - 1)
                         throw new CommandLineException(
                             $"Missing value for parameter '{argParam}'. Usage: --{argParam} <value>")
                         {
                             ArgumentName = argParam,
                         };
 
-                    var nextArg = rawArgs[i + 1];
+                    var nextArg = rawArgsArray[i + 1];
 
                     if (nextArg.StartsWith("--"))
                         throw new CommandLineException(

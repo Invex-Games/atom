@@ -39,7 +39,7 @@ public interface IArtifactProvider
     ///     This method is called by targets like <see cref="IStoreArtifact.StoreArtifact" />.
     /// </remarks>
     Task StoreArtifacts(
-        IReadOnlyList<string> artifactNames,
+        IEnumerable<string> artifactNames,
         string? buildId = null,
         string? buildSlice = null,
         CancellationToken cancellationToken = default);
@@ -61,7 +61,7 @@ public interface IArtifactProvider
     ///     This method is called by targets like <see cref="IRetrieveArtifact.RetrieveArtifact" />.
     /// </remarks>
     Task RetrieveArtifacts(
-        IReadOnlyList<string> artifactNames,
+        IEnumerable<string> artifactNames,
         string? buildId = null,
         string? buildSlice = null,
         CancellationToken cancellationToken = default);
@@ -75,7 +75,7 @@ public interface IArtifactProvider
     /// <remarks>
     ///     This is useful for managing storage by removing old or temporary artifacts.
     /// </remarks>
-    Task Cleanup(IReadOnlyList<string> runIdentifiers, CancellationToken cancellationToken = default);
+    Task Cleanup(IEnumerable<string> runIdentifiers, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Retrieves a list of all stored run identifiers from the artifact storage.

@@ -78,7 +78,9 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem fileSystem, ILogger<
     /// <param name="workflow">The workflow model to compare against the existing file.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns><c>true</c> if the workflow file is missing or outdated; otherwise, <c>false</c>.</returns>
-    public async Task<bool> CheckForDirtyWorkflow(WorkflowModel workflow, CancellationToken cancellationToken = default)
+    public async Task<bool> CheckForOutdatedWorkflow(
+        WorkflowModel workflow,
+        CancellationToken cancellationToken = default)
     {
         var filePath = FileLocation / $"{workflow.Name}.{FileExtension}";
 
@@ -100,7 +102,7 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem fileSystem, ILogger<
             return false;
 
         logger.LogInformation(
-            "Workflow file is dirty and needs to be regenerated: {FilePath}\nExisting:\n{Existing}\nNew:\n{New}",
+            "Workflow file is outdated and needs to be regenerated: {FilePath}\nExisting:\n{Existing}\nNew:\n{New}",
             filePath,
             existingText,
             newText);

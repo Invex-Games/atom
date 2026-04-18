@@ -28,6 +28,9 @@ internal sealed class WorkflowExpressionResolver(IEnumerable<IWorkflowExpression
 
             case RawExpression raw:
                 return raw.Value;
+
+            case ConcatExpression concat:
+                return string.Concat(concat.Values.Select(Resolve));
         }
 
         foreach (var writer in _writers)

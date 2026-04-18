@@ -24,7 +24,7 @@ public static class TestUtils
                 Args = commandLineArgs
                     .Args
                     .Append(new ProjectArg("AtomTest"))
-                    .ToArray(),
+                    .ToList(),
             };
 
         buildIdProvider ??= new();

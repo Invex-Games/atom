@@ -6,29 +6,29 @@ public partial record Step
 {
     public string? Id { get; init; }
 
-    public string? If { get; init; }
+    public WorkflowExpression? If { get; init; }
 
-    public string? Name { get; init; }
+    public WorkflowExpression? Name { get; init; }
 
-    public string? WorkingDirectory { get; init; }
+    public WorkflowExpression? WorkingDirectory { get; init; }
 
-    public IReadOnlyDictionary<string, SingleOrList<string>>? With { get; init; }
+    public IReadOnlyDictionary<string, WorkflowExpressionOrCollection>? With { get; init; }
 
-    public IReadOnlyDictionary<string, string>? Env { get; init; }
+    public IReadOnlyDictionary<string, WorkflowExpression>? Env { get; init; }
 
-    public string? ContinueOnError { get; init; }
+    public WorkflowExpression? ContinueOnError { get; init; }
 
-    public string? TimeoutMinutes { get; init; }
+    public WorkflowExpression? TimeoutMinutes { get; init; }
 
     public partial record UsesStep
     {
-        public required string Uses { get; init; }
+        public required WorkflowExpression Uses { get; init; }
     }
 
     public partial record RunStep
     {
-        public required SingleOrList<string> Run { get; init; }
+        public required WorkflowExpressionOrCollection Run { get; init; }
 
-        public string? Shell { get; init; }
+        public WorkflowExpression? Shell { get; init; }
     }
 }

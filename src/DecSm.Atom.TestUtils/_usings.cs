@@ -1,4 +1,5 @@
-﻿global using System.IO.Abstractions;
+﻿global using System.Collections.ObjectModel;
+global using System.IO.Abstractions;
 global using System.IO.Abstractions.TestingHelpers;
 global using System.Text;
 global using System.Text.RegularExpressions;

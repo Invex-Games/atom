@@ -1,5 +1,3 @@
-using DecSm.Atom.Build;
-
 namespace Atom.Targets;
 
 public interface IPullRequestHelper : IBuildAccessor

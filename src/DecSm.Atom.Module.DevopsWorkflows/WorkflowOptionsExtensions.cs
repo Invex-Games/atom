@@ -145,9 +145,9 @@ public static class WorkflowOptionsExtensions
     }
 
     [PublicAPI]
-    public sealed class Options
+    public sealed class DevopsOptions
     {
-        internal static Options Instance => field ??= new();
+        internal static DevopsOptions Instance => field ??= new();
 
         public DevopsPoolOptions DevopsPool => field ??= new();
 
@@ -162,6 +162,6 @@ public static class WorkflowOptionsExtensions
     extension(WorkflowOptions)
     {
         [PublicAPI]
-        public static Options Devops => Options.Instance;
+        public static DevopsOptions Devops => DevopsOptions.Instance;
     }
 }

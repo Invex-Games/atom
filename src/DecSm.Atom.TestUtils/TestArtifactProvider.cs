@@ -4,20 +4,20 @@
 public sealed class TestArtifactProvider : IArtifactProvider
 {
     public Task StoreArtifacts(
-        IReadOnlyList<string> artifactNames,
+        IEnumerable<string> artifactNames,
         string? buildId = null,
         string? buildSlice = null,
         CancellationToken cancellationToken = default) =>
         throw new NotImplementedException();
 
     public Task RetrieveArtifacts(
-        IReadOnlyList<string> artifactNames,
+        IEnumerable<string> artifactNames,
         string? buildId = null,
         string? buildSlice = null,
         CancellationToken cancellationToken = default) =>
         throw new NotImplementedException();
 
-    public Task Cleanup(IReadOnlyList<string> runIdentifiers, CancellationToken cancellationToken = default) =>
+    public Task Cleanup(IEnumerable<string> runIdentifiers, CancellationToken cancellationToken = default) =>
         throw new NotImplementedException();
 
     public Task<IReadOnlyList<string>> GetStoredRunIdentifiers(
@@ -28,7 +28,7 @@ public sealed class TestArtifactProvider : IArtifactProvider
 
     public Task RetrieveArtifact(
         string artifactName,
-        IReadOnlyList<string> buildIds,
+        IEnumerable<string> buildIds,
         string? buildSlice = null,
         CancellationToken cancellationToken = default) =>
         throw new NotImplementedException();

@@ -3,7 +3,7 @@
 [PublicAPI]
 public sealed record GithubRunsOn : IWorkflowOption
 {
-    public IReadOnlyList<WorkflowExpression> Labels { get; init; } = [];
+    public WorkflowExpressionCollection Labels { get; init; } = [];
 
     public WorkflowExpression? Group { get; init; }
 }

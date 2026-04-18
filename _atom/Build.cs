@@ -47,7 +47,7 @@ internal partial class Build : BuildDefinition,
         field ??=
         [
             WorkflowOptions.AzureKeyVault.Use,
-            WorkflowOptions.UseGitVersionForBuildId.Enabled,
+            WorkflowOptions.UseGitVersionForBuildId.UseAsBuildId,
             WorkflowOptions.Steps.SetupDotnet.Dotnet100X(),
         ];
 

@@ -27,8 +27,7 @@ partial record WorkflowExpression
         new RawExpression(value);
 }
 
-[PublicAPI]
-public static class WorkflowExpressionExtensions
+public static partial class WorkflowExpressionExtensions
 {
     extension(WorkflowExpressions)
     {
@@ -46,15 +45,15 @@ public static class WorkflowExpressionExtensions
             new(value);
 
         [PublicAPI]
-        public static StringExpression FromString(string value) =>
+        public static StringExpression From(string value) =>
             new(value);
 
         [PublicAPI]
-        public static BooleanExpression FromBool(bool value) =>
+        public static BooleanExpression From(bool value) =>
             new(value);
 
         [PublicAPI]
-        public static NumberExpression FromNumber<T>(T value)
+        public static NumberExpression From<T>(T value)
             where T : INumber<T> =>
             new(double.TryParse(value.ToString(), out var result)
                 ? result
@@ -63,7 +62,6 @@ public static class WorkflowExpressionExtensions
         [PublicAPI]
         public static FormatExpression Format(WorkflowExpressionInterpolatedStringHandler handler) =>
             handler.ToFormatExpression();
-
     }
 }
 

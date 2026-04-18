@@ -5,7 +5,7 @@ public sealed record Strategy
 {
     public required Matrix Matrix { get; init; }
 
-    public string? FailFast { get; init; }
+    public WorkflowExpression? FailFast { get; init; }
 
-    public string? MaxParallel { get; init; }
+    public WorkflowExpression? MaxParallel { get; init; }
 }
