@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     Package ecosystem values for Dependabot.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public enum PackageEcosystem
 {

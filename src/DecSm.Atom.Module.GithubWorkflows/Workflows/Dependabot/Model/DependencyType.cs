@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     Dependency type for allow/ignore rules.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public enum DependencyType
 {
     /// <summary>

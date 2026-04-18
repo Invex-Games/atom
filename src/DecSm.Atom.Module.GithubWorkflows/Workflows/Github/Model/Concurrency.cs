@@ -1,6 +1,6 @@
 namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Github.Model;
 
-[UnstableAPI]
+[PublicAPI]
 public sealed record Concurrency
 {
     public required WorkflowExpression Group { get; init; } = "";

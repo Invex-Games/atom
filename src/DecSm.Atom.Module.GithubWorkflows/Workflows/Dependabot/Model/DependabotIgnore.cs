@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     Ignore rule for Dependabot updates.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public sealed record DependabotIgnore
 {
     /// <summary>
@@ -25,7 +25,7 @@ public sealed record DependabotIgnore
 /// <summary>
 ///     Semantic version update type.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public enum SemverUpdateType
 {
     VersionUpdateSemverMajor,
@@ -36,7 +36,7 @@ public enum SemverUpdateType
 /// <summary>
 ///     Versions to ignore. Can be a single version string or a list of version strings.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 [Union]
 public partial record DependabotVersions
 {

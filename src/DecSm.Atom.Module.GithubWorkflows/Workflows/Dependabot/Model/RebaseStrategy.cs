@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     Rebase strategy for Dependabot.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public enum RebaseStrategy
 {
     /// <summary>

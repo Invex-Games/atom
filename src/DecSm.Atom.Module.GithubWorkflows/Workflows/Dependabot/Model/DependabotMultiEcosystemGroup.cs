@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     Multi-ecosystem group configuration that spans multiple package ecosystems.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public sealed record DependabotMultiEcosystemGroup
 {
     /// <summary>

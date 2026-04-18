@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     Commit message preferences for Dependabot.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public sealed record DependabotCommitMessage
 {
     /// <summary>
@@ -25,7 +25,7 @@ public sealed record DependabotCommitMessage
 /// <summary>
 ///     Commit message include option.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public enum CommitMessageInclude
 {
     Scope,

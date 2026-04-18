@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     Group configuration for dependencies.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 [Union]
 public partial record DependabotGroup
 {
@@ -66,7 +66,7 @@ public partial record DependabotGroup
 /// <summary>
 ///     Specifies whether the rules in the group apply to version updates or security updates.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public enum GroupAppliesTo
 {
     VersionUpdates,
@@ -76,7 +76,7 @@ public enum GroupAppliesTo
 /// <summary>
 ///     Dependency type for groups.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public enum GroupDependencyType
 {
     Development,
@@ -86,7 +86,7 @@ public enum GroupDependencyType
 /// <summary>
 ///     Semantic versioning update type.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public enum GroupUpdateType
 {
     Major,
@@ -97,7 +97,7 @@ public enum GroupUpdateType
 /// <summary>
 ///     Configure how dependencies are grouped.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public enum GroupBy
 {
     DependencyName,

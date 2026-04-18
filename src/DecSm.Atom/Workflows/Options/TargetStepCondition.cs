@@ -1,4 +1,4 @@
 namespace DecSm.Atom.Workflows.Options;
 
-[UnstableAPI]
+[PublicAPI]
 public sealed record TargetStepCondition(WorkflowExpression Condition) : IWorkflowOption;

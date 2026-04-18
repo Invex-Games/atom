@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     Cooldown configuration for dependency updates.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public sealed record DependabotCooldown
 {
     /// <summary>

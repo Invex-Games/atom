@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     Registries to use for this update configuration. Can be a list of registry names or "*" for all.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 [Union]
 public partial record DependabotRegistries
 {

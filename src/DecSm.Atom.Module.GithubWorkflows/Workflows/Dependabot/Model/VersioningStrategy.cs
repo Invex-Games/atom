@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     How to update manifest version requirements.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public enum VersioningStrategy
 {
     /// <summary>

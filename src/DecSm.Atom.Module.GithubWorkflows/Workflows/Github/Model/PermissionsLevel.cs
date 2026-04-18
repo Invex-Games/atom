@@ -1,6 +1,6 @@
 namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Github.Model;
 
-[UnstableAPI]
+[PublicAPI]
 public enum PermissionsLevel
 {
     None,

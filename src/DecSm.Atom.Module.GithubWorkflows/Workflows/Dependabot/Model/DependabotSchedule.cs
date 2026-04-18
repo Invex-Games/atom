@@ -3,7 +3,7 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
 /// <summary>
 ///     Schedule preferences for Dependabot updates.
 /// </summary>
-[UnstableAPI]
+[PublicAPI]
 public sealed record DependabotSchedule
 {
     /// <summary>

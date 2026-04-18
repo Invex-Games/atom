@@ -1,6 +1,6 @@
 namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Github.Model;
 
-[UnstableAPI]
+[PublicAPI]
 [Union]
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public partial record On
@@ -347,7 +347,7 @@ public partial record On
     }
 }
 
-[UnstableAPI]
+[PublicAPI]
 [Union]
 public partial record WorkflowDispatchInput
 {
