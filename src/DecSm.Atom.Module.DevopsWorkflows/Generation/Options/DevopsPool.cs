@@ -3,7 +3,7 @@
 [PublicAPI]
 public sealed record DevopsPool : IWorkflowOption
 {
-    public IReadOnlyList<WorkflowExpression> Demands { get; init; } = [];
+    public WorkflowExpressionCollection Demands { get; init; } = [];
 
     public WorkflowExpression? Name { get; init; }
 

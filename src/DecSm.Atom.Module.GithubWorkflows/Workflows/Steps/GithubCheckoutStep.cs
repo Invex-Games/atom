@@ -165,69 +165,69 @@ public sealed record GithubCheckoutStep : CheckoutStep, IGithubAdditionalStepOpt
     /// </summary>
     public WorkflowExpression? GithubServerUrl { get; init; }
 
-    public Step Build(IWorkflowExpressionResolver expressionResolver)
+    public Step Build()
     {
-        var with = new Dictionary<string, SingleOrList<string>>();
+        var with = new Dictionary<string, WorkflowExpressionOrCollection>();
 
         if (Repository is not null)
-            with["repository"] = expressionResolver.Resolve(Repository);
+            with["repository"] = Repository;
 
         if (Branch is not null)
-            with["ref"] = expressionResolver.Resolve(Branch);
+            with["ref"] = Branch;
 
         if (Token is not null)
-            with["token"] = expressionResolver.Resolve(Token);
+            with["token"] = Token;
 
         if (SshKey is not null)
-            with["ssh-key"] = expressionResolver.Resolve(SshKey);
+            with["ssh-key"] = SshKey;
 
         if (SshKnownHosts is not null)
-            with["ssh-known-hosts"] = expressionResolver.Resolve(SshKnownHosts);
+            with["ssh-known-hosts"] = SshKnownHosts;
 
         if (SshStrict is not null)
-            with["ssh-strict"] = expressionResolver.Resolve(SshStrict);
+            with["ssh-strict"] = SshStrict;
 
         if (SshUser is not null)
-            with["ssh-user"] = expressionResolver.Resolve(SshUser);
+            with["ssh-user"] = SshUser;
 
         if (PersistCredentials is not null)
-            with["persist-credentials"] = expressionResolver.Resolve(PersistCredentials);
+            with["persist-credentials"] = PersistCredentials;
 
         if (Path is not null)
-            with["path"] = expressionResolver.Resolve(Path);
+            with["path"] = Path;
 
         if (Clean is not null)
-            with["clean"] = expressionResolver.Resolve(Clean);
+            with["clean"] = Clean;
 
         if (Filter is not null)
-            with["filter"] = expressionResolver.Resolve(Filter);
+            with["filter"] = Filter;
 
         if (SparseCheckout is not null)
-            with["sparse-checkout"] = expressionResolver.Resolve(SparseCheckout);
+            with["sparse-checkout"] = SparseCheckout;
 
         if (SparseCheckoutConeMode is not null)
-            with["sparse-checkout-cone-mode"] = expressionResolver.Resolve(SparseCheckoutConeMode);
+            with["sparse-checkout-cone-mode"] = SparseCheckoutConeMode;
 
         if (FetchDepth is not null)
-            with["fetch-depth"] = expressionResolver.Resolve(FetchDepth);
+            with["fetch-depth"] = FetchDepth;
 
         if (FetchTags is not null)
-            with["fetch-tags"] = expressionResolver.Resolve(FetchTags);
+            with["fetch-tags"] = FetchTags;
 
         if (ShowProgress is not null)
-            with["show-progress"] = expressionResolver.Resolve(ShowProgress);
+            with["show-progress"] = ShowProgress;
 
         if (Lfs is not null)
-            with["lfs"] = expressionResolver.Resolve(Lfs);
+            with["lfs"] = Lfs;
 
         if (Submodules is not null)
-            with["submodules"] = expressionResolver.Resolve(Submodules);
+            with["submodules"] = Submodules;
 
         if (SetSafeDirectory is not null)
-            with["set-safe-directory"] = expressionResolver.Resolve(SetSafeDirectory);
+            with["set-safe-directory"] = SetSafeDirectory;
 
         if (GithubServerUrl is not null)
-            with["github-server-url"] = expressionResolver.Resolve(GithubServerUrl);
+            with["github-server-url"] = GithubServerUrl;
 
         return new Step.UsesStep
         {

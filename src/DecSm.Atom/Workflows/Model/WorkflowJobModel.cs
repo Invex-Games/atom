@@ -11,7 +11,7 @@ public sealed record WorkflowJobModel(string Name, WorkflowStepModel TargetStep)
     /// <summary>
     ///     Gets the names of other jobs that must be completed before this job can start.
     /// </summary>
-    public required IReadOnlyList<string> JobDependencies { get; init; }
+    public required WorkflowExpressionCollection JobDependencies { get; init; }
 
     /// <summary>
     ///     Gets the matrix dimensions for running this job in multiple configurations.

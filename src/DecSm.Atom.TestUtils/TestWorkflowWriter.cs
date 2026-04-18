@@ -3,7 +3,7 @@
 [PublicAPI]
 public class TestWorkflowWriter : IWorkflowWriter<TestWorkflowType>
 {
-    public bool IsDirty { get; init; }
+    public bool IsOutdated { get; init; }
 
     public List<WorkflowModel> GeneratedWorkflows { get; } = [];
 
@@ -14,6 +14,6 @@ public class TestWorkflowWriter : IWorkflowWriter<TestWorkflowType>
         return Task.CompletedTask;
     }
 
-    public Task<bool> CheckForDirtyWorkflow(WorkflowModel workflow, CancellationToken cancellationToken = default) =>
-        Task.FromResult(IsDirty);
+    public Task<bool> CheckForOutdatedWorkflow(WorkflowModel workflow, CancellationToken cancellationToken = default) =>
+        Task.FromResult(IsOutdated);
 }

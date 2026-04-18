@@ -31,7 +31,7 @@ public interface IWorkflowWriter
     /// <returns>
     ///     A task that resolves to <c>true</c> if the workflow file is missing or outdated; otherwise, <c>false</c>.
     /// </returns>
-    Task<bool> CheckForDirtyWorkflow(WorkflowModel workflow, CancellationToken cancellationToken = default);
+    Task<bool> CheckForOutdatedWorkflow(WorkflowModel workflow, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -53,7 +53,7 @@ public interface IWorkflowWriter<T> : IWorkflowWriter
     abstract Task IWorkflowWriter.Generate(WorkflowModel workflow, CancellationToken cancellationToken);
 
     /// <inheritdoc />
-    abstract Task<bool> IWorkflowWriter.CheckForDirtyWorkflow(
+    abstract Task<bool> IWorkflowWriter.CheckForOutdatedWorkflow(
         WorkflowModel workflow,
         CancellationToken cancellationToken);
 }

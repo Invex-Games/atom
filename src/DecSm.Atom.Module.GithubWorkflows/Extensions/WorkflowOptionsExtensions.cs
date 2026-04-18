@@ -251,9 +251,9 @@ public static class WorkflowOptionsExtensions
     }
 
     [PublicAPI]
-    public sealed class Options
+    public sealed class GithubOptions
     {
-        internal static Options Instance => field ??= new();
+        internal static GithubOptions Instance => field ??= new();
 
         public GithubRunsOnOptions RunsOn => field ??= new();
 
@@ -267,6 +267,6 @@ public static class WorkflowOptionsExtensions
     extension(WorkflowOptions)
     {
         [PublicAPI]
-        public static Options Github => Options.Instance;
+        public static GithubOptions Github => GithubOptions.Instance;
     }
 }

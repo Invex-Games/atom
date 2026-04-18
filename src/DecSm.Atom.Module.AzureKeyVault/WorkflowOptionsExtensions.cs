@@ -5,9 +5,9 @@ namespace DecSm.Atom.Module.AzureKeyVault;
 public static class WorkflowOptionsExtensions
 {
     [PublicAPI]
-    public class Options
+    public class AzureKeyVaultOptions
     {
-        internal static Options Instance { get; } = new();
+        internal static AzureKeyVaultOptions Instance { get; } = new();
 
         public UseAzureKeyVault Use =>
             new()
@@ -25,6 +25,6 @@ public static class WorkflowOptionsExtensions
     extension(WorkflowOptions)
     {
         [PublicAPI]
-        public static Options AzureKeyVault => Options.Instance;
+        public static AzureKeyVaultOptions AzureKeyVault => AzureKeyVaultOptions.Instance;
     }
 }

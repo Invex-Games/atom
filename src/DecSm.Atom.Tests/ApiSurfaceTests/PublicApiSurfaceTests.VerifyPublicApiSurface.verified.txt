@@ -4343,7 +4343,7 @@
     Name: DecSm.Atom.Workflows.Writer.IWorkflowWriter,
     Members: [
       {
-        Name: CheckForDirtyWorkflow
+        Name: CheckForOutdatedWorkflow
       },
       {
         Name: Generate
@@ -4389,7 +4389,7 @@
     Name: DecSm.Atom.Workflows.Writer.WorkflowFileWriter`1,
     Members: [
       {
-        Name: CheckForDirtyWorkflow
+        Name: CheckForOutdatedWorkflow
       },
       {
         Name: Generate

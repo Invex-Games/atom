@@ -79,11 +79,8 @@ public static class WorkflowOptionsExtensions
                 Value = value,
             };
 
-        public RunTargetIf RunIfWorkflowCondition(WorkflowExpression condition) =>
-            new()
-            {
-                Condition = condition,
-            };
+        public TargetCondition RunIfWorkflowCondition(WorkflowExpression condition) =>
+            new(condition);
     }
 
     [PublicAPI]
@@ -122,7 +119,7 @@ public static class WorkflowOptionsExtensions
                 };
 
             public SetupDotnetStep From(
-                string? dotnetVersion = null,
+                WorkflowExpression? dotnetVersion = null,
                 SetupDotnetStep.DotnetQuality? quality = null,
                 bool cache = false,
                 string? lockFile = null) =>

@@ -48,7 +48,7 @@ public sealed class AzureBlobArtifactProvider(
     ///     Thrown if a build ID is required but not available, or if no files are found in an artifact directory.
     /// </exception>
     public async Task StoreArtifacts(
-        IReadOnlyList<string> artifactNames,
+        IEnumerable<string> artifactNames,
         string? buildId = null,
         string? slice = null,
         CancellationToken cancellationToken = default)
@@ -148,7 +148,7 @@ public sealed class AzureBlobArtifactProvider(
     ///     Thrown if a build ID is required but not available, or if no blobs are found for the specified artifact.
     /// </exception>
     public async Task RetrieveArtifacts(
-        IReadOnlyList<string> artifactNames,
+        IEnumerable<string> artifactNames,
         string? buildId = null,
         string? buildSlice = null,
         CancellationToken cancellationToken = default)
@@ -254,7 +254,7 @@ public sealed class AzureBlobArtifactProvider(
     /// <param name="runIdentifiers">A list of build IDs for which to clean up artifacts.</param>
     /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-    public async Task Cleanup(IReadOnlyList<string> runIdentifiers, CancellationToken cancellationToken = default)
+    public async Task Cleanup(IEnumerable<string> runIdentifiers, CancellationToken cancellationToken = default)
     {
         var connectionString =
             paramService.GetParam(nameof(IAzureArtifactStorage.AzureArtifactStorageConnectionString));

@@ -4,43 +4,49 @@
 ///     Contains the parsed command-line arguments for an Atom build execution, providing a structured representation of
 ///     user input.
 /// </summary>
-/// <param name="IsValid">
-///     A value indicating whether the command-line arguments were parsed successfully and are valid. If
-///     false, the Atom application will typically terminate or display help.
-/// </param>
-/// <param name="Args">
-///     A read-only list of <see cref="IArg" /> objects representing the individual arguments parsed from the command
-///     line. This list provides access to raw argument objects like <see cref="HelpArg" />, <see cref="CommandArg" />, or
-///     <see cref="ParamArg" />.
-/// </param>
 /// <remarks>
 ///     An instance of this record is created by the <see cref="CommandLineArgsParser" /> after parsing the raw string
 ///     arguments provided to the Atom application.
 /// </remarks>
 [PublicAPI]
-public sealed record CommandLineArgs(bool IsValid, IReadOnlyList<IArg> Args)
+public sealed record CommandLineArgs
 {
     /// <summary>
-    ///     Gets a list of validation errors for the current command-line arguments.
+    ///     Contains the parsed command-line arguments for an Atom build execution, providing a structured representation of
+    ///     user input.
     /// </summary>
-    /// <returns>A read-only list of error messages. An empty list indicates no validation errors.</returns>
-    public IReadOnlyList<string> GetValidationErrors()
+    /// <param name="IsValid">
+    ///     A value indicating whether the command-line arguments were parsed successfully and are valid. If
+    ///     false, the Atom application will typically terminate or display help.
+    /// </param>
+    /// <param name="Args">
+    ///     A read-only list of <see cref="IArg" /> objects representing the individual arguments parsed from the command
+    ///     line. This list provides access to raw argument objects like <see cref="HelpArg" />, <see cref="CommandArg" />, or
+    ///     <see cref="ParamArg" />.
+    /// </param>
+    /// <remarks>
+    ///     An instance of this record is created by the <see cref="CommandLineArgsParser" /> after parsing the raw string
+    ///     arguments provided to the Atom application.
+    /// </remarks>
+    public CommandLineArgs(bool IsValid, IEnumerable<IArg> Args)
     {
-        var errors = new List<string>();
+        this.IsValid = IsValid;
 
-        if (!IsValid)
-            errors.Add("One or more arguments could not be parsed");
-
-        errors.AddRange(Commands
-            .Where(command => string.IsNullOrWhiteSpace(command.Name))
-            .Select(_ => "Target name cannot be empty"));
-
-        errors.AddRange(Params
-            .Where(param => string.IsNullOrWhiteSpace(param.ParamName))
-            .Select(param => $"Parameter name cannot be empty for value '{param.ParamValue}'"));
-
-        return errors;
+        this.Args = Args.ToList();
     }
+
+    /// <summary>
+    ///     A value indicating whether the command-line arguments were parsed successfully and are valid. If
+    ///     false, the Atom application will typically terminate or display help.
+    /// </summary>
+    public bool IsValid { get; init; }
+
+    /// <summary>
+    ///     A read-only list of <see cref="IArg" /> objects representing the individual arguments parsed from the command
+    ///     line. This list provides access to raw argument objects like <see cref="HelpArg" />, <see cref="CommandArg" />, or
+    ///     <see cref="ParamArg" />.
+    /// </summary>
+    public IReadOnlyList<IArg> Args { get; init; }
 
     /// <summary>
     ///     Gets a value indicating whether the help argument (<c>-h</c> or <c>--help</c>) was provided.
@@ -170,4 +176,26 @@ public sealed record CommandLineArgs(bool IsValid, IReadOnlyList<IArg> Args)
             .Select(arg => arg.ProjectName)
             .FirstOrDefault() ??
         "_atom";
+
+    /// <summary>
+    ///     Gets a list of validation errors for the current command-line arguments.
+    /// </summary>
+    /// <returns>A read-only list of error messages. An empty list indicates no validation errors.</returns>
+    public IReadOnlyList<string> GetValidationErrors()
+    {
+        var errors = new List<string>();
+
+        if (!IsValid)
+            errors.Add("One or more arguments could not be parsed");
+
+        errors.AddRange(Commands
+            .Where(command => string.IsNullOrWhiteSpace(command.Name))
+            .Select(_ => "Target name cannot be empty"));
+
+        errors.AddRange(Params
+            .Where(param => string.IsNullOrWhiteSpace(param.ParamName))
+            .Select(param => $"Parameter name cannot be empty for value '{param.ParamValue}'"));
+
+        return errors;
+    }
 }

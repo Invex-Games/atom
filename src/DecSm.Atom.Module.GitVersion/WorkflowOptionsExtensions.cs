@@ -5,17 +5,17 @@ namespace DecSm.Atom.Module.GitVersion;
 public static class WorkflowOptionsExtensions
 {
     [PublicAPI]
-    public class Options
+    public class GitVersionOptions
     {
-        internal static Options Instance { get; } = new();
+        internal static GitVersionOptions Instance { get; } = new();
 
-        public UseGitVersionForBuildId Enabled =>
+        public UseGitVersionForBuildId UseAsBuildId =>
             new()
             {
                 Value = true,
             };
 
-        public UseGitVersionForBuildId Disabled =>
+        public UseGitVersionForBuildId DoNotUseAsBuildId =>
             new()
             {
                 Value = false,
@@ -25,6 +25,6 @@ public static class WorkflowOptionsExtensions
     extension(WorkflowOptions)
     {
         [PublicAPI]
-        public static Options UseGitVersionForBuildId => Options.Instance;
+        public static GitVersionOptions UseGitVersionForBuildId => GitVersionOptions.Instance;
     }
 }

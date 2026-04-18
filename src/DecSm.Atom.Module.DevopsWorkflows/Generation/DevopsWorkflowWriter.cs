@@ -216,7 +216,8 @@ internal sealed partial class DevopsWorkflowWriter(
                             .Select((index, i) => dimensionValues[i][index])
 
                             // Replace any invalid characters in the dimension value with a hyphen
-                            .Select(value => new string(value
+                            .Select(value => new string(workflowExpressionResolver
+                                .Resolve(value)
                                 .Select(c => char.IsLetterOrDigit(c)
                                     ? c
                                     : '-')
@@ -384,12 +385,15 @@ internal sealed partial class DevopsWorkflowWriter(
             foreach (var setupDotnetStep in setupDotnetSteps)
                 using (Writer.WriteSection("- task: UseDotNet@2"))
                 {
-                    if (setupDotnetStep.DotnetVersion is not { Length: > 0 })
+                    if (workflowExpressionResolver.Resolve(setupDotnetStep.DotnetVersion) is not
+                        {
+                            Length: > 0,
+                        } dotnetVersion)
                         continue;
 
                     using (Writer.WriteSection("inputs:"))
                     {
-                        Writer.WriteLine($"version: '{setupDotnetStep.DotnetVersion}'\n");
+                        Writer.WriteLine($"version: '{workflowExpressionResolver.Resolve(dotnetVersion)}'\n");
 
                         if (setupDotnetStep.Quality is not null)
                             Writer.WriteLine("includePreviewVersions: 'true'");
@@ -411,8 +415,11 @@ internal sealed partial class DevopsWorkflowWriter(
 
             // If we know the SetupDotnet step was run for dotnet 10+,
             // then we can use the dotnet tool exec command instead of installing the tool to run it
-            if (setupDotnetSteps.Any(x =>
-                    SemVer.TryParse(x.DotnetVersion?.Replace("x", "0"), out var version) && version.Major >= 10))
+            if (setupDotnetSteps.Any(x => SemVer.TryParse(workflowExpressionResolver
+                                                  .Resolve(x.DotnetVersion)
+                                                  ?.Replace("x", "0"),
+                                              out var version) &&
+                                          version.Major >= 10))
             {
                 using (Writer.WriteSection("- script: |"))
                 {

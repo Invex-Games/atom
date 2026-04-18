@@ -1,6 +1,7 @@
 global using System.Runtime.InteropServices;
 global using Atom.Targets;
 global using DecSm.Atom;
+global using DecSm.Atom.Build;
 global using DecSm.Atom.Build.Definition;
 global using DecSm.Atom.Experimental;
 global using DecSm.Atom.Hosting;
@@ -23,6 +24,7 @@ global using DecSm.Atom.Workflows.Definition.Options;
 global using DecSm.Atom.Workflows.Definition.Triggers;
 global using DecSm.Atom.Workflows.Expressions;
 global using DecSm.Atom.Workflows.Options;
+global using LibGit2Sharp;
 global using Octokit.GraphQL;
 global using Octokit.GraphQL.Internal;
 global using Octokit.GraphQL.Model;

@@ -13,8 +13,8 @@ public partial class CheckoutOptionBuild : MinimalBuildDefinition, IGithubWorkfl
                 WorkflowTargets.CheckoutOptionTarget1,
                 WorkflowTargets.CheckoutOptionTarget2.WithOptions(WorkflowOptions.Github.Steps.Checkout(new()
                 {
-                    Submodules = WorkflowExpressions.FromString("recursive"),
-                    Token = WorkflowExpressions.FromString("some-token"),
+                    Submodules = WorkflowExpressions.From("recursive"),
+                    Token = WorkflowExpressions.From("some-token"),
                     FetchDepth = 0,
                     Lfs = true,
                 })),

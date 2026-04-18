@@ -1,5 +1,3 @@
-using DecSm.Atom.Build;
-using LibGit2Sharp;
 using Commit = LibGit2Sharp.Commit;
 using Repository = LibGit2Sharp.Repository;
 

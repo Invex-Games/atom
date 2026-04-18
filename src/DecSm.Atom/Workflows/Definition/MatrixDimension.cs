@@ -17,5 +17,5 @@ public record MatrixDimension(string Name)
     /// <remarks>
     ///     These values represent the different options for this dimension (e.g., "windows-latest", "ubuntu-latest").
     /// </remarks>
-    public IReadOnlyList<string> Values { get; init; } = [];
+    public WorkflowExpressionCollection Values { get; init; } = [];
 }

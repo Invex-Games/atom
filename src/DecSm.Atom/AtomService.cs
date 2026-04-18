@@ -70,7 +70,7 @@
 ///         <code>
 /// atom Build --headless
 /// </code>
-///         In this mode, workflow generation is typically skipped. If workflows are found to be "dirty" (outdated),
+///         In this mode, workflow generation is typically skipped. If workflows are found to be outdated,
 ///         <c>AtomService</c> will raise an error, prompting regeneration.
 ///     </example>
 ///     <seealso cref="DecSm.Atom.Hosting.HostExtensions.AddAtom{TBuilder, TBuild}(TBuilder, string[])" />
@@ -119,7 +119,7 @@ internal sealed class AtomService(
 
             if (args.HasGen || !args.HasHeadless)
                 await workflowGenerator.GenerateWorkflows(stoppingToken);
-            else if (await workflowGenerator.WorkflowsDirty(stoppingToken))
+            else if (await workflowGenerator.WorkflowsOutdated(stoppingToken))
                 throw new WorkflowOutdatedException(
                     "One or more workflows are out of date. To regenerate workflows, run the build with the --gen flag.");
 

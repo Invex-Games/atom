@@ -55,11 +55,11 @@ internal sealed class WorkflowGenerator(
     }
 
     /// <summary>
-    ///     Checks if any of the defined workflow files are "dirty" (i.e., need to be regenerated).
+    ///     Checks if any of the defined workflow files are outdated (i.e., need to be regenerated).
     /// </summary>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns><c>true</c> if any workflow file is dirty; otherwise, <c>false</c>.</returns>
-    public async Task<bool> WorkflowsDirty(CancellationToken cancellationToken = default)
+    /// <returns><c>true</c> if any workflow file is outdated; otherwise, <c>false</c>.</returns>
+    public async Task<bool> WorkflowsOutdated(CancellationToken cancellationToken = default)
     {
         var workflowDefinitions = ((MinimalBuildDefinition)buildDefinition).Workflows;
 
@@ -76,7 +76,7 @@ internal sealed class WorkflowGenerator(
                 continue;
 
             var workflow = workflowResolver.Resolve(workflowDefinition);
-            var checkTask = writer.CheckForDirtyWorkflow(workflow, cancellationToken);
+            var checkTask = writer.CheckForOutdatedWorkflow(workflow, cancellationToken);
 
             checkTasks.Add(checkTask);
         }
