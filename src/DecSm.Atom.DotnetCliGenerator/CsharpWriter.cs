@@ -1,4 +1,6 @@
-﻿namespace Atom;
+﻿using DecSm.Atom.Build.Util.Scope;
+
+namespace Atom;
 
 /// <summary>
 ///     Represents a parameter for a C# method, including its type, name, default value, and XML description.

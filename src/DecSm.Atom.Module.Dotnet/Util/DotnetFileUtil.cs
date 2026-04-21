@@ -34,7 +34,7 @@ public static class DotnetFileUtil
     /// <summary>
     ///     Gets the full path to a project file by its name.
     /// </summary>
-    /// <param name="fileSystem">The file system to use.</param>
+    /// <param name="atomFileSystem">The file system to use.</param>
     /// <param name="projectName">The name of the project.</param>
     /// <returns>The full path to the project file.</returns>
     /// <exception cref="InvalidOperationException">Thrown if the project file does not exist.</exception>
@@ -42,17 +42,17 @@ public static class DotnetFileUtil
     ///     Searches for a file matching the pattern {projectName}.*proj in all subdirectories of the root directory.
     ///     If multiple files match, the one with the shortest path ancestry (fewest directory levels) is returned.
     /// </remarks>
-    public static RootedPath? GetProjectFilePathByName(IAtomFileSystem fileSystem, string projectName)
+    public static RootedPath? GetProjectFilePathByName(IAtomFileSystem atomFileSystem, string projectName)
     {
-        var foundProjectPath = fileSystem
+        var foundProjectPath = atomFileSystem
             .Directory
-            .GetFiles(fileSystem.AtomRootDirectory, $"{projectName}.csproj", SearchOption.AllDirectories)
+            .GetFiles(atomFileSystem.AtomRootDirectory, $"{projectName}.csproj", SearchOption.AllDirectories)
             .OrderBy(p => p.Split(Path.DirectorySeparatorChar)
                 .Length)
             .FirstOrDefault();
 
         return foundProjectPath is null
             ? null
-            : fileSystem.CreateRootedPath(foundProjectPath);
+            : atomFileSystem.CreateRootedPath(foundProjectPath);
     }
 }

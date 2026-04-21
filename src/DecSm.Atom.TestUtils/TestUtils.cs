@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.TestUtils;
+﻿using DecSm.Atom.Build.Hosting;
+
+namespace DecSm.Atom.TestUtils;
 
 [PublicAPI]
 public static class TestUtils

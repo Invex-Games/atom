@@ -29,7 +29,7 @@ public interface IDotnetPackHelper : IDotnetCliHelper, IBuildInfo
         DotnetPackAndStageOptions? options = null,
         CancellationToken cancellationToken = default)
     {
-        var projectPath = DotnetFileUtil.GetProjectFilePathByName(FileSystem, projectName) ??
+        var projectPath = DotnetFileUtil.GetProjectFilePathByName(AtomFileSystem, projectName) ??
                           throw new StepFailedException($"Could not locate project file for project {projectName}.");
 
         Logger.LogDebug("Located project file for project {ProjectName} at {ProjectPath}", projectName, projectPath);
@@ -91,17 +91,17 @@ public interface IDotnetPackHelper : IDotnetCliHelper, IBuildInfo
         var projectName = projectPath.FileNameWithoutExtension;
 
         var buildDirectory = options.PackOptions?.Output is { Length: > 0 }
-            ? FileSystem.CreateRootedPath(options.PackOptions?.Output!)
+            ? AtomFileSystem.CreateRootedPath(options.PackOptions?.Output!)
             : projectPath.Parent! / "bin" / configuration;
 
-        var publishDirectory = FileSystem.AtomPublishDirectory / projectName;
+        var publishDirectory = AtomFileSystem.AtomPublishDirectory / projectName;
 
         Logger.LogInformation("Packing project {Project}", projectName);
 
-        if (FileSystem.Directory.Exists(buildDirectory))
+        if (AtomFileSystem.Directory.Exists(buildDirectory))
         {
             Logger.LogDebug("Deleting existing pack directory {PackDirectory}", buildDirectory);
-            FileSystem.Directory.Delete(buildDirectory, true);
+            AtomFileSystem.Directory.Delete(buildDirectory, true);
         }
 
         Logger.LogDebug(
@@ -115,18 +115,19 @@ public interface IDotnetPackHelper : IDotnetCliHelper, IBuildInfo
             (options.SetVersionsFromProviders, options.CustomPropertiesTransform) switch
             {
                 (true, not null) => await TransformProjectVersionScope
-                    .CreateAsync(DotnetFileUtil.GetPropertyFilesForProject(projectPath, FileSystem.AtomRootDirectory),
+                    .CreateAsync(
+                        DotnetFileUtil.GetPropertyFilesForProject(projectPath, AtomFileSystem.AtomRootDirectory),
                         BuildVersion,
                         cancellationToken)
                     .AddAsync(options.CustomPropertiesTransform),
 
                 (true, null) => await TransformProjectVersionScope.CreateAsync(
-                    DotnetFileUtil.GetPropertyFilesForProject(projectPath, FileSystem.AtomRootDirectory),
+                    DotnetFileUtil.GetPropertyFilesForProject(projectPath, AtomFileSystem.AtomRootDirectory),
                     BuildVersion,
                     cancellationToken),
 
                 (false, not null) => await TransformMultiFileScope.CreateAsync(
-                    DotnetFileUtil.GetPropertyFilesForProject(projectPath, FileSystem.AtomRootDirectory),
+                    DotnetFileUtil.GetPropertyFilesForProject(projectPath, AtomFileSystem.AtomRootDirectory),
                     options.CustomPropertiesTransform!,
                     cancellationToken),
 
@@ -135,7 +136,7 @@ public interface IDotnetPackHelper : IDotnetCliHelper, IBuildInfo
 
         await DotnetCli.Pack(projectPath, options.PackOptions, cancellationToken: cancellationToken);
 
-        var packagedFile = FileSystem.CreateRootedPath(FileSystem
+        var packagedFile = AtomFileSystem.CreateRootedPath(AtomFileSystem
             .Directory
             .GetFiles(buildDirectory, $"{projectName}.*.nupkg")
             .OrderDescending()
@@ -150,21 +151,21 @@ public interface IDotnetPackHelper : IDotnetCliHelper, IBuildInfo
 
         Logger.LogDebug("Moving package {PackagedFile} to {PublishedFile}", packagedFile, publishedFile);
 
-        if (options.ClearPublishDirectory && FileSystem.Directory.Exists(publishDirectory))
+        if (options.ClearPublishDirectory && AtomFileSystem.Directory.Exists(publishDirectory))
         {
             Logger.LogDebug("Deleting existing publish directory {PublishDirectory}", publishDirectory);
-            FileSystem.Directory.Delete(publishDirectory, true);
+            AtomFileSystem.Directory.Delete(publishDirectory, true);
         }
 
-        FileSystem.Directory.CreateDirectory(publishDirectory);
+        AtomFileSystem.Directory.CreateDirectory(publishDirectory);
 
-        if (FileSystem.File.Exists(publishedFile))
+        if (AtomFileSystem.File.Exists(publishedFile))
         {
             Logger.LogDebug("Deleting existing published file {PublishedFile}", publishedFile);
-            FileSystem.File.Delete(publishedFile);
+            AtomFileSystem.File.Delete(publishedFile);
         }
 
-        FileSystem.File.Move(packagedFile, publishedFile);
+        AtomFileSystem.File.Move(packagedFile, publishedFile);
 
         Logger.LogInformation("Packed project {Project}", projectName);
     }

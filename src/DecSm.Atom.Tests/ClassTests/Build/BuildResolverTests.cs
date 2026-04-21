@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Tests.ClassTests.Build;
+﻿using DecSm.Atom.Build.Exceptions;
+
+namespace DecSm.Atom.Tests.ClassTests.Build;
 
 [TestFixture]
 public class BuildResolverTests

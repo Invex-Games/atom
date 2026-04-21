@@ -1,19 +1,17 @@
 namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Github;
 
 internal sealed class GithubWorkflowFileWriter(
-    IAtomFileSystem fileSystem,
+    IAtomFileSystem atomFileSystem,
     GithubWorkflowBuilder workflowBuilder,
     IWorkflowExpressionResolver expressionResolver,
     ILogger<WorkflowFileWriter<GithubWorkflowType>> logger
-) : WorkflowFileWriter<GithubWorkflowType>(fileSystem, logger)
+) : WorkflowFileWriter<GithubWorkflowType>(atomFileSystem, logger)
 {
-    private readonly IAtomFileSystem _fileSystem = fileSystem;
+    private readonly IAtomFileSystem _atomFileSystem = atomFileSystem;
 
     protected override string FileExtension => "yml";
 
-    protected override int TabSize => 2;
-
-    protected override RootedPath FileLocation => _fileSystem.AtomRootDirectory / ".github" / "workflows";
+    protected override RootedPath FileLocation => _atomFileSystem.AtomRootDirectory / ".github" / "workflows";
 
     protected override void WriteWorkflow(WorkflowModel workflow)
     {
@@ -656,13 +654,13 @@ internal sealed class GithubWorkflowFileWriter(
             case Step.RunStep runStep:
                 switch (runStep.Run)
                 {
-                    case WorkflowExpressionOrCollection.Expression s:
-                        WriteSectionOrProperty("run", expressionResolver.Resolve(s.Value));
+                    case { Count: 1 } single:
+                        WriteSectionOrProperty("run", expressionResolver.Resolve(single[0]));
 
                         break;
 
-                    case WorkflowExpressionOrCollection.Collection l:
-                        WriteSectionOrProperty("run", l.Value.Select(x => expressionResolver.Resolve(x)));
+                    default:
+                        WriteSectionOrProperty("run", runStep.Run.Select(x => expressionResolver.Resolve(x)));
 
                         break;
                 }
@@ -686,12 +684,12 @@ internal sealed class GithubWorkflowFileWriter(
                 foreach (var (key, value) in with)
                     switch (value)
                     {
-                        case WorkflowExpressionOrCollection.Expression single:
-                            WriteProperty(key, expressionResolver.Resolve(single.Value));
+                        case { Count: 1 } single:
+                            WriteProperty(key, expressionResolver.Resolve(single[0]));
 
                             break;
-                        case WorkflowExpressionOrCollection.Collection list:
-                            WriteProperty(key, list.Value.Select(x => expressionResolver.Resolve(x)));
+                        default:
+                            WriteProperty(key, value.Select(x => expressionResolver.Resolve(x)));
 
                             break;
                     }

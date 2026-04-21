@@ -36,7 +36,7 @@ public interface INugetHelper : IBuildInfo
             // Linux: $HOME/.nuget/NuGet.Config
             // Mac: $HOME/.nuget/NuGet.Config
             var appDataPath =
-                FileSystem.CreateRootedPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+                AtomFileSystem.CreateRootedPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
 
             return Environment.OSVersion.Platform switch
             {
@@ -76,8 +76,8 @@ public interface INugetHelper : IBuildInfo
         RootedPath? configFile = null,
         CancellationToken cancellationToken = default)
     {
-        var packageBuildDir = FileSystem.AtomArtifactsDirectory / projectName;
-        var packages = FileSystem.Directory.GetFiles(packageBuildDir, "*.nupkg");
+        var packageBuildDir = AtomFileSystem.AtomArtifactsDirectory / projectName;
+        var packages = AtomFileSystem.Directory.GetFiles(packageBuildDir, "*.nupkg");
 
         if (packages.Length == 0)
         {
@@ -252,7 +252,7 @@ public interface INugetHelper : IBuildInfo
     {
         if (skipIfExists)
         {
-            var nugetContents = await FileSystem.File.ReadAllTextAsync(NugetConfigPath, cancellationToken);
+            var nugetContents = await AtomFileSystem.File.ReadAllTextAsync(NugetConfigPath, cancellationToken);
 
             if (feeds.All(f => nugetContents.Contains(f.Url, StringComparison.OrdinalIgnoreCase)))
             {

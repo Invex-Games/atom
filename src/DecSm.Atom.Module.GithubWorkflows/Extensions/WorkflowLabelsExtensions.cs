@@ -9,7 +9,7 @@ public static class WorkflowLabelsExtensions
     public sealed class RunsOn
     {
         // Linux x64 1x
-        public string Ubuntu_Slim => "ubuntu-latest";
+        public string Ubuntu_Slim => "ubuntu-slim";
 
         // Linux x64 4x
         public string Ubuntu_Latest => "ubuntu-latest";
@@ -77,9 +77,9 @@ public static class WorkflowLabelsExtensions
     }
 
     [PublicAPI]
-    public sealed class Labels
+    public sealed class GithubLabels
     {
-        internal static Labels Instance => field ??= new();
+        internal static GithubLabels Instance => field ??= new();
 
         public RunsOn RunsOn => field ??= new();
 
@@ -89,6 +89,6 @@ public static class WorkflowLabelsExtensions
     extension(WorkflowLabels)
     {
         [PublicAPI]
-        public static Labels Github => Labels.Instance;
+        public static GithubLabels Github => GithubLabels.Instance;
     }
 }

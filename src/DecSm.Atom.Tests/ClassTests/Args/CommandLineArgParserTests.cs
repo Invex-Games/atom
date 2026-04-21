@@ -1,3 +1,5 @@
+using DecSm.Atom.Build.Exceptions;
+
 namespace DecSm.Atom.Tests.ClassTests.Args;
 
 [TestFixture]

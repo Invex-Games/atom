@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.TestUtils;
+﻿using DecSm.Atom.Core.Scope;
+
+namespace DecSm.Atom.TestUtils;
 
 [PublicAPI]
 public sealed class TestLogger : ILogger

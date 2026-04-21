@@ -403,7 +403,7 @@ FodyWeavers.xsd
 .vscode/
 
 # Atom
-!src/DecSm.Atom/Artifacts
+!src/DecSm.Atom.Build/Artifacts
 !src/DecSm.Atom.Tests/Artifacts
 atom-publish
 .gitversioncache

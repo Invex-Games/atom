@@ -4,16 +4,18 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot;
 ///     Writes Dependabot configuration files in YAML format.
 /// </summary>
 [PublicAPI]
-public sealed class DependabotConfigFileWriter(IAtomFileSystem fileSystem, ILogger<DependabotConfigFileWriter> logger)
-    : WorkflowFileWriter<DependabotWorkflowType>(fileSystem, logger)
+public sealed class DependabotConfigFileWriter(
+    IAtomFileSystem atomFileSystem,
+    ILogger<DependabotConfigFileWriter> logger
+) : WorkflowFileWriter<DependabotWorkflowType>(atomFileSystem, logger)
 {
-    private readonly IAtomFileSystem _fileSystem = fileSystem;
+    private readonly IAtomFileSystem _atomFileSystem = atomFileSystem;
 
     protected override string FileExtension => "yml";
 
     protected override int TabSize => 2;
 
-    protected override RootedPath FileLocation => _fileSystem.AtomRootDirectory / ".github";
+    protected override RootedPath FileLocation => _atomFileSystem.AtomRootDirectory / ".github";
 
     protected override void WriteWorkflow(WorkflowModel workflow)
     {

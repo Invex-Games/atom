@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Tests.ClassTests.Logging;
+﻿using DecSm.Atom.Core.Scope;
+
+namespace DecSm.Atom.Tests.ClassTests.Logging;
 
 [TestFixture]
 public class ReportLoggerTests
@@ -7,10 +9,14 @@ public class ReportLoggerTests
     public void Setup()
     {
         _scopeProvider = new();
-        _logger = new(_scopeProvider);
+        _paramService = A.Fake<IParamService>();
+        _reportService = new();
+        _logger = new(_paramService, _reportService, _scopeProvider);
     }
 
     private ReportLogger _logger;
+    private IParamService _paramService;
+    private ReportService _reportService;
     private TestScopeProvider _scopeProvider;
 
     [Test]
@@ -51,14 +57,12 @@ public class ReportLoggerTests
         var eventId = new EventId(1, "TestEvent");
         const string state = "TestState";
         Exception? exception = null;
-        ServiceStaticAccessor<ReportService>.Service = new();
 
         // Act
         _logger.Log(logLevel, eventId, state, exception, (s, _) => s);
 
         // Assert
-        ServiceStaticAccessor<ReportService>
-            .Service
+        _reportService
             .GetReportData()
             .ShouldBeEmpty();
     }
@@ -71,14 +75,12 @@ public class ReportLoggerTests
         var eventId = new EventId(1, "TestEvent");
         const string state = "TestState";
         Exception? exception = null;
-        ServiceStaticAccessor<ReportService>.Service = new();
 
         // Act
         _logger.Log(logLevel, eventId, state, exception, (s, _) => s);
 
         // Assert
-        ServiceStaticAccessor<ReportService>
-            .Service
+        _reportService
             .GetReportData()
             .ShouldNotBeEmpty();
     }

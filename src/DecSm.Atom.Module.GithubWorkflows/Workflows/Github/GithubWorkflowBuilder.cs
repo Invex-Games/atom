@@ -1,10 +1,13 @@
+using DecSm.Atom.Workflows.Dotnet.Nuget;
+
 namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Github;
 
 internal sealed class GithubWorkflowBuilder(
     IBuildDefinition buildDefinition,
     BuildModel buildModel,
     IParamService paramService,
-    IAtomFileSystem fileSystem,
+    IAtomFileSystem atomFileSystem,
+    AtomProjectData atomProjectData,
     ILogger<GithubWorkflowBuilder> logger
 )
 {
@@ -324,14 +327,14 @@ internal sealed class GithubWorkflowBuilder(
                             : "Retrieve multiple artifacts",
                     };
 
-                    if (fileSystem.IsFileBasedApp)
+                    if (atomProjectData.IsFileBasedApp)
                     {
                         if (AppContext.GetData("EntryPointFilePath") is not string fileName)
                             throw new InvalidOperationException(
                                 "AtomFileSystem reports file-based app but AppContext.EntryPointFilePath is null, cannot determine file path to run");
 
                         var filePathRelativeToRoot =
-                            fileSystem.FileSystem.Path.GetRelativePath(fileSystem.AtomRootDirectory, fileName);
+                            atomFileSystem.FileSystem.Path.GetRelativePath(atomFileSystem.AtomRootDirectory, fileName);
 
                         steps.Add(new Step.RunStep
                         {
@@ -342,7 +345,7 @@ internal sealed class GithubWorkflowBuilder(
                     }
                     else
                     {
-                        var projectPath = FindProjectPath(fileSystem, fileSystem.ProjectName);
+                        var projectPath = FindProjectPath(atomFileSystem, atomProjectData.ProjectName);
 
                         steps.Add(new Step.RunStep
                         {
@@ -357,7 +360,7 @@ internal sealed class GithubWorkflowBuilder(
                 {
                     Name = $"Retrieve {artifact.ArtifactName}",
                     Uses = "actions/download-artifact@v8",
-                    With = new Dictionary<string, WorkflowExpressionOrCollection>
+                    With = new Dictionary<string, WorkflowExpressionCollection>
                     {
                         ["name"] = artifact.BuildSlice is { Length: > 0 }
                             ? new ConcatExpression([artifact.ArtifactName, "-", artifact.BuildSlice])
@@ -382,14 +385,14 @@ internal sealed class GithubWorkflowBuilder(
 
         var targetStepEnv = BuildTargetStepEnv(workflow, job, target.Params, target.ConsumedVariables, matrixParams);
 
-        if (fileSystem.IsFileBasedApp)
+        if (atomProjectData.IsFileBasedApp)
         {
             if (AppContext.GetData("EntryPointFilePath") is not string fileName)
                 throw new InvalidOperationException(
                     "AtomFileSystem reports file-based app but AppContext.EntryPointFilePath is null, cannot determine file path to run");
 
             var filePathRelativeToRoot =
-                fileSystem.FileSystem.Path.GetRelativePath(fileSystem.AtomRootDirectory, fileName);
+                atomFileSystem.FileSystem.Path.GetRelativePath(atomFileSystem.AtomRootDirectory, fileName);
 
             steps.Add(new Step.RunStep
             {
@@ -402,7 +405,7 @@ internal sealed class GithubWorkflowBuilder(
         }
         else
         {
-            var projectPath = FindProjectPath(fileSystem, fileSystem.ProjectName);
+            var projectPath = FindProjectPath(atomFileSystem, atomProjectData.ProjectName);
 
             steps.Add(new Step.RunStep
             {
@@ -448,14 +451,14 @@ internal sealed class GithubWorkflowBuilder(
                             : "Store multiple artifacts",
                     };
 
-                    if (fileSystem.IsFileBasedApp)
+                    if (atomProjectData.IsFileBasedApp)
                     {
                         if (AppContext.GetData("EntryPointFilePath") is not string fileName)
                             throw new InvalidOperationException(
                                 "AtomFileSystem reports file-based app but AppContext.EntryPointFilePath is null, cannot determine file path to run");
 
                         var filePathRelativeToRoot =
-                            fileSystem.FileSystem.Path.GetRelativePath(fileSystem.AtomRootDirectory, fileName);
+                            atomFileSystem.FileSystem.Path.GetRelativePath(atomFileSystem.AtomRootDirectory, fileName);
 
                         steps.Add(new Step.RunStep
                         {
@@ -466,7 +469,7 @@ internal sealed class GithubWorkflowBuilder(
                     }
                     else
                     {
-                        var projectPath = FindProjectPath(fileSystem, fileSystem.ProjectName);
+                        var projectPath = FindProjectPath(atomFileSystem, atomProjectData.ProjectName);
 
                         steps.Add(new Step.RunStep
                         {
@@ -481,7 +484,7 @@ internal sealed class GithubWorkflowBuilder(
                 {
                     Name = $"Store {artifact.ArtifactName}",
                     Uses = "actions/upload-artifact@v7",
-                    With = new Dictionary<string, WorkflowExpressionOrCollection>
+                    With = new Dictionary<string, WorkflowExpressionCollection>
                     {
                         ["name"] = artifact.BuildSlice is { Length: > 0 }
                             ? new ConcatExpression([artifact.ArtifactName, "-", artifact.BuildSlice])
@@ -513,7 +516,7 @@ internal sealed class GithubWorkflowBuilder(
 
     private static Step.UsesStep BuildSetupDotnetStep(SetupDotnetStep step)
     {
-        var with = new Dictionary<string, WorkflowExpressionOrCollection>();
+        var with = new Dictionary<string, WorkflowExpressionCollection>();
 
         if (step.DotnetVersion is not null)
         {
@@ -699,12 +702,12 @@ internal sealed class GithubWorkflowBuilder(
         return targetStepEnv;
     }
 
-    private static string FindProjectPath(IAtomFileSystem fileSystem, string projectName)
+    private static string FindProjectPath(IAtomFileSystem atomFileSystem, string projectName)
     {
-        var projectPath = fileSystem
+        var projectPath = atomFileSystem
             .FileSystem
             .DirectoryInfo
-            .New(fileSystem.AtomRootDirectory)
+            .New(atomFileSystem.AtomRootDirectory)
             .EnumerateFiles("*.csproj",
                 new EnumerationOptions
                 {
@@ -718,10 +721,10 @@ internal sealed class GithubWorkflowBuilder(
         if (projectPath?.FullName is null)
             throw new InvalidOperationException($"Project '{projectName}' not found in current directory.");
 
-        return fileSystem
+        return atomFileSystem
             .FileSystem
             .Path
-            .GetRelativePath(fileSystem.AtomRootDirectory, projectPath.FullName)
+            .GetRelativePath(atomFileSystem.AtomRootDirectory, projectPath.FullName)
             .Replace("\\", "/");
     }
 }

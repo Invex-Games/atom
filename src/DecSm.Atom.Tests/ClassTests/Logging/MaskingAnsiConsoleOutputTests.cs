@@ -6,16 +6,16 @@ public class MaskingAnsiConsoleOutputTests
     [SetUp]
     public void SetUp()
     {
-        // Install a stub param service that masks our known secret
-        ServiceStaticAccessor<IParamService>.Service = new StubParamService(Secret, MaskedSecret);
-
         _writer = new(new StringBuilder());
 
         // Create a thin output that writes to our StringWriter
         var rawOutput = new TestAnsiConsoleOutput(_writer);
 
+        // Create a stub param service that masks our known secret
+        var paramService = new StubParamService(Secret, MaskedSecret);
+
         // Wrap it with our masking output
-        var maskingOutput = new MaskingAnsiConsoleOutput(rawOutput);
+        var maskingOutput = new MaskingAnsiConsoleOutput(rawOutput, paramService);
 
         var settings = new AnsiConsoleSettings
         {
@@ -28,7 +28,6 @@ public class MaskingAnsiConsoleOutputTests
     [TearDown]
     public void TearDown()
     {
-        ServiceStaticAccessor<IParamService>.Service = null;
         _writer.Dispose();
     }
 

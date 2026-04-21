@@ -13,7 +13,7 @@ public sealed class AzureBlobArtifactProvider(
     IBuildInfo buildInfo,
     IParamService paramService,
     ReportService reportService,
-    IAtomFileSystem fileSystem,
+    IAtomFileSystem atomFileSystem,
     IBuildIdProvider buildIdProvider,
     ILogger<AzureBlobArtifactProvider> logger
 ) : IArtifactProvider
@@ -78,7 +78,7 @@ public sealed class AzureBlobArtifactProvider(
 
         var containerClient = serviceClient.GetBlobContainerClient(container);
 
-        var invalidPathChars = fileSystem.Path.GetInvalidPathChars();
+        var invalidPathChars = atomFileSystem.Path.GetInvalidPathChars();
         var pathSafeRegex = new Regex($"[{Regex.Escape(new(invalidPathChars))}]");
         slice ??= pathSafeRegex.Replace(paramService.GetParam(nameof(IBuildInfo.BuildSlice)) ?? string.Empty, "-");
 
@@ -91,13 +91,13 @@ public sealed class AzureBlobArtifactProvider(
 
         foreach (var artifactName in artifactNames)
         {
-            var publishDir = fileSystem.AtomPublishDirectory / artifactName;
+            var publishDir = atomFileSystem.AtomPublishDirectory / artifactName;
 
             var artifactBlobDir = slice is { Length: > 0 }
                 ? $"{buildName}/{buildIdPath}/{artifactName}/{slice}"
                 : $"{buildName}/{buildIdPath}/{artifactName}";
 
-            var files = fileSystem.Directory.GetFiles(publishDir, "*", SearchOption.AllDirectories);
+            var files = atomFileSystem.Directory.GetFiles(publishDir, "*", SearchOption.AllDirectories);
 
             foreach (var file in files)
                 logger.LogDebug("Found file {File} for upload", file);
@@ -111,7 +111,7 @@ public sealed class AzureBlobArtifactProvider(
 
             foreach (var file in files)
             {
-                var relativePath = fileSystem.Path.GetRelativePath(publishDir, file);
+                var relativePath = atomFileSystem.Path.GetRelativePath(publishDir, file);
                 var blobPath = $"{artifactBlobDir}/{relativePath}";
 
                 var blobClient = containerClient.GetBlobClient(blobPath);
@@ -178,7 +178,7 @@ public sealed class AzureBlobArtifactProvider(
 
         var containerClient = serviceClient.GetBlobContainerClient(container);
 
-        var invalidPathChars = fileSystem.Path.GetInvalidPathChars();
+        var invalidPathChars = atomFileSystem.Path.GetInvalidPathChars();
         var pathSafeRegex = new Regex($"[{Regex.Escape(new(invalidPathChars))}]");
         buildSlice ??= pathSafeRegex.Replace(paramService.GetParam(nameof(IBuildInfo.BuildSlice)) ?? string.Empty, "-");
 
@@ -191,12 +191,12 @@ public sealed class AzureBlobArtifactProvider(
 
         foreach (var artifactName in artifactNames)
         {
-            var artifactDir = fileSystem.AtomArtifactsDirectory / artifactName;
+            var artifactDir = atomFileSystem.AtomArtifactsDirectory / artifactName;
 
             if (artifactDir.DirectoryExists)
-                fileSystem.Directory.Delete(artifactDir, true);
+                atomFileSystem.Directory.Delete(artifactDir, true);
 
-            fileSystem.Directory.CreateDirectory(artifactDir);
+            atomFileSystem.Directory.CreateDirectory(artifactDir);
 
             // Includes path separator at the end to prevent matching other directories with the same start of the name
             var artifactBlobDir = buildSlice is { Length: > 0 }
@@ -229,16 +229,16 @@ public sealed class AzureBlobArtifactProvider(
                         $"Blob name {blobName} does not start with {buildName}/{buildIdPath}.");
 
                 var blobPath = artifactDir / blobName;
-                var blobDir = fileSystem.Path.GetDirectoryName(blobPath);
+                var blobDir = atomFileSystem.Path.GetDirectoryName(blobPath);
 
                 if (blobDir is null)
                     throw new InvalidOperationException($"Could not get directory name for blob path {blobPath}.");
 
-                if (!fileSystem.Directory.Exists(blobDir))
-                    fileSystem.Directory.CreateDirectory(blobDir);
+                if (!atomFileSystem.Directory.Exists(blobDir))
+                    atomFileSystem.Directory.CreateDirectory(blobDir);
 
                 logger.LogTrace("Writing file {BlobPath}", blobPath);
-                await using var fileStream = fileSystem.File.Create(blobPath);
+                await using var fileStream = atomFileSystem.File.Create(blobPath);
                 await blobDownloadInfo.Value.Content.CopyToAsync(fileStream, cancellationToken);
             }
 
@@ -309,7 +309,7 @@ public sealed class AzureBlobArtifactProvider(
 
         if (artifactName is { Length: > 0 })
         {
-            var invalidPathChars = fileSystem.Path.GetInvalidPathChars();
+            var invalidPathChars = atomFileSystem.Path.GetInvalidPathChars();
             var pathSafeRegex = new Regex($"[{Regex.Escape(new(invalidPathChars))}]");
 
             buildSlice ??=

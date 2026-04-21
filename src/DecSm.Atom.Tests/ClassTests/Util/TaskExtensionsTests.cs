@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Tests.ClassTests.Util;
+﻿using DecSm.Atom.Core;
+
+namespace DecSm.Atom.Tests.ClassTests.Util;
 
 [TestFixture]
 public class TaskExtensionsTests

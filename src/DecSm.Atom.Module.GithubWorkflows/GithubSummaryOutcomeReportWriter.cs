@@ -9,7 +9,7 @@
 ///     It also masks any secrets present in the report text.
 /// </remarks>
 internal sealed class GithubSummaryOutcomeReportWriter(
-    IAtomFileSystem fileSystem,
+    IAtomFileSystem atomFileSystem,
     ReportService reportService,
     IParamService paramService
 ) : IOutcomeReportWriter
@@ -21,7 +21,7 @@ internal sealed class GithubSummaryOutcomeReportWriter(
     /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
     public async Task ReportRunOutcome(CancellationToken cancellationToken)
     {
-        await using var writer = fileSystem.File.OpenWrite(Github.Variables.StepSummary);
+        await using var writer = atomFileSystem.File.OpenWrite(Github.Variables.StepSummary);
 
         var reportText = ReportDataMarkdownFormatter.Write(reportService.GetReportData());
 

@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Tests.ClassTests.Build;
+﻿using DecSm.Atom.Core;
+
+namespace DecSm.Atom.Tests.ClassTests.Build;
 
 [TestFixture]
 public class DefaultBuildVersionProviderTests

@@ -12,7 +12,7 @@ public partial record Step
 
     public WorkflowExpression? WorkingDirectory { get; init; }
 
-    public IReadOnlyDictionary<string, WorkflowExpressionOrCollection>? With { get; init; }
+    public IReadOnlyDictionary<string, WorkflowExpressionCollection>? With { get; init; }
 
     public IReadOnlyDictionary<string, WorkflowExpression>? Env { get; init; }
 
@@ -27,7 +27,7 @@ public partial record Step
 
     public partial record RunStep
     {
-        public required WorkflowExpressionOrCollection Run { get; init; }
+        public required WorkflowExpressionCollection Run { get; init; }
 
         public WorkflowExpression? Shell { get; init; }
     }

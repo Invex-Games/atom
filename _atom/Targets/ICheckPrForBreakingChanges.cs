@@ -1,5 +1,3 @@
-using Repository = LibGit2Sharp.Repository;
-
 namespace Atom.Targets;
 
 public sealed record ReleaseInfo(string CommitHash, SemVer Version);
@@ -8,7 +6,7 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
 {
     private RootedPath[] FilesToCheck =>
     [
-        FileSystem.AtomRootDirectory /
+        AtomFileSystem.AtomRootDirectory /
         "DecSm.Atom.Tests" /
         "ApiSurfaceTests" /
         "PublicApiSurfaceTests.VerifyPublicApiSurface.verified.txt",
@@ -23,7 +21,7 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
                 var owner = Github.Variables.RepositoryOwner;
                 Logger.LogDebug("Target repository owner: {Owner}", owner);
 
-                using var repo = new Repository(FileSystem.AtomRootDirectory);
+                using var repo = new Repository(AtomFileSystem.AtomRootDirectory);
 
                 var currentCommitHash = repo.Head.Tip.Sha;
                 Logger.LogDebug("Current commit hash: {CommitHash}", currentCommitHash);
@@ -196,7 +194,7 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
         if (prQueryResult.Id.Value is null)
             throw new StepFailedException("Could not find pull request.");
 
-        using var repo = new Repository(FileSystem.AtomRootDirectory);
+        using var repo = new Repository(AtomFileSystem.AtomRootDirectory);
 
         var checkRunMutation = new Mutation()
             .CreateCheckRun(new CreateCheckRunInput

@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DecSm.Atom\DecSm.Atom.csproj" />
-    <ProjectReference Include="..\DecSm.Atom.SourceGenerators\DecSm.Atom.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\DecSm.Atom.Build\DecSm.Atom.Build.csproj" />
+    <ProjectReference Include="..\DecSm.Atom.Build.SourceGenerators\DecSm.Atom.Build.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>

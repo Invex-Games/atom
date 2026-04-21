@@ -33,7 +33,7 @@ public partial interface IGithubWorkflows : IJobRunsOn
             typeof(DependabotConfigFileWriter),
             ServiceLifetime.Singleton));
 
-        builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(IWorkflowVariableProvider),
+        builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(IVariableProvider),
             typeof(GithubVariableProvider),
             ServiceLifetime.Singleton));
 

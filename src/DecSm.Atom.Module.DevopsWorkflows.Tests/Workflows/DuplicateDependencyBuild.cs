@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Module.DevopsWorkflows.Tests.Workflows;
+﻿using DecSm.Atom.Build.Hosting;
+
+namespace DecSm.Atom.Module.DevopsWorkflows.Tests.Workflows;
 
 [BuildDefinition]
 public partial class DuplicateDependencyBuild : MinimalBuildDefinition, IDevopsWorkflows, IDuplicateDependencyTarget

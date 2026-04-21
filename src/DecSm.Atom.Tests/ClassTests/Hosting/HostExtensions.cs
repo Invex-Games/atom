@@ -74,11 +74,11 @@ public class HostExtensionsTests
             .ShouldNotBeNull();
 
         serviceProvider
-            .GetService<IWorkflowVariableProvider>()
+            .GetService<IVariableProvider>()
             .ShouldNotBeNull();
 
         serviceProvider
-            .GetService<IWorkflowVariableService>()
+            .GetService<IVariableService>()
             .ShouldNotBeNull();
 
         serviceProvider

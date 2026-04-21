@@ -315,7 +315,7 @@ jobs:
     permissions:
       contents: write
     needs: [ PackProjects, PackTool, TestProjects, SetupBuildInfo ]
-    if: contains(needs.SetupBuildInfo.outputs.build-version, '-') != true
+    if: ne(contains(dependencies.SetupBuildInfo.outputs['SetupBuildInfo.build-version'], '-'), true)
     runs-on: ubuntu-latest
     steps:
 

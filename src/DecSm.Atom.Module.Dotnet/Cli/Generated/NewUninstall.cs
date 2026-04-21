@@ -58,7 +58,7 @@ public partial interface IDotnetCli
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> NewUninstall(
-        DecSm.Atom.Paths.RootedPath package,
+        DecSm.Atom.FileSystem.RootedPath package,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -98,7 +98,7 @@ internal partial class DotnetCli
     }
     
     public Task<ProcessRunResult> NewUninstall(
-        DecSm.Atom.Paths.RootedPath package,
+        DecSm.Atom.FileSystem.RootedPath package,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )    {

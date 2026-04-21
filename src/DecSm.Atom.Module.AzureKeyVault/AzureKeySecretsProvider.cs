@@ -1,6 +1,4 @@
-﻿using DecSm.Atom.Workflows.Options;
-
-namespace DecSm.Atom.Module.AzureKeyVault;
+﻿namespace DecSm.Atom.Module.AzureKeyVault;
 
 /// <summary>
 ///     Provides an implementation of <see cref="ISecretsProvider" /> and <see cref="IWorkflowOptionProvider" />
@@ -13,7 +11,7 @@ namespace DecSm.Atom.Module.AzureKeyVault;
 /// </remarks>
 [PublicAPI]
 public sealed class AzureKeySecretsProvider(
-    IBuildDefinition buildDefinition,
+    IWorkflowBuildDefinition buildDefinition,
     CommandLineArgs args,
     IAzureKeyVault keyVault,
     ILogger<AzureKeySecretsProvider> logger
@@ -73,7 +71,7 @@ public sealed class AzureKeySecretsProvider(
     {
         get
         {
-            if (!UseAzureKeyVault.IsOptionEnabled(buildDefinition.GlobalWorkflowOptions))
+            if (!UseAzureKeyVault.IsEnabled(buildDefinition))
                 return [];
 
             var injections = keyVault.AzureKeyVaultValueInjections;
