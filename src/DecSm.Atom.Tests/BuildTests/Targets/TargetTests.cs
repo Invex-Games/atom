@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Tests.BuildTests.Targets;
+﻿using DecSm.Atom.Build.Hosting;
+
+namespace DecSm.Atom.Tests.BuildTests.Targets;
 
 [TestFixture]
 public class TargetTests

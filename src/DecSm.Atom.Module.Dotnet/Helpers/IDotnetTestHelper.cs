@@ -30,7 +30,7 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
         DotnetTestAndStageOptions? options = null,
         CancellationToken cancellationToken = default)
     {
-        var projectPath = DotnetFileUtil.GetProjectFilePathByName(FileSystem, projectName) ??
+        var projectPath = DotnetFileUtil.GetProjectFilePathByName(AtomFileSystem, projectName) ??
                           throw new StepFailedException($"Could not locate project file for project {projectName}.");
 
         Logger.LogDebug("Located project file for project {ProjectName} at {ProjectPath}", projectName, projectPath);
@@ -107,7 +107,7 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
         {
             Output = testOptions.Output is { Length: > 0 }
                 ? testOptions.Output
-                : FileSystem.AtomRootDirectory / projectName / "TestResults",
+                : AtomFileSystem.AtomRootDirectory / projectName / "TestResults",
             Logger = testOptions.Logger ??
             [
                 $"\"trx;LogFileName={projectName}.trx\"", $"\"html;LogFileName={projectName}.html\"",
@@ -118,31 +118,31 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
                           : null),
         };
 
-        var testOutputDirectory = FileSystem.CreateRootedPath(testOptions.Output);
+        var testOutputDirectory = AtomFileSystem.CreateRootedPath(testOptions.Output);
 
-        var publishDirectory = FileSystem.AtomPublishDirectory / projectName;
+        var publishDirectory = AtomFileSystem.AtomPublishDirectory / projectName;
 
         var testResultsPublishDirectory = publishDirectory / "test-results";
 
-        if (FileSystem.Directory.Exists(testResultsPublishDirectory))
-            FileSystem.Directory.Delete(testResultsPublishDirectory, true);
+        if (AtomFileSystem.Directory.Exists(testResultsPublishDirectory))
+            AtomFileSystem.Directory.Delete(testResultsPublishDirectory, true);
 
-        FileSystem.Directory.CreateDirectory(testResultsPublishDirectory);
+        AtomFileSystem.Directory.CreateDirectory(testResultsPublishDirectory);
 
         var coverageResultsPublishDirectory = publishDirectory / "coverage-results";
 
-        if (options.IncludeCoverage && FileSystem.Directory.Exists(coverageResultsPublishDirectory))
-            FileSystem.Directory.Delete(coverageResultsPublishDirectory, true);
+        if (options.IncludeCoverage && AtomFileSystem.Directory.Exists(coverageResultsPublishDirectory))
+            AtomFileSystem.Directory.Delete(coverageResultsPublishDirectory, true);
 
         if (options.IncludeCoverage)
-            FileSystem.Directory.CreateDirectory(coverageResultsPublishDirectory);
+            AtomFileSystem.Directory.CreateDirectory(coverageResultsPublishDirectory);
 
         Logger.LogInformation("Running unit tests for project {Project}", projectName);
 
-        if (FileSystem.Directory.Exists(testOutputDirectory))
+        if (AtomFileSystem.Directory.Exists(testOutputDirectory))
         {
             Logger.LogDebug("Deleting existing test output directory {TestOutputDirectory}", testOutputDirectory);
-            FileSystem.Directory.Delete(testOutputDirectory, true);
+            AtomFileSystem.Directory.Delete(testOutputDirectory, true);
         }
 
         Logger.LogDebug(
@@ -156,18 +156,19 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
             (options.SetVersionsFromProviders, options.CustomPropertiesTransform) switch
             {
                 (true, not null) => await TransformProjectVersionScope
-                    .CreateAsync(DotnetFileUtil.GetPropertyFilesForProject(projectPath, FileSystem.AtomRootDirectory),
+                    .CreateAsync(
+                        DotnetFileUtil.GetPropertyFilesForProject(projectPath, AtomFileSystem.AtomRootDirectory),
                         BuildVersion,
                         cancellationToken)
                     .AddAsync(options.CustomPropertiesTransform),
 
                 (true, null) => await TransformProjectVersionScope.CreateAsync(
-                    DotnetFileUtil.GetPropertyFilesForProject(projectPath, FileSystem.AtomRootDirectory),
+                    DotnetFileUtil.GetPropertyFilesForProject(projectPath, AtomFileSystem.AtomRootDirectory),
                     BuildVersion,
                     cancellationToken),
 
                 (false, not null) => await TransformMultiFileScope.CreateAsync(
-                    DotnetFileUtil.GetPropertyFilesForProject(projectPath, FileSystem.AtomRootDirectory),
+                    DotnetFileUtil.GetPropertyFilesForProject(projectPath, AtomFileSystem.AtomRootDirectory),
                     options.CustomPropertiesTransform!,
                     cancellationToken),
 
@@ -185,7 +186,7 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
             cancellationToken);
 
         // Copy html file to publish directory
-        FileSystem.File.Copy(testOutputDirectory / $"{projectName}.html",
+        AtomFileSystem.File.Copy(testOutputDirectory / $"{projectName}.html",
             testResultsPublishDirectory / $"{projectName}.html");
 
         GenerateTestReport(projectName,
@@ -201,7 +202,7 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
                 $"-reports:{testOutputDirectory / "**" / "coverage.cobertura.xml"}",
                 $"-targetdir:{coverageResultsPublishDirectory}",
                 "-reporttypes:HtmlInline;JsonSummary",
-                "-sourcedirs:" + FileSystem.AtomRootDirectory,
+                "-sourcedirs:" + AtomFileSystem.AtomRootDirectory,
             ],
             new()
             {
@@ -303,7 +304,7 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
         string coverageJsonFile,
         bool includeTitle = true)
     {
-        var coverageJson = FileSystem.File.ReadAllText(coverageJsonFile);
+        var coverageJson = AtomFileSystem.File.ReadAllText(coverageJsonFile);
 
         var summary = JsonSerializer.Deserialize(coverageJson, CoverageModelContext.Default.CoverageModel)!.Summary;
 

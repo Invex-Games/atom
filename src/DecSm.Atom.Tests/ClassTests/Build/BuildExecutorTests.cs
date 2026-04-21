@@ -16,7 +16,7 @@ public class BuildExecutorTests
         };
 
         _paramService = A.Fake<IParamService>();
-        _workflowVariableService = A.Fake<IWorkflowVariableService>();
+        _variableService = A.Fake<IVariableService>();
         _outcomeReporters = [];
         _console = new();
         _reportService = new();
@@ -32,7 +32,7 @@ public class BuildExecutorTests
 
     private IParamService _paramService;
 
-    private IWorkflowVariableService _workflowVariableService;
+    private IVariableService _variableService;
 
     private IReadOnlyList<IOutcomeReportWriter> _outcomeReporters;
     private TestConsole _console;
@@ -48,7 +48,7 @@ public class BuildExecutorTests
         var buildExecutor = new BuildExecutor(_commandLineArgs,
             _buildModel,
             _paramService,
-            _workflowVariableService,
+            _variableService,
             _outcomeReporters,
             _console,
             _reportService,
@@ -113,7 +113,7 @@ public class BuildExecutorTests
         var buildExecutor = new BuildExecutor(_commandLineArgs,
             _buildModel,
             _paramService,
-            _workflowVariableService,
+            _variableService,
             _outcomeReporters,
             _console,
             _reportService,

@@ -48,7 +48,7 @@ public partial interface IDotnetCli
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> NugetWhy(
-        DecSm.Atom.Paths.RootedPath projectorsolution,
+        DecSm.Atom.FileSystem.RootedPath projectorsolution,
         NugetWhyOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
@@ -78,7 +78,7 @@ internal partial class DotnetCli
     }
     
     public Task<ProcessRunResult> NugetWhy(
-        DecSm.Atom.Paths.RootedPath projectorsolution,
+        DecSm.Atom.FileSystem.RootedPath projectorsolution,
         NugetWhyOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default

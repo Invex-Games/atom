@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DecSm.Atom.Module.Dotnet\DecSm.Atom.Module.Dotnet.csproj" />
-    <ProjectReference Include="..\DecSm.Atom.SourceGenerators\DecSm.Atom.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\DecSm.Atom.Build.SourceGenerators\DecSm.Atom.Build.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>

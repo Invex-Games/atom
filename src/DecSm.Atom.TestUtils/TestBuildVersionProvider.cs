@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.TestUtils;
+﻿using DecSm.Atom.Core;
+
+namespace DecSm.Atom.TestUtils;
 
 [PublicAPI]
 public class TestBuildVersionProvider : IBuildVersionProvider

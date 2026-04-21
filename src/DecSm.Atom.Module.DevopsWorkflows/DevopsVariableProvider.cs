@@ -1,13 +1,13 @@
 ﻿namespace DecSm.Atom.Module.DevopsWorkflows;
 
 /// <summary>
-///     Provides an implementation of <see cref="IWorkflowVariableProvider" /> for Azure DevOps Pipelines.
+///     Provides an implementation of <see cref="IVariableProvider" /> for Azure DevOps Pipelines.
 /// </summary>
 /// <remarks>
 ///     This provider enables writing output variables that can be consumed by subsequent steps or jobs
 ///     within an Azure DevOps Pipeline. It also supports reading variables from previous jobs.
 /// </remarks>
-internal sealed class DevopsVariableProvider(ILogger<DevopsVariableProvider> logger) : IWorkflowVariableProvider
+internal sealed class DevopsVariableProvider(ILogger<DevopsVariableProvider> logger) : IVariableProvider
 {
     /// <summary>
     ///     Writes a variable to the Azure DevOps Pipeline output, making it available to subsequent steps or jobs.

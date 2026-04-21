@@ -33,7 +33,7 @@ public interface IGithubReleaseHelper : IGithubHelper
         string releaseTag,
         bool dryRunWhenNotRunningInGithubActions = true)
     {
-        var artifactPath = FileSystem.AtomArtifactsDirectory / artifactName;
+        var artifactPath = AtomFileSystem.AtomArtifactsDirectory / artifactName;
 
         await UploadAssetToRelease(releaseTag, artifactPath, dryRunWhenNotRunningInGithubActions);
     }
@@ -70,7 +70,7 @@ public interface IGithubReleaseHelper : IGithubHelper
             if (assetPath.DirectoryExists)
                 Logger.LogInformation("Artifact path {AssetPath} is a directory containing {FileCount} files.",
                     assetPath,
-                    FileSystem.Directory.GetFiles(assetPath, "*", SearchOption.AllDirectories)
+                    AtomFileSystem.Directory.GetFiles(assetPath, "*", SearchOption.AllDirectories)
                         .Length);
             else
                 Logger.LogInformation("Artifact path {AssetPath} is a file.", assetPath);
@@ -86,7 +86,7 @@ public interface IGithubReleaseHelper : IGithubHelper
 
         if (assetPath.DirectoryExists)
         {
-            var zipPath = FileSystem.CreateRootedPath($"{assetPath}.zip");
+            var zipPath = AtomFileSystem.CreateRootedPath($"{assetPath}.zip");
 
             #if NET10_0_OR_GREATER
             await ZipFile.CreateFromDirectoryAsync(assetPath, zipPath);
@@ -97,12 +97,12 @@ public interface IGithubReleaseHelper : IGithubHelper
             assetPath = zipPath;
         }
 
-        var assetFile = FileSystem.FileInfo.New(assetPath);
+        var assetFile = AtomFileSystem.FileInfo.New(assetPath);
 
         if (!assetFile.FullName.EndsWith(".zip"))
         {
             // zip the file
-            var zipPath = FileSystem.CreateRootedPath($"{assetPath}.zip");
+            var zipPath = AtomFileSystem.CreateRootedPath($"{assetPath}.zip");
 
             #if NET10_0_OR_GREATER
             await ZipFile.CreateFromDirectoryAsync(assetPath.Parent!, zipPath);
@@ -113,7 +113,7 @@ public interface IGithubReleaseHelper : IGithubHelper
             assetPath = zipPath;
         }
 
-        assetFile = FileSystem.FileInfo.New(assetPath);
+        assetFile = AtomFileSystem.FileInfo.New(assetPath);
 
         await using var stream = assetFile.OpenRead();
 

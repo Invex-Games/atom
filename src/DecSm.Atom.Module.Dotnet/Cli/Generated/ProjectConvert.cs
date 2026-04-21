@@ -44,7 +44,7 @@ public partial interface IDotnetCli
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> ProjectConvert(
-        DecSm.Atom.Paths.RootedPath file,
+        DecSm.Atom.FileSystem.RootedPath file,
         ProjectConvertOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
@@ -72,7 +72,7 @@ internal partial class DotnetCli
     }
     
     public Task<ProcessRunResult> ProjectConvert(
-        DecSm.Atom.Paths.RootedPath file,
+        DecSm.Atom.FileSystem.RootedPath file,
         ProjectConvertOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default

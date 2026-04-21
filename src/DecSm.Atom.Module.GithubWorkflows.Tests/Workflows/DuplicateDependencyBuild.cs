@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
+﻿using DecSm.Atom.Build.Hosting;
+
+namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
 
 [BuildDefinition]
 public partial class DuplicateDependencyBuild : MinimalBuildDefinition, IGithubWorkflows, IDuplicateDependencyTarget

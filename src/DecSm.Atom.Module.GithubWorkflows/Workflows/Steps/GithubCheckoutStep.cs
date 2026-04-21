@@ -167,67 +167,67 @@ public sealed record GithubCheckoutStep : CheckoutStep, IGithubAdditionalStepOpt
 
     public Step Build()
     {
-        var with = new Dictionary<string, WorkflowExpressionOrCollection>();
+        var with = new Dictionary<string, WorkflowExpressionCollection>();
 
         if (Repository is not null)
-            with["repository"] = Repository;
+            with["repository"] = [Repository];
 
         if (Branch is not null)
-            with["ref"] = Branch;
+            with["ref"] = [Branch];
 
         if (Token is not null)
-            with["token"] = Token;
+            with["token"] = [Token];
 
         if (SshKey is not null)
-            with["ssh-key"] = SshKey;
+            with["ssh-key"] = [SshKey];
 
         if (SshKnownHosts is not null)
-            with["ssh-known-hosts"] = SshKnownHosts;
+            with["ssh-known-hosts"] = [SshKnownHosts];
 
         if (SshStrict is not null)
-            with["ssh-strict"] = SshStrict;
+            with["ssh-strict"] = [SshStrict];
 
         if (SshUser is not null)
-            with["ssh-user"] = SshUser;
+            with["ssh-user"] = [SshUser];
 
         if (PersistCredentials is not null)
-            with["persist-credentials"] = PersistCredentials;
+            with["persist-credentials"] = [PersistCredentials];
 
         if (Path is not null)
-            with["path"] = Path;
+            with["path"] = [Path];
 
         if (Clean is not null)
-            with["clean"] = Clean;
+            with["clean"] = [Clean];
 
         if (Filter is not null)
-            with["filter"] = Filter;
+            with["filter"] = [Filter];
 
         if (SparseCheckout is not null)
-            with["sparse-checkout"] = SparseCheckout;
+            with["sparse-checkout"] = [SparseCheckout];
 
         if (SparseCheckoutConeMode is not null)
-            with["sparse-checkout-cone-mode"] = SparseCheckoutConeMode;
+            with["sparse-checkout-cone-mode"] = [SparseCheckoutConeMode];
 
         if (FetchDepth is not null)
-            with["fetch-depth"] = FetchDepth;
+            with["fetch-depth"] = [FetchDepth];
 
         if (FetchTags is not null)
-            with["fetch-tags"] = FetchTags;
+            with["fetch-tags"] = [FetchTags];
 
         if (ShowProgress is not null)
-            with["show-progress"] = ShowProgress;
+            with["show-progress"] = [ShowProgress];
 
         if (Lfs is not null)
-            with["lfs"] = Lfs;
+            with["lfs"] = [Lfs];
 
         if (Submodules is not null)
-            with["submodules"] = Submodules;
+            with["submodules"] = [Submodules];
 
         if (SetSafeDirectory is not null)
-            with["set-safe-directory"] = SetSafeDirectory;
+            with["set-safe-directory"] = [SetSafeDirectory];
 
         if (GithubServerUrl is not null)
-            with["github-server-url"] = GithubServerUrl;
+            with["github-server-url"] = [GithubServerUrl];
 
         return new Step.UsesStep
         {

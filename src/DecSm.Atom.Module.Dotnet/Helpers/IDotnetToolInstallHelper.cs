@@ -42,7 +42,7 @@ public interface IDotnetToolInstallHelper : IBuildAccessor
             ? "-g"
             : string.Empty;
 
-        if (!global && !FileSystem.File.Exists(FileSystem.CurrentDirectory / ".config" / "dotnet-tools.json"))
+        if (!global && !AtomFileSystem.File.Exists(AtomFileSystem.CurrentDirectory / ".config" / "dotnet-tools.json"))
             ProcessRunner.Run(new("dotnet", "new tool-manifest")
             {
                 InvocationLogLevel = LogLevel.Debug,
@@ -122,7 +122,7 @@ public interface IDotnetToolInstallHelper : IBuildAccessor
             ? "-g"
             : string.Empty;
 
-        if (!global && !FileSystem.File.Exists(FileSystem.CurrentDirectory / ".config" / "dotnet-tools.json"))
+        if (!global && !AtomFileSystem.File.Exists(AtomFileSystem.CurrentDirectory / ".config" / "dotnet-tools.json"))
             await ProcessRunner.RunAsync(new("dotnet", "new tool-manifest")
                 {
                     InvocationLogLevel = LogLevel.Debug,

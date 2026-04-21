@@ -24,12 +24,12 @@ internal interface IDeployTargets : INugetHelper, IGithubReleaseHelper, ISetupBu
                     await PushProject(project, NugetFeed, NugetApiKey, cancellationToken: cancellationToken);
 
                 // Push Atom tool package - platform-specific + multi-targeted
-                foreach (var atomToolPackagePath in FileSystem.Directory.GetFiles(
-                             FileSystem.AtomArtifactsDirectory / Projects.DecSm_Atom_Tool.Name,
+                foreach (var atomToolPackagePath in AtomFileSystem.Directory.GetFiles(
+                             AtomFileSystem.AtomArtifactsDirectory / Projects.DecSm_Atom_Tool.Name,
                              "*.nupkg",
                              SearchOption.AllDirectories))
                     await PushPackageToNuget(
-                        FileSystem.AtomArtifactsDirectory / Projects.DecSm_Atom_Tool.Name / atomToolPackagePath,
+                        AtomFileSystem.AtomArtifactsDirectory / Projects.DecSm_Atom_Tool.Name / atomToolPackagePath,
                         NugetFeed,
                         NugetApiKey,
                         cancellationToken: cancellationToken);

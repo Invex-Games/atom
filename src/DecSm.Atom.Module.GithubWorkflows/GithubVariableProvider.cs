@@ -3,14 +3,14 @@
 namespace DecSm.Atom.Module.GithubWorkflows;
 
 /// <summary>
-///     Provides an implementation of <see cref="IWorkflowVariableProvider" /> for GitHub Actions.
+///     Provides an implementation of <see cref="IVariableProvider" /> for GitHub Actions.
 /// </summary>
 /// <remarks>
 ///     This provider enables writing output variables that can be consumed by subsequent steps or jobs
 ///     within a GitHub Actions workflow. It also indicates whether a variable can be read from a previous job.
 /// </remarks>
-internal sealed class GithubVariableProvider(IAtomFileSystem fileSystem, ILogger<GithubVariableProvider> logger)
-    : IWorkflowVariableProvider
+internal sealed class GithubVariableProvider(IAtomFileSystem atomFileSystem, ILogger<GithubVariableProvider> logger)
+    : IVariableProvider
 {
     /// <summary>
     ///     Writes a variable to the GitHub Actions output, making it available to subsequent steps or jobs.
@@ -45,7 +45,7 @@ internal sealed class GithubVariableProvider(IAtomFileSystem fileSystem, ILogger
             variableValue,
             githubOutputPath);
 
-        await fileSystem.File.AppendAllTextAsync(githubOutputPath,
+        await atomFileSystem.File.AppendAllTextAsync(githubOutputPath,
             $"{variableName}={variableValue}{Environment.NewLine}",
             cancellationToken);
 

@@ -4,9 +4,9 @@ namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Github.Model;
 [Union]
 public partial record Permissions
 {
-    partial record All(PermissionsLevel Level);
+    public sealed partial record All(PermissionsLevel Level);
 
-    partial record Exact(PermissionsEvent Permissions);
+    public sealed partial record Exact(PermissionsEvent Permissions);
 
     public Permissions Shrink() =>
         this switch

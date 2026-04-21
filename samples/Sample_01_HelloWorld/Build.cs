@@ -5,7 +5,6 @@
 // This is automatically globally included when using DecSm.Atom from a nuget package
 
 using DecSm.Atom.Build.Definition;
-using DecSm.Atom.Hosting;
 
 namespace Atom;
 

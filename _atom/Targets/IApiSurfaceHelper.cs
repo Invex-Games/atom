@@ -1,6 +1,3 @@
-using Commit = LibGit2Sharp.Commit;
-using Repository = LibGit2Sharp.Repository;
-
 namespace Atom.Targets;
 
 public sealed record BreakingChanges(IReadOnlyList<Change> MajorChanges, IReadOnlyList<Change> MinorChanges);
@@ -30,7 +27,7 @@ public interface IApiSurfaceHelper : IBuildAccessor
 
         var targetFiles = FormatTargetFiles(filesToCheck);
 
-        using var repo = new Repository(FileSystem.AtomRootDirectory);
+        using var repo = new Repository(AtomFileSystem.AtomRootDirectory);
         var oldCommit = repo.Lookup<Commit>(oldCommitHash);
 
         if (oldCommit?.IsMissing is not false)
@@ -56,7 +53,7 @@ public interface IApiSurfaceHelper : IBuildAccessor
 
         IReadOnlyList<Change> suspiciousChanges = changes
             .Where(x => targetFiles.Contains(x.Path) && x.LinesDeleted > 0)
-            .Select(x => new Change(FileSystem.AtomRootDirectory / x.Path, x.AddedLines, x.DeletedLines))
+            .Select(x => new Change(AtomFileSystem.AtomRootDirectory / x.Path, x.AddedLines, x.DeletedLines))
             .ToList();
 
         Logger.LogDebug("Suspicious changes: {@SuspiciousChanges}", suspiciousChanges);
@@ -84,8 +81,8 @@ public interface IApiSurfaceHelper : IBuildAccessor
     private HashSet<string> FormatTargetFiles(RootedPath[] filesToCheck)
     {
         var targetFiles = filesToCheck
-            .Select(x => FileSystem.Path.IsPathRooted(x)
-                ? FileSystem.Path.GetRelativePath(FileSystem.AtomRootDirectory, x)
+            .Select(x => AtomFileSystem.Path.IsPathRooted(x)
+                ? AtomFileSystem.Path.GetRelativePath(AtomFileSystem.AtomRootDirectory, x)
                 : x)
             .Select(x => x.Replace("\\", "/"))
             .Select(x => x.StartsWith('/')

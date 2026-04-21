@@ -11,7 +11,7 @@
 /// </remarks>
 [BuildDefinition]
 [GenerateEntryPoint]
-internal sealed partial class Build : MinimalBuildDefinition
+internal sealed partial class Build : BuildDefinition
 {
     /// <summary>
     ///     The target that generates the .NET CLI wrapper code.
@@ -101,6 +101,7 @@ internal sealed partial class Build : MinimalBuildDefinition
                 DotnetCliGenerator.GenerateOptionsCode(writer, command);
 
                 await FileSystem.File.WriteAllTextAsync(FileSystem.AtomRootDirectory /
+                                                        "src" /
                                                         "DecSm.Atom.Module.Dotnet" /
                                                         "Cli" /
                                                         "Generated" /

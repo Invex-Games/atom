@@ -33,7 +33,7 @@ internal interface IBuildTargets : IDotnetPackHelper, IDotnetPublishHelper
 
                 Logger.LogInformation("Packing AOT Atom tool for runtime {RuntimeIdentifier}", runtimeIdentifier);
 
-                await DotnetPackAndStage(FileSystem.GetPath<Projects.DecSm_Atom_Tool>(),
+                await DotnetPackAndStage(AtomFileSystem.GetPath<Projects.DecSm_Atom_Tool>(),
                     new()
                     {
                         PackOptions = new()
@@ -51,7 +51,7 @@ internal interface IBuildTargets : IDotnetPackHelper, IDotnetPublishHelper
                 {
                     Logger.LogInformation("Packing Atom tool for non-native AOT");
 
-                    await DotnetPackAndStage(FileSystem.GetPath<Projects.DecSm_Atom_Tool>(),
+                    await DotnetPackAndStage(AtomFileSystem.GetPath<Projects.DecSm_Atom_Tool>(),
                         new()
                         {
                             ClearPublishDirectory = false,

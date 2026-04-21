@@ -1,7 +1,16 @@
 <Solution>
   <Folder Name="/Analyzers/">
+    <Project Path="src/DecSm.Atom.Build.SourceGenerators/DecSm.Atom.Build.SourceGenerators.csproj" />
     <Project Path="src/DecSm.Atom.Analyzers/DecSm.Atom.Analyzers.csproj" />
     <Project Path="src/DecSm.Atom.SourceGenerators/DecSm.Atom.SourceGenerators.csproj" />
+  </Folder>
+  <Folder Name="/Core/">
+    <Project Path="src/DecSm.Atom.Build/DecSm.Atom.Build.csproj" />
+    <Project Path="src/DecSm.Atom.FileSystem/DecSm.Atom.FileSystem.csproj" />
+    <Project Path="src/DecSm.Atom.Process/DecSm.Atom.Process.csproj" />
+    <Project Path="src/DecSm.Atom.SemanticVersion/DecSm.Atom.SemanticVersion.csproj" />
+    <Project Path="src/DecSm.Atom.Workflows/DecSm.Atom.Workflows.csproj" />
+    <Project Path="src/DecSm.Atom/DecSm.Atom.csproj" />
   </Folder>
   <Folder Name="/Modules/">
     <Project Path="src/DecSm.Atom.Module.AzureKeyVault/DecSm.Atom.Module.AzureKeyVault.csproj" />
@@ -29,6 +38,5 @@
     <Project Path="src/DecSm.Atom.DotnetCliGenerator/DecSm.Atom.DotnetCliGenerator.csproj" />
     <Project Path="src/DecSm.Atom.Tool/DecSm.Atom.Tool.csproj" />
   </Folder>
-  <Project Path="src/DecSm.Atom/DecSm.Atom.csproj" />
   <Project Path="_atom/_atom.csproj" />
 </Solution>

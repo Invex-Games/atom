@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Tests.ClassTests.Params;
+﻿using DecSm.Atom.Core.Secrets;
+
+namespace DecSm.Atom.Tests.ClassTests.Params;
 
 [TestFixture]
 [NonParallelizable]

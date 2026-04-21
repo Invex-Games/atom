@@ -57,7 +57,7 @@ public static class DotnetCliGenerator
                         [
                             command.Arguments[0] with
                             {
-                                ValueType = "DecSm.Atom.Paths.RootedPath",
+                                ValueType = "DecSm.Atom.FileSystem.RootedPath",
                             },
                         ],
                     },
@@ -116,7 +116,7 @@ public static class DotnetCliGenerator
                         [
                             command.Arguments[0] with
                             {
-                                ValueType = "DecSm.Atom.Paths.RootedPath",
+                                ValueType = "DecSm.Atom.FileSystem.RootedPath",
                             },
                         ],
                     },
@@ -203,8 +203,8 @@ public static class DotnetCliGenerator
                 .Arguments
                 .Select(arg => new MethodParam(IsKnownAotFriendlyType(arg.ValueType)
                         ? FormatType(arg.ValueType)
-                        : arg.ValueType is "DecSm.Atom.Paths.RootedPath"
-                            ? "DecSm.Atom.Paths.RootedPath"
+                        : arg.ValueType is "DecSm.Atom.FileSystem.RootedPath"
+                            ? "DecSm.Atom.FileSystem.RootedPath"
                             : "System.String",
                     CsharpWriter.ToPascalCase(arg.Name, true),
                     XmlDescription: arg.Description))
@@ -228,7 +228,7 @@ public static class DotnetCliGenerator
                     {
                         case { Arguments.Count: 0, Options.Count: 0 }:
                         {
-                            bodyWriter.WriteLine("return processRunner.RunAsync((processRunOptions is null");
+                            bodyWriter.WriteLine("processRunner.RunAsync((processRunOptions is null");
 
                             using (bodyWriter.Indent)
                             {
@@ -243,7 +243,7 @@ public static class DotnetCliGenerator
 
                         case { Arguments.Count: 0, Options.Count: > 0 }:
                         {
-                            bodyWriter.WriteLine("return processRunner.RunAsync((processRunOptions is null");
+                            bodyWriter.WriteLine("processRunner.RunAsync((processRunOptions is null");
 
                             using (bodyWriter.Indent)
                             {
@@ -377,7 +377,7 @@ public static class DotnetCliGenerator
     /// <returns><c>true</c> if the type is considered AOT-friendly; otherwise, <c>false</c>.</returns>
     /// <remarks>
     ///     This method uses simple string checks to classify types. It explicitly allows
-    ///     `DecSm.Atom.Paths.RootedPath`, `Microsoft.DotNet.Cli.Utils.VerbosityOptions`,
+    ///     `DecSm.Atom.FileSystem.RootedPath`, `Microsoft.DotNet.Cli.Utils.VerbosityOptions`,
     ///     and any type starting with "System." (assuming BCL types are generally AOT-friendly).
     /// </remarks>
     private static bool IsKnownAotFriendlyType(string? typeName)
@@ -397,7 +397,7 @@ public static class DotnetCliGenerator
             typeName = typeName[(typeName.IndexOf('`') + 1)..];
 
         // Explicitly allow our known custom types and consider all BCL types under System.* as known
-        return typeName is "DecSm.Atom.Paths.RootedPath" or "Microsoft.DotNet.Cli.Utils.VerbosityOptions" ||
+        return typeName is "DecSm.Atom.FileSystem.RootedPath" or "Microsoft.DotNet.Cli.Utils.VerbosityOptions" ||
                typeName.StartsWith("System.", StringComparison.Ordinal);
     }
 }

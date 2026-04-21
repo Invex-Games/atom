@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Tests.BuildTests.BuildInfo;
+﻿using DecSm.Atom.Core;
+
+namespace DecSm.Atom.Tests.BuildTests.BuildInfo;
 
 [BuildDefinition]
 public sealed partial class BuildInfoBuild : MinimalBuildDefinition, IBuildInfoTarget

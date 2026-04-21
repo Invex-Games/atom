@@ -17,7 +17,7 @@ public partial interface IDevopsWorkflows : IJobRunsOn
     /// </summary>
     /// <param name="builder">The host application builder.</param>
     /// <remarks>
-    ///     This method registers <see cref="DevopsWorkflowWriter" /> for generating workflow files
+    ///     This method registers <see cref="DevopsWorkflowFileWriter" /> for generating workflow files
     ///     and <see cref="DevopsVariableProvider" /> for Azure DevOps-specific workflow variables.
     ///     When running inside Azure DevOps Pipelines, it also sets up <see cref="DevopsSummaryOutcomeReportWriter" />
     ///     for reporting and adjusts artifact and publish paths to Azure DevOps conventions.
@@ -25,12 +25,18 @@ public partial interface IDevopsWorkflows : IJobRunsOn
     protected static partial void ConfigureBuilder(IHostApplicationBuilder builder)
     {
         builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(IWorkflowWriter),
-            typeof(DevopsWorkflowWriter),
+            typeof(DevopsWorkflowFileWriter),
             ServiceLifetime.Singleton));
 
-        builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(IWorkflowVariableProvider),
+        builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(IVariableProvider),
             typeof(DevopsVariableProvider),
             ServiceLifetime.Singleton));
+
+        builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(IWorkflowExpressionFormatter),
+            typeof(DevopsExpressionFormatter),
+            ServiceLifetime.Singleton));
+
+        builder.Services.TryAddSingleton<DevopsWorkflowBuilder>();
 
         if (Devops.IsDevopsPipelines)
             builder

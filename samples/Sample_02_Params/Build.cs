@@ -17,7 +17,6 @@
 // These are automatically globally included when using DecSm.Atom from a nuget package
 
 using DecSm.Atom.Build.Definition;
-using DecSm.Atom.Hosting;
 using DecSm.Atom.Params;
 
 namespace Atom;

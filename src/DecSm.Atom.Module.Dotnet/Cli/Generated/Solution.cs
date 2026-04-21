@@ -37,7 +37,7 @@ public partial interface IDotnetCli
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> Solution(
-        DecSm.Atom.Paths.RootedPath slnFile,
+        DecSm.Atom.FileSystem.RootedPath slnFile,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -62,7 +62,7 @@ internal partial class DotnetCli
     }
     
     public Task<ProcessRunResult> Solution(
-        DecSm.Atom.Paths.RootedPath slnFile,
+        DecSm.Atom.FileSystem.RootedPath slnFile,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )    {

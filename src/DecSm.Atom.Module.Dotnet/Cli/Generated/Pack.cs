@@ -66,7 +66,7 @@ public partial interface IDotnetCli
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> Pack(
-        DecSm.Atom.Paths.RootedPath projectOrSolutionOrFile,
+        DecSm.Atom.FileSystem.RootedPath projectOrSolutionOrFile,
         PackOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
@@ -111,7 +111,7 @@ internal partial class DotnetCli
     }
     
     public Task<ProcessRunResult> Pack(
-        DecSm.Atom.Paths.RootedPath projectOrSolutionOrFile,
+        DecSm.Atom.FileSystem.RootedPath projectOrSolutionOrFile,
         PackOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
