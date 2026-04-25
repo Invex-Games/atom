@@ -1,4 +1,4 @@
-﻿using DecSm.Atom.Build.BuildFlags;
+﻿using DecSm.Atom.Build.BuildOptions;
 
 namespace DecSm.Atom.Build.Definition;
 
@@ -43,7 +43,7 @@ public abstract class BuildDefinition(IServiceProvider services) : IBuildDefinit
     /// <inheritdoc />
     public abstract IReadOnlyDictionary<string, ParamDefinition> ParamDefinitions { get; }
 
-    public virtual IReadOnlyList<IBuildFlag> Flags { get; } = [];
+    public virtual IReadOnlyList<IBuildOption> BuildOptions { get; } = [];
 
     /// <inheritdoc />
     public abstract object? AccessParam(string paramName);

@@ -1,5 +1,3 @@
-using DecSm.Atom.Build.Util;
-
 namespace DecSm.Atom.Workflows.Experimental;
 
 [UnstableAPI]
@@ -19,11 +17,11 @@ public sealed record WorkflowCacheSaveOption : IWorkflowOption
 {
     public required string Name { get; init; }
 
-    public required WorkflowExpression Key { get; init; }
+    public required TextExpression Key { get; init; }
 
-    public required WorkflowExpressionCollection Paths { get; init; }
+    public required TextExpressionCollection Paths { get; init; }
 
-    public WorkflowExpression? RunIf { get; init; }
+    public TextExpression? RunIf { get; init; }
 
     public bool RunOnlyIfMatchingNameCacheMissed { get; init; } = true;
 
@@ -35,11 +33,11 @@ public sealed record WorkflowCacheRestoreOption : IWorkflowOption
 {
     public required string Name { get; init; }
 
-    public required WorkflowExpression Key { get; init; }
+    public required TextExpression Key { get; init; }
 
-    public required WorkflowExpressionCollection Paths { get; init; }
+    public required TextExpressionCollection Paths { get; init; }
 
-    public WorkflowExpression? RunIf { get; init; }
+    public TextExpression? RunIf { get; init; }
 
     public string StepId => $"cache-restore-{WorkflowCacheUtil.ConvertNameToId(Name)}";
 }
@@ -54,9 +52,9 @@ public static class WorkflowCacheOptions
 
         public WorkflowCacheSaveOption Save(
             string name,
-            WorkflowExpression key,
-            IEnumerable<WorkflowExpression> paths,
-            WorkflowExpression? runIf = null,
+            TextExpression key,
+            IEnumerable<TextExpression> paths,
+            TextExpression? runIf = null,
             bool runOnlyIfMatchingNameCacheMissed = true) =>
             new()
             {
@@ -72,9 +70,9 @@ public static class WorkflowCacheOptions
         [UnstableAPI]
         public WorkflowCacheRestoreOption Restore(
             string name,
-            WorkflowExpression key,
-            IEnumerable<WorkflowExpression> paths,
-            WorkflowExpression? runIf = null) =>
+            TextExpression key,
+            IEnumerable<TextExpression> paths,
+            TextExpression? runIf = null) =>
             new()
             {
                 Name = name,

@@ -1,4 +1,4 @@
-﻿namespace DecSm.Atom.Workflows.Definition;
+﻿namespace DecSm.Atom.Workflows;
 
 /// <summary>
 ///     Defines a contract for a workflow type, representing a specific CI/CD platform or execution environment.

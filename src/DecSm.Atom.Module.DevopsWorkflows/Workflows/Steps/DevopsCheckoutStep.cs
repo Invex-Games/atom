@@ -9,52 +9,52 @@ public sealed record DevopsCheckoutStep : CheckoutStep, IDevopsAdditionalStepOpt
     /// <summary>
     ///     Repository to check out. Valid values: "self" | "none" or repository resource name.
     /// </summary>
-    public required WorkflowExpression Repository { get; init; }
+    public required TextExpression Repository { get; init; }
 
     /// <summary>
     ///     Whether to clean the repository before checkout.
     /// </summary>
-    public WorkflowExpression? Clean { get; init; }
+    public TextExpression? Clean { get; init; }
 
     /// <summary>
     ///     Number of commits to fetch (depth). 0 indicates all history.
     /// </summary>
-    public WorkflowExpression? FetchDepth { get; init; }
+    public TextExpression? FetchDepth { get; init; }
 
     /// <summary>
     ///     Whether to download Git-LFS files.
     /// </summary>
-    public WorkflowExpression? Lfs { get; init; }
+    public TextExpression? Lfs { get; init; }
 
     /// <summary>
     ///     Whether to checkout submodules.
     /// </summary>
-    public WorkflowExpression? Submodules { get; init; }
+    public TextExpression? Submodules { get; init; }
 
     /// <summary>
     ///     Path to check out source code, relative to $(Agent.BuildDirectory).
     /// </summary>
-    public WorkflowExpression? Path { get; init; }
+    public TextExpression? Path { get; init; }
 
     /// <summary>
     ///     Persist credentials for later use by the Git command-line tool.
     /// </summary>
-    public WorkflowExpression? PersistCredentials { get; init; }
+    public TextExpression? PersistCredentials { get; init; }
 
     /// <summary>
     ///     Evaluate this condition expression to determine whether to run this task.
     /// </summary>
-    public WorkflowExpression? Condition { get; init; }
+    public TextExpression? Condition { get; init; }
 
     /// <summary>
     ///     Continue running even on failure?
     /// </summary>
-    public WorkflowExpression? ContinueOnError { get; init; }
+    public TextExpression? ContinueOnError { get; init; }
 
     /// <summary>
     ///     Human-readable name for the task.
     /// </summary>
-    public WorkflowExpression? DisplayName { get; init; }
+    public TextExpression? DisplayName { get; init; }
 
     /// <summary>
     ///     Environment in which to run this task.
@@ -64,27 +64,27 @@ public sealed record DevopsCheckoutStep : CheckoutStep, IDevopsAdditionalStepOpt
     /// <summary>
     ///     Run this task when the job runs?
     /// </summary>
-    public WorkflowExpression? Enabled { get; init; }
+    public TextExpression? Enabled { get; init; }
 
     /// <summary>
     ///     Variables to map into the process's environment.
     /// </summary>
-    public IReadOnlyDictionary<string, WorkflowExpression>? Env { get; init; }
+    public IReadOnlyDictionary<string, TextExpression>? Env { get; init; }
 
     /// <summary>
     ///     ID of the step.
     /// </summary>
-    public WorkflowExpression? Name { get; init; }
+    public TextExpression? Name { get; init; }
 
     /// <summary>
     ///     Time to wait for this task to complete before the server kills it.
     /// </summary>
-    public WorkflowExpression? TimeoutInMinutes { get; init; }
+    public TextExpression? TimeoutInMinutes { get; init; }
 
     /// <summary>
     ///     Number of retries if the task fails.
     /// </summary>
-    public WorkflowExpression? RetryCountOnTaskFailure { get; init; }
+    public TextExpression? RetryCountOnTaskFailure { get; init; }
 
     public Step Build() =>
         new Step.Checkout

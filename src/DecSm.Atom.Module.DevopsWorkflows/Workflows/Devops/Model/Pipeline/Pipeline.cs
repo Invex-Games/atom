@@ -32,12 +32,12 @@ public partial record Pipeline
         /// <summary>
         ///     Pipeline run number.
         /// </summary>
-        public WorkflowExpression? Name { get; init; }
+        public WorkflowExpression<string>? Name { get; init; }
 
         /// <summary>
         ///     Append the commit message to the build number. The default is true.
         /// </summary>
-        public WorkflowExpression? AppendCommitMessageToRunName { get; init; }
+        public WorkflowExpression<bool>? AppendCommitMessageToRunName { get; init; }
 
         /// <summary>
         ///     Continuous integration triggers.
@@ -73,7 +73,7 @@ public partial record Pipeline
         ///     Behavior lock requests from this stage should exhibit in relation to other exclusive lock requests.
         ///     Valid values: "sequential" | "runLatest"
         /// </summary>
-        public WorkflowExpression? LockBehavior { get; init; }
+        public WorkflowExpression<string>? LockBehavior { get; init; }
     }
 
     /// <summary>
@@ -94,12 +94,12 @@ public partial record Pipeline
         /// <summary>
         ///     Pipeline run number.
         /// </summary>
-        public WorkflowExpression? Name { get; init; }
+        public WorkflowExpression<string>? Name { get; init; }
 
         /// <summary>
         ///     Append the commit message to the build number. The default is true.
         /// </summary>
-        public WorkflowExpression? AppendCommitMessageToRunName { get; init; }
+        public WorkflowExpression<bool>? AppendCommitMessageToRunName { get; init; }
 
         /// <summary>
         ///     Continuous integration triggers.
@@ -135,7 +135,7 @@ public partial record Pipeline
         ///     Behavior lock requests from this stage should exhibit in relation to other exclusive lock requests.
         ///     Valid values: "sequential" | "runLatest"
         /// </summary>
-        public WorkflowExpression? LockBehavior { get; init; }
+        public WorkflowExpression<string>? LockBehavior { get; init; }
     }
 
     /// <summary>
@@ -156,12 +156,12 @@ public partial record Pipeline
         /// <summary>
         ///     Pipeline run number.
         /// </summary>
-        public WorkflowExpression? Name { get; init; }
+        public WorkflowExpression<string>? Name { get; init; }
 
         /// <summary>
         ///     Append the commit message to the build number. The default is true.
         /// </summary>
-        public WorkflowExpression? AppendCommitMessageToRunName { get; init; }
+        public WorkflowExpression<bool>? AppendCommitMessageToRunName { get; init; }
 
         /// <summary>
         ///     Continuous integration triggers.
@@ -197,7 +197,7 @@ public partial record Pipeline
         ///     Behavior lock requests from this stage should exhibit in relation to other exclusive lock requests.
         ///     Valid values: "sequential" | "runLatest"
         /// </summary>
-        public WorkflowExpression? LockBehavior { get; init; }
+        public WorkflowExpression<string>? LockBehavior { get; init; }
     }
 
     /// <summary>
@@ -218,7 +218,7 @@ public partial record Pipeline
         /// <summary>
         ///     Continue running even on failure?
         /// </summary>
-        public WorkflowExpression? ContinueOnError { get; init; }
+        public WorkflowExpression<bool>? ContinueOnError { get; init; }
 
         /// <summary>
         ///     Pool where jobs in this pipeline will run unless otherwise specified.
@@ -233,7 +233,7 @@ public partial record Pipeline
         /// <summary>
         ///     Container resources to run as a service container.
         /// </summary>
-        public IReadOnlyDictionary<string, WorkflowExpression>? Services { get; init; }
+        public IReadOnlyDictionary<string, TextExpression>? Services { get; init; }
 
         /// <summary>
         ///     Workspace options on the agent.
@@ -243,12 +243,12 @@ public partial record Pipeline
         /// <summary>
         ///     Pipeline run number.
         /// </summary>
-        public WorkflowExpression? Name { get; init; }
+        public WorkflowExpression<string>? Name { get; init; }
 
         /// <summary>
         ///     Append the commit message to the build number. The default is true.
         /// </summary>
-        public WorkflowExpression? AppendCommitMessageToRunName { get; init; }
+        public WorkflowExpression<bool>? AppendCommitMessageToRunName { get; init; }
 
         /// <summary>
         ///     Continuous integration triggers.
@@ -284,6 +284,6 @@ public partial record Pipeline
         ///     Behavior lock requests from this stage should exhibit in relation to other exclusive lock requests.
         ///     Valid values: "sequential" | "runLatest"
         /// </summary>
-        public WorkflowExpression? LockBehavior { get; init; }
+        public WorkflowExpression<string>? LockBehavior { get; init; }
     }
 }

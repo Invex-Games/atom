@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Module.DevopsWorkflows;
+﻿using DecSm.Atom.Workflows;
+
+namespace DecSm.Atom.Module.DevopsWorkflows;
 
 /// <summary>
 ///     Provides integration with Azure DevOps Pipelines for DecSm.Atom builds.
@@ -32,7 +34,7 @@ public partial interface IDevopsWorkflows : IJobRunsOn
             typeof(DevopsVariableProvider),
             ServiceLifetime.Singleton));
 
-        builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(IWorkflowExpressionFormatter),
+        builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(ITextExpressionFormatter),
             typeof(DevopsExpressionFormatter),
             ServiceLifetime.Singleton));
 

@@ -1,4 +1,4 @@
-﻿namespace DecSm.Atom.Workflows.Options;
+﻿namespace DecSm.Atom.Workflows;
 
 /// <summary>
 ///     Defines the execution environment (runner or agent) for a workflow job.
@@ -8,7 +8,7 @@
 ///     It is typically used in build matrices to run jobs across multiple environments.
 /// </remarks>
 [PublicAPI]
-public interface IJobRunsOn : IBuildDefinition, IBuildAccessor
+public interface IJobRunsOn : IBuildAccessor
 {
     /// <summary>
     ///     Gets the runner or agent tag for the job, sourced from the "job-runs-on" parameter.

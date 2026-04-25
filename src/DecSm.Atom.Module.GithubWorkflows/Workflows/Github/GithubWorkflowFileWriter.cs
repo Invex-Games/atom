@@ -1,13 +1,16 @@
+using DecSm.Atom.StructuredText.Expressions;
+
 namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Github;
 
 internal sealed class GithubWorkflowFileWriter(
     IAtomFileSystem atomFileSystem,
     GithubWorkflowBuilder workflowBuilder,
-    IWorkflowExpressionResolver expressionResolver,
     ILogger<WorkflowFileWriter<GithubWorkflowType>> logger
 ) : WorkflowFileWriter<GithubWorkflowType>(atomFileSystem, logger)
 {
     private readonly IAtomFileSystem _atomFileSystem = atomFileSystem;
+
+    private readonly GithubExpressionFormatter _expressionFormatter = new();
 
     protected override string FileExtension => "yml";
 
@@ -24,38 +27,38 @@ internal sealed class GithubWorkflowFileWriter(
         if (githubWorkflow.Name is { Length: > 0 } name)
             WriteProperty("name", name);
 
-        var runName = expressionResolver.Resolve(githubWorkflow.RunName);
+        var runName = _expressionFormatter.Format(githubWorkflow.RunName);
 
         if (runName is { Length: > 0 })
             WriteProperty("run-name", runName);
 
         if (githubWorkflow.Name is { Length: > 0 } || runName is { Length: > 0 })
-            Writer.WriteLine();
+            TextBuilder.WriteLine();
 
         WriteOn(githubWorkflow.On);
-        Writer.WriteLine();
+        TextBuilder.WriteLine();
 
         if (githubWorkflow.Permissions is { } permissions)
         {
             WritePermissions(permissions);
-            Writer.WriteLine();
+            TextBuilder.WriteLine();
         }
 
         if (githubWorkflow.Env is { } env)
         {
             WriteEnv(env);
-            Writer.WriteLine();
+            TextBuilder.WriteLine();
         }
 
         if (githubWorkflow.Concurrency is { } concurrency)
         {
             WriteConcurrency(concurrency);
-            Writer.WriteLine();
+            TextBuilder.WriteLine();
         }
 
-        using (Writer.WriteSection("jobs:"))
+        using (TextBuilder.WriteSection("jobs:"))
         {
-            Writer.WriteLine();
+            TextBuilder.WriteLine();
 
             foreach (var job in githubWorkflow.Jobs)
                 WriteJob(githubWorkflow, job);
@@ -67,24 +70,24 @@ internal sealed class GithubWorkflowFileWriter(
         if (concurrency is null)
             return;
 
-        using (Writer.WriteSection("concurrency:"))
+        using (TextBuilder.WriteSection("concurrency:"))
         {
-            Writer.WriteLine(Format(expressionResolver.Resolve(concurrency.Group)));
+            TextBuilder.WriteLine(Format(_expressionFormatter.Format(concurrency.Group)));
 
             if (concurrency.CancelInProgress is { } cancelInProgress)
-                WriteProperty("cancel-in-progress", expressionResolver.Resolve(cancelInProgress));
+                WriteProperty("cancel-in-progress", _expressionFormatter.Format(cancelInProgress));
         }
     }
 
-    private void WriteEnv(IReadOnlyDictionary<string, WorkflowExpression>? env)
+    private void WriteEnv(IReadOnlyDictionary<string, TextExpression>? env)
     {
         if (env is not { Count: > 0 })
             return;
 
-        using var _ = Writer.WriteSection("env:");
+        using var _ = TextBuilder.WriteSection("env:");
 
         foreach (var (key, value) in env)
-            WriteProperty(key, expressionResolver.Resolve(value));
+            WriteProperty(key, _expressionFormatter.Format(value));
     }
 
     private void WritePermissions(Permissions? permissions)
@@ -95,20 +98,20 @@ internal sealed class GithubWorkflowFileWriter(
         switch (permissions)
         {
             case Permissions.All { Level: PermissionsLevel.Read }:
-                Writer.WriteLine("permissions: read-all");
+                TextBuilder.WriteLine("permissions: read-all");
 
                 break;
             case Permissions.All { Level: PermissionsLevel.Write }:
-                Writer.WriteLine("permissions: write-all");
+                TextBuilder.WriteLine("permissions: write-all");
 
                 break;
             case Permissions.All { Level: PermissionsLevel.None }:
-                Writer.WriteLine("permissions: { }");
+                TextBuilder.WriteLine("permissions: { }");
 
                 break;
 
             case Permissions.Exact exact:
-                using (Writer.WriteSection("permissions:"))
+                using (TextBuilder.WriteSection("permissions:"))
                 {
                     if (exact.Permissions.Actions is { } actionsPermission)
                         WriteProperty("actions",
@@ -198,7 +201,7 @@ internal sealed class GithubWorkflowFileWriter(
 
     private void WriteOn(IReadOnlyList<On> workflowOn)
     {
-        using var _ = Writer.WriteSection("on:");
+        using var _ = TextBuilder.WriteSection("on:");
 
         var orderedOn = workflowOn.OrderBy(x => x.GetType()
             .FullName);
@@ -207,57 +210,57 @@ internal sealed class GithubWorkflowFileWriter(
             switch (on)
             {
                 case On.BranchProtectionRule branchProtectionRule:
-                    using (Writer.WriteSection("branch_protection_rule:"))
+                    using (TextBuilder.WriteSection("branch_protection_rule:"))
                         WriteProperty("types", branchProtectionRule.Types.Select(x => x.ToString()));
 
                     break;
                 case On.CheckRun checkRun:
-                    using (Writer.WriteSection("check_run:"))
+                    using (TextBuilder.WriteSection("check_run:"))
                         WriteProperty("types", checkRun.Types.Select(x => x.ToString()));
 
                     break;
                 case On.CheckSuite checkSuite:
-                    using (Writer.WriteSection("check_suite:"))
+                    using (TextBuilder.WriteSection("check_suite:"))
                         WriteProperty("types", checkSuite.Types.Select(x => x.ToString()));
 
                     break;
                 case On.Create:
-                    Writer.WriteLine("create");
+                    TextBuilder.WriteLine("create");
 
                     break;
                 case On.Delete:
-                    Writer.WriteLine("delete");
+                    TextBuilder.WriteLine("delete");
 
                     break;
                 case On.Deployment:
-                    Writer.WriteLine("deployment");
+                    TextBuilder.WriteLine("deployment");
 
                     break;
                 case On.DeploymentStatus:
-                    Writer.WriteLine("deployment_status");
+                    TextBuilder.WriteLine("deployment_status");
 
                     break;
                 case On.Discussion discussion:
-                    using (Writer.WriteSection("discussion:"))
+                    using (TextBuilder.WriteSection("discussion:"))
                         WriteProperty("types", discussion.Types.Select(x => x.ToString()));
 
                     break;
                 case On.DiscussionComment discussionComment:
-                    using (Writer.WriteSection("discussion_comment:"))
+                    using (TextBuilder.WriteSection("discussion_comment:"))
                         WriteProperty("types", discussionComment.Types.Select(x => x.ToString()));
 
                     break;
                 case On.Fork:
-                    Writer.WriteLine("fork");
+                    TextBuilder.WriteLine("fork");
 
                     break;
                 case On.Gollum:
-                    Writer.WriteLine("gollum");
+                    TextBuilder.WriteLine("gollum");
 
                     break;
 
                 case On.ImageVersion imageVersion:
-                    using (Writer.WriteSection("image_version:"))
+                    using (TextBuilder.WriteSection("image_version:"))
                     {
                         if (imageVersion.Names is { Count: > 0 } names)
                             WriteProperty("names", names);
@@ -268,56 +271,56 @@ internal sealed class GithubWorkflowFileWriter(
 
                     break;
                 case On.IssueComment issueComment:
-                    using (Writer.WriteSection("issue_comment:"))
+                    using (TextBuilder.WriteSection("issue_comment:"))
                         WriteProperty("types", string.Join(", ", issueComment.Types.Select(x => x.ToString())));
 
                     break;
                 case On.Issues issues:
-                    using (Writer.WriteSection("issues:"))
+                    using (TextBuilder.WriteSection("issues:"))
                         WriteProperty("types", string.Join(", ", issues.Types.Select(x => x.ToString())));
 
                     break;
                 case On.Label label:
-                    using (Writer.WriteSection("label:"))
+                    using (TextBuilder.WriteSection("label:"))
                         WriteProperty("types", string.Join(", ", label.Types.Select(x => x.ToString())));
 
                     break;
                 case On.MergeGroup mergeGroup:
-                    using (Writer.WriteSection("merge_group:"))
+                    using (TextBuilder.WriteSection("merge_group:"))
                         WriteProperty("types", string.Join(", ", mergeGroup.Types.Select(x => x.ToString())));
 
                     break;
                 case On.Milestone milestone:
-                    using (Writer.WriteSection("milestone:"))
+                    using (TextBuilder.WriteSection("milestone:"))
                         WriteProperty("types", string.Join(", ", milestone.Types.Select(x => x.ToString())));
 
                     break;
                 case On.PageBuild:
-                    Writer.WriteLine("page_build");
+                    TextBuilder.WriteLine("page_build");
 
                     break;
                 case On.Project project:
-                    using (Writer.WriteSection("project:"))
+                    using (TextBuilder.WriteSection("project:"))
                         WriteProperty("types", project.Types.Select(x => x.ToString()));
 
                     break;
                 case On.ProjectCard projectCard:
-                    using (Writer.WriteSection("project_card:"))
+                    using (TextBuilder.WriteSection("project_card:"))
                         WriteProperty("types", string.Join(", ", projectCard.Types.Select(x => x.ToString())));
 
                     break;
                 case On.ProjectColumn projectColumn:
-                    using (Writer.WriteSection("project_column:"))
+                    using (TextBuilder.WriteSection("project_column:"))
                         WriteProperty("types", string.Join(", ", projectColumn.Types.Select(x => x.ToString())));
 
                     break;
                 case On.Public:
-                    Writer.WriteLine("public");
+                    TextBuilder.WriteLine("public");
 
                     break;
 
                 case On.PullRequest pullRequest:
-                    using (Writer.WriteSection("pull_request:"))
+                    using (TextBuilder.WriteSection("pull_request:"))
                     {
                         if (pullRequest.Types.Count > 0)
                             WriteProperty("types", pullRequest.Types.Select(x => x.ToString()));
@@ -343,23 +346,23 @@ internal sealed class GithubWorkflowFileWriter(
 
                     break;
                 case On.PullRequestReview pullRequestReview:
-                    using (Writer.WriteSection("pull_request_review:"))
+                    using (TextBuilder.WriteSection("pull_request_review:"))
                         WriteProperty("types", pullRequestReview.Types.Select(x => x.ToString()));
 
                     break;
                 case On.PullRequestReviewComment pullRequestReviewComment:
-                    using (Writer.WriteSection("pull_request_review_comment:"))
+                    using (TextBuilder.WriteSection("pull_request_review_comment:"))
                         WriteProperty("types", pullRequestReviewComment.Types.Select(x => x.ToString()));
 
                     break;
                 case On.PullRequestTarget pullRequestTarget:
-                    using (Writer.WriteSection("pull_request_target:"))
+                    using (TextBuilder.WriteSection("pull_request_target:"))
                         WriteProperty("types", pullRequestTarget.Types.Select(x => x.ToString()));
 
                     break;
 
                 case On.Push push:
-                    using (Writer.WriteSection("push:"))
+                    using (TextBuilder.WriteSection("push:"))
                     {
                         if (push.Branches is { Count: > 0 } branches)
                             WriteProperty("branches", branches);
@@ -376,46 +379,46 @@ internal sealed class GithubWorkflowFileWriter(
 
                     break;
                 case On.RegistryPackage registryPackage:
-                    using (Writer.WriteSection("registry_package:"))
+                    using (TextBuilder.WriteSection("registry_package:"))
                         WriteProperty("types", registryPackage.Types.Select(x => x.ToString()));
 
                     break;
                 case On.Release release:
-                    using (Writer.WriteSection("release:"))
+                    using (TextBuilder.WriteSection("release:"))
                         WriteProperty("types", release.Types.Select(x => x.ToString()));
 
                     break;
                 case On.RepositoryDispatch repositoryDispatch:
-                    using (Writer.WriteSection("repository_dispatch:"))
+                    using (TextBuilder.WriteSection("repository_dispatch:"))
                         WriteProperty("types", repositoryDispatch.Types.Select(x => x.ToString()));
 
                     break;
 
                 case On.Schedule schedule:
-                    using (Writer.WriteSection("schedule:"))
+                    using (TextBuilder.WriteSection("schedule:"))
                         WriteProperty("cron", schedule.Crons);
 
                     break;
                 case On.Status:
-                    Writer.WriteLine("status");
+                    TextBuilder.WriteLine("status");
 
                     break;
                 case On.Watch watch:
-                    using (Writer.WriteSection("watch:"))
+                    using (TextBuilder.WriteSection("watch:"))
                         WriteProperty("types", watch.Types.Select(x => x.ToString()));
 
                     break;
                 case On.WorkflowCall:
-                    Writer.WriteLine("workflow_call");
+                    TextBuilder.WriteLine("workflow_call");
 
                     break;
 
                 case On.WorkflowDispatch workflowDispatch:
-                    using (Writer.WriteSection("workflow_dispatch:"))
+                    using (TextBuilder.WriteSection("workflow_dispatch:"))
                         if (workflowDispatch.Inputs is { Count: > 0 } inputs)
-                            using (Writer.WriteSection("inputs:"))
+                            using (TextBuilder.WriteSection("inputs:"))
                                 foreach (var input in inputs)
-                                    using (Writer.WriteSection($"{input.Name}:"))
+                                    using (TextBuilder.WriteSection($"{input.Name}:"))
                                     {
                                         if (input.Description is { } description)
                                             WriteProperty("description", description);
@@ -448,7 +451,7 @@ internal sealed class GithubWorkflowFileWriter(
                     break;
 
                 case On.WorkflowRun workflowRun:
-                    using (Writer.WriteSection("workflow_run:"))
+                    using (TextBuilder.WriteSection("workflow_run:"))
                     {
                         if (workflowRun.Workflows is { Count: > 0 } workflows)
                             WriteProperty("workflows", workflows);
@@ -466,42 +469,42 @@ internal sealed class GithubWorkflowFileWriter(
 
     private void WriteJob(GithubWorkflow githubWorkflow, Job job)
     {
-        using var _ = Writer.WriteSection($"{expressionResolver.Resolve(job.Name)}:");
+        using var _ = TextBuilder.WriteSection($"{_expressionFormatter.Format(job.Name)}:");
 
         if (job.Permissions is { } permissions && permissions != githubWorkflow.Permissions)
             WritePermissions(permissions);
 
         if (job.Needs is { Count: > 0 } needs)
-            WriteProperty("needs", needs.Select(x => expressionResolver.Resolve(x)));
+            WriteProperty("needs", needs.Select(x => _expressionFormatter.Format(x)));
 
-        if (expressionResolver.Resolve(job.If) is { Length: > 0 } condition)
+        if (_expressionFormatter.Format(job.If) is { Length: > 0 } condition)
             WriteProperty("if", condition);
 
         if (job.RunsOn is { Group: null, Labels.Count: 1 })
         {
             var value = job.RunsOn.Labels[0];
-            WriteProperty("runs-on", expressionResolver.Resolve(value));
+            WriteProperty("runs-on", _expressionFormatter.Format(value));
         }
         else
-            using (Writer.WriteSection("runs-on:"))
-                if (expressionResolver.Resolve(job.RunsOn.Group) is { Length: > 0 } group)
+            using (TextBuilder.WriteSection("runs-on:"))
+                if (_expressionFormatter.Format(job.RunsOn.Group) is { Length: > 0 } group)
                     WriteProperty("group", group);
                 else if (job.RunsOn.Labels.Count > 0)
-                    WriteProperty("labels", job.RunsOn.Labels.Select(x => expressionResolver.Resolve(x)));
+                    WriteProperty("labels", job.RunsOn.Labels.Select(x => _expressionFormatter.Format(x)));
 
         switch (job.Snapshot)
         {
             case { Version: not null }:
-                using (Writer.WriteSection("snapshot:"))
+                using (TextBuilder.WriteSection("snapshot:"))
                 {
-                    WriteProperty("image-name", expressionResolver.Resolve(job.Snapshot.ImageName));
-                    WriteProperty("version", expressionResolver.Resolve(job.Snapshot.Version));
+                    WriteProperty("image-name", _expressionFormatter.Format(job.Snapshot.ImageName));
+                    WriteProperty("version", _expressionFormatter.Format(job.Snapshot.Version));
                 }
 
                 break;
 
             case { Version: null }:
-                WriteProperty("snapshot", expressionResolver.Resolve(job.Snapshot.ImageName));
+                WriteProperty("snapshot", _expressionFormatter.Format(job.Snapshot.ImageName));
 
                 break;
         }
@@ -509,16 +512,16 @@ internal sealed class GithubWorkflowFileWriter(
         switch (job.Environment)
         {
             case { UrlValue: not null }:
-                using (Writer.WriteSection("environment:"))
+                using (TextBuilder.WriteSection("environment:"))
                 {
-                    WriteProperty("name", expressionResolver.Resolve(job.Environment.Name));
-                    WriteProperty("url", expressionResolver.Resolve(job.Environment.UrlValue!));
+                    WriteProperty("name", _expressionFormatter.Format(job.Environment.Name));
+                    WriteProperty("url", _expressionFormatter.Format(job.Environment.UrlValue!));
                 }
 
                 break;
 
             case { UrlValue: null }:
-                WriteProperty("environment", expressionResolver.Resolve(job.Environment.Name));
+                WriteProperty("environment", _expressionFormatter.Format(job.Environment.Name));
 
                 break;
         }
@@ -526,32 +529,32 @@ internal sealed class GithubWorkflowFileWriter(
         WriteConcurrency(job.Concurrency);
 
         if (job.Outputs is { Count: > 0 } outputs)
-            using (Writer.WriteSection("outputs:"))
+            using (TextBuilder.WriteSection("outputs:"))
                 foreach (var (key, value) in outputs)
-                    WriteProperty(key, expressionResolver.Resolve(value));
+                    WriteProperty(key, _expressionFormatter.Format(value));
 
         WriteEnv(job.Env);
 
         if (job.TimeoutMinutes is { } timeout)
-            WriteProperty("timeout-minutes", expressionResolver.Resolve(timeout));
+            WriteProperty("timeout-minutes", _expressionFormatter.Format(timeout));
 
         WriteStrategy(job.Strategy);
 
         if (job.ContinueOnError is { } continueOnError)
-            WriteProperty("continue-on-error", expressionResolver.Resolve(continueOnError));
+            WriteProperty("continue-on-error", _expressionFormatter.Format(continueOnError));
 
         WriteContainer(job.Container);
 
         if (job.Services is { Count: > 0 } services)
-            using (Writer.WriteSection("services:"))
+            using (TextBuilder.WriteSection("services:"))
                 foreach (var service in services)
-                    using (Writer.WriteSection($"{service.Key}:"))
+                    using (TextBuilder.WriteSection($"{service.Key}:"))
                         WriteContainer(service.Value);
 
         if (job.Steps is { Count: > 0 } steps)
-            using (Writer.WriteSection("steps:"))
+            using (TextBuilder.WriteSection("steps:"))
             {
-                Writer.WriteLine();
+                TextBuilder.WriteLine();
 
                 foreach (var step in steps)
                     WriteStep(step);
@@ -563,31 +566,31 @@ internal sealed class GithubWorkflowFileWriter(
         if (jobContainer is null)
             return;
 
-        using var containerSection = Writer.WriteSection("container:");
+        using var containerSection = TextBuilder.WriteSection("container:");
 
-        WriteProperty("image", expressionResolver.Resolve(jobContainer.Image));
+        WriteProperty("image", _expressionFormatter.Format(jobContainer.Image));
 
         if (jobContainer.Credentials is { } credentials)
         {
-            using var credentialsSection = Writer.WriteSection("credentials:");
+            using var credentialsSection = TextBuilder.WriteSection("credentials:");
 
             if (credentials.Username is { } username)
-                WriteProperty("username", expressionResolver.Resolve(username));
+                WriteProperty("username", _expressionFormatter.Format(username));
 
             if (credentials.Password is { } password)
-                WriteProperty("password", expressionResolver.Resolve(password));
+                WriteProperty("password", _expressionFormatter.Format(password));
         }
 
         WriteEnv(jobContainer.Env);
 
         if (jobContainer.Ports is { } ports)
-            WriteProperty("ports", ports.Select(x => expressionResolver.Resolve(x)));
+            WriteProperty("ports", ports.Select(x => _expressionFormatter.Format(x)));
 
         if (jobContainer.Volumes is { } volumes)
-            WriteProperty("volumes", volumes.Select(x => expressionResolver.Resolve(x)));
+            WriteProperty("volumes", volumes.Select(x => _expressionFormatter.Format(x)));
 
         if (jobContainer.Options is { } options)
-            WriteProperty("options", expressionResolver.Resolve(options));
+            WriteProperty("options", _expressionFormatter.Format(options));
     }
 
     private void WriteStrategy(Strategy? strategy)
@@ -595,19 +598,19 @@ internal sealed class GithubWorkflowFileWriter(
         if (strategy is null)
             return;
 
-        using var strategySection = Writer.WriteSection("strategy:");
+        using var strategySection = TextBuilder.WriteSection("strategy:");
 
         if (strategy.FailFast is { } failFast)
-            WriteProperty("fail-fast", expressionResolver.Resolve(failFast));
+            WriteProperty("fail-fast", _expressionFormatter.Format(failFast));
 
         if (strategy.MaxParallel is { } maxParallel)
-            WriteProperty("max-parallel", expressionResolver.Resolve(maxParallel));
+            WriteProperty("max-parallel", _expressionFormatter.Format(maxParallel));
 
-        using var matrixSection = Writer.WriteSection("matrix:");
+        using var matrixSection = TextBuilder.WriteSection("matrix:");
 
         if (strategy.Matrix.Map is { } map)
             foreach (var (key, value) in map.Where(x => x.Value.Count > 0))
-                WriteProperty(key, value.Select(x => expressionResolver.Resolve(x)));
+                WriteProperty(key, value.Select(x => _expressionFormatter.Format(x)));
 
         if (strategy.Matrix.Include is { } include)
             foreach (var includeEntry in include)
@@ -617,9 +620,9 @@ internal sealed class GithubWorkflowFileWriter(
 
                 var pairs = includeEntry.ToList();
 
-                using (Writer.WriteSection($"- {pairs[0].Key}: {pairs[0].Value}"))
+                using (TextBuilder.WriteSection($"- {pairs[0].Key}: {pairs[0].Value}"))
                     foreach (var (key, value) in pairs.Skip(1))
-                        WriteProperty(key, expressionResolver.Resolve(value));
+                        WriteProperty(key, _expressionFormatter.Format(value));
             }
 
         if (strategy.Matrix.Exclude is { } exclude)
@@ -630,9 +633,9 @@ internal sealed class GithubWorkflowFileWriter(
 
                 var pairs = excludeEntry.ToList();
 
-                using (Writer.WriteSection($"- {pairs[0].Key}: {pairs[0].Value}"))
+                using (TextBuilder.WriteSection($"- {pairs[0].Key}: {pairs[0].Value}"))
                     foreach (var (key, value) in pairs.Skip(1))
-                        WriteProperty(key, expressionResolver.Resolve(value));
+                        WriteProperty(key, _expressionFormatter.Format(value));
             }
     }
 
@@ -640,13 +643,13 @@ internal sealed class GithubWorkflowFileWriter(
     {
         IDisposable? section = null;
 
-        if (expressionResolver.Resolve(step.Name) is { Length: > 0 } name)
+        if (_expressionFormatter.Format(step.Name) is { Length: > 0 } name)
             WriteSectionOrProperty("name", name);
 
         if (step.Id is { Length: > 0 } id)
             WriteSectionOrProperty("id", id);
 
-        if (expressionResolver.Resolve(step.If) is { Length: > 0 } condition)
+        if (_expressionFormatter.Format(step.If) is { Length: > 0 } condition)
             WriteSectionOrProperty("if", condition);
 
         switch (step)
@@ -655,41 +658,41 @@ internal sealed class GithubWorkflowFileWriter(
                 switch (runStep.Run)
                 {
                     case { Count: 1 } single:
-                        WriteSectionOrProperty("run", expressionResolver.Resolve(single[0]));
+                        WriteSectionOrProperty("run", _expressionFormatter.Format(single[0]));
 
                         break;
 
                     default:
-                        WriteSectionOrProperty("run", runStep.Run.Select(x => expressionResolver.Resolve(x)));
+                        WriteSectionOrProperty("run", runStep.Run.Select(x => _expressionFormatter.Format(x)));
 
                         break;
                 }
 
                 if (runStep.Shell is { } shell)
-                    WriteProperty("shell", expressionResolver.Resolve(shell));
+                    WriteProperty("shell", _expressionFormatter.Format(shell));
 
                 break;
 
             case Step.UsesStep usesStep:
-                WriteSectionOrProperty("uses", expressionResolver.Resolve(usesStep.Uses));
+                WriteSectionOrProperty("uses", _expressionFormatter.Format(usesStep.Uses));
 
                 break;
         }
 
         if (step.WorkingDirectory is { } workingDirectory)
-            WriteProperty("working-directory", expressionResolver.Resolve(workingDirectory));
+            WriteProperty("working-directory", _expressionFormatter.Format(workingDirectory));
 
         if (step.With is { Count: > 0 } with)
-            using (Writer.WriteSection("with:"))
+            using (TextBuilder.WriteSection("with:"))
                 foreach (var (key, value) in with)
                     switch (value)
                     {
                         case { Count: 1 } single:
-                            WriteProperty(key, expressionResolver.Resolve(single[0]));
+                            WriteProperty(key, _expressionFormatter.Format(single[0]));
 
                             break;
                         default:
-                            WriteProperty(key, value.Select(x => expressionResolver.Resolve(x)));
+                            WriteProperty(key, value.Select(x => _expressionFormatter.Format(x)));
 
                             break;
                     }
@@ -697,14 +700,14 @@ internal sealed class GithubWorkflowFileWriter(
         WriteEnv(step.Env);
 
         if (step.ContinueOnError is { } continueOnError)
-            WriteProperty("continue-on-error", expressionResolver.Resolve(continueOnError));
+            WriteProperty("continue-on-error", _expressionFormatter.Format(continueOnError));
 
         if (step.TimeoutMinutes is { } timeout)
-            WriteProperty("timeout-minutes", expressionResolver.Resolve(timeout));
+            WriteProperty("timeout-minutes", _expressionFormatter.Format(timeout));
 
         section?.Dispose();
 
-        Writer.WriteLine();
+        TextBuilder.WriteLine();
 
         return;
 
@@ -750,9 +753,9 @@ internal sealed class GithubWorkflowFileWriter(
                 default:
                     section = WriteSection($"- {valueName}", "|");
 
-                    using (Writer.WriteSection(string.Empty))
+                    using (TextBuilder.WriteSection(string.Empty))
                         foreach (var line in valueArray)
-                            Writer.WriteLine(Format(line));
+                            TextBuilder.WriteLine(Format(line));
 
                     break;
             }
@@ -762,8 +765,8 @@ internal sealed class GithubWorkflowFileWriter(
     private IDisposable WriteSection(string key, string value) =>
         value switch
         {
-            { Length: 0 } => Writer.WriteSection($"{key}: ''"),
-            _ => Writer.WriteSection($"{key}: {Format(value)}"),
+            { Length: 0 } => TextBuilder.WriteSection($"{key}: ''"),
+            _ => TextBuilder.WriteSection($"{key}: {Format(value)}"),
         };
 
     private void WriteProperty(string key, string value)
@@ -773,19 +776,19 @@ internal sealed class GithubWorkflowFileWriter(
         switch (lines.Length)
         {
             case 0:
-                Writer.WriteLine($"{key}: ''");
+                TextBuilder.WriteLine($"{key}: ''");
 
                 break;
             case 1:
-                Writer.WriteLine($"{key}: {Format(value)}");
+                TextBuilder.WriteLine($"{key}: {Format(value)}");
 
                 break;
 
             default:
             {
-                using (Writer.WriteSection($"{key}: |"))
+                using (TextBuilder.WriteSection($"{key}: |"))
                     foreach (var line in lines)
-                        Writer.WriteLine(line); // Don't format lines here
+                        TextBuilder.WriteLine(line); // Don't format lines here
 
                 break;
             }
@@ -799,11 +802,11 @@ internal sealed class GithubWorkflowFileWriter(
         var valuesTotalLength = valueList.Sum(x => x.Length);
 
         if (valuesTotalLength < 80)
-            Writer.WriteLine($"{key}: [ {string.Join(", ", valueList.Select(Format))} ]");
+            TextBuilder.WriteLine($"{key}: [ {string.Join(", ", valueList.Select(Format))} ]");
         else
-            using (Writer.WriteSection($"{key}:"))
+            using (TextBuilder.WriteSection($"{key}:"))
                 foreach (var value in valueList)
-                    Writer.WriteLine($"- {Format(value)}");
+                    TextBuilder.WriteLine($"- {Format(value)}");
     }
 
     private static string Format(string value) =>

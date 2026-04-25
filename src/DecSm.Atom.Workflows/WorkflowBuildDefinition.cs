@@ -7,7 +7,6 @@ public abstract class WorkflowBuildDefinition(IServiceProvider services)
     /// <inheritdoc />
     public virtual IReadOnlyList<WorkflowDefinition> Workflows { get; } = [];
 
-    /// <inheritdoc />
     public virtual IReadOnlyList<IWorkflowOption> GlobalWorkflowOptions { get; } = [];
 
     public override void ConfigureDefinitionHost(IHostApplicationBuilder builder)
@@ -19,7 +18,6 @@ public abstract class WorkflowBuildDefinition(IServiceProvider services)
             .AddSingleton<IWorkflowBuildDefinition>(services =>
                 (IWorkflowBuildDefinition)services.GetRequiredService<IBuildDefinition>())
             .AddSingleton<WorkflowGenerator>()
-            .AddSingleton<WorkflowResolver>()
-            .AddSingleton<IWorkflowExpressionResolver, WorkflowExpressionResolver>();
+            .AddSingleton<WorkflowResolver>();
     }
 }

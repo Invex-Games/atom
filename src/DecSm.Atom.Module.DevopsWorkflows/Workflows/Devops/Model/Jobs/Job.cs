@@ -22,37 +22,37 @@ public partial record Job
         ///     ID of the job.
         ///     Valid names may only contain alphanumeric characters and '_' and may not start with a number.
         /// </summary>
-        public required WorkflowExpression JobId { get; init; }
+        public required WorkflowExpression<string> JobId { get; init; }
 
         /// <summary>
         ///     Human-readable name for the job.
         /// </summary>
-        public WorkflowExpression? DisplayName { get; init; }
+        public WorkflowExpression<string>? DisplayName { get; init; }
 
         /// <summary>
         ///     Any jobs which must complete before this one.
         /// </summary>
-        public WorkflowExpressionCollection? DependsOn { get; init; }
+        public WorkflowExpressionCollection<string>? DependsOn { get; init; }
 
         /// <summary>
         ///     Evaluate this condition expression to determine whether to run this job.
         /// </summary>
-        public WorkflowExpression? Condition { get; init; }
+        public WorkflowExpression<bool>? Condition { get; init; }
 
         /// <summary>
         ///     Continue running even on failure?
         /// </summary>
-        public WorkflowExpression? ContinueOnError { get; init; }
+        public WorkflowExpression<bool>? ContinueOnError { get; init; }
 
         /// <summary>
         ///     Time to wait for this job to complete before the server kills it.
         /// </summary>
-        public WorkflowExpression? TimeoutInMinutes { get; init; }
+        public WorkflowExpression<double>? TimeoutInMinutes { get; init; }
 
         /// <summary>
         ///     Time to wait for the job to cancel before forcibly terminating it.
         /// </summary>
-        public WorkflowExpression? CancelTimeoutInMinutes { get; init; }
+        public WorkflowExpression<double>? CancelTimeoutInMinutes { get; init; }
 
         /// <summary>
         ///     Job-specific variables.
@@ -77,7 +77,7 @@ public partial record Job
         /// <summary>
         ///     Container resources to run as a service container.
         /// </summary>
-        public IReadOnlyDictionary<string, WorkflowExpression>? Services { get; init; }
+        public IReadOnlyDictionary<string, TextExpression>? Services { get; init; }
 
         /// <summary>
         ///     Workspace options on the agent.
@@ -97,7 +97,7 @@ public partial record Job
         /// <summary>
         ///     Job related information passed from a pipeline when extending a template.
         /// </summary>
-        public IReadOnlyDictionary<string, WorkflowExpression>? TemplateContext { get; init; }
+        public IReadOnlyDictionary<string, TextExpression>? TemplateContext { get; init; }
     }
 
     /// <summary>
@@ -109,37 +109,37 @@ public partial record Job
         ///     ID of the deployment job.
         ///     Valid names may only contain alphanumeric characters and '_' and may not start with a number.
         /// </summary>
-        public required WorkflowExpression DeploymentId { get; init; }
+        public required WorkflowExpression<string> DeploymentId { get; init; }
 
         /// <summary>
         ///     Human-readable name for the deployment.
         /// </summary>
-        public WorkflowExpression? DisplayName { get; init; }
+        public WorkflowExpression<string>? DisplayName { get; init; }
 
         /// <summary>
         ///     Any jobs which must complete before this one.
         /// </summary>
-        public WorkflowExpressionCollection? DependsOn { get; init; }
+        public WorkflowExpressionCollection<string>? DependsOn { get; init; }
 
         /// <summary>
         ///     Evaluate this condition expression to determine whether to run this deployment.
         /// </summary>
-        public WorkflowExpression? Condition { get; init; }
+        public WorkflowExpression<bool>? Condition { get; init; }
 
         /// <summary>
         ///     Continue running even on failure?
         /// </summary>
-        public WorkflowExpression? ContinueOnError { get; init; }
+        public WorkflowExpression<bool>? ContinueOnError { get; init; }
 
         /// <summary>
         ///     Time to wait for this job to complete before the server kills it.
         /// </summary>
-        public WorkflowExpression? TimeoutInMinutes { get; init; }
+        public WorkflowExpression<double>? TimeoutInMinutes { get; init; }
 
         /// <summary>
         ///     Time to wait for the job to cancel before forcibly terminating it.
         /// </summary>
-        public WorkflowExpression? CancelTimeoutInMinutes { get; init; }
+        public WorkflowExpression<double>? CancelTimeoutInMinutes { get; init; }
 
         /// <summary>
         ///     Deployment-specific variables.
@@ -169,7 +169,7 @@ public partial record Job
         /// <summary>
         ///     Container resources to run as a service container.
         /// </summary>
-        public IReadOnlyDictionary<string, WorkflowExpression>? Services { get; init; }
+        public IReadOnlyDictionary<string, TextExpression>? Services { get; init; }
 
         /// <summary>
         ///     Workspace options on the agent.
@@ -184,7 +184,7 @@ public partial record Job
         /// <summary>
         ///     Deployment related information passed from a pipeline when extending a template.
         /// </summary>
-        public IReadOnlyDictionary<string, WorkflowExpression>? TemplateContext { get; init; }
+        public IReadOnlyDictionary<string, TextExpression>? TemplateContext { get; init; }
     }
 
     /// <summary>
@@ -195,11 +195,11 @@ public partial record Job
         /// <summary>
         ///     Path to the template file.
         /// </summary>
-        public required WorkflowExpression TemplatePath { get; init; }
+        public required WorkflowExpression<string> TemplatePath { get; init; }
 
         /// <summary>
         ///     Parameters to pass to the template.
         /// </summary>
-        public IReadOnlyDictionary<string, WorkflowExpression>? Parameters { get; init; }
+        public IReadOnlyDictionary<string, TextExpression>? Parameters { get; init; }
     }
 }

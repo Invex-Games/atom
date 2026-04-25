@@ -21,11 +21,14 @@ public sealed record WorkflowTargetDefinition(string Name)
     ///     Creates a <see cref="WorkflowStepModel" /> from this target definition.
     /// </summary>
     /// <returns>A new <see cref="WorkflowStepModel" /> instance.</returns>
-    public WorkflowStepModel CreateModel() =>
-        new(Name)
+    public WorkflowStepModel CreateModel(IEnumerable<IWorkflowOption> workflowOptions) =>
+        new()
         {
+            Name = Name,
             MatrixDimensions = MatrixDimensions,
-            Options = Options,
+            Options = workflowOptions
+                .Concat(Options)
+                .ToList(),
         };
 
     /// <summary>

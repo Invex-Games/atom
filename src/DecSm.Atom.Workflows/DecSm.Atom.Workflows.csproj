@@ -6,11 +6,10 @@
 
   <ItemGroup>
     <PackageReference Include="DecSm.Analyzers.PublicApiSurface" Version="0.1.0-rc.11" PrivateAssets="all" />
-    <PackageReference Include="Dunet" Version="1.16.1" />
     <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.6" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.6" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.6" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.7" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -33,6 +32,7 @@
     <None Include="..\DecSm.Atom.Build.SourceGenerators\bin\$(Configuration)\netstandard2.0\DecSm.Atom.Build.SourceGenerators.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
     <ProjectReference Include="..\DecSm.Atom.Analyzers\DecSm.Atom.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <None Include="..\DecSm.Atom.Analyzers\bin\$(Configuration)\netstandard2.0\DecSm.Atom.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    <ProjectReference Include="..\DecSm.Atom.StructuredText\DecSm.Atom.StructuredText.csproj" />
   </ItemGroup>
 
   <ItemGroup>

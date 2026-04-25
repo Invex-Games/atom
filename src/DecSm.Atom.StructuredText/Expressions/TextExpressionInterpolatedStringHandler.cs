@@ -1,16 +1,16 @@
-namespace DecSm.Atom.Workflows.Expressions;
+namespace DecSm.Atom.StructuredText.Expressions;
 
 /// <summary>
 ///     An interpolated string handler that creates a <see cref="FormatExpression" /> from an interpolated string.
-///     Literal parts are combined into a format string with placeholders, and <see cref="WorkflowExpression" /> holes
+///     Literal parts are combined into a format string with placeholders, and <see cref="TextExpression" /> holes
 ///     become arguments.
 /// </summary>
 [InterpolatedStringHandler]
 [PublicAPI]
-public ref struct WorkflowExpressionInterpolatedStringHandler(int literalLength, int formattedCount)
+public ref struct TextExpressionInterpolatedStringHandler(int literalLength, int formattedCount)
 {
     private readonly StringBuilder _formatBuilder = new(literalLength + formattedCount * 3);
-    private readonly List<WorkflowExpression> _arguments = new(formattedCount);
+    private readonly List<TextExpression> _arguments = new(formattedCount);
     private int _argumentIndex = 0;
 
     public void AppendLiteral(string value) =>
@@ -18,7 +18,7 @@ public ref struct WorkflowExpressionInterpolatedStringHandler(int literalLength,
             .Replace("{", "{{")
             .Replace("}", "}}"));
 
-    public void AppendFormatted(WorkflowExpression expression)
+    public void AppendFormatted(TextExpression expression)
     {
         _formatBuilder.Append('{');
         _formatBuilder.Append(_argumentIndex++);

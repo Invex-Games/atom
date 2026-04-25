@@ -4,10 +4,12 @@
 ///     Represents a workflow model, including its name, triggers, options, and jobs, used for generating CI/CD workflow
 ///     files.
 /// </summary>
-/// <param name="Name">The name of the workflow.</param>
 [PublicAPI]
-public sealed record WorkflowModel(string Name)
+public sealed record WorkflowModel
 {
+    /// <summary>The name of the workflow.</summary>
+    public required string Name { get; init; }
+
     /// <summary>
     ///     Gets the triggers that define when the workflow should be initiated.
     /// </summary>
@@ -22,7 +24,7 @@ public sealed record WorkflowModel(string Name)
     /// <remarks>
     ///     Options can include input parameters, environment variables, or other settings.
     /// </remarks>
-    public required IReadOnlyList<IWorkflowOption> Options { get; init; }
+    public required IReadOnlyList<IWorkflowOption> WorkflowOptions { get; init; }
 
     /// <summary>
     ///     Gets the jobs that define the sequence of tasks to be executed by the workflow.

@@ -9,6 +9,7 @@
     <Project Path="src/DecSm.Atom.FileSystem/DecSm.Atom.FileSystem.csproj" />
     <Project Path="src/DecSm.Atom.Process/DecSm.Atom.Process.csproj" />
     <Project Path="src/DecSm.Atom.SemanticVersion/DecSm.Atom.SemanticVersion.csproj" />
+    <Project Path="src/DecSm.Atom.StructuredText/DecSm.Atom.StructuredText.csproj" />
     <Project Path="src/DecSm.Atom.Workflows/DecSm.Atom.Workflows.csproj" />
     <Project Path="src/DecSm.Atom/DecSm.Atom.csproj" />
   </Folder>

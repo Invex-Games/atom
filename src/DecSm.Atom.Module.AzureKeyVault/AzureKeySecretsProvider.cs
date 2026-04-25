@@ -71,7 +71,7 @@ public sealed class AzureKeySecretsProvider(
     {
         get
         {
-            if (!UseAzureKeyVault.IsEnabled(buildDefinition))
+            if (!UseAzureKeyVault.IsEnabled(buildDefinition.BuildOptions))
                 return [];
 
             var injections = keyVault.AzureKeyVaultValueInjections;

@@ -1,17 +1,19 @@
+using DecSm.Atom.StructuredText.Expressions;
+
 namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Github.Model;
 
 [PublicAPI]
 public sealed record Container
 {
-    public required WorkflowExpression Image { get; init; }
+    public required TextExpression Image { get; init; }
 
     public Credentials? Credentials { get; init; }
 
-    public IReadOnlyDictionary<string, WorkflowExpression>? Env { get; init; }
+    public IReadOnlyDictionary<string, TextExpression>? Env { get; init; }
 
-    public WorkflowExpressionCollection? Ports { get; init; }
+    public TextExpressionCollection? Ports { get; init; }
 
-    public WorkflowExpressionCollection? Volumes { get; init; }
+    public TextExpressionCollection? Volumes { get; init; }
 
-    public WorkflowExpression? Options { get; init; }
+    public TextExpression? Options { get; init; }
 }

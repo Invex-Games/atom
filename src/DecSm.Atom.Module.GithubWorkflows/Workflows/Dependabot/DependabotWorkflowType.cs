@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot;
+﻿using DecSm.Atom.Workflows;
+
+namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot;
 
 [PublicAPI]
 public sealed record DependabotWorkflowType : IWorkflowType

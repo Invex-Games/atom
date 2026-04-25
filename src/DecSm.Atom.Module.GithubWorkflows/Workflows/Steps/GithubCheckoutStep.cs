@@ -1,3 +1,5 @@
+using DecSm.Atom.StructuredText.Expressions;
+
 namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Steps;
 
 [PublicAPI]
@@ -7,14 +9,14 @@ public sealed record GithubCheckoutStep : CheckoutStep, IGithubAdditionalStepOpt
     ///     Repository name with owner. For example, actions/checkout.
     /// </summary>
     /// <remarks>Default: ${{ github.repository }}</remarks>
-    public WorkflowExpression? Repository { get; init; }
+    public TextExpression? Repository { get; init; }
 
     /// <summary>
     ///     The branch, tag or SHA to checkout. When checking out the repository that
     ///     triggered a workflow, this defaults to the reference or SHA for that event.
     ///     Otherwise, uses the default branch.
     /// </summary>
-    public WorkflowExpression? Branch { get; init; }
+    public TextExpression? Branch { get; init; }
 
     /// <summary>
     ///     Personal access token (PAT) used to fetch the repository. The PAT is configured
@@ -35,7 +37,7 @@ public sealed record GithubCheckoutStep : CheckoutStep, IGithubAdditionalStepOpt
     ///     </para>
     ///     <para>Default: ${{ github.token }}</para>
     /// </remarks>
-    public WorkflowExpression? Token { get; init; }
+    public TextExpression? Token { get; init; }
 
     /// <summary>
     ///     SSH key used to fetch the repository. The SSH key is configured with the local
@@ -54,7 +56,7 @@ public sealed record GithubCheckoutStep : CheckoutStep, IGithubAdditionalStepOpt
     ///         </see>
     ///     </para>
     /// </remarks>
-    public WorkflowExpression? SshKey { get; init; }
+    public TextExpression? SshKey { get; init; }
 
     /// <summary>
     ///     Known hosts in addition to the user and global host key database. The public SSH
@@ -62,7 +64,7 @@ public sealed record GithubCheckoutStep : CheckoutStep, IGithubAdditionalStepOpt
     ///     <c>ssh-keyscan github.com</c>. The public key for github.com is always implicitly
     ///     added.
     /// </summary>
-    public WorkflowExpression? SshKnownHosts { get; init; }
+    public TextExpression? SshKnownHosts { get; init; }
 
     /// <summary>
     ///     Whether to perform strict host key checking. When true, adds the options
@@ -70,72 +72,72 @@ public sealed record GithubCheckoutStep : CheckoutStep, IGithubAdditionalStepOpt
     ///     the input <c>ssh-known-hosts</c> to configure additional hosts.
     /// </summary>
     /// <remarks>Default: true</remarks>
-    public WorkflowExpression? SshStrict { get; init; }
+    public TextExpression? SshStrict { get; init; }
 
     /// <summary>
     ///     The user to use when connecting to the remote SSH host. By default 'git' is used.
     /// </summary>
     /// <remarks>Default: git</remarks>
-    public WorkflowExpression? SshUser { get; init; }
+    public TextExpression? SshUser { get; init; }
 
     /// <summary>
     ///     Whether to configure the token or SSH key with the local git config.
     /// </summary>
     /// <remarks>Default: true</remarks>
-    public WorkflowExpression? PersistCredentials { get; init; }
+    public TextExpression? PersistCredentials { get; init; }
 
     /// <summary>
     ///     Relative path under $GITHUB_WORKSPACE to place the repository.
     /// </summary>
-    public WorkflowExpression? Path { get; init; }
+    public TextExpression? Path { get; init; }
 
     /// <summary>
     ///     Whether to execute <c>git clean -ffdx &amp;&amp; git reset --hard HEAD</c> before fetching.
     /// </summary>
     /// <remarks>Default: true</remarks>
-    public WorkflowExpression? Clean { get; init; }
+    public TextExpression? Clean { get; init; }
 
     /// <summary>
     ///     Partially clone against a given filter. Overrides sparse-checkout if set.
     /// </summary>
     /// <remarks>Default: null</remarks>
-    public WorkflowExpression? Filter { get; init; }
+    public TextExpression? Filter { get; init; }
 
     /// <summary>
     ///     Do a sparse checkout on given patterns. Each pattern should be separated with new lines.
     /// </summary>
     /// <remarks>Default: null</remarks>
-    public WorkflowExpression? SparseCheckout { get; init; }
+    public TextExpression? SparseCheckout { get; init; }
 
     /// <summary>
     ///     Specifies whether to use cone-mode when doing a sparse checkout.
     /// </summary>
     /// <remarks>Default: true</remarks>
-    public WorkflowExpression? SparseCheckoutConeMode { get; init; }
+    public TextExpression? SparseCheckoutConeMode { get; init; }
 
     /// <summary>
     ///     Number of commits to fetch. 0 indicates all history for all branches and tags.
     /// </summary>
     /// <remarks>Default: 1</remarks>
-    public WorkflowExpression? FetchDepth { get; init; }
+    public TextExpression? FetchDepth { get; init; }
 
     /// <summary>
     ///     Whether to fetch tags, even if fetch-depth > 0.
     /// </summary>
     /// <remarks>Default: false</remarks>
-    public WorkflowExpression? FetchTags { get; init; }
+    public TextExpression? FetchTags { get; init; }
 
     /// <summary>
     ///     Whether to show progress status output when fetching.
     /// </summary>
     /// <remarks>Default: true</remarks>
-    public WorkflowExpression? ShowProgress { get; init; }
+    public TextExpression? ShowProgress { get; init; }
 
     /// <summary>
     ///     Whether to download Git-LFS files.
     /// </summary>
     /// <remarks>Default: false</remarks>
-    public WorkflowExpression? Lfs { get; init; }
+    public TextExpression? Lfs { get; init; }
 
     /// <summary>
     ///     Whether to checkout submodules: <c>true</c> to checkout submodules or <c>recursive</c> to
@@ -148,14 +150,14 @@ public sealed record GithubCheckoutStep : CheckoutStep, IGithubAdditionalStepOpt
     ///     </para>
     ///     <para>Default: false</para>
     /// </remarks>
-    public WorkflowExpression? Submodules { get; init; }
+    public TextExpression? Submodules { get; init; }
 
     /// <summary>
     ///     Add repository path as safe.directory for Git global config by running
     ///     <c>git config --global --add safe.directory &lt;path&gt;</c>.
     /// </summary>
     /// <remarks>Default: true</remarks>
-    public WorkflowExpression? SetSafeDirectory { get; init; }
+    public TextExpression? SetSafeDirectory { get; init; }
 
     /// <summary>
     ///     The base URL for the GitHub instance that you are trying to clone from, will use
@@ -163,11 +165,11 @@ public sealed record GithubCheckoutStep : CheckoutStep, IGithubAdditionalStepOpt
     ///     running from unless specified. Example URLs are https://github.com or
     ///     https://my-ghes-server.example.com.
     /// </summary>
-    public WorkflowExpression? GithubServerUrl { get; init; }
+    public TextExpression? GithubServerUrl { get; init; }
 
     public Step Build()
     {
-        var with = new Dictionary<string, WorkflowExpressionCollection>();
+        var with = new Dictionary<string, TextExpressionCollection>();
 
         if (Repository is not null)
             with["repository"] = [Repository];

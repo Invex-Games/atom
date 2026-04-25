@@ -1,7 +1,7 @@
 namespace DecSm.Atom.Workflows.Dotnet;
 
 [PublicAPI]
-public static class WorkflowLabelsExtensions
+public static class DotnetWorkflowLabelsExtensions
 {
     [PublicAPI]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -18,9 +18,9 @@ public static class WorkflowLabelsExtensions
     }
 
     [PublicAPI]
-    public sealed class Labels
+    public sealed class DotnetLabels
     {
-        internal static Labels Instance => field ??= new();
+        internal static DotnetLabels Instance => field ??= new();
 
         public Framework Framework => field ??= new();
     }
@@ -28,6 +28,6 @@ public static class WorkflowLabelsExtensions
     extension(WorkflowLabels)
     {
         [PublicAPI]
-        public static Labels Dotnet => Labels.Instance;
+        public static DotnetLabels Dotnet => DotnetLabels.Instance;
     }
 }

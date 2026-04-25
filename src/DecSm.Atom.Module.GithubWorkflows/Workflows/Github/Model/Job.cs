@@ -1,15 +1,17 @@
+using DecSm.Atom.StructuredText.Expressions;
+
 namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Github.Model;
 
 [PublicAPI]
 public sealed record Job
 {
-    public required WorkflowExpression Name { get; init; }
+    public required TextExpression Name { get; init; }
 
     public Permissions? Permissions { get; init; }
 
-    public WorkflowExpressionCollection Needs { get; init; } = [];
+    public TextExpressionCollection Needs { get; init; } = [];
 
-    public WorkflowExpression? If { get; init; }
+    public TextExpression? If { get; init; }
 
     public required RunsOn RunsOn { get; init; }
 
@@ -19,15 +21,15 @@ public sealed record Job
 
     public Concurrency? Concurrency { get; init; }
 
-    public IReadOnlyDictionary<string, WorkflowExpression>? Outputs { get; init; }
+    public IReadOnlyDictionary<string, TextExpression>? Outputs { get; init; }
 
-    public IReadOnlyDictionary<string, WorkflowExpression>? Env { get; init; }
+    public IReadOnlyDictionary<string, TextExpression>? Env { get; init; }
 
-    public WorkflowExpression? TimeoutMinutes { get; init; }
+    public TextExpression? TimeoutMinutes { get; init; }
 
     public Strategy? Strategy { get; init; }
 
-    public WorkflowExpression? ContinueOnError { get; init; }
+    public TextExpression? ContinueOnError { get; init; }
 
     public Container? Container { get; init; }
 

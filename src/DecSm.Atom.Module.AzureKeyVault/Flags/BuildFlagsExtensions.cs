@@ -9,13 +9,16 @@ public static class BuildFlagsExtensions
     {
         public static AzureKeyVaultFlags Instance => field ??= new();
 
-        public UseAzureKeyVault UseAzureKeyVault => field ??= new(true);
+        public UseAzureKeyVault UseAzureKeyVault => field ??= new();
 
         public UseAzureKeyVault SetUseAzureKeyVault(bool value) =>
-            new(value);
+            new()
+            {
+                Enabled = value,
+            };
     }
 
-    extension(BuildFlags)
+    extension(BuildOptions)
     {
         public static AzureKeyVaultFlags AzureKeyVault => AzureKeyVaultFlags.Instance;
     }

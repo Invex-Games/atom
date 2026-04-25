@@ -1,3 +1,5 @@
+using DecSm.Atom.StructuredText.Expressions;
+
 namespace DecSm.Atom.Module.GithubWorkflows.Extensions;
 
 [PublicAPI]
@@ -612,7 +614,7 @@ public static class WorkflowExpressionExtensions
             new($"inputs.{inputName}");
     }
 
-    extension(WorkflowExpressions)
+    extension(TextExpressions)
     {
         [PublicAPI]
         public static Expressions Github => Expressions.Instance;

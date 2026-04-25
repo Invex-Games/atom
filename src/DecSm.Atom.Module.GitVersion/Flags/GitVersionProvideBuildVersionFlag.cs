@@ -1,4 +1,6 @@
+using DecSm.Atom.Build.BuildOptions;
+
 namespace DecSm.Atom.Module.GitVersion.Flags;
 
 [PublicAPI]
-public sealed record GitVersionProvideBuildVersionFlag(bool Enabled) : IBuildFlag;
+public sealed record GitVersionProvideBuildVersionFlag(bool Enabled) : IBuildOption;

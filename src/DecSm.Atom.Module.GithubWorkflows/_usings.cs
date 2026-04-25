@@ -15,7 +15,6 @@ global using DecSm.Atom.Build.Variables;
 global using DecSm.Atom.Workflows.Definition;
 global using DecSm.Atom.Workflows.Definition.Options;
 global using DecSm.Atom.Workflows.Definition.Triggers;
-global using DecSm.Atom.Workflows.Expressions;
 global using DecSm.Atom.Workflows.Model;
 global using DecSm.Atom.Workflows.Options;
 global using DecSm.Atom.Workflows.Options.Injections;

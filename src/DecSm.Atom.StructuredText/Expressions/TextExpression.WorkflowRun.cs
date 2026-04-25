@@ -1,7 +1,7 @@
-namespace DecSm.Atom.Workflows.Expressions;
+namespace DecSm.Atom.StructuredText.Expressions;
 
 [PublicAPI]
-public sealed record TargetOutputExpression : WorkflowExpression
+public sealed record TargetOutputExpression : TextExpression, ITextExpression<string>
 {
     public required string TargetName { get; init; }
 
@@ -9,13 +9,13 @@ public sealed record TargetOutputExpression : WorkflowExpression
 }
 
 [PublicAPI]
-public sealed record TargetOutcomeExpression : WorkflowExpression
+public sealed record TargetOutcomeExpression : TextExpression, ITextExpression<string>
 {
     public required string Target { get; init; }
 }
 
 [PublicAPI]
-public sealed record StepOutputExpression : WorkflowExpression
+public sealed record StepOutputExpression : TextExpression, ITextExpression<string>
 {
     public required string StepName { get; init; }
 
@@ -23,13 +23,13 @@ public sealed record StepOutputExpression : WorkflowExpression
 }
 
 [PublicAPI]
-public sealed record StepOutcomeExpression : WorkflowExpression
+public sealed record StepOutcomeExpression : TextExpression, ITextExpression<string>
 {
     public required string StepName { get; init; }
 }
 
 [PublicAPI]
-public sealed record TargetOutcomeTypeExpression : WorkflowExpression
+public sealed record TargetOutcomeTypeExpression : TextExpression, ITextExpression<string>
 {
     public enum OutcomeType
     {
@@ -42,7 +42,7 @@ public sealed record TargetOutcomeTypeExpression : WorkflowExpression
 }
 
 [PublicAPI]
-public sealed record StepOutcomeTypeExpression : WorkflowExpression
+public sealed record StepOutcomeTypeExpression : TextExpression, ITextExpression<string>
 {
     public enum OutcomeType
     {

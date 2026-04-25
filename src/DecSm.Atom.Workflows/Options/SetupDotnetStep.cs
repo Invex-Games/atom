@@ -12,8 +12,8 @@
 /// <param name="Cache">Whether to cache the installed .NET SDK.</param>
 /// <param name="LockFile">The path to the project's lock file (e.g., "**/packages.lock.json")</param>
 [PublicAPI]
-public record SetupDotnetStep(
-    WorkflowExpression? DotnetVersion = null,
+public sealed record SetupDotnetStep(
+    TextExpression? DotnetVersion = null,
     SetupDotnetStep.DotnetQuality? Quality = null,
     bool Cache = false,
     string? LockFile = null

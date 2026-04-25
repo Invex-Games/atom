@@ -9,12 +9,12 @@ public sealed record IncludeExcludeFilters
     /// <summary>
     ///     List of items to include.
     /// </summary>
-    public WorkflowExpressionCollection? Include { get; init; }
+    public WorkflowExpressionCollection<string>? Include { get; init; }
 
     /// <summary>
     ///     List of items to exclude.
     /// </summary>
-    public WorkflowExpressionCollection? Exclude { get; init; }
+    public WorkflowExpressionCollection<string>? Exclude { get; init; }
 }
 
 /// <summary>
@@ -27,7 +27,7 @@ public sealed record Workspace
     ///     What to clean up before the job runs.
     ///     Valid values: "outputs" | "resources" | "all"
     /// </summary>
-    public WorkflowExpression? Clean { get; init; }
+    public WorkflowExpression<bool>? Clean { get; init; }
 }
 
 /// <summary>
@@ -39,12 +39,12 @@ public sealed record Extends
     /// <summary>
     ///     The template referenced by the pipeline to extend.
     /// </summary>
-    public required WorkflowExpression Template { get; init; }
+    public required WorkflowExpression<string> Template { get; init; }
 
     /// <summary>
     ///     Parameters used in the extend.
     /// </summary>
-    public IReadOnlyDictionary<string, WorkflowExpression>? Parameters { get; init; }
+    public IReadOnlyDictionary<string, TextExpression>? Parameters { get; init; }
 }
 
 /// <summary>
@@ -56,29 +56,29 @@ public sealed record Parameter
     /// <summary>
     ///     Parameter name.
     /// </summary>
-    public required WorkflowExpression Name { get; init; }
+    public required WorkflowExpression<string> Name { get; init; }
 
     /// <summary>
     ///     Parameter display name.
     /// </summary>
-    public WorkflowExpression? DisplayName { get; init; }
+    public WorkflowExpression<string>? DisplayName { get; init; }
 
     /// <summary>
     ///     Parameter type.
     ///     Valid values: "string" | "number" | "boolean" | "object" | "step" | "stepList" |
     ///     "job" | "jobList" | "deployment" | "deploymentList" | "stage" | "stageList"
     /// </summary>
-    public WorkflowExpression? Type { get; init; }
+    public WorkflowExpression<string>? Type { get; init; }
 
     /// <summary>
     ///     Default value for the parameter.
     /// </summary>
-    public WorkflowExpression? Default { get; init; }
+    public WorkflowExpression<string>? Default { get; init; }
 
     /// <summary>
     ///     Allowed values for the parameter.
     /// </summary>
-    public WorkflowExpressionCollection? Values { get; init; }
+    public WorkflowExpressionCollection<string>? Values { get; init; }
 }
 
 /// <summary>
@@ -90,12 +90,12 @@ public sealed record Schedule
     /// <summary>
     ///     Cron expression for the schedule.
     /// </summary>
-    public required WorkflowExpression Cron { get; init; }
+    public required WorkflowExpression<string> Cron { get; init; }
 
     /// <summary>
     ///     Display name for the schedule.
     /// </summary>
-    public WorkflowExpression? DisplayName { get; init; }
+    public WorkflowExpression<string>? DisplayName { get; init; }
 
     /// <summary>
     ///     Branches to include or exclude for the scheduled trigger.
@@ -105,5 +105,5 @@ public sealed record Schedule
     /// <summary>
     ///     Whether to run the schedule if the code hasn't changed.
     /// </summary>
-    public WorkflowExpression? Always { get; init; }
+    public WorkflowExpression<bool>? Always { get; init; }
 }

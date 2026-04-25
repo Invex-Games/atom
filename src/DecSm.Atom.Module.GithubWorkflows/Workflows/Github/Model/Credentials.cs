@@ -1,9 +1,11 @@
+using DecSm.Atom.StructuredText.Expressions;
+
 namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Github.Model;
 
 [PublicAPI]
 public sealed record Credentials
 {
-    public WorkflowExpression? Username { get; init; }
+    public TextExpression? Username { get; init; }
 
-    public WorkflowExpression? Password { get; init; }
+    public TextExpression? Password { get; init; }
 }

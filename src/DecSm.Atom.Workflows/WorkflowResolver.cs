@@ -26,32 +26,33 @@ internal sealed class WorkflowResolver(
     public WorkflowModel Resolve(WorkflowDefinition definition)
     {
         // Get all default options from BuildDefinition, WorkflowOptionProviders and WorkflowDefinition
-        var workflowOptions = IWorkflowOption
-            .Merge(buildDefinition
-                .GlobalWorkflowOptions
-                .Concat(_workflowOptionProviders.SelectMany(provider => provider.WorkflowOptions))
-                .Concat(definition.Options))
+        var workflowOptions = buildDefinition
+            .GlobalWorkflowOptions
+            .Concat(_workflowOptionProviders.SelectMany(x => x.WorkflowOptions))
+            .Concat(definition.WorkflowOptions)
             .ToList();
 
         // If there are no steps, we can return a simple workflow
         if (definition.Targets.Count is 0)
-            return new(definition.Name)
+            return new()
             {
+                Name = definition.Name,
                 Triggers = definition.Triggers,
-                Options = workflowOptions,
+                WorkflowOptions = workflowOptions,
                 Jobs = [],
             };
 
         // Transform all step definitions into steps
         var definedSteps = definition
             .Targets
-            .Select(targetDefinition => targetDefinition.CreateModel())
+            .Select(targetDefinition => targetDefinition.CreateModel(workflowOptions))
             .ToList();
 
         // Turn command steps into jobs
-        var definedCommandJobs = definedSteps.ConvertAll(step => new WorkflowJobModel(step.Name, step)
+        var definedCommandJobs = definedSteps.ConvertAll(step => new WorkflowJobModel
         {
-            MatrixDimensions = step.MatrixDimensions,
+            Name = step.Name,
+            TargetStep = step,
             JobDependencies = buildModel
                 .GetTarget(step.Name)
                 .Dependencies
@@ -62,13 +63,10 @@ internal sealed class WorkflowResolver(
         // If this workflow uses a custom artifact provider, we need to ensure that steps that
         // consume or produce artifacts are dependent on the Setup step.
         // It will be up to the WorkflowWriter to implement the download/upload steps.
-        if (UseCustomArtifactProvider.IsOptionEnabled(workflowOptions))
+        if (UseCustomArtifactProvider.IsEnabled(workflowOptions))
             definedCommandJobs = definedCommandJobs.ConvertAll(job =>
             {
-                var suppressArtifactPublishing = workflowOptions
-                    .Concat(job.TargetStep.Options)
-                    .OfType<SuppressArtifactPublishingOption>()
-                    .LastOrDefault() is { Value: true };
+                var suppressArtifactPublishing = SuppressArtifactPublishingOption.IsEnabled(job.TargetStep.Options);
 
                 if (suppressArtifactPublishing)
                     return job;
@@ -108,12 +106,17 @@ internal sealed class WorkflowResolver(
         var jobs = definedCommandJobs
             .Concat(buildModel
                 .Targets
-                .Select(target => target.Name)
-                .Where(targetName => definedCommandJobs.All(job => job.Name != targetName))
-                .Select(targetName => new WorkflowJobModel(targetName, new(targetName))
+                .Where(target => definedCommandJobs.All(job => job.Name != target.Name))
+                .Select(target => new WorkflowJobModel
                 {
+                    Name = target.Name,
+                    TargetStep = new()
+                    {
+                        Name = target.Name,
+                        MatrixDimensions = [],
+                        Options = workflowOptions,
+                    },
                     JobDependencies = [],
-                    MatrixDimensions = [],
                 }))
             .ToList();
 
@@ -141,11 +144,11 @@ internal sealed class WorkflowResolver(
         }
 
         // Order jobs based on dependencies
-
-        return new(definition.Name)
+        return new()
         {
+            Name = definition.Name,
             Triggers = definition.Triggers,
-            Options = workflowOptions,
+            WorkflowOptions = workflowOptions,
             Jobs = OrderJobs(jobs),
         };
     }

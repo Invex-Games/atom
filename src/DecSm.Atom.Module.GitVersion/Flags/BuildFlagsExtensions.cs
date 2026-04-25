@@ -1,3 +1,5 @@
+using DecSm.Atom.Build.BuildOptions;
+
 namespace DecSm.Atom.Module.GitVersion.Flags;
 
 [PublicAPI]
@@ -20,7 +22,7 @@ public static class BuildFlagsExtensions
             new(value);
     }
 
-    extension(BuildFlags)
+    extension(BuildOptions)
     {
         public static GitVersionFlags GitVersion => GitVersionFlags.Instance;
     }
