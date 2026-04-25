@@ -1,15 +1,13 @@
-using DecSm.Atom.Module.DevopsWorkflows.Workflows.Devops.Model.Resources;
-
 namespace DecSm.Atom.Module.DevopsWorkflows.Workflows.Devops;
 
 internal sealed class DevopsWorkflowFileWriter(
     IAtomFileSystem atomFileSystem,
     DevopsWorkflowBuilder workflowBuilder,
-    IWorkflowExpressionResolver expressionResolver,
     ILogger<DevopsWorkflowFileWriter> logger
 ) : WorkflowFileWriter<DevopsWorkflowType>(atomFileSystem, logger)
 {
     private readonly IAtomFileSystem _atomFileSystem = atomFileSystem;
+    private readonly DevopsExpressionFormatter _expressionFormatter = new();
 
     protected override string FileExtension => "yml";
 
@@ -39,7 +37,7 @@ internal sealed class DevopsWorkflowFileWriter(
         WritePool(pipeline.Pool);
         WriteLockBehavior(pipeline.LockBehavior);
 
-        using (Writer.WriteSection("stages:"))
+        using (TextBuilder.WriteSection("stages:"))
             foreach (var stage in pipeline.Stages)
                 WriteStage(stage);
     }
@@ -56,12 +54,12 @@ internal sealed class DevopsWorkflowFileWriter(
         WritePool(pipeline.Pool);
         WriteLockBehavior(pipeline.LockBehavior);
 
-        using (Writer.WriteSection("extends:"))
+        using (TextBuilder.WriteSection("extends:"))
         {
             WriteProperty("template", pipeline.Extends.Template);
 
             if (pipeline.Extends.Parameters is { Count: > 0 } parameters)
-                using (Writer.WriteSection("parameters:"))
+                using (TextBuilder.WriteSection("parameters:"))
                     foreach (var (key, value) in parameters)
                         WriteProperty(key, value);
         }
@@ -78,12 +76,12 @@ internal sealed class DevopsWorkflowFileWriter(
         WritePool(pipeline.Pool);
         WriteLockBehavior(pipeline.LockBehavior);
 
-        Writer.WriteLine();
+        TextBuilder.WriteLine();
 
-        using (Writer.WriteSection("jobs:"))
+        using (TextBuilder.WriteSection("jobs:"))
             foreach (var job in pipeline.Jobs)
             {
-                Writer.WriteLine();
+                TextBuilder.WriteLine();
                 WriteJob(job);
             }
     }
@@ -107,24 +105,24 @@ internal sealed class DevopsWorkflowFileWriter(
         WriteJobContainer(pipeline.Container);
 
         if (pipeline.Services is { Count: > 0 } services)
-            using (Writer.WriteSection("services:"))
+            using (TextBuilder.WriteSection("services:"))
                 foreach (var (key, value) in services)
                     WriteProperty(key, value);
 
         if (pipeline.Workspace is { } workspace)
             WriteWorkspace(workspace);
 
-        using (Writer.WriteSection("steps:"))
+        using (TextBuilder.WriteSection("steps:"))
             foreach (var step in pipeline.Steps)
                 WriteStep(step);
     }
 
-    private void WritePipelineHeader(WorkflowExpression? name, WorkflowExpression? appendCommitMessage)
+    private void WritePipelineHeader(TextExpression? name, TextExpression? appendCommitMessage)
     {
         if (name is not null)
         {
             WriteProperty("name", name);
-            Writer.WriteLine();
+            TextBuilder.WriteLine();
         }
 
         if (appendCommitMessage is not null)
@@ -136,15 +134,15 @@ internal sealed class DevopsWorkflowFileWriter(
         if (trigger is null)
             return;
 
-        trigger.Match(_ => Writer.WriteLine("trigger: none"),
+        trigger.Match(_ => TextBuilder.WriteLine("trigger: none"),
             bl =>
             {
-                using (Writer.WriteSection("trigger:"))
+                using (TextBuilder.WriteSection("trigger:"))
                     WriteExpressionList("branches", bl.Branches);
             },
             full =>
             {
-                using (Writer.WriteSection("trigger:"))
+                using (TextBuilder.WriteSection("trigger:"))
                 {
                     if (full.Batch is { } batch)
                         WriteProperty("batch", batch);
@@ -161,15 +159,15 @@ internal sealed class DevopsWorkflowFileWriter(
         if (pr is null)
             return;
 
-        pr.Match(_ => Writer.WriteLine("pr: none"),
+        pr.Match(_ => TextBuilder.WriteLine("pr: none"),
             bl =>
             {
-                using (Writer.WriteSection("pr:"))
+                using (TextBuilder.WriteSection("pr:"))
                     WriteExpressionList("branches", bl.Branches);
             },
             full =>
             {
-                using (Writer.WriteSection("pr:"))
+                using (TextBuilder.WriteSection("pr:"))
                 {
                     if (full.AutoCancel is { } autoCancel)
                         WriteProperty("autoCancel", autoCancel);
@@ -188,10 +186,10 @@ internal sealed class DevopsWorkflowFileWriter(
         if (parameters is not { Count: > 0 })
             return;
 
-        using var _ = Writer.WriteSection("parameters:");
+        using var _ = TextBuilder.WriteSection("parameters:");
 
         foreach (var param in parameters)
-            using (Writer.WriteSection($"- name: {Resolve(param.Name)}"))
+            using (TextBuilder.WriteSection($"- name: {Resolve(param.Name)}"))
             {
                 if (param.DisplayName is { } displayName)
                     WriteProperty("displayName", displayName);
@@ -212,10 +210,10 @@ internal sealed class DevopsWorkflowFileWriter(
         if (schedules is not { Count: > 0 })
             return;
 
-        using var _ = Writer.WriteSection("schedules:");
+        using var _ = TextBuilder.WriteSection("schedules:");
 
         foreach (var schedule in schedules)
-            using (Writer.WriteSection($"- cron: {Resolve(schedule.Cron)}"))
+            using (TextBuilder.WriteSection($"- cron: {Resolve(schedule.Cron)}"))
             {
                 if (schedule.DisplayName is { } displayName)
                     WriteProperty("displayName", displayName);
@@ -232,12 +230,12 @@ internal sealed class DevopsWorkflowFileWriter(
         if (resources is null)
             return;
 
-        using var _ = Writer.WriteSection("resources:");
+        using var _ = TextBuilder.WriteSection("resources:");
 
         if (resources.Builds is { Count: > 0 } builds)
-            using (Writer.WriteSection("builds:"))
+            using (TextBuilder.WriteSection("builds:"))
                 foreach (var build in builds)
-                    using (Writer.WriteSection($"- build: {Resolve(build.Build)}"))
+                    using (TextBuilder.WriteSection($"- build: {Resolve(build.Build)}"))
                     {
                         if (build.Type is { } type)
                             WriteProperty("type", type);
@@ -259,9 +257,9 @@ internal sealed class DevopsWorkflowFileWriter(
                     }
 
         if (resources.Containers is { Count: > 0 } containers)
-            using (Writer.WriteSection("containers:"))
+            using (TextBuilder.WriteSection("containers:"))
                 foreach (var container in containers)
-                    using (Writer.WriteSection($"- container: {Resolve(container.Container)}"))
+                    using (TextBuilder.WriteSection($"- container: {Resolve(container.Container)}"))
                     {
                         WriteProperty("image", container.Image);
 
@@ -269,7 +267,7 @@ internal sealed class DevopsWorkflowFileWriter(
                             WriteProperty("endpoint", endpoint);
 
                         if (container.Env is { Count: > 0 } env)
-                            using (Writer.WriteSection("env:"))
+                            using (TextBuilder.WriteSection("env:"))
                                 foreach (var (key, value) in env)
                                     WriteProperty(key, value);
 
@@ -283,7 +281,7 @@ internal sealed class DevopsWorkflowFileWriter(
                             WriteExpressionList("volumes", volumes);
 
                         if (container.Trigger is { } trigger)
-                            using (Writer.WriteSection("trigger:"))
+                            using (TextBuilder.WriteSection("trigger:"))
                             {
                                 if (trigger.Enabled is { } enabled)
                                     WriteProperty("enabled", enabled);
@@ -293,9 +291,9 @@ internal sealed class DevopsWorkflowFileWriter(
                     }
 
         if (resources.Pipelines is { Count: > 0 } pipelines)
-            using (Writer.WriteSection("pipelines:"))
+            using (TextBuilder.WriteSection("pipelines:"))
                 foreach (var pipeline in pipelines)
-                    using (Writer.WriteSection($"- pipeline: {Resolve(pipeline.Pipeline)}"))
+                    using (TextBuilder.WriteSection($"- pipeline: {Resolve(pipeline.Pipeline)}"))
                     {
                         WriteProperty("source", pipeline.Source);
 
@@ -309,7 +307,7 @@ internal sealed class DevopsWorkflowFileWriter(
                             WriteProperty("branch", branch);
 
                         if (pipeline.Trigger is { } trigger)
-                            using (Writer.WriteSection("trigger:"))
+                            using (TextBuilder.WriteSection("trigger:"))
                             {
                                 if (trigger.Enabled is { } enabled)
                                     WriteProperty("enabled", enabled);
@@ -323,9 +321,9 @@ internal sealed class DevopsWorkflowFileWriter(
                     }
 
         if (resources.Repositories is { Count: > 0 } repositories)
-            using (Writer.WriteSection("repositories:"))
+            using (TextBuilder.WriteSection("repositories:"))
                 foreach (var repo in repositories)
-                    using (Writer.WriteSection($"- repository: {Resolve(repo.Repository)}"))
+                    using (TextBuilder.WriteSection($"- repository: {Resolve(repo.Repository)}"))
                     {
                         WriteProperty("type", repo.Type);
 
@@ -340,9 +338,9 @@ internal sealed class DevopsWorkflowFileWriter(
                     }
 
         if (resources.Webhooks is { Count: > 0 } webhooks)
-            using (Writer.WriteSection("webhooks:"))
+            using (TextBuilder.WriteSection("webhooks:"))
                 foreach (var webhook in webhooks)
-                    using (Writer.WriteSection($"- webhook: {Resolve(webhook.Webhook)}"))
+                    using (TextBuilder.WriteSection($"- webhook: {Resolve(webhook.Webhook)}"))
                     {
                         WriteProperty("connection", webhook.Connection);
 
@@ -350,16 +348,16 @@ internal sealed class DevopsWorkflowFileWriter(
                             WriteProperty("type", type);
 
                         if (webhook.Filters is { Count: > 0 } filters)
-                            using (Writer.WriteSection("filters:"))
+                            using (TextBuilder.WriteSection("filters:"))
                                 foreach (var filter in filters)
-                                    using (Writer.WriteSection($"- path: {Resolve(filter.Path)}"))
+                                    using (TextBuilder.WriteSection($"- path: {Resolve(filter.Path)}"))
                                         WriteProperty("value", filter.Value);
                     }
 
         if (resources.Packages is { Count: > 0 } packages)
-            using (Writer.WriteSection("packages:"))
+            using (TextBuilder.WriteSection("packages:"))
                 foreach (var package in packages)
-                    using (Writer.WriteSection($"- package: {Resolve(package.Package)}"))
+                    using (TextBuilder.WriteSection($"- package: {Resolve(package.Package)}"))
                     {
                         WriteProperty("type", package.Type);
 
@@ -384,17 +382,17 @@ internal sealed class DevopsWorkflowFileWriter(
 
         variables.Match(dict =>
             {
-                using (Writer.WriteSection("variables:"))
+                using (TextBuilder.WriteSection("variables:"))
                     foreach (var (key, value) in dict.Values)
                         WriteProperty(key, value);
             },
             list =>
             {
-                using (Writer.WriteSection("variables:"))
+                using (TextBuilder.WriteSection("variables:"))
                     foreach (var variable in list.Values)
                         variable.Match(n =>
                             {
-                                using (Writer.WriteSection($"- name: {Resolve(n.VariableName)}"))
+                                using (TextBuilder.WriteSection($"- name: {Resolve(n.VariableName)}"))
                                 {
                                     WriteProperty("value", n.Value);
 
@@ -402,16 +400,16 @@ internal sealed class DevopsWorkflowFileWriter(
                                         WriteProperty("readonly", readOnly);
                                 }
                             },
-                            g => Writer.WriteLine($"- group: {Resolve(g.GroupName)}"),
+                            g => TextBuilder.WriteLine($"- group: {Resolve(g.GroupName)}"),
                             t =>
                             {
                                 if (t.Parameters is { Count: > 0 } parameters)
-                                    using (Writer.WriteSection($"- template: {Resolve(t.TemplatePath)}"))
-                                    using (Writer.WriteSection("parameters:"))
+                                    using (TextBuilder.WriteSection($"- template: {Resolve(t.TemplatePath)}"))
+                                    using (TextBuilder.WriteSection("parameters:"))
                                         foreach (var (key, value) in parameters)
                                             WriteProperty(key, value);
                                 else
-                                    Writer.WriteLine($"- template: {Resolve(t.TemplatePath)}");
+                                    TextBuilder.WriteLine($"- template: {Resolve(t.TemplatePath)}");
                             });
             });
     }
@@ -424,7 +422,7 @@ internal sealed class DevopsWorkflowFileWriter(
         pool.Match(pn => WriteProperty("pool", pn.Name),
             ps =>
             {
-                using (Writer.WriteSection("pool:"))
+                using (TextBuilder.WriteSection("pool:"))
                 {
                     if (ps.VmImage is { } vmImage)
                         WriteProperty("vmImage", vmImage);
@@ -438,7 +436,7 @@ internal sealed class DevopsWorkflowFileWriter(
             });
     }
 
-    private void WriteLockBehavior(WorkflowExpression? lockBehavior)
+    private void WriteLockBehavior(TextExpression? lockBehavior)
     {
         if (lockBehavior is not null)
             WriteProperty("lockBehavior", lockBehavior);
@@ -447,7 +445,7 @@ internal sealed class DevopsWorkflowFileWriter(
     private void WriteStage(Stage stage) =>
         stage.Match(sd =>
             {
-                using (Writer.WriteSection($"- stage: {Resolve(sd.StageId)}"))
+                using (TextBuilder.WriteSection($"- stage: {Resolve(sd.StageId)}"))
                 {
                     if (sd.Group is { } group)
                         WriteProperty("group", group);
@@ -475,12 +473,12 @@ internal sealed class DevopsWorkflowFileWriter(
                         WriteProperty("isSkippable", isSkippable);
 
                     if (sd.TemplateContext is { Count: > 0 } templateContext)
-                        using (Writer.WriteSection("templateContext:"))
+                        using (TextBuilder.WriteSection("templateContext:"))
                             foreach (var (key, value) in templateContext)
                                 WriteProperty(key, value);
 
                     if (sd.Jobs is { Count: > 0 } jobs)
-                        using (Writer.WriteSection("jobs:"))
+                        using (TextBuilder.WriteSection("jobs:"))
                             foreach (var job in jobs)
                                 WriteJob(job);
                 }
@@ -488,12 +486,12 @@ internal sealed class DevopsWorkflowFileWriter(
             t =>
             {
                 if (t.Parameters is { Count: > 0 } parameters)
-                    using (Writer.WriteSection($"- template: {Resolve(t.TemplatePath)}"))
-                    using (Writer.WriteSection("parameters:"))
+                    using (TextBuilder.WriteSection($"- template: {Resolve(t.TemplatePath)}"))
+                    using (TextBuilder.WriteSection("parameters:"))
                         foreach (var (key, value) in parameters)
                             WriteProperty(key, value);
                 else
-                    Writer.WriteLine($"- template: {Resolve(t.TemplatePath)}");
+                    TextBuilder.WriteLine($"- template: {Resolve(t.TemplatePath)}");
             });
 
     private void WriteJob(Job job) =>
@@ -502,17 +500,17 @@ internal sealed class DevopsWorkflowFileWriter(
             t =>
             {
                 if (t.Parameters is { Count: > 0 } parameters)
-                    using (Writer.WriteSection($"- template: {Resolve(t.TemplatePath)}"))
-                    using (Writer.WriteSection("parameters:"))
+                    using (TextBuilder.WriteSection($"- template: {Resolve(t.TemplatePath)}"))
+                    using (TextBuilder.WriteSection("parameters:"))
                         foreach (var (key, value) in parameters)
                             WriteProperty(key, value);
                 else
-                    Writer.WriteLine($"- template: {Resolve(t.TemplatePath)}");
+                    TextBuilder.WriteLine($"- template: {Resolve(t.TemplatePath)}");
             });
 
     private void WriteRegularJob(Job.RegularJob job)
     {
-        using var _ = Writer.WriteSection($"- job: {Resolve(job.JobId)}");
+        using var _ = TextBuilder.WriteSection($"- job: {Resolve(job.JobId)}");
 
         if (job.DisplayName is { } displayName)
             WriteProperty("displayName", displayName);
@@ -541,7 +539,7 @@ internal sealed class DevopsWorkflowFileWriter(
         WriteJobContainer(job.Container);
 
         if (job.Services is { Count: > 0 } services)
-            using (Writer.WriteSection("services:"))
+            using (TextBuilder.WriteSection("services:"))
                 foreach (var (key, value) in services)
                     WriteProperty(key, value);
 
@@ -552,19 +550,19 @@ internal sealed class DevopsWorkflowFileWriter(
             WriteExplicitResources(uses);
 
         if (job.TemplateContext is { Count: > 0 } templateContext)
-            using (Writer.WriteSection("templateContext:"))
+            using (TextBuilder.WriteSection("templateContext:"))
                 foreach (var (key, value) in templateContext)
                     WriteProperty(key, value);
 
         if (job.Steps is { Count: > 0 } steps)
-            using (Writer.WriteSection("steps:"))
+            using (TextBuilder.WriteSection("steps:"))
                 foreach (var step in steps)
                     WriteStep(step);
     }
 
     private void WriteDeploymentJob(Job.Deployment job)
     {
-        using var _ = Writer.WriteSection($"- deployment: {Resolve(job.DeploymentId)}");
+        using var _ = TextBuilder.WriteSection($"- deployment: {Resolve(job.DeploymentId)}");
 
         if (job.DisplayName is { } displayName)
             WriteProperty("displayName", displayName);
@@ -591,7 +589,7 @@ internal sealed class DevopsWorkflowFileWriter(
         WriteJobContainer(job.Container);
 
         if (job.Services is { Count: > 0 } services)
-            using (Writer.WriteSection("services:"))
+            using (TextBuilder.WriteSection("services:"))
                 foreach (var (key, value) in services)
                     WriteProperty(key, value);
 
@@ -602,7 +600,7 @@ internal sealed class DevopsWorkflowFileWriter(
             WriteExplicitResources(uses);
 
         if (job.TemplateContext is { Count: > 0 } templateContext)
-            using (Writer.WriteSection("templateContext:"))
+            using (TextBuilder.WriteSection("templateContext:"))
                 foreach (var (key, value) in templateContext)
                     WriteProperty(key, value);
     }
@@ -611,7 +609,7 @@ internal sealed class DevopsWorkflowFileWriter(
         environment.Match(en => WriteProperty("environment", en.Name),
             es =>
             {
-                using (Writer.WriteSection("environment:"))
+                using (TextBuilder.WriteSection("environment:"))
                 {
                     WriteProperty("name", es.Name);
 
@@ -632,8 +630,8 @@ internal sealed class DevopsWorkflowFileWriter(
     private void WriteDeploymentStrategy(DeploymentStrategy strategy) =>
         strategy.Match(ro =>
             {
-                using (Writer.WriteSection("strategy:"))
-                using (Writer.WriteSection("runOnce:"))
+                using (TextBuilder.WriteSection("strategy:"))
+                using (TextBuilder.WriteSection("runOnce:"))
                 {
                     WriteDeploymentHook("preDeploy", ro.PreDeploy);
                     WriteDeploymentHook("deploy", ro.Deploy);
@@ -645,8 +643,8 @@ internal sealed class DevopsWorkflowFileWriter(
             },
             r =>
             {
-                using (Writer.WriteSection("strategy:"))
-                using (Writer.WriteSection("rolling:"))
+                using (TextBuilder.WriteSection("strategy:"))
+                using (TextBuilder.WriteSection("rolling:"))
                 {
                     if (r.MaxParallel is { } maxParallel)
                         WriteProperty("maxParallel", maxParallel);
@@ -661,8 +659,8 @@ internal sealed class DevopsWorkflowFileWriter(
             },
             c =>
             {
-                using (Writer.WriteSection("strategy:"))
-                using (Writer.WriteSection("canary:"))
+                using (TextBuilder.WriteSection("strategy:"))
+                using (TextBuilder.WriteSection("canary:"))
                 {
                     WriteExpressionList("increments", c.Increments);
 
@@ -681,23 +679,23 @@ internal sealed class DevopsWorkflowFileWriter(
             return;
 
         if (subSection is not null)
-            using (Writer.WriteSection(hookName))
-            using (Writer.WriteSection($"{subSection}:"))
+            using (TextBuilder.WriteSection(hookName))
+            using (TextBuilder.WriteSection($"{subSection}:"))
             {
                 WritePool(hook.Pool);
 
                 if (hook.Steps is { Count: > 0 } steps)
-                    using (Writer.WriteSection("steps:"))
+                    using (TextBuilder.WriteSection("steps:"))
                         foreach (var step in steps)
                             WriteStep(step);
             }
         else
-            using (Writer.WriteSection($"{hookName}:"))
+            using (TextBuilder.WriteSection($"{hookName}:"))
             {
                 WritePool(hook.Pool);
 
                 if (hook.Steps is { Count: > 0 } steps)
-                    using (Writer.WriteSection("steps:"))
+                    using (TextBuilder.WriteSection("steps:"))
                         foreach (var step in steps)
                             WriteStep(step);
             }
@@ -705,14 +703,14 @@ internal sealed class DevopsWorkflowFileWriter(
 
     private void WriteJobStrategy(JobStrategy strategy)
     {
-        using var _ = Writer.WriteSection("strategy:");
+        using var _ = TextBuilder.WriteSection("strategy:");
 
         if (strategy.Matrix is { Count: > 0 } matrix)
-            using (Writer.WriteSection("matrix:"))
+            using (TextBuilder.WriteSection("matrix:"))
                 foreach (var (combinationName, dimensions) in matrix)
-                    using (Writer.WriteSection($"{combinationName}:"))
+                    using (TextBuilder.WriteSection($"{combinationName}:"))
                         foreach (var (key, value) in dimensions)
-                            Writer.WriteLine($"{key}: '{Resolve(value)}'");
+                            TextBuilder.WriteLine($"{key}: '{Resolve(value)}'");
 
         if (strategy.MaxParallel is { } maxParallel)
             WriteProperty("maxParallel", maxParallel);
@@ -729,7 +727,7 @@ internal sealed class DevopsWorkflowFileWriter(
         container.Match(cn => WriteProperty("container", cn.Name),
             cs =>
             {
-                using (Writer.WriteSection("container:"))
+                using (TextBuilder.WriteSection("container:"))
                 {
                     WriteProperty("image", cs.Image);
 
@@ -740,7 +738,7 @@ internal sealed class DevopsWorkflowFileWriter(
                         WriteProperty("endpoint", endpoint);
 
                     if (cs.Env is { Count: > 0 } env)
-                        using (Writer.WriteSection("env:"))
+                        using (TextBuilder.WriteSection("env:"))
                             foreach (var (key, value) in env)
                                 WriteProperty(key, value);
 
@@ -759,13 +757,13 @@ internal sealed class DevopsWorkflowFileWriter(
     private void WriteWorkspace(Workspace workspace)
     {
         if (workspace.Clean is { } clean)
-            using (Writer.WriteSection("workspace:"))
+            using (TextBuilder.WriteSection("workspace:"))
                 WriteProperty("clean", clean);
     }
 
     private void WriteExplicitResources(ExplicitResources uses)
     {
-        using var _ = Writer.WriteSection("uses:");
+        using var _ = TextBuilder.WriteSection("uses:");
 
         if (uses.Repositories is { Count: > 0 } repos)
             WriteExpressionList("repositories", repos);
@@ -790,7 +788,7 @@ internal sealed class DevopsWorkflowFileWriter(
 
     private void WriteTaskStep(Step.Task step)
     {
-        using var _ = Writer.WriteSection($"- task: {Resolve(step.TaskName)}");
+        using var _ = TextBuilder.WriteSection($"- task: {Resolve(step.TaskName)}");
 
         WriteCommonStepProperties(step.DisplayName,
             step.Name,
@@ -803,14 +801,14 @@ internal sealed class DevopsWorkflowFileWriter(
             step.Target);
 
         if (step.Inputs is { Count: > 0 } inputs)
-            using (Writer.WriteSection("inputs:"))
+            using (TextBuilder.WriteSection("inputs:"))
                 foreach (var (key, value) in inputs)
                     WriteProperty(key, value);
     }
 
     private void WriteScriptStep(Step.Script step)
     {
-        using var _ = Writer.WriteSection($"- script: {Resolve(step.ScriptContent)}");
+        using var _ = TextBuilder.WriteSection($"- script: {Resolve(step.ScriptContent)}");
 
         WriteCommonStepProperties(step.DisplayName,
             step.Name,
@@ -831,7 +829,7 @@ internal sealed class DevopsWorkflowFileWriter(
 
     private void WritePowerShellStep(Step.PowerShell step)
     {
-        using var _ = Writer.WriteSection($"- powershell: {Resolve(step.ScriptContent)}");
+        using var _ = TextBuilder.WriteSection($"- powershell: {Resolve(step.ScriptContent)}");
 
         WriteCommonStepProperties(step.DisplayName,
             step.Name,
@@ -858,7 +856,7 @@ internal sealed class DevopsWorkflowFileWriter(
 
     private void WritePwshStep(Step.Pwsh step)
     {
-        using var _ = Writer.WriteSection($"- pwsh: {Resolve(step.ScriptContent)}");
+        using var _ = TextBuilder.WriteSection($"- pwsh: {Resolve(step.ScriptContent)}");
 
         WriteCommonStepProperties(step.DisplayName,
             step.Name,
@@ -885,7 +883,7 @@ internal sealed class DevopsWorkflowFileWriter(
 
     private void WriteBashStep(Step.Bash step)
     {
-        using var _ = Writer.WriteSection($"- bash: {Resolve(step.ScriptContent)}");
+        using var _ = TextBuilder.WriteSection($"- bash: {Resolve(step.ScriptContent)}");
 
         WriteCommonStepProperties(step.DisplayName,
             step.Name,
@@ -906,7 +904,7 @@ internal sealed class DevopsWorkflowFileWriter(
 
     private void WriteCheckoutStep(Step.Checkout step)
     {
-        using var _ = Writer.WriteSection($"- checkout: {Resolve(step.Repository)}");
+        using var _ = TextBuilder.WriteSection($"- checkout: {Resolve(step.Repository)}");
 
         WriteCommonStepProperties(step.DisplayName,
             step.Name,
@@ -939,7 +937,7 @@ internal sealed class DevopsWorkflowFileWriter(
 
     private void WriteDownloadStep(Step.Download step)
     {
-        using var _ = Writer.WriteSection($"- download: {Resolve(step.Pipeline)}");
+        using var _ = TextBuilder.WriteSection($"- download: {Resolve(step.Pipeline)}");
 
         WriteCommonStepProperties(step.DisplayName,
             step.Name,
@@ -963,7 +961,7 @@ internal sealed class DevopsWorkflowFileWriter(
 
     private void WriteDownloadBuildStep(Step.DownloadBuild step)
     {
-        using var _ = Writer.WriteSection($"- downloadBuild: {Resolve(step.Build)}");
+        using var _ = TextBuilder.WriteSection($"- downloadBuild: {Resolve(step.Build)}");
 
         WriteCommonStepProperties(step.DisplayName,
             step.Name,
@@ -987,7 +985,7 @@ internal sealed class DevopsWorkflowFileWriter(
 
     private void WriteGetPackageStep(Step.GetPackage step)
     {
-        using var _ = Writer.WriteSection($"- getPackage: {Resolve(step.Package)}");
+        using var _ = TextBuilder.WriteSection($"- getPackage: {Resolve(step.Package)}");
 
         WriteCommonStepProperties(step.DisplayName,
             step.Name,
@@ -1008,7 +1006,7 @@ internal sealed class DevopsWorkflowFileWriter(
 
     private void WritePublishStep(Step.Publish step)
     {
-        using var _ = Writer.WriteSection($"- publish: {Resolve(step.PublishPath)}");
+        using var _ = TextBuilder.WriteSection($"- publish: {Resolve(step.PublishPath)}");
 
         WriteCommonStepProperties(step.DisplayName,
             step.Name,
@@ -1027,17 +1025,17 @@ internal sealed class DevopsWorkflowFileWriter(
     private void WriteTemplateStep(Step.Template step)
     {
         if (step.Parameters is { Count: > 0 } parameters)
-            using (Writer.WriteSection($"- template: {Resolve(step.TemplatePath)}"))
-            using (Writer.WriteSection("parameters:"))
+            using (TextBuilder.WriteSection($"- template: {Resolve(step.TemplatePath)}"))
+            using (TextBuilder.WriteSection("parameters:"))
                 foreach (var (key, value) in parameters)
                     WriteProperty(key, value);
         else
-            Writer.WriteLine($"- template: {Resolve(step.TemplatePath)}");
+            TextBuilder.WriteLine($"- template: {Resolve(step.TemplatePath)}");
     }
 
     private void WriteReviewAppStep(Step.ReviewApp step)
     {
-        using var _ = Writer.WriteSection($"- reviewApp: {Resolve(step.ReviewAppType)}");
+        using var _ = TextBuilder.WriteSection($"- reviewApp: {Resolve(step.ReviewAppType)}");
 
         WriteCommonStepProperties(step.DisplayName,
             step.Name,
@@ -1051,14 +1049,14 @@ internal sealed class DevopsWorkflowFileWriter(
     }
 
     private void WriteCommonStepProperties(
-        WorkflowExpression? displayName,
-        WorkflowExpression? name,
-        WorkflowExpression? condition,
-        WorkflowExpression? continueOnError,
-        WorkflowExpression? enabled,
-        WorkflowExpression? timeoutInMinutes,
-        WorkflowExpression? retryCountOnTaskFailure,
-        IReadOnlyDictionary<string, WorkflowExpression>? env,
+        TextExpression? displayName,
+        TextExpression? name,
+        TextExpression? condition,
+        TextExpression? continueOnError,
+        TextExpression? enabled,
+        TextExpression? timeoutInMinutes,
+        TextExpression? retryCountOnTaskFailure,
+        IReadOnlyDictionary<string, TextExpression>? env,
         StepTarget? target)
     {
         if (displayName is not null)
@@ -1083,7 +1081,7 @@ internal sealed class DevopsWorkflowFileWriter(
             WriteProperty("retryCountOnTaskFailure", retryCountOnTaskFailure);
 
         if (env is { Count: > 0 })
-            using (Writer.WriteSection("env:"))
+            using (TextBuilder.WriteSection("env:"))
                 foreach (var (key, value) in env)
                     WriteProperty(key, value);
 
@@ -1095,7 +1093,7 @@ internal sealed class DevopsWorkflowFileWriter(
         target.Match(tn => WriteProperty("target", tn.Name),
             ts =>
             {
-                using (Writer.WriteSection("target:"))
+                using (TextBuilder.WriteSection("target:"))
                 {
                     if (ts.Container is { } container)
                         WriteProperty("container", container);
@@ -1120,7 +1118,7 @@ internal sealed class DevopsWorkflowFileWriter(
         if (filters is null)
             return;
 
-        using var _ = Writer.WriteSection($"{name}:");
+        using var _ = TextBuilder.WriteSection($"{name}:");
 
         if (filters.Include is { Count: > 0 } include)
             WriteExpressionList("include", include);
@@ -1129,17 +1127,17 @@ internal sealed class DevopsWorkflowFileWriter(
             WriteExpressionList("exclude", exclude);
     }
 
-    private void WriteExpressionList(string key, WorkflowExpressionCollection values)
+    private void WriteExpressionList(string key, TextExpressionCollection values)
     {
-        using var _ = Writer.WriteSection($"{key}:");
+        using var _ = TextBuilder.WriteSection($"{key}:");
 
         foreach (var value in values)
-            Writer.WriteLine($"- {Resolve(value)}");
+            TextBuilder.WriteLine($"- {Resolve(value)}");
     }
 
-    private void WriteProperty(string key, WorkflowExpression value) =>
-        Writer.WriteLine($"{key}: {Resolve(value)}");
+    private void WriteProperty(string key, TextExpression value) =>
+        TextBuilder.WriteLine($"{key}: {Resolve(value)}");
 
-    private string Resolve(WorkflowExpression expression) =>
-        expressionResolver.Resolve(expression);
+    private string Resolve(TextExpression expression) =>
+        _expressionFormatter.Format(expression);
 }

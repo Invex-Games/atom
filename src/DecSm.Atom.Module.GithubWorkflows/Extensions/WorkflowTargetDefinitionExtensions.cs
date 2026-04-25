@@ -1,4 +1,7 @@
-﻿namespace DecSm.Atom.Module.GithubWorkflows.Extensions;
+﻿using DecSm.Atom.StructuredText.Expressions;
+using DecSm.Atom.Workflows;
+
+namespace DecSm.Atom.Module.GithubWorkflows.Extensions;
 
 /// <summary>
 ///     Provides extension methods for <see cref="WorkflowTargetDefinition" /> to simplify GitHub Actions workflow
@@ -24,7 +27,7 @@ public static class WorkflowTargetDefinitionExtensions
         ///     option to indicate that the matrix determines the runner.
         /// </remarks>
         [PublicAPI]
-        public WorkflowTargetDefinition WithGithubRunsOnMatrix(IEnumerable<WorkflowExpression> labels) =>
+        public WorkflowTargetDefinition WithGithubRunsOnMatrix(IEnumerable<TextExpression> labels) =>
             workflowTargetDefinition
                 .WithMatrixDimensions(new MatrixDimension(nameof(IJobRunsOn.JobRunsOn))
                 {
@@ -46,7 +49,7 @@ public static class WorkflowTargetDefinitionExtensions
         [PublicAPI]
         public WorkflowTargetDefinition WithGithubRunsOnMatrix(IEnumerable<string> labels) =>
             workflowTargetDefinition.WithGithubRunsOnMatrix(
-                labels.Select(Atom.Workflows.Expressions.WorkflowExpressionExtensions.Raw));
+                labels.Select(StructuredText.Expressions.WorkflowExpressionExtensions.Raw));
 
         /// <summary>
         ///     Configures the workflow target to inject the GitHub token as a secret.

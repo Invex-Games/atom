@@ -16,7 +16,7 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem atomFileSystem, ILog
     : IWorkflowWriter<T>
     where T : IWorkflowType
 {
-    protected StructuredWriter Writer => field ??= new(TabSize);
+    protected StructuredTextBuilder TextBuilder => field ??= new(TabSize);
 
     /// <summary>
     ///     Gets the number of spaces to use for each indentation level. Defaults to 2.
@@ -44,8 +44,8 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem atomFileSystem, ILog
 
         WriteWorkflow(workflow);
 
-        var newText = Writer.ToString();
-        Writer.Clear();
+        var newText = TextBuilder.ToString();
+        TextBuilder.Reset();
 
         var existingText = atomFileSystem.File.Exists(filePath)
             ? await atomFileSystem.File.ReadAllTextAsync(filePath, cancellationToken)
@@ -86,11 +86,11 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem atomFileSystem, ILog
 
         WriteWorkflow(workflow);
 
-        var newText = Writer
+        var newText = TextBuilder
             .ToString()
             .ReplaceLineEndings();
 
-        Writer.Clear();
+        TextBuilder.Reset();
 
         var existingText = atomFileSystem.File.Exists(filePath)
             ? await atomFileSystem.File.ReadAllTextAsync(filePath, cancellationToken)
@@ -115,45 +115,4 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem atomFileSystem, ILog
     /// </summary>
     /// <param name="workflow">The workflow model to write.</param>
     protected abstract void WriteWorkflow(WorkflowModel workflow);
-
-    protected static TOption? GetOption<TOption>(WorkflowModel workflow)
-        where TOption : IWorkflowOption =>
-        workflow
-            .Options
-            .OfType<TOption>()
-            .LastOrDefault();
-
-    protected static TOption? GetOption<TOption>(WorkflowModel workflow, WorkflowStepModel step)
-        where TOption : IWorkflowOption =>
-        step
-            .Options
-            .Concat(workflow.Options)
-            .OfType<TOption>()
-            .LastOrDefault();
-
-    protected static IEnumerable<TOption> GetOptions<TOption>(WorkflowModel workflow)
-        where TOption : IWorkflowOption =>
-        workflow.Options.OfType<TOption>();
-
-    protected static IEnumerable<TOption> GetOptions<TOption>(WorkflowModel workflow, WorkflowStepModel step)
-        where TOption : IWorkflowOption =>
-        workflow
-            .Options
-            .Concat(step.Options)
-            .OfType<TOption>();
-
-    protected static bool IsOptionEnabled<TOption>(WorkflowModel workflow)
-        where TOption : ToggleWorkflowOption<TOption> =>
-        workflow
-            .Options
-            .OfType<TOption>()
-            .LastOrDefault() is { Value: true };
-
-    protected static bool IsOptionEnabled<TOption>(WorkflowModel workflow, WorkflowStepModel step)
-        where TOption : ToggleWorkflowOption<TOption> =>
-        workflow
-            .Options
-            .Concat(step.Options)
-            .OfType<TOption>()
-            .LastOrDefault() is { Value: true };
 }

@@ -6,14 +6,15 @@ internal sealed partial class DevopsWorkflowBuilder(
     IParamService paramService,
     IAtomFileSystem atomFileSystem,
     AtomProjectData atomProjectData,
-    IWorkflowExpressionResolver expressionResolver,
     ILogger<DevopsWorkflowBuilder> logger
 )
 {
+    private readonly DevopsExpressionFormatter _expressionFormatter = new();
+
     public Pipeline Build(WorkflowModel workflow) =>
         new Pipeline.PipelineWithJobs
         {
-            Name = WorkflowExpressions.Raw(workflow.Name),
+            Name = TextExpressions.Raw(workflow.Name),
             Jobs = workflow
                 .Jobs
                 .Select(x => BuildJob(workflow, x))
@@ -68,7 +69,7 @@ internal sealed partial class DevopsWorkflowBuilder(
             if (includedBranches.Length > 0)
                 return new Trigger.BranchList
                 {
-                    Branches = new(includedBranches.Select(WorkflowExpressions.Raw)),
+                    Branches = new(includedBranches.Select(TextExpressions.Raw)),
                 };
 
             return null;
@@ -80,10 +81,10 @@ internal sealed partial class DevopsWorkflowBuilder(
                 ? new IncludeExcludeFilters
                 {
                     Include = includedBranches.Length > 0
-                        ? new WorkflowExpressionCollection(includedBranches.Select(WorkflowExpressions.Raw))
+                        ? new TextExpressionCollection(includedBranches.Select(TextExpressions.Raw))
                         : null,
                     Exclude = excludedBranches.Length > 0
-                        ? new WorkflowExpressionCollection(excludedBranches.Select(WorkflowExpressions.Raw))
+                        ? new TextExpressionCollection(excludedBranches.Select(TextExpressions.Raw))
                         : null,
                 }
                 : null,
@@ -91,10 +92,10 @@ internal sealed partial class DevopsWorkflowBuilder(
                 ? new IncludeExcludeFilters
                 {
                     Include = includedPaths.Length > 0
-                        ? new WorkflowExpressionCollection(includedPaths.Select(WorkflowExpressions.Raw))
+                        ? new TextExpressionCollection(includedPaths.Select(TextExpressions.Raw))
                         : null,
                     Exclude = excludedPaths.Length > 0
-                        ? new WorkflowExpressionCollection(excludedPaths.Select(WorkflowExpressions.Raw))
+                        ? new TextExpressionCollection(excludedPaths.Select(TextExpressions.Raw))
                         : null,
                 }
                 : null,
@@ -102,10 +103,10 @@ internal sealed partial class DevopsWorkflowBuilder(
                 ? new IncludeExcludeFilters
                 {
                     Include = includedTags.Length > 0
-                        ? new WorkflowExpressionCollection(includedTags.Select(WorkflowExpressions.Raw))
+                        ? new TextExpressionCollection(includedTags.Select(TextExpressions.Raw))
                         : null,
                     Exclude = excludedTags.Length > 0
-                        ? new WorkflowExpressionCollection(excludedTags.Select(WorkflowExpressions.Raw))
+                        ? new TextExpressionCollection(excludedTags.Select(TextExpressions.Raw))
                         : null,
                 }
                 : null,
@@ -147,7 +148,7 @@ internal sealed partial class DevopsWorkflowBuilder(
         if (!hasPaths && includedBranches.Length > 0 && excludedBranches.Length is 0)
             return new Pr.BranchList
             {
-                Branches = new(includedBranches.Select(WorkflowExpressions.Raw)),
+                Branches = new(includedBranches.Select(TextExpressions.Raw)),
             };
 
         return new Pr.Full
@@ -156,10 +157,10 @@ internal sealed partial class DevopsWorkflowBuilder(
                 ? new IncludeExcludeFilters
                 {
                     Include = includedBranches.Length > 0
-                        ? new WorkflowExpressionCollection(includedBranches.Select(WorkflowExpressions.Raw))
+                        ? new TextExpressionCollection(includedBranches.Select(TextExpressions.Raw))
                         : null,
                     Exclude = excludedBranches.Length > 0
-                        ? new WorkflowExpressionCollection(excludedBranches.Select(WorkflowExpressions.Raw))
+                        ? new TextExpressionCollection(excludedBranches.Select(TextExpressions.Raw))
                         : null,
                 }
                 : null,
@@ -167,10 +168,10 @@ internal sealed partial class DevopsWorkflowBuilder(
                 ? new IncludeExcludeFilters
                 {
                     Include = includedPaths.Length > 0
-                        ? new WorkflowExpressionCollection(includedPaths.Select(WorkflowExpressions.Raw))
+                        ? new TextExpressionCollection(includedPaths.Select(TextExpressions.Raw))
                         : null,
                     Exclude = excludedPaths.Length > 0
-                        ? new WorkflowExpressionCollection(excludedPaths.Select(WorkflowExpressions.Raw))
+                        ? new TextExpressionCollection(excludedPaths.Select(TextExpressions.Raw))
                         : null,
                 }
                 : null,
@@ -222,11 +223,11 @@ internal sealed partial class DevopsWorkflowBuilder(
 
                         return new()
                         {
-                            Name = WorkflowExpressions.Raw(input.Name),
-                            DisplayName = WorkflowExpressions.Raw($"{input.Name} | {input.Description}"),
-                            Type = WorkflowExpressions.Raw("boolean"),
+                            Name = TextExpressions.Raw(input.Name),
+                            DisplayName = TextExpressions.Raw($"{input.Name} | {input.Description}"),
+                            Type = TextExpressions.Raw("boolean"),
                             Default = defaultBoolValue is not null
-                                ? WorkflowExpressions.Raw(defaultBoolValue.Value
+                                ? TextExpressions.Raw(defaultBoolValue.Value
                                     ? "true"
                                     : "false")
                                 : null,
@@ -245,14 +246,13 @@ internal sealed partial class DevopsWorkflowBuilder(
 
                             return new()
                             {
-                                Name = WorkflowExpressions.Raw(input.Name),
-                                DisplayName = WorkflowExpressions.Raw($"{input.Name} | {input.Description}"),
-                                Type = WorkflowExpressions.Raw("string"),
+                                Name = TextExpressions.Raw(input.Name),
+                                DisplayName = TextExpressions.Raw($"{input.Name} | {input.Description}"),
+                                Type = TextExpressions.Raw("string"),
                                 Default = defaultChoiceValue is { Length: > 0 }
-                                    ? WorkflowExpressions.Raw(defaultChoiceValue)
+                                    ? TextExpressions.Raw(defaultChoiceValue)
                                     : null,
-                                Values = new(choiceInput.Choices.Select(c =>
-                                    (WorkflowExpression)WorkflowExpressions.Raw(c))),
+                                Values = new(choiceInput.Choices.Select(c => (TextExpression)TextExpressions.Raw(c))),
                             };
                         }
                     }
@@ -269,11 +269,11 @@ internal sealed partial class DevopsWorkflowBuilder(
 
                             return new()
                             {
-                                Name = WorkflowExpressions.Raw(input.Name),
-                                DisplayName = WorkflowExpressions.Raw($"{input.Name} | {input.Description}"),
-                                Type = WorkflowExpressions.Raw("string"),
+                                Name = TextExpressions.Raw(input.Name),
+                                DisplayName = TextExpressions.Raw($"{input.Name} | {input.Description}"),
+                                Type = TextExpressions.Raw("string"),
                                 Default = defaultStringValue is { Length: > 0 }
-                                    ? WorkflowExpressions.Raw(defaultStringValue)
+                                    ? TextExpressions.Raw(defaultStringValue)
                                     : null,
                             };
                         }
@@ -289,7 +289,7 @@ internal sealed partial class DevopsWorkflowBuilder(
     private static Variables.VariableList? BuildVariables(WorkflowModel workflow)
     {
         var variableGroups = workflow
-            .Options
+            .WorkflowOptions
             .OfType<DevopsVariableGroup>()
             .ToArray();
 
@@ -301,7 +301,7 @@ internal sealed partial class DevopsWorkflowBuilder(
             Values = variableGroups
                 .Select(g => (Variable)new Variable.Group
                 {
-                    GroupName = WorkflowExpressions.Raw(g.Name),
+                    GroupName = TextExpressions.Raw(g.Name),
                 })
                 .ToList(),
         };
@@ -312,7 +312,7 @@ internal sealed partial class DevopsWorkflowBuilder(
         var poolOption = job
             .TargetStep
             .Options
-            .Concat(workflow.Options)
+            .Concat(workflow.WorkflowOptions)
             .OfType<DevopsPool>()
             .FirstOrDefault();
 
@@ -334,15 +334,15 @@ internal sealed partial class DevopsWorkflowBuilder(
             _ => null,
         };
 
-        var environment = DeployToEnvironment.GetOption(workflow, job.TargetStep);
+        var environment = DeployToEnvironment.Get(workflow, job.TargetStep);
 
         if (environment is not null)
             return new Job.Deployment
             {
-                DeploymentId = WorkflowExpressions.Raw(job.Name),
-                DisplayName = WorkflowExpressions.Raw(job.Name),
+                DeploymentId = TextExpressions.Raw(job.Name),
+                DisplayName = TextExpressions.Raw(job.Name),
                 DependsOn = job.JobDependencies.Count > 0
-                    ? job.JobDependencies
+                    ? new TextExpressionCollection(job.JobDependencies.Select(TextExpressions.Raw))
                     : null,
                 Condition = conditionExpression,
                 Pool = pool,
@@ -361,17 +361,17 @@ internal sealed partial class DevopsWorkflowBuilder(
 
         return new Job.RegularJob
         {
-            JobId = WorkflowExpressions.Raw(job.Name),
-            DisplayName = WorkflowExpressions.Raw(job.Name),
+            JobId = TextExpressions.Raw(job.Name),
+            DisplayName = TextExpressions.Raw(job.Name),
             DependsOn = job.JobDependencies.Count > 0
-                ? job.JobDependencies
+                ? new TextExpressionCollection(job.JobDependencies.Select(TextExpressions.Raw))
                 : null,
             Condition = conditionExpression,
             Pool = pool,
-            Strategy = job.MatrixDimensions.Count > 0
+            Strategy = job.TargetStep.MatrixDimensions.Count > 0
                 ? new JobStrategy
                 {
-                    Matrix = BuildMatrix(job.MatrixDimensions),
+                    Matrix = BuildMatrix(job.TargetStep.MatrixDimensions),
                 }
                 : null,
             Steps = BuildSteps(workflow, job),
@@ -383,7 +383,7 @@ internal sealed partial class DevopsWorkflowBuilder(
         if (poolOption is null)
             return new()
             {
-                VmImage = WorkflowExpressions.Raw("ubuntu-latest"),
+                VmImage = TextExpressions.Raw("ubuntu-latest"),
             };
 
         if (poolOption.HostedImage is not null)
@@ -407,18 +407,18 @@ internal sealed partial class DevopsWorkflowBuilder(
 
         return new()
         {
-            VmImage = WorkflowExpressions.Raw("ubuntu-latest"),
+            VmImage = TextExpressions.Raw("ubuntu-latest"),
         };
     }
 
-    private Dictionary<string, IReadOnlyDictionary<string, WorkflowExpression>> BuildMatrix(
+    private Dictionary<string, IReadOnlyDictionary<string, TextExpression>> BuildMatrix(
         IReadOnlyList<MatrixDimension> matrixDimensions)
     {
         var dimensions = matrixDimensions
             .Select(d => (buildDefinition.ParamDefinitions[d.Name].ArgName, d.Values))
             .ToArray();
 
-        var result = new Dictionary<string, IReadOnlyDictionary<string, WorkflowExpression>>();
+        var result = new Dictionary<string, IReadOnlyDictionary<string, TextExpression>>();
         var indices = new int[dimensions.Length];
         var counter = 1;
 
@@ -431,8 +431,8 @@ internal sealed partial class DevopsWorkflowBuilder(
                 .ToArray();
 
             var sanitizedValues = currentValues
-                .Select(v => new string(expressionResolver
-                    .Resolve(v)
+                .Select(v => new string(_expressionFormatter
+                    .Format(v)
                     .Select(c => char.IsLetterOrDigit(c)
                         ? c
                         : '-')
@@ -444,7 +444,7 @@ internal sealed partial class DevopsWorkflowBuilder(
 
             var combinationName = $"{counter++:D3}_{string.Join("_", sanitizedValues)}";
 
-            var entry = new Dictionary<string, WorkflowExpression>();
+            var entry = new Dictionary<string, TextExpression>();
 
             for (var i = 0; i < dimensions.Length; i++)
                 entry[dimensions[i].ArgName] = currentValues[i];
@@ -488,12 +488,13 @@ internal sealed partial class DevopsWorkflowBuilder(
             additionalSteps.Add(new DevopsCheckoutStep
             {
                 Value = true,
-                Repository = WorkflowExpressions.Raw("self"),
-                FetchDepth = WorkflowExpressions.From(0),
+                Repository = TextExpressions.Raw("self"),
+                FetchDepth = TextExpressions.From(0),
             });
 
         additionalSteps = additionalSteps
-            .Where<IAdditionalStepOption>(x => x is not IToggleWorkflowOption or IToggleWorkflowOption { Value: true })
+            .Where<IAdditionalStepOption>(x =>
+                x is not IToggleWorkflowOption or IToggleWorkflowOption { Enabled: true })
             .ToList();
 
         // Add pre-target additional steps
@@ -504,6 +505,7 @@ internal sealed partial class DevopsWorkflowBuilder(
 
         // Matrix params
         var matrixParams = job
+            .TargetStep
             .MatrixDimensions
             .Select(dimension => buildDefinition.ParamDefinitions[dimension.Name].ArgName)
             .Select(name => (Name: name, Value: $"$({name})"))
@@ -531,7 +533,7 @@ internal sealed partial class DevopsWorkflowBuilder(
                     .Select(x => x.TargetStep)
                     .Single(x => x.Name == consumedArtifact.TargetName);
 
-                if (SuppressArtifactPublishingOption.GetOption(workflow, consumedStep) is { Value: true })
+                if (SuppressArtifactPublishingOption.Get(workflow, consumedStep) is { Value: true })
                     logger.LogWarning(
                         "Workflow {WorkflowName} target {TargetName} consumes artifact {ArtifactName} from target {SourceTargetName}, which has artifact publishing suppressed; this may cause the workflow to fail",
                         workflow.Name,
@@ -540,7 +542,7 @@ internal sealed partial class DevopsWorkflowBuilder(
                         consumedArtifact.TargetName);
             }
 
-            if (UseCustomArtifactProvider.GetOption(workflow) is { Value: true })
+            if (UseCustomArtifactProvider.Get(workflow) is { Value: true })
                 foreach (var slice in target.ConsumedArtifacts.GroupBy(a => a.BuildSlice))
                 {
                     var artifactNames = slice
@@ -555,14 +557,14 @@ internal sealed partial class DevopsWorkflowBuilder(
                         retrieveTarget.ConsumedVariables,
                         matrixParams);
 
-                    env["atom-artifacts"] = WorkflowExpressions.Raw(string.Join(",", artifactNames));
+                    env["atom-artifacts"] = TextExpressions.Raw(string.Join(",", artifactNames));
 
                     if (!env.ContainsKey("build-slice"))
                     {
                         if (slice.Key is { Length: > 0 })
-                            env.Add("build-slice", WorkflowExpressions.Raw(slice.Key));
+                            env.Add("build-slice", TextExpressions.Raw(slice.Key));
                         else if (buildSliceValue is not null)
-                            env.Add("build-slice", WorkflowExpressions.Raw(buildSliceValue));
+                            env.Add("build-slice", TextExpressions.Raw(buildSliceValue));
                     }
 
                     steps.Add(BuildScriptStep(artifactNames switch
@@ -586,12 +588,12 @@ internal sealed partial class DevopsWorkflowBuilder(
 
                     steps.Add(new Step.Task
                     {
-                        TaskName = WorkflowExpressions.Raw("DownloadPipelineArtifact@2"),
-                        DisplayName = WorkflowExpressions.Raw(artifact.ArtifactName),
-                        Inputs = new Dictionary<string, WorkflowExpression>
+                        TaskName = TextExpressions.Raw("DownloadPipelineArtifact@2"),
+                        DisplayName = TextExpressions.Raw(artifact.ArtifactName),
+                        Inputs = new Dictionary<string, TextExpression>
                         {
-                            ["artifact"] = WorkflowExpressions.Raw(artifactName),
-                            ["path"] = WorkflowExpressions.Raw(
+                            ["artifact"] = TextExpressions.Raw(artifactName),
+                            ["path"] = TextExpressions.Raw(
                                 $"{DevopsWorkflows.Devops.PipelineArtifactDirectory}/{artifact.ArtifactName}"),
                         },
                     });
@@ -605,9 +607,9 @@ internal sealed partial class DevopsWorkflowBuilder(
 
         // Produce artifacts
         if (target.ProducedArtifacts.Count > 0 &&
-            SuppressArtifactPublishingOption.GetOption(workflow, job.TargetStep) is not { Value: true })
+            SuppressArtifactPublishingOption.Get(workflow, job.TargetStep) is not { Value: true })
         {
-            if (UseCustomArtifactProvider.GetOption(workflow) is { Value: true })
+            if (UseCustomArtifactProvider.Get(workflow) is { Value: true })
                 foreach (var slice in target.ProducedArtifacts.GroupBy(a => a.BuildSlice))
                 {
                     var artifactNames = slice
@@ -622,14 +624,14 @@ internal sealed partial class DevopsWorkflowBuilder(
                         storeTarget.ConsumedVariables,
                         matrixParams);
 
-                    env["atom-artifacts"] = WorkflowExpressions.Raw(string.Join(",", artifactNames));
+                    env["atom-artifacts"] = TextExpressions.Raw(string.Join(",", artifactNames));
 
                     if (!env.ContainsKey("build-slice"))
                     {
                         if (slice.Key is { Length: > 0 })
-                            env.Add("build-slice", WorkflowExpressions.Raw(slice.Key));
+                            env.Add("build-slice", TextExpressions.Raw(slice.Key));
                         else if (buildSliceValue is not null)
-                            env.Add("build-slice", WorkflowExpressions.Raw(buildSliceValue));
+                            env.Add("build-slice", TextExpressions.Raw(buildSliceValue));
                     }
 
                     steps.Add(BuildScriptStep(artifactNames switch
@@ -653,13 +655,12 @@ internal sealed partial class DevopsWorkflowBuilder(
 
                     steps.Add(new Step.Task
                     {
-                        TaskName = WorkflowExpressions.Raw("PublishPipelineArtifact@1"),
-                        DisplayName = WorkflowExpressions.Raw(artifact.ArtifactName),
-                        Inputs = new Dictionary<string, WorkflowExpression>
+                        TaskName = TextExpressions.Raw("PublishPipelineArtifact@1"),
+                        DisplayName = TextExpressions.Raw(artifact.ArtifactName),
+                        Inputs = new Dictionary<string, TextExpression>
                         {
-                            ["artifactName"] = WorkflowExpressions.Raw(artifactName),
-                            ["targetPath"] =
-                                WorkflowExpressions.Raw(
+                            ["artifactName"] = TextExpressions.Raw(artifactName),
+                            ["targetPath"] = TextExpressions.Raw(
                                     $"{DevopsWorkflows.Devops.PipelinePublishDirectory}/{artifact.ArtifactName}"),
                         },
                     });
@@ -687,17 +688,17 @@ internal sealed partial class DevopsWorkflowBuilder(
 
     private static Step.Task BuildSetupDotnetStep(SetupDotnetStep step)
     {
-        var inputs = new Dictionary<string, WorkflowExpression>();
+        var inputs = new Dictionary<string, TextExpression>();
 
         if (step.DotnetVersion is not null)
             inputs["version"] = step.DotnetVersion;
 
         return new()
         {
-            TaskName = WorkflowExpressions.Raw("UseDotNet@2"),
+            TaskName = TextExpressions.Raw("UseDotNet@2"),
             DisplayName = step.DotnetVersion is not null
-                ? WorkflowExpressions.Concat(["Setup .NET ", step.DotnetVersion])
-                : WorkflowExpressions.Raw("Setup .NET"),
+                ? TextExpressions.Concat(["Setup .NET ", step.DotnetVersion])
+                : TextExpressions.Raw("Setup .NET"),
             Inputs = inputs.Count > 0
                 ? inputs
                 : null,
@@ -723,9 +724,9 @@ internal sealed partial class DevopsWorkflowBuilder(
                     "Failed to parse DecSm.Atom.Host assembly version as SemVer for syncing atom tool version");
         }
 
-        var env = feedsToAdd.ToDictionary<NugetFeedOptions, string, WorkflowExpression>(
+        var env = feedsToAdd.ToDictionary<NugetFeedOptions, string, TextExpression>(
             k => AddNugetFeedsStep.GetEnvVarNameForFeed(k.FeedName),
-            v => WorkflowExpressions.Raw($"$({v.SecretName})"));
+            v => TextExpressions.Raw($"$({v.SecretName})"));
 
         // If we are using .net 10+ then we can use the dotnet tool exec command instead of installing the tool to run it
         if (SemVer.TryParse(RuntimeInformation
@@ -736,11 +737,11 @@ internal sealed partial class DevopsWorkflowBuilder(
             version.Major >= 10)
             return new()
             {
-                ScriptContent = WorkflowExpressions.Raw(string.Join("\n",
+                ScriptContent = TextExpressions.Raw(string.Join("\n",
                     feedsToAdd.Select(feedToAdd => step.SyncAtomToolVersionToLibraryVersion
                         ? $"dotnet tool exec decsm.atom.tool@{toolVersion} -y -- nuget-add --name \"{feedToAdd.FeedName}\" --url \"{feedToAdd.FeedUrl}\""
                         : $"dotnet tool exec decsm.atom.tool -y -- nuget-add --name \"{feedToAdd.FeedName}\" --url \"{feedToAdd.FeedUrl}\""))),
-                DisplayName = WorkflowExpressions.Raw("Setup NuGet"),
+                DisplayName = TextExpressions.Raw("Setup NuGet"),
                 Env = env.Count > 0
                     ? env
                     : null,
@@ -748,13 +749,13 @@ internal sealed partial class DevopsWorkflowBuilder(
 
         return new()
         {
-            ScriptContent = WorkflowExpressions.Raw(string.Join("\n",
+            ScriptContent = TextExpressions.Raw(string.Join("\n",
                 feedsToAdd
                     .Select(feedToAdd => step.SyncAtomToolVersionToLibraryVersion
                         ? $"atom nuget-add --name \"{feedToAdd.FeedName}\" --url \"{feedToAdd.FeedUrl}\" --tool-version \"{toolVersion}\""
                         : $"atom nuget-add --name \"{feedToAdd.FeedName}\" --url \"{feedToAdd.FeedUrl}\"")
                     .Prepend("dotnet tool update --global DecSm.Atom.Tool"))),
-            DisplayName = WorkflowExpressions.Raw("Setup NuGet"),
+            DisplayName = TextExpressions.Raw("Setup NuGet"),
             Env = env.Count > 0
                 ? env
                 : null,
@@ -764,17 +765,17 @@ internal sealed partial class DevopsWorkflowBuilder(
     private Step.Script BuildScriptStep(
         string displayName,
         string targetName,
-        Dictionary<string, WorkflowExpression> env,
+        Dictionary<string, TextExpression> env,
         string? stepName = null)
     {
         var runScript = GetRunScript(targetName);
 
         return new()
         {
-            ScriptContent = WorkflowExpressions.Raw(runScript),
-            DisplayName = WorkflowExpressions.Raw(displayName),
+            ScriptContent = TextExpressions.Raw(runScript),
+            DisplayName = TextExpressions.Raw(displayName),
             Name = stepName is not null
-                ? WorkflowExpressions.Raw(stepName)
+                ? TextExpressions.Raw(stepName)
                 : null,
             Env = env.Count > 0
                 ? env
@@ -801,20 +802,20 @@ internal sealed partial class DevopsWorkflowBuilder(
         return $"dotnet run --project {projectPath} {targetName} --skip --headless";
     }
 
-    private Dictionary<string, WorkflowExpression> BuildTargetStepEnv(
+    private Dictionary<string, TextExpression> BuildTargetStepEnv(
         WorkflowModel workflow,
         WorkflowJobModel job,
         IReadOnlyList<UsedParam> usedParams,
         IReadOnlyList<ConsumedVariable> consumedVariables,
         List<(string Name, string Value)> matrixParams)
     {
-        var targetStepEnv = new Dictionary<string, WorkflowExpression>();
+        var targetStepEnv = new Dictionary<string, TextExpression>();
 
         foreach (var manualTrigger in workflow.Triggers.OfType<ManualTrigger>())
         foreach (var input in manualTrigger.Inputs?.Where(i => usedParams
                      .Select(p => p.Param.ArgName)
                      .Any(p => p == i.Name)) ?? [])
-            targetStepEnv[input.Name] = WorkflowExpressions
+            targetStepEnv[input.Name] = TextExpressions
                 .Raw("parameters")[input.Name]
                 .Evaluate();
 
@@ -832,17 +833,17 @@ internal sealed partial class DevopsWorkflowBuilder(
 
         if (requiredSecrets.Length > 0)
         {
-            foreach (var injectedSecret in workflow.Options.OfType<WorkflowSecretInjectionForSecretProvider>())
+            foreach (var injectedSecret in workflow.WorkflowOptions.OfType<WorkflowSecretInjectionForSecretProvider>())
                 if (buildDefinition.ParamDefinitions.GetValueOrDefault(injectedSecret.SecretName) is
                     { } paramDefinition)
                     targetStepEnv[paramDefinition.ArgName] =
-                        new DevopsMacroExpression(WorkflowExpressions.Raw(paramDefinition.EnvVarName));
+                        new DevopsMacroExpression(TextExpressions.Raw(paramDefinition.EnvVarName));
 
-            foreach (var injectedEnvVar in workflow.Options.OfType<WorkflowSecretsInjectionFromEnvironment>())
+            foreach (var injectedEnvVar in workflow.WorkflowOptions.OfType<WorkflowSecretsInjectionFromEnvironment>())
                 if (buildDefinition.ParamDefinitions.GetValueOrDefault(injectedEnvVar.SecretName) is
                     { } paramDefinition)
                     targetStepEnv[paramDefinition.ArgName] =
-                        new DevopsMacroExpression(WorkflowExpressions.Raw(paramDefinition.EnvVarName));
+                        new DevopsMacroExpression(TextExpressions.Raw(paramDefinition.EnvVarName));
         }
 
         foreach (var requiredSecret in requiredSecrets)
@@ -850,7 +851,7 @@ internal sealed partial class DevopsWorkflowBuilder(
                 .GetOptions(workflow, job.TargetStep)
                 .Any(x => x.Value == requiredSecret.Param.Name))
                 targetStepEnv[requiredSecret.Param.ArgName] =
-                    new DevopsMacroExpression(WorkflowExpressions.Raw(requiredSecret.Param.EnvVarName));
+                    new DevopsMacroExpression(TextExpressions.Raw(requiredSecret.Param.EnvVarName));
 
         var environmentInjections = WorkflowParamInjectionFromEnvironment.GetOptions(workflow, job.TargetStep);
         var paramInjections = WorkflowParamInjection.GetOptions(workflow, job.TargetStep);
@@ -872,7 +873,7 @@ internal sealed partial class DevopsWorkflowBuilder(
             }
 
             targetStepEnv[paramDefinition.ArgName] =
-                new DevopsMacroExpression(WorkflowExpressions.Raw(paramDefinition.EnvVarName));
+                new DevopsMacroExpression(TextExpressions.Raw(paramDefinition.EnvVarName));
         }
 
         foreach (var paramInjection in paramInjections)
@@ -895,7 +896,7 @@ internal sealed partial class DevopsWorkflowBuilder(
             targetStepEnv[environmentVariableInjection.Name] = environmentVariableInjection.Value;
 
         foreach (var matrixParam in matrixParams)
-            targetStepEnv[matrixParam.Name] = WorkflowExpressions.Raw(matrixParam.Value);
+            targetStepEnv[matrixParam.Name] = TextExpressions.Raw(matrixParam.Value);
 
         return targetStepEnv;
     }

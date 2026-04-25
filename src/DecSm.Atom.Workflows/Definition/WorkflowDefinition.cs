@@ -15,7 +15,7 @@ public sealed record WorkflowDefinition(string Name)
     /// <summary>
     ///     Gets the collection of options or parameters that can be configured for the workflow.
     /// </summary>
-    public IReadOnlyList<IWorkflowOption> Options { get; init; } = [];
+    public IReadOnlyList<IWorkflowOption> WorkflowOptions { get; init; } = [];
 
     /// <summary>
     ///     Gets the collection of targets that define the sequence of tasks to be executed by the workflow.

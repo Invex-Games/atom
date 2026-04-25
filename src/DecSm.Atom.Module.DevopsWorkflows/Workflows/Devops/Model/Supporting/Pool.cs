@@ -20,7 +20,7 @@ public partial record Pool
         /// <summary>
         ///     Name of the pool.
         /// </summary>
-        public required WorkflowExpression Name { get; init; }
+        public required WorkflowExpression<string> Name { get; init; }
     }
 
     /// <summary>
@@ -31,16 +31,16 @@ public partial record Pool
         /// <summary>
         ///     Name of a pool.
         /// </summary>
-        public WorkflowExpression? Name { get; init; }
+        public WorkflowExpression<string>? Name { get; init; }
 
         /// <summary>
         ///     Demands (for a private pool).
         /// </summary>
-        public WorkflowExpressionCollection? Demands { get; init; }
+        public WorkflowExpressionCollection<string>? Demands { get; init; }
 
         /// <summary>
         ///     Name of the VM image you want to use; valid only in the Microsoft-hosted pool.
         /// </summary>
-        public WorkflowExpression? VmImage { get; init; }
+        public WorkflowExpression<string>? VmImage { get; init; }
     }
 }

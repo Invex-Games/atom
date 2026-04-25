@@ -1,9 +1,11 @@
-﻿namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Options;
+﻿using DecSm.Atom.StructuredText.Expressions;
+
+namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Options;
 
 [PublicAPI]
 public sealed record GithubRunsOn : IWorkflowOption
 {
-    public WorkflowExpressionCollection Labels { get; init; } = [];
+    public TextExpressionCollection Labels { get; init; } = [];
 
-    public WorkflowExpression? Group { get; init; }
+    public TextExpression? Group { get; init; }
 }

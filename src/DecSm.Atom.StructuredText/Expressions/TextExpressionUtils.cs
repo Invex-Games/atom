@@ -1,11 +1,11 @@
-namespace DecSm.Atom.Workflows.Expressions;
+namespace DecSm.Atom.StructuredText.Expressions;
 
 [PublicAPI]
-public static class WorkflowExpressionUtils
+public static class TextExpressionUtils
 {
-    extension(IEnumerable<WorkflowExpression> expressions)
+    extension(IEnumerable<TextExpression> expressions)
     {
-        public IEnumerable<WorkflowExpression> Join(WorkflowExpression separator)
+        public IEnumerable<TextExpression> Join(TextExpression separator)
         {
             var list = expressions.ToList();
 

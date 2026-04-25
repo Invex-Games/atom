@@ -18,25 +18,4 @@
 ///     </code>
 /// </example>
 [PublicAPI]
-public sealed record WorkflowParamInjection(string Name, WorkflowExpression InjectionExpression) : IWorkflowOption
-{
-    /// <summary>
-    ///     Gets a value indicating that multiple instances of this option are allowed.
-    /// </summary>
-    public bool AllowMultiple => true;
-
-    /// <summary>
-    ///     Merges multiple <see cref="WorkflowParamInjection" /> instances, ensuring that for each parameter name,
-    ///     only the last injected value is retained.
-    /// </summary>
-    /// <typeparam name="T">The type of workflow option being merged.</typeparam>
-    /// <param name="entries">The collection of workflow options to merge.</param>
-    /// <returns>A collection of merged options with the latest value for each parameter.</returns>
-    public static IEnumerable<T> MergeWith<T>(IEnumerable<T> entries)
-        where T : IWorkflowOption =>
-        entries
-            .OfType<WorkflowParamInjection>()
-            .GroupBy(x => x.Name)
-            .Select(x => x.Last())
-            .Cast<T>();
-}
+public sealed record WorkflowParamInjection(string Name, TextExpression InjectionExpression) : IWorkflowOption;

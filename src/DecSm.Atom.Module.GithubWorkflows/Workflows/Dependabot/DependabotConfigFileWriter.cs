@@ -20,7 +20,7 @@ public sealed class DependabotConfigFileWriter(
     protected override void WriteWorkflow(WorkflowModel workflow)
     {
         var config = workflow
-            .Options
+            .WorkflowOptions
             .OfType<DependabotConfigOption>()
             .FirstOrDefault();
 
@@ -33,109 +33,109 @@ public sealed class DependabotConfigFileWriter(
 
     private void WriteConfig(DependabotConfig config)
     {
-        Writer.WriteLine($"version: {config.Version}");
-        Writer.WriteLine();
+        TextBuilder.WriteLine($"version: {config.Version}");
+        TextBuilder.WriteLine();
 
         if (config.EnableBetaEcosystems is true)
         {
-            Writer.WriteLine("enable-beta-ecosystems: true");
-            Writer.WriteLine();
+            TextBuilder.WriteLine("enable-beta-ecosystems: true");
+            TextBuilder.WriteLine();
         }
 
         if (config.Registries is { Count: > 0 } registries)
         {
-            using (Writer.WriteSection("registries:"))
+            using (TextBuilder.WriteSection("registries:"))
                 foreach (var (name, registry) in registries)
                     WriteRegistry(name, registry);
 
-            Writer.WriteLine();
+            TextBuilder.WriteLine();
         }
 
         if (config.MultiEcosystemGroups is { Count: > 0 } multiEcosystemGroups)
         {
-            using (Writer.WriteSection("multi-ecosystem-groups:"))
+            using (TextBuilder.WriteSection("multi-ecosystem-groups:"))
                 foreach (var (name, group) in multiEcosystemGroups)
                     WriteMultiEcosystemGroup(name, group);
 
-            Writer.WriteLine();
+            TextBuilder.WriteLine();
         }
 
-        using (Writer.WriteSection("updates:"))
+        using (TextBuilder.WriteSection("updates:"))
             foreach (var update in config.Updates)
                 WriteUpdate(update);
     }
 
     private void WriteRegistry(string name, DependabotRegistry registry)
     {
-        using var _ = Writer.WriteSection($"{name}:");
+        using var _ = TextBuilder.WriteSection($"{name}:");
 
-        Writer.WriteLine($"type: {FormatRegistryType(registry.Type)}");
-        Writer.WriteLine($"url: {registry.Url}");
+        TextBuilder.WriteLine($"type: {FormatRegistryType(registry.Type)}");
+        TextBuilder.WriteLine($"url: {registry.Url}");
 
         if (registry.Username is { Length: > 0 } username)
-            Writer.WriteLine($"username: {username}");
+            TextBuilder.WriteLine($"username: {username}");
 
         if (registry.Password is { Length: > 0 } password)
-            Writer.WriteLine($"password: {password}");
+            TextBuilder.WriteLine($"password: {password}");
 
         if (registry.Key is { Length: > 0 } key)
-            Writer.WriteLine($"key: {key}");
+            TextBuilder.WriteLine($"key: {key}");
 
         if (registry.Token is { Length: > 0 } token)
-            Writer.WriteLine($"token: {token}");
+            TextBuilder.WriteLine($"token: {token}");
 
         if (registry.ReplacesBase is { } replacesBase)
-            Writer.WriteLine($"replaces-base: {replacesBase.ToString().ToLowerInvariant()}");
+            TextBuilder.WriteLine($"replaces-base: {replacesBase.ToString().ToLowerInvariant()}");
 
         if (registry.Organization is { Length: > 0 } organization)
-            Writer.WriteLine($"organization: {organization}");
+            TextBuilder.WriteLine($"organization: {organization}");
 
         if (registry.Repo is { Length: > 0 } repo)
-            Writer.WriteLine($"repo: {repo}");
+            TextBuilder.WriteLine($"repo: {repo}");
 
         if (registry.AuthKey is { Length: > 0 } authKey)
-            Writer.WriteLine($"auth-key: {authKey}");
+            TextBuilder.WriteLine($"auth-key: {authKey}");
 
         if (registry.PublicKeyFingerprint is { Length: > 0 } publicKeyFingerprint)
-            Writer.WriteLine($"public-key-fingerprint: {publicKeyFingerprint}");
+            TextBuilder.WriteLine($"public-key-fingerprint: {publicKeyFingerprint}");
 
         if (registry.Registry is { Length: > 0 } registryName)
-            Writer.WriteLine($"registry: {registryName}");
+            TextBuilder.WriteLine($"registry: {registryName}");
 
         if (registry.TenantId is { Length: > 0 } tenantId)
-            Writer.WriteLine($"tenant-id: {tenantId}");
+            TextBuilder.WriteLine($"tenant-id: {tenantId}");
 
         if (registry.ClientId is { Length: > 0 } clientId)
-            Writer.WriteLine($"client-id: {clientId}");
+            TextBuilder.WriteLine($"client-id: {clientId}");
 
         if (registry.JfrogOidcProviderName is { Length: > 0 } jfrogOidcProviderName)
-            Writer.WriteLine($"jfrog-oidc-provider-name: {jfrogOidcProviderName}");
+            TextBuilder.WriteLine($"jfrog-oidc-provider-name: {jfrogOidcProviderName}");
 
         if (registry.IdentityMappingName is { Length: > 0 } identityMappingName)
-            Writer.WriteLine($"identity-mapping-name: {identityMappingName}");
+            TextBuilder.WriteLine($"identity-mapping-name: {identityMappingName}");
 
         if (registry.Audience is { Length: > 0 } audience)
-            Writer.WriteLine($"audience: {audience}");
+            TextBuilder.WriteLine($"audience: {audience}");
 
         if (registry.AwsRegion is { Length: > 0 } awsRegion)
-            Writer.WriteLine($"aws-region: {awsRegion}");
+            TextBuilder.WriteLine($"aws-region: {awsRegion}");
 
         if (registry.AccountId is { Length: > 0 } accountId)
-            Writer.WriteLine($"account-id: {accountId}");
+            TextBuilder.WriteLine($"account-id: {accountId}");
 
         if (registry.RoleName is { Length: > 0 } roleName)
-            Writer.WriteLine($"role-name: {roleName}");
+            TextBuilder.WriteLine($"role-name: {roleName}");
 
         if (registry.Domain is { Length: > 0 } domain)
-            Writer.WriteLine($"domain: {domain}");
+            TextBuilder.WriteLine($"domain: {domain}");
 
         if (registry.DomainOwner is { Length: > 0 } domainOwner)
-            Writer.WriteLine($"domain-owner: {domainOwner}");
+            TextBuilder.WriteLine($"domain-owner: {domainOwner}");
     }
 
     private void WriteMultiEcosystemGroup(string name, DependabotMultiEcosystemGroup group)
     {
-        using var _ = Writer.WriteSection($"{name}:");
+        using var _ = TextBuilder.WriteSection($"{name}:");
 
         WriteSchedule(group.Schedule);
 
@@ -146,10 +146,10 @@ public sealed class DependabotConfigFileWriter(
             WriteArrayProperty("assignees", assignees);
 
         if (group.Milestone is { } milestone)
-            Writer.WriteLine($"milestone: {milestone}");
+            TextBuilder.WriteLine($"milestone: {milestone}");
 
         if (group.TargetBranch is { Length: > 0 } targetBranch)
-            Writer.WriteLine($"target-branch: {targetBranch}");
+            TextBuilder.WriteLine($"target-branch: {targetBranch}");
 
         if (group.CommitMessage is { } commitMessage)
             WriteCommitMessage(commitMessage);
@@ -158,13 +158,13 @@ public sealed class DependabotConfigFileWriter(
             WritePullRequestBranchName(pullRequestBranchName);
 
         if (group.OpenPullRequestsLimit is { } openPullRequestsLimit)
-            Writer.WriteLine($"open-pull-requests-limit: {openPullRequestsLimit}");
+            TextBuilder.WriteLine($"open-pull-requests-limit: {openPullRequestsLimit}");
 
         if (group.UpdateTypes is { Count: > 0 } updateTypes)
             WriteArrayProperty("update-types", updateTypes.Select(FormatGroupUpdateType));
 
         if (group.DependencyType is { } dependencyType)
-            Writer.WriteLine($"dependency-type: {FormatGroupDependencyType(dependencyType)}");
+            TextBuilder.WriteLine($"dependency-type: {FormatGroupDependencyType(dependencyType)}");
 
         if (group.ExcludePatterns is { Count: > 0 } excludePatterns)
             WriteArrayProperty("exclude-patterns", excludePatterns);
@@ -172,10 +172,10 @@ public sealed class DependabotConfigFileWriter(
 
     private void WriteUpdate(DependabotUpdate update)
     {
-        using var _ = Writer.WriteSection($"- package-ecosystem: {update.PackageEcosystem}");
+        using var _ = TextBuilder.WriteSection($"- package-ecosystem: {update.PackageEcosystem}");
 
         if (update.Directory is { Length: > 0 } directory)
-            Writer.WriteLine($"directory: \"{directory}\"");
+            TextBuilder.WriteLine($"directory: \"{directory}\"");
         else if (update.Directories is { Count: > 0 } directories)
             WriteArrayProperty("directories", directories.Select(d => $"\"{d}\""));
 
@@ -204,96 +204,96 @@ public sealed class DependabotConfigFileWriter(
             WriteIgnoreRules(ignore);
 
         if (update.InsecureExternalCodeExecution is { } insecureExternalCodeExecution)
-            Writer.WriteLine(
+            TextBuilder.WriteLine(
                 $"insecure-external-code-execution: {FormatInsecureExternalCodeExecution(insecureExternalCodeExecution)}");
 
         if (update.Labels is { Count: > 0 } labels)
             WriteArrayProperty("labels", labels);
 
         if (update.Milestone is { } milestone)
-            Writer.WriteLine($"milestone: {milestone}");
+            TextBuilder.WriteLine($"milestone: {milestone}");
 
         if (update.Name is { Length: > 0 } name)
-            Writer.WriteLine($"name: \"{name}\"");
+            TextBuilder.WriteLine($"name: \"{name}\"");
 
         if (update.OpenPullRequestsLimit is { } openPullRequestsLimit)
-            Writer.WriteLine($"open-pull-requests-limit: {openPullRequestsLimit}");
+            TextBuilder.WriteLine($"open-pull-requests-limit: {openPullRequestsLimit}");
 
         if (update.PullRequestBranchName is { } pullRequestBranchName)
             WritePullRequestBranchName(pullRequestBranchName);
 
         if (update.RebaseStrategy is { } rebaseStrategy)
-            Writer.WriteLine($"rebase-strategy: {FormatRebaseStrategy(rebaseStrategy)}");
+            TextBuilder.WriteLine($"rebase-strategy: {FormatRebaseStrategy(rebaseStrategy)}");
 
         if (update.Registries is { } registries)
             WriteRegistriesReference(registries);
 
         if (update.TargetBranch is { Length: > 0 } targetBranch)
-            Writer.WriteLine($"target-branch: {targetBranch}");
+            TextBuilder.WriteLine($"target-branch: {targetBranch}");
 
         if (update.Vendor is { } vendor)
-            Writer.WriteLine($"vendor: {vendor.ToString().ToLowerInvariant()}");
+            TextBuilder.WriteLine($"vendor: {vendor.ToString().ToLowerInvariant()}");
 
         if (update.VersioningStrategy is { } versioningStrategy)
-            Writer.WriteLine($"versioning-strategy: {FormatVersioningStrategy(versioningStrategy)}");
+            TextBuilder.WriteLine($"versioning-strategy: {FormatVersioningStrategy(versioningStrategy)}");
 
         if (update.Patterns is { Count: > 0 } patterns)
             WriteArrayProperty("patterns", patterns);
 
         if (update.MultiEcosystemGroup is { Length: > 0 } multiEcosystemGroup)
-            Writer.WriteLine($"multi-ecosystem-group: {multiEcosystemGroup}");
+            TextBuilder.WriteLine($"multi-ecosystem-group: {multiEcosystemGroup}");
 
-        Writer.WriteLine();
+        TextBuilder.WriteLine();
     }
 
     private void WriteSchedule(DependabotSchedule schedule)
     {
-        using var _ = Writer.WriteSection("schedule:");
+        using var _ = TextBuilder.WriteSection("schedule:");
 
-        Writer.WriteLine($"interval: {FormatScheduleInterval(schedule.Interval)}");
+        TextBuilder.WriteLine($"interval: {FormatScheduleInterval(schedule.Interval)}");
 
         if (schedule.Day is { } day)
-            Writer.WriteLine($"day: {FormatScheduleDay(day)}");
+            TextBuilder.WriteLine($"day: {FormatScheduleDay(day)}");
 
         if (schedule.Time is { Length: > 0 } time)
-            Writer.WriteLine($"time: \"{time}\"");
+            TextBuilder.WriteLine($"time: \"{time}\"");
 
         if (schedule.Timezone is { Length: > 0 } timezone)
-            Writer.WriteLine($"timezone: {timezone}");
+            TextBuilder.WriteLine($"timezone: {timezone}");
 
         if (schedule.Cronjob is { Length: > 0 } cronjob)
-            Writer.WriteLine($"cronjob: \"{cronjob}\"");
+            TextBuilder.WriteLine($"cronjob: \"{cronjob}\"");
     }
 
     private void WriteCommitMessage(DependabotCommitMessage commitMessage)
     {
-        using var _ = Writer.WriteSection("commit-message:");
+        using var _ = TextBuilder.WriteSection("commit-message:");
 
         if (commitMessage.Prefix is { Length: > 0 } prefix)
-            Writer.WriteLine($"prefix: \"{prefix}\"");
+            TextBuilder.WriteLine($"prefix: \"{prefix}\"");
 
         if (commitMessage.PrefixDevelopment is { Length: > 0 } prefixDevelopment)
-            Writer.WriteLine($"prefix-development: \"{prefixDevelopment}\"");
+            TextBuilder.WriteLine($"prefix-development: \"{prefixDevelopment}\"");
 
         if (commitMessage.Include is { } include)
-            Writer.WriteLine($"include: {FormatCommitMessageInclude(include)}");
+            TextBuilder.WriteLine($"include: {FormatCommitMessageInclude(include)}");
     }
 
     private void WriteCooldown(DependabotCooldown cooldown)
     {
-        using var _ = Writer.WriteSection("cooldown:");
+        using var _ = TextBuilder.WriteSection("cooldown:");
 
         if (cooldown.DefaultDays is { } defaultDays)
-            Writer.WriteLine($"default-days: {defaultDays}");
+            TextBuilder.WriteLine($"default-days: {defaultDays}");
 
         if (cooldown.SemverMajorDays is { } semverMajorDays)
-            Writer.WriteLine($"semver-major-days: {semverMajorDays}");
+            TextBuilder.WriteLine($"semver-major-days: {semverMajorDays}");
 
         if (cooldown.SemverMinorDays is { } semverMinorDays)
-            Writer.WriteLine($"semver-minor-days: {semverMinorDays}");
+            TextBuilder.WriteLine($"semver-minor-days: {semverMinorDays}");
 
         if (cooldown.SemverPatchDays is { } semverPatchDays)
-            Writer.WriteLine($"semver-patch-days: {semverPatchDays}");
+            TextBuilder.WriteLine($"semver-patch-days: {semverPatchDays}");
 
         if (cooldown.Include is { Count: > 0 } include)
             WriteArrayProperty("include", include);
@@ -304,26 +304,26 @@ public sealed class DependabotConfigFileWriter(
 
     private void WriteAllowRules(IReadOnlyList<DependabotAllow> allow)
     {
-        using var _ = Writer.WriteSection("allow:");
+        using var _ = TextBuilder.WriteSection("allow:");
 
         foreach (var rule in allow)
             if (rule.DependencyName is { Length: > 0 } dependencyName)
             {
                 if (rule.DependencyType is { } dependencyType)
-                    using (Writer.WriteSection($"- dependency-name: \"{dependencyName}\""))
-                        Writer.WriteLine($"dependency-type: {FormatDependencyType(dependencyType)}");
+                    using (TextBuilder.WriteSection($"- dependency-name: \"{dependencyName}\""))
+                        TextBuilder.WriteLine($"dependency-type: {FormatDependencyType(dependencyType)}");
                 else
-                    Writer.WriteLine($"- dependency-name: \"{dependencyName}\"");
+                    TextBuilder.WriteLine($"- dependency-name: \"{dependencyName}\"");
             }
             else if (rule.DependencyType is { } dependencyType)
             {
-                Writer.WriteLine($"- dependency-type: {FormatDependencyType(dependencyType)}");
+                TextBuilder.WriteLine($"- dependency-type: {FormatDependencyType(dependencyType)}");
             }
     }
 
     private void WriteIgnoreRules(IReadOnlyList<DependabotIgnore> ignore)
     {
-        using var _ = Writer.WriteSection("ignore:");
+        using var _ = TextBuilder.WriteSection("ignore:");
 
         foreach (var rule in ignore)
         {
@@ -334,7 +334,7 @@ public sealed class DependabotConfigFileWriter(
             if (hasName)
             {
                 if (hasUpdateTypes || hasVersions)
-                    using (Writer.WriteSection($"- dependency-name: \"{rule.DependencyName}\""))
+                    using (TextBuilder.WriteSection($"- dependency-name: \"{rule.DependencyName}\""))
                     {
                         if (hasUpdateTypes)
                             WriteArrayProperty("update-types", rule.UpdateTypes!.Select(FormatSemverUpdateType));
@@ -343,13 +343,13 @@ public sealed class DependabotConfigFileWriter(
                             WriteVersions(rule.Versions!);
                     }
                 else
-                    Writer.WriteLine($"- dependency-name: \"{rule.DependencyName}\"");
+                    TextBuilder.WriteLine($"- dependency-name: \"{rule.DependencyName}\"");
             }
             else if (hasUpdateTypes)
             {
-                using (Writer.WriteSection("- update-types:"))
+                using (TextBuilder.WriteSection("- update-types:"))
                     foreach (var updateType in rule.UpdateTypes!)
-                        Writer.WriteLine($"- {FormatSemverUpdateType(updateType)}");
+                        TextBuilder.WriteLine($"- {FormatSemverUpdateType(updateType)}");
             }
         }
     }
@@ -359,7 +359,7 @@ public sealed class DependabotConfigFileWriter(
         switch (versions)
         {
             case DependabotVersions.Single single:
-                Writer.WriteLine($"versions: [ \"{single.Version}\" ]");
+                TextBuilder.WriteLine($"versions: [ \"{single.Version}\" ]");
 
                 break;
             case DependabotVersions.Multiple multiple:
@@ -371,17 +371,17 @@ public sealed class DependabotConfigFileWriter(
 
     private void WriteGroups(IReadOnlyDictionary<string, DependabotGroup> groups)
     {
-        using var _ = Writer.WriteSection("groups:");
+        using var _ = TextBuilder.WriteSection("groups:");
 
         foreach (var (name, group) in groups)
         {
-            using var __ = Writer.WriteSection($"{name}:");
+            using var __ = TextBuilder.WriteSection($"{name}:");
 
             if (group.AppliesTo is { } appliesTo)
-                Writer.WriteLine($"applies-to: {FormatGroupAppliesTo(appliesTo)}");
+                TextBuilder.WriteLine($"applies-to: {FormatGroupAppliesTo(appliesTo)}");
 
             if (group.DependencyType is { } dependencyType)
-                Writer.WriteLine($"dependency-type: {FormatGroupDependencyType(dependencyType)}");
+                TextBuilder.WriteLine($"dependency-type: {FormatGroupDependencyType(dependencyType)}");
 
             if (group.Patterns is { Count: > 0 } patterns)
                 WriteArrayProperty("patterns", patterns.Select(p => $"\"{p}\""));
@@ -393,15 +393,15 @@ public sealed class DependabotConfigFileWriter(
                 WriteArrayProperty("update-types", updateTypes.Select(FormatGroupUpdateType));
 
             if (group.GroupBy is { } groupBy)
-                Writer.WriteLine($"group-by: {FormatGroupBy(groupBy)}");
+                TextBuilder.WriteLine($"group-by: {FormatGroupBy(groupBy)}");
         }
     }
 
     private void WritePullRequestBranchName(DependabotPullRequestBranchName pullRequestBranchName)
     {
-        using var _ = Writer.WriteSection("pull-request-branch-name:");
+        using var _ = TextBuilder.WriteSection("pull-request-branch-name:");
 
-        Writer.WriteLine($"separator: \"{FormatBranchNameSeparator(pullRequestBranchName.Separator)}\"");
+        TextBuilder.WriteLine($"separator: \"{FormatBranchNameSeparator(pullRequestBranchName.Separator)}\"");
     }
 
     private void WriteRegistriesReference(DependabotRegistries registries)
@@ -409,7 +409,7 @@ public sealed class DependabotConfigFileWriter(
         switch (registries)
         {
             case DependabotRegistries.All:
-                Writer.WriteLine("registries: \"*\"");
+                TextBuilder.WriteLine("registries: \"*\"");
 
                 break;
             case DependabotRegistries.Named named:
@@ -425,11 +425,11 @@ public sealed class DependabotConfigFileWriter(
         var valuesTotalLength = valueList.Sum(x => x.Length);
 
         if (valuesTotalLength < 80 && valueList.Count <= 5)
-            Writer.WriteLine($"{key}: [ {string.Join(", ", valueList)} ]");
+            TextBuilder.WriteLine($"{key}: [ {string.Join(", ", valueList)} ]");
         else
-            using (Writer.WriteSection($"{key}:"))
+            using (TextBuilder.WriteSection($"{key}:"))
                 foreach (var value in valueList)
-                    Writer.WriteLine($"- {value}");
+                    TextBuilder.WriteLine($"- {value}");
     }
 
     private static string FormatScheduleInterval(ScheduleInterval interval) =>

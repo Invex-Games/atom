@@ -1,7 +1,6 @@
 ﻿global using System.Diagnostics.CodeAnalysis;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
-global using DecSm.Atom.Build.BuildFlags;
 global using DecSm.Atom.Build.BuildInfo;
 global using DecSm.Atom.Build.Definition;
 global using DecSm.Atom.Build.FileSystem;

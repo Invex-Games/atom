@@ -1,5 +1,3 @@
-using DecSm.Atom.Workflows.Dotnet.Nuget;
-
 namespace DecSm.Atom.Workflows.Options;
 
 [PublicAPI]
@@ -11,16 +9,16 @@ public static class WorkflowOptionsExtensions
     {
         internal static InjectionOptions Instance { get; } = new();
 
-        public WorkflowParamInjection Param(string paramName, WorkflowExpression injectionExpression) =>
+        public WorkflowParamInjection Param(string paramName, TextExpression injectionExpression) =>
             new(paramName, injectionExpression);
 
-        public WorkflowParamInjection Param(ParamDefinition paramDefinition, WorkflowExpression injectionExpression) =>
+        public WorkflowParamInjection Param(ParamDefinition paramDefinition, TextExpression injectionExpression) =>
             new(paramDefinition, injectionExpression);
 
         public WorkflowParamInjectionFromEnvironment ParamFromWorkflowEnvironment(string name) =>
             new(name);
 
-        public WorkflowEnvironmentVariableInjection EnvironmentVariable(string name, WorkflowExpression value) =>
+        public WorkflowEnvironmentVariableInjection EnvironmentVariable(string name, TextExpression value) =>
             new(name, value);
 
         public WorkflowSecretInjection Secret(string secretName) =>
@@ -51,7 +49,7 @@ public static class WorkflowOptionsExtensions
         public UseCustomArtifactProvider UseCustomProvider =>
             new()
             {
-                Value = true,
+                Enabled = true,
             };
     }
 
@@ -60,7 +58,7 @@ public static class WorkflowOptionsExtensions
     {
         internal static DeploymentOptions Instance { get; } = new();
 
-        public DeployToEnvironment ToEnvironment(WorkflowExpression environmentName) =>
+        public DeployToEnvironment ToEnvironment(TextExpression environmentName) =>
             new(environmentName);
     }
 
@@ -72,16 +70,16 @@ public static class WorkflowOptionsExtensions
         public SuppressArtifactPublishingOption SuppressArtifactPublishing =>
             new()
             {
-                Value = true,
+                Enabled = true,
             };
 
         public SuppressArtifactPublishingOption SetSuppressedArtifactPublishing(bool value) =>
             new()
             {
-                Value = value,
+                Enabled = value,
             };
 
-        public TargetCondition RunIfWorkflowCondition(WorkflowExpression condition) =>
+        public TargetCondition RunIfWorkflowCondition(TextExpression condition) =>
             new(condition);
     }
 
@@ -121,7 +119,7 @@ public static class WorkflowOptionsExtensions
                 };
 
             public SetupDotnetStep From(
-                WorkflowExpression? dotnetVersion = null,
+                TextExpression? dotnetVersion = null,
                 SetupDotnetStep.DotnetQuality? quality = null,
                 bool cache = false,
                 string? lockFile = null) =>

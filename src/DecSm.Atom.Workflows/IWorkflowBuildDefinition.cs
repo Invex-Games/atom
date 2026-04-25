@@ -11,11 +11,5 @@ public interface IWorkflowBuildDefinition : IBuildDefinition, IGen
     /// </remarks>
     IReadOnlyList<WorkflowDefinition> Workflows { get; }
 
-    /// <summary>
-    ///     Gets the collection of global workflow options that apply to all workflows.
-    /// </summary>
-    /// <remarks>
-    ///     These options can be overridden at the individual workflow level.
-    /// </remarks>
     IReadOnlyList<IWorkflowOption> GlobalWorkflowOptions { get; }
 }

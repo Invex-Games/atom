@@ -1,4 +1,4 @@
 namespace DecSm.Atom.Module.AzureKeyVault.Flags;
 
 [PublicAPI]
-public sealed record UseAzureKeyVault(bool Enabled) : IBuildFlag;
+public sealed record UseAzureKeyVault : ToggleBuildOption;

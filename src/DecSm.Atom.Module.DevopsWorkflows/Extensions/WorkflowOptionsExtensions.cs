@@ -77,7 +77,7 @@ public static class WorkflowOptionsExtensions
                 HostedImage = "$(job-runs-on)",
             };
 
-        public DevopsPool FromName(WorkflowExpression name) =>
+        public DevopsPool FromName(TextExpression name) =>
             new()
             {
                 HostedImage = name,
@@ -89,7 +89,7 @@ public static class WorkflowOptionsExtensions
                 HostedImage = name,
             };
 
-        public DevopsPool FromHostedImage(WorkflowExpression hostedImageName) =>
+        public DevopsPool FromHostedImage(TextExpression hostedImageName) =>
             new()
             {
                 HostedImage = hostedImageName,
@@ -101,7 +101,7 @@ public static class WorkflowOptionsExtensions
                 HostedImage = hostedImageName,
             };
 
-        public DevopsPool FromDemands(params WorkflowExpression[] demands) =>
+        public DevopsPool FromDemands(params TextExpression[] demands) =>
             new()
             {
                 Demands = demands,
@@ -111,14 +111,14 @@ public static class WorkflowOptionsExtensions
             new()
             {
                 Demands = demands
-                    .Select(WorkflowExpressions.Raw)
+                    .Select(TextExpressions.Raw)
                     .ToArray(),
             };
 
         public DevopsPool From(
-            WorkflowExpression? name = null,
-            WorkflowExpression? hostedImageName = null,
-            IEnumerable<WorkflowExpression>? demands = null) =>
+            TextExpression? name = null,
+            TextExpression? hostedImageName = null,
+            IEnumerable<TextExpression>? demands = null) =>
             new()
             {
                 Name = name,
@@ -134,12 +134,12 @@ public static class WorkflowOptionsExtensions
             {
                 Name = name is null
                     ? null
-                    : WorkflowExpressions.Raw(name),
+                    : TextExpressions.Raw(name),
                 HostedImage = hostedImageName is null
                     ? null
-                    : WorkflowExpressions.Raw(hostedImageName),
+                    : TextExpressions.Raw(hostedImageName),
                 Demands = demands
-                    ?.Select(WorkflowExpressions.Raw)
+                    ?.Select(TextExpressions.Raw)
                     .ToArray() ?? [],
             };
     }

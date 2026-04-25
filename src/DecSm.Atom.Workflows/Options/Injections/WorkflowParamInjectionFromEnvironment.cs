@@ -16,13 +16,7 @@
 ///     </code>
 /// </example>
 [PublicAPI]
-public sealed record WorkflowParamInjectionFromEnvironment(string Value) : IWorkflowOption
-{
-    /// <summary>
-    ///     Gets a value indicating that multiple instances of this option are allowed.
-    /// </summary>
-    public bool AllowMultiple => true;
-}
+public sealed record WorkflowParamInjectionFromEnvironment(string Value) : IWorkflowOption;
 
 [PublicAPI]
-public sealed record WorkflowEnvironmentVariableInjection(string Name, WorkflowExpression Value) : IWorkflowOption;
+public sealed record WorkflowEnvironmentVariableInjection(string Name, TextExpression Value) : IWorkflowOption;

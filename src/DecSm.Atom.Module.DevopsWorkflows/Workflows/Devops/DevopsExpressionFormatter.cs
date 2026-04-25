@@ -1,19 +1,13 @@
-using System.Globalization;
-
 namespace DecSm.Atom.Module.DevopsWorkflows.Workflows.Devops;
 
-internal sealed class DevopsExpressionFormatter(IBuildDefinition buildDefinition) : IWorkflowExpressionFormatter
+internal sealed class DevopsExpressionFormatter : TextExpressionFormatter
 {
-    public bool Enabled => buildDefinition is IDevopsWorkflows;
-
-    public int Priority => 1000;
-
-    public WorkflowExpression? Write(IWorkflowExpressionResolver resolver, WorkflowExpression expression) =>
+    protected override TextExpression? Resolve(TextExpression expression) =>
         expression switch
         {
             // Values
 
-            null => (WorkflowExpression?)null,
+            null => (TextExpression?)null,
 
             RawExpression => throw new InvalidOperationException(
                 "Literal expressions should have already been resolved."),
@@ -31,32 +25,31 @@ internal sealed class DevopsExpressionFormatter(IBuildDefinition buildDefinition
             // Accessors
 
             IndexAccessExpression indexAccessExpression =>
-                $"{resolver.Resolve(indexAccessExpression.Array)}[{resolver.Resolve(indexAccessExpression.Index)}]",
+                $"{Format(indexAccessExpression.Array)}[{Format(indexAccessExpression.Index)}]",
 
             PropertyAccessExpression propertyAccessExpression =>
-                $"{resolver.Resolve(propertyAccessExpression.Object)}.{resolver.Resolve(propertyAccessExpression.Property)}",
+                $"{Format(propertyAccessExpression.Object)}.{Format(propertyAccessExpression.Property)}",
 
             // Compile-time template expression: ${{ expression }}
-            EvaluateExpression evaluateExpression => $"${{{{ {resolver.Resolve(evaluateExpression.Expression)} }}}}",
+            EvaluateExpression evaluateExpression => $"${{{{ {Format(evaluateExpression.Expression)} }}}}",
 
             // Runtime expression: $[ expression ]
-            DevopsRuntimeExpression runtimeExpression => $"$[ {resolver.Resolve(runtimeExpression.Expression)} ]",
+            DevopsRuntimeExpression runtimeExpression => $"$[ {Format(runtimeExpression.Expression)} ]",
 
             // Macro variable expansion: $(variable)
-            DevopsMacroExpression macroExpression => $"$({resolver.Resolve(macroExpression.Variable)})",
+            DevopsMacroExpression macroExpression => $"$({Format(macroExpression.Variable)})",
 
             // Logic Operators
 
-            NotExpression notExpression => $"not({resolver.Resolve(notExpression.Source)})",
+            NotExpression notExpression => $"not({Format(notExpression.Source)})",
 
             AndExpression andExpression => andExpression.Source.Length switch
             {
                 0 => string.Empty,
-                1 => resolver.Resolve(andExpression.Source[0]),
-                2 => $"and({resolver.Resolve(andExpression.Source[0])}, {resolver.Resolve(andExpression.Source[1])})",
-                _ => resolver.Resolve(new AndExpression([
-                    new RawExpression(
-                        $"and({resolver.Resolve(andExpression.Source[0])}, {resolver.Resolve(andExpression.Source[1])})"),
+                1 => Format(andExpression.Source[0]),
+                2 => $"and({Format(andExpression.Source[0])}, {Format(andExpression.Source[1])})",
+                _ => Format(new AndExpression([
+                    new RawExpression($"and({Format(andExpression.Source[0])}, {Format(andExpression.Source[1])})"),
                     ..andExpression.Source[2..],
                 ])),
             },
@@ -64,72 +57,68 @@ internal sealed class DevopsExpressionFormatter(IBuildDefinition buildDefinition
             OrExpression orExpression => orExpression.Source.Length switch
             {
                 0 => string.Empty,
-                1 => resolver.Resolve(orExpression.Source[0]),
-                2 => $"or({resolver.Resolve(orExpression.Source[0])}, {resolver.Resolve(orExpression.Source[1])})",
-                _ => resolver.Resolve(new OrExpression([
-                    new RawExpression(
-                        $"or({resolver.Resolve(orExpression.Source[0])}, {resolver.Resolve(orExpression.Source[1])})"),
+                1 => Format(orExpression.Source[0]),
+                2 => $"or({Format(orExpression.Source[0])}, {Format(orExpression.Source[1])})",
+                _ => Format(new OrExpression([
+                    new RawExpression($"or({Format(orExpression.Source[0])}, {Format(orExpression.Source[1])})"),
                     ..orExpression.Source[2..],
                 ])),
             },
 
-            EqualExpression equalExpression =>
-                $"eq({resolver.Resolve(equalExpression.Left)}, {resolver.Resolve(equalExpression.Right)})",
+            EqualExpression equalExpression => $"eq({Format(equalExpression.Left)}, {Format(equalExpression.Right)})",
 
             NotEqualExpression notEqualExpression =>
-                $"ne({resolver.Resolve(notEqualExpression.Left)}, {resolver.Resolve(notEqualExpression.Right)})",
+                $"ne({Format(notEqualExpression.Left)}, {Format(notEqualExpression.Right)})",
 
             LessThanExpression lessThanExpression =>
-                $"lt({resolver.Resolve(lessThanExpression.Left)}, {resolver.Resolve(lessThanExpression.Right)})",
+                $"lt({Format(lessThanExpression.Left)}, {Format(lessThanExpression.Right)})",
 
             LessThanOrEqualToExpression lessThanOrEqualExpression =>
-                $"le({resolver.Resolve(lessThanOrEqualExpression.Left)}, {resolver.Resolve(lessThanOrEqualExpression.Right)})",
+                $"le({Format(lessThanOrEqualExpression.Left)}, {Format(lessThanOrEqualExpression.Right)})",
 
             GreaterThanExpression greaterThanExpression =>
-                $"gt({resolver.Resolve(greaterThanExpression.Left)}, {resolver.Resolve(greaterThanExpression.Right)})",
+                $"gt({Format(greaterThanExpression.Left)}, {Format(greaterThanExpression.Right)})",
 
             GreaterThanOrEqualToExpression greaterThanOrEqualExpression =>
-                $"ge({resolver.Resolve(greaterThanOrEqualExpression.Left)}, {resolver.Resolve(greaterThanOrEqualExpression.Right)})",
+                $"ge({Format(greaterThanOrEqualExpression.Left)}, {Format(greaterThanOrEqualExpression.Right)})",
 
             // Functions
 
             ContainsExpression containsExpression =>
-                $"contains({resolver.Resolve(containsExpression.Source)}, {resolver.Resolve(containsExpression.Pattern)})",
+                $"contains({Format(containsExpression.Source)}, {Format(containsExpression.Pattern)})",
 
             CoalesceExpression coalesceExpression => coalesceExpression.Source.Length switch
             {
                 0 => string.Empty,
-                1 => resolver.Resolve(coalesceExpression.Source[0]),
-                2 =>
-                    $"coalesce({resolver.Resolve(coalesceExpression.Source[0])}, {resolver.Resolve(coalesceExpression.Source[1])})",
+                1 => Format(coalesceExpression.Source[0]),
+                2 => $"coalesce({Format(coalesceExpression.Source[0])}, {Format(coalesceExpression.Source[1])})",
                 > 2 =>
-                    $"coalesce({resolver.Resolve(new CoalesceExpression(coalesceExpression.Source[..^1]))}, {resolver.Resolve(coalesceExpression.Source[^1])})",
+                    $"coalesce({Format(new CoalesceExpression(coalesceExpression.Source[..^1]))}, {Format(coalesceExpression.Source[^1])})",
                 _ => throw new ArgumentOutOfRangeException(nameof(expression)),
             },
 
             StartsWithExpression startsWithExpression =>
-                $"startsWith({resolver.Resolve(startsWithExpression.Source)}, {resolver.Resolve(startsWithExpression.Pattern)})",
+                $"startsWith({Format(startsWithExpression.Source)}, {Format(startsWithExpression.Pattern)})",
 
             EndsWithExpression endsWithExpression =>
-                $"endsWith({resolver.Resolve(endsWithExpression.Source)}, {resolver.Resolve(endsWithExpression.Pattern)})",
+                $"endsWith({Format(endsWithExpression.Source)}, {Format(endsWithExpression.Pattern)})",
 
             FormatExpression formatExpression => formatExpression.Arguments.Length switch
             {
-                0 => resolver.Resolve(formatExpression.Source),
-                1 =>
-                    $"format({resolver.Resolve(formatExpression.Source)}, {resolver.Resolve(formatExpression.Arguments[0])})",
+                0 => Format(formatExpression.Source),
+                1 => $"format({Format(formatExpression.Source)}, {Format(formatExpression.Arguments[0])})",
                 > 1 =>
-                    $"format({resolver.Resolve(formatExpression.Source)}, {string.Join(", ", formatExpression.Arguments.Select(resolver.Resolve))})",
+                    $"format({Format(formatExpression.Source)}, {string.Join(", ", formatExpression.Arguments.Select(Format))})",
                 _ => throw new ArgumentOutOfRangeException(nameof(expression)),
             },
 
             JoinExpression joinExpression => joinExpression.OptionalSeparator is null
-                ? $"join({resolver.Resolve(joinExpression.Source)})"
-                : $"join({resolver.Resolve(joinExpression.Source)}, {resolver.Resolve(joinExpression.OptionalSeparator)})",
+                ? $"join({Format(joinExpression.Source)})"
+                : $"join({Format(joinExpression.Source)}, {Format(joinExpression.OptionalSeparator)})",
 
-            ToJsonExpression toJsonExpression => $"convertToJson({resolver.Resolve(toJsonExpression.Source)})",
+            ToJsonExpression toJsonExpression => $"convertToJson({Format(toJsonExpression.Source)})",
 
-            HashFilesExpression hashFilesExpression => $"hashFiles({resolver.Resolve(hashFilesExpression.Source)})",
+            HashFilesExpression hashFilesExpression => $"hashFiles({Format(hashFilesExpression.Source)})",
 
             // Workflows
 

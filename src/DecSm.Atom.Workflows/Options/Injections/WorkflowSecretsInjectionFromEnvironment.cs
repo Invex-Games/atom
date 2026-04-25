@@ -16,10 +16,4 @@
 ///     </code>
 /// </example>
 [PublicAPI]
-public sealed record WorkflowSecretsInjectionFromEnvironment(string SecretName) : IWorkflowOption
-{
-    /// <summary>
-    ///     Gets a value indicating that multiple instances of this option are allowed.
-    /// </summary>
-    public bool AllowMultiple => true;
-}
+public sealed record WorkflowSecretsInjectionFromEnvironment(string SecretName) : IWorkflowOption;

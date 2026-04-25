@@ -3,9 +3,9 @@
 [PublicAPI]
 public sealed record DevopsPool : IWorkflowOption
 {
-    public WorkflowExpressionCollection Demands { get; init; } = [];
+    public TextExpressionCollection Demands { get; init; } = [];
 
-    public WorkflowExpression? Name { get; init; }
+    public TextExpression? Name { get; init; }
 
-    public WorkflowExpression? HostedImage { get; init; }
+    public TextExpression? HostedImage { get; init; }
 }

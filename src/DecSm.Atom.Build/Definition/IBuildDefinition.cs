@@ -1,4 +1,4 @@
-﻿using DecSm.Atom.Build.BuildFlags;
+﻿using DecSm.Atom.Build.BuildOptions;
 
 namespace DecSm.Atom.Build.Definition;
 
@@ -33,7 +33,7 @@ public interface IBuildDefinition
     /// </remarks>
     IReadOnlyDictionary<string, ParamDefinition> ParamDefinitions { get; }
 
-    IReadOnlyList<IBuildFlag> Flags { get; }
+    IReadOnlyList<IBuildOption> BuildOptions { get; }
 
     /// <summary>
     ///     Retrieves the value of a build parameter by its name.

@@ -1,3 +1,4 @@
+using DecSm.Atom.StructuredText.Expressions;
 using Permissions = DecSm.Atom.Module.GithubWorkflows.Workflows.Github.Model.Permissions;
 
 namespace DecSm.Atom.Module.GithubWorkflows.Extensions;
@@ -173,14 +174,14 @@ public static class WorkflowOptionsExtensions
         {
             Labels =
             [
-                WorkflowExpressions
+                TextExpressions
                     .Github
                     .MatrixProperty("job-runs-on")
                     .Evaluate(),
             ],
         };
 
-        public GithubRunsOn FromLabel(params WorkflowExpression[] labels) =>
+        public GithubRunsOn FromLabel(params TextExpression[] labels) =>
             new()
             {
                 Labels = labels,
@@ -190,11 +191,11 @@ public static class WorkflowOptionsExtensions
             new()
             {
                 Labels = labels
-                    .Select(WorkflowExpressions.Raw)
+                    .Select(TextExpressions.Raw)
                     .ToArray(),
             };
 
-        public GithubRunsOn FromGroup(WorkflowExpression group) =>
+        public GithubRunsOn FromGroup(TextExpression group) =>
             new()
             {
                 Group = group,
@@ -206,7 +207,7 @@ public static class WorkflowOptionsExtensions
                 Group = group,
             };
 
-        public GithubRunsOn From(WorkflowExpression? group, WorkflowExpression[] labels) =>
+        public GithubRunsOn From(TextExpression? group, TextExpression[] labels) =>
             new()
             {
                 Labels = labels,
@@ -217,7 +218,7 @@ public static class WorkflowOptionsExtensions
             new()
             {
                 Labels = labels
-                    .Select(WorkflowExpressions.Raw)
+                    .Select(TextExpressions.Raw)
                     .ToArray(),
                 Group = group,
             };

@@ -43,15 +43,14 @@ internal partial class Build : WorkflowBuildDefinition,
         Values = FrameworkNames,
     };
 
-    public override IReadOnlyList<IBuildFlag> Flags =>
-    [
-        BuildFlags.GitVersion.ProvideBuildId,
-        BuildFlags.GitVersion.ProvideBuildVersion,
-        BuildFlags.AzureKeyVault.UseAzureKeyVault,
-    ];
-
-    public override IReadOnlyList<IWorkflowOption> GlobalWorkflowOptions =>
-        field ??= [WorkflowOptions.Steps.SetupDotnet.Dotnet100X()];
+    public override IReadOnlyList<IBuildOption> Options =>
+        field ??=
+        [
+            DecSm.Atom.Build.BuildOptions.BuildOptions.GitVersion.ProvideBuildId,
+            DecSm.Atom.Build.BuildOptions.BuildOptions.GitVersion.ProvideBuildVersion,
+            DecSm.Atom.Build.BuildOptions.BuildOptions.AzureKeyVault.UseAzureKeyVault,
+            DecSm.Atom.Build.BuildOptions.BuildOptions.Steps.SetupDotnet.Dotnet100X(),
+        ];
 
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
         field ??=
@@ -117,12 +116,12 @@ internal partial class Build : WorkflowBuildDefinition,
                                 Checks = PermissionsLevel.Write,
                             })),
                             WorkflowOptions.Inject.Param(nameof(ICheckPrForBreakingChanges.PullRequestNumber),
-                                WorkflowExpressions.Github.GithubEvent["number"]),
+                                TextExpressions.Github.GithubEvent["number"]),
                         ],
                     },
                 ],
                 WorkflowTypes = [WorkflowTypes.Github.Action],
-                Options = [WorkflowOptions.Github.TokenPermissions.NoneAll],
+                WorkflowOptions = [WorkflowOptions.Github.TokenPermissions.NoneAll],
             },
             new("Build")
             {
@@ -191,7 +190,7 @@ internal partial class Build : WorkflowBuildDefinition,
                     },
                 ],
                 WorkflowTypes = [WorkflowTypes.Github.Action],
-                Options = [WorkflowOptions.Github.TokenPermissions.NoneAll],
+                WorkflowOptions = [WorkflowOptions.Github.TokenPermissions.NoneAll],
             },
 
             // Test devops
@@ -236,7 +235,7 @@ internal partial class Build : WorkflowBuildDefinition,
                     new(nameof(IDeployTargets.PushToNugetDevops)),
                 ],
                 WorkflowTypes = [Devops.WorkflowType],
-                Options =
+                WorkflowOptions =
                 [
                     WorkflowOptions.Inject.Param(nameof(INugetHelper.NugetDryRun), true),
                     WorkflowOptions.Devops.VariableGroup.Atom,
@@ -297,13 +296,13 @@ internal partial class Build : WorkflowBuildDefinition,
                     },
                 ],
                 WorkflowTypes = [WorkflowTypes.Github.Action],
-                Options =
+                WorkflowOptions =
                 [
                     WorkflowOptions.Github.TokenPermissions.NoneAll,
                     WorkflowOptions.Target.RunIfWorkflowCondition(
-                        WorkflowExpressions.Github.GithubActor.EqualToString("dependabot[bot]")),
+                        TextExpressions.Github.GithubActor.EqualToString("dependabot[bot]")),
                     WorkflowOptions.Inject.Param(nameof(ICheckPrForBreakingChanges.PullRequestNumber),
-                        WorkflowExpressions.Github.GithubEvent["number"]),
+                        TextExpressions.Github.GithubEvent["number"]),
                 ],
             },
         ];

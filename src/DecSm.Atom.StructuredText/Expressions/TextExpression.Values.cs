@@ -1,35 +1,35 @@
-namespace DecSm.Atom.Workflows.Expressions;
+namespace DecSm.Atom.StructuredText.Expressions;
 
-partial record WorkflowExpression
+partial record TextExpression
 {
-    public static implicit operator WorkflowExpression(bool value) =>
+    public static implicit operator TextExpression(bool value) =>
         new BooleanExpression(value);
 
-    public static implicit operator WorkflowExpression(double value) =>
+    public static implicit operator TextExpression(double value) =>
         new NumberExpression(value);
 
-    public static implicit operator WorkflowExpression(float value) =>
+    public static implicit operator TextExpression(float value) =>
         new NumberExpression(value);
 
-    public static implicit operator WorkflowExpression(long value) =>
+    public static implicit operator TextExpression(long value) =>
         new NumberExpression(value);
 
-    public static implicit operator WorkflowExpression(int value) =>
+    public static implicit operator TextExpression(int value) =>
         new NumberExpression(value);
 
-    public static implicit operator WorkflowExpression(short value) =>
+    public static implicit operator TextExpression(short value) =>
         new NumberExpression(value);
 
-    public static implicit operator WorkflowExpression(byte value) =>
+    public static implicit operator TextExpression(byte value) =>
         new NumberExpression(value);
 
-    public static implicit operator WorkflowExpression(string value) =>
+    public static implicit operator TextExpression(string value) =>
         new RawExpression(value);
 }
 
 public static partial class WorkflowExpressionExtensions
 {
-    extension(WorkflowExpressions)
+    extension(TextExpressions)
     {
         [PublicAPI]
         public static BooleanExpression True => new(true);
@@ -60,19 +60,19 @@ public static partial class WorkflowExpressionExtensions
                 : 0);
 
         [PublicAPI]
-        public static FormatExpression Format(WorkflowExpressionInterpolatedStringHandler handler) =>
+        public static FormatExpression Format(TextExpressionInterpolatedStringHandler handler) =>
             handler.ToFormatExpression();
     }
 }
 
 [PublicAPI]
-public sealed record BooleanExpression(bool Value) : WorkflowExpression;
+public sealed record BooleanExpression(bool Value) : TextExpression, ITextExpression<bool>;
 
 [PublicAPI]
-public sealed record NullExpression : WorkflowExpression;
+public sealed record NullExpression : TextExpression;
 
 [PublicAPI]
-public sealed record NumberExpression(double Value) : WorkflowExpression;
+public sealed record NumberExpression(double Value) : TextExpression, ITextExpression<double>;
 
 [PublicAPI]
-public sealed record StringExpression(string Value) : WorkflowExpression;
+public sealed record StringExpression(string Value) : TextExpression, ITextExpression<string>;
