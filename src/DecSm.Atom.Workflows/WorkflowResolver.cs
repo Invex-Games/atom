@@ -28,7 +28,7 @@ internal sealed class WorkflowResolver(
         var workflowOptions = buildOptionService
             .Options
             .Concat(buildDefinition.GlobalWorkflowOptions)
-            .Concat(definition.WorkflowOptions)
+            .Concat(definition.Options)
             .ToList();
 
         // If there are no steps, we can return a simple workflow
@@ -37,7 +37,7 @@ internal sealed class WorkflowResolver(
             {
                 Name = definition.Name,
                 Triggers = definition.Triggers,
-                WorkflowOptions = workflowOptions,
+                Options = workflowOptions,
                 Jobs = [],
             };
 
@@ -147,7 +147,7 @@ internal sealed class WorkflowResolver(
         {
             Name = definition.Name,
             Triggers = definition.Triggers,
-            WorkflowOptions = workflowOptions,
+            Options = workflowOptions,
             Jobs = OrderJobs(jobs),
         };
     }

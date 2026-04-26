@@ -24,7 +24,7 @@ public sealed record WorkflowModel
     /// <remarks>
     ///     Options can include input parameters, environment variables, or other settings.
     /// </remarks>
-    public required IReadOnlyList<IBuildOption> WorkflowOptions { get; init; }
+    public required IReadOnlyList<IBuildOption> Options { get; init; }
 
     /// <summary>
     ///     Gets the jobs that define the sequence of tasks to be executed by the workflow.

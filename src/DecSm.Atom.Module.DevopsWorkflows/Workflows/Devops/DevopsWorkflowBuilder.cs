@@ -289,7 +289,7 @@ internal sealed partial class DevopsWorkflowBuilder(
     private static Variables.VariableList? BuildVariables(WorkflowModel workflow)
     {
         var variableGroups = workflow
-            .WorkflowOptions
+            .Options
             .OfType<DevopsVariableGroup>()
             .ToArray();
 
@@ -312,14 +312,14 @@ internal sealed partial class DevopsWorkflowBuilder(
         var poolOption = job
             .TargetStep
             .Options
-            .Concat(workflow.WorkflowOptions)
+            .Concat(workflow.Options)
             .OfType<DevopsPool>()
             .FirstOrDefault();
 
         var pool = BuildPool(poolOption);
 
         var condition = TargetCondition
-            .GetOptions(workflow, job.TargetStep)
+            .GetOptions(job.TargetStep.Options)
             .ToList();
 
         var conditionExpression = condition switch
@@ -334,7 +334,7 @@ internal sealed partial class DevopsWorkflowBuilder(
             _ => null,
         };
 
-        var environment = DeployToEnvironment.Get(workflow, job.TargetStep);
+        var environment = DeployToEnvironment.Get(job.TargetStep.Options);
 
         if (environment is not null)
             return new Job.Deployment
@@ -480,7 +480,7 @@ internal sealed partial class DevopsWorkflowBuilder(
     private List<Step> BuildSteps(WorkflowModel workflow, WorkflowJobModel job)
     {
         var additionalSteps = IAdditionalStepOption
-            .GetOptions(workflow, job.TargetStep)
+            .GetOptions(job.TargetStep.Options)
             .ToList();
 
         // Special case: Add default checkout step if there isn't one
@@ -530,7 +530,7 @@ internal sealed partial class DevopsWorkflowBuilder(
                     .Select(x => x.TargetStep)
                     .Single(x => x.Name == consumedArtifact.TargetName);
 
-                if (SuppressArtifactPublishingOption.Get(workflow, consumedStep) is { Enabled: true })
+                if (SuppressArtifactPublishingOption.Get(consumedStep.Options) is { Enabled: true })
                     logger.LogWarning(
                         "Workflow {WorkflowName} target {TargetName} consumes artifact {ArtifactName} from target {SourceTargetName}, which has artifact publishing suppressed; this may cause the workflow to fail",
                         workflow.Name,
@@ -539,7 +539,7 @@ internal sealed partial class DevopsWorkflowBuilder(
                         consumedArtifact.TargetName);
             }
 
-            if (UseCustomArtifactProvider.Get(workflow) is { Enabled: true })
+            if (UseCustomArtifactProvider.Get(job.TargetStep.Options) is { Enabled: true })
                 foreach (var slice in target.ConsumedArtifacts.GroupBy(a => a.BuildSlice))
                 {
                     var artifactNames = slice
@@ -604,9 +604,9 @@ internal sealed partial class DevopsWorkflowBuilder(
 
         // Produce artifacts
         if (target.ProducedArtifacts.Count > 0 &&
-            SuppressArtifactPublishingOption.Get(workflow, job.TargetStep) is not { Enabled: true })
+            SuppressArtifactPublishingOption.Get(job.TargetStep.Options) is not { Enabled: true })
         {
-            if (UseCustomArtifactProvider.Get(workflow) is { Enabled: true })
+            if (UseCustomArtifactProvider.Get(job.TargetStep.Options) is { Enabled: true })
                 foreach (var slice in target.ProducedArtifacts.GroupBy(a => a.BuildSlice))
                 {
                     var artifactNames = slice
@@ -830,13 +830,13 @@ internal sealed partial class DevopsWorkflowBuilder(
 
         if (requiredSecrets.Length > 0)
         {
-            foreach (var injectedSecret in workflow.WorkflowOptions.OfType<WorkflowSecretInjectionForSecretProvider>())
+            foreach (var injectedSecret in workflow.Options.OfType<WorkflowSecretInjectionForSecretProvider>())
                 if (buildDefinition.ParamDefinitions.GetValueOrDefault(injectedSecret.SecretName) is
                     { } paramDefinition)
                     targetStepEnv[paramDefinition.ArgName] =
                         new DevopsMacroExpression(TextExpressions.Raw(paramDefinition.EnvVarName));
 
-            foreach (var injectedEnvVar in workflow.WorkflowOptions.OfType<WorkflowSecretsInjectionFromEnvironment>())
+            foreach (var injectedEnvVar in workflow.Options.OfType<WorkflowSecretsInjectionFromEnvironment>())
                 if (buildDefinition.ParamDefinitions.GetValueOrDefault(injectedEnvVar.SecretName) is
                     { } paramDefinition)
                     targetStepEnv[paramDefinition.ArgName] =
@@ -845,14 +845,14 @@ internal sealed partial class DevopsWorkflowBuilder(
 
         foreach (var requiredSecret in requiredSecrets)
             if (WorkflowSecretInjection
-                .GetOptions(workflow, job.TargetStep)
+                .GetOptions(job.TargetStep.Options)
                 .Any(x => x.Value == requiredSecret.Param.Name))
                 targetStepEnv[requiredSecret.Param.ArgName] =
                     new DevopsMacroExpression(TextExpressions.Raw(requiredSecret.Param.EnvVarName));
 
-        var environmentInjections = WorkflowParamInjectionFromEnvironment.GetOptions(workflow, job.TargetStep);
-        var paramInjections = WorkflowParamInjection.GetOptions(workflow, job.TargetStep);
-        var environmentVariableInjections = WorkflowEnvironmentVariableInjection.GetOptions(workflow, job.TargetStep);
+        var environmentInjections = WorkflowParamInjectionFromEnvironment.GetOptions(job.TargetStep.Options);
+        var paramInjections = WorkflowParamInjection.GetOptions(job.TargetStep.Options);
+        var environmentVariableInjections = WorkflowEnvironmentVariableInjection.GetOptions(job.TargetStep.Options);
 
         environmentInjections = environmentInjections
             .Where(e => paramInjections.All(p => p.Name != e.Value))

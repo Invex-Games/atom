@@ -28,7 +28,7 @@ internal sealed class WorkflowGenerator(
 
         // ReSharper disable LoopCanBeConvertedToQuery
         foreach (var workflowDefinition in workflowDefinitions)
-        foreach (var workflowType in workflowDefinition.WorkflowTypes)
+        foreach (var workflowType in workflowDefinition.Types)
         {
             // ReSharper restore LoopCanBeConvertedToQuery
             var writer = _writers.FirstOrDefault(w => w.WorkflowType == workflowType.GetType());
@@ -67,7 +67,7 @@ internal sealed class WorkflowGenerator(
 
         // ReSharper disable LoopCanBeConvertedToQuery
         foreach (var workflowDefinition in workflowDefinitions)
-        foreach (var workflowType in workflowDefinition.WorkflowTypes)
+        foreach (var workflowType in workflowDefinition.Types)
         {
             // ReSharper restore LoopCanBeConvertedToQuery
             var writer = _writers.FirstOrDefault(w => w.WorkflowType == workflowType.GetType());

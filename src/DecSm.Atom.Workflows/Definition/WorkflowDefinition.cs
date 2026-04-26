@@ -15,7 +15,7 @@ public sealed record WorkflowDefinition(string Name)
     /// <summary>
     ///     Gets the collection of options or parameters that can be configured for the workflow.
     /// </summary>
-    public IReadOnlyList<IBuildOption> WorkflowOptions { get; init; } = [];
+    public IReadOnlyList<IBuildOption> Options { get; init; } = [];
 
     /// <summary>
     ///     Gets the collection of targets that define the sequence of tasks to be executed by the workflow.
@@ -25,5 +25,5 @@ public sealed record WorkflowDefinition(string Name)
     /// <summary>
     ///     Gets the collection of workflow types that this definition applies to (e.g., GitHub Actions, Azure DevOps).
     /// </summary>
-    public IReadOnlyList<IWorkflowType> WorkflowTypes { get; init; } = [];
+    public IReadOnlyList<IWorkflowType> Types { get; init; } = [];
 }

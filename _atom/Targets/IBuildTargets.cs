@@ -4,6 +4,12 @@ internal interface IBuildTargets : IDotnetPackHelper, IDotnetPublishHelper
 {
     static readonly string[] ProjectsToPack =
     [
+        Projects.DecSm_Atom_Build.Name,
+        Projects.DecSm_Atom_FileSystem.Name,
+        Projects.DecSm_Atom_Process.Name,
+        Projects.DecSm_Atom_SemanticVersion.Name,
+        Projects.DecSm_Atom_StructuredText.Name,
+        Projects.DecSm_Atom_Workflows.Name,
         Projects.DecSm_Atom_Module_AzureKeyVault.Name,
         Projects.DecSm_Atom_Module_AzureStorage.Name,
         Projects.DecSm_Atom_Module_DevopsWorkflows.Name,
