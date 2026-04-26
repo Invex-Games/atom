@@ -31,6 +31,10 @@ public interface IBuildDefinition
     /// </remarks>
     IReadOnlyDictionary<string, ParamDefinition> ParamDefinitions { get; }
 
+    /// <summary>
+    ///     Gets the build options applied globally to this build definition.
+    ///     Override to supply a custom list of <see cref="IBuildOption" /> instances.
+    /// </summary>
     IReadOnlyList<IBuildOption> Options { get; }
 
     /// <summary>
@@ -40,5 +44,10 @@ public interface IBuildDefinition
     /// <returns>The value of the specified parameter, or <c>null</c> if not defined or has no value.</returns>
     object? AccessParam(string paramName);
 
+    /// <summary>
+    ///     Allows the build definition to configure the host application builder before the host is started.
+    ///     Override to register additional services or configuration.
+    /// </summary>
+    /// <param name="builder">The host application builder to configure.</param>
     void ConfigureDefinitionHost(IHostApplicationBuilder builder);
 }

@@ -1,25 +1,19 @@
 ﻿namespace DecSm.Atom.Build.Definition;
 
 /// <summary>
-///     A minimal abstract base class for creating build definitions, providing default implementations for
+///     The standard abstract base class for creating build definitions, providing default implementations for
 ///     <see cref="IBuildDefinition" />.
 /// </summary>
 /// <remarks>
-///     <para>
-///         While developers should typically inherit from the more comprehensive <see cref="BuildDefinition" />,
-///         this class can be used for a leaner setup.
-///     </para>
-///     <para>
-///         The <see cref="TargetDefinitions" /> and <see cref="ParamDefinitions" /> properties are populated by source
-///         generators based on the interfaces and attributes used in the derived class. A derived class must be
-///         decorated with <see cref="BuildDefinitionAttribute" />.
-///     </para>
+///     The <see cref="TargetDefinitions" /> and <see cref="ParamDefinitions" /> properties are populated by source
+///     generators based on the interfaces and attributes used in the derived class. A derived class must be
+///     decorated with <see cref="BuildDefinitionAttribute" />.
 /// </remarks>
 /// <example>
-///     A minimal build definition:
+///     A typical build definition:
 ///     <code>
 /// [BuildDefinition]
-/// internal partial class MyBuild : MinimalBuildDefinition, IMyTargets
+/// internal partial class MyBuild : BuildDefinition, IMyTargets
 /// {
 ///     // ...
 /// }
@@ -41,10 +35,12 @@ public abstract class BuildDefinition(IServiceProvider services) : IBuildDefinit
     /// <inheritdoc />
     public abstract IReadOnlyDictionary<string, ParamDefinition> ParamDefinitions { get; }
 
+    /// <inheritdoc />
     public virtual IReadOnlyList<IBuildOption> Options { get; } = [];
 
     /// <inheritdoc />
     public abstract object? AccessParam(string paramName);
 
+    /// <inheritdoc />
     public virtual void ConfigureDefinitionHost(IHostApplicationBuilder builder) { }
 }

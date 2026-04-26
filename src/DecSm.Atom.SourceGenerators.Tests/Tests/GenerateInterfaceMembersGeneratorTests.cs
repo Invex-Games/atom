@@ -40,7 +40,7 @@ public sealed class GenerateInterfaceMembersGeneratorTests
         // Act
         var generatedText =
             TestUtils.GetGeneratedSource<GenerateInterfaceMembersSourceGenerator>(source,
-                typeof(MinimalBuildDefinition).Assembly);
+                typeof(BuildDefinition).Assembly);
 
         // Assert
         await Verify(generatedText);

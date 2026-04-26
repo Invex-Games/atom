@@ -1,0 +1,18 @@
+<Project>
+  <ItemGroup>
+    <Using Include="DecSm.Atom.Build.Args" Global="true" />
+    <Using Include="DecSm.Atom.Build.BuildOptions" Global="true" />
+    <Using Include="DecSm.Atom.Build.BuildInfo" Global="true" />
+    <Using Include="DecSm.Atom.Build.Definition" Global="true" />
+    <Using Include="DecSm.Atom.Build.Exceptions" Global="true" />
+    <Using Include="DecSm.Atom.Build.FileSystem" Global="true" />
+    <Using Include="DecSm.Atom.Build.Hosting" Global="true" />
+    <Using Include="DecSm.Atom.Build.Logging" Global="true" />
+    <Using Include="DecSm.Atom.Build.Model" Global="true" />
+    <Using Include="DecSm.Atom.Build.Params" Global="true" />
+    <Using Include="DecSm.Atom.Build.Reports" Global="true" />
+    <Using Include="DecSm.Atom.Build.Secrets" Global="true" />
+    <Using Include="DecSm.Atom.Build.Util" Global="true" />
+    <Using Include="DecSm.Atom.Build.Variables" Global="true" />
+  </ItemGroup>
+</Project>

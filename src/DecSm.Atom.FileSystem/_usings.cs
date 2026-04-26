@@ -1,6 +1,5 @@
 global using System.Diagnostics.CodeAnalysis;
 global using System.IO.Abstractions;
-global using System.Reflection;
 global using System.Runtime.CompilerServices;
 global using JetBrains.Annotations;
 global using Microsoft.Extensions.DependencyInjection;
