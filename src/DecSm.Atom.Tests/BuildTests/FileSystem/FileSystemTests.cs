@@ -28,7 +28,7 @@ public sealed class FileSystemTests
         var host = CreateTestHost<MinimalAtomBuild>(configure: builder =>
             builder.Services.AddSingleton<IPathProvider>(provider => new FunctionPathProvider
             {
-                Resolver = key => key is AtomPaths.Root
+                Provider = key => key is AtomPaths.Root
                     ? provider
                         .GetRequiredService<IAtomFileSystem>()
                         .CreateRootedPath(Environment.OSVersion.Platform is PlatformID.Win32NT
@@ -75,7 +75,7 @@ public sealed class FileSystemTests
         var host = CreateTestHost<MinimalAtomBuild>(configure: builder =>
             builder.Services.AddSingleton<IPathProvider>(provider => new FunctionPathProvider
             {
-                Resolver = key => key is AtomPaths.Artifacts
+                Provider = key => key is AtomPaths.Artifacts
                     ? provider
                         .GetRequiredService<IAtomFileSystem>()
                         .CreateRootedPath(Environment.OSVersion.Platform is PlatformID.Win32NT
@@ -122,7 +122,7 @@ public sealed class FileSystemTests
         var host = CreateTestHost<MinimalAtomBuild>(configure: builder =>
             builder.Services.AddSingleton<IPathProvider>(provider => new FunctionPathProvider
             {
-                Resolver = key => key is AtomPaths.Publish
+                Provider = key => key is AtomPaths.Publish
                     ? provider
                         .GetRequiredService<IAtomFileSystem>()
                         .CreateRootedPath(Environment.OSVersion.Platform is PlatformID.Win32NT
@@ -169,7 +169,7 @@ public sealed class FileSystemTests
         var host = CreateTestHost<MinimalAtomBuild>(configure: builder =>
             builder.Services.AddSingleton<IPathProvider>(provider => new FunctionPathProvider
             {
-                Resolver = key => key is AtomPaths.Temp
+                Provider = key => key is AtomPaths.Temp
                     ? provider
                         .GetRequiredService<IAtomFileSystem>()
                         .CreateRootedPath(Environment.OSVersion.Platform is PlatformID.Win32NT
