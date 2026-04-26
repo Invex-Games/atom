@@ -15,13 +15,13 @@ public sealed record WorkflowTargetDefinition(string Name)
     /// <summary>
     ///     Gets the options that configure this workflow target's behavior.
     /// </summary>
-    public IReadOnlyList<IWorkflowOption> Options { get; init; } = [];
+    public IReadOnlyList<IBuildOption> Options { get; init; } = [];
 
     /// <summary>
     ///     Creates a <see cref="WorkflowStepModel" /> from this target definition.
     /// </summary>
     /// <returns>A new <see cref="WorkflowStepModel" /> instance.</returns>
-    public WorkflowStepModel CreateModel(IEnumerable<IWorkflowOption> workflowOptions) =>
+    public WorkflowStepModel CreateModel(IEnumerable<IBuildOption> workflowOptions) =>
         new()
         {
             Name = Name,
@@ -49,7 +49,7 @@ public sealed record WorkflowTargetDefinition(string Name)
     /// </summary>
     /// <param name="options">The options to add.</param>
     /// <returns>A new <see cref="WorkflowTargetDefinition" /> instance.</returns>
-    public WorkflowTargetDefinition WithOptions(params IEnumerable<IWorkflowOption> options) =>
+    public WorkflowTargetDefinition WithOptions(params IEnumerable<IBuildOption> options) =>
         this with
         {
             Options = Options

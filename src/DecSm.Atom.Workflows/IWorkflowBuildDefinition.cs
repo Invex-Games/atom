@@ -11,5 +11,5 @@ public interface IWorkflowBuildDefinition : IBuildDefinition, IGen
     /// </remarks>
     IReadOnlyList<WorkflowDefinition> Workflows { get; }
 
-    IReadOnlyList<IWorkflowOption> GlobalWorkflowOptions { get; }
+    IReadOnlyList<IBuildOption> GlobalWorkflowOptions { get; }
 }

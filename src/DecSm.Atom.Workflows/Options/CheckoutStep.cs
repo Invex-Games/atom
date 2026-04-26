@@ -4,4 +4,6 @@ namespace DecSm.Atom.Workflows.Options;
 public record CheckoutStep : IAdditionalStepOption
 {
     public int Order { get; init; } = -1000;
+
+    public bool Value { get; init; } = true;
 }

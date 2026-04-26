@@ -1,4 +1,4 @@
-﻿using DecSm.Atom.Workflows;
+﻿using DecSm.Atom.Workflows.WorkflowContext;
 
 namespace DecSm.Atom.Module.DevopsWorkflows;
 
@@ -36,6 +36,10 @@ public partial interface IDevopsWorkflows : IJobRunsOn
 
         builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(ITextExpressionFormatter),
             typeof(DevopsExpressionFormatter),
+            ServiceLifetime.Singleton));
+
+        builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(IWorkflowContextProvider),
+            typeof(DevopsWorkflowContextProvider),
             ServiceLifetime.Singleton));
 
         builder.Services.TryAddSingleton<DevopsWorkflowBuilder>();

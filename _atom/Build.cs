@@ -46,10 +46,10 @@ internal partial class Build : WorkflowBuildDefinition,
     public override IReadOnlyList<IBuildOption> Options =>
         field ??=
         [
-            DecSm.Atom.Build.BuildOptions.BuildOptions.GitVersion.ProvideBuildId,
-            DecSm.Atom.Build.BuildOptions.BuildOptions.GitVersion.ProvideBuildVersion,
-            DecSm.Atom.Build.BuildOptions.BuildOptions.AzureKeyVault.UseAzureKeyVault,
-            DecSm.Atom.Build.BuildOptions.BuildOptions.Steps.SetupDotnet.Dotnet100X(),
+            BuildOptions.GitVersion.ProvideBuildId,
+            BuildOptions.GitVersion.ProvideBuildVersion,
+            BuildOptions.AzureKeyVault.UseAzureKeyVault,
+            BuildOptions.Steps.SetupDotnet.Dotnet100X(),
         ];
 
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
@@ -64,7 +64,7 @@ internal partial class Build : WorkflowBuildDefinition,
                     new(nameof(ISetupBuildInfo.SetupBuildInfo)),
                     new(nameof(IBuildTargets.PackProjects))
                     {
-                        Options = [WorkflowOptions.Target.SuppressArtifactPublishing],
+                        Options = [BuildOptions.Target.SuppressArtifactPublishing],
                     },
                     new(nameof(IBuildTargets.PackTool))
                     {
@@ -77,8 +77,7 @@ internal partial class Build : WorkflowBuildDefinition,
                         ],
                         Options =
                         [
-                            WorkflowOptions.Target.SuppressArtifactPublishing,
-                            WorkflowOptions.Github.RunsOn.SetByMatrix,
+                            BuildOptions.Target.SuppressArtifactPublishing, BuildOptions.Github.RunsOn.SetByMatrix,
                         ],
                     },
                     new(nameof(ITestTargets.TestProjects))
@@ -96,18 +95,18 @@ internal partial class Build : WorkflowBuildDefinition,
                         ],
                         Options =
                         [
-                            WorkflowOptions.Target.SuppressArtifactPublishing,
-                            WorkflowOptions.Github.RunsOn.SetByMatrix,
-                            WorkflowOptions.Steps.SetupDotnet.Dotnet80X(),
-                            WorkflowOptions.Steps.SetupDotnet.Dotnet90X(),
+                            BuildOptions.Target.SuppressArtifactPublishing,
+                            BuildOptions.Github.RunsOn.SetByMatrix,
+                            BuildOptions.Steps.SetupDotnet.Dotnet80X(),
+                            BuildOptions.Steps.SetupDotnet.Dotnet90X(),
                         ],
                     },
                     new(nameof(ICheckPrForBreakingChanges.CheckPrForBreakingChanges))
                     {
                         Options =
                         [
-                            WorkflowOptions.Target.SuppressArtifactPublishing,
-                            WorkflowOptions.Inject.Secret(nameof(IGithubHelper.GithubToken)),
+                            BuildOptions.Target.SuppressArtifactPublishing,
+                            BuildOptions.Inject.Secret(nameof(IGithubHelper.GithubToken)),
                             new GithubTokenPermissionsOption(new Permissions.Exact(new()
                             {
                                 IdTokens = PermissionsLevel.Write,
@@ -115,13 +114,13 @@ internal partial class Build : WorkflowBuildDefinition,
                                 PullRequests = PermissionsLevel.Write,
                                 Checks = PermissionsLevel.Write,
                             })),
-                            WorkflowOptions.Inject.Param(nameof(ICheckPrForBreakingChanges.PullRequestNumber),
+                            BuildOptions.Inject.Param(nameof(ICheckPrForBreakingChanges.PullRequestNumber),
                                 TextExpressions.Github.GithubEvent["number"]),
                         ],
                     },
                 ],
                 WorkflowTypes = [WorkflowTypes.Github.Action],
-                WorkflowOptions = [WorkflowOptions.Github.TokenPermissions.NoneAll],
+                WorkflowOptions = [BuildOptions.Github.TokenPermissions.NoneAll],
             },
             new("Build")
             {
@@ -147,7 +146,7 @@ internal partial class Build : WorkflowBuildDefinition,
                                 Values = PlatformNames.ToList(),
                             },
                         ],
-                        Options = [WorkflowOptions.Github.RunsOn.SetByMatrix],
+                        Options = [BuildOptions.Github.RunsOn.SetByMatrix],
                     },
                     new(nameof(ITestTargets.TestProjects))
                     {
@@ -164,9 +163,9 @@ internal partial class Build : WorkflowBuildDefinition,
                         ],
                         Options =
                         [
-                            WorkflowOptions.Github.RunsOn.SetByMatrix,
-                            WorkflowOptions.Steps.SetupDotnet.Dotnet80X(),
-                            WorkflowOptions.Steps.SetupDotnet.Dotnet90X(),
+                            BuildOptions.Github.RunsOn.SetByMatrix,
+                            BuildOptions.Steps.SetupDotnet.Dotnet80X(),
+                            BuildOptions.Steps.SetupDotnet.Dotnet90X(),
                         ],
                     },
                     new(nameof(IDeployTargets.PushToNuget)),
@@ -174,12 +173,12 @@ internal partial class Build : WorkflowBuildDefinition,
                     {
                         Options =
                         [
-                            WorkflowOptions.Inject.Secret(nameof(IGithubHelper.GithubToken)),
+                            BuildOptions.Inject.Secret(nameof(IGithubHelper.GithubToken)),
                             new GithubTokenPermissionsOption(new Permissions.Exact(new()
                             {
                                 Contents = PermissionsLevel.Write,
                             })),
-                            WorkflowOptions.Target.RunIfWorkflowCondition(new TargetOutputExpression
+                            BuildOptions.Target.RunIfWorkflowCondition(new TargetOutputExpression
                                 {
                                     OutputName = ParamDefinitions[nameof(ISetupBuildInfo.BuildVersion)].ArgName,
                                     TargetName = nameof(ISetupBuildInfo.SetupBuildInfo),
@@ -190,7 +189,7 @@ internal partial class Build : WorkflowBuildDefinition,
                     },
                 ],
                 WorkflowTypes = [WorkflowTypes.Github.Action],
-                WorkflowOptions = [WorkflowOptions.Github.TokenPermissions.NoneAll],
+                WorkflowOptions = [BuildOptions.Github.TokenPermissions.NoneAll],
             },
 
             // Test devops
@@ -210,7 +209,7 @@ internal partial class Build : WorkflowBuildDefinition,
                                 Values = DevopsPlatformNames,
                             },
                         ],
-                        Options = [WorkflowOptions.Devops.DevopsPool.SetByMatrix],
+                        Options = [BuildOptions.Devops.DevopsPool.SetByMatrix],
                     },
                     new(nameof(ITestTargets.TestProjects))
                     {
@@ -227,9 +226,9 @@ internal partial class Build : WorkflowBuildDefinition,
                         ],
                         Options =
                         [
-                            WorkflowOptions.Devops.DevopsPool.SetByMatrix,
-                            WorkflowOptions.Steps.SetupDotnet.Dotnet80X(),
-                            WorkflowOptions.Steps.SetupDotnet.Dotnet90X(),
+                            BuildOptions.Devops.DevopsPool.SetByMatrix,
+                            BuildOptions.Steps.SetupDotnet.Dotnet80X(),
+                            BuildOptions.Steps.SetupDotnet.Dotnet90X(),
                         ],
                     },
                     new(nameof(IDeployTargets.PushToNugetDevops)),
@@ -237,8 +236,8 @@ internal partial class Build : WorkflowBuildDefinition,
                 WorkflowTypes = [Devops.WorkflowType],
                 WorkflowOptions =
                 [
-                    WorkflowOptions.Inject.Param(nameof(INugetHelper.NugetDryRun), true),
-                    WorkflowOptions.Devops.VariableGroup.Atom,
+                    BuildOptions.Inject.Param(nameof(INugetHelper.NugetDryRun), true),
+                    BuildOptions.Devops.VariableGroup.Atom,
                 ],
             },
 
@@ -285,7 +284,7 @@ internal partial class Build : WorkflowBuildDefinition,
                     {
                         Options =
                         [
-                            WorkflowOptions.Inject.Secret(nameof(IGithubHelper.GithubToken)),
+                            BuildOptions.Inject.Secret(nameof(IGithubHelper.GithubToken)),
                             new GithubTokenPermissionsOption(new Permissions.Exact(new()
                             {
                                 IdTokens = PermissionsLevel.Write,
@@ -298,10 +297,10 @@ internal partial class Build : WorkflowBuildDefinition,
                 WorkflowTypes = [WorkflowTypes.Github.Action],
                 WorkflowOptions =
                 [
-                    WorkflowOptions.Github.TokenPermissions.NoneAll,
-                    WorkflowOptions.Target.RunIfWorkflowCondition(
+                    BuildOptions.Github.TokenPermissions.NoneAll,
+                    BuildOptions.Target.RunIfWorkflowCondition(
                         TextExpressions.Github.GithubActor.EqualToString("dependabot[bot]")),
-                    WorkflowOptions.Inject.Param(nameof(ICheckPrForBreakingChanges.PullRequestNumber),
+                    BuildOptions.Inject.Param(nameof(ICheckPrForBreakingChanges.PullRequestNumber),
                         TextExpressions.Github.GithubEvent["number"]),
                 ],
             },

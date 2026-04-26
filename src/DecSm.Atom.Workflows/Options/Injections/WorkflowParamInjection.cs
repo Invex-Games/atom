@@ -18,4 +18,4 @@
 ///     </code>
 /// </example>
 [PublicAPI]
-public sealed record WorkflowParamInjection(string Name, TextExpression InjectionExpression) : IWorkflowOption;
+public sealed record WorkflowParamInjection(string Name, TextExpression InjectionExpression) : IBuildOption;

@@ -5,9 +5,9 @@ namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
 [BuildDefinition]
 public partial class DuplicateDependencyBuild : MinimalBuildDefinition, IGithubWorkflows, IDuplicateDependencyTarget
 {
-    public override IReadOnlyList<IWorkflowOption> GlobalWorkflowOptions =>
+    public override IReadOnlyList<IBuildOption> GlobalWorkflowOptions =>
     [
-        WorkflowOptions.Artifacts.UseCustomProvider,
+        BuildOptions.Artifacts.UseCustomProvider,
     ];
 
     public override IReadOnlyList<WorkflowDefinition> Workflows =>

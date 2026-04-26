@@ -125,6 +125,7 @@ public static class HostExtensions
             return parsedArgs;
         });
 
+        builder.Services.AddSingleton<IBuildOptionService, BuildOptionService>();
         builder.Services.AddSingleton<BuildResolver>();
 
         builder.Services.AddSingleton<BuildModel>(services =>

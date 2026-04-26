@@ -1,13 +1,13 @@
-namespace DecSm.Atom.Module.AzureKeyVault.Flags;
+namespace DecSm.Atom.Module.AzureKeyVault.Options;
 
 [PublicAPI]
 [SuppressMessage("Performance", "CA1822:Mark members as static")]
-public static class BuildFlagsExtensions
+public static class AzureKeyVaultBuildOptionsExtensions
 {
     [PublicAPI]
-    public sealed class AzureKeyVaultFlags
+    public sealed class AzureKeyVaultBuildOptions
     {
-        public static AzureKeyVaultFlags Instance => field ??= new();
+        public static AzureKeyVaultBuildOptions Instance => field ??= new();
 
         public UseAzureKeyVault UseAzureKeyVault => field ??= new();
 
@@ -20,6 +20,6 @@ public static class BuildFlagsExtensions
 
     extension(BuildOptions)
     {
-        public static AzureKeyVaultFlags AzureKeyVault => AzureKeyVaultFlags.Instance;
+        public static AzureKeyVaultBuildOptions AzureKeyVault => AzureKeyVaultBuildOptions.Instance;
     }
 }

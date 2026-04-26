@@ -5,7 +5,7 @@
 /// </summary>
 /// <remarks>
 ///     <para>
-///         When <see cref="ToggleWorkflowOption.Enabled" />, the workflow will use the
+///         When <see cref="ToggleBuildOption.Enabled" />, the workflow will use the
 ///         <see cref="IStoreArtifact.StoreArtifact" /> and <see cref="IRetrieveArtifact.RetrieveArtifact" /> targets,
 ///         which delegate to the registered <see cref="IArtifactProvider" /> implementation.
 ///     </para>
@@ -37,4 +37,4 @@
 /// <seealso cref="IStoreArtifact" />
 /// <seealso cref="IRetrieveArtifact" />
 [PublicAPI]
-public sealed record UseCustomArtifactProvider : ToggleWorkflowOption;
+public sealed record UseCustomArtifactProvider : ToggleBuildOption;

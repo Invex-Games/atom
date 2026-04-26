@@ -1,6 +1,4 @@
-﻿using DecSm.Atom.Workflows;
-
-namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Github;
+﻿namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Github;
 
 [PublicAPI]
 public sealed record GithubWorkflowType : IWorkflowType

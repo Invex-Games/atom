@@ -1,6 +1,4 @@
-﻿using DecSm.Atom.Build.BuildOptions;
-
-namespace DecSm.Atom.Build.Definition;
+﻿namespace DecSm.Atom.Build.Definition;
 
 /// <summary>
 ///     Defines the core structure and components of an Atom build process.
@@ -33,7 +31,7 @@ public interface IBuildDefinition
     /// </remarks>
     IReadOnlyDictionary<string, ParamDefinition> ParamDefinitions { get; }
 
-    IReadOnlyList<IBuildOption> BuildOptions { get; }
+    IReadOnlyList<IBuildOption> Options { get; }
 
     /// <summary>
     ///     Retrieves the value of a build parameter by its name.

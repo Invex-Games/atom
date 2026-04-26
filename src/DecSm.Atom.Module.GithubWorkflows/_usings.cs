@@ -5,6 +5,7 @@ global using System.Reflection;
 global using System.Text;
 global using DecSm.Atom.Build.Artifacts;
 global using DecSm.Atom.Build;
+global using DecSm.Atom.Build.BuildOptions;
 global using DecSm.Atom.Build.Definition;
 global using DecSm.Atom.Build.Model;
 global using DecSm.Atom.Build.Logging;
@@ -13,7 +14,6 @@ global using DecSm.Atom.FileSystem;
 global using DecSm.Atom.Build.Reports;
 global using DecSm.Atom.Build.Variables;
 global using DecSm.Atom.Workflows.Definition;
-global using DecSm.Atom.Workflows.Definition.Options;
 global using DecSm.Atom.Workflows.Definition.Triggers;
 global using DecSm.Atom.Workflows.Model;
 global using DecSm.Atom.Workflows.Options;
@@ -40,5 +40,7 @@ global using DecSm.Atom.Module.GithubWorkflows.Workflows.Github.Model;
 global using DecSm.Atom.Module.GithubWorkflows.Workflows.Options;
 global using DecSm.Atom.Module.GithubWorkflows.Workflows.Steps;
 global using DecSm.Atom.SemanticVersion;
+global using DecSm.Atom.StructuredText.Expressions;
+global using DecSm.Atom.Workflows;
 
 [assembly: InternalsVisibleTo("DecSm.Atom.Module.GithubWorkflows.Tests")]

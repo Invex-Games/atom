@@ -1,5 +1,3 @@
-using DecSm.Atom.Build.BuildOptions;
-
 namespace DecSm.Atom.Module.GitVersion.Flags;
 
 [PublicAPI]
@@ -11,15 +9,21 @@ public static class BuildFlagsExtensions
     {
         public static GitVersionFlags Instance => field ??= new();
 
-        public GitVersionProvideBuildIdFlag ProvideBuildId => field ??= new(true);
+        public GitVersionProvideBuildIdFlag ProvideBuildId => field ??= new();
 
         public GitVersionProvideBuildIdFlag SetProvideBuildId(bool value) =>
-            new(value);
+            new()
+            {
+                Enabled = value,
+            };
 
-        public GitVersionProvideBuildVersionFlag ProvideBuildVersion => field ??= new(true);
+        public GitVersionProvideBuildVersionFlag ProvideBuildVersion => field ??= new();
 
         public GitVersionProvideBuildVersionFlag SetProvideBuildVersion(bool value) =>
-            new(value);
+            new()
+            {
+                Enabled = value,
+            };
     }
 
     extension(BuildOptions)

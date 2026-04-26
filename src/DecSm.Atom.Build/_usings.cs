@@ -11,6 +11,7 @@ global using System.Text.Json;
 global using System.Text.Json.Serialization;
 global using System.Text.RegularExpressions;
 global using DecSm.Atom.Build.Args;
+global using DecSm.Atom.Build.BuildOptions;
 global using DecSm.Atom.Build.BuildInfo;
 global using DecSm.Atom.Build.Definition;
 global using DecSm.Atom.Build.Exceptions;

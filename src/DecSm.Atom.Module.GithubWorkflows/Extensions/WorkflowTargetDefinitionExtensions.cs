@@ -1,7 +1,4 @@
-﻿using DecSm.Atom.StructuredText.Expressions;
-using DecSm.Atom.Workflows;
-
-namespace DecSm.Atom.Module.GithubWorkflows.Extensions;
+﻿namespace DecSm.Atom.Module.GithubWorkflows.Extensions;
 
 /// <summary>
 ///     Provides extension methods for <see cref="WorkflowTargetDefinition" /> to simplify GitHub Actions workflow
@@ -33,7 +30,7 @@ public static class WorkflowTargetDefinitionExtensions
                 {
                     Values = labels.ToList(),
                 })
-                .WithOptions(WorkflowOptions.Github.RunsOn.SetByMatrix);
+                .WithOptions(BuildOptions.Github.RunsOn.SetByMatrix);
 
         /// <summary>
         ///     Configures the workflow target to run on a matrix of GitHub Actions runner labels.
@@ -62,8 +59,8 @@ public static class WorkflowTargetDefinitionExtensions
         [PublicAPI]
         public WorkflowTargetDefinition WithGithubTokenInjection(Permissions? permissions = null) =>
             permissions is null
-                ? workflowTargetDefinition.WithOptions(WorkflowOptions.Inject.Secret(nameof(IGithubHelper.GithubToken)))
-                : workflowTargetDefinition.WithOptions(WorkflowOptions.Inject.Secret(nameof(IGithubHelper.GithubToken)),
+                ? workflowTargetDefinition.WithOptions(BuildOptions.Inject.Secret(nameof(IGithubHelper.GithubToken)))
+                : workflowTargetDefinition.WithOptions(BuildOptions.Inject.Secret(nameof(IGithubHelper.GithubToken)),
                     new GithubTokenPermissionsOption(permissions));
     }
 }

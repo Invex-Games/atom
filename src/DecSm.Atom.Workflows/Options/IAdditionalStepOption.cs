@@ -1,7 +1,7 @@
 namespace DecSm.Atom.Workflows.Options;
 
 [PublicAPI]
-public interface IAdditionalStepOption : IWorkflowOption
+public interface IAdditionalStepOption : IBuildOption
 {
     /// <summary>
     ///     The order that the step should be executed within the job.

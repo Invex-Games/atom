@@ -16,7 +16,7 @@
 ///     </code>
 /// </example>
 [PublicAPI]
-public sealed record WorkflowParamInjectionFromEnvironment(string Value) : IWorkflowOption;
+public sealed record WorkflowParamInjectionFromEnvironment(string Value) : IBuildOption;
 
 [PublicAPI]
-public sealed record WorkflowEnvironmentVariableInjection(string Name, TextExpression Value) : IWorkflowOption;
+public sealed record WorkflowEnvironmentVariableInjection(string Name, TextExpression Value) : IBuildOption;
