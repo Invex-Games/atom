@@ -46,10 +46,35 @@ jobs:
         env:
           nuget-dry-run: true
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom
+        displayName: DecSm.Atom.Build
         inputs:
-          artifactName: DecSm.Atom
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom
+          artifactName: DecSm.Atom.Build
+          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Build
+      - task: PublishPipelineArtifact@1
+        displayName: DecSm.Atom.FileSystem
+        inputs:
+          artifactName: DecSm.Atom.FileSystem
+          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.FileSystem
+      - task: PublishPipelineArtifact@1
+        displayName: DecSm.Atom.Process
+        inputs:
+          artifactName: DecSm.Atom.Process
+          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Process
+      - task: PublishPipelineArtifact@1
+        displayName: DecSm.Atom.SemanticVersion
+        inputs:
+          artifactName: DecSm.Atom.SemanticVersion
+          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.SemanticVersion
+      - task: PublishPipelineArtifact@1
+        displayName: DecSm.Atom.StructuredText
+        inputs:
+          artifactName: DecSm.Atom.StructuredText
+          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.StructuredText
+      - task: PublishPipelineArtifact@1
+        displayName: DecSm.Atom.Workflows
+        inputs:
+          artifactName: DecSm.Atom.Workflows
+          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Workflows
       - task: PublishPipelineArtifact@1
         displayName: DecSm.Atom.Module.AzureKeyVault
         inputs:
@@ -175,15 +200,15 @@ jobs:
           artifactName: DecSm.Atom.Tests-$(job-runs-on)-$(test-framework)
           targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Tests
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Analyzers.Tests
+        displayName: DecSm.Atom.Build.Analyzers.Tests
         inputs:
-          artifactName: DecSm.Atom.Analyzers.Tests-$(job-runs-on)-$(test-framework)
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Analyzers.Tests
+          artifactName: DecSm.Atom.Build.Analyzers.Tests-$(job-runs-on)-$(test-framework)
+          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Build.Analyzers.Tests
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.SourceGenerators.Tests
+        displayName: DecSm.Atom.Build.SourceGenerators.Tests
         inputs:
-          artifactName: DecSm.Atom.SourceGenerators.Tests-$(job-runs-on)-$(test-framework)
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.SourceGenerators.Tests
+          artifactName: DecSm.Atom.Build.SourceGenerators.Tests-$(job-runs-on)-$(test-framework)
+          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Build.SourceGenerators.Tests
       - task: PublishPipelineArtifact@1
         displayName: DecSm.Atom.Module.DevopsWorkflows.Tests
         inputs:
@@ -217,10 +242,35 @@ jobs:
         inputs:
           version: 10.0.x
       - task: DownloadPipelineArtifact@2
-        displayName: DecSm.Atom
+        displayName: DecSm.Atom.Build
         inputs:
-          artifact: DecSm.Atom
-          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom
+          artifact: DecSm.Atom.Build
+          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.Build
+      - task: DownloadPipelineArtifact@2
+        displayName: DecSm.Atom.FileSystem
+        inputs:
+          artifact: DecSm.Atom.FileSystem
+          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.FileSystem
+      - task: DownloadPipelineArtifact@2
+        displayName: DecSm.Atom.Process
+        inputs:
+          artifact: DecSm.Atom.Process
+          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.Process
+      - task: DownloadPipelineArtifact@2
+        displayName: DecSm.Atom.SemanticVersion
+        inputs:
+          artifact: DecSm.Atom.SemanticVersion
+          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.SemanticVersion
+      - task: DownloadPipelineArtifact@2
+        displayName: DecSm.Atom.StructuredText
+        inputs:
+          artifact: DecSm.Atom.StructuredText
+          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.StructuredText
+      - task: DownloadPipelineArtifact@2
+        displayName: DecSm.Atom.Workflows
+        inputs:
+          artifact: DecSm.Atom.Workflows
+          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.Workflows
       - task: DownloadPipelineArtifact@2
         displayName: DecSm.Atom.Module.AzureKeyVault
         inputs:
