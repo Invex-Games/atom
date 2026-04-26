@@ -5,15 +5,13 @@
 /// </summary>
 /// <param name="buildDefinition">The build definition containing global options and target information.</param>
 /// <param name="buildModel">The resolved build model.</param>
-/// <param name="workflowOptionProviders">A collection of workflow option providers.</param>
+/// <param name="buildOptionService">The service providing the resolved set of build options.</param>
 internal sealed class WorkflowResolver(
     IWorkflowBuildDefinition buildDefinition,
     BuildModel buildModel,
-    IEnumerable<IWorkflowOptionProvider> workflowOptionProviders
+    IBuildOptionService buildOptionService
 )
 {
-    private readonly IReadOnlyList<IWorkflowOptionProvider> _workflowOptionProviders = workflowOptionProviders.ToList();
-
     /// <summary>
     ///     Resolves a <see cref="WorkflowDefinition" /> into a <see cref="WorkflowModel" />,
     ///     including job and step ordering, and dependency resolution.
@@ -25,10 +23,11 @@ internal sealed class WorkflowResolver(
     /// </exception>
     public WorkflowModel Resolve(WorkflowDefinition definition)
     {
-        // Get all default options from BuildDefinition, WorkflowOptionProviders and WorkflowDefinition
-        var workflowOptions = buildDefinition
-            .GlobalWorkflowOptions
-            .Concat(_workflowOptionProviders.SelectMany(x => x.WorkflowOptions))
+        // Get all default options from BuildOptionService (includes IBuildDefinition.BuildOptions + providers),
+        // plus GlobalWorkflowOptions from the build definition and the workflow-level options
+        var workflowOptions = buildOptionService
+            .Options
+            .Concat(buildDefinition.GlobalWorkflowOptions)
             .Concat(definition.WorkflowOptions)
             .ToList();
 

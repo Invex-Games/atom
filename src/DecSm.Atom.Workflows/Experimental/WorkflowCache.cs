@@ -13,7 +13,7 @@ public static partial class WorkflowCacheUtil
 }
 
 [UnstableAPI]
-public sealed record WorkflowCacheSaveOption : IWorkflowOption
+public sealed record WorkflowCacheSaveOption : IBuildOption
 {
     public required string Name { get; init; }
 
@@ -29,7 +29,7 @@ public sealed record WorkflowCacheSaveOption : IWorkflowOption
 }
 
 [UnstableAPI]
-public sealed record WorkflowCacheRestoreOption : IWorkflowOption
+public sealed record WorkflowCacheRestoreOption : IBuildOption
 {
     public required string Name { get; init; }
 
@@ -84,7 +84,7 @@ public static class WorkflowCacheOptions
             };
     }
 
-    extension(WorkflowOptions)
+    extension(BuildOptions)
     {
         [UnstableAPI]
         public static CacheOptions Cache => CacheOptions.Instance;

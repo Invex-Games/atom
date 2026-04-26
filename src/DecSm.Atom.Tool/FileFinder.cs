@@ -64,6 +64,7 @@ public static class FileFinder
     private static readonly HashSet<string> RootMarkers = new(StringComparer.OrdinalIgnoreCase)
     {
         ".git",
+        ".slnx",
         ".sln",
         "package.json",
         "go.mod",

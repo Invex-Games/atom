@@ -21,4 +21,4 @@ namespace DecSm.Atom.Workflows.Options.Injections;
 ///     </code>
 /// </example>
 [PublicAPI]
-public sealed record WorkflowSecretInjectionForSecretProvider(string SecretName) : IWorkflowOption;
+public sealed record WorkflowSecretInjectionForSecretProvider(string SecretName) : IBuildOption;

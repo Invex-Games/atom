@@ -1,5 +1,4 @@
-﻿using DecSm.Atom.StructuredText.Expressions;
-using DecSm.Atom.Workflows;
+﻿using DecSm.Atom.Workflows.WorkflowContext;
 
 namespace DecSm.Atom.Module.GithubWorkflows.Helpers;
 
@@ -42,6 +41,10 @@ public partial interface IGithubWorkflows : IJobRunsOn
 
         builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(ITextExpressionFormatter),
             typeof(GithubExpressionFormatter),
+            ServiceLifetime.Singleton));
+
+        builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(IWorkflowContextProvider),
+            typeof(GithubWorkflowContextProvider),
             ServiceLifetime.Singleton));
 
         builder.Services.TryAddSingleton<GithubWorkflowBuilder>();

@@ -140,7 +140,7 @@ public static class WorkflowOptionsExtensions
         }
     }
 
-    extension(WorkflowOptions)
+    extension(BuildOptions)
     {
         [PublicAPI]
         public static InjectionOptions Inject => InjectionOptions.Instance;

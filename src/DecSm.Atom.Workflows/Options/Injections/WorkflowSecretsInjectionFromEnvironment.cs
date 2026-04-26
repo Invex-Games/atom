@@ -16,4 +16,4 @@
 ///     </code>
 /// </example>
 [PublicAPI]
-public sealed record WorkflowSecretsInjectionFromEnvironment(string SecretName) : IWorkflowOption;
+public sealed record WorkflowSecretsInjectionFromEnvironment(string SecretName) : IBuildOption;

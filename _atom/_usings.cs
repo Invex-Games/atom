@@ -17,7 +17,7 @@ global using DecSm.Atom.Module.GithubWorkflows.Workflows.Github.Model;
 global using DecSm.Atom.Module.GithubWorkflows.Workflows.Options;
 global using DecSm.Atom.Module.GitVersion;
 global using DecSm.Atom.FileSystem;
-global using DecSm.Atom.Module.AzureKeyVault.Flags;
+global using DecSm.Atom.Module.AzureKeyVault.Options;
 global using DecSm.Atom.Module.DevopsWorkflows;
 global using DecSm.Atom.Module.DevopsWorkflows.Extensions;
 global using DecSm.Atom.Module.GitVersion.Flags;

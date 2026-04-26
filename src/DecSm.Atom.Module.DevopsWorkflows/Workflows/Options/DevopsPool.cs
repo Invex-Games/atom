@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Module.DevopsWorkflows.Workflows.Options;
 
 [PublicAPI]
-public sealed record DevopsPool : IWorkflowOption
+public sealed record DevopsPool : IBuildOption
 {
     public TextExpressionCollection Demands { get; init; } = [];
 

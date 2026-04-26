@@ -1,4 +1,3 @@
-using DecSm.Atom.StructuredText.Expressions;
 using DecSm.Atom.Workflows.Dotnet.Nuget;
 
 namespace DecSm.Atom.Module.GithubWorkflows.Workflows.Github;
@@ -22,7 +21,7 @@ internal sealed class GithubWorkflowBuilder(
                 .Select(x => BuildJob(workflow, x))
                 .ToList(),
             Permissions = BuildPermissions(GithubTokenPermissionsOption.Get(workflow) ??
-                                           WorkflowOptions.Github.TokenPermissions.NoneAll),
+                                           BuildOptions.Github.TokenPermissions.NoneAll),
         };
 
     private List<On> BuildTriggers(WorkflowModel workflow) =>
@@ -245,8 +244,6 @@ internal sealed class GithubWorkflowBuilder(
             });
 
         additionalSteps = additionalSteps
-            .Where<IAdditionalStepOption>(x =>
-                x is not IToggleWorkflowOption or IToggleWorkflowOption { Enabled: true })
             .ToList();
 
         // Add pre-target additional steps
@@ -289,7 +286,7 @@ internal sealed class GithubWorkflowBuilder(
                     .Select(x => x.TargetStep)
                     .Single(x => x.Name == consumedArtifact.TargetName);
 
-                if (SuppressArtifactPublishingOption.Get(workflow, consumedStep) is { Value: true })
+                if (SuppressArtifactPublishingOption.Get(workflow, consumedStep) is { Enabled: true })
                     logger.LogWarning(
                         "Workflow {WorkflowName} target {TargetName} consumes artifact {ArtifactName} from target {SourceTargetName}, which has artifact publishing suppressed; this may cause the workflow to fail",
                         workflow.Name,
@@ -298,7 +295,7 @@ internal sealed class GithubWorkflowBuilder(
                         consumedArtifact.TargetName);
             }
 
-            if (UseCustomArtifactProvider.Get(workflow) is { Value: true })
+            if (UseCustomArtifactProvider.Get(workflow) is { Enabled: true })
                 foreach (var slice in target.ConsumedArtifacts.GroupBy(a => a.BuildSlice))
                 {
                     var artifactNames = slice
@@ -422,7 +419,7 @@ internal sealed class GithubWorkflowBuilder(
 
         if (target.ProducedArtifacts.Count > 0)
         {
-            if (UseCustomArtifactProvider.Get(workflow) is { Value: true })
+            if (UseCustomArtifactProvider.Get(workflow) is { Enabled: true })
                 foreach (var slice in target.ProducedArtifacts.GroupBy(a => a.BuildSlice))
                 {
                     var artifactNames = slice
@@ -656,7 +653,9 @@ internal sealed class GithubWorkflowBuilder(
         var paramInjections = WorkflowParamInjection.GetOptions(workflow, job.TargetStep);
         var environmentVariableInjections = WorkflowEnvironmentVariableInjection.GetOptions(workflow, job.TargetStep);
 
-        environmentInjections = environmentInjections.Where(e => paramInjections.All(p => p.Name != e.Value));
+        environmentInjections = environmentInjections
+            .Where(e => paramInjections.All(p => p.Name != e.Value))
+            .ToList();
 
         foreach (var environmentInjection in environmentInjections)
         {

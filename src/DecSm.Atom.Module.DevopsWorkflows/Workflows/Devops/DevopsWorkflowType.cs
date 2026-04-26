@@ -1,6 +1,4 @@
-﻿using DecSm.Atom.Workflows;
-
-namespace DecSm.Atom.Module.DevopsWorkflows.Workflows.Devops;
+﻿namespace DecSm.Atom.Module.DevopsWorkflows.Workflows.Devops;
 
 [PublicAPI]
 public sealed record DevopsWorkflowType : IWorkflowType

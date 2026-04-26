@@ -20,5 +20,5 @@ public sealed record WorkflowStepModel
     /// <summary>
     ///     Gets the options that configure this step's behavior.
     /// </summary>
-    public required IReadOnlyList<IWorkflowOption> Options { get; init; }
+    public required IReadOnlyList<IBuildOption> Options { get; init; }
 }

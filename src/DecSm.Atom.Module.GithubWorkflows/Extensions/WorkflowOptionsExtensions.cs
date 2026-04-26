@@ -1,4 +1,3 @@
-using DecSm.Atom.StructuredText.Expressions;
 using Permissions = DecSm.Atom.Module.GithubWorkflows.Workflows.Github.Model.Permissions;
 
 namespace DecSm.Atom.Module.GithubWorkflows.Extensions;
@@ -265,7 +264,7 @@ public static class WorkflowOptionsExtensions
         public GithubStepsOptions Steps => field ??= new();
     }
 
-    extension(WorkflowOptions)
+    extension(BuildOptions)
     {
         [PublicAPI]
         public static GithubOptions Github => GithubOptions.Instance;

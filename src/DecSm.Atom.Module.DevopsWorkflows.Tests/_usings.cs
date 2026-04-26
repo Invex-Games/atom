@@ -1,6 +1,7 @@
 ﻿global using DecSm.Atom.Args;
 global using DecSm.Atom.Artifacts;
 global using DecSm.Atom.Build;
+global using DecSm.Atom.Build.BuildOptions;
 global using DecSm.Atom.Build.Definition;
 global using DecSm.Atom.Params;
 global using DecSm.Atom.TestUtils;

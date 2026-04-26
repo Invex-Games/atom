@@ -82,9 +82,8 @@ public partial interface IAzureKeyVault : IBuildAccessor
     protected static partial void ConfigureBuilder(IHostApplicationBuilder builder) =>
         builder
             .Services
-            .AddSingleton<AzureKeySecretsProvider>()
-            .AddSingleton<ISecretsProvider>(x => x.GetRequiredService<AzureKeySecretsProvider>())
-            .AddSingleton<IWorkflowOptionProvider>(x => x.GetRequiredService<AzureKeySecretsProvider>());
+            .AddSingleton<ISecretsProvider, AzureKeySecretsProvider>()
+            .AddSingleton<IBuildOptionProvider, AzureKeyOptionsProvider>();
 }
 
 /// <summary>

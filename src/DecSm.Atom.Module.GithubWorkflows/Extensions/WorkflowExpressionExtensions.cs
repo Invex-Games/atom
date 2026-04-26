@@ -1,5 +1,3 @@
-using DecSm.Atom.StructuredText.Expressions;
-
 namespace DecSm.Atom.Module.GithubWorkflows.Extensions;
 
 [PublicAPI]

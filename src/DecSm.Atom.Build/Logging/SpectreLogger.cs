@@ -202,9 +202,8 @@ internal sealed partial class SpectreLogger(
     /// <returns>The formatted category name.</returns>
     private static string FormatCategoryName(string name, string? command)
     {
-        // TODO: Restore?
-        // if (name == typeof(AtomService).FullName)
-        //     return "Atom";
+        if (name == typeof(AtomService).FullName)
+            return "Atom";
 
         return command is not null
             ? $"{command} | {name}"

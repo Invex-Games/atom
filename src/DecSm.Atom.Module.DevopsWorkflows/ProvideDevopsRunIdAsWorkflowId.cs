@@ -8,4 +8,4 @@
 ///     will be used as the unique identifier for the workflow run.
 /// </remarks>
 [PublicAPI]
-public sealed record ProvideDevopsRunIdAsWorkflowId : ToggleWorkflowOption;
+public sealed record ProvideDevopsRunIdAsWorkflowId : ToggleBuildOption;

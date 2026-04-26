@@ -1,21 +1,19 @@
 ﻿namespace DecSm.Atom.Module.AzureKeyVault;
 
 /// <summary>
-///     Provides an implementation of <see cref="ISecretsProvider" /> and <see cref="IWorkflowOptionProvider" />
-///     for retrieving secrets from Azure Key Vault.
+///     Provides an implementation of <see cref="ISecretsProvider" /> for retrieving secrets from Azure Key Vault.
 /// </summary>
 /// <remarks>
 ///     This provider connects to Azure Key Vault using the parameters defined in <see cref="IAzureKeyVault" />
-///     and allows for dynamic retrieval of secrets during the build process. It also integrates with
-///     workflow options to define how Azure Key Vault parameters are injected.
+///     and allows for dynamic retrieval of secrets during the build process.
 /// </remarks>
 [PublicAPI]
 public sealed class AzureKeySecretsProvider(
-    IWorkflowBuildDefinition buildDefinition,
+    IBuildDefinition buildDefinition,
     CommandLineArgs args,
     IAzureKeyVault keyVault,
     ILogger<AzureKeySecretsProvider> logger
-) : ISecretsProvider, IWorkflowOptionProvider
+) : ISecretsProvider
 {
     private SecretClient? _secretClient;
 
@@ -56,117 +54,6 @@ public sealed class AzureKeySecretsProvider(
                 key);
 
             return null;
-        }
-    }
-
-    /// <summary>
-    ///     Gets a read-only list of workflow options related to Azure Key Vault parameter injection.
-    /// </summary>
-    /// <remarks>
-    ///     This property dynamically generates workflow options based on the
-    ///     <see cref="IAzureKeyVault.AzureKeyVaultValueInjections" />
-    ///     configuration, allowing for flexible secret injection strategies.
-    /// </remarks>
-    public IReadOnlyList<IWorkflowOption> WorkflowOptions
-    {
-        get
-        {
-            if (!UseAzureKeyVault.IsEnabled(buildDefinition.BuildOptions))
-                return [];
-
-            var injections = keyVault.AzureKeyVaultValueInjections;
-
-            var valueInjections = new List<IWorkflowOption>();
-
-            switch (injections.Address)
-            {
-                case AzureKeyVaultValueInjectionType.EnvironmentVariable:
-                    valueInjections.Add(
-                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretFromWorkflowEnvironment(
-                            nameof(IAzureKeyVault.AzureVaultAddress)));
-
-                    break;
-                case AzureKeyVaultValueInjectionType.Secret:
-                    valueInjections.Add(
-                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretForSecretProvider(
-                            nameof(IAzureKeyVault.AzureVaultAddress)));
-
-                    break;
-                case AzureKeyVaultValueInjectionType.None:
-
-                    break;
-                default:
-
-                    throw new ArgumentOutOfRangeException(nameof(injections.Address), injections.Address, null);
-            }
-
-            switch (injections.TenantId)
-            {
-                case AzureKeyVaultValueInjectionType.EnvironmentVariable:
-                    valueInjections.Add(
-                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretFromWorkflowEnvironment(
-                            nameof(IAzureKeyVault.AzureVaultTenantId)));
-
-                    break;
-                case AzureKeyVaultValueInjectionType.Secret:
-                    valueInjections.Add(
-                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretForSecretProvider(
-                            nameof(IAzureKeyVault.AzureVaultTenantId)));
-
-                    break;
-                case AzureKeyVaultValueInjectionType.None:
-
-                    break;
-                default:
-
-                    throw new ArgumentOutOfRangeException(nameof(injections.TenantId), injections.TenantId, null);
-            }
-
-            switch (injections.AppId)
-            {
-                case AzureKeyVaultValueInjectionType.EnvironmentVariable:
-                    valueInjections.Add(
-                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretFromWorkflowEnvironment(
-                            nameof(IAzureKeyVault.AzureVaultAppId)));
-
-                    break;
-                case AzureKeyVaultValueInjectionType.Secret:
-                    valueInjections.Add(
-                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretForSecretProvider(
-                            nameof(IAzureKeyVault.AzureVaultAppId)));
-
-                    break;
-                case AzureKeyVaultValueInjectionType.None:
-
-                    break;
-                default:
-
-                    throw new ArgumentOutOfRangeException(nameof(injections.AppId), injections.AppId, null);
-            }
-
-            switch (injections.AppSecret)
-            {
-                case AzureKeyVaultValueInjectionType.EnvironmentVariable:
-                    valueInjections.Add(
-                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretFromWorkflowEnvironment(
-                            nameof(IAzureKeyVault.AzureVaultAppSecret)));
-
-                    break;
-                case AzureKeyVaultValueInjectionType.Secret:
-                    valueInjections.Add(
-                        Workflows.Definition.Options.WorkflowOptions.Inject.SecretForSecretProvider(
-                            nameof(IAzureKeyVault.AzureVaultAppSecret)));
-
-                    break;
-                case AzureKeyVaultValueInjectionType.None:
-
-                    break;
-                default:
-
-                    throw new ArgumentOutOfRangeException(nameof(injections.AppSecret), injections.AppSecret, null);
-            }
-
-            return valueInjections;
         }
     }
 

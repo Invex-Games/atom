@@ -492,10 +492,7 @@ internal sealed partial class DevopsWorkflowBuilder(
                 FetchDepth = TextExpressions.From(0),
             });
 
-        additionalSteps = additionalSteps
-            .Where<IAdditionalStepOption>(x =>
-                x is not IToggleWorkflowOption or IToggleWorkflowOption { Enabled: true })
-            .ToList();
+        additionalSteps = additionalSteps.ToList();
 
         // Add pre-target additional steps
         var steps = new List<Step>(additionalSteps
@@ -533,7 +530,7 @@ internal sealed partial class DevopsWorkflowBuilder(
                     .Select(x => x.TargetStep)
                     .Single(x => x.Name == consumedArtifact.TargetName);
 
-                if (SuppressArtifactPublishingOption.Get(workflow, consumedStep) is { Value: true })
+                if (SuppressArtifactPublishingOption.Get(workflow, consumedStep) is { Enabled: true })
                     logger.LogWarning(
                         "Workflow {WorkflowName} target {TargetName} consumes artifact {ArtifactName} from target {SourceTargetName}, which has artifact publishing suppressed; this may cause the workflow to fail",
                         workflow.Name,
@@ -542,7 +539,7 @@ internal sealed partial class DevopsWorkflowBuilder(
                         consumedArtifact.TargetName);
             }
 
-            if (UseCustomArtifactProvider.Get(workflow) is { Value: true })
+            if (UseCustomArtifactProvider.Get(workflow) is { Enabled: true })
                 foreach (var slice in target.ConsumedArtifacts.GroupBy(a => a.BuildSlice))
                 {
                     var artifactNames = slice
@@ -607,9 +604,9 @@ internal sealed partial class DevopsWorkflowBuilder(
 
         // Produce artifacts
         if (target.ProducedArtifacts.Count > 0 &&
-            SuppressArtifactPublishingOption.Get(workflow, job.TargetStep) is not { Value: true })
+            SuppressArtifactPublishingOption.Get(workflow, job.TargetStep) is not { Enabled: true })
         {
-            if (UseCustomArtifactProvider.Get(workflow) is { Value: true })
+            if (UseCustomArtifactProvider.Get(workflow) is { Enabled: true })
                 foreach (var slice in target.ProducedArtifacts.GroupBy(a => a.BuildSlice))
                 {
                     var artifactNames = slice
@@ -661,7 +658,7 @@ internal sealed partial class DevopsWorkflowBuilder(
                         {
                             ["artifactName"] = TextExpressions.Raw(artifactName),
                             ["targetPath"] = TextExpressions.Raw(
-                                    $"{DevopsWorkflows.Devops.PipelinePublishDirectory}/{artifact.ArtifactName}"),
+                                $"{DevopsWorkflows.Devops.PipelinePublishDirectory}/{artifact.ArtifactName}"),
                         },
                     });
                 }
@@ -857,7 +854,9 @@ internal sealed partial class DevopsWorkflowBuilder(
         var paramInjections = WorkflowParamInjection.GetOptions(workflow, job.TargetStep);
         var environmentVariableInjections = WorkflowEnvironmentVariableInjection.GetOptions(workflow, job.TargetStep);
 
-        environmentInjections = environmentInjections.Where(e => paramInjections.All(p => p.Name != e.Value));
+        environmentInjections = environmentInjections
+            .Where(e => paramInjections.All(p => p.Name != e.Value))
+            .ToList();
 
         foreach (var environmentInjection in environmentInjections)
         {

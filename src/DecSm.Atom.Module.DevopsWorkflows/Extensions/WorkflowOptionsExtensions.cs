@@ -171,7 +171,7 @@ public static class WorkflowOptionsExtensions
         public ProvideDevopsRunIdAsWorkflowId ProvideDevopsRunIdAsWorkflowId => field ??= new();
     }
 
-    extension(WorkflowOptions)
+    extension(BuildOptions)
     {
         [PublicAPI]
         public static DevopsOptions Devops => DevopsOptions.Instance;

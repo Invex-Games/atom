@@ -1,6 +1,4 @@
-﻿using DecSm.Atom.Build.BuildOptions;
-
-namespace DecSm.Atom.Build.Definition;
+﻿namespace DecSm.Atom.Build.Definition;
 
 /// <summary>
 ///     A minimal abstract base class for creating build definitions, providing default implementations for
@@ -43,7 +41,7 @@ public abstract class BuildDefinition(IServiceProvider services) : IBuildDefinit
     /// <inheritdoc />
     public abstract IReadOnlyDictionary<string, ParamDefinition> ParamDefinitions { get; }
 
-    public virtual IReadOnlyList<IBuildOption> BuildOptions { get; } = [];
+    public virtual IReadOnlyList<IBuildOption> Options { get; } = [];
 
     /// <inheritdoc />
     public abstract object? AccessParam(string paramName);
