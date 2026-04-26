@@ -7,5 +7,6 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("DecSm.Atom.FileSystem.Tests")]
+[assembly: InternalsVisibleTo("DecSm.Atom.Process.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: SuppressMessage("ReSharper", "LocalizableElement")]

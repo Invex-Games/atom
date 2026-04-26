@@ -1,46 +1,87 @@
 ﻿namespace DecSm.Atom.Process;
 
 /// <summary>
-///     Defines a service for executing external processes with comprehensive logging and error handling.
+///     Defines a service for executing external processes with comprehensive logging, output
+///     capture, and error handling.
 /// </summary>
+/// <remarks>
+///     <para>
+///         Both stdout and stderr are captured in real time via async read loops so that long-running
+///         processes stream their output to the logger rather than buffering it until exit.
+///     </para>
+///     <para>
+///         This interface is registered as a singleton by <see cref="ProcessHostExtensions" />.
+///         Inject it into build targets and helpers instead of using
+///         <see cref="System.Diagnostics.Process" /> directly, to benefit from consistent logging
+///         and uniform error handling across all process invocations.
+///     </para>
+/// </remarks>
 [PublicAPI]
 public interface IProcessRunner
 {
     /// <summary>
-    ///     Executes an external process synchronously.
+    ///     Executes an external process synchronously and returns its result.
     /// </summary>
-    /// <param name="options">The configuration options for the process execution.</param>
-    /// <returns>A <see cref="ProcessRunResult" /> containing the exit code and captured output.</returns>
+    /// <param name="options">The configuration for the process execution.</param>
+    /// <returns>
+    ///     A <see cref="ProcessRunResult" /> containing the exit code and captured output.
+    ///     Only returned when the exit code is zero, or when
+    ///     <see cref="ProcessRunOptions.AllowFailedResult" /> is <c>true</c>.
+    /// </returns>
     /// <exception cref="Exception">
-    ///     Thrown if the process returns a non-zero exit code and <see cref="ProcessRunOptions.AllowFailedResult" /> is
-    ///     <c>false</c>.
+    ///     Thrown when the process exits with a non-zero code and
+    ///     <see cref="ProcessRunOptions.AllowFailedResult" /> is <c>false</c>.  The message
+    ///     includes the command name, exit code, and any captured stderr.
     /// </exception>
     ProcessRunResult Run(ProcessRunOptions options);
 
     /// <summary>
-    ///     Executes an external process asynchronously.
+    ///     Executes an external process asynchronously and returns its result.
     /// </summary>
-    /// <param name="options">The configuration options for the process execution.</param>
-    /// <param name="cancellationToken">A token to cancel the process.</param>
-    /// <returns>A task that resolves to a <see cref="ProcessRunResult" /> containing the exit code and captured output.</returns>
+    /// <param name="options">The configuration for the process execution.</param>
+    /// <param name="cancellationToken">
+    ///     A token that cancels the wait for the process to exit.  Note: cancelling the token
+    ///     aborts the wait but does <em>not</em> kill the underlying OS process.
+    /// </param>
+    /// <returns>
+    ///     A task that resolves to a <see cref="ProcessRunResult" /> when the process exits.
+    ///     Only completes successfully when the exit code is zero, or when
+    ///     <see cref="ProcessRunOptions.AllowFailedResult" /> is <c>true</c>.
+    /// </returns>
     /// <exception cref="Exception">
-    ///     Thrown if the process returns a non-zero exit code and <see cref="ProcessRunOptions.AllowFailedResult" /> is
-    ///     <c>false</c>.
+    ///     Thrown (on the returned task) when the process exits with a non-zero code and
+    ///     <see cref="ProcessRunOptions.AllowFailedResult" /> is <c>false</c>.
     /// </exception>
-    /// <exception cref="OperationCanceledException">Thrown if the operation is canceled.</exception>
+    /// <exception cref="OperationCanceledException">
+    ///     Thrown when <paramref name="cancellationToken" /> is cancelled before the process exits.
+    /// </exception>
     Task<ProcessRunResult> RunAsync(ProcessRunOptions options, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
-///     Provides a standardized service for executing external processes with comprehensive logging, error handling, and
-///     result capture.
+///     Default implementation of <see cref="IProcessRunner" /> that wraps
+///     <see cref="System.Diagnostics.Process" />.
 /// </summary>
 /// <remarks>
-///     This class wraps <see cref="System.Diagnostics.Process" /> to provide a more robust and configurable execution
-///     model
-///     for build automation, including real-time stream capture, flexible error handling, and cancellation support.
+///     <para>
+///         stdout and stderr are both redirected and read asynchronously via
+///         <see cref="System.Diagnostics.Process.BeginOutputReadLine" /> /
+///         <see cref="System.Diagnostics.Process.BeginErrorReadLine" /> so that output is streamed
+///         to the logger in real time rather than buffered.
+///     </para>
+///     <para>
+///         Each received line is passed through <see cref="ProcessRunOptions.TransformOutput" /> or
+///         <see cref="ProcessRunOptions.TransformError" /> when set: a <c>null</c> return from the
+///         transform suppresses the line from both the log and the captured result.
+///     </para>
+///     <para>
+///         On a non-zero exit code without <see cref="ProcessRunOptions.AllowFailedResult" />,
+///         stdout and stderr are promoted to at least <see cref="LogLevel.Information" /> /
+///         <see cref="LogLevel.Warning" /> respectively (if they were configured below those
+///         thresholds) before a descriptive exception is thrown.
+///     </para>
 /// </remarks>
-/// <param name="logger">The logger for capturing process execution information.</param>
+/// <param name="logger">The logger for capturing process execution diagnostics.</param>
 [PublicAPI]
 internal sealed class ProcessRunner(ILogger<ProcessRunner> logger) : IProcessRunner
 {

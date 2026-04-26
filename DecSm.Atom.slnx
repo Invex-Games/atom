@@ -1,7 +1,7 @@
 <Solution>
   <Folder Name="/Analyzers/">
-    <Project Path="src/DecSm.Atom.Analyzers/DecSm.Atom.Analyzers.csproj" />
-    <Project Path="src/DecSm.Atom.SourceGenerators/DecSm.Atom.SourceGenerators.csproj" />
+    <Project Path="src/DecSm.Atom.Build.Analyzers/DecSm.Atom.Build.Analyzers.csproj" />
+    <Project Path="src/DecSm.Atom.Build.SourceGenerators/DecSm.Atom.Build.SourceGenerators.csproj" />
   </Folder>
   <Folder Name="/Core/">
     <Project Path="src/DecSm.Atom.Build/DecSm.Atom.Build.csproj" />
@@ -25,11 +25,14 @@
     <Project Path="samples/Sample_02_Params/Sample_02_Params.csproj" />
   </Folder>
   <Folder Name="/Tests/">
+    <Project Path="src/DecSm.Atom.Build.Analyzers.Tests/DecSm.Atom.Build.Analyzers.Tests.csproj" />
+    <Project Path="src/DecSm.Atom.Build.SourceGenerators.Tests/DecSm.Atom.Build.SourceGenerators.Tests.csproj" />
     <Project Path="src/DecSm.Atom.FileSystem.Tests/DecSm.Atom.FileSystem.Tests.csproj" />
-    <Project Path="src/DecSm.Atom.Analyzers.Tests/DecSm.Atom.Analyzers.Tests.csproj" />
+    <Project Path="src/DecSm.Atom.Process.Tests/DecSm.Atom.Process.Tests.csproj" />
     <Project Path="src/DecSm.Atom.Module.DevopsWorkflows.Tests/DecSm.Atom.Module.DevopsWorkflows.Tests.csproj" />
     <Project Path="src/DecSm.Atom.Module.GithubWorkflows.Tests/DecSm.Atom.Module.GithubWorkflows.Tests.csproj" />
-    <Project Path="src/DecSm.Atom.SourceGenerators.Tests/DecSm.Atom.SourceGenerators.Tests.csproj" />
+    <Project Path="src/DecSm.Atom.SemanticVersion.Tests/DecSm.Atom.SemanticVersion.Tests.csproj" />
+    <Project Path="src/DecSm.Atom.StructuredText.Tests/DecSm.Atom.StructuredText.Tests.csproj" />
     <Project Path="src/DecSm.Atom.Tests/DecSm.Atom.Tests.csproj" />
     <Project Path="src/DecSm.Atom.TestUtils/DecSm.Atom.TestUtils.csproj" />
     <Project Path="src/DecSm.Atom.Tool.Tests/DecSm.Atom.Tool.Tests.csproj" />
