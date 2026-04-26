@@ -20,8 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DecSm.Atom.Analyzers\DecSm.Atom.Analyzers.csproj" />
-    <ProjectReference Include="..\DecSm.Atom\DecSm.Atom.csproj" />
-    <ProjectReference Include="..\DecSm.Atom.SourceGenerators\DecSm.Atom.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\DecSm.Atom.Build\DecSm.Atom.Build.csproj" />
   </ItemGroup>
 
 </Project>

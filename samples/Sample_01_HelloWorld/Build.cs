@@ -2,9 +2,10 @@
 // In the console, run the following command to execute the build:
 // dotnet run -- HelloWorld
 
-// This is automatically globally included when using DecSm.Atom from a nuget package
+// These usings are automatically globally included when using DecSm.Atom from a nuget package
 
 using DecSm.Atom.Build.Definition;
+using DecSm.Atom.Build.Hosting;
 
 namespace Atom;
 

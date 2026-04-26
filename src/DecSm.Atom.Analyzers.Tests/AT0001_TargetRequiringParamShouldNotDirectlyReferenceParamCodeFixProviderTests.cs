@@ -32,7 +32,7 @@ public class AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamCodeFixPr
             new("Microsoft.NETCore.App.Ref", "10.0.0-rc.1.25451.107"),
             Path.Combine("ref", "net10.0"));
 
-        var assemblyReference = MetadataReference.CreateFromFile(typeof(MinimalBuildDefinition).Assembly.Location);
+        var assemblyReference = MetadataReference.CreateFromFile(typeof(BuildDefinition).Assembly.Location);
         configuration.TestState.AdditionalReferences.AddRange([assemblyReference]);
     }
 
@@ -42,7 +42,7 @@ public class AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamCodeFixPr
         const string sourceCode = """
                                   using DecSm.Atom.Build;
                                   using DecSm.Atom.Build.Definition;
-                                  using DecSm.Atom.Params;
+                                  using DecSm.Atom.Build.Params;
 
                                   public interface IMyTarget : IBuildAccessor
                                   {
@@ -56,7 +56,7 @@ public class AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamCodeFixPr
         const string fixedCode = """
                                  using DecSm.Atom.Build;
                                  using DecSm.Atom.Build.Definition;
-                                 using DecSm.Atom.Params;
+                                 using DecSm.Atom.Build.Params;
 
                                  public interface IMyTarget : IBuildAccessor
                                  {

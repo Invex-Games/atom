@@ -16,7 +16,6 @@ global using DecSm.Atom.Build.BuildInfo;
 global using DecSm.Atom.Build.Definition;
 global using DecSm.Atom.Build.Exceptions;
 global using DecSm.Atom.Build.FileSystem;
-global using DecSm.Atom.Build.Help;
 global using DecSm.Atom.Build.Hosting;
 global using DecSm.Atom.Build.Logging;
 global using DecSm.Atom.Build.Model;

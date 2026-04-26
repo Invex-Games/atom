@@ -4,7 +4,7 @@ public static class Symbols
 {
     public const string BuildDefinitionAttribute = "DecSm.Atom.Build.Definition.BuildDefinitionAttribute";
 
-    public const string GenerateEntryPointAttribute = "DecSm.Atom.Hosting.GenerateEntryPointAttribute";
+    public const string GenerateEntryPointAttribute = "DecSm.Atom.Build.Hosting.GenerateEntryPointAttribute";
 
     public const string GenerateInterfaceMembersAttribute =
         "DecSm.Atom.Build.Definition.GenerateInterfaceMembersAttribute";
@@ -17,12 +17,12 @@ public static class Symbols
     public const string Target = "DecSm.Atom.Build.Definition.Target";
     public const string WorkflowTargetDefinition = "DecSm.Atom.Workflows.Definition.WorkflowTargetDefinition";
 
-    public const string ParamDefinition = "DecSm.Atom.Params.ParamDefinition";
-    public const string ParamDefinitionAttribute = "DecSm.Atom.Params.ParamDefinitionAttribute";
-    public const string SecretDefinitionAttribute = "DecSm.Atom.Params.SecretDefinitionAttribute";
+    public const string ParamDefinition = "DecSm.Atom.Build.Params.ParamDefinition";
+    public const string ParamDefinitionAttribute = "DecSm.Atom.Build.Params.ParamDefinitionAttribute";
+    public const string SecretDefinitionAttribute = "DecSm.Atom.Build.Params.SecretDefinitionAttribute";
 
-    public const string ConfigureHostAttribute = "DecSm.Atom.Hosting.ConfigureHostAttribute";
-    public const string ConfigureHostBuilderAttribute = "DecSm.Atom.Hosting.ConfigureHostBuilderAttribute";
+    public const string ConfigureHostAttribute = "DecSm.Atom.Build.Hosting.ConfigureHostAttribute";
+    public const string ConfigureHostBuilderAttribute = "DecSm.Atom.Build.Hosting.ConfigureHostBuilderAttribute";
 
     public const string IReadOnlyDictionary = "System.Collections.Generic.IReadOnlyDictionary";
     public const string Dictionary = "System.Collections.Generic.Dictionary";

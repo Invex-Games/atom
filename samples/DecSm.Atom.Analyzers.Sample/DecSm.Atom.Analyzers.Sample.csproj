@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DecSm.Atom\DecSm.Atom.csproj" />
+    <ProjectReference Include="..\..\src\DecSm.Atom.Build\DecSm.Atom.Build.csproj" />
     <ProjectReference Include="..\..\src\DecSm.Atom.SourceGenerators\DecSm.Atom.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\..\src\DecSm.Atom.Analyzers\DecSm.Atom.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>

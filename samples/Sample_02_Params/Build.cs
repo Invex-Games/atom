@@ -14,10 +14,11 @@
 // or
 // dotnet run -- Hello -i
 
-// These are automatically globally included when using DecSm.Atom from a nuget package
+// These usings are automatically globally included when using DecSm.Atom from a nuget package
 
 using DecSm.Atom.Build.Definition;
-using DecSm.Atom.Params;
+using DecSm.Atom.Build.Hosting;
+using DecSm.Atom.Build.Params;
 
 namespace Atom;
 

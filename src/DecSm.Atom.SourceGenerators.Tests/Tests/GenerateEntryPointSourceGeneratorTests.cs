@@ -8,7 +8,7 @@ public class GenerateEntryPointSourceGeneratorTests
         // Arrange
         const string source = """
                               using DecSm.Atom.Build.Definition;
-                              using DecSm.Atom.Hosting;
+                              using DecSm.Atom.Build.Hosting;
 
                               namespace TestNamespace;
 
@@ -19,8 +19,7 @@ public class GenerateEntryPointSourceGeneratorTests
 
         // Act
         var generatedText =
-            TestUtils.GetGeneratedSource<GenerateEntryPointSourceGenerator>(source,
-                typeof(MinimalBuildDefinition).Assembly);
+            TestUtils.GetGeneratedSource<GenerateEntryPointSourceGenerator>(source, typeof(BuildDefinition).Assembly);
 
         // Assert
         await Verify(generatedText);

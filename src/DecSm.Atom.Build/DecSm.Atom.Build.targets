@@ -1,0 +1,9 @@
+<Project>
+    <!--
+      This file makes the project's directory path visible to the DecSm.Atom
+      source generator, so it can magically find the solution file.
+    -->
+    <ItemGroup>
+        <CompilerVisibleProperty Include="MSBuildProjectDirectory" />
+    </ItemGroup>
+</Project>

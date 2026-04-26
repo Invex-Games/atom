@@ -1,6 +1,5 @@
 <Solution>
   <Folder Name="/Analyzers/">
-    <Project Path="src/DecSm.Atom.Build.SourceGenerators/DecSm.Atom.Build.SourceGenerators.csproj" />
     <Project Path="src/DecSm.Atom.Analyzers/DecSm.Atom.Analyzers.csproj" />
     <Project Path="src/DecSm.Atom.SourceGenerators/DecSm.Atom.SourceGenerators.csproj" />
   </Folder>
@@ -11,7 +10,6 @@
     <Project Path="src/DecSm.Atom.SemanticVersion/DecSm.Atom.SemanticVersion.csproj" />
     <Project Path="src/DecSm.Atom.StructuredText/DecSm.Atom.StructuredText.csproj" />
     <Project Path="src/DecSm.Atom.Workflows/DecSm.Atom.Workflows.csproj" />
-    <Project Path="src/DecSm.Atom/DecSm.Atom.csproj" />
   </Folder>
   <Folder Name="/Modules/">
     <Project Path="src/DecSm.Atom.Module.AzureKeyVault/DecSm.Atom.Module.AzureKeyVault.csproj" />
@@ -27,6 +25,7 @@
     <Project Path="samples/Sample_02_Params/Sample_02_Params.csproj" />
   </Folder>
   <Folder Name="/Tests/">
+    <Project Path="src/DecSm.Atom.FileSystem.Tests/DecSm.Atom.FileSystem.Tests.csproj" />
     <Project Path="src/DecSm.Atom.Analyzers.Tests/DecSm.Atom.Analyzers.Tests.csproj" />
     <Project Path="src/DecSm.Atom.Module.DevopsWorkflows.Tests/DecSm.Atom.Module.DevopsWorkflows.Tests.csproj" />
     <Project Path="src/DecSm.Atom.Module.GithubWorkflows.Tests/DecSm.Atom.Module.GithubWorkflows.Tests.csproj" />

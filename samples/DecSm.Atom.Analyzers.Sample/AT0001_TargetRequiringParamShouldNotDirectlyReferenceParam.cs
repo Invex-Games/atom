@@ -2,7 +2,7 @@
 
 using DecSm.Atom.Build;
 using DecSm.Atom.Build.Definition;
-using DecSm.Atom.Params;
+using DecSm.Atom.Build.Params;
 using JetBrains.Annotations;
 
 namespace DecSm.Atom.Analyzers.Sample;
@@ -83,3 +83,5 @@ public interface IMyTarget : IBuildAccessor
             .RequiresParam(MyParam1) // Analyzer AT0001 should flag this
             .RequiresParam(NotParam2);
 }
+
+#pragma warning enable AT0001
