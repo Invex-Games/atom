@@ -52,11 +52,41 @@ jobs:
         id: PackProjects
         run: dotnet run --project _atom/_atom.csproj -- PackProjects --skip --headless
 
-      - name: Store DecSm.Atom
+      - name: Store DecSm.Atom.Build
         uses: actions/upload-artifact@v7
         with:
-          name: DecSm.Atom
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom'
+          name: DecSm.Atom.Build
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build'
+
+      - name: Store DecSm.Atom.FileSystem
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.FileSystem
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.FileSystem'
+
+      - name: Store DecSm.Atom.Process
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.Process
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Process'
+
+      - name: Store DecSm.Atom.SemanticVersion
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.SemanticVersion
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SemanticVersion'
+
+      - name: Store DecSm.Atom.StructuredText
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.StructuredText
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.StructuredText'
+
+      - name: Store DecSm.Atom.Workflows
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.Workflows
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Workflows'
 
       - name: Store DecSm.Atom.Module.AzureKeyVault
         uses: actions/upload-artifact@v7
@@ -178,17 +208,17 @@ jobs:
           name: 'DecSm.Atom.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
           path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Tests'
 
-      - name: Store DecSm.Atom.Analyzers.Tests
+      - name: Store DecSm.Atom.Build.Analyzers.Tests
         uses: actions/upload-artifact@v7
         with:
-          name: 'DecSm.Atom.Analyzers.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: 'DecSm.Atom.Build.Analyzers.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Store DecSm.Atom.SourceGenerators.Tests
+      - name: Store DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/upload-artifact@v7
         with:
-          name: 'DecSm.Atom.SourceGenerators.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: 'DecSm.Atom.Build.SourceGenerators.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
       - name: Store DecSm.Atom.Module.DevopsWorkflows.Tests
         uses: actions/upload-artifact@v7
@@ -223,11 +253,41 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Retrieve DecSm.Atom
+      - name: Retrieve DecSm.Atom.Build
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom'
+          name: DecSm.Atom.Build
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build'
+
+      - name: Retrieve DecSm.Atom.FileSystem
+        uses: actions/download-artifact@v8
+        with:
+          name: DecSm.Atom.FileSystem
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.FileSystem'
+
+      - name: Retrieve DecSm.Atom.Process
+        uses: actions/download-artifact@v8
+        with:
+          name: DecSm.Atom.Process
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Process'
+
+      - name: Retrieve DecSm.Atom.SemanticVersion
+        uses: actions/download-artifact@v8
+        with:
+          name: DecSm.Atom.SemanticVersion
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SemanticVersion'
+
+      - name: Retrieve DecSm.Atom.StructuredText
+        uses: actions/download-artifact@v8
+        with:
+          name: DecSm.Atom.StructuredText
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.StructuredText'
+
+      - name: Retrieve DecSm.Atom.Workflows
+        uses: actions/download-artifact@v8
+        with:
+          name: DecSm.Atom.Workflows
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Workflows'
 
       - name: Retrieve DecSm.Atom.Module.AzureKeyVault
         uses: actions/download-artifact@v8
@@ -329,11 +389,41 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Retrieve DecSm.Atom
+      - name: Retrieve DecSm.Atom.Build
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom'
+          name: DecSm.Atom.Build
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build'
+
+      - name: Retrieve DecSm.Atom.FileSystem
+        uses: actions/download-artifact@v8
+        with:
+          name: DecSm.Atom.FileSystem
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.FileSystem'
+
+      - name: Retrieve DecSm.Atom.Process
+        uses: actions/download-artifact@v8
+        with:
+          name: DecSm.Atom.Process
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Process'
+
+      - name: Retrieve DecSm.Atom.SemanticVersion
+        uses: actions/download-artifact@v8
+        with:
+          name: DecSm.Atom.SemanticVersion
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SemanticVersion'
+
+      - name: Retrieve DecSm.Atom.StructuredText
+        uses: actions/download-artifact@v8
+        with:
+          name: DecSm.Atom.StructuredText
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.StructuredText'
+
+      - name: Retrieve DecSm.Atom.Workflows
+        uses: actions/download-artifact@v8
+        with:
+          name: DecSm.Atom.Workflows
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Workflows'
 
       - name: Retrieve DecSm.Atom.Module.AzureKeyVault
         uses: actions/download-artifact@v8
@@ -515,221 +605,221 @@ jobs:
           name: DecSm.Atom.Tests-macos-latest-net10.0
           path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-windows-latest-net8.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-windows-latest-net8.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-windows-latest-net9.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-windows-latest-net9.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-windows-latest-net10.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-windows-latest-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-windows-11-arm-net8.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-windows-11-arm-net8.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-windows-11-arm-net9.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-windows-11-arm-net9.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-windows-11-arm-net10.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-windows-11-arm-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-ubuntu-latest-net8.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-ubuntu-latest-net8.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-ubuntu-latest-net9.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-ubuntu-latest-net9.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-ubuntu-latest-net10.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-ubuntu-latest-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-ubuntu-24.04-arm-net8.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-ubuntu-24.04-arm-net8.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-ubuntu-24.04-arm-net9.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-ubuntu-24.04-arm-net9.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-ubuntu-24.04-arm-net10.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-ubuntu-24.04-arm-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-macos-15-intel-net8.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-macos-15-intel-net8.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-macos-15-intel-net9.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-macos-15-intel-net9.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-macos-15-intel-net10.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-macos-15-intel-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-macos-latest-net8.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-macos-latest-net8.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-macos-latest-net9.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-macos-latest-net9.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.Analyzers.Tests
+      - name: Retrieve DecSm.Atom.Build.Analyzers.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.Analyzers.Tests-macos-latest-net10.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Analyzers.Tests'
+          name: DecSm.Atom.Build.Analyzers.Tests-macos-latest-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-windows-latest-net8.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-windows-latest-net8.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-windows-latest-net9.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-windows-latest-net9.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-windows-latest-net10.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-windows-latest-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-windows-11-arm-net8.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-windows-11-arm-net8.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-windows-11-arm-net9.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-windows-11-arm-net9.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-windows-11-arm-net10.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-windows-11-arm-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-ubuntu-latest-net8.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-ubuntu-latest-net8.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-ubuntu-latest-net9.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-ubuntu-latest-net9.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-ubuntu-latest-net10.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-ubuntu-latest-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-ubuntu-24.04-arm-net8.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-ubuntu-24.04-arm-net8.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-ubuntu-24.04-arm-net9.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-ubuntu-24.04-arm-net9.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-ubuntu-24.04-arm-net10.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-ubuntu-24.04-arm-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-macos-15-intel-net8.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-macos-15-intel-net8.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-macos-15-intel-net9.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-macos-15-intel-net9.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-macos-15-intel-net10.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-macos-15-intel-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-macos-latest-net8.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-macos-latest-net8.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-macos-latest-net9.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-macos-latest-net9.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
-      - name: Retrieve DecSm.Atom.SourceGenerators.Tests
+      - name: Retrieve DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/download-artifact@v8
         with:
-          name: DecSm.Atom.SourceGenerators.Tests-macos-latest-net10.0
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SourceGenerators.Tests'
+          name: DecSm.Atom.Build.SourceGenerators.Tests-macos-latest-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
 
       - name: Retrieve DecSm.Atom.Module.DevopsWorkflows.Tests
         uses: actions/download-artifact@v8
