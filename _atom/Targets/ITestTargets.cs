@@ -5,8 +5,8 @@ internal interface ITestTargets : IDotnetTestHelper
     static readonly string[] ProjectsToTest =
     [
         Projects.DecSm_Atom_Tests.Name,
-        Projects.DecSm_Atom_Analyzers_Tests.Name,
-        Projects.DecSm_Atom_SourceGenerators_Tests.Name,
+        Projects.DecSm_Atom_Build_Analyzers_Tests.Name,
+        Projects.DecSm_Atom_Build_SourceGenerators_Tests.Name,
         Projects.DecSm_Atom_Module_DevopsWorkflows_Tests.Name,
         Projects.DecSm_Atom_Module_GithubWorkflows_Tests.Name,
         Projects.DecSm_Atom_Tool_Tests.Name,

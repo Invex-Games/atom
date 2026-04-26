@@ -12,7 +12,7 @@ partial record TextExpression
         new(collection, this);
 
     public ContainsExpression ContainedIn(string collection) =>
-        new(this, new StringExpression(collection));
+        new(new StringExpression(collection), this);
 
     public CoalesceExpression Coalesce(params TextExpression[] source) =>
         new([this, ..source]);
