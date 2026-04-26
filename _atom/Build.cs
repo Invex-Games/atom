@@ -119,8 +119,7 @@ internal partial class Build : WorkflowBuildDefinition,
                         ],
                     },
                 ],
-                WorkflowTypes = [WorkflowTypes.Github.Action],
-                WorkflowOptions = [BuildOptions.Github.TokenPermissions.NoneAll],
+                Types = [WorkflowTypes.Github.Action],
             },
             new("Build")
             {
@@ -188,8 +187,7 @@ internal partial class Build : WorkflowBuildDefinition,
                         ],
                     },
                 ],
-                WorkflowTypes = [WorkflowTypes.Github.Action],
-                WorkflowOptions = [BuildOptions.Github.TokenPermissions.NoneAll],
+                Types = [WorkflowTypes.Github.Action],
             },
 
             // Test devops
@@ -233,8 +231,8 @@ internal partial class Build : WorkflowBuildDefinition,
                     },
                     new(nameof(IDeployTargets.PushToNugetDevops)),
                 ],
-                WorkflowTypes = [Devops.WorkflowType],
-                WorkflowOptions =
+                Types = [Devops.WorkflowType],
+                Options =
                 [
                     BuildOptions.Inject.Param(nameof(INugetHelper.NugetDryRun), true),
                     BuildOptions.Devops.VariableGroup.Atom,
@@ -285,6 +283,10 @@ internal partial class Build : WorkflowBuildDefinition,
                         Options =
                         [
                             BuildOptions.Inject.Secret(nameof(IGithubHelper.GithubToken)),
+                            BuildOptions.Inject.Param(nameof(ICheckPrForBreakingChanges.PullRequestNumber),
+                                TextExpressions.Github.GithubEvent["number"]),
+                            BuildOptions.Target.RunIfWorkflowCondition(
+                                TextExpressions.Github.GithubActor.EqualToString("dependabot[bot]")),
                             new GithubTokenPermissionsOption(new Permissions.Exact(new()
                             {
                                 IdTokens = PermissionsLevel.Write,
@@ -294,15 +296,7 @@ internal partial class Build : WorkflowBuildDefinition,
                         ],
                     },
                 ],
-                WorkflowTypes = [WorkflowTypes.Github.Action],
-                WorkflowOptions =
-                [
-                    BuildOptions.Github.TokenPermissions.NoneAll,
-                    BuildOptions.Target.RunIfWorkflowCondition(
-                        TextExpressions.Github.GithubActor.EqualToString("dependabot[bot]")),
-                    BuildOptions.Inject.Param(nameof(ICheckPrForBreakingChanges.PullRequestNumber),
-                        TextExpressions.Github.GithubEvent["number"]),
-                ],
+                Types = [WorkflowTypes.Github.Action],
             },
         ];
 }

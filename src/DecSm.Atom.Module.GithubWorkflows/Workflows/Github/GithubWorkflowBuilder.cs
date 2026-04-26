@@ -20,7 +20,7 @@ internal sealed class GithubWorkflowBuilder(
                 .Jobs
                 .Select(x => BuildJob(workflow, x))
                 .ToList(),
-            Permissions = BuildPermissions(GithubTokenPermissionsOption.Get(workflow) ??
+            Permissions = BuildPermissions(GithubTokenPermissionsOption.Get(workflow.Options) ??
                                            BuildOptions.Github.TokenPermissions.NoneAll),
         };
 
@@ -165,13 +165,13 @@ internal sealed class GithubWorkflowBuilder(
         new()
         {
             Name = job.Name,
-            Permissions = BuildPermissions(GithubTokenPermissionsOption.Get(workflow, job.TargetStep)),
+            Permissions = BuildPermissions(GithubTokenPermissionsOption.Get(job.TargetStep.Options)),
             Needs = job
                 .JobDependencies
                 .Distinct()
                 .ToList(),
             If = TargetCondition
-                    .GetOptions(workflow, job.TargetStep)
+                    .GetOptions(job.TargetStep.Options)
                     .ToList() switch
                 {
                     { Count: > 1 } options => options[0]
@@ -183,7 +183,7 @@ internal sealed class GithubWorkflowBuilder(
                     { Count: 1 } option => option[0].Value,
                     _ => null,
                 },
-            RunsOn = GithubRunsOn.Get(workflow, job.TargetStep) is { } runsOn
+            RunsOn = GithubRunsOn.Get(job.TargetStep.Options) is { } runsOn
                 ? new()
                 {
                     Labels = runsOn.Labels,
@@ -194,7 +194,7 @@ internal sealed class GithubWorkflowBuilder(
                     Labels = ["ubuntu-latest"],
                 },
             Snapshot = null,
-            Environment = DeployToEnvironment.Get(workflow, job.TargetStep) is { } environment
+            Environment = DeployToEnvironment.Get(job.TargetStep.Options) is { } environment
                 ? new()
                 {
                     Name = environment.EnvironmentName,
@@ -232,7 +232,7 @@ internal sealed class GithubWorkflowBuilder(
     private List<Step> BuildSteps(WorkflowModel workflow, WorkflowJobModel job)
     {
         var additionalSteps = IAdditionalStepOption
-            .GetOptions(workflow, job.TargetStep)
+            .GetOptions(job.TargetStep.Options)
             .ToList();
 
         // Special case: Add default checkout step if there isn't one
@@ -243,8 +243,7 @@ internal sealed class GithubWorkflowBuilder(
                 FetchDepth = TextExpressions.From(0),
             });
 
-        additionalSteps = additionalSteps
-            .ToList();
+        additionalSteps = additionalSteps.ToList();
 
         // Add pre-target additional steps
         var steps = new List<Step>(additionalSteps
@@ -286,7 +285,7 @@ internal sealed class GithubWorkflowBuilder(
                     .Select(x => x.TargetStep)
                     .Single(x => x.Name == consumedArtifact.TargetName);
 
-                if (SuppressArtifactPublishingOption.Get(workflow, consumedStep) is { Enabled: true })
+                if (SuppressArtifactPublishingOption.Get(consumedStep.Options) is { Enabled: true })
                     logger.LogWarning(
                         "Workflow {WorkflowName} target {TargetName} consumes artifact {ArtifactName} from target {SourceTargetName}, which has artifact publishing suppressed; this may cause the workflow to fail",
                         workflow.Name,
@@ -295,7 +294,7 @@ internal sealed class GithubWorkflowBuilder(
                         consumedArtifact.TargetName);
             }
 
-            if (UseCustomArtifactProvider.Get(workflow) is { Enabled: true })
+            if (UseCustomArtifactProvider.Get(job.TargetStep.Options) is { Enabled: true })
                 foreach (var slice in target.ConsumedArtifacts.GroupBy(a => a.BuildSlice))
                 {
                     var artifactNames = slice
@@ -373,7 +372,7 @@ internal sealed class GithubWorkflowBuilder(
         }
 
         var targetStepCondition = TargetStepCondition
-                .GetOptions(workflow, job.TargetStep)
+                .GetOptions(job.TargetStep.Options)
                 .ToList() switch
             {
                 { Count: > 1 } multiple => new AndExpression(multiple
@@ -419,7 +418,7 @@ internal sealed class GithubWorkflowBuilder(
 
         if (target.ProducedArtifacts.Count > 0)
         {
-            if (UseCustomArtifactProvider.Get(workflow) is { Enabled: true })
+            if (UseCustomArtifactProvider.Get(job.TargetStep.Options) is { Enabled: true })
                 foreach (var slice in target.ProducedArtifacts.GroupBy(a => a.BuildSlice))
                 {
                     var artifactNames = slice
@@ -627,14 +626,14 @@ internal sealed class GithubWorkflowBuilder(
 
         if (requiredSecrets.Any(x => x.Param.IsSecret))
         {
-            foreach (var injectedSecret in workflow.WorkflowOptions.OfType<WorkflowSecretInjectionForSecretProvider>())
+            foreach (var injectedSecret in workflow.Options.OfType<WorkflowSecretInjectionForSecretProvider>())
                 if (buildDefinition.ParamDefinitions.GetValueOrDefault(injectedSecret.SecretName) is
                     { } paramDefinition)
                     targetStepEnv[paramDefinition.ArgName] = TextExpressions
                         .Raw("secrets")[paramDefinition.EnvVarName]
                         .Evaluate();
 
-            foreach (var injectedEvVar in workflow.WorkflowOptions.OfType<WorkflowSecretsInjectionFromEnvironment>())
+            foreach (var injectedEvVar in workflow.Options.OfType<WorkflowSecretsInjectionFromEnvironment>())
                 if (buildDefinition.ParamDefinitions.GetValueOrDefault(injectedEvVar.SecretName) is { } paramDefinition)
                     targetStepEnv[paramDefinition.ArgName] = TextExpressions
                         .Raw("vars")[paramDefinition.EnvVarName]
@@ -643,15 +642,15 @@ internal sealed class GithubWorkflowBuilder(
 
         foreach (var requiredSecret in requiredSecrets)
             if (WorkflowSecretInjection
-                .GetOptions(workflow, job.TargetStep)
+                .GetOptions(job.TargetStep.Options)
                 .Any(x => x.Value == requiredSecret.Param.Name))
                 targetStepEnv[requiredSecret.Param.ArgName] = TextExpressions
                     .Raw("secrets")[requiredSecret.Param.EnvVarName]
                     .Evaluate();
 
-        var environmentInjections = WorkflowParamInjectionFromEnvironment.GetOptions(workflow, job.TargetStep);
-        var paramInjections = WorkflowParamInjection.GetOptions(workflow, job.TargetStep);
-        var environmentVariableInjections = WorkflowEnvironmentVariableInjection.GetOptions(workflow, job.TargetStep);
+        var environmentInjections = WorkflowParamInjectionFromEnvironment.GetOptions(job.TargetStep.Options);
+        var paramInjections = WorkflowParamInjection.GetOptions(job.TargetStep.Options);
+        var environmentVariableInjections = WorkflowEnvironmentVariableInjection.GetOptions(job.TargetStep.Options);
 
         environmentInjections = environmentInjections
             .Where(e => paramInjections.All(p => p.Name != e.Value))

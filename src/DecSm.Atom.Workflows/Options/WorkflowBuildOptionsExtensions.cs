@@ -2,12 +2,12 @@ namespace DecSm.Atom.Workflows.Options;
 
 [PublicAPI]
 [SuppressMessage("Performance", "CA1822:Mark members as static")]
-public static class WorkflowOptionsExtensions
+public static class WorkflowBuildOptionsExtensions
 {
     [PublicAPI]
-    public sealed class InjectionOptions
+    public sealed class InjectionBuildOptions
     {
-        internal static InjectionOptions Instance { get; } = new();
+        internal static InjectionBuildOptions Instance { get; } = new();
 
         public WorkflowParamInjection Param(string paramName, TextExpression injectionExpression) =>
             new(paramName, injectionExpression);
@@ -42,9 +42,9 @@ public static class WorkflowOptionsExtensions
     }
 
     [PublicAPI]
-    public sealed class ArtifactOptions
+    public sealed class ArtifactBuildOptions
     {
-        internal static ArtifactOptions Instance { get; } = new();
+        internal static ArtifactBuildOptions Instance { get; } = new();
 
         public UseCustomArtifactProvider UseCustomProvider =>
             new()
@@ -54,18 +54,18 @@ public static class WorkflowOptionsExtensions
     }
 
     [PublicAPI]
-    public sealed class DeploymentOptions
+    public sealed class DeploymentBuildOptions
     {
-        internal static DeploymentOptions Instance { get; } = new();
+        internal static DeploymentBuildOptions Instance { get; } = new();
 
         public DeployToEnvironment ToEnvironment(TextExpression environmentName) =>
             new(environmentName);
     }
 
     [PublicAPI]
-    public sealed class TargetOptions
+    public sealed class TargetBuildOptions
     {
-        internal static TargetOptions Instance { get; } = new();
+        internal static TargetBuildOptions Instance { get; } = new();
 
         public SuppressArtifactPublishingOption SuppressArtifactPublishing =>
             new()
@@ -84,9 +84,9 @@ public static class WorkflowOptionsExtensions
     }
 
     [PublicAPI]
-    public sealed class StepsOptions
+    public sealed class StepsBuildOptions
     {
-        internal static StepsOptions Instance { get; } = new();
+        internal static StepsBuildOptions Instance { get; } = new();
 
         [PublicAPI]
         public SetupDotnetOptions SetupDotnet => field ??= new();
@@ -143,18 +143,18 @@ public static class WorkflowOptionsExtensions
     extension(BuildOptions)
     {
         [PublicAPI]
-        public static InjectionOptions Inject => InjectionOptions.Instance;
+        public static InjectionBuildOptions Inject => InjectionBuildOptions.Instance;
 
         [PublicAPI]
-        public static ArtifactOptions Artifacts => ArtifactOptions.Instance;
+        public static ArtifactBuildOptions Artifacts => ArtifactBuildOptions.Instance;
 
         [PublicAPI]
-        public static DeploymentOptions Deploy => DeploymentOptions.Instance;
+        public static DeploymentBuildOptions Deploy => DeploymentBuildOptions.Instance;
 
         [PublicAPI]
-        public static TargetOptions Target => TargetOptions.Instance;
+        public static TargetBuildOptions Target => TargetBuildOptions.Instance;
 
         [PublicAPI]
-        public static StepsOptions Steps => StepsOptions.Instance;
+        public static StepsBuildOptions Steps => StepsBuildOptions.Instance;
     }
 }

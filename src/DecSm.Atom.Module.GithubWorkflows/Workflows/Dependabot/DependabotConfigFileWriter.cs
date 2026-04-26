@@ -20,7 +20,7 @@ public sealed class DependabotConfigFileWriter(
     protected override void WriteWorkflow(WorkflowModel workflow)
     {
         var config = workflow
-            .WorkflowOptions
+            .Options
             .OfType<DependabotConfigOption>()
             .FirstOrDefault();
 

@@ -12,8 +12,8 @@ public static class WorkflowPresetsExtensions
         public WorkflowDefinition Dependabot(DependabotConfig config) =>
             new("dependabot")
             {
-                WorkflowOptions = [new DependabotConfigOption(config)],
-                WorkflowTypes = [WorkflowTypes.Github.Dependabot],
+                Options = [new DependabotConfigOption(config)],
+                Types = [WorkflowTypes.Github.Dependabot],
             };
     }
 
