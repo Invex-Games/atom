@@ -31,7 +31,6 @@
     <Project Path="src/DecSm.Atom.Module.GithubWorkflows.Tests/DecSm.Atom.Module.GithubWorkflows.Tests.csproj" />
     <Project Path="src/DecSm.Atom.Tests/DecSm.Atom.Tests.csproj" />
     <Project Path="src/DecSm.Atom.TestUtils/DecSm.Atom.TestUtils.csproj" />
-    <Project Path="src/DecSm.Atom.Tool.Tests/DecSm.Atom.Tool.Tests.csproj" />
   </Folder>
   <Folder Name="/Tests/Analyzers/">
     <Project Path="src/DecSm.Atom.Build.Analyzers.Tests/DecSm.Atom.Build.Analyzers.Tests.csproj" />
@@ -46,6 +45,9 @@
   <Folder Name="/Tests/Modules/">
     <Project Path="src/DecSm.StructuredText.AzureDevopsPipelines.Tests/DecSm.StructuredText.AzureDevopsPipelines.Tests.csproj" />
     <Project Path="src/DecSm.StructuredText.GithubActions.Tests/DecSm.StructuredText.GithubActions.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/Tools/">
+    <Project Path="src/DecSm.Atom.Tool.Tests/DecSm.Atom.Tool.Tests.csproj" />
   </Folder>
   <Folder Name="/Tools/">
     <Project Path="src/DecSm.Atom.DotnetCliGenerator/DecSm.Atom.DotnetCliGenerator.csproj" />
