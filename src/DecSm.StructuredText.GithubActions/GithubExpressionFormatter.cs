@@ -69,7 +69,7 @@ public sealed class GithubExpressionFormatter : TextExpressionFormatter
                 1 => Format(coalesceExpression.Source[0]),
                 2 => $"coalesce({Format(coalesceExpression.Source[0])}, {Format(coalesceExpression.Source[1])})",
                 > 2 =>
-                    $"coalesce({new CoalesceExpression(coalesceExpression.Source[..^1])}, {Format(coalesceExpression.Source[^1])})",
+                    $"coalesce({Format(new CoalesceExpression(coalesceExpression.Source[..^1]))}, {Format(coalesceExpression.Source[^1])})",
                 _ => throw new ArgumentOutOfRangeException(nameof(expression)),
             },
 
