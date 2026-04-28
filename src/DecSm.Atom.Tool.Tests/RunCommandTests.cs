@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Tool.Tests;
+﻿using System.IO.Abstractions;
+
+namespace DecSm.Atom.Tool.Tests;
 
 [TestFixture]
 public class RunCommandTests
@@ -11,82 +13,308 @@ public class RunCommandTests
         RunCommand.MockDotnetCli = true;
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        RunCommand.FileSystem = new FileSystem();
+        RunCommand.MockDotnetCli = false;
+    }
+
     private MockFileSystem _fs = null!;
 
-    private static string GetRoot() =>
+    private static string Root =>
         RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
             ? @"C:\"
             : "/";
 
+    private string P(params string[] parts) =>
+        _fs.Path.Combine([Root, ..parts]);
+
+    // ── Upward-search / root-marker boundary ─────────────────────────────────
+
     [Test]
     public async Task Handle_ShouldFindProjectInParent_AndStopAtRootMarker()
     {
-        // Arrange
-        var root = GetRoot();
-        var repoDir = _fs.Path.Combine(root, "Repo");
-        var subDir = _fs.Path.Combine(repoDir, "SubFolder");
-        var targetDir = _fs.Path.Combine(subDir, "Target");
+        var repoDir = P("Repo");
+        var subDir = P("Repo", "SubFolder");
+        var targetDir = P("Repo", "SubFolder", "Target");
 
-        // CRITICAL FIX: Explicitly create the full path
-        // MockFileSystem needs the physical directory to exist to enumerate it
         _fs.AddDirectory(targetDir);
-
-        // Adding the file automatically creates 'Repo', but not 'SubFolder\Target'
-        _fs.AddFile(_fs.Path.Combine(repoDir, "MyProj.csproj"), new(""));
-
-        // Add the root marker
-        _fs.AddDirectory(_fs.Path.Combine(subDir, ".git"));
+        _fs.AddFile(P("Repo", "MyProj.csproj"), new(""));
+        _fs.AddDirectory(_fs.Path.Combine(subDir, ".git")); // root marker
 
         _fs.Directory.SetCurrentDirectory(targetDir);
 
-        // Act
         var result = await RunCommand.Handle([], "MyProj", CancellationToken.None);
 
-        // Assert
-        result.ShouldBe(1);
+        result.ShouldBe(1); // blocked by .git root marker
     }
+
+    // ── Downward convention search ────────────────────────────────────────────
 
     [Test]
     public async Task Handle_ShouldFindNestedProject_WhenConventionSearchIsEnabled()
     {
-        // Arrange
-        var root = GetRoot();
-        var workDir = _fs.Path.Combine(root, "Work");
-        var nestedProject = _fs.Path.Combine(workDir, "Atom", "Atom.csproj");
-
-        // AddDirectory is not strictly needed here because AddFile creates the parent
-        _fs.AddFile(nestedProject, new(""));
+        var workDir = P("Work");
+        _fs.AddFile(P("Work", "Atom", "Atom.csproj"), new(""));
         _fs.Directory.SetCurrentDirectory(workDir);
 
-        // Act
         var result = await RunCommand.Handle([], "Atom", CancellationToken.None);
 
-        // Assert
         result.ShouldBe(0);
     }
+
+    // ── Breadth-first ordering ────────────────────────────────────────────────
 
     [Test]
     public async Task Handle_ShouldPrioritizeBreadthFirst_InDownwardSearch()
     {
-        // Arrange
-        var root = GetRoot();
-        var searchRoot = _fs.Path.Combine(root, "SearchRoot");
+        var searchRoot = P("SearchRoot");
 
-        var deepPath = _fs.Path.Combine(searchRoot, "Level1", "Level2", "Target.csproj");
-        var shallowPath = _fs.Path.Combine(searchRoot, "Level1_Sibling", "Target.csproj");
-
-        // AddFile creates all necessary parent directories for these files
-        _fs.AddFile(deepPath, new(""));
-        _fs.AddFile(shallowPath, new(""));
-
-        // Ensure the search root itself is initialized
+        _fs.AddFile(P("SearchRoot", "Level1", "Level2", "Target.csproj"), new(""));
+        _fs.AddFile(P("SearchRoot", "Level1_Sibling", "Target.csproj"), new(""));
         _fs.AddDirectory(searchRoot);
+
         _fs.Directory.SetCurrentDirectory(searchRoot);
 
-        // Act
         var result = await RunCommand.Handle([], "Target", CancellationToken.None);
 
-        // Assert
+        result.ShouldBe(0);
+    }
+
+    // ── .csproj extension subject ─────────────────────────────────────────────
+
+    [Test]
+    public async Task Handle_WithDotCsprojSubject_FindsProject_ReturnsZero()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "MyBuild.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], "MyBuild.csproj", CancellationToken.None);
+
+        result.ShouldBe(0);
+    }
+
+    [Test]
+    public async Task Handle_WithDotCsprojSubject_ProjectNotFound_ReturnsOne()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], "Missing.csproj", CancellationToken.None);
+
+        result.ShouldBe(1);
+    }
+
+    // ── .cs extension subject ─────────────────────────────────────────────────
+
+    [Test]
+    public async Task Handle_WithDotCsSubject_FindsCsFile_ReturnsZero()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "build.cs"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], "build.cs", CancellationToken.None);
+
+        result.ShouldBe(0);
+    }
+
+    [Test]
+    public async Task Handle_WithDotCsSubject_FileNotFound_ReturnsOne()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], "missing.cs", CancellationToken.None);
+
+        result.ShouldBe(1);
+    }
+
+    // ── Name-only subject (Either) ────────────────────────────────────────────
+
+    [Test]
+    public async Task Handle_WithEitherSubject_FindsProject_ReturnsZero()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "mybuild.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], "mybuild", CancellationToken.None);
+
+        result.ShouldBe(0);
+    }
+
+    [Test]
+    public async Task Handle_WithEitherSubject_FindsCsFile_ReturnsZero()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "mybuild.cs"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], "mybuild", CancellationToken.None);
+
+        result.ShouldBe(0);
+    }
+
+    [Test]
+    public async Task Handle_WithEitherSubject_NotFound_ReturnsOne()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], "mybuild", CancellationToken.None);
+
+        result.ShouldBe(1);
+    }
+
+    [Test]
+    public async Task Handle_WithEitherSubject_PrefersProjectOverCsFile()
+    {
+        // Both exist — project wins (project is checked first)
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "mybuild.csproj"), new(""));
+        _fs.AddFile(P("work", "mybuild.cs"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        // Should succeed regardless of which one it picks
+        var result = await RunCommand.Handle([], "mybuild", CancellationToken.None);
+
+        result.ShouldBe(0);
+    }
+
+    // ── Empty subject (None — default discovery) ──────────────────────────────
+
+    [Test]
+    public async Task Handle_WithEmptySubject_FindsAtomProject_ReturnsZero()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "_atom.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], string.Empty, CancellationToken.None);
+
+        result.ShouldBe(0);
+    }
+
+    [Test]
+    public async Task Handle_WithEmptySubject_FindsBuildProject_ReturnsZero()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "_build.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], string.Empty, CancellationToken.None);
+
+        result.ShouldBe(0);
+    }
+
+    [Test]
+    public async Task Handle_WithEmptySubject_NothingFound_ReturnsOne()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], string.Empty, CancellationToken.None);
+
+        result.ShouldBe(1);
+    }
+
+    // ── Argument sanitization ─────────────────────────────────────────────────
+
+    [Test]
+    public async Task Handle_SubjectWithNewlines_IsSanitizedBeforeSearch()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "mybuild.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        // Newlines in subject should be stripped
+        var result = await RunCommand.Handle([], "my\nbuild", CancellationToken.None);
+
+        result.ShouldBe(0);
+    }
+
+    [Test]
+    public async Task Handle_SubjectWithCarriageReturn_IsSanitizedBeforeSearch()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "mybuild.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], "my\rbuild", CancellationToken.None);
+
+        result.ShouldBe(0);
+    }
+
+    [Test]
+    public async Task Handle_SubjectWithSurroundingQuotes_IsTrimmed()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "mybuild.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], "\"mybuild\"", CancellationToken.None);
+
+        result.ShouldBe(0);
+    }
+
+    [Test]
+    public async Task Handle_SubjectWithSingleQuotes_IsTrimmed()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "mybuild.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], "'mybuild'", CancellationToken.None);
+
+        result.ShouldBe(0);
+    }
+
+    [Test]
+    public async Task Handle_SubjectWithSurroundingSpaces_IsTrimmed()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "mybuild.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], "  mybuild  ", CancellationToken.None);
+
+        result.ShouldBe(0);
+    }
+
+    // ── Run-args are forwarded ────────────────────────────────────────────────
+
+    [Test]
+    public async Task Handle_WithRunArgs_DoesNotAffectSearchOrReturnCode()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "_atom.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        // Extra run args should not affect discovery or mock return
+        var result = await RunCommand.Handle(["--target", "Build", "--param", "Foo=Bar"],
+            string.Empty,
+            CancellationToken.None);
+
         result.ShouldBe(0);
     }
 }
