@@ -37,6 +37,8 @@
     <Project Path="src/DecSm.Atom.Tests/DecSm.Atom.Tests.csproj" />
     <Project Path="src/DecSm.Atom.TestUtils/DecSm.Atom.TestUtils.csproj" />
     <Project Path="src/DecSm.Atom.Tool.Tests/DecSm.Atom.Tool.Tests.csproj" />
+    <Project Path="src/DecSm.StructuredText.AzureDevopsPipelines.Tests/DecSm.StructuredText.AzureDevopsPipelines.Tests.csproj" />
+    <Project Path="src/DecSm.StructuredText.GithubActions.Tests/DecSm.StructuredText.GithubActions.Tests.csproj" />
     <Project Path="src/DecSm.StructuredText.Tests/DecSm.StructuredText.Tests.csproj" />
   </Folder>
   <Folder Name="/Tools/">
