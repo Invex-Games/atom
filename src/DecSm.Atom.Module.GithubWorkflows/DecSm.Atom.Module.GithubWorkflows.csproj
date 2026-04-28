@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DecSm.StructuredText.GithubActions\DecSm.StructuredText.GithubActions.csproj" />
     <ProjectReference Include="..\DecSm.Atom.Workflows\DecSm.Atom.Workflows.csproj" />
     <ProjectReference Include="..\DecSm.Atom.Build.SourceGenerators\DecSm.Atom.Build.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>

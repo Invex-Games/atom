@@ -16,7 +16,7 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem atomFileSystem, ILog
     : IWorkflowWriter<T>
     where T : IWorkflowType
 {
-    protected StructuredTextBuilder TextBuilder => field ??= new(TabSize);
+    protected StructuredTextWriter TextWriter => field ??= new(TabSize);
 
     /// <summary>
     ///     Gets the number of spaces to use for each indentation level. Defaults to 2.
@@ -44,8 +44,8 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem atomFileSystem, ILog
 
         WriteWorkflow(workflow);
 
-        var newText = TextBuilder.ToString();
-        TextBuilder.Reset();
+        var newText = TextWriter.ToString();
+        TextWriter.Reset();
 
         var existingText = atomFileSystem.File.Exists(filePath)
             ? await atomFileSystem.File.ReadAllTextAsync(filePath, cancellationToken)
@@ -86,11 +86,11 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem atomFileSystem, ILog
 
         WriteWorkflow(workflow);
 
-        var newText = TextBuilder
+        var newText = TextWriter
             .ToString()
             .ReplaceLineEndings();
 
-        TextBuilder.Reset();
+        TextWriter.Reset();
 
         var existingText = atomFileSystem.File.Exists(filePath)
             ? await atomFileSystem.File.ReadAllTextAsync(filePath, cancellationToken)

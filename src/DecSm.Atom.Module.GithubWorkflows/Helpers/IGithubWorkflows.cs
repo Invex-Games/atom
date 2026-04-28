@@ -1,6 +1,4 @@
-﻿using DecSm.Atom.Workflows.WorkflowContext;
-
-namespace DecSm.Atom.Module.GithubWorkflows.Helpers;
+﻿namespace DecSm.Atom.Module.GithubWorkflows.Helpers;
 
 /// <summary>
 ///     Provides integration with GitHub Actions workflows for DecSm.Atom builds.
@@ -39,15 +37,9 @@ public partial interface IGithubWorkflows : IJobRunsOn
             typeof(GithubVariableProvider),
             ServiceLifetime.Singleton));
 
-        builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(ITextExpressionFormatter),
-            typeof(GithubExpressionFormatter),
-            ServiceLifetime.Singleton));
-
         builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(IWorkflowContextProvider),
             typeof(GithubWorkflowContextProvider),
             ServiceLifetime.Singleton));
-
-        builder.Services.TryAddSingleton<GithubWorkflowBuilder>();
 
         if (!Github.IsGithubActions)
             return;

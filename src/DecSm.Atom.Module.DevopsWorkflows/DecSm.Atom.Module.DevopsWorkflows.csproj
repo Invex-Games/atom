@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="DecSm.Analyzers.PublicApiSurface" Version="0.1.0-rc.11" PrivateAssets="all" />
-    <PackageReference Include="Dunet" Version="1.16.1" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,17 +21,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DecSm.Atom.StructuredText\DecSm.Atom.StructuredText.csproj" />
+    <ProjectReference Include="..\DecSm.StructuredText.AzureDevopsPipelines\DecSm.StructuredText.AzureDevopsPipelines.csproj" />
     <ProjectReference Include="..\DecSm.Atom.Workflows\DecSm.Atom.Workflows.csproj" />
     <ProjectReference Include="..\DecSm.Atom.Build.SourceGenerators\DecSm.Atom.Build.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="DecSm.Atom.Module.DevopsWorkflows.props" Pack="true" PackagePath="buildTransitive/" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Workflows\Devops\Model\" />
   </ItemGroup>
 
 </Project>

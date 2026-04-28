@@ -1,5 +1,3 @@
-using DecSm.Atom.Workflows.WorkflowContext;
-
 namespace DecSm.Atom.Module.GithubWorkflows;
 
 internal sealed class GithubWorkflowContextProvider : IWorkflowContextProvider

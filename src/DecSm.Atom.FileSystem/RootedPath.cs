@@ -104,7 +104,7 @@ public record RootedPath(IFileSystem FileSystem, string Path)
     ///     Returns <c>null</c> (rather than throwing) when the path points to a file or does not exist.
     /// </returns>
     /// <remarks>
-    ///     This delegates to <see cref="IPath.GetDirectoryName" />, which strips the last path
+    ///     This delegates to <see cref="IPath.GetDirectoryName(string)" />, which strips the last path
     ///     segment and trailing separator — it does <em>not</em> return the directory's own name.
     /// </remarks>
     public string? DirectoryName =>
@@ -114,7 +114,7 @@ public record RootedPath(IFileSystem FileSystem, string Path)
 
     /// <summary>
     ///     Combines the current <see cref="RootedPath" /> with a relative string segment using
-    ///     <see cref="IPath.Combine" />.
+    ///     <see cref="IPath.Combine(string, string)" />.
     /// </summary>
     /// <param name="left">The base <see cref="RootedPath" />.</param>
     /// <param name="right">The relative segment to append.</param>

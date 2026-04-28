@@ -32,7 +32,7 @@
     <None Include="..\DecSm.Atom.SourceGenerators\bin\$(Configuration)\netstandard2.0\DecSm.Atom.SourceGenerators.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
     <ProjectReference Include="..\DecSm.Atom.Build.Analyzers\DecSm.Atom.Build.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <None Include="..\DecSm.Atom.Analyzers\bin\$(Configuration)\netstandard2.0\DecSm.Atom.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-    <ProjectReference Include="..\DecSm.Atom.StructuredText\DecSm.Atom.StructuredText.csproj" />
+    <ProjectReference Include="..\DecSm.StructuredText\DecSm.StructuredText.csproj" />
   </ItemGroup>
 
   <ItemGroup>

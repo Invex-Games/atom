@@ -11,8 +11,8 @@ internal sealed partial class DevopsWorkflowBuilder(
 {
     private readonly DevopsExpressionFormatter _expressionFormatter = new();
 
-    public Pipeline Build(WorkflowModel workflow) =>
-        new Pipeline.PipelineWithJobs
+    public DevopsPipeline Build(WorkflowModel workflow) =>
+        new DevopsPipeline.DevopsPipelineWithJobs
         {
             Name = TextExpressions.Raw(workflow.Name),
             Jobs = workflow
