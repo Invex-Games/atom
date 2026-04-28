@@ -1,3 +1,4 @@
+global using System.Diagnostics;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Globalization;
 global using System.IO.Compression;
@@ -31,16 +32,19 @@ global using System.Runtime.CompilerServices;
 global using System.Runtime.InteropServices;
 global using DecSm.Atom.Build.FileSystem;
 global using DecSm.Atom.Build.Hosting;
+global using DecSm.Atom.Module.GithubWorkflows.DependabotConfig;
 global using DecSm.Atom.Module.GithubWorkflows.Extensions;
+global using DecSm.Atom.Module.GithubWorkflows.GithubActions;
 global using DecSm.Atom.Module.GithubWorkflows.Helpers;
-global using DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot;
-global using DecSm.Atom.Module.GithubWorkflows.Workflows.Dependabot.Model;
-global using DecSm.Atom.Module.GithubWorkflows.Workflows.Github;
-global using DecSm.Atom.Module.GithubWorkflows.Workflows.Github.Model;
-global using DecSm.Atom.Module.GithubWorkflows.Workflows.Options;
-global using DecSm.Atom.Module.GithubWorkflows.Workflows.Steps;
+global using DecSm.StructuredText.GithubActions;
+global using DecSm.StructuredText.GithubActions.DependabotConfigModel.Model;
+global using DecSm.StructuredText.GithubActions.GithubActionModel;
+global using DecSm.Atom.Module.GithubWorkflows.Options;
+global using DecSm.Atom.Module.GithubWorkflows.Steps;
 global using DecSm.Atom.SemanticVersion;
-global using DecSm.Atom.StructuredText.Expressions;
 global using DecSm.Atom.Workflows;
+global using DecSm.Atom.Workflows.Dotnet.Nuget;
+global using DecSm.Atom.Workflows.WorkflowContext;
+global using DecSm.StructuredText.Expressions;
 
 [assembly: InternalsVisibleTo("DecSm.Atom.Module.GithubWorkflows.Tests")]

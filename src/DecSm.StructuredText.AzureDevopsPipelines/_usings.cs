@@ -1,0 +1,13 @@
+global using System.Globalization;
+global using DecSm.StructuredText.AzureDevopsPipelines.DevopsPipelineModel.Jobs;
+global using DecSm.StructuredText.AzureDevopsPipelines.DevopsPipelineModel.Pipeline;
+global using DecSm.StructuredText.AzureDevopsPipelines.DevopsPipelineModel.Resources;
+global using DecSm.StructuredText.AzureDevopsPipelines.DevopsPipelineModel.Stages;
+global using DecSm.StructuredText.AzureDevopsPipelines.DevopsPipelineModel.Steps;
+global using DecSm.StructuredText.AzureDevopsPipelines.DevopsPipelineModel.Supporting;
+global using DecSm.StructuredText.AzureDevopsPipelines.DevopsPipelineModel.Triggers;
+global using DecSm.StructuredText.AzureDevopsPipelines.DevopsPipelineModel.Variables;
+global using DecSm.StructuredText;
+global using DecSm.StructuredText.Expressions;
+global using Dunet;
+global using JetBrains.Annotations;

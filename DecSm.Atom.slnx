@@ -8,8 +8,8 @@
     <Project Path="src/DecSm.Atom.FileSystem/DecSm.Atom.FileSystem.csproj" />
     <Project Path="src/DecSm.Atom.Process/DecSm.Atom.Process.csproj" />
     <Project Path="src/DecSm.Atom.SemanticVersion/DecSm.Atom.SemanticVersion.csproj" />
-    <Project Path="src/DecSm.Atom.StructuredText/DecSm.Atom.StructuredText.csproj" />
     <Project Path="src/DecSm.Atom.Workflows/DecSm.Atom.Workflows.csproj" />
+    <Project Path="src/DecSm.StructuredText/DecSm.StructuredText.csproj" />
   </Folder>
   <Folder Name="/Modules/">
     <Project Path="src/DecSm.Atom.Module.AzureKeyVault/DecSm.Atom.Module.AzureKeyVault.csproj" />
@@ -18,6 +18,8 @@
     <Project Path="src/DecSm.Atom.Module.Dotnet/DecSm.Atom.Module.Dotnet.csproj" />
     <Project Path="src/DecSm.Atom.Module.GithubWorkflows/DecSm.Atom.Module.GithubWorkflows.csproj" />
     <Project Path="src/DecSm.Atom.Module.GitVersion/DecSm.Atom.Module.GitVersion.csproj" />
+    <Project Path="src/DecSm.StructuredText.AzureDevopsPipelines/DecSm.StructuredText.AzureDevopsPipelines.csproj" />
+    <Project Path="src/DecSm.StructuredText.GithubActions/DecSm.StructuredText.GithubActions.csproj" />
   </Folder>
   <Folder Name="/Samples/">
     <Project Path="samples/DecSm.Atom.Analyzers.Sample/DecSm.Atom.Analyzers.Sample.csproj" />
@@ -32,10 +34,10 @@
     <Project Path="src/DecSm.Atom.Module.DevopsWorkflows.Tests/DecSm.Atom.Module.DevopsWorkflows.Tests.csproj" />
     <Project Path="src/DecSm.Atom.Module.GithubWorkflows.Tests/DecSm.Atom.Module.GithubWorkflows.Tests.csproj" />
     <Project Path="src/DecSm.Atom.SemanticVersion.Tests/DecSm.Atom.SemanticVersion.Tests.csproj" />
-    <Project Path="src/DecSm.Atom.StructuredText.Tests/DecSm.Atom.StructuredText.Tests.csproj" />
     <Project Path="src/DecSm.Atom.Tests/DecSm.Atom.Tests.csproj" />
     <Project Path="src/DecSm.Atom.TestUtils/DecSm.Atom.TestUtils.csproj" />
     <Project Path="src/DecSm.Atom.Tool.Tests/DecSm.Atom.Tool.Tests.csproj" />
+    <Project Path="src/DecSm.StructuredText.Tests/DecSm.StructuredText.Tests.csproj" />
   </Folder>
   <Folder Name="/Tools/">
     <Project Path="src/DecSm.Atom.DotnetCliGenerator/DecSm.Atom.DotnetCliGenerator.csproj" />

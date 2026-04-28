@@ -9,7 +9,8 @@ public static class WorkflowPresetsExtensions
     {
         internal static Presets Instance => field ??= new();
 
-        public WorkflowDefinition Dependabot(DependabotConfig config) =>
+        public WorkflowDefinition Dependabot(
+            StructuredText.GithubActions.DependabotConfigModel.Model.DependabotConfig config) =>
             new("dependabot")
             {
                 Options = [new DependabotConfigOption(config)],

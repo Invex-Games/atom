@@ -1,5 +1,3 @@
-using Permissions = DecSm.Atom.Module.GithubWorkflows.Workflows.Github.Model.Permissions;
-
 namespace DecSm.Atom.Module.GithubWorkflows.Extensions;
 
 [PublicAPI]
@@ -239,7 +237,8 @@ public static class WorkflowOptionsExtensions
     [PublicAPI]
     public sealed class GithubDependabotOptions
     {
-        public DependabotConfigOption Configure(DependabotConfig config) =>
+        public DependabotConfigOption Configure(
+            StructuredText.GithubActions.DependabotConfigModel.Model.DependabotConfig config) =>
             new(config);
     }
 

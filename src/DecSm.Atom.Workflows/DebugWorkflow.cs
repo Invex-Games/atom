@@ -17,7 +17,7 @@ public class DebugWorkflowWriter(IAtomFileSystem atomFileSystem, ILogger<Workflo
     protected override RootedPath FileLocation => _atomFileSystem.AtomRootDirectory / ".debug-workflows";
 
     protected override void WriteWorkflow(WorkflowModel workflow) =>
-        TextBuilder.WriteLine(JsonSerializer.Serialize(workflow,
+        TextWriter.WriteLine(JsonSerializer.Serialize(workflow,
             new JsonSerializerOptions
             {
                 WriteIndented = true,
