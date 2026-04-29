@@ -1,4 +1,4 @@
-﻿using DecSm.Atom.Core.Scope;
+﻿using DecSm.Atom.Build.Util.Scope;
 
 namespace DecSm.Atom.TestUtils;
 

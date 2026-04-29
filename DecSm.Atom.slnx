@@ -29,14 +29,15 @@
   <Folder Name="/Tests/">
     <Project Path="src/DecSm.Atom.Module.DevopsWorkflows.Tests/DecSm.Atom.Module.DevopsWorkflows.Tests.csproj" />
     <Project Path="src/DecSm.Atom.Module.GithubWorkflows.Tests/DecSm.Atom.Module.GithubWorkflows.Tests.csproj" />
-    <Project Path="src/DecSm.Atom.Tests/DecSm.Atom.Tests.csproj" />
     <Project Path="src/DecSm.Atom.TestUtils/DecSm.Atom.TestUtils.csproj" />
+    <Project Path="src/DecSm.Atom.Workflows.TestUtils/DecSm.Atom.Workflows.TestUtils.csproj" />
   </Folder>
   <Folder Name="/Tests/Analyzers/">
     <Project Path="src/DecSm.Atom.Build.Analyzers.Tests/DecSm.Atom.Build.Analyzers.Tests.csproj" />
     <Project Path="src/DecSm.Atom.Build.SourceGenerators.Tests/DecSm.Atom.Build.SourceGenerators.Tests.csproj" />
   </Folder>
   <Folder Name="/Tests/Core/">
+    <Project Path="src/DecSm.Atom.Build.Tests/DecSm.Atom.Build.Tests.csproj" />
     <Project Path="src/DecSm.Atom.FileSystem.Tests/DecSm.Atom.FileSystem.Tests.csproj" />
     <Project Path="src/DecSm.Atom.Process.Tests/DecSm.Atom.Process.Tests.csproj" />
     <Project Path="src/DecSm.Atom.SemanticVersion.Tests/DecSm.Atom.SemanticVersion.Tests.csproj" />

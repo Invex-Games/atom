@@ -7,7 +7,7 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
     private RootedPath[] FilesToCheck =>
     [
         AtomFileSystem.AtomRootDirectory /
-        "DecSm.Atom.Tests" /
+        "DecSm.Atom.Build.Tests" /
         "ApiSurfaceTests" /
         "PublicApiSurfaceTests.VerifyPublicApiSurface.verified.txt",
     ];
