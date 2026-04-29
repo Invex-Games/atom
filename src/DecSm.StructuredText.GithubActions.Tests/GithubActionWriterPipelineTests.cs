@@ -5,8 +5,6 @@ namespace DecSm.StructuredText.GithubActions.Tests;
 [TestFixture]
 internal sealed class GithubActionWriterPipelineTests
 {
-    // ── Name / run-name ───────────────────────────────────────────────────────
-
     [Test]
     public void Write_ActionWithName_WritesNameAtTop()
     {
@@ -68,8 +66,6 @@ internal sealed class GithubActionWriterPipelineTests
         var output = GithubActionWriterHelper.Write(action);
         output.ShouldContain("CI" + Environment.NewLine + Environment.NewLine + "on:");
     }
-
-    // ── Permissions ───────────────────────────────────────────────────────────
 
     [Test]
     public void Write_ActionWithPermissionsReadAll_WritesReadAll()
@@ -158,8 +154,6 @@ internal sealed class GithubActionWriterPipelineTests
             .ShouldContain(Environment.NewLine + Environment.NewLine);
     }
 
-    // ── Env ───────────────────────────────────────────────────────────────────
-
     [Test]
     public void Write_ActionWithEnv_WritesEnvSection()
     {
@@ -185,8 +179,6 @@ internal sealed class GithubActionWriterPipelineTests
         var output = GithubActionWriterHelper.Write(action);
         output.ShouldNotContain("env:");
     }
-
-    // ── Concurrency ───────────────────────────────────────────────────────────
 
     [Test]
     public void Write_ActionWithConcurrency_WritesConcurrencySection()
@@ -219,8 +211,6 @@ internal sealed class GithubActionWriterPipelineTests
         var output = GithubActionWriterHelper.Write(action);
         output.ShouldContain("cancel-in-progress: true");
     }
-
-    // ── Jobs section ──────────────────────────────────────────────────────────
 
     [Test]
     public void Write_Action_AlwaysWritesJobsSection()

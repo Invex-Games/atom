@@ -6,18 +6,19 @@
 /// </summary>
 /// <remarks>
 ///     <para>
-///     This exception is used throughout the Atom framework to signal failures in build targets,
-///     such as task execution errors, failed external process calls (via <see cref="IProcessRunner" />),
-///     or unmet validation criteria within a target's logic.
-///     Consumers of the Atom framework can also throw <c>StepFailedException</c> to programmatically halt a build target
-///     and optionally provide custom report data using the <see cref="ReportData" /> property.
-///     The <see cref="ReportData" /> property allows attaching custom reporting information that can be
-///     used for enhanced error reporting, logging, or debugging purposes by Atom's reporting services.
+///         This exception is used throughout the Atom framework to signal failures in build targets,
+///         such as task execution errors, failed external process calls (via <see cref="IProcessRunner" />),
+///         or unmet validation criteria within a target's logic.
+///         Consumers of the Atom framework can also throw <c>StepFailedException</c> to programmatically halt a build
+///         target
+///         and optionally provide custom report data using the <see cref="ReportData" /> property.
+///         The <see cref="ReportData" /> property allows attaching custom reporting information that can be
+///         used for enhanced error reporting, logging, or debugging purposes by Atom's reporting services.
 ///     </para>
 ///     <para>
-///     This exception inherits from <see cref="AtomException"/>. Use <see cref="BuildConfigurationException"/> for
-///     configuration errors (duplicate targets, circular dependencies); use <see cref="StepFailedException"/> for
-///     runtime target execution failures.
+///         This exception inherits from <see cref="AtomException" />. Use <see cref="BuildConfigurationException" /> for
+///         configuration errors (duplicate targets, circular dependencies); use <see cref="StepFailedException" /> for
+///         runtime target execution failures.
 ///     </para>
 /// </remarks>
 /// <example>
@@ -40,8 +41,8 @@
 ///     }
 ///     </code>
 /// </example>
-/// <seealso cref="AtomException"/>
-/// <seealso cref="BuildConfigurationException"/>
+/// <seealso cref="AtomException" />
+/// <seealso cref="BuildConfigurationException" />
 [PublicAPI]
 public sealed class StepFailedException(string message, Exception? innerException = null)
     : AtomException(message, innerException!)

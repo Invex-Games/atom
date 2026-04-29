@@ -72,17 +72,6 @@ public sealed record ConcatExpression(IEnumerable<TextExpression> Values) : Text
 [PublicAPI]
 public static partial class WorkflowExpressionExtensions
 {
-    extension(TextExpressions)
-    {
-        public static ConcatExpression Concat(IEnumerable<TextExpression> expressions) =>
-            new(expressions);
-
-        public static ConcatExpression ConcatWithSeparator(
-            TextExpression separator,
-            IEnumerable<TextExpression> expressions) =>
-            new(Join(separator, expressions));
-    }
-
     private static IEnumerable<TextExpression> Join(TextExpression separator, IEnumerable<TextExpression> expressions)
     {
         var list = expressions.ToList();
@@ -94,5 +83,16 @@ public static partial class WorkflowExpressionExtensions
             yield return separator;
             yield return expression;
         }
+    }
+
+    extension(TextExpressions)
+    {
+        public static ConcatExpression Concat(IEnumerable<TextExpression> expressions) =>
+            new(expressions);
+
+        public static ConcatExpression ConcatWithSeparator(
+            TextExpression separator,
+            IEnumerable<TextExpression> expressions) =>
+            new(Join(separator, expressions));
     }
 }

@@ -23,12 +23,12 @@ namespace DecSm.Atom.Workflows;
 ///     <code>
 /// // In CI/CD pipeline, the build fails with:
 /// // "One or more workflows are out of date. To regenerate workflows, run the build with the --gen flag."
-///
+/// 
 /// // To fix locally:
 /// // 1. Run: dotnet run --project ./Build --gen
 /// // 2. Commit the regenerated workflow files
 /// // 3. Push to repository
-///
+/// 
 /// // Example of catching this exception:
 /// try
 /// {

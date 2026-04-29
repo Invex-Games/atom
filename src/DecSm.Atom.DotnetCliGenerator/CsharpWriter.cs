@@ -245,7 +245,6 @@ public sealed partial class CsharpWriter
                     : $"{returnType} {name}(");
 
                 using (Indent)
-                {
                     for (var i = 0; i < validParameters.Count; i++)
                     {
                         var (paramType, paramName, defaultValue, _) = validParameters[i];
@@ -259,7 +258,6 @@ public sealed partial class CsharpWriter
                                 : string.Empty,
                             true);
                     }
-                }
 
                 WriteLine(");");
             }
@@ -278,7 +276,6 @@ public sealed partial class CsharpWriter
             WriteLine($"{access} {returnType} {name}(");
 
             using (Indent)
-            {
                 for (var i = 0; i < validParameters.Count; i++)
                 {
                     var (paramType, paramName, defaultValue, _) = validParameters[i];
@@ -292,7 +289,6 @@ public sealed partial class CsharpWriter
                             : string.Empty,
                         true);
                 }
-            }
 
             Write(")");
         }

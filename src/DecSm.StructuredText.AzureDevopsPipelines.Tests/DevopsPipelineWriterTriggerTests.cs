@@ -23,8 +23,6 @@ internal sealed class DevopsPipelineWriterTriggerTests
             ],
         };
 
-    // ── Trigger: None ─────────────────────────────────────────────────────────
-
     [Test]
     public void WriteTrigger_None_WritesTriggerNone()
     {
@@ -38,8 +36,6 @@ internal sealed class DevopsPipelineWriterTriggerTests
         var output = PipelineWriterHelper.Write(SimplePipeline(new Trigger.None()));
         output.ShouldNotContain("trigger:" + Environment.NewLine);
     }
-
-    // ── Trigger: BranchList ───────────────────────────────────────────────────
 
     [Test]
     public void WriteTrigger_BranchList_WritesBranchesSection()
@@ -67,8 +63,6 @@ internal sealed class DevopsPipelineWriterTriggerTests
 
         output.ShouldContain(PipelineWriterHelper.JoinLines(lines));
     }
-
-    // ── Trigger: Full ─────────────────────────────────────────────────────────
 
     [Test]
     public void WriteTrigger_Full_WithBatch_WritesBatch()
@@ -138,8 +132,6 @@ internal sealed class DevopsPipelineWriterTriggerTests
         var output = PipelineWriterHelper.Write(SimplePipeline());
         output.ShouldNotContain("trigger");
     }
-
-    // ── PR: None ──────────────────────────────────────────────────────────────
 
     [Test]
     public void WritePr_None_WritesPrNone()

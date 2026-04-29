@@ -708,4 +708,89 @@ public class ParamServiceTests
         public string GetSecret(string secretName) =>
             "VaultValue";
     }
+
+    [Test]
+    public void GetParam_WithDefaultValuesOnlyScope_ReturnsDefaultValue()
+    {
+        // Arrange
+        var paramDefinition = new ParamDefinition("TestParam")
+        {
+            ArgName = "test-param",
+            Description = "Test parameter",
+            Sources = ParamSource.All,
+            IsSecret = false,
+            ChainedParams = [],
+        };
+
+        _args = new(true, [new ParamArg("test-param", "TestParam", "ArgValue")]);
+
+        _config = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                { "Params:test-param", "ConfigValue" },
+            })
+            .Build();
+
+        _paramService = new(_buildDefinition, _args, _console, _config, _logger, _vaultProviders);
+
+        A
+            .CallTo(() => _buildDefinition.ParamDefinitions)
+            .Returns(new Dictionary<string, ParamDefinition>
+            {
+                { "TestParam", paramDefinition },
+            });
+
+        // Act - inside scope, should return only the default
+        string? insideScope;
+        string? outsideScope;
+
+        using (_paramService.CreateDefaultValuesOnlyScope())
+            insideScope = _paramService.GetParam("TestParam", "MyDefault");
+
+        // After scope, should resolve from args (ArgValue)
+        using (_paramService.CreateNoCacheScope())
+            outsideScope = _paramService.GetParam("TestParam", "MyDefault");
+
+        // Assert
+        insideScope.ShouldBe("MyDefault");
+        outsideScope.ShouldBe("ArgValue");
+    }
+
+    [Test]
+    public void GetParam_WithUnknownParamName_ThrowsInvalidOperationException()
+    {
+        A
+            .CallTo(() => _buildDefinition.ParamDefinitions)
+            .Returns(new Dictionary<string, ParamDefinition>());
+
+        Should.Throw<InvalidOperationException>(() => _paramService.GetParam("NonExistent", "default"));
+    }
+
+    [Test]
+    public void GetParam_IntType_FromCommandLineArgs_ConvertsCorrectly()
+    {
+        var paramDefinition = new ParamDefinition("CountParam")
+        {
+            ArgName = "count",
+            Description = "Count parameter",
+            Sources = ParamSource.CommandLineArgs,
+            IsSecret = false,
+            ChainedParams = [],
+        };
+
+        _args = new(true, [new ParamArg("count", "CountParam", "42")]);
+
+        _config = new ConfigurationBuilder().Build();
+        _paramService = new(_buildDefinition, _args, _console, _config, _logger, _vaultProviders);
+
+        A
+            .CallTo(() => _buildDefinition.ParamDefinitions)
+            .Returns(new Dictionary<string, ParamDefinition>
+            {
+                { "CountParam", paramDefinition },
+            });
+
+        var result = _paramService.GetParam("CountParam", 0);
+        result.ShouldBe(42);
+    }
 }

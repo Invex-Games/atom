@@ -16,8 +16,6 @@ internal sealed class DevopsPipelineWriterVariablesTests
             ],
         };
 
-    // ── Variables: Dictionary ─────────────────────────────────────────────────
-
     [Test]
     public void WriteVariables_Dictionary_WritesKeyValuePairs()
     {
@@ -48,8 +46,6 @@ internal sealed class DevopsPipelineWriterVariablesTests
 
         output.ShouldContain("MY_VAR: 'hello world'");
     }
-
-    // ── Variables: VariableList with Name ─────────────────────────────────────
 
     [Test]
     public void WriteVariables_VariableList_Name_WritesNameValuePair()
@@ -108,8 +104,6 @@ internal sealed class DevopsPipelineWriterVariablesTests
         output.ShouldNotContain("readonly:");
     }
 
-    // ── Variables: VariableList with Group ────────────────────────────────────
-
     [Test]
     public void WriteVariables_VariableList_Group_WritesGroupReference()
     {
@@ -127,8 +121,6 @@ internal sealed class DevopsPipelineWriterVariablesTests
         output.ShouldContain("variables:");
         output.ShouldContain("- group: my-variable-group");
     }
-
-    // ── Variables: VariableList with Template ──────────────────────────────────
 
     [Test]
     public void WriteVariables_VariableList_Template_NoParams_WritesTemplatePath()
@@ -171,8 +163,6 @@ internal sealed class DevopsPipelineWriterVariablesTests
         output.ShouldContain("env: production");
     }
 
-    // ── Variables: Mixed list ─────────────────────────────────────────────────
-
     [Test]
     public void WriteVariables_VariableList_Mixed_WritesAllTypes()
     {
@@ -200,8 +190,6 @@ internal sealed class DevopsPipelineWriterVariablesTests
         output.ShouldContain("- group: shared-group");
         output.ShouldContain("- template: templates/vars.yml");
     }
-
-    // ── Variables: Null ───────────────────────────────────────────────────────
 
     [Test]
     public void WriteVariables_Null_WritesNothing()

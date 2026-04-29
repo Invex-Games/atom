@@ -12,16 +12,12 @@ internal sealed class GithubActionWriterJobTests
     private static string WriteJob(Job job) =>
         GithubActionWriterHelper.Write(ActionWithJob(job));
 
-    // ── Basics ────────────────────────────────────────────────────────────────
-
     [Test]
     public void WriteJob_WritesJobNameAsSection()
     {
         var output = WriteJob(GithubActionWriterHelper.MinimalJob("my-job"));
         output.ShouldContain("my-job:");
     }
-
-    // ── needs ─────────────────────────────────────────────────────────────────
 
     [Test]
     public void WriteJob_WithNeeds_WritesNeedsInline()
@@ -56,8 +52,6 @@ internal sealed class GithubActionWriterJobTests
         output.ShouldNotContain("needs:");
     }
 
-    // ── if: ───────────────────────────────────────────────────────────────────
-
     [Test]
     public void WriteJob_WithIf_WritesIfProperty()
     {
@@ -76,8 +70,6 @@ internal sealed class GithubActionWriterJobTests
         var output = WriteJob(GithubActionWriterHelper.MinimalJob());
         output.ShouldNotContain("if:");
     }
-
-    // ── runs-on ───────────────────────────────────────────────────────────────
 
     [Test]
     public void WriteJob_WithSingleLabel_WritesRunsOnInline()
@@ -121,8 +113,6 @@ internal sealed class GithubActionWriterJobTests
         output.ShouldContain("group: my-runner-group");
     }
 
-    // ── snapshot ──────────────────────────────────────────────────────────────
-
     [Test]
     public void WriteJob_WithSnapshot_WritesSnapshotSection()
     {
@@ -155,8 +145,6 @@ internal sealed class GithubActionWriterJobTests
         var output = WriteJob(job);
         output.ShouldContain("snapshot: my-image");
     }
-
-    // ── environment ───────────────────────────────────────────────────────────
 
     [Test]
     public void WriteJob_WithEnvironmentAndUrl_WritesEnvironmentSection()
@@ -191,8 +179,6 @@ internal sealed class GithubActionWriterJobTests
         output.ShouldContain("environment: staging");
     }
 
-    // ── concurrency ───────────────────────────────────────────────────────────
-
     [Test]
     public void WriteJob_WithConcurrency_WritesConcurrencySection()
     {
@@ -210,8 +196,6 @@ internal sealed class GithubActionWriterJobTests
         output.ShouldContain("cancel-in-progress: true");
     }
 
-    // ── outputs ───────────────────────────────────────────────────────────────
-
     [Test]
     public void WriteJob_WithOutputs_WritesOutputsSection()
     {
@@ -227,8 +211,6 @@ internal sealed class GithubActionWriterJobTests
         output.ShouldContain("outputs:");
         output.ShouldContain("artifact-path:");
     }
-
-    // ── env ───────────────────────────────────────────────────────────────────
 
     [Test]
     public void WriteJob_WithEnv_WritesEnvSection()
@@ -246,8 +228,6 @@ internal sealed class GithubActionWriterJobTests
         output.ShouldContain("NODE_ENV: production");
     }
 
-    // ── timeout-minutes ───────────────────────────────────────────────────────
-
     [Test]
     public void WriteJob_WithTimeoutMinutes_WritesTimeoutMinutes()
     {
@@ -259,8 +239,6 @@ internal sealed class GithubActionWriterJobTests
         var output = WriteJob(job);
         output.ShouldContain("timeout-minutes: 30");
     }
-
-    // ── strategy / matrix ─────────────────────────────────────────────────────
 
     [Test]
     public void WriteJob_WithStrategy_WritesStrategyAndMatrixSection()
@@ -347,8 +325,6 @@ internal sealed class GithubActionWriterJobTests
         output.ShouldContain("version: 14");
     }
 
-    // ── continue-on-error ─────────────────────────────────────────────────────
-
     [Test]
     public void WriteJob_WithContinueOnError_WritesContinueOnError()
     {
@@ -360,8 +336,6 @@ internal sealed class GithubActionWriterJobTests
         var output = WriteJob(job);
         output.ShouldContain("continue-on-error: true");
     }
-
-    // ── container ─────────────────────────────────────────────────────────────
 
     [Test]
     public void WriteJob_WithContainer_WritesContainerSection()
@@ -418,8 +392,6 @@ internal sealed class GithubActionWriterJobTests
         output.ShouldContain("6379");
     }
 
-    // ── services ──────────────────────────────────────────────────────────────
-
     [Test]
     public void WriteJob_WithServices_WritesServicesSection()
     {
@@ -439,8 +411,6 @@ internal sealed class GithubActionWriterJobTests
         output.ShouldContain("redis:");
         output.ShouldContain("image: redis:6");
     }
-
-    // ── permissions ───────────────────────────────────────────────────────────
 
     [Test]
     public void WriteJob_WithJobPermissionsDifferentFromAction_WritesPermissions()
@@ -468,8 +438,6 @@ internal sealed class GithubActionWriterJobTests
             .Length
             .ShouldBeGreaterThanOrEqualTo(3); // At least two occurrences
     }
-
-    // ── steps section ─────────────────────────────────────────────────────────
 
     [Test]
     public void WriteJob_WithSteps_WritesStepsSection()

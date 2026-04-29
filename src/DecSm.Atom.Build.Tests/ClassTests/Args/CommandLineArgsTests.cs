@@ -209,4 +209,82 @@ public class CommandLineArgsTests
             () => result[1]
                 .ShouldBeEquivalentTo(commandArg2));
     }
+
+    [Test]
+    public void HasInteractive_WhenInteractiveArgIsPresent_ShouldReturnTrue()
+    {
+        var args = new CommandLineArgs(true, [new InteractiveArg()]);
+        args.HasInteractive.ShouldBeTrue();
+    }
+
+    [Test]
+    public void HasInteractive_WhenInteractiveArgIsNotPresent_ShouldReturnFalse()
+    {
+        var args = new CommandLineArgs(true, [new HelpArg()]);
+        args.HasInteractive.ShouldBeFalse();
+    }
+
+    [Test]
+    public void HasProject_WhenProjectArgIsNotPresent_ShouldReturnFalse()
+    {
+        var args = new CommandLineArgs(true, [new HelpArg()]);
+        args.HasProject.ShouldBeFalse();
+    }
+
+    [Test]
+    public void ProjectName_WhenProjectArgIsPresent_ReturnsProjectName()
+    {
+        var args = new CommandLineArgs(true, [new ProjectArg("MyProject")]);
+        args.ProjectName.ShouldBe("MyProject");
+    }
+
+    [Test]
+    public void ProjectName_WhenProjectArgIsNotPresent_ReturnsDefaultAtom()
+    {
+        var args = new CommandLineArgs(true, []);
+        args.ProjectName.ShouldBe("_atom");
+    }
+
+    [Test]
+    public void GetValidationErrors_WhenIsValidFalse_ContainsParseError()
+    {
+        var args = new CommandLineArgs(false, []);
+        var errors = args.GetValidationErrors();
+        errors.ShouldContain(e => e.Contains("could not be parsed"));
+    }
+
+    [Test]
+    public void GetValidationErrors_WhenCommandHasEmptyName_ContainsError()
+    {
+        var args = new CommandLineArgs(true, [new CommandArg("")]);
+        var errors = args.GetValidationErrors();
+        errors.ShouldContain(e => e.Contains("Target name cannot be empty"));
+    }
+
+    [Test]
+    public void GetValidationErrors_WhenParamHasEmptyName_ContainsError()
+    {
+        var args = new CommandLineArgs(true, [new ParamArg("", "", "someValue")]);
+        var errors = args.GetValidationErrors();
+        errors.ShouldContain(e => e.Contains("Parameter name cannot be empty"));
+    }
+
+    [Test]
+    public void GetValidationErrors_WhenArgsAreValid_ReturnsEmpty()
+    {
+        var args = new CommandLineArgs(true, [new CommandArg("Build"), new ParamArg("version", "Version", "1.0.0")]);
+
+        args
+            .GetValidationErrors()
+            .ShouldBeEmpty();
+    }
+
+    [Test]
+    public void GetValidationErrors_WhenMultipleErrors_ReturnsAll()
+    {
+        var args = new CommandLineArgs(false, [new CommandArg(""), new CommandArg("   "), new ParamArg("", "", "val")]);
+
+        var errors = args.GetValidationErrors();
+        errors.Count.ShouldBeGreaterThanOrEqualTo(3);
+    }
 }

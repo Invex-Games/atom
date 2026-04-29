@@ -16,8 +16,6 @@ internal sealed class DevopsPipelineWriterResourcesTests
             ],
         };
 
-    // ── Resources: Builds ─────────────────────────────────────────────────────
-
     [Test]
     public void WriteResources_Builds_WritesBuildsSection()
     {
@@ -65,8 +63,6 @@ internal sealed class DevopsPipelineWriterResourcesTests
         output.ShouldContain("branch: main");
         output.ShouldContain("trigger: true");
     }
-
-    // ── Resources: Containers ─────────────────────────────────────────────────
 
     [Test]
     public void WriteResources_Containers_WritesContainersSection()

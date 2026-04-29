@@ -30,10 +30,8 @@ public class MaskingAnsiConsoleOutputTests
     }
 
     [TearDown]
-    public void TearDown()
-    {
+    public void TearDown() =>
         _writer.Dispose();
-    }
 
     private const string Secret = "SuperSecretValue123";
     private const string MaskedSecret = "*****";

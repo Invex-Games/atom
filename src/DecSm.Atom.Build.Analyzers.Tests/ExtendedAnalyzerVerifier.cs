@@ -1,7 +1,4 @@
-﻿using JetBrains.Annotations;
-using Microsoft.CodeAnalysis.Diagnostics;
-
-namespace DecSm.Atom.Build.Analyzers.Tests;
+﻿namespace DecSm.Atom.Build.Analyzers.Tests;
 
 [PublicAPI]
 public sealed class ExtendedAnalyzerVerifier<TAnalyzer> : ExtendedAnalyzerVerifier<TAnalyzer,

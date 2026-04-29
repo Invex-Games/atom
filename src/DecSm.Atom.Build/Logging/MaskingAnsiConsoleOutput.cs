@@ -30,8 +30,6 @@ internal sealed class MaskingAnsiConsoleOutput(IAnsiConsoleOutput inner, IServic
         private readonly TextWriter _innerWriter;
         private readonly IServiceProvider _serviceProvider;
 
-        private IParamService ParamService => field ??= _serviceProvider.GetRequiredService<IParamService>();
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="MaskingTextWriter" /> class.
         /// </summary>
@@ -42,6 +40,8 @@ internal sealed class MaskingAnsiConsoleOutput(IAnsiConsoleOutput inner, IServic
             _innerWriter = innerWriter;
             _serviceProvider = serviceProvider;
         }
+
+        private IParamService ParamService => field ??= _serviceProvider.GetRequiredService<IParamService>();
 
         /// <inheritdoc />
         public override Encoding Encoding => _innerWriter.Encoding;

@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace DecSm.StructuredText.Tests;
 
 [TestFixture]

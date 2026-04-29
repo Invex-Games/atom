@@ -3,14 +3,9 @@
 /// <summary>
 ///     Resolves a <see cref="WorkflowDefinition" /> into a fully structured <see cref="WorkflowModel" />.
 /// </summary>
-/// <param name="buildDefinition">The build definition containing global options and target information.</param>
 /// <param name="buildModel">The resolved build model.</param>
 /// <param name="buildOptionService">The service providing the resolved set of build options.</param>
-internal sealed class WorkflowResolver(
-    IWorkflowBuildDefinition buildDefinition,
-    BuildModel buildModel,
-    IBuildOptionService buildOptionService
-)
+internal sealed class WorkflowResolver(BuildModel buildModel, IBuildOptionService buildOptionService)
 {
     /// <summary>
     ///     Resolves a <see cref="WorkflowDefinition" /> into a <see cref="WorkflowModel" />,
@@ -27,7 +22,6 @@ internal sealed class WorkflowResolver(
         // plus GlobalWorkflowOptions from the build definition and the workflow-level options
         var workflowOptions = buildOptionService
             .Options
-            .Concat(buildDefinition.GlobalWorkflowOptions)
             .Concat(definition.Options)
             .ToList();
 

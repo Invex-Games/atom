@@ -3,8 +3,6 @@ namespace DecSm.StructuredText.AzureDevopsPipelines.Tests;
 [TestFixture]
 internal sealed class DevopsPipelineWriterPipelineTests
 {
-    // ── PipelineWithSteps ─────────────────────────────────────────────────────
-
     [Test]
     public void Write_PipelineWithSteps_Minimal_WritesStepsSection()
     {
@@ -156,8 +154,6 @@ internal sealed class DevopsPipelineWriterPipelineTests
         output.ShouldContain("continueOnError: true");
     }
 
-    // ── PipelineWithJobs ──────────────────────────────────────────────────────
-
     [Test]
     public void Write_PipelineWithJobs_Minimal_WritesJobsSection()
     {
@@ -229,8 +225,6 @@ internal sealed class DevopsPipelineWriterPipelineTests
         output.ShouldContain("pool: my-pool");
     }
 
-    // ── PipelineWithStages ────────────────────────────────────────────────────
-
     [Test]
     public void Write_PipelineWithStages_Minimal_WritesStagesSection()
     {
@@ -270,8 +264,6 @@ internal sealed class DevopsPipelineWriterPipelineTests
         var output = PipelineWriterHelper.Write(pipeline);
         output.ShouldContain("lockBehavior: runLatest");
     }
-
-    // ── PipelineWithExtends ───────────────────────────────────────────────────
 
     [Test]
     public void Write_PipelineWithExtends_Minimal_WritesExtendsSection()
@@ -336,8 +328,6 @@ internal sealed class DevopsPipelineWriterPipelineTests
             .Write(pipeline)
             .ShouldBe(PipelineWriterHelper.JoinLines(lines));
     }
-
-    // ── DefaultTextWriter property ────────────────────────────────────────────
 
     [Test]
     public void DevopsPipelineWriter_DefaultTextWriter_HasDefaultIndentSize()

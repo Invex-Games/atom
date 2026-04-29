@@ -3,9 +3,9 @@ namespace DecSm.StructuredText.AzureDevopsPipelines;
 [PublicAPI]
 public sealed class DevopsPipelineWriter
 {
-    public StructuredTextWriter TextWriter { get; init; } = new();
-
     private readonly DevopsExpressionFormatter _expressionFormatter = new();
+
+    public StructuredTextWriter TextWriter { get; init; } = new();
 
     public void Write(DevopsPipeline devopsPipeline) =>
         devopsPipeline.Match(WritePipelineWithStages,

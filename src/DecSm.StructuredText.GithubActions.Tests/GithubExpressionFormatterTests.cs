@@ -8,8 +8,6 @@ internal sealed class GithubExpressionFormatterTests
     // Unknown expression type for the default-case test.
     private sealed record UnknownExpression : TextExpression;
 
-    // ── Values ────────────────────────────────────────────────────────────────
-
     [Test]
     public void Format_Null_ReturnsNull() =>
         _formatter
@@ -64,8 +62,6 @@ internal sealed class GithubExpressionFormatterTests
             .Format(new StringExpression(string.Empty))
             .ShouldBe("''");
 
-    // ── Compile-time template expression ─────────────────────────────────────
-
     [Test]
     public void Format_EvaluateExpression_WrapsInDoubleCurlyBraces() =>
         _formatter
@@ -77,8 +73,6 @@ internal sealed class GithubExpressionFormatterTests
         _formatter
             .Format(new EvaluateExpression(new StringExpression("val")))
             .ShouldBe("${{ 'val' }}");
-
-    // ── Accessors ─────────────────────────────────────────────────────────────
 
     [Test]
     public void Format_IndexAccessExpression_WrapsIndexInSquareBrackets() =>
@@ -97,8 +91,6 @@ internal sealed class GithubExpressionFormatterTests
         _formatter
             .Format(new PropertyAccessExpression(new RawExpression("obj"), new RawExpression("prop")))
             .ShouldBe("obj.prop");
-
-    // ── Logic operators ───────────────────────────────────────────────────────
 
     [Test]
     public void Format_NotExpression_PrependsBang() =>
@@ -190,8 +182,6 @@ internal sealed class GithubExpressionFormatterTests
             .Format(new GreaterThanOrEqualToExpression(new RawExpression("left"), new RawExpression("right")))
             .ShouldBe("left >= right");
 
-    // ── Functions ─────────────────────────────────────────────────────────────
-
     [Test]
     public void Format_ContainsExpression_UsesContainsFunction() =>
         _formatter
@@ -277,8 +267,6 @@ internal sealed class GithubExpressionFormatterTests
         _formatter
             .Format(new HashFilesExpression(new RawExpression("**/package-lock.json")))
             .ShouldBe("hashFiles(**/package-lock.json)");
-
-    // ── Workflow expressions ───────────────────────────────────────────────────
 
     [Test]
     public void Format_TargetOutputExpression_WithOutputName_UsesNeedsOutputsFormat() =>
@@ -401,8 +389,6 @@ internal sealed class GithubExpressionFormatterTests
             })
             .ShouldBe("skipped");
 
-    // ── WorkflowExpression<T> overload ────────────────────────────────────────
-
     [Test]
     public void Format_WorkflowExpression_Null_ReturnsNull()
     {
@@ -423,13 +409,9 @@ internal sealed class GithubExpressionFormatterTests
             .ShouldBe("workflow-value");
     }
 
-    // ── Error cases ───────────────────────────────────────────────────────────
-
     [Test]
     public void Format_UnknownExpression_ThrowsArgumentOutOfRangeException() =>
         Should.Throw<ArgumentOutOfRangeException>(() => _formatter.Format(new UnknownExpression()));
-
-    // ── Nested / combined expressions ─────────────────────────────────────────
 
     [Test]
     public void Format_NestedExpressions_ComposedCorrectly()

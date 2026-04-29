@@ -17,6 +17,8 @@ public sealed record AddNugetFeedsStep : IAdditionalStepOption
 
     public bool SyncAtomToolVersionToLibraryVersion { get; init; } = true;
 
+    public int Order { get; init; } = -100;
+
     /// <summary>
     ///     Generates a standardized environment variable name for a given NuGet feed's authentication token.
     /// </summary>
@@ -24,6 +26,4 @@ public sealed record AddNugetFeedsStep : IAdditionalStepOption
     /// <returns>The conventional environment variable name for the feed's token (e.g., "NUGET_TOKEN_MY_FEED").</returns>
     public static string GetEnvVarNameForFeed(string feedName) =>
         $"NUGET_TOKEN_{feedName.Replace(" ", "_").ToUpper()}";
-
-    public int Order { get; init; } = -100;
 }

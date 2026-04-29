@@ -1,6 +1,4 @@
-﻿using System.IO.Abstractions;
-
-namespace DecSm.Atom.Tool.Tests;
+﻿namespace DecSm.Atom.Tool.Tests;
 
 [TestFixture]
 public class RunCommandTests
@@ -30,8 +28,6 @@ public class RunCommandTests
     private string P(params string[] parts) =>
         _fs.Path.Combine([Root, ..parts]);
 
-    // ── Upward-search / root-marker boundary ─────────────────────────────────
-
     [Test]
     public async Task Handle_ShouldFindProjectInParent_AndStopAtRootMarker()
     {
@@ -49,8 +45,6 @@ public class RunCommandTests
         result.ShouldBe(1); // blocked by .git root marker
     }
 
-    // ── Downward convention search ────────────────────────────────────────────
-
     [Test]
     public async Task Handle_ShouldFindNestedProject_WhenConventionSearchIsEnabled()
     {
@@ -62,8 +56,6 @@ public class RunCommandTests
 
         result.ShouldBe(0);
     }
-
-    // ── Breadth-first ordering ────────────────────────────────────────────────
 
     [Test]
     public async Task Handle_ShouldPrioritizeBreadthFirst_InDownwardSearch()
@@ -80,8 +72,6 @@ public class RunCommandTests
 
         result.ShouldBe(0);
     }
-
-    // ── .csproj extension subject ─────────────────────────────────────────────
 
     [Test]
     public async Task Handle_WithDotCsprojSubject_FindsProject_ReturnsZero()
@@ -108,8 +98,6 @@ public class RunCommandTests
         result.ShouldBe(1);
     }
 
-    // ── .cs extension subject ─────────────────────────────────────────────────
-
     [Test]
     public async Task Handle_WithDotCsSubject_FindsCsFile_ReturnsZero()
     {
@@ -134,8 +122,6 @@ public class RunCommandTests
 
         result.ShouldBe(1);
     }
-
-    // ── Name-only subject (Either) ────────────────────────────────────────────
 
     [Test]
     public async Task Handle_WithEitherSubject_FindsProject_ReturnsZero()
@@ -191,8 +177,6 @@ public class RunCommandTests
         result.ShouldBe(0);
     }
 
-    // ── Empty subject (None — default discovery) ──────────────────────────────
-
     [Test]
     public async Task Handle_WithEmptySubject_FindsAtomProject_ReturnsZero()
     {
@@ -230,8 +214,6 @@ public class RunCommandTests
 
         result.ShouldBe(1);
     }
-
-    // ── Argument sanitization ─────────────────────────────────────────────────
 
     [Test]
     public async Task Handle_SubjectWithNewlines_IsSanitizedBeforeSearch()
@@ -298,8 +280,6 @@ public class RunCommandTests
 
         result.ShouldBe(0);
     }
-
-    // ── Run-args are forwarded ────────────────────────────────────────────────
 
     [Test]
     public async Task Handle_WithRunArgs_DoesNotAffectSearchOrReturnCode()
