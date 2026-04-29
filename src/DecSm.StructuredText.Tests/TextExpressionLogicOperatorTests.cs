@@ -3,106 +3,106 @@ namespace DecSm.StructuredText.Tests;
 [TestFixture]
 internal sealed class TextExpressionLogicOperatorTests
 {
-    private static readonly RawExpression _a = new("a");
-    private static readonly RawExpression _b = new("b");
-    private static readonly RawExpression _c = new("c");
+    private static readonly RawExpression A = new("a");
+    private static readonly RawExpression B = new("b");
+    private static readonly RawExpression C = new("c");
 
     [Test]
     public void Not_Method_WrapsSource()
     {
-        var expr = _a.Not();
+        var expr = A.Not();
 
         expr
             .ShouldBeOfType<NotExpression>()
             .Source
-            .ShouldBe(_a);
+            .ShouldBe(A);
     }
 
     [Test]
     public void Not_Operator_WrapsSource()
     {
-        var expr = !_a;
+        var expr = !A;
 
         expr
             .ShouldBeOfType<NotExpression>()
             .Source
-            .ShouldBe(_a);
+            .ShouldBe(A);
     }
 
     [Test]
     public void And_Method_CombinesSelfWithExpressions()
     {
-        var expr = _a.And(_b, _c);
+        var expr = A.And(B, C);
 
         var and = expr.ShouldBeOfType<AndExpression>();
-        and.Source.ShouldBe(new TextExpression[] { _a, _b, _c });
+        and.Source.ShouldBe(new TextExpression[] { A, B, C });
     }
 
     [Test]
     public void And_Operator_CombinesTwoExpressions()
     {
-        var expr = _a & _b;
+        var expr = A & B;
 
         var and = expr.ShouldBeOfType<AndExpression>();
-        and.Source.ShouldBe(new TextExpression[] { _a, _b });
+        and.Source.ShouldBe(new TextExpression[] { A, B });
     }
 
     [Test]
     public void Or_Method_CombinesSelfWithExpressions()
     {
-        var expr = _a.Or(_b, _c);
+        var expr = A.Or(B, C);
 
         var or = expr.ShouldBeOfType<OrExpression>();
-        or.Source.ShouldBe(new TextExpression[] { _a, _b, _c });
+        or.Source.ShouldBe(new TextExpression[] { A, B, C });
     }
 
     [Test]
     public void Or_Operator_CombinesTwoExpressions()
     {
-        var expr = _a | _b;
+        var expr = A | B;
 
         var or = expr.ShouldBeOfType<OrExpression>();
-        or.Source.ShouldBe(new TextExpression[] { _a, _b });
+        or.Source.ShouldBe(new TextExpression[] { A, B });
     }
 
     [Test]
     public void EqualTo_TextExpression_CreatesEqualExpression()
     {
-        var expr = _a.EqualTo(_b);
+        var expr = A.EqualTo(B);
 
-        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(_a), () => expr.Right.ShouldBe(_b));
+        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(A), () => expr.Right.ShouldBe(B));
     }
 
     [Test]
     public void EqualTo_StringRaw_CreatesEqualExpressionWithRawExpression()
     {
-        var expr = _a.EqualTo("raw");
+        var expr = A.EqualTo("raw");
 
-        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(_a),
+        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(A),
             () => expr.Right.ShouldBe(new RawExpression("raw")));
     }
 
     [Test]
     public void EqualToString_CreatesEqualExpressionWithStringExpression()
     {
-        var expr = _a.EqualToString("str");
+        var expr = A.EqualToString("str");
 
-        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(_a),
+        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(A),
             () => expr.Right.ShouldBe(new StringExpression("str")));
     }
 
     [Test]
     public void NotEqualTo_TextExpression_CreatesNotEqualExpression()
     {
-        var expr = _a.NotEqualTo(_b);
+        var expr = A.NotEqualTo(B);
 
-        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(_a), () => expr.Right.ShouldBe(_b));
+        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(A), () => expr.Right.ShouldBe(B));
     }
 
     [Test]
     public void NotEqualTo_StringRaw_WrapsInRawExpression()
     {
-        var expr = _a.NotEqualTo("raw");
+        var expr = A.NotEqualTo("raw");
 
         expr.Right.ShouldBe(new RawExpression("raw"));
     }
@@ -110,7 +110,7 @@ internal sealed class TextExpressionLogicOperatorTests
     [Test]
     public void NotEqualToString_WrapsInStringExpression()
     {
-        var expr = _a.NotEqualToString("str");
+        var expr = A.NotEqualToString("str");
 
         expr.Right.ShouldBe(new StringExpression("str"));
     }
@@ -118,15 +118,15 @@ internal sealed class TextExpressionLogicOperatorTests
     [Test]
     public void LessThan_TextExpression_CreatesLessThanExpression()
     {
-        var expr = _a.LessThan(_b);
+        var expr = A.LessThan(B);
 
-        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(_a), () => expr.Right.ShouldBe(_b));
+        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(A), () => expr.Right.ShouldBe(B));
     }
 
     [Test]
     public void LessThan_String_WrapsInRawExpression()
     {
-        var expr = _a.LessThan("raw");
+        var expr = A.LessThan("raw");
 
         expr.Right.ShouldBe(new RawExpression("raw"));
     }
@@ -134,7 +134,7 @@ internal sealed class TextExpressionLogicOperatorTests
     [Test]
     public void LessThanString_WrapsInStringExpression()
     {
-        var expr = _a.LessThanString("str");
+        var expr = A.LessThanString("str");
 
         expr.Right.ShouldBe(new StringExpression("str"));
     }
@@ -142,15 +142,15 @@ internal sealed class TextExpressionLogicOperatorTests
     [Test]
     public void GreaterThan_TextExpression_CreatesGreaterThanExpression()
     {
-        var expr = _a.GreaterThan(_b);
+        var expr = A.GreaterThan(B);
 
-        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(_a), () => expr.Right.ShouldBe(_b));
+        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(A), () => expr.Right.ShouldBe(B));
     }
 
     [Test]
     public void GreaterThan_String_WrapsInRawExpression()
     {
-        var expr = _a.GreaterThan("raw");
+        var expr = A.GreaterThan("raw");
 
         expr.Right.ShouldBe(new RawExpression("raw"));
     }
@@ -158,7 +158,7 @@ internal sealed class TextExpressionLogicOperatorTests
     [Test]
     public void GreaterThanString_WrapsInStringExpression()
     {
-        var expr = _a.GreaterThanString("str");
+        var expr = A.GreaterThanString("str");
 
         expr.Right.ShouldBe(new StringExpression("str"));
     }
@@ -166,15 +166,15 @@ internal sealed class TextExpressionLogicOperatorTests
     [Test]
     public void LessThanOrEqualTo_TextExpression_CreatesLessThanOrEqualToExpression()
     {
-        var expr = _a.LessThanOrEqualTo(_b);
+        var expr = A.LessThanOrEqualTo(B);
 
-        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(_a), () => expr.Right.ShouldBe(_b));
+        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(A), () => expr.Right.ShouldBe(B));
     }
 
     [Test]
     public void LessThanOrEqualTo_String_WrapsInRawExpression()
     {
-        var expr = _a.LessThanOrEqualTo("raw");
+        var expr = A.LessThanOrEqualTo("raw");
 
         expr.Right.ShouldBe(new RawExpression("raw"));
     }
@@ -182,7 +182,7 @@ internal sealed class TextExpressionLogicOperatorTests
     [Test]
     public void LessThanOrEqualToString_WrapsInStringExpression()
     {
-        var expr = _a.LessThanOrEqualToString("str");
+        var expr = A.LessThanOrEqualToString("str");
 
         expr.Right.ShouldBe(new StringExpression("str"));
     }
@@ -190,15 +190,15 @@ internal sealed class TextExpressionLogicOperatorTests
     [Test]
     public void GreaterThanOrEqualTo_TextExpression_CreatesGreaterThanOrEqualToExpression()
     {
-        var expr = _a.GreaterThanOrEqualTo(_b);
+        var expr = A.GreaterThanOrEqualTo(B);
 
-        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(_a), () => expr.Right.ShouldBe(_b));
+        expr.ShouldSatisfyAllConditions(() => expr.Left.ShouldBe(A), () => expr.Right.ShouldBe(B));
     }
 
     [Test]
     public void GreaterThanOrEqualTo_String_WrapsInRawExpression()
     {
-        var expr = _a.GreaterThanOrEqualTo("raw");
+        var expr = A.GreaterThanOrEqualTo("raw");
 
         expr.Right.ShouldBe(new RawExpression("raw"));
     }
@@ -206,7 +206,7 @@ internal sealed class TextExpressionLogicOperatorTests
     [Test]
     public void GreaterThanOrEqualToString_WrapsInStringExpression()
     {
-        var expr = _a.GreaterThanOrEqualToString("str");
+        var expr = A.GreaterThanOrEqualToString("str");
 
         expr.Right.ShouldBe(new StringExpression("str"));
     }

@@ -35,7 +35,6 @@ public class RunCommandTests
     [Test]
     public async Task Handle_ShouldFindProjectInParent_AndStopAtRootMarker()
     {
-        var repoDir = P("Repo");
         var subDir = P("Repo", "SubFolder");
         var targetDir = P("Repo", "SubFolder", "Target");
 

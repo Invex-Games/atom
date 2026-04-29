@@ -104,9 +104,8 @@ internal sealed class FileSystemHostExtensionsTests
         services.AddAtomFileSystem();
 
         services.ProvidePath((queryKey, atomFs) => queryKey == key
-                ? new RootedPath(atomFs, lowPriorityPath)
-                : null,
-            1);
+            ? new RootedPath(atomFs, lowPriorityPath)
+            : null);
 
         services.ProvidePath((queryKey, atomFs) => queryKey == key
                 ? new RootedPath(atomFs, highPriorityPath)

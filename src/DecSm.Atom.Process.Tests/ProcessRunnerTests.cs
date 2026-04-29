@@ -23,11 +23,6 @@ internal sealed class ProcessRunnerTests
                 AllowFailedResult = true,
             };
 
-    private static ProcessRunOptions EchoStdoutOptions(string text) =>
-        OperatingSystem.IsWindows()
-            ? new ProcessRunOptions("cmd", $"/c echo {text}")
-            : new("sh", ["-c", $"echo {text}"]);
-
     private static ProcessRunOptions EchoStderrOptions(string text) =>
         OperatingSystem.IsWindows()
             ? new ProcessRunOptions("cmd", $"/c echo {text} 1>&2")

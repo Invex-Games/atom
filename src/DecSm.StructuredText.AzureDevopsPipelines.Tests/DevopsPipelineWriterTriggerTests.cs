@@ -135,7 +135,7 @@ internal sealed class DevopsPipelineWriterTriggerTests
     [Test]
     public void WriteTrigger_Null_WritesNothing()
     {
-        var output = PipelineWriterHelper.Write(SimplePipeline(null));
+        var output = PipelineWriterHelper.Write(SimplePipeline());
         output.ShouldNotContain("trigger");
     }
 
