@@ -8,7 +8,7 @@ namespace DecSm.Atom.Workflows.Definition.Triggers;
 /// <param name="Required">A flag indicating whether this input must be provided by the user.</param>
 /// <param name="DefaultValue">An optional default value for the string input.</param>
 [PublicAPI]
-public sealed record ManualStringInput(string Name, string Description, bool? Required, string? DefaultValue)
+public sealed record ManualStringInput(string Name, string Description, bool? Required, string? DefaultValue = null)
     : ManualInput(Name, Description, Required)
 {
     /// <summary>

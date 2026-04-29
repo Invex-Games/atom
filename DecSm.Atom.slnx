@@ -41,6 +41,7 @@
     <Project Path="src/DecSm.Atom.FileSystem.Tests/DecSm.Atom.FileSystem.Tests.csproj" />
     <Project Path="src/DecSm.Atom.Process.Tests/DecSm.Atom.Process.Tests.csproj" />
     <Project Path="src/DecSm.Atom.SemanticVersion.Tests/DecSm.Atom.SemanticVersion.Tests.csproj" />
+    <Project Path="src/DecSm.Atom.Workflows.Tests/DecSm.Atom.Workflows.Tests.csproj" />
     <Project Path="src/DecSm.StructuredText.Tests/DecSm.StructuredText.Tests.csproj" />
   </Folder>
   <Folder Name="/Tests/Modules/">
