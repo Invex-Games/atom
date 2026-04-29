@@ -3,23 +3,23 @@ namespace DecSm.StructuredText.Tests;
 [TestFixture]
 internal sealed class TextExpressionFunctionTests
 {
-    private static readonly RawExpression _src = new("source");
-    private static readonly RawExpression _pat = new("pattern");
+    private static readonly RawExpression Src = new("source");
+    private static readonly RawExpression Pat = new("pattern");
 
     [Test]
     public void Contains_TextExpression_SetsSourceAndPattern()
     {
-        var expr = _src.Contains(_pat);
+        var expr = Src.Contains(Pat);
 
-        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(_src), () => expr.Pattern.ShouldBe(_pat));
+        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(Src), () => expr.Pattern.ShouldBe(Pat));
     }
 
     [Test]
     public void Contains_String_WrapsPatternInStringExpression()
     {
-        var expr = _src.Contains("pat");
+        var expr = Src.Contains("pat");
 
-        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(_src),
+        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(Src),
             () => expr.Pattern.ShouldBe(new StringExpression("pat")));
     }
 
@@ -28,9 +28,9 @@ internal sealed class TextExpressionFunctionTests
     {
         // "this is contained in collection" → ContainsExpression { Source=collection, Pattern=this }
         var collection = new RawExpression("collection");
-        var expr = _src.ContainedIn(collection);
+        var expr = Src.ContainedIn(collection);
 
-        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(collection), () => expr.Pattern.ShouldBe(_src));
+        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(collection), () => expr.Pattern.ShouldBe(Src));
     }
 
     [Test]
@@ -38,24 +38,24 @@ internal sealed class TextExpressionFunctionTests
     {
         // "this is contained in collection" → ContainsExpression { Source = collection, Pattern = this }
         // (consistent with ContainedIn(TextExpression) overload)
-        var expr = _src.ContainedIn("collection");
+        var expr = Src.ContainedIn("collection");
 
         expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(new StringExpression("collection")),
-            () => expr.Pattern.ShouldBe(_src));
+            () => expr.Pattern.ShouldBe(Src));
     }
 
     [Test]
     public void StartsWith_TextExpression_SetsSourceAndPattern()
     {
-        var expr = _src.StartsWith(_pat);
+        var expr = Src.StartsWith(Pat);
 
-        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(_src), () => expr.Pattern.ShouldBe(_pat));
+        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(Src), () => expr.Pattern.ShouldBe(Pat));
     }
 
     [Test]
     public void StartsWith_String_WrapsPatternInStringExpression()
     {
-        var expr = _src.StartsWith("prefix");
+        var expr = Src.StartsWith("prefix");
 
         expr.Pattern.ShouldBe(new StringExpression("prefix"));
     }
@@ -65,32 +65,32 @@ internal sealed class TextExpressionFunctionTests
     {
         // _src.IsStartOf(target) means "target starts with _src"
         var target = new RawExpression("target");
-        var expr = _src.IsStartOf(target);
+        var expr = Src.IsStartOf(target);
 
-        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(target), () => expr.Pattern.ShouldBe(_src));
+        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(target), () => expr.Pattern.ShouldBe(Src));
     }
 
     [Test]
     public void IsStartOf_String_WrapsPatternInStringExpression()
     {
-        var expr = _src.IsStartOf("target");
+        var expr = Src.IsStartOf("target");
 
         expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(new StringExpression("target")),
-            () => expr.Pattern.ShouldBe(_src));
+            () => expr.Pattern.ShouldBe(Src));
     }
 
     [Test]
     public void EndsWith_TextExpression_SetsSourceAndPattern()
     {
-        var expr = _src.EndsWith(_pat);
+        var expr = Src.EndsWith(Pat);
 
-        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(_src), () => expr.Pattern.ShouldBe(_pat));
+        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(Src), () => expr.Pattern.ShouldBe(Pat));
     }
 
     [Test]
     public void EndsWith_String_WrapsPatternInStringExpression()
     {
-        var expr = _src.EndsWith("suffix");
+        var expr = Src.EndsWith("suffix");
 
         expr.Pattern.ShouldBe(new StringExpression("suffix"));
     }
@@ -99,48 +99,48 @@ internal sealed class TextExpressionFunctionTests
     public void IsEndOf_TextExpression_SwapsSourceAndPattern()
     {
         var target = new RawExpression("target");
-        var expr = _src.IsEndOf(target);
+        var expr = Src.IsEndOf(target);
 
-        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(target), () => expr.Pattern.ShouldBe(_src));
+        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(target), () => expr.Pattern.ShouldBe(Src));
     }
 
     [Test]
     public void IsEndOfString_WrapsPatternInStringExpression()
     {
-        var expr = _src.IsEndOfString("target");
+        var expr = Src.IsEndOfString("target");
 
         expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(new StringExpression("target")),
-            () => expr.Pattern.ShouldBe(_src));
+            () => expr.Pattern.ShouldBe(Src));
     }
 
     [Test]
     public void Coalesce_TextExpressions_IncludesThisAndParams()
     {
-        var expr = _src.Coalesce(_pat, new RawExpression("fallback"));
+        var expr = Src.Coalesce(Pat, new RawExpression("fallback"));
 
-        expr.Source.ShouldBe([_src, _pat, new RawExpression("fallback")]);
+        expr.Source.ShouldBe([Src, Pat, new RawExpression("fallback")]);
     }
 
     [Test]
     public void Coalesce_Strings_WrapsEachInStringExpression()
     {
-        var expr = _src.Coalesce("a", "b");
+        var expr = Src.Coalesce("a", "b");
 
-        expr.Source.ShouldBe([_src, new StringExpression("a"), new StringExpression("b")]);
+        expr.Source.ShouldBe([Src, new StringExpression("a"), new StringExpression("b")]);
     }
 
     [Test]
     public void Format_TextExpressions_SetsSourceAndArguments()
     {
-        var expr = _src.Format(_pat);
+        var expr = Src.Format(Pat);
 
-        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(_src), () => expr.Arguments.ShouldBe([_pat]));
+        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(Src), () => expr.Arguments.ShouldBe([Pat]));
     }
 
     [Test]
     public void FormatString_WrapsArgumentsInStringExpressions()
     {
-        var expr = _src.FormatString("arg1", "arg2");
+        var expr = Src.FormatString("arg1", "arg2");
 
         expr.Arguments.ShouldBe([new StringExpression("arg1"), new StringExpression("arg2")]);
     }
@@ -148,15 +148,15 @@ internal sealed class TextExpressionFunctionTests
     [Test]
     public void OperatorPlus_SingleTextExpression_CreatesFormatExpression()
     {
-        var expr = _src + _pat;
+        var expr = Src + Pat;
 
-        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(_src), () => expr.Arguments.ShouldBe([_pat]));
+        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(Src), () => expr.Arguments.ShouldBe([Pat]));
     }
 
     [Test]
     public void OperatorPlus_TextExpressionArray_CreatesFormatExpression()
     {
-        var expr = _src + [_pat, new RawExpression("c")];
+        var expr = Src + [Pat, new RawExpression("c")];
 
         expr.Arguments.Length.ShouldBe(2);
     }
@@ -164,7 +164,7 @@ internal sealed class TextExpressionFunctionTests
     [Test]
     public void OperatorPlus_String_WrapsInStringExpression()
     {
-        var expr = _src + "arg";
+        var expr = Src + "arg";
 
         expr.Arguments.ShouldBe([new StringExpression("arg")]);
     }
@@ -172,7 +172,7 @@ internal sealed class TextExpressionFunctionTests
     [Test]
     public void OperatorPlus_StringArray_WrapsEachInStringExpression()
     {
-        var expr = _src + ["x", "y"];
+        var expr = Src + ["x", "y"];
 
         expr.Arguments.ShouldBe([new StringExpression("x"), new StringExpression("y")]);
     }
@@ -181,15 +181,15 @@ internal sealed class TextExpressionFunctionTests
     public void Join_TextExpression_SetsSourceAndSeparator()
     {
         var sep = new StringExpression(",");
-        var expr = _src.Join(sep);
+        var expr = Src.Join(sep);
 
-        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(_src), () => expr.OptionalSeparator.ShouldBe(sep));
+        expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(Src), () => expr.OptionalSeparator.ShouldBe(sep));
     }
 
     [Test]
     public void JoinString_WrapsSeparatorInStringExpression()
     {
-        var expr = _src.JoinString(", ");
+        var expr = Src.JoinString(", ");
 
         expr.OptionalSeparator.ShouldBe(new StringExpression(", "));
     }
@@ -197,17 +197,17 @@ internal sealed class TextExpressionFunctionTests
     [Test]
     public void ToJson_WrapsSource()
     {
-        var expr = _src.ToJson();
+        var expr = Src.ToJson();
 
-        expr.Source.ShouldBe(_src);
+        expr.Source.ShouldBe(Src);
     }
 
     [Test]
     public void HashFiles_WrapsSource()
     {
-        var expr = _src.HashFiles();
+        var expr = Src.HashFiles();
 
-        expr.Source.ShouldBe(_src);
+        expr.Source.ShouldBe(Src);
     }
 
     [Test]
