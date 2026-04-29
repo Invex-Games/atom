@@ -165,7 +165,6 @@ public static class DotnetCliGenerator
                     bodyWriter.WriteLine("return string.Join(' ',");
 
                     using (bodyWriter.Block("new[]"))
-                    {
                         foreach (var option in command.Options.Where(x => x.ValueType is not (null or "System.Void")))
                         {
                             bodyWriter.WriteLine(option.ValueType is "System.Boolean"
@@ -180,7 +179,6 @@ public static class DotnetCliGenerator
                                 bodyWriter.WriteLine(": null,");
                             }
                         }
-                    }
 
                     bodyWriter.WriteLine(".Where(x => x is { Length: > 0 }));");
                 });

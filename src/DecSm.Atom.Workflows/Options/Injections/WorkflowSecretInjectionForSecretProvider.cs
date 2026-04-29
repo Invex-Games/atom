@@ -1,6 +1,4 @@
-﻿using DecSm.Atom.Build.Secrets;
-
-namespace DecSm.Atom.Workflows.Options.Injections;
+﻿namespace DecSm.Atom.Workflows.Options.Injections;
 
 /// <summary>
 ///     Represents a workflow option for injecting a secret value that is specifically intended for

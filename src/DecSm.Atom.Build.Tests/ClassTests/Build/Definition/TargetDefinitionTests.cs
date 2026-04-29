@@ -210,4 +210,260 @@ public class TargetDefinitionTests
                 .TargetName
                 .ShouldBe(nameof(ITestTarget.TestTarget)));
     }
+
+    [Test]
+    public void IsHidden_DefaultIsFalse()
+    {
+        var targetDefinition = new TargetDefinition
+        {
+            Name = "name",
+        };
+
+        targetDefinition.Hidden.ShouldBeFalse();
+    }
+
+    [Test]
+    public void IsHidden_SetsHiddenTrue()
+    {
+        var targetDefinition = new TargetDefinition
+        {
+            Name = "name",
+        };
+
+        targetDefinition.IsHidden();
+        targetDefinition.Hidden.ShouldBeTrue();
+    }
+
+    [Test]
+    public void IsHidden_ExplicitFalse_SetsHiddenFalse()
+    {
+        var targetDefinition = new TargetDefinition
+        {
+            Name = "name",
+        };
+
+        targetDefinition.IsHidden(false);
+        targetDefinition.Hidden.ShouldBeFalse();
+    }
+
+    [Test]
+    public void UsesParam_AddsOptionalParam()
+    {
+        const string paramName = "ParamName";
+
+        var targetDefinition = new TargetDefinition
+        {
+            Name = "name",
+        };
+
+        targetDefinition.UsesParam(paramName);
+
+        targetDefinition.Params.ShouldSatisfyAllConditions(x => x.Count.ShouldBe(1),
+            x => x[0]
+                .Param
+                .ShouldBe(paramName),
+            x => x[0]
+                .Required
+                .ShouldBeFalse());
+    }
+
+    [Test]
+    public void UsesParam_MultipleParams_AddsAll()
+    {
+        var targetDefinition = new TargetDefinition
+        {
+            Name = "name",
+        };
+
+        targetDefinition.UsesParam("Param1", "Param2");
+        targetDefinition.Params.Count.ShouldBe(2);
+        targetDefinition.Params.ShouldAllBe(p => !p.Required);
+    }
+
+    [Test]
+    public void RequiresParam_SetsRequired()
+    {
+        var targetDefinition = new TargetDefinition
+        {
+            Name = "name",
+        };
+
+        targetDefinition.RequiresParam("RequiredParam");
+
+        targetDefinition
+            .Params
+            .Single()
+            .Required
+            .ShouldBeTrue();
+    }
+
+    [Test]
+    public async Task Executes_SynchronousAction_IsInvoked()
+    {
+        var called = false;
+
+        var targetDefinition = new TargetDefinition
+        {
+            Name = "name",
+        };
+
+        targetDefinition.Executes(() => called = true);
+
+        await targetDefinition
+            .Tasks
+            .Single()(CancellationToken.None);
+
+        called.ShouldBeTrue();
+    }
+
+    [Test]
+    public async Task Executes_FuncWithCancellationToken_PassesToken()
+    {
+        CancellationToken capturedToken = default;
+        using var cts = new CancellationTokenSource();
+
+        var targetDefinition = new TargetDefinition
+        {
+            Name = "name",
+        };
+
+        targetDefinition.Executes(ct =>
+        {
+            capturedToken = ct;
+
+            return Task.CompletedTask;
+        });
+
+        await targetDefinition
+            .Tasks
+            .Single()(cts.Token);
+
+        capturedToken.ShouldBe(cts.Token);
+    }
+
+    [Test]
+    public void DependsOn_NullOrWhiteSpaceString_ThrowsArgumentException()
+    {
+        var targetDefinition = new TargetDefinition
+        {
+            Name = "name",
+        };
+
+        Should.Throw<ArgumentException>(() => targetDefinition.DependsOn((string)null!));
+        Should.Throw<ArgumentException>(() => targetDefinition.DependsOn("   "));
+    }
+
+    [Test]
+    public void DependsOn_TargetDefinitionOverload_AddsByName()
+    {
+        var dep = new TargetDefinition
+        {
+            Name = "DepTarget",
+        };
+
+        var targetDefinition = new TargetDefinition
+        {
+            Name = "name",
+        };
+
+        targetDefinition.DependsOn(dep);
+
+        targetDefinition.Dependencies.ShouldHaveSingleItem();
+
+        targetDefinition
+            .Dependencies[0]
+            .ShouldBe("DepTarget");
+    }
+
+    [Test]
+    public void ProducesArtifacts_AddsMultipleArtifacts()
+    {
+        var targetDefinition = new TargetDefinition
+        {
+            Name = "name",
+        };
+
+        targetDefinition.ProducesArtifacts(["Art1", "Art2"]);
+
+        targetDefinition.ProducedArtifacts.Count.ShouldBe(2);
+
+        targetDefinition
+            .ProducedArtifacts
+            .Select(a => a.ArtifactName)
+            .ShouldBe(["Art1", "Art2"]);
+    }
+
+    [Test]
+    public void ProducesArtifact_WithBuildSlice_SetsBuildSlice()
+    {
+        var targetDefinition = new TargetDefinition
+        {
+            Name = "name",
+        };
+
+        targetDefinition.ProducesArtifact("Art1", "linux-x64");
+
+        targetDefinition
+            .ProducedArtifacts[0]
+            .BuildSlice
+            .ShouldBe("linux-x64");
+    }
+
+    [Test]
+    public void ConsumesArtifacts_MultipleNames_AddsAll()
+    {
+        var targetDefinition = new TargetDefinition
+        {
+            Name = "name",
+        };
+
+        targetDefinition.ConsumesArtifacts("Producer", ["Artifact1", "Artifact2"]);
+
+        targetDefinition.ConsumedArtifacts.Count.ShouldBe(2);
+        targetDefinition.ConsumedArtifacts.ShouldAllBe(a => a.TargetName == "Producer");
+    }
+
+    [Test]
+    public void ConsumesArtifact_MultipleSlices_AddsOnePerSlice()
+    {
+        var targetDefinition = new TargetDefinition
+        {
+            Name = "name",
+        };
+
+        targetDefinition.ConsumesArtifact("Producer", "Artifact1", ["linux-x64", "win-x64"]);
+
+        targetDefinition.ConsumedArtifacts.Count.ShouldBe(2);
+
+        targetDefinition
+            .ConsumedArtifacts
+            .Select(a => a.BuildSlice)
+            .ShouldBe(["linux-x64", "win-x64"]);
+    }
+
+    [Test]
+    public void ConsumesArtifacts_NamesAndSlices_AddsCrossProduct()
+    {
+        var targetDefinition = new TargetDefinition
+        {
+            Name = "name",
+        };
+
+        targetDefinition.ConsumesArtifacts("Producer", ["Art1", "Art2"], ["linux-x64", "win-x64"]);
+
+        // 2 artifacts × 2 slices = 4 entries
+        targetDefinition.ConsumedArtifacts.Count.ShouldBe(4);
+
+        targetDefinition
+            .ConsumedArtifacts
+            .Select(a => a.ArtifactName)
+            .Distinct()
+            .ShouldBe(["Art1", "Art2"], true);
+
+        targetDefinition
+            .ConsumedArtifacts
+            .Select(a => a.BuildSlice)
+            .Distinct()
+            .ShouldBe(["linux-x64", "win-x64"], true);
+    }
 }

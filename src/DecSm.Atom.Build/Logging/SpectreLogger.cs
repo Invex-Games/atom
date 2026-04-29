@@ -1,6 +1,4 @@
-﻿using DecSm.Atom.Build.Util.Scope;
-
-namespace DecSm.Atom.Build.Logging;
+﻿namespace DecSm.Atom.Build.Logging;
 
 /// <summary>
 ///     An internal logger implementation that writes formatted log messages to the console using Spectre.Console.

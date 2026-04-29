@@ -3,8 +3,6 @@ namespace DecSm.StructuredText.GithubActions.Tests;
 [TestFixture]
 internal sealed class GithubActionWriterOnTests
 {
-    // ── on: push ──────────────────────────────────────────────────────────────
-
     [Test]
     public void WriteOn_Push_WithBranches_WritesBranchesInline()
     {
@@ -104,8 +102,6 @@ internal sealed class GithubActionWriterOnTests
         output.ShouldContain("push:");
     }
 
-    // ── on: pull_request ──────────────────────────────────────────────────────
-
     [Test]
     public void WriteOn_PullRequest_WithTypes_WritesTypes()
     {
@@ -147,8 +143,6 @@ internal sealed class GithubActionWriterOnTests
         output.ShouldContain("pull_request:");
         output.ShouldContain("branches:");
     }
-
-    // ── on: workflow_dispatch ─────────────────────────────────────────────────
 
     [Test]
     public void WriteOn_WorkflowDispatch_NoInputs_WritesWorkflowDispatch()
@@ -245,8 +239,6 @@ internal sealed class GithubActionWriterOnTests
         output.ShouldContain("type: number");
     }
 
-    // ── on: schedule ─────────────────────────────────────────────────────────
-
     [Test]
     public void WriteOn_Schedule_WithCron_WritesScheduleSection()
     {
@@ -257,8 +249,6 @@ internal sealed class GithubActionWriterOnTests
         output.ShouldContain("cron:");
         output.ShouldContain("0 2 * * 1");
     }
-
-    // ── on: workflow_call ─────────────────────────────────────────────────────
 
     [Test]
     public void WriteOn_WorkflowCall_WritesWorkflowCallLine()

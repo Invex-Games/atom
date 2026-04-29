@@ -31,8 +31,6 @@ internal sealed class RunArgsFilterTests
         return capture.CapturedContext;
     }
 
-    // ── No arguments ─────────────────────────────────────────────────────────
-
     [Test]
     public async Task InvokeAsync_NoArguments_PassesContextUnchanged()
     {
@@ -41,8 +39,6 @@ internal sealed class RunArgsFilterTests
         ctx.ShouldNotBeNull();
         ctx.Arguments.ShouldBeEmpty();
     }
-
-    // ── nuget-add command ─────────────────────────────────────────────────────
 
     [Test]
     public async Task InvokeAsync_NugetAddCommand_PassesContextWithoutChangingEscapeIndex()
@@ -54,8 +50,6 @@ internal sealed class RunArgsFilterTests
         ctx.Arguments.ShouldBe(["nuget-add", "my-feed", "https://example.com"]);
     }
 
-    // ── Root command with direct args ─────────────────────────────────────────
-
     [Test]
     public async Task InvokeAsync_DirectAtomArgs_SetsEscapeIndexToZero()
     {
@@ -66,8 +60,6 @@ internal sealed class RunArgsFilterTests
         ctx.ShouldNotBeNull();
         ctx.EscapeIndex.ShouldBe(0);
     }
-
-    // ── -p / --project short and long flags ──────────────────────────────────
 
     [Test]
     public async Task InvokeAsync_ShortProjectFlag_SetsEscapeIndexToTwo()
@@ -88,8 +80,6 @@ internal sealed class RunArgsFilterTests
         ctx.EscapeIndex.ShouldBe(2);
     }
 
-    // ── -f / --file short and long flags ─────────────────────────────────────
-
     [Test]
     public async Task InvokeAsync_ShortFileFlag_SetsEscapeIndexToTwo()
     {
@@ -108,8 +98,6 @@ internal sealed class RunArgsFilterTests
         ctx.EscapeIndex.ShouldBe(2);
     }
 
-    // ── Edge: flag only, no value ─────────────────────────────────────────────
-
     [Test]
     public async Task InvokeAsync_ProjectFlagWithNoValue_SetsEscapeIndexToZero()
     {
@@ -120,8 +108,6 @@ internal sealed class RunArgsFilterTests
         ctx.ShouldNotBeNull();
         ctx.EscapeIndex.ShouldBe(0);
     }
-
-    // ── Arguments are preserved on the passed-through context ─────────────────
 
     [Test]
     public async Task InvokeAsync_ProjectFlag_ArgumentsArePreserved()

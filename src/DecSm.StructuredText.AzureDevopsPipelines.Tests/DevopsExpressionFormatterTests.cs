@@ -8,8 +8,6 @@ internal sealed class DevopsExpressionFormatterTests
     // A custom unknown expression type for testing the default case
     private sealed record UnknownExpression : TextExpression;
 
-    // ── Values ────────────────────────────────────────────────────────────────
-
     [Test]
     public void Format_Null_ReturnsNull() =>
         _formatter
@@ -64,8 +62,6 @@ internal sealed class DevopsExpressionFormatterTests
             .Format(new StringExpression(string.Empty))
             .ShouldBe("''");
 
-    // ── DevOps-specific expressions ───────────────────────────────────────────
-
     [Test]
     public void Format_DevopsMacroExpression_WrapsBrackets() =>
         _formatter
@@ -90,8 +86,6 @@ internal sealed class DevopsExpressionFormatterTests
             .Format(new DevopsRuntimeExpression(new StringExpression("value")))
             .ShouldBe("$[ 'value' ]");
 
-    // ── Compile-time template expression ─────────────────────────────────────
-
     [Test]
     public void Format_EvaluateExpression_WrapsInDoubleCurlyBraces() =>
         _formatter
@@ -103,8 +97,6 @@ internal sealed class DevopsExpressionFormatterTests
         _formatter
             .Format(new EvaluateExpression(new StringExpression("val")))
             .ShouldBe("${{ 'val' }}");
-
-    // ── Accessors ─────────────────────────────────────────────────────────────
 
     [Test]
     public void Format_IndexAccessExpression_WrapsIndexInSquareBrackets() =>
@@ -129,8 +121,6 @@ internal sealed class DevopsExpressionFormatterTests
         _formatter
             .Format(new PropertyAccessExpression(new RawExpression("dependencies"), new RawExpression("myJob")))
             .ShouldBe("dependencies.myJob");
-
-    // ── Logic operators ───────────────────────────────────────────────────────
 
     [Test]
     public void Format_NotExpression_WrapsInNotFunction() =>
@@ -222,8 +212,6 @@ internal sealed class DevopsExpressionFormatterTests
             .Format(new GreaterThanOrEqualToExpression(new RawExpression("left"), new RawExpression("right")))
             .ShouldBe("ge(left, right)");
 
-    // ── Functions ─────────────────────────────────────────────────────────────
-
     [Test]
     public void Format_ContainsExpression_UsesContainsFunction() =>
         _formatter
@@ -309,8 +297,6 @@ internal sealed class DevopsExpressionFormatterTests
         _formatter
             .Format(new HashFilesExpression(new RawExpression("**/package-lock.json")))
             .ShouldBe("hashFiles(**/package-lock.json)");
-
-    // ── Workflow expressions ───────────────────────────────────────────────────
 
     [Test]
     public void Format_TargetOutputExpression_WithOutputName_UsesDependenciesOutputsFormat() =>
@@ -433,8 +419,6 @@ internal sealed class DevopsExpressionFormatterTests
             })
             .ShouldBe("'Skipped'");
 
-    // ── WorkflowExpression<T> overload ────────────────────────────────────────
-
     [Test]
     public void Format_WorkflowExpression_Null_ReturnsNull()
     {
@@ -455,13 +439,9 @@ internal sealed class DevopsExpressionFormatterTests
             .ShouldBe("workflow-value");
     }
 
-    // ── Error cases ───────────────────────────────────────────────────────────
-
     [Test]
     public void Format_UnknownExpression_ThrowsArgumentOutOfRangeException() =>
         Should.Throw<ArgumentOutOfRangeException>(() => _formatter.Format(new UnknownExpression()));
-
-    // ── Nested / combined expressions ─────────────────────────────────────────
 
     [Test]
     public void Format_NestedExpressions_ComposedCorrectly()

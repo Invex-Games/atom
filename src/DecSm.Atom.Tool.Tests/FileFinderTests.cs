@@ -3,6 +3,10 @@ namespace DecSm.Atom.Tool.Tests;
 [TestFixture]
 internal sealed class FileFinderTests
 {
+    [SetUp]
+    public void SetUp() =>
+        _fs = new();
+
     private MockFileSystem _fs = null!;
 
     private static string Root =>
@@ -12,12 +16,6 @@ internal sealed class FileFinderTests
 
     private string CombinePath(params string[] parts) =>
         _fs.Path.Combine([Root, ..parts]);
-
-    [SetUp]
-    public void SetUp() =>
-        _fs = new();
-
-    // ── Direct file path ──────────────────────────────────────────────────────
 
     [Test]
     public void FindFile_WhenStartDirectoryIsExistingFile_ReturnsImmediately()
@@ -30,8 +28,6 @@ internal sealed class FileFinderTests
         result.ShouldNotBeNull();
         result.FullName.ShouldBe(filePath);
     }
-
-    // ── Current directory ─────────────────────────────────────────────────────
 
     [Test]
     public void FindFile_FileInCurrentDirectory_ReturnsFile()
@@ -59,8 +55,6 @@ internal sealed class FileFinderTests
 
         result.ShouldBeNull();
     }
-
-    // ── Upward search ─────────────────────────────────────────────────────────
 
     [Test]
     public void FindFile_FileInParentDirectory_ReturnsFile()
@@ -146,8 +140,6 @@ internal sealed class FileFinderTests
 
         result.ShouldNotBeNull();
     }
-
-    // ── Downward search ───────────────────────────────────────────────────────
 
     [Test]
     public void FindFile_FileInSubdirectory_ReturnsFile()
@@ -257,8 +249,6 @@ internal sealed class FileFinderTests
         result.ShouldNotBeNull();
     }
 
-    // ── Convention search (checkParentSubfolderMatches) ───────────────────────
-
     [Test]
     public void FindFile_WithConventionSearch_FindsFileInMatchingSubdirectory()
     {
@@ -315,8 +305,6 @@ internal sealed class FileFinderTests
         // BFS finds it anyway through normal traversal
         result.ShouldNotBeNull();
     }
-
-    // ── Multiple file names ───────────────────────────────────────────────────
 
     [Test]
     public void FindFile_WithMultipleFileNames_ReturnsFirstMatch()

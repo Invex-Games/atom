@@ -17,8 +17,6 @@ internal sealed class DependabotConfigWriterTests
             PackageEcosystem = ecosystem,
         };
 
-    // ── Version / minimal ─────────────────────────────────────────────────────
-
     [Test]
     public void WriteConfig_MinimalConfig_WritesVersionLine()
     {
@@ -76,8 +74,6 @@ internal sealed class DependabotConfigWriterTests
         WriteConfig(config)
             .ShouldNotContain("enable-beta-ecosystems");
     }
-
-    // ── Registries ────────────────────────────────────────────────────────────
 
     [Test]
     public void WriteConfig_WithRegistry_WritesRegistriesSection()
@@ -152,8 +148,6 @@ internal sealed class DependabotConfigWriterTests
             .ShouldBeLessThan(output.IndexOf("updates:", StringComparison.Ordinal));
     }
 
-    // ── multi-ecosystem-groups ────────────────────────────────────────────────
-
     [Test]
     public void WriteConfig_WithMultiEcosystemGroup_WritesSection()
     {
@@ -177,8 +171,6 @@ internal sealed class DependabotConfigWriterTests
         output.ShouldContain("angular:");
     }
 
-    // ── updates: package-ecosystem ────────────────────────────────────────────
-
     [Test]
     public void WriteUpdate_MultipleEcosystems_WritesAll()
     {
@@ -191,8 +183,6 @@ internal sealed class DependabotConfigWriterTests
         output.ShouldContain("package-ecosystem: nuget");
         output.ShouldContain("package-ecosystem: npm");
     }
-
-    // ── updates: directory / directories ─────────────────────────────────────
 
     [Test]
     public void WriteUpdate_WithDirectory_WritesQuotedDirectory()
@@ -231,8 +221,6 @@ internal sealed class DependabotConfigWriterTests
         output.ShouldContain("\"/src\"");
         output.ShouldContain("\"/tests\"");
     }
-
-    // ── updates: schedule ─────────────────────────────────────────────────────
 
     [Test]
     public void WriteUpdate_WithDailySchedule_WritesScheduleSection()
@@ -335,8 +323,6 @@ internal sealed class DependabotConfigWriterTests
         }
     }
 
-    // ── updates: allow ────────────────────────────────────────────────────────
-
     [Test]
     public void WriteUpdate_WithAllowByName_WritesAllowSection()
     {
@@ -414,8 +400,6 @@ internal sealed class DependabotConfigWriterTests
         output.ShouldContain("dependency-name: \"angular*\"");
         output.ShouldContain("dependency-type: production");
     }
-
-    // ── updates: ignore ───────────────────────────────────────────────────────
 
     [Test]
     public void WriteUpdate_WithIgnoreByName_WritesIgnoreSection()
@@ -524,8 +508,6 @@ internal sealed class DependabotConfigWriterTests
         output.ShouldContain("<3.0.0");
     }
 
-    // ── updates: groups ───────────────────────────────────────────────────────
-
     [Test]
     public void WriteUpdate_WithGroups_WritesGroupsSection()
     {
@@ -628,8 +610,6 @@ internal sealed class DependabotConfigWriterTests
         var output = WriteConfig(config);
         output.ShouldContain("group-by: dependency-name");
     }
-
-    // ── updates: misc properties ──────────────────────────────────────────────
 
     [Test]
     public void WriteUpdate_WithLabels_WritesLabelsArray()
@@ -937,8 +917,6 @@ internal sealed class DependabotConfigWriterTests
         WriteConfig(config)
             .ShouldContain("insecure-external-code-execution: allow");
     }
-
-    // ── registry types ────────────────────────────────────────────────────────
 
     [Test]
     public void WriteRegistry_AllRegistryTypes_FormatCorrectly()

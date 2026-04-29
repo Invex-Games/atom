@@ -17,8 +17,6 @@ internal sealed class GithubActionWriterStepTests
             ],
         });
 
-    // ── UsesStep ──────────────────────────────────────────────────────────────
-
     [Test]
     public void WriteStep_UsesStep_WritesUsesHeader()
     {
@@ -163,8 +161,6 @@ internal sealed class GithubActionWriterStepTests
         output.ShouldContain("timeout-minutes: 5");
     }
 
-    // ── RunStep ───────────────────────────────────────────────────────────────
-
     [Test]
     public void WriteStep_RunStep_SingleLine_WritesRunHeader()
     {
@@ -278,8 +274,6 @@ internal sealed class GithubActionWriterStepTests
         output.ShouldContain("timeout-minutes: 10");
     }
 
-    // ── Multiple steps ────────────────────────────────────────────────────────
-
     [Test]
     public void WriteStep_MultipleSteps_EachSeparatedByBlankLine()
     {
@@ -310,8 +304,6 @@ internal sealed class GithubActionWriterStepTests
         // There should be at least one blank line between the steps
         between.ShouldContain(Environment.NewLine + Environment.NewLine);
     }
-
-    // ── Format (quoting) ─────────────────────────────────────────────────────
 
     [Test]
     public void WriteStep_RunStep_WithValueContainingColon_QuotesValue()

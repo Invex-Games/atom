@@ -3,8 +3,6 @@ namespace DecSm.StructuredText.AzureDevopsPipelines.Tests;
 [TestFixture]
 internal sealed class DevopsPipelineWriterJobTests
 {
-    // ── RegularJob ────────────────────────────────────────────────────────────
-
     [Test]
     public void WriteJob_RegularJob_Minimal_WritesJobId()
     {
@@ -283,8 +281,6 @@ internal sealed class DevopsPipelineWriterJobTests
         output.ShouldContain("strategy:");
         output.ShouldContain("parallel: 5");
     }
-
-    // ── Deployment Job ────────────────────────────────────────────────────────
 
     [Test]
     public void WriteJob_Deployment_Minimal_WritesDeploymentLine()
@@ -599,8 +595,6 @@ internal sealed class DevopsPipelineWriterJobTests
         output.ShouldContain("postRouteTraffic:");
     }
 
-    // ── Template Job ──────────────────────────────────────────────────────────
-
     [Test]
     public void WriteJob_Template_NoParams_WritesInlineLine()
     {
@@ -638,8 +632,6 @@ internal sealed class DevopsPipelineWriterJobTests
         output.ShouldContain("parameters:");
         output.ShouldContain("buildType: release");
     }
-
-    // ── Deployment additional options ─────────────────────────────────────────
 
     [Test]
     public void WriteJob_Deployment_WithServices_WritesServices()

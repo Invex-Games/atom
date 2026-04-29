@@ -10,6 +10,4 @@ public interface IWorkflowBuildDefinition : IBuildDefinition, IGen
     ///     Workflows define how targets are orchestrated, potentially across different CI/CD platforms.
     /// </remarks>
     IReadOnlyList<WorkflowDefinition> Workflows { get; }
-
-    IReadOnlyList<IBuildOption> GlobalWorkflowOptions { get; }
 }

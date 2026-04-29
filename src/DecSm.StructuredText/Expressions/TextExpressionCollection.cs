@@ -16,8 +16,7 @@ public sealed class TextExpressionCollection : IEnumerable<TextExpression>
 
     public int Capacity => _items.Capacity;
 
-    public void Add(TextExpression item) =>
-        _items.Add(item);
+    public TextExpression this[int index] => _items[index];
 
     public IEnumerator<TextExpression> GetEnumerator() =>
         _items.GetEnumerator();
@@ -25,7 +24,8 @@ public sealed class TextExpressionCollection : IEnumerable<TextExpression>
     IEnumerator IEnumerable.GetEnumerator() =>
         GetEnumerator();
 
-    public TextExpression this[int index] => _items[index];
+    public void Add(TextExpression item) =>
+        _items.Add(item);
 
     public static implicit operator TextExpressionCollection(TextExpression expression) =>
         new([expression]);
@@ -74,8 +74,7 @@ public sealed class WorkflowExpressionCollection<T> : IEnumerable<TextExpression
 
     public int Capacity => _inner.Capacity;
 
-    public void Add(TextExpression item) =>
-        _inner.Add(item);
+    public TextExpression this[int index] => _inner[index];
 
     public IEnumerator<TextExpression> GetEnumerator() =>
         _inner.GetEnumerator();
@@ -83,7 +82,8 @@ public sealed class WorkflowExpressionCollection<T> : IEnumerable<TextExpression
     IEnumerator IEnumerable.GetEnumerator() =>
         GetEnumerator();
 
-    public TextExpression this[int index] => _inner[index];
+    public void Add(TextExpression item) =>
+        _inner.Add(item);
 
     [return: NotNullIfNotNull(nameof(collection))]
     public static implicit operator WorkflowExpressionCollection<T>?(TextExpressionCollection? collection) =>

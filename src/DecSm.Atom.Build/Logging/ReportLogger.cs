@@ -1,6 +1,4 @@
-﻿using DecSm.Atom.Build.Util.Scope;
-
-namespace DecSm.Atom.Build.Logging;
+﻿namespace DecSm.Atom.Build.Logging;
 
 /// <summary>
 ///     An internal logger implementation that captures log entries to be included in the final build report.

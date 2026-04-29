@@ -13,6 +13,12 @@
 public interface IBuildDefinition
 {
     /// <summary>
+    ///     Gets the build options applied globally to this build definition.
+    ///     Override to supply a custom list of <see cref="IBuildOption" /> instances.
+    /// </summary>
+    IReadOnlyList<IBuildOption> Options { get; }
+
+    /// <summary>
     ///     Gets the collection of target definitions for the build.
     /// </summary>
     /// <remarks>
@@ -30,12 +36,6 @@ public interface IBuildDefinition
     ///     <see cref="SecretDefinitionAttribute" />.
     /// </remarks>
     IReadOnlyDictionary<string, ParamDefinition> ParamDefinitions { get; }
-
-    /// <summary>
-    ///     Gets the build options applied globally to this build definition.
-    ///     Override to supply a custom list of <see cref="IBuildOption" /> instances.
-    /// </summary>
-    IReadOnlyList<IBuildOption> Options { get; }
 
     /// <summary>
     ///     Retrieves the value of a build parameter by its name.

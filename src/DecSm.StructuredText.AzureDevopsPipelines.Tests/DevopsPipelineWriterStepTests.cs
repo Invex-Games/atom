@@ -3,8 +3,6 @@ namespace DecSm.StructuredText.AzureDevopsPipelines.Tests;
 [TestFixture]
 internal sealed class DevopsPipelineWriterStepTests
 {
-    // ── Task step ─────────────────────────────────────────────────────────────
-
     [Test]
     public void WriteStep_Task_Minimal_WritesTaskLine()
     {
@@ -79,8 +77,6 @@ internal sealed class DevopsPipelineWriterStepTests
         output.ShouldContain("MY_TOKEN: $(mySecret)");
     }
 
-    // ── Script step ───────────────────────────────────────────────────────────
-
     [Test]
     public void WriteStep_Script_WritesScriptLine()
     {
@@ -130,8 +126,6 @@ internal sealed class DevopsPipelineWriterStepTests
 
         output.ShouldContain("workingDirectory: $(Build.SourcesDirectory)/frontend");
     }
-
-    // ── PowerShell step ───────────────────────────────────────────────────────
 
     [Test]
     public void WriteStep_PowerShell_WritesPowerShellLine()

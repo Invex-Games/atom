@@ -19,8 +19,6 @@ public sealed record SetupDotnetStep(
     string? LockFile = null
 ) : IAdditionalStepOption
 {
-    public int Order { get; init; } = -200;
-
     /// <summary>
     ///     Specifies the quality of the .NET SDK version to install.
     /// </summary>
@@ -52,4 +50,6 @@ public sealed record SetupDotnetStep(
         /// </summary>
         Ga,
     }
+
+    public int Order { get; init; } = -200;
 }

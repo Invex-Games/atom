@@ -11,13 +11,13 @@ public static class BuildFlagsExtensions
 
         public GitVersionProvideBuildIdFlag ProvideBuildId => field ??= new();
 
+        public GitVersionProvideBuildVersionFlag ProvideBuildVersion => field ??= new();
+
         public GitVersionProvideBuildIdFlag SetProvideBuildId(bool value) =>
             new()
             {
                 Enabled = value,
             };
-
-        public GitVersionProvideBuildVersionFlag ProvideBuildVersion => field ??= new();
 
         public GitVersionProvideBuildVersionFlag SetProvideBuildVersion(bool value) =>
             new()

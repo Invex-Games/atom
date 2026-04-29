@@ -1,8 +1,4 @@
-﻿using JetBrains.Annotations;
-using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.Diagnostics;
-
-namespace DecSm.Atom.Build.Analyzers.Tests;
+﻿namespace DecSm.Atom.Build.Analyzers.Tests;
 
 [PublicAPI]
 public class ExtendedCodeFixVerifier<TAnalyzer, TCodeFix> : ExtendedCodeFixVerifier<TAnalyzer,

@@ -8,6 +8,7 @@ global using DecSm.Atom.Build.BuildOptions;
 global using DecSm.Atom.Build.BuildInfo;
 global using DecSm.Atom.Build.Definition;
 global using DecSm.Atom.Build.Hosting;
+global using DecSm.Atom.Build.Util.Scope;
 global using DecSm.Atom.SemanticVersion;
 global using JetBrains.Annotations;
 global using Microsoft.Extensions.DependencyInjection;

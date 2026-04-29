@@ -24,6 +24,15 @@ public interface IAtomFileSystem : IFileSystem
     /// </remarks>
     IFileSystem FileSystem { get; }
 
+    /// <summary>
+    ///     Gets the current working directory of the application as a <see cref="RootedPath" />.
+    /// </summary>
+    /// <remarks>
+    ///     Evaluated eagerly each time the property is read — it is not cached because the working
+    ///     directory can change during the lifetime of the process.
+    /// </remarks>
+    RootedPath CurrentDirectory => new(this, FileSystem.Directory.GetCurrentDirectory());
+
     /// <inheritdoc cref="IFileSystem.Directory" />
     IDirectory IFileSystem.Directory => FileSystem.Directory;
 
@@ -50,15 +59,6 @@ public interface IAtomFileSystem : IFileSystem
 
     /// <inheritdoc cref="IFileSystem.FileVersionInfo" />
     IFileVersionInfoFactory IFileSystem.FileVersionInfo => FileSystem.FileVersionInfo;
-
-    /// <summary>
-    ///     Gets the current working directory of the application as a <see cref="RootedPath" />.
-    /// </summary>
-    /// <remarks>
-    ///     Evaluated eagerly each time the property is read — it is not cached because the working
-    ///     directory can change during the lifetime of the process.
-    /// </remarks>
-    RootedPath CurrentDirectory => new(this, FileSystem.Directory.GetCurrentDirectory());
 
     /// <summary>
     ///     Resolves a well-known path by key, querying the registered <see cref="IPathProvider" />

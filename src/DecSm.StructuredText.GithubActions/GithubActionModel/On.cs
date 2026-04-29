@@ -188,18 +188,6 @@ public partial record On
 
     partial record PullRequest(IReadOnlyList<PullRequest.PullRequestType> Types)
     {
-        public required IReadOnlyList<string>? Branches { get; init; }
-
-        public required IReadOnlyList<string>? BranchesIgnore { get; init; }
-
-        public required IReadOnlyList<string>? Tags { get; init; }
-
-        public required IReadOnlyList<string>? TagsIgnore { get; init; }
-
-        public required IReadOnlyList<string>? Paths { get; init; }
-
-        public required IReadOnlyList<string>? PathsIgnore { get; init; }
-
         public enum PullRequestType
         {
             assigned,
@@ -224,6 +212,18 @@ public partial record On
             enqueued,
             dequeued,
         }
+
+        public required IReadOnlyList<string>? Branches { get; init; }
+
+        public required IReadOnlyList<string>? BranchesIgnore { get; init; }
+
+        public required IReadOnlyList<string>? Tags { get; init; }
+
+        public required IReadOnlyList<string>? TagsIgnore { get; init; }
+
+        public required IReadOnlyList<string>? Paths { get; init; }
+
+        public required IReadOnlyList<string>? PathsIgnore { get; init; }
     }
 
     partial record PullRequestReview(IReadOnlyList<PullRequestReview.PullRequestReviewType> Types)
@@ -332,18 +332,18 @@ public partial record On
 
     partial record WorkflowRun
     {
-        public required IReadOnlyList<string>? Workflows { get; init; }
-
-        public required IReadOnlyList<string>? Branches { get; init; }
-
-        public required IReadOnlyList<WorkflowDispatchTypes>? Types { get; init; }
-
         public enum WorkflowDispatchTypes
         {
             requested,
             completed,
             in_progress,
         }
+
+        public required IReadOnlyList<string>? Workflows { get; init; }
+
+        public required IReadOnlyList<string>? Branches { get; init; }
+
+        public required IReadOnlyList<WorkflowDispatchTypes>? Types { get; init; }
     }
 }
 

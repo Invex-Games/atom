@@ -3,9 +3,9 @@ namespace DecSm.StructuredText.GithubActions;
 [PublicAPI]
 public sealed class GithubActionWriter
 {
-    public StructuredTextWriter TextWriter { get; init; } = new();
-
     private readonly GithubExpressionFormatter _expressionFormatter = new();
+
+    public StructuredTextWriter TextWriter { get; init; } = new();
 
     public void Write(GithubAction githubAction)
     {
@@ -471,11 +471,13 @@ public sealed class GithubActionWriter
             WriteProperty("runs-on", _expressionFormatter.Format(value));
         }
         else
+        {
             using (TextWriter.WriteSection("runs-on:"))
                 if (_expressionFormatter.Format(job.RunsOn.Group) is { Length: > 0 } group)
                     WriteProperty("group", group);
                 else if (job.RunsOn.Labels.Count > 0)
                     WriteProperty("labels", job.RunsOn.Labels.Select(x => _expressionFormatter.Format(x)));
+        }
 
         switch (job.Snapshot)
         {
