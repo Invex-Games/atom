@@ -29,5 +29,6 @@ global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("DecSm.Atom.Build.Tests")]
+[assembly: InternalsVisibleTo("DecSm.Atom.Workflows.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: SuppressMessage("ReSharper", "LocalizableElement")]
