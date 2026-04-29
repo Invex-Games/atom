@@ -1,6 +1,4 @@
-﻿using DecSm.Atom.Build.Hosting;
-
-namespace DecSm.Atom.TestUtils;
+﻿namespace DecSm.Atom.TestUtils;
 
 [PublicAPI]
 public static class TestUtils
@@ -12,7 +10,7 @@ public static class TestUtils
         TestBuildIdProvider? buildIdProvider = null,
         TestBuildVersionProvider? buildVersionProvider = null,
         Action<HostApplicationBuilder>? configure = null)
-        where T : MinimalBuildDefinition
+        where T : BuildDefinition
     {
         var builder = AtomHost.CreateAtomBuilder<T>([]);
 
@@ -32,7 +30,7 @@ public static class TestUtils
         buildIdProvider ??= new();
         buildVersionProvider ??= new();
 
-        builder.Services.AddKeyedSingleton<IAnsiConsole>("StaticAccess", console);
+        builder.Services.AddSingleton<IAnsiConsole>(console);
         builder.Services.AddKeyedSingleton<IFileSystem>("RootFileSystem", fileSystem);
         builder.Services.AddSingleton(commandLineArgs);
         builder.Services.AddSingleton(buildIdProvider);
