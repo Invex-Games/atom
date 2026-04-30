@@ -1,4 +1,3 @@
-global using System.ComponentModel.Design;
 global using System.Diagnostics;
 global using System.Diagnostics.CodeAnalysis;
 global using System.IO.Abstractions;

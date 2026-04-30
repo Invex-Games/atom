@@ -17,7 +17,7 @@ internal sealed class DevopsPipelineWriterPipelineTests
             ],
         };
 
-        string[] lines = ["steps:", "  - script: echo hello"];
+        string[] lines = ["steps:", "", "  - script: echo hello"];
 
         PipelineWriterHelper
             .Write(pipeline)
@@ -39,7 +39,7 @@ internal sealed class DevopsPipelineWriterPipelineTests
             ],
         };
 
-        string[] lines = ["name: $(Build.DefinitionName)", "", "steps:", "  - script: echo hi"];
+        string[] lines = ["name: $(Build.DefinitionName)", "", "steps:", "", "  - script: echo hi"];
 
         PipelineWriterHelper
             .Write(pipeline)

@@ -13,9 +13,11 @@ internal sealed class DevopsWorkflowFileWriter(
 
     protected override RootedPath FileLocation => _atomFileSystem.AtomRootDirectory / ".devops" / "workflows";
 
-    protected override void WriteWorkflow(WorkflowModel workflow)
+    protected override string WriteWorkflow(WorkflowModel workflow)
     {
         var devopsPipeline = workflowBuilder.Build(workflow);
         _pipelineWriter.Write(devopsPipeline);
+
+        return _pipelineWriter.TextWriter.ToString();
     }
 }

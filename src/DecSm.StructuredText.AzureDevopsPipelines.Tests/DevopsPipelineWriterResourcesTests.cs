@@ -113,10 +113,8 @@ internal sealed class DevopsPipelineWriterResourcesTests
         output.ShouldContain("options: --memory 2g");
         output.ShouldContain("env:");
         output.ShouldContain("NODE_ENV: test");
-        output.ShouldContain("ports:");
-        output.ShouldContain("- 8080:80");
-        output.ShouldContain("volumes:");
-        output.ShouldContain("- /tmp:/tmp");
+        output.ShouldContain("ports: [ 8080:80 ]");
+        output.ShouldContain("volumes: [ /tmp:/tmp ]");
     }
 
     [Test]
@@ -145,7 +143,7 @@ internal sealed class DevopsPipelineWriterResourcesTests
         output.ShouldContain("trigger:");
         output.ShouldContain("enabled: true");
         output.ShouldContain("tags:");
-        output.ShouldContain("- v*");
+        output.ShouldContain("include: [ v* ]");
     }
 
     // ── Resources: Pipelines ──────────────────────────────────────────────────
@@ -189,13 +187,13 @@ internal sealed class DevopsPipelineWriterResourcesTests
                         Enabled = new BooleanExpression(true),
                         Branches = new()
                         {
-                            Include = new[] { "main" },
+                            Include = ["main"],
                         },
                         Tags = new()
                         {
-                            Include = new[] { "v*" },
+                            Include = ["v*"],
                         },
-                        Stages = new[] { "Deploy" },
+                        Stages = ["Deploy"],
                     },
                 },
             ],
@@ -207,8 +205,7 @@ internal sealed class DevopsPipelineWriterResourcesTests
         output.ShouldContain("version: latest");
         output.ShouldContain("branch: main");
         output.ShouldContain("enabled: true");
-        output.ShouldContain("stages:");
-        output.ShouldContain("- Deploy");
+        output.ShouldContain("stages: [ Deploy ]");
     }
 
     // ── Resources: Repositories ───────────────────────────────────────────────

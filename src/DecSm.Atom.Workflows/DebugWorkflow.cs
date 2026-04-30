@@ -10,16 +10,17 @@ public sealed record DebugWorkflowType : IWorkflowType
 public class DebugWorkflowWriter(IAtomFileSystem atomFileSystem, ILogger<WorkflowFileWriter<DebugWorkflowType>> logger)
     : WorkflowFileWriter<DebugWorkflowType>(atomFileSystem, logger)
 {
+    private static readonly JsonSerializerOptions JsonSerializerOptions = new()
+    {
+        WriteIndented = true,
+    };
+
     private readonly IAtomFileSystem _atomFileSystem = atomFileSystem;
 
     protected override string FileExtension => "md";
 
     protected override RootedPath FileLocation => _atomFileSystem.AtomRootDirectory / ".debug-workflows";
 
-    protected override void WriteWorkflow(WorkflowModel workflow) =>
-        TextWriter.WriteLine(JsonSerializer.Serialize(workflow,
-            new JsonSerializerOptions
-            {
-                WriteIndented = true,
-            }));
+    protected override string WriteWorkflow(WorkflowModel workflow) =>
+        JsonSerializer.Serialize(workflow, JsonSerializerOptions);
 }

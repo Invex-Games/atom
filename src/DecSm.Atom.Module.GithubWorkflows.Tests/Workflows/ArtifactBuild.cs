@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class ArtifactBuild : MinimalBuildDefinition,
+public partial class ArtifactBuild : WorkflowBuildDefinition,
     IGithubWorkflows,
     IArtifactTarget1,
     IArtifactTarget2,
@@ -21,22 +21,27 @@ public partial class ArtifactBuild : MinimalBuildDefinition,
             ],
             Targets =
             [
-                WorkflowTargets.ArtifactTarget1,
-                WorkflowTargets.ArtifactTarget2,
-                WorkflowTargets.ArtifactTarget3,
-                WorkflowTargets.ArtifactTarget4.WithMatrixDimensions(
-                    new MatrixDimension(nameof(IArtifactSliceTarget1.TestSlice))
-                    {
-                        Values = [IArtifactTarget2.Slice1, IArtifactTarget2.Slice2],
-                    }),
+                new(nameof(IArtifactTarget1.ArtifactTarget1)),
+                new(nameof(IArtifactTarget2.ArtifactTarget2)),
+                new(nameof(IArtifactTarget3.ArtifactTarget3)),
+                new(nameof(IArtifactTarget4.ArtifactTarget4))
+                {
+                    MatrixDimensions =
+                    [
+                        new(nameof(IArtifactSliceTarget1.TestSlice))
+                        {
+                            Values = [IArtifactTarget2.Slice1, IArtifactTarget2.Slice2],
+                        },
+                    ],
+                },
             ],
-            WorkflowTypes = [new GithubWorkflowType()],
+            Types = [WorkflowTypes.Github.Action],
         },
     ];
 }
 
 [BuildDefinition]
-public partial class CustomArtifactBuild : MinimalBuildDefinition,
+public partial class CustomArtifactBuild : WorkflowBuildDefinition,
     IGithubWorkflows,
     IStoreArtifact,
     IRetrieveArtifact,
@@ -58,18 +63,23 @@ public partial class CustomArtifactBuild : MinimalBuildDefinition,
             ],
             Targets =
             [
-                WorkflowTargets.SetupBuildInfo,
-                WorkflowTargets.ArtifactTarget1,
-                WorkflowTargets.ArtifactTarget2,
-                WorkflowTargets.ArtifactTarget3,
-                WorkflowTargets.ArtifactTarget4.WithMatrixDimensions(
-                    new MatrixDimension(nameof(IArtifactSliceTarget1.TestSlice))
-                    {
-                        Values = [IArtifactTarget2.Slice1, IArtifactTarget2.Slice2],
-                    }),
+                new(nameof(ISetupBuildInfo.SetupBuildInfo)),
+                new(nameof(IArtifactTarget1.ArtifactTarget1)),
+                new(nameof(IArtifactTarget2.ArtifactTarget2)),
+                new(nameof(IArtifactTarget3.ArtifactTarget3)),
+                new(nameof(IArtifactTarget4.ArtifactTarget4))
+                {
+                    MatrixDimensions =
+                    [
+                        new(nameof(IArtifactSliceTarget1.TestSlice))
+                        {
+                            Values = [IArtifactTarget2.Slice1, IArtifactTarget2.Slice2],
+                        },
+                    ],
+                },
             ],
-            WorkflowTypes = [new GithubWorkflowType()],
-            Options = [WorkflowOptions.Artifacts.UseCustomProvider],
+            Types = [WorkflowTypes.Github.Action],
+            Options = [BuildOptions.Artifacts.UseCustomProvider],
         },
     ];
 }

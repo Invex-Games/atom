@@ -1,4 +1,4 @@
 ﻿namespace DecSm.Atom.Module.DevopsWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class MinimalBuild : MinimalBuildDefinition;
+public partial class MinimalBuild : WorkflowBuildDefinition;

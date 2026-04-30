@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Module.DevopsWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class CheckoutOptionBuild : MinimalBuildDefinition, IDevopsWorkflows, ICheckoutOptionTarget
+public partial class CheckoutOptionBuild : WorkflowBuildDefinition, IDevopsWorkflows, ICheckoutOptionTarget
 {
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [
@@ -10,10 +10,18 @@ public partial class CheckoutOptionBuild : MinimalBuildDefinition, IDevopsWorkfl
             Triggers = [WorkflowTriggers.Manual],
             Targets =
             [
-                WorkflowTargets.CheckoutOptionTarget.WithOptions(
-                    WorkflowOptions.Devops.ConfigureCheckout(true, "recursive")),
+                new(nameof(ICheckoutOptionTarget.CheckoutOptionTarget))
+                {
+                    Options =
+                    [
+                        BuildOptions.Devops.Steps.Checkout(new()
+                        {
+                            DisplayName = "Checkout with no options",
+                        }),
+                    ],
+                },
             ],
-            WorkflowTypes = [Devops.WorkflowType],
+            Types = [WorkflowTypes.Devops.Pipeline],
         },
     ];
 }

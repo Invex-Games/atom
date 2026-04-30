@@ -27,10 +27,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          token: 'some-token'
+          token: some-token
           fetch-depth: 0
           lfs: true
-          submodules: 'recursive'
+          submodules: recursive
 
       - name: CheckoutOptionTarget2
         id: CheckoutOptionTarget2

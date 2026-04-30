@@ -18,7 +18,7 @@ public sealed class DependabotConfigFileWriter(
 
     protected override RootedPath FileLocation => _atomFileSystem.AtomRootDirectory / ".github";
 
-    protected override void WriteWorkflow(WorkflowModel workflow)
+    protected override string WriteWorkflow(WorkflowModel workflow)
     {
         var config = workflow
             .Options
@@ -30,5 +30,7 @@ public sealed class DependabotConfigFileWriter(
                 $"Dependabot workflow '{workflow.Name}' is missing a {nameof(DependabotConfigOption)}.");
 
         _configWriter.WriteConfig(config.Config);
+
+        return _configWriter.TextWriter.ToString();
     }
 }

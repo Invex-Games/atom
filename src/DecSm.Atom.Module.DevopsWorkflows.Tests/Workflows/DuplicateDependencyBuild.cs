@@ -1,22 +1,17 @@
-﻿using DecSm.Atom.Build.Hosting;
-
-namespace DecSm.Atom.Module.DevopsWorkflows.Tests.Workflows;
+﻿namespace DecSm.Atom.Module.DevopsWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class DuplicateDependencyBuild : MinimalBuildDefinition, IDevopsWorkflows, IDuplicateDependencyTarget
+public partial class DuplicateDependencyBuild : WorkflowBuildDefinition, IDevopsWorkflows, IDuplicateDependencyTarget
 {
-    public override IReadOnlyList<IBuildOption> GlobalWorkflowOptions =>
-    [
-        BuildOptions.Artifacts.UseCustomProvider,
-    ];
+    public override IReadOnlyList<IBuildOption> Options => [BuildOptions.Artifacts.UseCustomProvider];
 
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [
         new("duplicatedependency-workflow")
         {
             Triggers = [WorkflowTriggers.Manual],
-            Targets = [WorkflowTargets.DuplicateDependencyTarget1],
-            WorkflowTypes = [Devops.WorkflowType],
+            Targets = [new(nameof(IDuplicateDependencyTarget.DuplicateDependencyTarget1))],
+            Types = [WorkflowTypes.Devops.Pipeline],
         },
     ];
 }

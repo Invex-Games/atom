@@ -760,7 +760,10 @@ public sealed class DevopsPipelineWriter
             WriteExpressionList("pools", pools);
     }
 
-    private void WriteStep(Step step) =>
+    private void WriteStep(Step step)
+    {
+        TextWriter.WriteLine();
+
         step.Match(WriteTaskStep,
             WriteScriptStep,
             WritePowerShellStep,
@@ -773,6 +776,7 @@ public sealed class DevopsPipelineWriter
             WritePublishStep,
             WriteTemplateStep,
             WriteReviewAppStep);
+    }
 
     private void WriteTaskStep(Step.Task step)
     {
@@ -1117,6 +1121,21 @@ public sealed class DevopsPipelineWriter
 
     private void WriteExpressionList(string key, TextExpressionCollection values)
     {
+        // If the combined length of the expressions is less than 120 characters,
+        // we can write the list as a single line e.g. [ item1, item2, item3 ]
+        // Otherwise, we need to write each expression on a separate line.
+
+        var resolvedValues = values
+            .Select(Resolve)
+            .ToArray();
+
+        if (resolvedValues.Sum(v => v.Length) + (resolvedValues.Length - 1) * 2 <= 120)
+        {
+            TextWriter.WriteLine($"{key}: [ {string.Join(", ", resolvedValues)} ]");
+
+            return;
+        }
+
         using var _ = TextWriter.WriteSection($"{key}:");
 
         foreach (var value in values)

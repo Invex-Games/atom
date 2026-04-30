@@ -273,7 +273,7 @@ internal sealed class DevopsPipelineWriterVariablesTests
             Pool = new Pool.PoolSpec
             {
                 Name = new RawExpression("my-pool"),
-                Demands = new[] { "agent.os -equals Windows_NT", "vstest" },
+                Demands = ["agent.os -equals Windows_NT", "vstest"],
             },
             Steps =
             [
@@ -284,9 +284,7 @@ internal sealed class DevopsPipelineWriterVariablesTests
             ],
         });
 
-        output.ShouldContain("demands:");
-        output.ShouldContain("- agent.os -equals Windows_NT");
-        output.ShouldContain("- vstest");
+        output.ShouldContain("demands: [ agent.os -equals Windows_NT, vstest ]");
     }
 
     [Test]

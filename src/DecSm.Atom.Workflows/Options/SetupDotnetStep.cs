@@ -51,5 +51,7 @@ public sealed record SetupDotnetStep(
         Ga,
     }
 
+    public bool Enabled { get; init; } = true;
+
     public int Order { get; init; } = -200;
 }

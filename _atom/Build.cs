@@ -231,7 +231,7 @@ internal partial class Build : WorkflowBuildDefinition,
                     },
                     new(nameof(IDeployTargets.PushToNugetDevops)),
                 ],
-                Types = [Devops.WorkflowType],
+                Types = [WorkflowTypes.Devops.Pipeline],
                 Options =
                 [
                     BuildOptions.Inject.Param(nameof(INugetHelper.NugetDryRun), true),

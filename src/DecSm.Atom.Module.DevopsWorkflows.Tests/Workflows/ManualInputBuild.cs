@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Module.DevopsWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class ManualInputBuild : MinimalBuildDefinition, IDevopsWorkflows, IManualInputTarget
+public partial class ManualInputBuild : WorkflowBuildDefinition, IDevopsWorkflows, IManualInputTarget
 {
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [
@@ -13,19 +13,21 @@ public partial class ManualInputBuild : MinimalBuildDefinition, IDevopsWorkflows
                 {
                     Inputs =
                     [
-                        ManualStringInput.ForParam(ParamDefinitions[WorkflowParams.StringParamWithoutDefault]),
-                        ManualStringInput.ForParam(ParamDefinitions[WorkflowParams.StringParamWithDefault]),
-                        ManualBoolInput.ForParam(ParamDefinitions[WorkflowParams.BoolParamWithoutDefault]),
-                        ManualBoolInput.ForParam(ParamDefinitions[WorkflowParams.BoolParamWithDefault]),
-                        ManualChoiceInput.ForParam(ParamDefinitions[WorkflowParams.ChoiceParamWithoutDefault],
+                        ManualStringInput.ForParam(
+                            ParamDefinitions[nameof(IManualInputTarget.StringParamWithoutDefault)]),
+                        ManualStringInput.ForParam(ParamDefinitions[nameof(IManualInputTarget.StringParamWithDefault)]),
+                        ManualBoolInput.ForParam(ParamDefinitions[nameof(IManualInputTarget.BoolParamWithoutDefault)]),
+                        ManualBoolInput.ForParam(ParamDefinitions[nameof(IManualInputTarget.BoolParamWithDefault)]),
+                        ManualChoiceInput.ForParam(
+                            ParamDefinitions[nameof(IManualInputTarget.ChoiceParamWithoutDefault)],
                             ["choice 1", "choice 2", "choice 3"]),
-                        ManualChoiceInput.ForParam(ParamDefinitions[WorkflowParams.ChoiceParamWithDefault],
+                        ManualChoiceInput.ForParam(ParamDefinitions[nameof(IManualInputTarget.ChoiceParamWithDefault)],
                             ["choice 1", "choice 2", "choice 3"]),
                     ],
                 },
             ],
-            Targets = [WorkflowTargets.ManualInputTarget],
-            WorkflowTypes = [Devops.WorkflowType],
+            Targets = [new(nameof(IManualInputTarget.ManualInputTarget))],
+            Types = [WorkflowTypes.Devops.Pipeline],
         },
     ];
 }

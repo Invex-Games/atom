@@ -1,4 +1,4 @@
-﻿namespace DecSm.Atom.Workflows.TestUtils;
+﻿namespace DecSm.Atom.Workflows.Tests.TestUtils;
 
 [PublicAPI]
 public sealed record TestWorkflowTrigger : IWorkflowTrigger;

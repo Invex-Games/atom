@@ -1,16 +1,20 @@
 ﻿name: simple-workflow
 
 trigger: none
+pr:
+  branches:
+    - main
 
 jobs:
 
   - job: SimpleTarget
+    displayName: SimpleTarget
     pool:
       vmImage: ubuntu-latest
     steps:
-
       - checkout: self
+        enabled: true
         fetchDepth: 0
-
       - script: dotnet run --project AtomTest/AtomTest.csproj SimpleTarget --skip --headless
+        displayName: SimpleTarget
         name: SimpleTarget

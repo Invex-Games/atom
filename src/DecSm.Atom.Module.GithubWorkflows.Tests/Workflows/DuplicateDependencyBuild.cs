@@ -1,22 +1,17 @@
-﻿using DecSm.Atom.Build.Hosting;
-
-namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
+﻿namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class DuplicateDependencyBuild : MinimalBuildDefinition, IGithubWorkflows, IDuplicateDependencyTarget
+public partial class DuplicateDependencyBuild : WorkflowBuildDefinition, IGithubWorkflows, IDuplicateDependencyTarget
 {
-    public override IReadOnlyList<IBuildOption> GlobalWorkflowOptions =>
-    [
-        BuildOptions.Artifacts.UseCustomProvider,
-    ];
+    public override IReadOnlyList<IBuildOption> Options => [BuildOptions.Artifacts.UseCustomProvider];
 
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [
         new("duplicatedependency-workflow")
         {
             Triggers = [WorkflowTriggers.Manual],
-            Targets = [WorkflowTargets.DuplicateDependencyTarget1],
-            WorkflowTypes = [WorkflowTypes.Github.Action],
+            Targets = [new(nameof(IDuplicateDependencyTarget.DuplicateDependencyTarget1))],
+            Types = [WorkflowTypes.Github.Action],
         },
     ];
 }

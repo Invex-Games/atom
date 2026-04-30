@@ -34,7 +34,7 @@ public class BuildDefinitionSourceGeneratorTests
                               namespace TestNamespace;
 
                               [BuildDefinition]
-                              public partial class MinimalTestDefinition : MinimalBuildDefinition;
+                              public partial class MinimalTestDefinition : BuildDefinition;
                               """;
 
         // Act
