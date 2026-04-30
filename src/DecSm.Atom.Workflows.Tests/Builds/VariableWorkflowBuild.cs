@@ -1,3 +1,5 @@
+using DecSm.Atom.Workflows.Tests.TestUtils;
+
 namespace DecSm.Atom.Workflows.Tests.Builds;
 
 [BuildDefinition]

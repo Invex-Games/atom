@@ -20,8 +20,8 @@ public class TargetDefinitionExtensionsTests
         t.DependsOn(target1, target2);
 
         t.Dependencies.Count.ShouldBe(2);
-        t.Dependencies.ShouldContain("Target1");
-        t.Dependencies.ShouldContain("Target2");
+        t.Dependencies.ShouldContain("target1");
+        t.Dependencies.ShouldContain("target2");
     }
 
     [Test]
@@ -35,9 +35,9 @@ public class TargetDefinitionExtensionsTests
         t.DependsOn(alpha, beta, gamma);
 
         t.Dependencies.Count.ShouldBe(3);
-        t.Dependencies.ShouldContain("Alpha");
-        t.Dependencies.ShouldContain("Beta");
-        t.Dependencies.ShouldContain("Gamma");
+        t.Dependencies.ShouldContain("alpha");
+        t.Dependencies.ShouldContain("beta");
+        t.Dependencies.ShouldContain("gamma");
     }
 
     [Test]
@@ -52,8 +52,8 @@ public class TargetDefinitionExtensionsTests
         t.DependsOn(step1, step2, step3, step4);
 
         t.Dependencies.Count.ShouldBe(4);
-        t.Dependencies.ShouldContain("Step1");
-        t.Dependencies.ShouldContain("Step4");
+        t.Dependencies.ShouldContain("step1");
+        t.Dependencies.ShouldContain("step4");
     }
 
     [Test]
@@ -69,8 +69,8 @@ public class TargetDefinitionExtensionsTests
         t.DependsOn(job1, job2, job3, job4, job5);
 
         t.Dependencies.Count.ShouldBe(5);
-        t.Dependencies.ShouldContain("Job1");
-        t.Dependencies.ShouldContain("Job5");
+        t.Dependencies.ShouldContain("job1");
+        t.Dependencies.ShouldContain("job5");
     }
 
     [Test]

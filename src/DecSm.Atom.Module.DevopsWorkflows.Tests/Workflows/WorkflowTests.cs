@@ -13,7 +13,9 @@ public class WorkflowTests
     {
         // Arrange
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
-        var build = CreateTestHost<MinimalBuild>(fileSystem: fileSystem, commandLineArgs: new(true, [new GenArg()]));
+
+        var build = CreateTestHost<MinimalBuild>(fileSystem: fileSystem,
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         build.Run();
@@ -31,7 +33,9 @@ public class WorkflowTests
     {
         // Arrange
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
-        var build = CreateTestHost<SimpleBuild>(fileSystem: fileSystem, commandLineArgs: new(true, [new GenArg()]));
+
+        var build = CreateTestHost<SimpleBuild>(fileSystem: fileSystem,
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -54,7 +58,9 @@ public class WorkflowTests
     {
         // Arrange
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
-        var build = CreateTestHost<DependentBuild>(fileSystem: fileSystem, commandLineArgs: new(true, [new GenArg()]));
+
+        var build = CreateTestHost<DependentBuild>(fileSystem: fileSystem,
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -78,7 +84,7 @@ public class WorkflowTests
         // Arrange
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
         var console = new TestConsole();
-        var build = CreateTestHost<ArtifactBuild>(console, fileSystem, new(true, [new GenArg()]));
+        var build = CreateTestHost<ArtifactBuild>(console, fileSystem, new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -105,7 +111,7 @@ public class WorkflowTests
 
         var build = CreateTestHost<CustomArtifactBuild>(console,
             fileSystem,
-            new(true, [new GenArg()]),
+            new(true, [new CommandArg(nameof(IGen.Gen))]),
             configure: builder => builder.Services.AddSingleton<IArtifactProvider, TestArtifactProvider>());
 
         // Act
@@ -131,7 +137,7 @@ public class WorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<ManualInputBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new GenArg()]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -156,7 +162,7 @@ public class WorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<SetupDotnetBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new GenArg()]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -181,7 +187,7 @@ public class WorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<EnvironmentBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new GenArg()]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -206,7 +212,7 @@ public class WorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<CheckoutOptionBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new GenArg()]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -231,7 +237,7 @@ public class WorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<DuplicateDependencyBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new GenArg()]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();

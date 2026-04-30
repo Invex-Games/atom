@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class CheckoutOptionBuild : MinimalBuildDefinition, IGithubWorkflows, ICheckoutOptionTarget
+public partial class CheckoutOptionBuild : WorkflowBuildDefinition, IGithubWorkflows, ICheckoutOptionTarget
 {
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [
@@ -10,20 +10,32 @@ public partial class CheckoutOptionBuild : MinimalBuildDefinition, IGithubWorkfl
             Triggers = [WorkflowTriggers.Manual],
             Targets =
             [
-                WorkflowTargets.CheckoutOptionTarget1,
-                WorkflowTargets.CheckoutOptionTarget2.WithOptions(WorkflowOptions.Github.Steps.Checkout(new()
+                new(nameof(ICheckoutOptionTarget.CheckoutOptionTarget1)),
+                new(nameof(ICheckoutOptionTarget.CheckoutOptionTarget2))
                 {
-                    Submodules = WorkflowExpressions.From("recursive"),
-                    Token = WorkflowExpressions.From("some-token"),
-                    FetchDepth = 0,
-                    Lfs = true,
-                })),
-                WorkflowTargets.CheckoutOptionTarget3.WithOptions(WorkflowOptions.Github.Steps.Checkout(new()
+                    Options =
+                    [
+                        BuildOptions.Github.Steps.Checkout(new()
+                        {
+                            Submodules = "recursive",
+                            Token = "some-token",
+                            FetchDepth = 0,
+                            Lfs = true,
+                        }),
+                    ],
+                },
+                new(nameof(ICheckoutOptionTarget.CheckoutOptionTarget3))
                 {
-                    Value = false,
-                })),
+                    Options =
+                    [
+                        BuildOptions.Github.Steps.Checkout(new()
+                        {
+                            Enabled = false,
+                        }),
+                    ],
+                },
             ],
-            WorkflowTypes = [new GithubWorkflowType()],
+            Types = [WorkflowTypes.Github.Action],
         },
     ];
 }

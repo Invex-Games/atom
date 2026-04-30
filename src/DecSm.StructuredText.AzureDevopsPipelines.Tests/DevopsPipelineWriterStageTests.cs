@@ -61,7 +61,7 @@ internal sealed class DevopsPipelineWriterStageTests
         Stage stage = new Stage.StageDefinition
         {
             StageId = new RawExpression("TestStage"),
-            DependsOn = new[] { "BuildStage" },
+            DependsOn = ["BuildStage"],
         };
 
         var output = PipelineWriterHelper.Write(new DevopsPipeline.DevopsPipelineWithStages
@@ -69,8 +69,7 @@ internal sealed class DevopsPipelineWriterStageTests
             Stages = [stage],
         });
 
-        output.ShouldContain("dependsOn:");
-        output.ShouldContain("- BuildStage");
+        output.ShouldContain("dependsOn: [ BuildStage ]");
     }
 
     [Test]
@@ -450,8 +449,7 @@ internal sealed class DevopsPipelineWriterStageTests
         var output = PipelineWriterHelper.Write(pipeline);
 
         output.ShouldContain("trigger:");
-        output.ShouldContain("branches:");
-        output.ShouldContain("- main");
+        output.ShouldContain("branches: [ main ]");
         output.ShouldContain("variables:");
         output.ShouldContain("buildConfiguration: Release");
         output.ShouldContain("stages:");

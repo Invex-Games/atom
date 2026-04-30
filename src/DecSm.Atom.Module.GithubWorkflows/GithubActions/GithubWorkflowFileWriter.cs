@@ -10,16 +10,19 @@ internal sealed class GithubWorkflowFileWriter(
 ) : WorkflowFileWriter<GithubWorkflowType>(atomFileSystem, logger)
 {
     private readonly IAtomFileSystem _atomFileSystem = atomFileSystem;
-    private readonly GithubActionWriter _writer = new();
 
     protected override string FileExtension => "yml";
 
     protected override RootedPath FileLocation => _atomFileSystem.AtomRootDirectory / ".github" / "workflows";
 
-    protected override void WriteWorkflow(WorkflowModel workflow)
+    protected override string WriteWorkflow(WorkflowModel workflow)
     {
         var resolvedWorkflow = BuildWorkflow(workflow);
-        _writer.Write(resolvedWorkflow);
+
+        var actionWriter = new GithubActionWriter();
+        actionWriter.Write(resolvedWorkflow);
+
+        return actionWriter.TextWriter.ToString();
     }
 
     private GithubAction BuildWorkflow(WorkflowModel workflow) =>
@@ -237,7 +240,7 @@ internal sealed class GithubWorkflowFileWriter(
             Steps = BuildSteps(workflow, job),
         };
 
-    private static Permissions BuildPermissions(GithubTokenPermissionsOption? permissionOption) =>
+    private static Permissions? BuildPermissions(GithubTokenPermissionsOption? permissionOption) =>
         permissionOption?.Permissions switch
         {
             Permissions.All all => all,
@@ -248,7 +251,8 @@ internal sealed class GithubWorkflowFileWriter(
                     : exact.Permissions.IsAll(PermissionsLevel.None)
                         ? new Permissions.All(PermissionsLevel.None)
                         : exact.Permissions,
-            _ => throw new UnreachableException(),
+            null => null,
+            _ => throw new ArgumentOutOfRangeException(nameof(permissionOption), permissionOption, null),
         };
 
     private List<Step> BuildSteps(WorkflowModel workflow, WorkflowJobModel job)
@@ -261,7 +265,7 @@ internal sealed class GithubWorkflowFileWriter(
         if (!additionalSteps.Any(x => x is CheckoutStep))
             additionalSteps.Add(new GithubCheckoutStep
             {
-                Value = true,
+                Enabled = true,
                 FetchDepth = TextExpressions.From(0),
             });
 
@@ -271,7 +275,8 @@ internal sealed class GithubWorkflowFileWriter(
         var steps = new List<Step>(additionalSteps
             .Where(x => x.Order < 0)
             .OrderBy(x => x.Order)
-            .Select(BuildAdditionalStep));
+            .Select(BuildAdditionalStep)
+            .OfType<Step>());
 
         var matrixParams = job
             .TargetStep
@@ -522,15 +527,17 @@ internal sealed class GithubWorkflowFileWriter(
         steps.AddRange(additionalSteps
             .Where(x => x.Order > 0)
             .OrderBy(x => x.Order)
-            .Select(BuildAdditionalStep));
+            .Select(BuildAdditionalStep)
+            .OfType<Step>());
 
         return steps;
     }
 
-    private static Step BuildAdditionalStep(IAdditionalStepOption additionalStep) =>
+    private static Step? BuildAdditionalStep(IAdditionalStepOption additionalStep) =>
         additionalStep switch
         {
-            IGithubAdditionalStepOption githubStep => githubStep.Build(),
+            IGithubAdditionalStepOption { Enabled: true } githubStep => githubStep.Build(),
+            IGithubAdditionalStepOption => null,
             SetupDotnetStep setupDotnetStep => BuildSetupDotnetStep(setupDotnetStep),
             AddNugetFeedsStep addNugetFeedsStep => BuildAddNugetFeedsStep(addNugetFeedsStep),
             _ => throw new InvalidOperationException(

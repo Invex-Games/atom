@@ -1,28 +1,36 @@
 ﻿name: dependent-workflow
 
 trigger: none
+pr:
+  branches: [ main ]
 
 jobs:
 
   - job: DependentTarget1
+    displayName: DependentTarget1
     pool:
       vmImage: ubuntu-latest
     steps:
 
       - checkout: self
+        enabled: true
         fetchDepth: 0
 
       - script: dotnet run --project AtomTest/AtomTest.csproj DependentTarget1 --skip --headless
+        displayName: DependentTarget1
         name: DependentTarget1
 
   - job: DependentTarget2
+    displayName: DependentTarget2
     dependsOn: [ DependentTarget1 ]
     pool:
       vmImage: ubuntu-latest
     steps:
 
       - checkout: self
+        enabled: true
         fetchDepth: 0
 
       - script: dotnet run --project AtomTest/AtomTest.csproj DependentTarget2 --skip --headless
+        displayName: DependentTarget2
         name: DependentTarget2

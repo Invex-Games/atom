@@ -42,13 +42,11 @@ internal sealed class DevopsPipelineWriterTriggerTests
     {
         var output = PipelineWriterHelper.Write(SimplePipeline(new Trigger.BranchList
         {
-            Branches = new[] { "main", "develop" },
+            Branches = ["main", "develop"],
         }));
 
         output.ShouldContain("trigger:");
-        output.ShouldContain("branches:");
-        output.ShouldContain("- main");
-        output.ShouldContain("- develop");
+        output.ShouldContain("branches: [ main, develop ]");
     }
 
     [Test]
@@ -56,10 +54,10 @@ internal sealed class DevopsPipelineWriterTriggerTests
     {
         var output = PipelineWriterHelper.Write(SimplePipeline(new Trigger.BranchList
         {
-            Branches = new[] { "main" },
+            Branches = ["main"],
         }));
 
-        string[] lines = ["trigger:", "  branches:", "    - main"];
+        string[] lines = ["trigger:", "  branches: [ main ]"];
 
         output.ShouldContain(PipelineWriterHelper.JoinLines(lines));
     }
@@ -83,17 +81,14 @@ internal sealed class DevopsPipelineWriterTriggerTests
         {
             Branches = new()
             {
-                Include = new[] { "main", "release/*" },
-                Exclude = new[] { "feature/*" },
+                Include = ["main", "release/*"],
+                Exclude = ["feature/*"],
             },
         }));
 
         output.ShouldContain("branches:");
-        output.ShouldContain("include:");
-        output.ShouldContain("- main");
-        output.ShouldContain("- release/*");
-        output.ShouldContain("exclude:");
-        output.ShouldContain("- feature/*");
+        output.ShouldContain("include: [ main, release/* ]");
+        output.ShouldContain("exclude: [ feature/* ]");
     }
 
     [Test]
@@ -103,12 +98,12 @@ internal sealed class DevopsPipelineWriterTriggerTests
         {
             Paths = new()
             {
-                Include = new[] { "src/**" },
+                Include = ["src/**"],
             },
         }));
 
         output.ShouldContain("paths:");
-        output.ShouldContain("- src/**");
+        output.ShouldContain("include: [ src/** ]");
     }
 
     [Test]
@@ -118,12 +113,12 @@ internal sealed class DevopsPipelineWriterTriggerTests
         {
             Tags = new()
             {
-                Include = new[] { "v*" },
+                Include = ["v*"],
             },
         }));
 
         output.ShouldContain("tags:");
-        output.ShouldContain("- v*");
+        output.ShouldContain("include: [ v* ]");
     }
 
     [Test]
@@ -151,8 +146,7 @@ internal sealed class DevopsPipelineWriterTriggerTests
         }));
 
         output.ShouldContain("pr:");
-        output.ShouldContain("branches:");
-        output.ShouldContain("- main");
+        output.ShouldContain("branches: [ main ]");
     }
 
     // ── PR: Full ──────────────────────────────────────────────────────────────
@@ -195,10 +189,8 @@ internal sealed class DevopsPipelineWriterTriggerTests
             },
         }));
 
-        output.ShouldContain("branches:");
-        output.ShouldContain("- main");
-        output.ShouldContain("paths:");
-        output.ShouldContain("- docs/**");
+        output.ShouldContain("include: [ main ]");
+        output.ShouldContain("exclude: [ docs/** ]");
     }
 
     [Test]
@@ -244,10 +236,7 @@ internal sealed class DevopsPipelineWriterTriggerTests
         output.ShouldContain("displayName: Environment");
         output.ShouldContain("type: string");
         output.ShouldContain("default: dev");
-        output.ShouldContain("values:");
-        output.ShouldContain("- dev");
-        output.ShouldContain("- staging");
-        output.ShouldContain("- prod");
+        output.ShouldContain("values: [ dev, staging, prod ]");
     }
 
     [Test]
@@ -292,7 +281,7 @@ internal sealed class DevopsPipelineWriterTriggerTests
                 DisplayName = new RawExpression("Weekly Sunday"),
                 Branches = new()
                 {
-                    Include = new[] { "main" },
+                    Include = "main",
                 },
                 Always = new BooleanExpression(true),
             },
@@ -301,8 +290,7 @@ internal sealed class DevopsPipelineWriterTriggerTests
         output.ShouldContain("- cron: 0 0 * * 0");
         output.ShouldContain("displayName: Weekly Sunday");
         output.ShouldContain("always: true");
-        output.ShouldContain("branches:");
-        output.ShouldContain("- main");
+        output.ShouldContain("include: [ main ]");
     }
 
     [Test]

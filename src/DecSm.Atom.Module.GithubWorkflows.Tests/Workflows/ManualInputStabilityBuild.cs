@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class ManualInputStabilityBuild : BuildDefinition, IGithubWorkflows, IManualInputStabilityTarget
+public partial class ManualInputStabilityBuild : WorkflowBuildDefinition, IGithubWorkflows, IManualInputStabilityTarget
 {
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [
@@ -13,19 +13,21 @@ public partial class ManualInputStabilityBuild : BuildDefinition, IGithubWorkflo
                 {
                     Inputs =
                     [
-                        ManualStringInput.ForParam(WorkflowParams.StringParamWithoutDefault),
-                        ManualStringInput.ForParam(WorkflowParams.StringParamWithDefault),
-                        ManualBoolInput.ForParam(WorkflowParams.BoolParamWithoutDefault),
-                        ManualBoolInput.ForParam(WorkflowParams.BoolParamWithDefault),
-                        ManualChoiceInput.ForParam(WorkflowParams.ChoiceParamWithoutDefault,
+                        ManualStringInput.ForParam(
+                            ParamDefinitions[nameof(IManualInputTarget.StringParamWithoutDefault)]),
+                        ManualStringInput.ForParam(ParamDefinitions[nameof(IManualInputTarget.StringParamWithDefault)]),
+                        ManualBoolInput.ForParam(ParamDefinitions[nameof(IManualInputTarget.BoolParamWithoutDefault)]),
+                        ManualBoolInput.ForParam(ParamDefinitions[nameof(IManualInputTarget.BoolParamWithDefault)]),
+                        ManualChoiceInput.ForParam(
+                            ParamDefinitions[nameof(IManualInputTarget.ChoiceParamWithoutDefault)],
                             ["choice 1", "choice 2", "choice 3"]),
-                        ManualChoiceInput.ForParam(WorkflowParams.ChoiceParamWithDefault,
+                        ManualChoiceInput.ForParam(ParamDefinitions[nameof(IManualInputTarget.ChoiceParamWithDefault)],
                             ["choice 1", "choice 2", "choice 3"]),
                     ],
                 },
             ],
-            Targets = [WorkflowTargets.ManualInputTarget],
-            WorkflowTypes = [WorkflowTypes.Github.Action],
+            Targets = [new(nameof(IManualInputStabilityTarget.ManualInputTarget))],
+            Types = [WorkflowTypes.Github.Action],
         },
     ];
 }

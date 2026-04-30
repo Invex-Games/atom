@@ -1,7 +1,7 @@
 namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class DependabotBuild : MinimalBuildDefinition, IGithubWorkflows
+public partial class DependabotBuild : WorkflowBuildDefinition, IGithubWorkflows
 {
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [

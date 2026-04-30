@@ -17,6 +17,8 @@ public sealed record AddNugetFeedsStep : IAdditionalStepOption
 
     public bool SyncAtomToolVersionToLibraryVersion { get; init; } = true;
 
+    public bool Enabled { get; init; } = true;
+
     public int Order { get; init; } = -100;
 
     /// <summary>

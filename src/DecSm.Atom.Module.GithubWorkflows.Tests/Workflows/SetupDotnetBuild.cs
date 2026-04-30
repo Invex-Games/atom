@@ -1,15 +1,21 @@
 ﻿namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class SetupDotnetBuild : MinimalBuildDefinition, IGithubWorkflows, ISetupDotnetTarget
+public partial class SetupDotnetBuild : WorkflowBuildDefinition, IGithubWorkflows, ISetupDotnetTarget
 {
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [
         new("setup-dotnet")
         {
             Triggers = [WorkflowTriggers.PushToMain],
-            Targets = [WorkflowTargets.SetupDotnetTarget.WithOptions(WorkflowOptions.Steps.SetupDotnet.Dotnet90X())],
-            WorkflowTypes = [WorkflowTypes.Github.Action],
+            Targets =
+            [
+                new(nameof(ISetupDotnetTarget.SetupDotnetTarget))
+                {
+                    Options = [BuildOptions.Steps.SetupDotnet.Dotnet90X()],
+                },
+            ],
+            Types = [WorkflowTypes.Github.Action],
         },
     ];
 }

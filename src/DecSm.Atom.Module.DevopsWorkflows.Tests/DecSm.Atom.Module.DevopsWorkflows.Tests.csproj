@@ -51,7 +51,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DecSm.Atom.Module.DevopsWorkflows\DecSm.Atom.Module.DevopsWorkflows.csproj" />
-    <ProjectReference Include="..\DecSm.Atom.SourceGenerators\DecSm.Atom.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\DecSm.Atom.Build.SourceGenerators\DecSm.Atom.Build.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\DecSm.Atom.TestUtils\DecSm.Atom.TestUtils.csproj" />
   </ItemGroup>
 

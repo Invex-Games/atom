@@ -16,8 +16,6 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem atomFileSystem, ILog
     : IWorkflowWriter<T>
     where T : IWorkflowType
 {
-    protected StructuredTextWriter TextWriter => field ??= new(TabSize);
-
     /// <summary>
     ///     Gets the number of spaces to use for each indentation level. Defaults to 2.
     /// </summary>
@@ -42,10 +40,8 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem atomFileSystem, ILog
     {
         var filePath = FileLocation / $"{workflow.Name}.{FileExtension}";
 
-        WriteWorkflow(workflow);
-
-        var newText = TextWriter.ToString();
-        TextWriter.Reset();
+        var newText = WriteWorkflow(workflow)
+            .ReplaceLineEndings();
 
         var existingText = atomFileSystem.File.Exists(filePath)
             ? await atomFileSystem.File.ReadAllTextAsync(filePath, cancellationToken)
@@ -84,13 +80,8 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem atomFileSystem, ILog
     {
         var filePath = FileLocation / $"{workflow.Name}.{FileExtension}";
 
-        WriteWorkflow(workflow);
-
-        var newText = TextWriter
-            .ToString()
+        var newText = WriteWorkflow(workflow)
             .ReplaceLineEndings();
-
-        TextWriter.Reset();
 
         var existingText = atomFileSystem.File.Exists(filePath)
             ? await atomFileSystem.File.ReadAllTextAsync(filePath, cancellationToken)
@@ -114,5 +105,5 @@ public abstract class WorkflowFileWriter<T>(IAtomFileSystem atomFileSystem, ILog
     ///     When overridden in a derived class, writes the content of the workflow file using the provided helper methods.
     /// </summary>
     /// <param name="workflow">The workflow model to write.</param>
-    protected abstract void WriteWorkflow(WorkflowModel workflow);
+    protected abstract string WriteWorkflow(WorkflowModel workflow);
 }

@@ -1,9 +1,7 @@
-﻿using DecSm.Atom.Module.GithubWorkflows.Workflows.Options;
-
-namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
+﻿namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class PermissionsBuild : MinimalBuildDefinition, IGithubWorkflows, IPermissionsTarget
+public partial class PermissionsBuild : WorkflowBuildDefinition, IGithubWorkflows, IPermissionsTarget
 {
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [
@@ -18,13 +16,19 @@ public partial class PermissionsBuild : MinimalBuildDefinition, IGithubWorkflows
             ],
             Targets =
             [
-                WorkflowTargets.PermissionsTarget.WithOptions(new GithubTokenPermissionsOption(new PermissionsEvent
+                new(nameof(IPermissionsTarget.PermissionsTarget))
                 {
-                    Actions = PermissionsLevel.Write,
-                })),
+                    Options =
+                    [
+                        new GithubTokenPermissionsOption(new PermissionsEvent
+                        {
+                            Actions = PermissionsLevel.Write,
+                        }),
+                    ],
+                },
             ],
-            WorkflowTypes = [WorkflowTypes.Github.Action],
-            Options = [WorkflowOptions.Github.TokenPermissions.ReadAll],
+            Types = [WorkflowTypes.Github.Action],
+            Options = [BuildOptions.Github.TokenPermissions.ReadAll],
         },
     ];
 }

@@ -27,10 +27,7 @@
     <Project Path="samples/Sample_02_Params/Sample_02_Params.csproj" />
   </Folder>
   <Folder Name="/Tests/">
-    <Project Path="src/DecSm.Atom.Module.DevopsWorkflows.Tests/DecSm.Atom.Module.DevopsWorkflows.Tests.csproj" />
-    <Project Path="src/DecSm.Atom.Module.GithubWorkflows.Tests/DecSm.Atom.Module.GithubWorkflows.Tests.csproj" />
     <Project Path="src/DecSm.Atom.TestUtils/DecSm.Atom.TestUtils.csproj" />
-    <Project Path="src/DecSm.Atom.Workflows.TestUtils/DecSm.Atom.Workflows.TestUtils.csproj" />
   </Folder>
   <Folder Name="/Tests/Analyzers/">
     <Project Path="src/DecSm.Atom.Build.Analyzers.Tests/DecSm.Atom.Build.Analyzers.Tests.csproj" />
@@ -45,6 +42,8 @@
     <Project Path="src/DecSm.StructuredText.Tests/DecSm.StructuredText.Tests.csproj" />
   </Folder>
   <Folder Name="/Tests/Modules/">
+    <Project Path="src/DecSm.Atom.Module.DevopsWorkflows.Tests/DecSm.Atom.Module.DevopsWorkflows.Tests.csproj" />
+    <Project Path="src/DecSm.Atom.Module.GithubWorkflows.Tests/DecSm.Atom.Module.GithubWorkflows.Tests.csproj" />
     <Project Path="src/DecSm.StructuredText.AzureDevopsPipelines.Tests/DecSm.StructuredText.AzureDevopsPipelines.Tests.csproj" />
     <Project Path="src/DecSm.StructuredText.GithubActions.Tests/DecSm.StructuredText.GithubActions.Tests.csproj" />
   </Folder>

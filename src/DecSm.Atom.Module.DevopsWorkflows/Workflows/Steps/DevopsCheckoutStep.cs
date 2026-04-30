@@ -9,7 +9,7 @@ public sealed record DevopsCheckoutStep : CheckoutStep, IDevopsAdditionalStepOpt
     /// <summary>
     ///     Repository to check out. Valid values: "self" | "none" or repository resource name.
     /// </summary>
-    public required TextExpression Repository { get; init; }
+    public TextExpression Repository { get; init; } = "self";
 
     /// <summary>
     ///     Whether to clean the repository before checkout.
@@ -64,7 +64,7 @@ public sealed record DevopsCheckoutStep : CheckoutStep, IDevopsAdditionalStepOpt
     /// <summary>
     ///     Run this task when the job runs?
     /// </summary>
-    public TextExpression? Enabled { get; init; }
+    public TextExpression? EnableRun { get; init; }
 
     /// <summary>
     ///     Variables to map into the process's environment.
@@ -100,7 +100,7 @@ public sealed record DevopsCheckoutStep : CheckoutStep, IDevopsAdditionalStepOpt
             ContinueOnError = ContinueOnError,
             DisplayName = DisplayName,
             Target = Target,
-            Enabled = Enabled,
+            Enabled = EnableRun,
             Env = Env,
             Name = Name,
             TimeoutInMinutes = TimeoutInMinutes,

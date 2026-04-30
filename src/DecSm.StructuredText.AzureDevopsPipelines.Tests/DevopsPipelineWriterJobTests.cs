@@ -50,9 +50,7 @@ internal sealed class DevopsPipelineWriterJobTests
             Jobs = [job],
         });
 
-        output.ShouldContain("dependsOn:");
-        output.ShouldContain("- BuildJob");
-        output.ShouldContain("- TestJob");
+        output.ShouldContain("dependsOn: [ BuildJob, TestJob ]");
     }
 
     [Test]
@@ -218,10 +216,8 @@ internal sealed class DevopsPipelineWriterJobTests
         });
 
         output.ShouldContain("uses:");
-        output.ShouldContain("repositories:");
-        output.ShouldContain("- myRepo");
-        output.ShouldContain("pools:");
-        output.ShouldContain("- myPool");
+        output.ShouldContain("repositories: [ myRepo ]");
+        output.ShouldContain("pools: [ myPool ]");
     }
 
     [Test]
@@ -331,8 +327,7 @@ internal sealed class DevopsPipelineWriterJobTests
         output.ShouldContain("resourceName: myVM");
         output.ShouldContain("resourceType: VirtualMachine");
         output.ShouldContain("resourceId: 12345");
-        output.ShouldContain("tags:");
-        output.ShouldContain("- primary");
+        output.ShouldContain("tags: [ primary ]");
     }
 
     [Test]
@@ -511,9 +506,7 @@ internal sealed class DevopsPipelineWriterJobTests
         });
 
         output.ShouldContain("canary:");
-        output.ShouldContain("increments:");
-        output.ShouldContain("- 10");
-        output.ShouldContain("- 50");
+        output.ShouldContain("increments: [ 10, 50 ]");
         output.ShouldContain("- script: echo canary");
     }
 

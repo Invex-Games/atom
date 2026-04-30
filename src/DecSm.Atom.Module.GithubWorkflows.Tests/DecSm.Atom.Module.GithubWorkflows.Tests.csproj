@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
-    <UserSecretsId>decsm.atom.tests</UserSecretsId>
+    <UserSecretsId>decsm-atom-module-githubworkflows-tests</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -51,7 +51,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DecSm.Atom.Module.GithubWorkflows\DecSm.Atom.Module.GithubWorkflows.csproj" />
-    <ProjectReference Include="..\DecSm.Atom.SourceGenerators\DecSm.Atom.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\DecSm.Atom.Build.SourceGenerators\DecSm.Atom.Build.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\DecSm.Atom.TestUtils\DecSm.Atom.TestUtils.csproj" />
   </ItemGroup>
 

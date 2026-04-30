@@ -351,8 +351,7 @@ internal sealed class DevopsPipelineWriterStepTests
         });
 
         output.ShouldContain("artifact: drop");
-        output.ShouldContain("patterns:");
-        output.ShouldContain("- **/*.zip");
+        output.ShouldContain("patterns: [ **/*.zip ]");
         output.ShouldContain("path: $(Pipeline.Workspace)/drop");
     }
 
@@ -391,7 +390,7 @@ internal sealed class DevopsPipelineWriterStepTests
         });
 
         output.ShouldContain("artifact: logs");
-        output.ShouldContain("- **/*.log");
+        output.ShouldContain("patterns: [ **/*.log ]");
         output.ShouldContain("path: $(Build.StagingDirectory)");
     }
 
@@ -632,9 +631,7 @@ internal sealed class DevopsPipelineWriterStepTests
             Steps = [step],
         });
 
-        output.ShouldContain("settableVariables:");
-        output.ShouldContain("- MY_VAR");
-        output.ShouldContain("- ANOTHER_VAR");
+        output.ShouldContain("settableVariables: [ MY_VAR, ANOTHER_VAR ]");
     }
 
     // ── JobContainer inline ───────────────────────────────────────────────────
@@ -692,8 +689,8 @@ internal sealed class DevopsPipelineWriterStepTests
         output.ShouldContain("options: --user root");
         output.ShouldContain("endpoint: myRegistry");
         output.ShouldContain("ENV_VAR: val");
-        output.ShouldContain("- 8080:80");
-        output.ShouldContain("- /opt:/opt");
+        output.ShouldContain("ports: [ 8080:80 ]");
+        output.ShouldContain("volumes: [ /opt:/opt ]");
         output.ShouldContain("mapDockerSocket: true");
     }
 

@@ -1,4 +1,4 @@
 ﻿namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class MinimalBuild : MinimalBuildDefinition;
+public partial class EmptyBuild : WorkflowBuildDefinition;

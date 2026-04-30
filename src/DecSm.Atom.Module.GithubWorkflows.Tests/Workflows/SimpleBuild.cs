@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class SimpleBuild : MinimalBuildDefinition, IGithubWorkflows, ISimpleTarget
+public partial class SimpleBuild : WorkflowBuildDefinition, IGithubWorkflows, ISimpleTarget
 {
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [
@@ -14,8 +14,8 @@ public partial class SimpleBuild : MinimalBuildDefinition, IGithubWorkflows, ISi
                     IncludedBranches = ["main"],
                 },
             ],
-            Targets = [WorkflowTargets.SimpleTarget],
-            WorkflowTypes = [new GithubWorkflowType()],
+            Targets = [new(nameof(ISimpleTarget.SimpleTarget))],
+            Types = [WorkflowTypes.Github.Action],
         },
     ];
 }

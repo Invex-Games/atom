@@ -32,7 +32,12 @@ internal sealed partial class DevopsWorkflowBuilder(
             .OfType<GitPushTrigger>()
             .ToArray();
 
-        if (pushTriggers.Length is 0)
+        var hasManualTrigger = workflow
+            .Triggers
+            .OfType<ManualTrigger>()
+            .Any();
+
+        if (pushTriggers.Length is 0 && !hasManualTrigger)
             return new Trigger.None();
 
         // Combine all push triggers into a single full trigger
@@ -335,6 +340,7 @@ internal sealed partial class DevopsWorkflowBuilder(
         };
 
         var environment = DeployToEnvironment.Get(job.TargetStep.Options);
+        var jobVariables = BuildJobConsumedVariables(job);
 
         if (environment is not null)
             return new Job.Deployment
@@ -346,6 +352,7 @@ internal sealed partial class DevopsWorkflowBuilder(
                     : null,
                 Condition = conditionExpression,
                 Pool = pool,
+                Variables = jobVariables,
                 Environment = new DeploymentEnvironment.EnvironmentName
                 {
                     Name = environment.EnvironmentName,
@@ -368,6 +375,7 @@ internal sealed partial class DevopsWorkflowBuilder(
                 : null,
             Condition = conditionExpression,
             Pool = pool,
+            Variables = jobVariables,
             Strategy = job.TargetStep.MatrixDimensions.Count > 0
                 ? new JobStrategy
                 {
@@ -375,6 +383,51 @@ internal sealed partial class DevopsWorkflowBuilder(
                 }
                 : null,
             Steps = BuildSteps(workflow, job),
+        };
+    }
+
+    private Variables? BuildJobConsumedVariables(WorkflowJobModel job)
+    {
+        var target = buildModel.GetTarget(job.TargetStep.Name);
+
+        var targets = new List<TargetModel>
+        {
+            target,
+        };
+
+        if (UseCustomArtifactProvider.Get(job.TargetStep.Options) is { Enabled: true })
+        {
+            if (target.ConsumedArtifacts.Count > 0)
+                targets.Add(buildModel.GetTarget(nameof(IRetrieveArtifact.RetrieveArtifact)));
+
+            if (target.ProducedArtifacts.Count > 0 &&
+                SuppressArtifactPublishingOption.Get(job.TargetStep.Options) is not { Enabled: true })
+                targets.Add(buildModel.GetTarget(nameof(IStoreArtifact.StoreArtifact)));
+        }
+
+        var consumedVariables = targets
+            .SelectMany(t => t.ConsumedVariables)
+            .DistinctBy(v => v.VariableName)
+            .ToList();
+
+        if (consumedVariables.Count is 0)
+            return null;
+
+        return new Variables.VariableList
+        {
+            Values = consumedVariables
+                .Select(consumedVariable =>
+                {
+                    var argName = buildDefinition.ParamDefinitions[consumedVariable.VariableName].ArgName;
+
+                    return (Variable)new Variable.Name
+                    {
+                        VariableName = TextExpressions.Raw(argName),
+                        Value = new DevopsRuntimeExpression(new RawExpression(
+                            $"dependencies.{consumedVariable.TargetName}.outputs['{consumedVariable.TargetName}.{argName}']")),
+                    };
+                })
+                .ToList(),
         };
     }
 
@@ -487,7 +540,7 @@ internal sealed partial class DevopsWorkflowBuilder(
         if (!additionalSteps.Any(x => x is CheckoutStep))
             additionalSteps.Add(new DevopsCheckoutStep
             {
-                Value = true,
+                EnableRun = true,
                 Repository = TextExpressions.Raw("self"),
                 FetchDepth = TextExpressions.From(0),
             });
@@ -820,8 +873,9 @@ internal sealed partial class DevopsWorkflowBuilder(
         {
             var argName = buildDefinition.ParamDefinitions[consumedVariable.VariableName].ArgName;
 
-            targetStepEnv[argName] = new DevopsRuntimeExpression(new RawExpression(
-                $"dependencies.{consumedVariable.TargetName}.outputs['{consumedVariable.TargetName}.{argName}']"));
+            // Consumed variables are declared as job-level variables (using runtime expressions) in BuildJobConsumedVariables.
+            // Here we reference them via the macro $(varName) syntax, which is the correct way to read job variables in step envs.
+            targetStepEnv[argName] = new DevopsMacroExpression(TextExpressions.Raw(argName));
         }
 
         var requiredSecrets = usedParams
