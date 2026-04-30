@@ -1,0 +1,282 @@
+name: Validate
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions: { }
+
+jobs:
+
+  SetupBuildInfo:
+    runs-on: ubuntu-latest
+    outputs:
+      build-name: ${{ steps.SetupBuildInfo.outputs.build-name }}
+      build-id: ${{ steps.SetupBuildInfo.outputs.build-id }}
+      build-version: ${{ steps.SetupBuildInfo.outputs.build-version }}
+      build-timestamp: ${{ steps.SetupBuildInfo.outputs.build-timestamp }}
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET 10.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: SetupBuildInfo
+        id: SetupBuildInfo
+        run: dotnet run --project _atom/_atom.csproj -- SetupBuildInfo --skip --headless
+
+  PackProjects:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET 10.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: PackProjects
+        id: PackProjects
+        run: dotnet run --project _atom/_atom.csproj -- PackProjects --skip --headless
+
+      - name: Store DecSm.Atom.Build
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.Build
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build'
+
+      - name: Store DecSm.Atom.FileSystem
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.FileSystem
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.FileSystem'
+
+      - name: Store DecSm.Atom.Process
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.Process
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Process'
+
+      - name: Store DecSm.Atom.SemanticVersion
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.SemanticVersion
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SemanticVersion'
+
+      - name: Store DecSm.Atom.Workflows
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.Workflows
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Workflows'
+
+      - name: Store DecSm.StructuredText
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.StructuredText
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.StructuredText'
+
+      - name: Store DecSm.StructuredText.AzureDevopsPipelines
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.StructuredText.AzureDevopsPipelines
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.StructuredText.AzureDevopsPipelines'
+
+      - name: Store DecSm.StructuredText.GithubActions
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.StructuredText.GithubActions
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.StructuredText.GithubActions'
+
+      - name: Store DecSm.Atom.Module.AzureKeyVault
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.Module.AzureKeyVault
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.AzureKeyVault'
+
+      - name: Store DecSm.Atom.Module.AzureStorage
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.Module.AzureStorage
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.AzureStorage'
+
+      - name: Store DecSm.Atom.Module.DevopsWorkflows
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.Module.DevopsWorkflows
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.DevopsWorkflows'
+
+      - name: Store DecSm.Atom.Module.Dotnet
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.Module.Dotnet
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.Dotnet'
+
+      - name: Store DecSm.Atom.Module.GitVersion
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.Module.GitVersion
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.GitVersion'
+
+      - name: Store DecSm.Atom.Module.GithubWorkflows
+        uses: actions/upload-artifact@v7
+        with:
+          name: DecSm.Atom.Module.GithubWorkflows
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.GithubWorkflows'
+
+  PackTool:
+    runs-on: ${{ matrix.job-runs-on }}
+    strategy:
+      matrix:
+        job-runs-on:
+          - windows-latest
+          - windows-11-arm
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+          - macos-15-intel
+          - macos-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET 10.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: PackTool
+        id: PackTool
+        run: dotnet run --project _atom/_atom.csproj -- PackTool --skip --headless
+        env:
+          job-runs-on: ${{ matrix.job-runs-on }}
+          build-slice: ${{ matrix.job-runs-on }}
+
+      - name: Store DecSm.Atom.Tool
+        uses: actions/upload-artifact@v7
+        with:
+          name: 'DecSm.Atom.Tool-${{ matrix.job-runs-on }}'
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Tool'
+
+  TestProjects:
+    runs-on: ${{ matrix.job-runs-on }}
+    strategy:
+      matrix:
+        job-runs-on:
+          - windows-latest
+          - windows-11-arm
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+          - macos-15-intel
+          - macos-latest
+        test-framework: [ net8.0, net9.0, net10.0 ]
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET 10.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Setup .NET 8.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Setup .NET 9.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 9.0.x
+
+      - name: TestProjects
+        id: TestProjects
+        run: dotnet run --project _atom/_atom.csproj -- TestProjects --skip --headless
+        env:
+          job-runs-on: ${{ matrix.job-runs-on }}
+          test-framework: ${{ matrix.test-framework }}
+          build-slice: '${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
+
+      - name: Store DecSm.Atom.Build.Tests
+        uses: actions/upload-artifact@v7
+        with:
+          name: 'DecSm.Atom.Build.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Tests'
+
+      - name: Store DecSm.Atom.Build.Analyzers.Tests
+        uses: actions/upload-artifact@v7
+        with:
+          name: 'DecSm.Atom.Build.Analyzers.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
+
+      - name: Store DecSm.Atom.Build.SourceGenerators.Tests
+        uses: actions/upload-artifact@v7
+        with:
+          name: 'DecSm.Atom.Build.SourceGenerators.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
+
+      - name: Store DecSm.Atom.Module.DevopsWorkflows.Tests
+        uses: actions/upload-artifact@v7
+        with:
+          name: 'DecSm.Atom.Module.DevopsWorkflows.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.DevopsWorkflows.Tests'
+
+      - name: Store DecSm.Atom.Module.GithubWorkflows.Tests
+        uses: actions/upload-artifact@v7
+        with:
+          name: 'DecSm.Atom.Module.GithubWorkflows.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.GithubWorkflows.Tests'
+
+      - name: Store DecSm.Atom.Tool.Tests
+        uses: actions/upload-artifact@v7
+        with:
+          name: 'DecSm.Atom.Tool.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
+          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Tool.Tests'
+
+  CheckPrForBreakingChanges:
+    permissions:
+      checks: write
+      contents: write
+      id-token: write
+      pull-requests: write
+    needs: [ SetupBuildInfo ]
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET 10.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: CheckPrForBreakingChanges
+        id: CheckPrForBreakingChanges
+        run: dotnet run --project _atom/_atom.csproj -- CheckPrForBreakingChanges --skip --headless
+        env:
+          build-version: ${{ needs.SetupBuildInfo.outputs.build-version }}
+          azure-vault-app-secret: ${{ secrets.AZURE_VAULT_APP_SECRET }}
+          azure-vault-address: ${{ vars.AZURE_VAULT_ADDRESS }}
+          azure-vault-tenant-id: ${{ vars.AZURE_VAULT_TENANT_ID }}
+          azure-vault-app-id: ${{ vars.AZURE_VAULT_APP_ID }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ github.event.number }}
+
