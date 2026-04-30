@@ -3,8 +3,6 @@
 [BuildDefinition]
 public partial class DuplicateDependencyBuild : WorkflowBuildDefinition, IDevopsWorkflows, IDuplicateDependencyTarget
 {
-    public override IReadOnlyList<IBuildOption> Options => [BuildOptions.Artifacts.UseCustomProvider];
-
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [
         new("duplicatedependency-workflow")
@@ -14,6 +12,8 @@ public partial class DuplicateDependencyBuild : WorkflowBuildDefinition, IDevops
             Types = [WorkflowTypes.Devops.Pipeline],
         },
     ];
+
+    public override IReadOnlyList<IBuildOption> Options => [BuildOptions.Artifacts.UseCustomProvider];
 }
 
 [ConfigureHostBuilder]
