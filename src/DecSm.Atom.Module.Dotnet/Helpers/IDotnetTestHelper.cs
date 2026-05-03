@@ -108,6 +108,9 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
             Output = testOptions.Output is { Length: > 0 }
                 ? testOptions.Output
                 : AtomFileSystem.AtomRootDirectory / projectName / "TestResults",
+            ResultsDirectory = testOptions.ResultsDirectory is { Length: > 0 }
+                ? testOptions.ResultsDirectory
+                : AtomFileSystem.AtomRootDirectory / projectName / "TestResults",
             Logger = testOptions.Logger ??
             [
                 $"\"trx;LogFileName={projectName}.trx\"", $"\"html;LogFileName={projectName}.html\"",
