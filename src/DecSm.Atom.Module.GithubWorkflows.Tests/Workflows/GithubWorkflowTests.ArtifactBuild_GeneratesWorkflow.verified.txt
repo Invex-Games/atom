@@ -25,7 +25,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: TestArtifact1
-          path: '${{ github.workspace }}/.github/artifacts/TestArtifact1'
+          path: '${{ github.workspace }}/.github/publish/TestArtifact1'
 
   ArtifactTarget2:
     needs: [ ArtifactTarget1 ]
@@ -51,13 +51,13 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: TestArtifact2-Slice1
-          path: '${{ github.workspace }}/.github/artifacts/TestArtifact2'
+          path: '${{ github.workspace }}/.github/publish/TestArtifact2'
 
       - name: Store TestArtifact2
         uses: actions/upload-artifact@v7
         with:
           name: TestArtifact2-Slice2
-          path: '${{ github.workspace }}/.github/artifacts/TestArtifact2'
+          path: '${{ github.workspace }}/.github/publish/TestArtifact2'
 
   ArtifactTarget3:
     needs: [ ArtifactTarget1, ArtifactTarget2 ]
