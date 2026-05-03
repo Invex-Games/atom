@@ -83,6 +83,7 @@ public static class StringUtil
             if (stripNewlines)
                 @string = @string
                     .Replace(Environment.NewLine, " ")
+                    .Replace("\r\n", " ")
                     .Replace("\r", " ")
                     .Replace("\n", " ");
 
