@@ -48,8 +48,6 @@ internal sealed class HelpService(
         console.Write(
             new Markup("  [dim]-i,  --interactive[/] [dim]Run in interactive mode (prompt for required params)[/]\n"));
 
-        console.Write(new Markup("  [dim]-g,  --gen[/]         [dim]Generate build scripts[/]\n"));
-
         console.Write(new Markup(
             "  [dim]-s,  --skip[/]        [dim]Skip dependency execution (run only specified commands)[/]\n"));
 
