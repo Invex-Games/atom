@@ -74,7 +74,7 @@ public class BuildExecutorTests
 
         _commandLineArgs = new(true, [new CommandArg("Test")]);
 
-        var target = new TargetModel("Test", null, false)
+        var target = new TargetModel("Test", null, false, null)
         {
             Tasks =
             [

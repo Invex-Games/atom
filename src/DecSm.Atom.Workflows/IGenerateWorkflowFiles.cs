@@ -1,10 +1,11 @@
 namespace DecSm.Atom.Workflows;
 
 [PublicAPI]
-public interface IGen : IBuildAccessor
+public interface IGenerateWorkflowFiles : IBuildAccessor
 {
-    Target Gen =>
+    Target GenerateWorkflowFiles =>
         t => t
+            .WithAlias("Gen")
             .DescribedAs("Generates workflow files")
             .Executes(() => GetService<WorkflowGenerator>()
                 .GenerateWorkflows());

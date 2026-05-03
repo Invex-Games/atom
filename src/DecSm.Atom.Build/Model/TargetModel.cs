@@ -9,8 +9,9 @@
 /// <param name="Name">The name of the target.</param>
 /// <param name="Description">An optional description of the target.</param>
 /// <param name="IsHidden">A value indicating whether the target should be hidden from user-facing lists.</param>
+/// <param name="Alias">An optional alias that can be used as a shorthand to invoke the target from the command line.</param>
 [PublicAPI]
-public sealed record TargetModel(string Name, string? Description, bool IsHidden)
+public sealed record TargetModel(string Name, string? Description, bool IsHidden, string? Alias)
 {
     /// <summary>
     ///     Gets the collection of asynchronous tasks that will be executed when the target runs.

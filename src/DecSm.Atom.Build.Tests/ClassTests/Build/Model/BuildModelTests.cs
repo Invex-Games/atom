@@ -22,7 +22,7 @@ public class BuildModelTests
     }
 
     private static TargetModel TestTargetModel =>
-        new("TargetModel", null, false)
+        new("TargetModel", null, false, null)
         {
             Tasks = [],
             Params = [],

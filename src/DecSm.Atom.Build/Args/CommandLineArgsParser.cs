@@ -10,6 +10,20 @@
 /// </remarks>
 internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IAnsiConsole console)
 {
+    private readonly IReadOnlyDictionary<string, string> _aliasToTargetName = buildDefinition
+        .TargetDefinitions
+        .Select(x =>
+        {
+            var definition = x.Value(new()
+            {
+                Name = x.Key,
+            });
+
+            return (Name: x.Key, definition.Alias);
+        })
+        .Where(x => x.Alias is not null)
+        .ToDictionary(x => x.Alias!, x => x.Name, StringComparer.OrdinalIgnoreCase);
+
     /// <summary>
     ///     Parses the provided command-line arguments into a <see cref="CommandLineArgs" /> object.
     /// </summary>
@@ -97,7 +111,7 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
                     continue;
             }
 
-            if (TryParseCommand(buildDefinition.TargetDefinitions, rawArg) is { } commandArg)
+            if (TryParseCommand(buildDefinition.TargetDefinitions, _aliasToTargetName, rawArg) is { } commandArg)
             {
                 args.Add(commandArg);
 
@@ -110,6 +124,7 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
             var commandMatches = buildDefinition
                 .TargetDefinitions
                 .Keys
+                .Concat(_aliasToTargetName.Keys)
                 .OrderBy(targetDefinition => targetDefinition.GetLevenshteinDistance(rawArg))
                 .Take(3)
                 .ToList();
@@ -169,13 +184,27 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
     ///     Attempts to parse a raw argument as a defined command (target) from the build definition.
     /// </summary>
     /// <param name="targetDefinitions">The available target definitions.</param>
+    /// <param name="aliasToTargetName">A mapping from alias strings to target names.</param>
     /// <param name="rawArg">The raw string argument.</param>
-    /// <returns>A <see cref="CommandArg" /> if the argument matches a known target; otherwise, <c>null</c>.</returns>
-    private static CommandArg? TryParseCommand(IReadOnlyDictionary<string, Target> targetDefinitions, string rawArg) =>
-        targetDefinitions
+    /// <returns>A <see cref="CommandArg" /> if the argument matches a known target or alias; otherwise, <c>null</c>.</returns>
+    private static CommandArg? TryParseCommand(
+        IReadOnlyDictionary<string, Target> targetDefinitions,
+        IReadOnlyDictionary<string, string> aliasToTargetName,
+        string rawArg)
+    {
+        // Match by target name
+        var matchedByName = targetDefinitions
             .Where(buildTarget => string.Equals(rawArg, buildTarget.Key, StringComparison.OrdinalIgnoreCase))
             .Select(x => x.Key)
-            .FirstOrDefault() is { } matchedBuildTarget
-            ? new CommandArg(matchedBuildTarget)
-            : null;
+            .FirstOrDefault();
+
+        if (matchedByName is not null)
+            return new(matchedByName);
+
+        // Match by alias
+        if (aliasToTargetName.TryGetValue(rawArg, out var targetName))
+            return new(targetName);
+
+        return null;
+    }
 }
