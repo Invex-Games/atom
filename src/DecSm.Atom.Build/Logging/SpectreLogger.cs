@@ -4,6 +4,7 @@
 ///     An internal logger implementation that writes formatted log messages to the console using Spectre.Console.
 /// </summary>
 /// <param name="categoryName">The category name for the logger.</param>
+/// <param name="serviceProvider">The service provider for resolving services.</param>
 /// <param name="scopeProvider">The external scope provider for accessing scope data.</param>
 internal sealed partial class SpectreLogger(
     string categoryName,
