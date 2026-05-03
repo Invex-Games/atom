@@ -129,6 +129,7 @@ jobs:
       id-token: write
       pull-requests: write
     needs: [ SetupBuildInfo ]
+    if: github.event.pull_request > 0
     runs-on: ubuntu-latest
     steps:
 
