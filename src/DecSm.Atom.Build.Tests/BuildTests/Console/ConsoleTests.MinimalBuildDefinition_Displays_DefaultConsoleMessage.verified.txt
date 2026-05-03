@@ -8,7 +8,6 @@ Options
 
   -h,  --help        Show help for entire tool or a single command
   -i,  --interactive Run in interactive mode (prompt for required params)
-  -g,  --gen         Generate build scripts
   -s,  --skip        Skip dependency execution (run only specified commands)
   -hl, --headless    Run in headless mode (no prompts or logins, used in CI)
   -v,  --verbose     Show verbose output (extra logging)
