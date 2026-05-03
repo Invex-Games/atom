@@ -1,5 +1,6 @@
 ﻿name: environment-workflow
 
+trigger: none
 
 jobs:
 

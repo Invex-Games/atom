@@ -84,4 +84,4 @@ public interface IMyTarget : IBuildAccessor
             .RequiresParam(NotParam2);
 }
 
-#pragma warning enable AT0001
+#pragma warning restore AT0001

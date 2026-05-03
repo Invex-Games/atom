@@ -1,5 +1,6 @@
 ﻿name: duplicatedependency-workflow
 
+trigger: none
 
 jobs:
 

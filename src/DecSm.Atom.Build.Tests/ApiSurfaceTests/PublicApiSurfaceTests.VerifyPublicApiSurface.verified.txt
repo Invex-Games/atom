@@ -755,6 +755,17 @@
     ]
   },
   {
+    Name: DecSm.Atom.Build.IAtomLifecycleHook,
+    Members: [
+      {
+        Name: AfterExecute
+      },
+      {
+        Name: BeforeExecute
+      }
+    ]
+  },
+  {
     Name: DecSm.Atom.Build.IBuildAccessor,
     Members: [
       {

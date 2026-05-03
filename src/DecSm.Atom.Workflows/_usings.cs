@@ -3,6 +3,7 @@ global using System.Runtime.CompilerServices;
 global using System.Text.Json;
 global using System.Text.RegularExpressions;
 global using DecSm.Atom.Build;
+global using DecSm.Atom.Build.Args;
 global using DecSm.Atom.Build.Artifacts;
 global using DecSm.Atom.Build.BuildOptions;
 global using DecSm.Atom.Build.Definition;

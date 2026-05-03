@@ -68,6 +68,7 @@ internal sealed class AtomService(
     IHelpService helpService,
     IHostApplicationLifetime lifetime,
     ReportService reportService,
+    IEnumerable<IAtomLifecycleHook> lifecycleHooks,
     ILogger<AtomService> logger
 ) : BackgroundService
 {
@@ -93,14 +94,13 @@ internal sealed class AtomService(
             if (args is { HasHelp: true } or { HasHelp: false, HasHeadless: false, Commands.Count: 0, Params.Count: 0 })
                 return;
 
-            // TODO: Workflows
-            // if (args.HasGen || !args.HasHeadless)
-            //     await workflowGenerator.GenerateWorkflows(stoppingToken);
-            // else if (await workflowGenerator.WorkflowsOutdated(stoppingToken))
-            //     throw new WorkflowOutdatedException(
-            //         "One or more workflows are out of date. To regenerate workflows, run the build with the --gen flag.");
+            foreach (var hook in lifecycleHooks)
+                await hook.BeforeExecute(stoppingToken);
 
             await executor.Execute(stoppingToken);
+
+            foreach (var hook in lifecycleHooks)
+                await hook.AfterExecute(stoppingToken);
         }
         catch (CommandLineException ex)
         {
@@ -111,12 +111,6 @@ internal sealed class AtomService(
 
             Environment.ExitCode = 1;
         }
-        // TODO: Workflows
-        // catch (WorkflowOutdatedException ex)
-        // {
-        //     logger.LogCritical("{Message}", ex.Message);
-        //     Environment.ExitCode = 1;
-        // }
         catch (BuildConfigurationException ex)
         {
             logger.LogCritical("Build configuration error: {Message}", ex.Message);
@@ -129,6 +123,11 @@ internal sealed class AtomService(
         catch (StepFailedException)
         {
             // Already handled by BuildExecutor, just set exit code
+            Environment.ExitCode = 1;
+        }
+        catch (AtomException ex)
+        {
+            logger.LogCritical("{Message}", ex.Message);
             Environment.ExitCode = 1;
         }
         catch (Exception ex)

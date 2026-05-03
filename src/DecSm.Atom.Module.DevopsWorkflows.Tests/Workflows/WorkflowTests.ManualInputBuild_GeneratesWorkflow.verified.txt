@@ -1,5 +1,6 @@
 ﻿name: manual-input-workflow
 
+trigger: none
 parameters:
   - name: string-param-without-default
     displayName: string-param-without-default | String param
