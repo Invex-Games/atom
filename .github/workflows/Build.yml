@@ -56,85 +56,85 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: DecSm.Atom.Build
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Build'
 
       - name: Store DecSm.Atom.FileSystem
         uses: actions/upload-artifact@v7
         with:
           name: DecSm.Atom.FileSystem
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.FileSystem'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.FileSystem'
 
       - name: Store DecSm.Atom.Process
         uses: actions/upload-artifact@v7
         with:
           name: DecSm.Atom.Process
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Process'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Process'
 
       - name: Store DecSm.Atom.SemanticVersion
         uses: actions/upload-artifact@v7
         with:
           name: DecSm.Atom.SemanticVersion
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.SemanticVersion'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.SemanticVersion'
 
       - name: Store DecSm.Atom.Workflows
         uses: actions/upload-artifact@v7
         with:
           name: DecSm.Atom.Workflows
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Workflows'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Workflows'
 
       - name: Store DecSm.StructuredText
         uses: actions/upload-artifact@v7
         with:
           name: DecSm.StructuredText
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.StructuredText'
+          path: '${{ github.workspace }}/.github/publish/DecSm.StructuredText'
 
       - name: Store DecSm.StructuredText.AzureDevopsPipelines
         uses: actions/upload-artifact@v7
         with:
           name: DecSm.StructuredText.AzureDevopsPipelines
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.StructuredText.AzureDevopsPipelines'
+          path: '${{ github.workspace }}/.github/publish/DecSm.StructuredText.AzureDevopsPipelines'
 
       - name: Store DecSm.StructuredText.GithubActions
         uses: actions/upload-artifact@v7
         with:
           name: DecSm.StructuredText.GithubActions
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.StructuredText.GithubActions'
+          path: '${{ github.workspace }}/.github/publish/DecSm.StructuredText.GithubActions'
 
       - name: Store DecSm.Atom.Module.AzureKeyVault
         uses: actions/upload-artifact@v7
         with:
           name: DecSm.Atom.Module.AzureKeyVault
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.AzureKeyVault'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Module.AzureKeyVault'
 
       - name: Store DecSm.Atom.Module.AzureStorage
         uses: actions/upload-artifact@v7
         with:
           name: DecSm.Atom.Module.AzureStorage
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.AzureStorage'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Module.AzureStorage'
 
       - name: Store DecSm.Atom.Module.DevopsWorkflows
         uses: actions/upload-artifact@v7
         with:
           name: DecSm.Atom.Module.DevopsWorkflows
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.DevopsWorkflows'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Module.DevopsWorkflows'
 
       - name: Store DecSm.Atom.Module.Dotnet
         uses: actions/upload-artifact@v7
         with:
           name: DecSm.Atom.Module.Dotnet
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.Dotnet'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Module.Dotnet'
 
       - name: Store DecSm.Atom.Module.GitVersion
         uses: actions/upload-artifact@v7
         with:
           name: DecSm.Atom.Module.GitVersion
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.GitVersion'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Module.GitVersion'
 
       - name: Store DecSm.Atom.Module.GithubWorkflows
         uses: actions/upload-artifact@v7
         with:
           name: DecSm.Atom.Module.GithubWorkflows
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.GithubWorkflows'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Module.GithubWorkflows'
 
   PackTool:
     runs-on: ${{ matrix.job-runs-on }}
@@ -170,7 +170,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: 'DecSm.Atom.Tool-${{ matrix.job-runs-on }}'
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Tool'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Tool'
 
   TestProjects:
     runs-on: ${{ matrix.job-runs-on }}
@@ -218,37 +218,37 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: 'DecSm.Atom.Build.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Tests'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Build.Tests'
 
       - name: Store DecSm.Atom.Build.Analyzers.Tests
         uses: actions/upload-artifact@v7
         with:
           name: 'DecSm.Atom.Build.Analyzers.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.Analyzers.Tests'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Build.Analyzers.Tests'
 
       - name: Store DecSm.Atom.Build.SourceGenerators.Tests
         uses: actions/upload-artifact@v7
         with:
           name: 'DecSm.Atom.Build.SourceGenerators.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Build.SourceGenerators.Tests'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Build.SourceGenerators.Tests'
 
       - name: Store DecSm.Atom.Module.DevopsWorkflows.Tests
         uses: actions/upload-artifact@v7
         with:
           name: 'DecSm.Atom.Module.DevopsWorkflows.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.DevopsWorkflows.Tests'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Module.DevopsWorkflows.Tests'
 
       - name: Store DecSm.Atom.Module.GithubWorkflows.Tests
         uses: actions/upload-artifact@v7
         with:
           name: 'DecSm.Atom.Module.GithubWorkflows.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Module.GithubWorkflows.Tests'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Module.GithubWorkflows.Tests'
 
       - name: Store DecSm.Atom.Tool.Tests
         uses: actions/upload-artifact@v7
         with:
           name: 'DecSm.Atom.Tool.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
-          path: '${{ github.workspace }}/.github/artifacts/DecSm.Atom.Tool.Tests'
+          path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Tool.Tests'
 
   PushToNuget:
     needs: [ TestProjects, PackProjects, PackTool, SetupBuildInfo ]

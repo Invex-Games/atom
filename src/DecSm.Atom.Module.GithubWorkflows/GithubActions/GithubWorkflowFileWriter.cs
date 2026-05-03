@@ -444,7 +444,7 @@ internal sealed class GithubWorkflowFileWriter(
             });
         }
 
-        if (target.ProducedArtifacts.Count > 0)
+        if (target.ProducedArtifacts.Count > 0 && !SuppressArtifactPublishingOption.IsEnabled(job.TargetStep.Options))
         {
             if (UseCustomArtifactProvider.Get(job.TargetStep.Options) is { Enabled: true })
                 foreach (var slice in target.ProducedArtifacts.GroupBy(a => a.BuildSlice))
@@ -519,7 +519,7 @@ internal sealed class GithubWorkflowFileWriter(
                             : buildSliceValue is not null
                                 ? new ConcatExpression([artifact.ArtifactName, "-", buildSliceValue])
                                 : artifact.ArtifactName,
-                        ["path"] = $"${{{{ github.workspace }}}}/.github/artifacts/{artifact.ArtifactName}",
+                        ["path"] = $"${{{{ github.workspace }}}}/.github/publish/{artifact.ArtifactName}",
                     },
                 }));
         }
