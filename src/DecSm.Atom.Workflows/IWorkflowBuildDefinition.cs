@@ -1,7 +1,7 @@
 namespace DecSm.Atom.Workflows;
 
 [PublicAPI]
-public interface IWorkflowBuildDefinition : IBuildDefinition, IGen
+public interface IWorkflowBuildDefinition : IBuildDefinition, IGenerateWorkflowFiles
 {
     /// <summary>
     ///     Gets the collection of workflow definitions for the build.

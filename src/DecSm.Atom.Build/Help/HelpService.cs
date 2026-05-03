@@ -129,9 +129,13 @@ internal sealed class HelpService(
     /// <param name="target">The target model to display.</param>
     private void WriteCommand(TargetModel target)
     {
+        var aliasDisplay = target.Alias is { Length: > 0 }
+            ? $" [dim]({target.Alias.EscapeMarkup()})[/]"
+            : string.Empty;
+
         var title = target.Description is { Length: > 0 }
-            ? $"[bold navy]{target.Name.EscapeMarkup()}[/] [dim]| {target.Description.EscapeMarkup()}[/]"
-            : $"[bold navy]{target.Name.EscapeMarkup()}[/]";
+            ? $"[bold navy]{target.Name.EscapeMarkup()}[/]{aliasDisplay} [dim]| {target.Description.EscapeMarkup()}[/]"
+            : $"[bold navy]{target.Name.EscapeMarkup()}[/]{aliasDisplay}";
 
         var tree = new Tree(title);
 
