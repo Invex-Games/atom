@@ -89,7 +89,8 @@ internal sealed class AtomService(
                 throw new CommandLineException(errorMessage);
             }
 
-            helpService.ShowHelp();
+            if (args.HasHelp || !args.Commands.Any())
+                helpService.ShowHelp();
 
             if (args is { HasHelp: true } or { HasHelp: false, HasHeadless: false, Commands.Count: 0, Params.Count: 0 })
                 return;

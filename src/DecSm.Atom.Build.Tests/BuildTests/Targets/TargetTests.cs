@@ -263,4 +263,54 @@ public class TargetTests
         target.ConsumedVariables.Count.ShouldBe(1, "Consumed variables should be deduplicated");
         target.ProducedVariables.Count.ShouldBe(1, "Produced variables should be deduplicated");
     }
+
+    [Test]
+    public async Task TargetBuild_WithNoTargetsInvoked_DisplaysHelp()
+    {
+        // Arrange
+        var testConsole = new TestConsole();
+
+        var host = CreateTestHost<TestTargetAtomBuild>(testConsole);
+
+        // Act
+        await host.RunAsync();
+
+        // Assert
+        testConsole.Output.ShouldContain("Usage");
+        testConsole.Output.ShouldContain("Options");
+    }
+
+    [Test]
+    public async Task TargetBuild_WithTargetInvoked_DoesNotDisplayHelp()
+    {
+        // Arrange
+        var testConsole = new TestConsole();
+
+        var host = CreateTestHost<TestTargetAtomBuild>(testConsole,
+            commandLineArgs: new(true, [new CommandArg("TestTarget")]));
+
+        // Act
+        await host.RunAsync();
+
+        // Assert
+        testConsole.Output.ShouldNotContain("Usage");
+        testConsole.Output.ShouldNotContain("Options");
+    }
+
+    [Test]
+    public async Task TargetBuild_WithTargetInvokedAndHelpFlagPresent_DisplaysHelp()
+    {
+        // Arrange
+        var testConsole = new TestConsole();
+
+        var host = CreateTestHost<TestTargetAtomBuild>(testConsole,
+            commandLineArgs: new(true, [new CommandArg("TestTarget"), new HelpArg()]));
+
+        // Act
+        await host.RunAsync();
+
+        // Assert
+        testConsole.Output.ShouldContain("Usage");
+        testConsole.Output.ShouldContain("Options");
+    }
 }
