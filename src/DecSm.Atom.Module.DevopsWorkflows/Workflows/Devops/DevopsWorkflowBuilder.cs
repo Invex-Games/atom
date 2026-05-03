@@ -32,12 +32,7 @@ internal sealed partial class DevopsWorkflowBuilder(
             .OfType<GitPushTrigger>()
             .ToArray();
 
-        var hasManualTrigger = workflow
-            .Triggers
-            .OfType<ManualTrigger>()
-            .Any();
-
-        if (pushTriggers.Length is 0 && !hasManualTrigger)
+        if (pushTriggers.Length is 0)
             return new Trigger.None();
 
         // Combine all push triggers into a single full trigger

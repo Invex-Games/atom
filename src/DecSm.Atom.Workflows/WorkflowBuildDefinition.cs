@@ -17,6 +17,7 @@ public abstract class WorkflowBuildDefinition(IServiceProvider services)
                 (IWorkflowBuildDefinition)services.GetRequiredService<IBuildDefinition>())
             .AddSingleton<IWorkflowContext, WorkflowContext.WorkflowContext>()
             .AddSingleton<WorkflowGenerator>()
-            .AddSingleton<WorkflowResolver>();
+            .AddSingleton<WorkflowResolver>()
+            .AddSingleton<IAtomLifecycleHook, WorkflowLifecycleHook>();
     }
 }

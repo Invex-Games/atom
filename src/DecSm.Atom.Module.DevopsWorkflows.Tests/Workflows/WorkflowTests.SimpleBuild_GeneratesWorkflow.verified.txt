@@ -2,8 +2,7 @@
 
 trigger: none
 pr:
-  branches:
-    - main
+  branches: [ main ]
 
 jobs:
 
@@ -12,9 +11,11 @@ jobs:
     pool:
       vmImage: ubuntu-latest
     steps:
+
       - checkout: self
         enabled: true
         fetchDepth: 0
+
       - script: dotnet run --project AtomTest/AtomTest.csproj SimpleTarget --skip --headless
         displayName: SimpleTarget
         name: SimpleTarget

@@ -106,6 +106,7 @@ internal sealed class HelpService(
         if (libraryTargets.Count > 0)
         {
             console.Write(new Markup("[bold]Library Commands[/]\n"));
+            console.Write(new Markup("[dim]Name (Alias) | Description[/]\n"));
             console.WriteLine();
 
             foreach (var target in libraryTargets)
@@ -116,6 +117,7 @@ internal sealed class HelpService(
         if (projectTargets.Count > 0)
         {
             console.Write(new Markup("[bold]Project Commands[/]\n"));
+            console.Write(new Markup("[dim]Name (Alias) | Description[/]\n"));
             console.WriteLine();
 
             foreach (var target in projectTargets)
