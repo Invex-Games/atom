@@ -46,7 +46,8 @@ internal sealed class DevopsPipelineWriterTriggerTests
         }));
 
         output.ShouldContain("trigger:");
-        output.ShouldContain("branches: [ main, develop ]");
+        output.ShouldContain("branches:");
+        output.ShouldContain("include: [ main, develop ]");
     }
 
     [Test]
