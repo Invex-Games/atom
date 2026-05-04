@@ -112,6 +112,12 @@ debug it like standard code, and automatically generate CI/CD configuration file
 - [CLI](docs/reference/cli.md) — Command-line arguments and the Atom global tool
 - [API Reference](api/index.md) — Auto-generated API documentation (via DocFX)
 
+## AI Disclaimer
+
+The Atom libraries are human-made, however GitHub Copilot completions have been used on a superficial level.
+
+Generative AI was also used to assist in writing tests and documentation.
+
 ## License
 
 Atom is released under the [MIT License](LICENSE.txt).
