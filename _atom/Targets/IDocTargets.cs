@@ -13,13 +13,10 @@ internal interface IDocTargets : IDotnetCliHelper
             .Executes(async cancellationToken =>
             {
                 // First, build analyzers in release mode
-                await DotnetCli.Restore(AtomFileSystem.GetPath<Solution>(), cancellationToken: cancellationToken);
-
                 await DotnetCli.Build([AtomFileSystem.GetPath<Projects.DecSm_Atom_Build_Analyzers>()],
                     new()
                     {
                         Configuration = "Release",
-                        NoRestore = true,
                     },
                     cancellationToken: cancellationToken);
 
@@ -27,7 +24,6 @@ internal interface IDocTargets : IDotnetCliHelper
                     new()
                     {
                         Configuration = "Release",
-                        NoRestore = true,
                     },
                     cancellationToken: cancellationToken);
 
