@@ -106,7 +106,7 @@ public static class StringUtil
         ///     unchanged.
         /// </returns>
         [return: NotNullIfNotNull(nameof(@string))]
-        public string? SanitizeSecrets(List<string> secrets)
+        public string? SanitizeSecrets(IEnumerable<string> secrets)
         {
             var validSecrets = secrets
                 .Where(s => !string.IsNullOrEmpty(s))

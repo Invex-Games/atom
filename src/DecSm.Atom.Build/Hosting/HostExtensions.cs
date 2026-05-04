@@ -81,9 +81,9 @@ public static class HostExtensions
         });
 
         builder.Services.AddSingleton(TimeProvider.System);
-        builder.Services.AddSingleton<IBuildIdProvider, DefaultBuildIdProvider>();
-        builder.Services.AddSingleton<IBuildVersionProvider, DefaultBuildVersionProvider>();
-        builder.Services.AddSingleton<IBuildTimestampProvider, DefaultBuildTimestampProvider>();
+        builder.Services.TryAddSingleton<IBuildIdProvider, DefaultBuildIdProvider>();
+        builder.Services.TryAddSingleton<IBuildVersionProvider, DefaultBuildVersionProvider>();
+        builder.Services.TryAddSingleton<IBuildTimestampProvider, DefaultBuildTimestampProvider>();
 
         builder
             .Services
@@ -107,8 +107,6 @@ public static class HostExtensions
         builder.Services.AddSingleton<IVariableProvider, AtomVariableProvider>();
         builder.Services.TryAddSingleton<IVariableService, VariableService>();
 
-        builder.Services.TryAddSingleton<IBuildTimestampProvider, DefaultBuildTimestampProvider>();
-        builder.Services.TryAddSingleton<IBuildVersionProvider, DefaultBuildVersionProvider>();
         builder.Services.TryAddSingleton<IHelpService, HelpService>();
 
         builder.Services.AddSingleton<CommandLineArgsParser>();

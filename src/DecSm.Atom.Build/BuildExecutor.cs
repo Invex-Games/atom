@@ -71,6 +71,8 @@ internal sealed class BuildExecutor(
     /// <param name="target">The target to validate.</param>
     private void ValidateTargetParameters(TargetModel target)
     {
+        var missingParams = new List<UsedParam>();
+
         foreach (var requiredParam in target.Params.Where(x => x.Required))
         {
             var defaultValue = requiredParam.Param.DefaultValue is { Length: > 0 }
@@ -92,6 +94,13 @@ internal sealed class BuildExecutor(
             if (value is { Length: > 0 })
                 continue;
 
+            missingParams.Add(requiredParam);
+        }
+
+        if (missingParams.Count == 0)
+            return;
+
+        foreach (var requiredParam in missingParams)
             logger.LogError("""
                             Missing required parameter '{ParamName}' for target {TargetName}.
                             You can provide it via:
@@ -106,11 +115,8 @@ internal sealed class BuildExecutor(
                 requiredParam.Param.EnvVarName,
                 requiredParam.Param.Name);
 
-            buildModel.GetTargetState(target)
-                .Status = TargetRunState.Failed;
-
-            return;
-        }
+        buildModel.GetTargetState(target)
+            .Status = TargetRunState.Failed;
     }
 
     /// <summary>

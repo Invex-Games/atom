@@ -92,6 +92,53 @@ internal sealed class MaskingAnsiConsoleOutputTests
         TestContext.Out.WriteLine(output);
     }
 
+    [Test]
+    public async Task WriteAsync_WithSecret_ShouldMaskSecrets()
+    {
+        // Arrange — write directly through the MaskingTextWriter via the console's output writer
+        var writer = _console.Profile.Out.Writer;
+
+        // Act
+        await writer.WriteAsync($"Token is {Secret} here");
+        await writer.FlushAsync();
+        var output = _writer.ToString();
+
+        // Assert
+        output.ShouldNotContain(Secret);
+        output.ShouldContain(MaskedSecret);
+        await TestContext.Out.WriteLineAsync(output);
+    }
+
+    [Test]
+    public async Task WriteAsync_WithNull_ShouldNotThrow()
+    {
+        // Arrange
+        var writer = _console.Profile.Out.Writer;
+
+        // Act
+        await writer.WriteAsync((string?)null);
+        await writer.FlushAsync();
+        var output = _writer.ToString();
+
+        // Assert
+        output.ShouldBeEmpty();
+    }
+
+    [Test]
+    public async Task WriteAsync_WithEmptyString_ShouldNotThrow()
+    {
+        // Arrange
+        var writer = _console.Profile.Out.Writer;
+
+        // Act
+        await writer.WriteAsync(string.Empty);
+        await writer.FlushAsync();
+        var output = _writer.ToString();
+
+        // Assert
+        output.ShouldBeEmpty();
+    }
+
     private sealed class StubParamService(string secret, string mask) : IParamService
     {
         public IDisposable CreateNoCacheScope() =>

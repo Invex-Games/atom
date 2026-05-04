@@ -129,7 +129,7 @@ internal sealed class ParamService(
     /// </summary>
     private readonly AsyncLocal<bool> _defaultValuesOnly = new();
 
-    private readonly List<string> _knownSecrets = [];
+    private readonly ConcurrentBag<string> _knownSecrets = [];
 
     /// <summary>
     ///     Gets or sets a value indicating whether parameter caching is disabled.

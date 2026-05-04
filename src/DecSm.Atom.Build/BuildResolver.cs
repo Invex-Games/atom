@@ -99,7 +99,7 @@ internal sealed class BuildResolver(
                 var usedParams = new List<UsedParam>();
 
                 foreach (var param in x.Params)
-                    AddParamAndChildren(param.Param, param.Required, usedParams, paramModels);
+                    AddParamAndChildren(param.Param, param.Required, usedParams, paramModels, []);
 
                 return new TargetModel(x.Name, x.Description, x.Hidden, x.Alias)
                 {
@@ -265,16 +265,21 @@ internal sealed class BuildResolver(
     /// <param name="required">A value indicating whether the parameter is required.</param>
     /// <param name="usedParams">The list of used parameters to add to.</param>
     /// <param name="paramModels">A dictionary of all available parameter models.</param>
+    /// <param name="visited">A set of already-visited parameter names to detect and prevent circular chains.</param>
     private static void AddParamAndChildren(
         string param,
         bool required,
         List<UsedParam> usedParams,
-        Dictionary<string, ParamModel> paramModels)
+        Dictionary<string, ParamModel> paramModels,
+        HashSet<string> visited)
     {
+        if (!visited.Add(param))
+            return;
+
         var model = paramModels[param];
         usedParams.Add(new(model, required));
 
         foreach (var chainedParam in model.ChainedParams)
-            AddParamAndChildren(chainedParam, required, usedParams, paramModels);
+            AddParamAndChildren(chainedParam, required, usedParams, paramModels, visited);
     }
 }

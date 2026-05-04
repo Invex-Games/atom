@@ -35,7 +35,7 @@ public enum ParamSource
     /// <summary>
     ///     The parameter can be resolved from a secret management system.
     /// </summary>
-    Secrets = 32,
+    Secrets = 16,
 
     /// <summary>
     ///     The parameter can be resolved from any of the available sources.
