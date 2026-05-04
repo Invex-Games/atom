@@ -2,7 +2,7 @@ using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Atom.Targets;
 
-internal interface IDocTargets : IDotnetCliHelper, IGithubHelper
+internal interface IDocTargets : IDotnetCliHelper, IGithubHelper, ISetupBuildInfo
 {
     private const string GeneratedDocsArtifactName = "GeneratedDocs";
 
@@ -93,6 +93,7 @@ internal interface IDocTargets : IDotnetCliHelper, IGithubHelper
             .DescribedAs("Publishes the generated DocFX site to GitHub Pages via the gh-pages branch")
             .RequiresParam(nameof(GithubToken))
             .DependsOn(BuildDocs)
+            .DependsOn(SetupBuildInfo)
             .ConsumesArtifact(nameof(BuildDocs), GeneratedDocsArtifactName)
             .Executes(async cancellationToken =>
             {
