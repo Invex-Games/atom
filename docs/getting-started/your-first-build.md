@@ -83,14 +83,14 @@ For larger builds you'll typically use a dedicated project.
 25-12-16 +10:00  DecSm.Atom.Build.BuildExecutor:
 22:46:01.754 INF Executing build
 
-SayHello
+HelloWorld
 
-25-12-16 +10:00  SayHello | Build:
+25-12-16 +10:00  HelloWorld | Build:
 22:46:01.790 INF Hello, World!
 
 Build Summary
 
-  SayHello │ Succeeded │ <0.01s
+  HelloWorld │ Succeeded │ <0.01s
 ```
 
 ## Adding Parameters

@@ -370,4 +370,112 @@ internal sealed class BuildResolverTests
                 .Status
                 .ShouldBe(TargetRunState.PendingRun));
     }
+
+    [Test]
+    public void Resolve_WithCircularChainedParams_DoesNotStackOverflow()
+    {
+        // Arrange — Param1 chains to Param2, Param2 chains back to Param1
+        var buildDefinition = new TestBuildDefinitionWithParams(_services,
+            new Dictionary<string, ParamDefinition>
+            {
+                ["Param1"] = new("Param1")
+                {
+                    ArgName = "param-1",
+                    Description = "Param 1",
+                    Sources = ParamSource.All,
+                    IsSecret = false,
+                    ChainedParams = ["Param2"],
+                },
+                ["Param2"] = new("Param2")
+                {
+                    ArgName = "param-2",
+                    Description = "Param 2",
+                    Sources = ParamSource.All,
+                    IsSecret = false,
+                    ChainedParams = ["Param1"],
+                },
+            })
+        {
+            ManualTargetDefinitions = new Dictionary<string, Target>
+            {
+                ["Target1"] = t => t
+                    .RequiresParam("Param1")
+                    .Executes(() => Task.CompletedTask),
+            },
+        };
+
+        var commandLineArgs = new CommandLineArgs(true, [new CommandArg("Target1")]);
+        var paramService = A.Fake<IParamService>();
+        var logger = A.Fake<ILogger<BuildResolver>>();
+        var buildResolver = new BuildResolver(buildDefinition, paramService, commandLineArgs, logger);
+
+        // Act — should not throw StackOverflowException
+        var buildModel = buildResolver.Resolve();
+
+        // Assert — Target1 should have both params resolved (each appearing once)
+        var target = buildModel.Targets.First(t => t.Name == "Target1");
+        target.Params.Count.ShouldBe(2);
+        target.Params.ShouldContain(p => p.Param.Name == "Param1");
+        target.Params.ShouldContain(p => p.Param.Name == "Param2");
+    }
+
+    [Test]
+    public void Resolve_WithSelfReferencingChainedParam_DoesNotStackOverflow()
+    {
+        // Arrange — Param1 chains to itself
+        var buildDefinition = new TestBuildDefinitionWithParams(_services,
+            new Dictionary<string, ParamDefinition>
+            {
+                ["Param1"] = new("Param1")
+                {
+                    ArgName = "param-1",
+                    Description = "Param 1",
+                    Sources = ParamSource.All,
+                    IsSecret = false,
+                    ChainedParams = ["Param1"],
+                },
+            })
+        {
+            ManualTargetDefinitions = new Dictionary<string, Target>
+            {
+                ["Target1"] = t => t
+                    .RequiresParam("Param1")
+                    .Executes(() => Task.CompletedTask),
+            },
+        };
+
+        var commandLineArgs = new CommandLineArgs(true, [new CommandArg("Target1")]);
+        var paramService = A.Fake<IParamService>();
+        var logger = A.Fake<ILogger<BuildResolver>>();
+        var buildResolver = new BuildResolver(buildDefinition, paramService, commandLineArgs, logger);
+
+        // Act — should not throw StackOverflowException
+        var buildModel = buildResolver.Resolve();
+
+        // Assert — Target1 should have Param1 resolved once (not infinite)
+        var target = buildModel.Targets.First(t => t.Name == "Target1");
+        target.Params.ShouldHaveSingleItem();
+
+        target
+            .Params[0]
+            .Param
+            .Name
+            .ShouldBe("Param1");
+    }
+
+    private class TestBuildDefinitionWithParams(
+        IServiceProvider services,
+        IReadOnlyDictionary<string, ParamDefinition> paramDefinitions
+    ) : BuildDefinition(services)
+    {
+        public IReadOnlyDictionary<string, Target> ManualTargetDefinitions { get; init; } =
+            new Dictionary<string, Target>();
+
+        public override IReadOnlyDictionary<string, Target> TargetDefinitions => ManualTargetDefinitions;
+
+        public override IReadOnlyDictionary<string, ParamDefinition> ParamDefinitions => paramDefinitions;
+
+        public override object? AccessParam(string paramName) =>
+            null;
+    }
 }

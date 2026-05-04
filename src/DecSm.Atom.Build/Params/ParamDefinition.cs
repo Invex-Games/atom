@@ -12,6 +12,10 @@ public sealed record ParamDefinition(string Name)
     /// </summary>
     public required string ArgName { get; init; }
 
+    /// <summary>
+    ///     Gets the environment variable name derived from <see cref="ArgName" />.
+    ///     The name is uppercased with hyphens, dots, and spaces replaced by underscores.
+    /// </summary>
     [JsonIgnore]
     public string EnvVarName =>
         ArgName

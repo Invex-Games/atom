@@ -80,7 +80,7 @@ internal sealed class MaskingAnsiConsoleOutput(IAnsiConsoleOutput inner, IServic
         public override Task WriteAsync(string? value) =>
             value switch
             {
-                null or { Length: > 0 } => _innerWriter.WriteAsync(value),
+                null or { Length: 0 } => _innerWriter.WriteAsync(value),
                 _ => _innerWriter.WriteAsync(ParamService.MaskMatchingSecrets(value)),
             };
 

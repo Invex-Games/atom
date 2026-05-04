@@ -23,13 +23,13 @@ public interface ISetupBuildInfo : IBuildInfo, IVariablesHelper, IReportsHelper
     ///             </item>
     ///             <item>
     ///                 <description>
-    ///                     Retrieves the build name (from <see cref="IBuildInfo.BuildId" />) and writes it as a build variable
+    ///                     Retrieves the build ID (from <see cref="IBuildInfo.BuildId" />) and writes it as a build variable
     ///                     named "BuildId".
     ///                 </description>
     ///             </item>
     ///             <item>
     ///                 <description>
-    ///                     Retrieves the build name (from <see cref="IBuildInfo.BuildVersion" />) and writes it as a build
+    ///                     Retrieves the build version (from <see cref="IBuildInfo.BuildVersion" />) and writes it as a build
     ///                     variable
     ///                     named
     ///                     "BuildVersion".
@@ -37,7 +37,7 @@ public interface ISetupBuildInfo : IBuildInfo, IVariablesHelper, IReportsHelper
     ///             </item>
     ///             <item>
     ///                 <description>
-    ///                     Retrieves the build name (from <see cref="IBuildInfo.BuildTimestamp" />), converts it to a string,
+    ///                     Retrieves the build timestamp (from <see cref="IBuildInfo.BuildTimestamp" />), converts it to a string,
     ///                     and
     ///                     writes it
     ///                     as a build variable named "BuildTimestamp".
