@@ -102,6 +102,10 @@ internal partial class Build : WorkflowBuildDefinition,
                             BuildOptions.Steps.SetupDotnet.Dotnet90X(),
                         ],
                     },
+                    new(nameof(IDocTargets.BuildDocs))
+                    {
+                        Options = [BuildOptions.Target.SuppressArtifactPublishing],
+                    },
                     new(nameof(ICheckPrForBreakingChanges.CheckPrForBreakingChanges))
                     {
                         Options =
@@ -172,6 +176,20 @@ internal partial class Build : WorkflowBuildDefinition,
                             BuildOptions.Steps.SetupDotnet.Dotnet90X(),
                         ],
                     },
+                    new(nameof(IDocTargets.BuildDocs)),
+                    new(nameof(IDocTargets.PublishDocs))
+                    {
+                        Options =
+                        [
+                            BuildOptions.Target.RunIfWorkflowCondition(new TargetOutputExpression
+                                {
+                                    OutputName = ParamDefinitions[nameof(ISetupBuildInfo.BuildVersion)].ArgName,
+                                    TargetName = nameof(ISetupBuildInfo.SetupBuildInfo),
+                                }
+                                .Contains("-")
+                                .Not()),
+                        ],
+                    },
                     new(nameof(IDeployTargets.PushToNuget)),
                     new(nameof(IDeployTargets.PushToRelease))
                     {
@@ -188,7 +206,7 @@ internal partial class Build : WorkflowBuildDefinition,
                                     TargetName = nameof(ISetupBuildInfo.SetupBuildInfo),
                                 }
                                 .Contains("-")
-                                .NotEqualTo(true)),
+                                .Not()),
                         ],
                     },
                 ],

@@ -250,6 +250,56 @@ jobs:
           name: 'DecSm.Atom.Tool.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
           path: '${{ github.workspace }}/.github/publish/DecSm.Atom.Tool.Tests'
 
+  BuildDocs:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET 10.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: BuildDocs
+        id: BuildDocs
+        run: dotnet run --project _atom/_atom.csproj -- BuildDocs --skip --headless
+
+      - name: Store GeneratedDocs
+        uses: actions/upload-artifact@v7
+        with:
+          name: GeneratedDocs
+          path: '${{ github.workspace }}/.github/publish/GeneratedDocs'
+
+  PublishDocs:
+    needs: [ BuildDocs ]
+    if: !contains(needs.SetupBuildInfo.outputs.build-version, '-')
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET 10.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Retrieve GeneratedDocs
+        uses: actions/download-artifact@v8
+        with:
+          name: GeneratedDocs
+          path: '${{ github.workspace }}/.github/artifacts/GeneratedDocs'
+
+      - name: PublishDocs
+        id: PublishDocs
+        run: dotnet run --project _atom/_atom.csproj -- PublishDocs --skip --headless
+
   PushToNuget:
     needs: [ TestProjects, PackProjects, PackTool, SetupBuildInfo ]
     runs-on: ubuntu-latest
@@ -399,7 +449,7 @@ jobs:
     permissions:
       contents: write
     needs: [ PackProjects, PackTool, TestProjects, SetupBuildInfo ]
-    if: contains(needs.SetupBuildInfo.outputs.build-version, '-') != true
+    if: !contains(needs.SetupBuildInfo.outputs.build-version, '-')
     runs-on: ubuntu-latest
     steps:
 
