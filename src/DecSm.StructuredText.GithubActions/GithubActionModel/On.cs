@@ -5,8 +5,10 @@ namespace DecSm.StructuredText.GithubActions.GithubActionModel;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public partial record On
 {
+    [PublicAPI]
     partial record BranchProtectionRule(IReadOnlyList<BranchProtectionRule.BranchProtectionType> Types)
     {
+        [PublicAPI]
         public enum BranchProtectionType
         {
             created,
@@ -15,8 +17,10 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record CheckRun(IReadOnlyList<CheckRun.CheckRunType> Types)
     {
+        [PublicAPI]
         public enum CheckRunType
         {
             created,
@@ -25,24 +29,32 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record CheckSuite(IReadOnlyList<CheckSuite.CheckSuiteType> Types)
     {
+        [PublicAPI]
         public enum CheckSuiteType
         {
             completed,
         }
     }
 
+    [PublicAPI]
     partial record Create;
 
+    [PublicAPI]
     partial record Delete;
 
+    [PublicAPI]
     partial record Deployment;
 
+    [PublicAPI]
     partial record DeploymentStatus;
 
+    [PublicAPI]
     partial record Discussion(IReadOnlyList<Discussion.DiscussionType> Types)
     {
+        [PublicAPI]
         public enum DiscussionType
         {
             created,
@@ -61,8 +73,10 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record DiscussionComment(IReadOnlyList<DiscussionComment.DiscussionCommentType> Types)
     {
+        [PublicAPI]
         public enum DiscussionCommentType
         {
             created,
@@ -71,10 +85,13 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record Fork;
 
+    [PublicAPI]
     partial record Gollum;
 
+    [PublicAPI]
     partial record ImageVersion
     {
         public required IReadOnlyList<string>? Names { get; init; }
@@ -82,8 +99,10 @@ public partial record On
         public required IReadOnlyList<string>? Versions { get; init; }
     }
 
+    [PublicAPI]
     partial record IssueComment(IReadOnlyList<IssueComment.IssueCommentType> Types)
     {
+        [PublicAPI]
         public enum IssueCommentType
         {
             created,
@@ -92,8 +111,10 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record Issues(IReadOnlyList<Issues.IssuesType> Types)
     {
+        [PublicAPI]
         public enum IssuesType
         {
             opened,
@@ -117,8 +138,10 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record Label(IReadOnlyList<Label.LabelType> Types)
     {
+        [PublicAPI]
         public enum LabelType
         {
             created,
@@ -126,16 +149,20 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record MergeGroup(IReadOnlyList<MergeGroup.MergeGroupType> Types)
     {
+        [PublicAPI]
         public enum MergeGroupType
         {
             checks_requested,
         }
     }
 
+    [PublicAPI]
     partial record Milestone(IReadOnlyList<Milestone.MilestoneType> Types)
     {
+        [PublicAPI]
         public enum MilestoneType
         {
             created,
@@ -146,10 +173,13 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record PageBuild;
 
+    [PublicAPI]
     partial record Project(IReadOnlyList<Project.ProjectType> Types)
     {
+        [PublicAPI]
         public enum ProjectType
         {
             created,
@@ -161,8 +191,10 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record ProjectCard(IReadOnlyList<ProjectCard.ProjectCardType> Types)
     {
+        [PublicAPI]
         public enum ProjectCardType
         {
             created,
@@ -173,8 +205,10 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record ProjectColumn(IReadOnlyList<ProjectColumn.ProjectColumnType> Types)
     {
+        [PublicAPI]
         public enum ProjectColumnType
         {
             created,
@@ -184,10 +218,13 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record Public;
 
+    [PublicAPI]
     partial record PullRequest(IReadOnlyList<PullRequest.PullRequestType> Types)
     {
+        [PublicAPI]
         public enum PullRequestType
         {
             assigned,
@@ -226,8 +263,10 @@ public partial record On
         public required IReadOnlyList<string>? PathsIgnore { get; init; }
     }
 
+    [PublicAPI]
     partial record PullRequestReview(IReadOnlyList<PullRequestReview.PullRequestReviewType> Types)
     {
+        [PublicAPI]
         public enum PullRequestReviewType
         {
             submitted,
@@ -236,8 +275,10 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record PullRequestReviewComment(IReadOnlyList<PullRequestReviewComment.PullRequestReviewCommentType> Types)
     {
+        [PublicAPI]
         public enum PullRequestReviewCommentType
         {
             created,
@@ -246,8 +287,10 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record PullRequestTarget(IReadOnlyList<PullRequestTarget.PullRequestTargetType> Types)
     {
+        [PublicAPI]
         public enum PullRequestTargetType
         {
             assigned,
@@ -274,6 +317,7 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record Push
     {
         public required IReadOnlyList<string>? Branches { get; init; }
@@ -289,8 +333,10 @@ public partial record On
         public required IReadOnlyList<string>? PathsIgnore { get; init; }
     }
 
+    [PublicAPI]
     partial record RegistryPackage(IReadOnlyList<RegistryPackage.RegistryPackageType> Types)
     {
+        [PublicAPI]
         public enum RegistryPackageType
         {
             published,
@@ -298,8 +344,10 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record Release(IReadOnlyList<Release.ReleaseType> Types)
     {
+        [PublicAPI]
         public enum ReleaseType
         {
             published,
@@ -312,26 +360,35 @@ public partial record On
         }
     }
 
+    [PublicAPI]
     partial record RepositoryDispatch(IReadOnlyList<string> Types);
 
+    [PublicAPI]
     partial record Schedule(IReadOnlyList<string> Crons);
 
+    [PublicAPI]
     partial record Status;
 
+    [PublicAPI]
     partial record Watch(params Watch.WatchType[] Types)
     {
+        [PublicAPI]
         public enum WatchType
         {
             started,
         }
     }
 
+    [PublicAPI]
     partial record WorkflowCall;
 
+    [PublicAPI]
     partial record WorkflowDispatch(IReadOnlyList<WorkflowDispatchInput> Inputs);
 
+    [PublicAPI]
     partial record WorkflowRun
     {
+        [PublicAPI]
         public enum WorkflowDispatchTypes
         {
             requested,
@@ -361,21 +418,25 @@ public partial record WorkflowDispatchInput
 
     public abstract string Type { get; }
 
+    [PublicAPI]
     public partial record String
     {
         public override string Type => "string";
     }
 
+    [PublicAPI]
     public partial record Number
     {
         public override string Type => "number";
     }
 
+    [PublicAPI]
     public partial record Boolean
     {
         public override string Type => "boolean";
     }
 
+    [PublicAPI]
     public partial record Choice
     {
         public override string Type => "choice";

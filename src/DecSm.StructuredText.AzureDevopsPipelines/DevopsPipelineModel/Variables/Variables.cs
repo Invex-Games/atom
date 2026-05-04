@@ -15,6 +15,7 @@ public partial record Variables
     /// <summary>
     ///     Define variables using name/value pairs (mapping syntax).
     /// </summary>
+    [PublicAPI]
     public sealed partial record Dictionary
     {
         /// <summary>
@@ -26,6 +27,7 @@ public partial record Variables
     /// <summary>
     ///     Define variables by name, variable group, or in a template (list syntax).
     /// </summary>
+    [PublicAPI]
     public sealed partial record VariableList
     {
         /// <summary>
@@ -51,6 +53,7 @@ public partial record Variable
     /// <summary>
     ///     A named variable with a value.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Name
     {
         /// <summary>
@@ -72,6 +75,7 @@ public partial record Variable
     /// <summary>
     ///     Reference to a variable group.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Group
     {
         /// <summary>
@@ -83,6 +87,7 @@ public partial record Variable
     /// <summary>
     ///     Reference to a variable template file.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Template
     {
         /// <summary>

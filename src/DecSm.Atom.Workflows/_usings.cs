@@ -14,7 +14,6 @@ global using DecSm.Atom.Build.Params;
 global using DecSm.Atom.Build.Secrets;
 global using DecSm.Atom.Build.Util;
 global using DecSm.Atom.FileSystem;
-global using DecSm.StructuredText;
 global using DecSm.StructuredText.Expressions;
 global using DecSm.Atom.Workflows.Definition;
 global using DecSm.Atom.Workflows.Definition.Triggers;

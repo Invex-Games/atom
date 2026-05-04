@@ -17,6 +17,7 @@ public partial record DevopsPipeline
     /// <summary>
     ///     Pipeline with stages - the full multi-stage syntax.
     /// </summary>
+    [PublicAPI]
     public sealed partial record DevopsPipelineWithStages
     {
         /// <summary>
@@ -79,6 +80,7 @@ public partial record DevopsPipeline
     /// <summary>
     ///     Pipeline that extends a template.
     /// </summary>
+    [PublicAPI]
     public sealed partial record DevopsPipelineWithExtends
     {
         /// <summary>
@@ -141,6 +143,7 @@ public partial record DevopsPipeline
     /// <summary>
     ///     Pipeline with jobs and one implicit stage.
     /// </summary>
+    [PublicAPI]
     public sealed partial record DevopsPipelineWithJobs
     {
         /// <summary>
@@ -203,6 +206,7 @@ public partial record DevopsPipeline
     /// <summary>
     ///     Pipeline with steps and one implicit job.
     /// </summary>
+    [PublicAPI]
     public sealed partial record DevopsPipelineWithSteps
     {
         /// <summary>

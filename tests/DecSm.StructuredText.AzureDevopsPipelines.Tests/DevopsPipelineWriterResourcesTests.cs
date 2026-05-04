@@ -101,8 +101,8 @@ internal sealed class DevopsPipelineWriterResourcesTests
                     {
                         ["NODE_ENV"] = new RawExpression("test"),
                     },
-                    Ports = new[] { "8080:80" },
-                    Volumes = new[] { "/tmp:/tmp" },
+                    Ports = ["8080:80"],
+                    Volumes = ["/tmp:/tmp"],
                 },
             ],
         }));
@@ -133,7 +133,7 @@ internal sealed class DevopsPipelineWriterResourcesTests
                         Enabled = new BooleanExpression(true),
                         Tags = new()
                         {
-                            Include = new[] { "v*" },
+                            Include = ["v*"],
                         },
                     },
                 },

@@ -20,11 +20,13 @@ public partial record Step
 
     public TextExpression? TimeoutMinutes { get; init; }
 
+    [PublicAPI]
     public partial record UsesStep
     {
         public required TextExpression Uses { get; init; }
     }
 
+    [PublicAPI]
     public partial record RunStep
     {
         public required TextExpressionCollection Run { get; init; }

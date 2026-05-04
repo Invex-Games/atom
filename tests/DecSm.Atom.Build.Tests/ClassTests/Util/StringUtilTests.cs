@@ -6,8 +6,8 @@ internal sealed class StringUtilTests
     [Test]
     public void GetLevenshteinDistance_BothNullOrEmpty_ReturnsZero()
     {
-        string? a = null;
-        string? b = null;
+        const string? a = null;
+        const string? b = null;
 
         a
             .GetLevenshteinDistance(b)
@@ -17,7 +17,7 @@ internal sealed class StringUtilTests
     [Test]
     public void GetLevenshteinDistance_FirstNullOrEmpty_ReturnsLengthOfSecond()
     {
-        string? a = null;
+        const string? a = null;
 
         a
             .GetLevenshteinDistance("abc")
@@ -73,7 +73,7 @@ internal sealed class StringUtilTests
     [Test]
     public void SanitizeForLogging_NullInput_ReturnsNull()
     {
-        string? s = null;
+        const string? s = null;
 
         s
             .SanitizeForLogging()
@@ -140,7 +140,7 @@ internal sealed class StringUtilTests
     [Test]
     public void SanitizeSecrets_NullInput_ReturnsNull()
     {
-        string? s = null;
+        const string? s = null;
 
         s
             .SanitizeSecrets([])

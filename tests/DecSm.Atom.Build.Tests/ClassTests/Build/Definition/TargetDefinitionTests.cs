@@ -319,7 +319,7 @@ internal sealed class TargetDefinitionTests
     [Test]
     public async Task Executes_FuncWithCancellationToken_PassesToken()
     {
-        CancellationToken capturedToken = default;
+        var capturedToken = CancellationToken.None;
         using var cts = new CancellationTokenSource();
 
         var targetDefinition = new TargetDefinition

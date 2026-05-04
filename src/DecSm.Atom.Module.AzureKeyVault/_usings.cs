@@ -10,7 +10,6 @@ global using DecSm.Atom.Build.Hosting;
 global using DecSm.Atom.Build.Params;
 global using DecSm.Atom.Build.Secrets;
 global using DecSm.Atom.Module.AzureKeyVault.Options;
-global using DecSm.Atom.Workflows;
 global using DecSm.Atom.Workflows.Options;
 global using JetBrains.Annotations;
 global using Microsoft.Extensions.DependencyInjection;

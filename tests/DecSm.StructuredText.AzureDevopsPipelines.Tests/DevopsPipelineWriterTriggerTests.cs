@@ -142,7 +142,7 @@ internal sealed class DevopsPipelineWriterTriggerTests
     {
         var output = PipelineWriterHelper.Write(SimplePipeline(pr: new Pr.BranchList
         {
-            Branches = new[] { "main" },
+            Branches = ["main"],
         }));
 
         output.ShouldContain("pr:");
@@ -181,11 +181,11 @@ internal sealed class DevopsPipelineWriterTriggerTests
         {
             Branches = new()
             {
-                Include = new[] { "main" },
+                Include = ["main"],
             },
             Paths = new()
             {
-                Exclude = new[] { "docs/**" },
+                Exclude = ["docs/**"],
             },
         }));
 
@@ -228,7 +228,7 @@ internal sealed class DevopsPipelineWriterTriggerTests
                 DisplayName = new RawExpression("Environment"),
                 Type = new RawExpression("string"),
                 Default = new RawExpression("dev"),
-                Values = new[] { "dev", "staging", "prod" },
+                Values = ["dev", "staging", "prod"],
             },
         ]));
 

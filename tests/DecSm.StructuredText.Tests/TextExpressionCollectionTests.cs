@@ -149,8 +149,10 @@ internal sealed class TextExpressionCollectionTests
     [Test]
     public void WorkflowExpressionCollection_Add_IncreasesCount()
     {
-        var collection = new WorkflowExpressionCollection<string>();
-        collection.Add(new RawExpression("x"));
+        var collection = new WorkflowExpressionCollection<string>
+        {
+            new RawExpression("x"),
+        };
 
         collection.Count.ShouldBe(1);
     }

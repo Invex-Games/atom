@@ -16,11 +16,13 @@ public partial record Trigger
     /// <summary>
     ///     Disable CI triggers.
     /// </summary>
+    [PublicAPI]
     public sealed partial record None;
 
     /// <summary>
     ///     List of branches that trigger a run.
     /// </summary>
+    [PublicAPI]
     public sealed partial record BranchList
     {
         /// <summary>
@@ -32,6 +34,7 @@ public partial record Trigger
     /// <summary>
     ///     Full syntax for complete control over CI triggers.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Full
     {
         /// <summary>

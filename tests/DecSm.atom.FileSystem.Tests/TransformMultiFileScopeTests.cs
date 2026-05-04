@@ -163,10 +163,7 @@ internal sealed class TransformMultiFileScopeTests
         await scope.DisposeAsync();
 
         // Assert
-        mockFs
-            .File
-            .ReadAllText(FilePath("existing.txt"))
-            .ShouldBe("original");
+        (await mockFs.File.ReadAllTextAsync(FilePath("existing.txt"))).ShouldBe("original");
 
         mockFs
             .File
@@ -245,10 +242,7 @@ internal sealed class TransformMultiFileScopeTests
         await scope.DisposeAsync();
 
         // Assert
-        mockFs
-            .File
-            .ReadAllText(FilePath("file1.txt"))
-            .ShouldBe("original");
+        (await mockFs.File.ReadAllTextAsync(FilePath("file1.txt"))).ShouldBe("original");
     }
 
     [Test]

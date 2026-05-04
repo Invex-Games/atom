@@ -35,7 +35,7 @@ internal sealed class TextExpressionLogicOperatorTests
         var expr = A.And(B, C);
 
         var and = expr.ShouldBeOfType<AndExpression>();
-        and.Source.ShouldBe(new TextExpression[] { A, B, C });
+        and.Source.ShouldBe([A, B, C]);
     }
 
     [Test]
@@ -44,7 +44,7 @@ internal sealed class TextExpressionLogicOperatorTests
         var expr = A & B;
 
         var and = expr.ShouldBeOfType<AndExpression>();
-        and.Source.ShouldBe(new TextExpression[] { A, B });
+        and.Source.ShouldBe([A, B]);
     }
 
     [Test]
@@ -53,7 +53,7 @@ internal sealed class TextExpressionLogicOperatorTests
         var expr = A.Or(B, C);
 
         var or = expr.ShouldBeOfType<OrExpression>();
-        or.Source.ShouldBe(new TextExpression[] { A, B, C });
+        or.Source.ShouldBe([A, B, C]);
     }
 
     [Test]
@@ -62,7 +62,7 @@ internal sealed class TextExpressionLogicOperatorTests
         var expr = A | B;
 
         var or = expr.ShouldBeOfType<OrExpression>();
-        or.Source.ShouldBe(new TextExpression[] { A, B });
+        or.Source.ShouldBe([A, B]);
     }
 
     [Test]

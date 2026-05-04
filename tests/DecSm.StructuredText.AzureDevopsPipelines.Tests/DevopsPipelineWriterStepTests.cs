@@ -341,7 +341,7 @@ internal sealed class DevopsPipelineWriterStepTests
         {
             Pipeline = new RawExpression("myUpstream"),
             Artifact = new RawExpression("drop"),
-            Patterns = new[] { "**/*.zip" },
+            Patterns = ["**/*.zip"],
             Path = new RawExpression("$(Pipeline.Workspace)/drop"),
         };
 
@@ -380,7 +380,7 @@ internal sealed class DevopsPipelineWriterStepTests
         {
             Build = new RawExpression("myBuild"),
             Artifact = new RawExpression("logs"),
-            Patterns = new[] { "**/*.log" },
+            Patterns = ["**/*.log"],
             Path = new RawExpression("$(Build.StagingDirectory)"),
         };
 
@@ -621,7 +621,7 @@ internal sealed class DevopsPipelineWriterStepTests
             {
                 SettableVariables = new()
                 {
-                    AllowedVariables = new[] { "MY_VAR", "ANOTHER_VAR" },
+                    AllowedVariables = ["MY_VAR", "ANOTHER_VAR"],
                 },
             },
         };
@@ -671,8 +671,8 @@ internal sealed class DevopsPipelineWriterStepTests
                 {
                     ["ENV_VAR"] = new RawExpression("val"),
                 },
-                Ports = new[] { "8080:80" },
-                Volumes = new[] { "/opt:/opt" },
+                Ports = ["8080:80"],
+                Volumes = ["/opt:/opt"],
                 MapDockerSocket = new BooleanExpression(true),
             },
             Steps =

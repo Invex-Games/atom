@@ -15,7 +15,6 @@ public static class Symbols
     public const string IBuildAccessor = "DecSm.Atom.Build.IBuildAccessor";
 
     public const string Target = "DecSm.Atom.Build.Definition.Target";
-    public const string WorkflowTargetDefinition = "DecSm.Atom.Workflows.Definition.WorkflowTargetDefinition";
 
     public const string ParamDefinition = "DecSm.Atom.Build.Params.ParamDefinition";
     public const string ParamDefinitionAttribute = "DecSm.Atom.Build.Params.ParamDefinitionAttribute";

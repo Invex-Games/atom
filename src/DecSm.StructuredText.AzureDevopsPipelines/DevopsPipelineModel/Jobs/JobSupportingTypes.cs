@@ -39,6 +39,7 @@ public partial record JobContainer
     /// <summary>
     ///     Reference to a container resource by name.
     /// </summary>
+    [PublicAPI]
     public sealed partial record ContainerName
     {
         /// <summary>
@@ -50,6 +51,7 @@ public partial record JobContainer
     /// <summary>
     ///     Full container specification.
     /// </summary>
+    [PublicAPI]
     public sealed partial record ContainerSpec
     {
         /// <summary>
@@ -104,6 +106,7 @@ public partial record DeploymentEnvironment
     /// <summary>
     ///     Simple environment name.
     /// </summary>
+    [PublicAPI]
     public sealed partial record EnvironmentName
     {
         /// <summary>
@@ -115,6 +118,7 @@ public partial record DeploymentEnvironment
     /// <summary>
     ///     Full environment specification.
     /// </summary>
+    [PublicAPI]
     public sealed partial record EnvironmentSpec
     {
         /// <summary>
@@ -160,6 +164,7 @@ public partial record DeploymentStrategy
     /// <summary>
     ///     Run-once deployment strategy.
     /// </summary>
+    [PublicAPI]
     public sealed partial record RunOnce
     {
         /// <summary>
@@ -196,6 +201,7 @@ public partial record DeploymentStrategy
     /// <summary>
     ///     Rolling deployment strategy.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Rolling
     {
         /// <summary>
@@ -237,6 +243,7 @@ public partial record DeploymentStrategy
     /// <summary>
     ///     Canary deployment strategy.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Canary
     {
         /// <summary>

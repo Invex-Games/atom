@@ -1,4 +1,3 @@
-global using DecSm.StructuredText.AzureDevopsPipelines;
 global using DecSm.StructuredText.AzureDevopsPipelines.DevopsPipelineModel.Jobs;
 global using DecSm.StructuredText.AzureDevopsPipelines.DevopsPipelineModel.Pipeline;
 global using DecSm.StructuredText.AzureDevopsPipelines.DevopsPipelineModel.Resources;

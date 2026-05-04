@@ -106,7 +106,7 @@ internal sealed class TaskExtensionsTests
     {
         Task<int>? task = null;
         var result = await task.WithRetry();
-        result.ShouldBe(default);
+        result.ShouldBe(0);
     }
 
     [Test]

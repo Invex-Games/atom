@@ -16,11 +16,13 @@ public partial record Pr
     /// <summary>
     ///     Disable PR triggers.
     /// </summary>
+    [PublicAPI]
     public sealed partial record None;
 
     /// <summary>
     ///     List of branches that trigger a pull request run.
     /// </summary>
+    [PublicAPI]
     public sealed partial record BranchList
     {
         /// <summary>
@@ -32,6 +34,7 @@ public partial record Pr
     /// <summary>
     ///     Full syntax for complete control over PR triggers.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Full
     {
         /// <summary>

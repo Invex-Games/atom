@@ -117,12 +117,8 @@ public sealed class DevopsPipelineWriter
             WriteProperty("appendCommitMessageToRunName", appendCommitMessage);
     }
 
-    private void WriteTrigger(Trigger? trigger)
-    {
-        if (trigger is null)
-            return;
-
-        trigger.Match(_ => TextWriter.WriteLine("trigger: none"),
+    private void WriteTrigger(Trigger? trigger) =>
+        trigger?.Match(_ => TextWriter.WriteLine("trigger: none"),
             bl =>
             {
                 using (TextWriter.WriteSection("trigger:"))
@@ -140,14 +136,9 @@ public sealed class DevopsPipelineWriter
                     WriteIncludeExcludeFilters("tags", full.Tags);
                 }
             });
-    }
 
-    private void WritePr(Pr? pr)
-    {
-        if (pr is null)
-            return;
-
-        pr.Match(_ => TextWriter.WriteLine("pr: none"),
+    private void WritePr(Pr? pr) =>
+        pr?.Match(_ => TextWriter.WriteLine("pr: none"),
             bl =>
             {
                 using (TextWriter.WriteSection("pr:"))
@@ -167,7 +158,6 @@ public sealed class DevopsPipelineWriter
                         WriteProperty("drafts", drafts);
                 }
             });
-    }
 
     private void WriteParameters(IReadOnlyList<Parameter>? parameters)
     {
@@ -363,12 +353,8 @@ public sealed class DevopsPipelineWriter
                     }
     }
 
-    private void WriteVariables(Variables? variables)
-    {
-        if (variables is null)
-            return;
-
-        variables.Match(dict =>
+    private void WriteVariables(Variables? variables) =>
+        variables?.Match(dict =>
             {
                 using (TextWriter.WriteSection("variables:"))
                     foreach (var (key, value) in dict.Values)
@@ -400,14 +386,9 @@ public sealed class DevopsPipelineWriter
                                     TextWriter.WriteLine($"- template: {Resolve(t.TemplatePath)}");
                             });
             });
-    }
 
-    private void WritePool(Pool? pool)
-    {
-        if (pool is null)
-            return;
-
-        pool.Match(pn => WriteProperty("pool", pn.Name),
+    private void WritePool(Pool? pool) =>
+        pool?.Match(pn => WriteProperty("pool", pn.Name),
             ps =>
             {
                 using (TextWriter.WriteSection("pool:"))
@@ -422,7 +403,6 @@ public sealed class DevopsPipelineWriter
                         WriteExpressionList("demands", demands);
                 }
             });
-    }
 
     private void WriteLockBehavior(TextExpression? lockBehavior)
     {
@@ -707,12 +687,8 @@ public sealed class DevopsPipelineWriter
             WriteProperty("parallel", parallel);
     }
 
-    private void WriteJobContainer(JobContainer? container)
-    {
-        if (container is null)
-            return;
-
-        container.Match(cn => WriteProperty("container", cn.Name),
+    private void WriteJobContainer(JobContainer? container) =>
+        container?.Match(cn => WriteProperty("container", cn.Name),
             cs =>
             {
                 using (TextWriter.WriteSection("container:"))
@@ -740,7 +716,6 @@ public sealed class DevopsPipelineWriter
                         WriteProperty("mapDockerSocket", mapDockerSocket);
                 }
             });
-    }
 
     private void WriteWorkspace(Workspace workspace)
     {
