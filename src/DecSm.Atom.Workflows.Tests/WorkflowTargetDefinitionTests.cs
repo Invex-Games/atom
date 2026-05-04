@@ -1,7 +1,7 @@
 namespace DecSm.Atom.Workflows.Tests;
 
 [TestFixture]
-public class WorkflowTargetDefinitionTests
+internal sealed class WorkflowTargetDefinitionTests
 {
     [Test]
     public void CreateModel_WithNoOptions_ReturnsModelWithWorkflowOptions()

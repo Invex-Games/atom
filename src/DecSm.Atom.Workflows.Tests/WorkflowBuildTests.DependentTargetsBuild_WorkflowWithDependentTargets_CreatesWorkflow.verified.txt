@@ -1,0 +1,29 @@
+﻿{
+  IsOutdated: false,
+  ThrowOnWrite: false,
+  GeneratedWorkflows: [
+    {
+      Name: dependent-workflow,
+      Triggers: [
+        {}
+      ],
+      Jobs: [
+        {
+          Name: FirstTarget,
+          TargetStep: {
+            Name: FirstTarget
+          }
+        },
+        {
+          Name: SecondTarget,
+          TargetStep: {
+            Name: SecondTarget
+          },
+          JobDependencies: [
+            FirstTarget
+          ]
+        }
+      ]
+    }
+  ]
+}

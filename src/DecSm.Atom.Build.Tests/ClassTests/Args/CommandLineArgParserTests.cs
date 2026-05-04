@@ -1,7 +1,7 @@
 namespace DecSm.Atom.Build.Tests.ClassTests.Args;
 
 [TestFixture]
-public class CommandLineArgParserTests
+internal sealed class CommandLineArgParserTests
 {
     [Test]
     public void CommandLineArgsParser_Parses_NoArgs()

@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.Tests.ClassTests.Build.Model;
 
 [TestFixture]
-public class BuildModelTests
+internal sealed class BuildModelTests
 {
     [Test]
     public void CurrentTarget_WhenNoTargets_ReturnsNull()

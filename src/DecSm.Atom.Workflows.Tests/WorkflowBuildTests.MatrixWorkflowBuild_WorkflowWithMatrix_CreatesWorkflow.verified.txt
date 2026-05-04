@@ -1,0 +1,33 @@
+﻿{
+  IsOutdated: false,
+  ThrowOnWrite: false,
+  GeneratedWorkflows: [
+    {
+      Name: matrix-workflow,
+      Triggers: [
+        {}
+      ],
+      Jobs: [
+        {
+          Name: SingleTarget,
+          TargetStep: {
+            Name: SingleTarget,
+            MatrixDimensions: [
+              {
+                Name: os,
+                Values: [
+                  {
+                    Value: ubuntu-latest
+                  },
+                  {
+                    Value: windows-latest
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

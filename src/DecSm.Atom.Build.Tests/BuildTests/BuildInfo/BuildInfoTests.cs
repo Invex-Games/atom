@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.Tests.BuildTests.BuildInfo;
 
 [TestFixture]
-public class BuildInfoTests
+internal sealed class BuildInfoTests
 {
     private sealed record TestTimestampProvider(long Timestamp = 12345678) : IBuildTimestampProvider;
 
@@ -41,10 +41,10 @@ public class BuildInfoTests
 
                 b.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    { "Params:build-name", "TestBuildName" },
-                    { "Params:build-id", "TestBuildId" },
-                    { "Params:build-version", "2.1.3" },
-                    { "Params:build-timestamp", "87654321" },
+                    ["Params:build-name"] = "TestBuildName",
+                    ["Params:build-id"] = "TestBuildId",
+                    ["Params:build-version"] = "2.1.3",
+                    ["Params:build-timestamp"] = "87654321",
                 });
             });
 
@@ -82,10 +82,10 @@ public class BuildInfoTests
 
                     b.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
                     {
-                        { "Params:build-name", "ConfigBuildName" },
-                        { "Params:build-id", "ConfigBuildId" },
-                        { "Params:build-version", "3.2.1" },
-                        { "Params:build-timestamp", "11223344" },
+                        ["Params:build-name"] = "ConfigBuildName",
+                        ["Params:build-id"] = "ConfigBuildId",
+                        ["Params:build-version"] = "3.2.1",
+                        ["Params:build-timestamp"] = "11223344",
                     });
                 });
 

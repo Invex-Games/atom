@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.Tests.ClassTests.Util;
 
 [TestFixture]
-public class TaskExtensionsTests
+internal sealed class TaskExtensionsTests
 {
     [Test]
     public async Task WithRetry_NullTask_ReturnsCompletedTask()

@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.Tests.BuildTests.Targets;
 
 [TestFixture]
-public class TargetTests
+internal sealed class TargetTests
 {
     [Test]
     public void TestTargetBuild_WithTestTargetArg_Executes_TestTarget()

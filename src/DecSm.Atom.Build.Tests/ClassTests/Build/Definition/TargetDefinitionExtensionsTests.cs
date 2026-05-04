@@ -2,7 +2,7 @@ namespace DecSm.Atom.Build.Tests.ClassTests.Build.Definition;
 
 [TestFixture]
 [SuppressMessage("ReSharper", "ConvertToLocalFunction")]
-public class TargetDefinitionExtensionsTests
+internal sealed class TargetDefinitionExtensionsTests
 {
     private static TargetDefinition MakeTarget(string name = "Test") =>
         new()

@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Module.DevopsWorkflows.Tests.Workflows;
 
 [TestFixture]
-public class WorkflowTests
+internal sealed class WorkflowTests
 {
     private static string WorkflowDir =>
         Environment.OSVersion.Platform is PlatformID.Win32NT

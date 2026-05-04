@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.Tests.BuildTests.Core;
 
 [TestFixture]
-public class CoreTests
+internal sealed class CoreTests
 {
     [Test]
     public void DefaultBuildDefinition_IsEmpty()

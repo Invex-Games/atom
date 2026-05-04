@@ -1,0 +1,12 @@
+﻿{
+  IsOutdated: false,
+  ThrowOnWrite: false,
+  GeneratedWorkflows: [
+    {
+      Name: empty-targets-workflow,
+      Triggers: [
+        {}
+      ]
+    }
+  ]
+}

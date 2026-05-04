@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.Tests.BuildTests.Params;
 
 [TestFixture]
-public class ParamTests
+internal sealed class ParamTests
 {
     [Test]
     public void Param_IsReadFromCommandLine()

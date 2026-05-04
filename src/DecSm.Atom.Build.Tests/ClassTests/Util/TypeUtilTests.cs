@@ -1,7 +1,7 @@
 namespace DecSm.Atom.Build.Tests.ClassTests.Util;
 
 [TestFixture]
-public class TypeUtilTests
+internal sealed class TypeUtilTests
 {
     [Test]
     public void Convert_NullInput_ReturnsDefault()

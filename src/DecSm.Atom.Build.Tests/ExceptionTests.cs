@@ -1,7 +1,7 @@
 namespace DecSm.Atom.Build.Tests;
 
 [TestFixture]
-public class ExceptionTests
+internal sealed class ExceptionTests
 {
     [Test]
     public void AtomException_DefaultConstructor_Creates()

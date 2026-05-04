@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.Tests.ClassTests.Args;
 
 [TestFixture]
-public class CommandLineArgsTests
+internal sealed class CommandLineArgsTests
 {
     [Test]
     public void HasHelp_WhenHelpArgIsPresent_ShouldReturnTrue()

@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.Analyzers.Tests;
 
 [PublicAPI]
-public class ExtendedCodeFixVerifier<TAnalyzer, TCodeFix> : ExtendedCodeFixVerifier<TAnalyzer,
+public sealed class ExtendedCodeFixVerifier<TAnalyzer, TCodeFix> : ExtendedCodeFixVerifier<TAnalyzer,
     CSharpCodeFixTest<TAnalyzer, TCodeFix, DefaultVerifier>, DefaultVerifier>
     where TAnalyzer : DiagnosticAnalyzer, new()
     where TCodeFix : CodeFixProvider, new();

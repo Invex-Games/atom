@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.Tests.ClassTests.Hosting;
 
 [TestFixture]
-public class HostExtensionsTests
+internal sealed class HostExtensionsTests
 {
     [UsedImplicitly]
     private class TestBuildDefinition(IServiceProvider services) : BuildDefinition(services), IBuildDefinition
