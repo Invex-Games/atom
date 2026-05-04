@@ -91,6 +91,7 @@ internal interface IDocTargets : IDotnetCliHelper, IGithubHelper
     Target PublishDocs =>
         t => t
             .DescribedAs("Publishes the generated DocFX site to GitHub Pages via the gh-pages branch")
+            .RequiresParam(nameof(GithubToken))
             .DependsOn(BuildDocs)
             .ConsumesArtifact(nameof(BuildDocs), GeneratedDocsArtifactName)
             .Executes(async cancellationToken =>
