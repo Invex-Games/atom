@@ -375,7 +375,7 @@ public sealed class GithubActionWriter
                     break;
                 case On.RepositoryDispatch repositoryDispatch:
                     using (TextWriter.WriteSection("repository_dispatch:"))
-                        WriteProperty("types", repositoryDispatch.Types.Select(x => x.ToString()));
+                        WriteProperty("types", repositoryDispatch.Types.Select(x => x));
 
                     break;
 
@@ -502,7 +502,7 @@ public sealed class GithubActionWriter
                 using (TextWriter.WriteSection("environment:"))
                 {
                     WriteProperty("name", _expressionFormatter.Format(job.Environment.Name));
-                    WriteProperty("url", _expressionFormatter.Format(job.Environment.UrlValue!));
+                    WriteProperty("url", _expressionFormatter.Format(job.Environment.UrlValue));
                 }
 
                 break;
@@ -674,8 +674,8 @@ public sealed class GithubActionWriter
                 foreach (var (key, value) in with)
                     switch (value)
                     {
-                        case { Count: 1 } single:
-                            WriteProperty(key, _expressionFormatter.Format(single[0]));
+                        case { Count: 1 }:
+                            WriteProperty(key, _expressionFormatter.Format(value[0]));
 
                             break;
                         default:

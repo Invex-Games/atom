@@ -209,17 +209,13 @@ internal sealed partial class DevopsWorkflowBuilder(
                             defaultBoolValue = boolInput.DefaultValue.Value;
                         else
                             using (paramService.CreateDefaultValuesOnlyScope())
-                                switch (buildDefinition.AccessParam(inputParamName))
+                                defaultBoolValue = buildDefinition.AccessParam(inputParamName) switch
                                 {
-                                    case bool boolParam:
-                                        defaultBoolValue = boolParam;
-
-                                        break;
-                                    case string stringParam when bool.TryParse(stringParam, out var parsedBool):
-                                        defaultBoolValue = parsedBool;
-
-                                        break;
-                                }
+                                    bool boolParam => boolParam,
+                                    string stringParam when bool.TryParse(stringParam, out var parsedBool) =>
+                                        parsedBool,
+                                    _ => defaultBoolValue,
+                                };
 
                         return new()
                         {
@@ -252,7 +248,7 @@ internal sealed partial class DevopsWorkflowBuilder(
                                 Default = defaultChoiceValue is { Length: > 0 }
                                     ? TextExpressions.Raw(defaultChoiceValue)
                                     : null,
-                                Values = new(choiceInput.Choices.Select(c => (TextExpression)TextExpressions.Raw(c))),
+                                Values = new(choiceInput.Choices.Select(TextExpression (c) => TextExpressions.Raw(c))),
                             };
                         }
                     }
@@ -299,7 +295,7 @@ internal sealed partial class DevopsWorkflowBuilder(
         return new()
         {
             Values = variableGroups
-                .Select(g => (Variable)new Variable.Group
+                .Select(Variable (g) => new Variable.Group
                 {
                     GroupName = TextExpressions.Raw(g.Name),
                 })
@@ -324,13 +320,13 @@ internal sealed partial class DevopsWorkflowBuilder(
 
         var conditionExpression = condition switch
         {
-            { Count: > 1 } options => options[0]
+            { Count: > 1 } => condition[0]
                 .Value
-                .And(options
+                .And(condition
                     .Skip(1)
                     .Select(x => x.Value)
                     .ToArray()),
-            { Count: 1 } option => option[0].Value,
+            [_] => condition[0].Value,
             _ => null,
         };
 
@@ -381,7 +377,7 @@ internal sealed partial class DevopsWorkflowBuilder(
         };
     }
 
-    private Variables? BuildJobConsumedVariables(WorkflowJobModel job)
+    private Variables.VariableList? BuildJobConsumedVariables(WorkflowJobModel job)
     {
         var target = buildModel.GetTarget(job.TargetStep.Name);
 
@@ -408,21 +404,19 @@ internal sealed partial class DevopsWorkflowBuilder(
         if (consumedVariables.Count is 0)
             return null;
 
-        return new Variables.VariableList
+        return new()
         {
-            Values = consumedVariables
-                .Select(consumedVariable =>
-                {
-                    var argName = buildDefinition.ParamDefinitions[consumedVariable.VariableName].ArgName;
+            Values = consumedVariables.ConvertAll(consumedVariable =>
+            {
+                var argName = buildDefinition.ParamDefinitions[consumedVariable.VariableName].ArgName;
 
-                    return (Variable)new Variable.Name
-                    {
-                        VariableName = TextExpressions.Raw(argName),
-                        Value = new DevopsRuntimeExpression(new RawExpression(
-                            $"dependencies.{consumedVariable.TargetName}.outputs['{consumedVariable.TargetName}.{argName}']")),
-                    };
-                })
-                .ToList(),
+                return new Variable.Name
+                {
+                    VariableName = TextExpressions.Raw(argName),
+                    Value = new DevopsRuntimeExpression(new RawExpression(
+                        $"dependencies.{consumedVariable.TargetName}.outputs['{consumedVariable.TargetName}.{argName}']")),
+                };
+            }),
         };
     }
 
@@ -721,7 +715,7 @@ internal sealed partial class DevopsWorkflowBuilder(
         return steps;
     }
 
-    private Step BuildAdditionalStep(IAdditionalStepOption additionalStep) =>
+    private static Step BuildAdditionalStep(IAdditionalStepOption additionalStep) =>
         additionalStep switch
         {
             IDevopsAdditionalStepOption devopsStep => devopsStep.Build(),
@@ -750,7 +744,7 @@ internal sealed partial class DevopsWorkflowBuilder(
         };
     }
 
-    private Step.Script BuildAddNugetFeedsStep(AddNugetFeedsStep step)
+    private static Step.Script BuildAddNugetFeedsStep(AddNugetFeedsStep step)
     {
         var feedsToAdd = step.FeedsToAdd.ToList();
 

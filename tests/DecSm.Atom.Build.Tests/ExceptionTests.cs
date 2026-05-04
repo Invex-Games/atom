@@ -39,7 +39,7 @@ internal sealed class ExceptionTests
     [Test]
     public void BuildConfigurationException_WithReportData_SetsProperty()
     {
-        var reportData = new ListReportData(new[] { "Error 1", "Error 2" });
+        var reportData = new ListReportData(["Error 1", "Error 2"]);
 
         var ex = new BuildConfigurationException("Test")
         {

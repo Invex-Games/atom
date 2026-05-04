@@ -1,12 +1,14 @@
 namespace DecSm.StructuredText.Tests;
 
 [TestFixture]
+[SuppressMessage("Roslynator", "RCS1105:Unnecessary interpolation", Justification = "Test code")]
+[SuppressMessage("ReSharper", "StringLiteralAsInterpolationArgument", Justification = "Test code")]
 internal sealed class TextExpressionInterpolatedStringHandlerTests
 {
     [Test]
     public void Format_LiteralOnly_ProducesStringExpressionSourceWithNoArguments()
     {
-        var expr = TextExpressions.Format($"hello world");
+        var expr = TextExpressions.Format("hello world");
 
         expr.ShouldSatisfyAllConditions(() => expr.Source.ShouldBe(new StringExpression("hello world")),
             () => expr.Arguments.ShouldBeEmpty());
@@ -17,7 +19,7 @@ internal sealed class TextExpressionInterpolatedStringHandlerTests
     {
         // Braces in the literal part must be doubled so the resulting format string
         // does not clash with the {0} argument placeholders.
-        var expr = TextExpressions.Format($"{{literal braces}}");
+        var expr = TextExpressions.Format("{literal braces}");
 
         expr.Source.ShouldBe(new StringExpression("{{literal braces}}"));
     }

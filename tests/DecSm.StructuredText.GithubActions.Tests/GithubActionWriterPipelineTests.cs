@@ -28,8 +28,7 @@ internal sealed class GithubActionWriterPipelineTests
         var output = GithubActionWriterHelper.Write(action);
         var nameEnd = output.IndexOf("name: My CI", StringComparison.Ordinal) + "name: My CI".Length;
 
-        output
-            .Substring(nameEnd)
+        output[nameEnd..]
             .ShouldStartWith(Environment.NewLine + Environment.NewLine);
     }
 

@@ -15,6 +15,7 @@ public partial record Stage
     /// <summary>
     ///     A collection of related jobs.
     /// </summary>
+    [PublicAPI]
     public sealed partial record StageDefinition
     {
         /// <summary>
@@ -83,6 +84,7 @@ public partial record Stage
     /// <summary>
     ///     Reference to a stage template.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Template
     {
         /// <summary>

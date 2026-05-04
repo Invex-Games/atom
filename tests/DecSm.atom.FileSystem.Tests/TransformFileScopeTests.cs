@@ -147,10 +147,7 @@ internal sealed class TransformFileScopeTests
         await scope.DisposeAsync();
 
         // Assert - content should be restored (from first dispose), not double-restored
-        mockFs
-            .File
-            .ReadAllText(FilePath("file.txt"))
-            .ShouldBe("original");
+        (await mockFs.File.ReadAllTextAsync(FilePath("file.txt"))).ShouldBe("original");
     }
 
     [Test]

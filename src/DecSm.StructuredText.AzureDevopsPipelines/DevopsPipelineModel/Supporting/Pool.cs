@@ -15,6 +15,7 @@ public partial record Pool
     /// <summary>
     ///     Specify a private pool by name.
     /// </summary>
+    [PublicAPI]
     public sealed partial record PoolName
     {
         /// <summary>
@@ -26,6 +27,7 @@ public partial record Pool
     /// <summary>
     ///     Full syntax for using demands and Microsoft-hosted pools.
     /// </summary>
+    [PublicAPI]
     public sealed partial record PoolSpec
     {
         /// <summary>

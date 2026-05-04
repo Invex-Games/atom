@@ -25,6 +25,7 @@ public partial record Step
     /// <summary>
     ///     Runs a task.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Task
     {
         /// <summary>
@@ -86,6 +87,7 @@ public partial record Step
     /// <summary>
     ///     Runs a script using cmd.exe on Windows and Bash on other platforms.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Script
     {
         /// <summary>
@@ -152,6 +154,7 @@ public partial record Step
     /// <summary>
     ///     Runs a script using either Windows PowerShell (on Windows) or pwsh (Linux and macOS).
     /// </summary>
+    [PublicAPI]
     public sealed partial record PowerShell
     {
         /// <summary>
@@ -228,6 +231,7 @@ public partial record Step
     /// <summary>
     ///     Runs a script in PowerShell Core on Windows, macOS, and Linux.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Pwsh
     {
         /// <summary>
@@ -304,6 +308,7 @@ public partial record Step
     /// <summary>
     ///     Runs a script in Bash on Windows, macOS, and Linux.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Bash
     {
         /// <summary>
@@ -370,6 +375,7 @@ public partial record Step
     /// <summary>
     ///     Configure how the pipeline checks out source code.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Checkout
     {
         /// <summary>
@@ -456,6 +462,7 @@ public partial record Step
     /// <summary>
     ///     Downloads artifacts associated with the current run or from another Azure Pipeline.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Download
     {
         /// <summary>
@@ -527,6 +534,7 @@ public partial record Step
     /// <summary>
     ///     Downloads build artifacts.
     /// </summary>
+    [PublicAPI]
     public sealed partial record DownloadBuild
     {
         /// <summary>
@@ -598,6 +606,7 @@ public partial record Step
     /// <summary>
     ///     Downloads a package from a package management feed in Azure Artifacts or Azure DevOps Server.
     /// </summary>
+    [PublicAPI]
     public sealed partial record GetPackage
     {
         /// <summary>
@@ -664,6 +673,7 @@ public partial record Step
     /// <summary>
     ///     Publishes (uploads) a file or folder as a pipeline artifact.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Publish
     {
         /// <summary>
@@ -725,6 +735,7 @@ public partial record Step
     /// <summary>
     ///     Reference to a step template.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Template
     {
         /// <summary>
@@ -741,6 +752,7 @@ public partial record Step
     /// <summary>
     ///     Creates a resource dynamically under a deploy phase provider.
     /// </summary>
+    [PublicAPI]
     public sealed partial record ReviewApp
     {
         /// <summary>
@@ -810,6 +822,7 @@ public partial record StepTarget
     /// <summary>
     ///     Simple target name.
     /// </summary>
+    [PublicAPI]
     public sealed partial record TargetName
     {
         /// <summary>
@@ -821,6 +834,7 @@ public partial record StepTarget
     /// <summary>
     ///     Full target specification.
     /// </summary>
+    [PublicAPI]
     public sealed partial record TargetSpec
     {
         /// <summary>

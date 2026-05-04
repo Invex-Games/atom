@@ -391,7 +391,7 @@ internal sealed class DevopsPipelineWriterStageTests
         {
             Trigger = new Trigger.BranchList
             {
-                Branches = new[] { "main" },
+                Branches = ["main"],
             },
             Variables = new Variables.Dictionary
             {

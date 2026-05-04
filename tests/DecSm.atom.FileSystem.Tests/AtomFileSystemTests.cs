@@ -1,3 +1,5 @@
+using JetBrains.Annotations;
+
 namespace DecSm.Atom.FileSystem.Tests;
 
 [TestFixture]
@@ -220,6 +222,7 @@ internal sealed class AtomFileSystemTests
             () => result.FileSystem.ShouldBeSameAs(atomFs));
     }
 
+    [UsedImplicitly(Reason = "Test code")]
     private sealed class TestPathMarker : IPathMarker
     {
         public static readonly string ExpectedPath = OperatingSystem.IsWindows()

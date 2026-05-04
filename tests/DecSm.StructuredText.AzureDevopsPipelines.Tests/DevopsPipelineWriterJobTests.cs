@@ -205,8 +205,8 @@ internal sealed class DevopsPipelineWriterJobTests
             JobId = new RawExpression("MyJob"),
             Uses = new()
             {
-                Repositories = new[] { "myRepo" },
-                Pools = new[] { "myPool" },
+                Repositories = ["myRepo"],
+                Pools = ["myPool"],
             },
         };
 
@@ -312,7 +312,7 @@ internal sealed class DevopsPipelineWriterJobTests
                 ResourceName = new RawExpression("myVM"),
                 ResourceType = new RawExpression("VirtualMachine"),
                 ResourceId = new NumberExpression(12345),
-                Tags = new[] { "primary" },
+                Tags = ["primary"],
             },
             Strategy = new DeploymentStrategy.RunOnce(),
         };

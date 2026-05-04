@@ -16,6 +16,7 @@ public partial record Job
     /// <summary>
     ///     A job is a collection of steps run by an agent or on a server.
     /// </summary>
+    [PublicAPI]
     public sealed partial record RegularJob
     {
         /// <summary>
@@ -103,6 +104,7 @@ public partial record Job
     /// <summary>
     ///     A deployment job is a special type of job for deployment scenarios.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Deployment
     {
         /// <summary>
@@ -190,6 +192,7 @@ public partial record Job
     /// <summary>
     ///     Reference to a job template.
     /// </summary>
+    [PublicAPI]
     public sealed partial record Template
     {
         /// <summary>

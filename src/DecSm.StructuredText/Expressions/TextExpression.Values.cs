@@ -60,8 +60,18 @@ public static partial class WorkflowExpressionExtensions
                 : 0);
 
         [PublicAPI]
+        [OverloadResolutionPriority(1)]
         public static FormatExpression Format(TextExpressionInterpolatedStringHandler handler) =>
             handler.ToFormatExpression();
+
+        [PublicAPI]
+        public static FormatExpression Format(string text)
+        {
+            var handler = new TextExpressionInterpolatedStringHandler(text.Length, 0);
+            handler.AppendLiteral(text);
+
+            return handler.ToFormatExpression();
+        }
     }
 }
 

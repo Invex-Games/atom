@@ -45,6 +45,7 @@ public sealed record WorkflowCacheRestoreOption : IBuildOption
 [UnstableAPI]
 public static class WorkflowCacheOptions
 {
+    [UnstableAPI]
     [SuppressMessage("Performance", "CA1822:Mark members as static")]
     public sealed class CacheOptions
     {
