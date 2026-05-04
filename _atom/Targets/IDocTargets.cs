@@ -60,8 +60,8 @@ internal interface IDocTargets : IDotnetCliHelper
 
                 Logger.LogInformation("DocFX site generated at {Path}", siteDirectory);
 
-                // Copy the generated site to the artifact directory
-                await CopyDirectory(siteDirectory, AtomFileSystem.AtomArtifactsDirectory / GeneratedDocsArtifactName);
+                // Copy the generated site to the publish directory
+                await CopyDirectory(siteDirectory, AtomFileSystem.AtomPublishDirectory / GeneratedDocsArtifactName);
             });
 
     Target ServeDocs =>
