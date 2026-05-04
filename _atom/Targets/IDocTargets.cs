@@ -18,7 +18,7 @@ internal interface IDocTargets : IBuildAccessor
 
                 if (RuntimeInformation.FrameworkDescription.StartsWith(".NET 10"))
                 {
-                    await ProcessRunner.RunAsync(new("dotnet", "tool exec docfx")
+                    await ProcessRunner.RunAsync(new("dotnet", "tool exec -y docfx")
                         {
                             WorkingDirectory = AtomFileSystem.AtomRootDirectory,
                         },
