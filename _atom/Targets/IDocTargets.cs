@@ -2,7 +2,7 @@ using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Atom.Targets;
 
-internal interface IDocTargets : IDotnetCliHelper
+internal interface IDocTargets : IDotnetCliHelper, IGithubHelper
 {
     private const string GeneratedDocsArtifactName = "GeneratedDocs";
 
@@ -167,8 +167,12 @@ internal interface IDocTargets : IDotnetCliHelper
                     if (string.IsNullOrEmpty(remoteUrl))
                         throw new StepFailedException("Could not determine git remote URL.");
 
+                    // Inject the GitHub token into the remote URL for authentication
+                    if (!string.IsNullOrEmpty(GithubToken) && remoteUrl.StartsWith("https://"))
+                        remoteUrl = remoteUrl.Replace("https://", $"https://x-access-token:{GithubToken}@");
+
                     // Force push to gh-pages
-                    Logger.LogInformation("Pushing to gh-pages branch at {Remote}...", remoteUrl);
+                    Logger.LogInformation("Pushing to gh-pages branch...");
 
                     await ProcessRunner.RunAsync(new("git", ["push", "--force", remoteUrl, "gh-pages"])
                         {
