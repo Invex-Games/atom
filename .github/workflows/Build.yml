@@ -1,11 +1,11 @@
 name: Build
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main, feature/**, patch/** ]
   release:
     types: [ released ]
-  workflow_dispatch:
 
 permissions: { }
 

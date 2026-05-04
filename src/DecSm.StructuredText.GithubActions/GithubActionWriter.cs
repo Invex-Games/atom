@@ -188,8 +188,11 @@ public sealed class GithubActionWriter
     {
         using var _ = TextWriter.WriteSection("on:");
 
-        var orderedOn = workflowOn.OrderBy(x => x.GetType()
-            .FullName);
+        // Special case: workflow_dispatch must be first.
+        var orderedOn = workflowOn.OrderBy(x => x is On.WorkflowDispatch
+            ? "_"
+            : x.GetType()
+                .FullName);
 
         foreach (var on in orderedOn)
             switch (on)
@@ -199,46 +202,56 @@ public sealed class GithubActionWriter
                         WriteProperty("types", branchProtectionRule.Types.Select(x => x.ToString()));
 
                     break;
+
                 case On.CheckRun checkRun:
                     using (TextWriter.WriteSection("check_run:"))
                         WriteProperty("types", checkRun.Types.Select(x => x.ToString()));
 
                     break;
+
                 case On.CheckSuite checkSuite:
                     using (TextWriter.WriteSection("check_suite:"))
                         WriteProperty("types", checkSuite.Types.Select(x => x.ToString()));
 
                     break;
+
                 case On.Create:
                     TextWriter.WriteLine("create");
 
                     break;
+
                 case On.Delete:
                     TextWriter.WriteLine("delete");
 
                     break;
+
                 case On.Deployment:
                     TextWriter.WriteLine("deployment");
 
                     break;
+
                 case On.DeploymentStatus:
                     TextWriter.WriteLine("deployment_status");
 
                     break;
+
                 case On.Discussion discussion:
                     using (TextWriter.WriteSection("discussion:"))
                         WriteProperty("types", discussion.Types.Select(x => x.ToString()));
 
                     break;
+
                 case On.DiscussionComment discussionComment:
                     using (TextWriter.WriteSection("discussion_comment:"))
                         WriteProperty("types", discussionComment.Types.Select(x => x.ToString()));
 
                     break;
+
                 case On.Fork:
                     TextWriter.WriteLine("fork");
 
                     break;
+
                 case On.Gollum:
                     TextWriter.WriteLine("gollum");
 
@@ -255,50 +268,60 @@ public sealed class GithubActionWriter
                     }
 
                     break;
+
                 case On.IssueComment issueComment:
                     using (TextWriter.WriteSection("issue_comment:"))
                         WriteProperty("types", string.Join(", ", issueComment.Types.Select(x => x.ToString())));
 
                     break;
+
                 case On.Issues issues:
                     using (TextWriter.WriteSection("issues:"))
                         WriteProperty("types", string.Join(", ", issues.Types.Select(x => x.ToString())));
 
                     break;
+
                 case On.Label label:
                     using (TextWriter.WriteSection("label:"))
                         WriteProperty("types", string.Join(", ", label.Types.Select(x => x.ToString())));
 
                     break;
+
                 case On.MergeGroup mergeGroup:
                     using (TextWriter.WriteSection("merge_group:"))
                         WriteProperty("types", string.Join(", ", mergeGroup.Types.Select(x => x.ToString())));
 
                     break;
+
                 case On.Milestone milestone:
                     using (TextWriter.WriteSection("milestone:"))
                         WriteProperty("types", string.Join(", ", milestone.Types.Select(x => x.ToString())));
 
                     break;
+
                 case On.PageBuild:
                     TextWriter.WriteLine("page_build");
 
                     break;
+
                 case On.Project project:
                     using (TextWriter.WriteSection("project:"))
                         WriteProperty("types", project.Types.Select(x => x.ToString()));
 
                     break;
+
                 case On.ProjectCard projectCard:
                     using (TextWriter.WriteSection("project_card:"))
                         WriteProperty("types", string.Join(", ", projectCard.Types.Select(x => x.ToString())));
 
                     break;
+
                 case On.ProjectColumn projectColumn:
                     using (TextWriter.WriteSection("project_column:"))
                         WriteProperty("types", string.Join(", ", projectColumn.Types.Select(x => x.ToString())));
 
                     break;
+
                 case On.Public:
                     TextWriter.WriteLine("public");
 
@@ -330,16 +353,19 @@ public sealed class GithubActionWriter
                     }
 
                     break;
+
                 case On.PullRequestReview pullRequestReview:
                     using (TextWriter.WriteSection("pull_request_review:"))
                         WriteProperty("types", pullRequestReview.Types.Select(x => x.ToString()));
 
                     break;
+
                 case On.PullRequestReviewComment pullRequestReviewComment:
                     using (TextWriter.WriteSection("pull_request_review_comment:"))
                         WriteProperty("types", pullRequestReviewComment.Types.Select(x => x.ToString()));
 
                     break;
+
                 case On.PullRequestTarget pullRequestTarget:
                     using (TextWriter.WriteSection("pull_request_target:"))
                         WriteProperty("types", pullRequestTarget.Types.Select(x => x.ToString()));
@@ -363,16 +389,19 @@ public sealed class GithubActionWriter
                     }
 
                     break;
+
                 case On.RegistryPackage registryPackage:
                     using (TextWriter.WriteSection("registry_package:"))
                         WriteProperty("types", registryPackage.Types.Select(x => x.ToString()));
 
                     break;
+
                 case On.Release release:
                     using (TextWriter.WriteSection("release:"))
                         WriteProperty("types", release.Types.Select(x => x.ToString()));
 
                     break;
+
                 case On.RepositoryDispatch repositoryDispatch:
                     using (TextWriter.WriteSection("repository_dispatch:"))
                         WriteProperty("types", repositoryDispatch.Types.Select(x => x));
@@ -384,15 +413,18 @@ public sealed class GithubActionWriter
                         WriteProperty("cron", schedule.Crons);
 
                     break;
+
                 case On.Status:
                     TextWriter.WriteLine("status");
 
                     break;
+
                 case On.Watch watch:
                     using (TextWriter.WriteSection("watch:"))
                         WriteProperty("types", watch.Types.Select(x => x.ToString()));
 
                     break;
+
                 case On.WorkflowCall:
                     TextWriter.WriteLine("workflow_call");
 
