@@ -188,11 +188,8 @@ public sealed class GithubActionWriter
     {
         using var _ = TextWriter.WriteSection("on:");
 
-        // Special case: workflow_dispatch must be first.
-        var orderedOn = workflowOn.OrderBy(x => x is On.WorkflowDispatch
-            ? "_"
-            : x.GetType()
-                .FullName);
+        var orderedOn = workflowOn.OrderBy(x => x.GetType()
+            .FullName);
 
         foreach (var on in orderedOn)
             switch (on)
