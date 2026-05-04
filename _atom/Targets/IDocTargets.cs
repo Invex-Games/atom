@@ -2,7 +2,7 @@ using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Atom.Targets;
 
-internal interface IDocTargets : IBuildAccessor
+internal interface IDocTargets : IDotnetCliHelper
 {
     private const string GeneratedDocsArtifactName = "GeneratedDocs";
 
@@ -12,10 +12,20 @@ internal interface IDocTargets : IBuildAccessor
             .ProducesArtifact(GeneratedDocsArtifactName)
             .Executes(async cancellationToken =>
             {
+                // First, build all projects in release mode
+                await DotnetCli.Restore(AtomFileSystem.GetPath<Solution>(), cancellationToken: cancellationToken);
+
+                await DotnetCli.Build(AtomFileSystem.GetPath<Solution>(),
+                    new()
+                    {
+                        Configuration = "Release",
+                        NoRestore = true,
+                    },
+                    cancellationToken: cancellationToken);
+
                 var siteDirectory = AtomFileSystem.AtomRootDirectory / "_site";
 
                 // If .NET 10, we can just do dotnet tool exec docfx
-
                 if (RuntimeInformation.FrameworkDescription.StartsWith(".NET 10"))
                 {
                     await ProcessRunner.RunAsync(new("dotnet", "tool exec -y docfx")
@@ -27,7 +37,6 @@ internal interface IDocTargets : IBuildAccessor
                 else
                 {
                     // Otherwise, we need to restore the tools and run docfx
-
                     Logger.LogInformation("Acquiring DocFX tool...");
 
                     await ProcessRunner.RunAsync(new("dotnet", "tool update docfx -g")
