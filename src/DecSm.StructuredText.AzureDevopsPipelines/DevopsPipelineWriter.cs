@@ -122,7 +122,8 @@ public sealed class DevopsPipelineWriter
             bl =>
             {
                 using (TextWriter.WriteSection("trigger:"))
-                    WriteExpressionList("branches", bl.Branches);
+                using (TextWriter.WriteSection("branches:"))
+                    WriteExpressionList("include", bl.Branches);
             },
             full =>
             {
@@ -142,7 +143,8 @@ public sealed class DevopsPipelineWriter
             bl =>
             {
                 using (TextWriter.WriteSection("pr:"))
-                    WriteExpressionList("branches", bl.Branches);
+                using (TextWriter.WriteSection("branches:"))
+                    WriteExpressionList("include", bl.Branches);
             },
             full =>
             {
