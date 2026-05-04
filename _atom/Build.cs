@@ -186,7 +186,7 @@ internal partial class Build : WorkflowBuildDefinition,
                                     TargetName = nameof(ISetupBuildInfo.SetupBuildInfo),
                                 }
                                 .Contains("-")
-                                .Not()),
+                                .EqualTo(false)),
                         ],
                     },
                     new(nameof(IDeployTargets.PushToNuget)),
@@ -205,7 +205,7 @@ internal partial class Build : WorkflowBuildDefinition,
                                     TargetName = nameof(ISetupBuildInfo.SetupBuildInfo),
                                 }
                                 .Contains("-")
-                                .Not()),
+                                .EqualTo(false)),
                         ],
                     },
                 ],

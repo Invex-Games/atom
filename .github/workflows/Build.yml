@@ -1,11 +1,11 @@
 name: Build
 
 on:
-  workflow_dispatch:
   push:
     branches: [ main, feature/**, patch/** ]
   release:
     types: [ released ]
+  workflow_dispatch:
 
 permissions: { }
 
@@ -276,7 +276,7 @@ jobs:
 
   PublishDocs:
     needs: [ BuildDocs ]
-    if: !contains(needs.SetupBuildInfo.outputs.build-version, '-')
+    if: contains(needs.SetupBuildInfo.outputs.build-version, '-') == false
     runs-on: ubuntu-latest
     steps:
 
@@ -449,7 +449,7 @@ jobs:
     permissions:
       contents: write
     needs: [ PackProjects, PackTool, TestProjects, SetupBuildInfo ]
-    if: !contains(needs.SetupBuildInfo.outputs.build-version, '-')
+    if: contains(needs.SetupBuildInfo.outputs.build-version, '-') == false
     runs-on: ubuntu-latest
     steps:
 
