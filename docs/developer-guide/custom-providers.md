@@ -1,0 +1,123 @@
+# Custom Providers
+
+Atom uses a provider pattern for several extensibility points. Implement these interfaces to integrate with custom
+backends.
+
+## `ISecretsProvider`
+
+Retrieve secrets from a custom store:
+
+```csharp
+public class MySecretsProvider : ISecretsProvider
+{
+    public string? GetSecret(string key)
+    {
+        // Return the secret value, or null to delegate to the next provider.
+        return MyVault.TryGet(key);
+    }
+}
+```
+
+Register it:
+
+```csharp
+builder.Services.AddSingleton<ISecretsProvider, MySecretsProvider>();
+```
+
+Multiple providers form a chain — return `null` to pass through.
+
+## `IArtifactProvider`
+
+Store and retrieve build artifacts in a custom location:
+
+```csharp
+public class MyArtifactProvider : IArtifactProvider
+{
+    public IReadOnlyList<string> RequiredParams => ["my-storage-url"];
+
+    public Task StoreArtifacts(IEnumerable<string> artifactNames, string? buildId, string? buildSlice, CancellationToken ct)
+    {
+        // Upload artifacts
+    }
+
+    public Task RetrieveArtifacts(IEnumerable<string> artifactNames, string? buildId, string? buildSlice, CancellationToken ct)
+    {
+        // Download artifacts
+    }
+
+    public Task Cleanup(IEnumerable<string> runIdentifiers, CancellationToken ct)
+    {
+        // Remove old artifacts
+    }
+
+    public Task<IReadOnlyList<string>> GetStoredRunIdentifiers(string? artifactName, string? buildSlice, CancellationToken ct)
+    {
+        // List known runs
+    }
+}
+```
+
+Register as a singleton — only one `IArtifactProvider` is active at a time.
+
+## `IVariableProvider`
+
+Read and write workflow variables via a custom mechanism:
+
+```csharp
+public class MyVariableProvider : IVariableProvider
+{
+    public Task<bool> WriteVariable(string variableName, string variableValue, CancellationToken ct)
+    {
+        // Return true if handled, false to delegate
+    }
+
+    public Task<bool> ReadVariable(string jobName, string variableName, CancellationToken ct)
+    {
+        // Return true if found, false to delegate
+    }
+}
+```
+
+Multiple providers form a chain.
+
+## `IBuildIdProvider` / `IBuildVersionProvider` / `IBuildTimestampProvider`
+
+Replace how the build identity is determined:
+
+```csharp
+public class MyVersionProvider : IBuildVersionProvider
+{
+    public string BuildVersion => ReadVersionFromSomewhere();
+}
+```
+
+## `IPathProvider`
+
+Add custom well-known paths:
+
+```csharp
+public class MyPathProvider : IPathProvider
+{
+    public RootedPath? GetPath(string key) => key switch
+    {
+        "MyCustomPath" => new RootedPath(fileSystem, "/custom/path"),
+        _ => null,
+    };
+}
+```
+
+## `IOutcomeReportWriter`
+
+Write build reports to a custom destination:
+
+```csharp
+public class MyReportWriter : IOutcomeReportWriter
+{
+    // Write report data to Slack, email, a database, etc.
+}
+```
+
+## Next Steps
+
+→ [Source Generators](source-generators.md)
+

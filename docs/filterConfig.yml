@@ -1,0 +1,12 @@
+# Filter out internal types and members from API docs
+apiRules:
+  - exclude:
+      hasAttribute:
+        uid: System.Runtime.CompilerServices.CompilerGeneratedAttribute
+  - exclude:
+      uidRegex: ^.*\.Internal\..*$
+  - include:
+      uidRegex: ^DecSm\.
+  - exclude:
+      uidRegex: ^(?!DecSm\.)
+

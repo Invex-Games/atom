@@ -1,0 +1,83 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dotnet/docfx/main/schemas/docfx.schema.json",
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [
+            "src/DecSm.Atom.Build/DecSm.Atom.Build.csproj",
+            "src/DecSm.Atom.Workflows/DecSm.Atom.Workflows.csproj",
+            "src/DecSm.Atom.FileSystem/DecSm.Atom.FileSystem.csproj",
+            "src/DecSm.Atom.Process/DecSm.Atom.Process.csproj",
+            "src/DecSm.Atom.SemanticVersion/DecSm.Atom.SemanticVersion.csproj",
+            "src/DecSm.Atom.Module.AzureKeyVault/DecSm.Atom.Module.AzureKeyVault.csproj",
+            "src/DecSm.Atom.Module.AzureStorage/DecSm.Atom.Module.AzureStorage.csproj",
+            "src/DecSm.Atom.Module.DevopsWorkflows/DecSm.Atom.Module.DevopsWorkflows.csproj",
+            "src/DecSm.Atom.Module.Dotnet/DecSm.Atom.Module.Dotnet.csproj",
+            "src/DecSm.Atom.Module.GithubWorkflows/DecSm.Atom.Module.GithubWorkflows.csproj",
+            "src/DecSm.Atom.Module.GitVersion/DecSm.Atom.Module.GitVersion.csproj"
+          ]
+        }
+      ],
+      "dest": "api",
+      "properties": {
+        "TargetFramework": "net10.0"
+      },
+      "filter": "docs/filterConfig.yml"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "toc.yml",
+          "index.md",
+          "README.md"
+        ]
+      },
+      {
+        "files": [
+          "api/**.yml",
+          "api/index.md"
+        ]
+      },
+      {
+        "files": [
+          "docs/toc.yml",
+          "docs/**/*.md"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "output": "_site",
+    "globalMetadataFiles": [],
+    "fileMetadataFiles": [],
+    "globalMetadata": {
+      "_appTitle": "Atom",
+      "_appName": "Atom",
+      "_appFooter": "Atom — Build Automation for .NET",
+      "_enableSearch": true,
+      "_disableContribution": false,
+      "_disableToc": false,
+      "_gitContribute": {
+        "repo": "https://github.com/DecSmith42/atom",
+        "branch": "main"
+      }
+    },
+    "template": [
+      "default",
+      "modern"
+    ],
+    "postProcessors": [],
+    "keepFileLink": false,
+    "disableGitFeatures": false
+  }
+}
+
+

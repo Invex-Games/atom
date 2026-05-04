@@ -407,3 +407,8 @@ FodyWeavers.xsd
 !src/DecSm.Atom.Tests/Artifacts
 atom-publish
 .gitversioncache
+
+# DocFX
+_site/
+api/*.yml
+api/.manifest
