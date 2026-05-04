@@ -121,10 +121,8 @@ internal partial class Build : WorkflowBuildDefinition,
                             })),
                             BuildOptions.Inject.Param(nameof(ICheckPrForBreakingChanges.PullRequestNumber),
                                 TextExpressions.Github.GithubEvent["number"]),
-                            BuildOptions.Target.RunIfWorkflowCondition(TextExpressions
-                                .Github
-                                .GithubEvent["pull_request"]
-                                .GreaterThan(0)),
+                            BuildOptions.Target.RunIfWorkflowCondition(
+                                TextExpressions.Github.GithubEventName.EqualToString("pull_request")),
                         ],
                     },
                 ],
