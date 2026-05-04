@@ -122,6 +122,24 @@ jobs:
           test-framework: ${{ matrix.test-framework }}
           build-slice: '${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
 
+  BuildDocs:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET 10.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: BuildDocs
+        id: BuildDocs
+        run: dotnet run --project _atom/_atom.csproj -- BuildDocs --skip --headless
+
   CheckPrForBreakingChanges:
     permissions:
       checks: write
