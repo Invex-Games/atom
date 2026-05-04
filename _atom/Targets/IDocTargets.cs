@@ -28,9 +28,9 @@ internal interface IDocTargets : IBuildAccessor
                 {
                     // Otherwise, we need to restore the tools and run docfx
 
-                    Logger.LogInformation("Restoring .NET tools...");
+                    Logger.LogInformation("Acquiring DocFX tool...");
 
-                    await ProcessRunner.RunAsync(new("dotnet", "tool restore")
+                    await ProcessRunner.RunAsync(new("dotnet", "tool update docfx -g")
                         {
                             WorkingDirectory = AtomFileSystem.AtomRootDirectory,
                         },
