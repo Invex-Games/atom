@@ -180,6 +180,11 @@ internal partial class Build : WorkflowBuildDefinition,
                     {
                         Options =
                         [
+                            BuildOptions.Inject.Secret(nameof(IGithubHelper.GithubToken)),
+                            new GithubTokenPermissionsOption(new Permissions.Exact(new()
+                            {
+                                Contents = PermissionsLevel.Write,
+                            })),
                             BuildOptions.Target.RunIfWorkflowCondition(new TargetOutputExpression
                                 {
                                     OutputName = ParamDefinitions[nameof(ISetupBuildInfo.BuildVersion)].ArgName,

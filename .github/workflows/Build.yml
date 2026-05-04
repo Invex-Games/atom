@@ -275,6 +275,8 @@ jobs:
           path: '${{ github.workspace }}/.github/publish/GeneratedDocs'
 
   PublishDocs:
+    permissions:
+      contents: write
     needs: [ BuildDocs ]
     if: contains(needs.SetupBuildInfo.outputs.build-version, '-') == false
     runs-on: ubuntu-latest
