@@ -123,6 +123,20 @@ internal interface IDocTargets : IDotnetCliHelper
                         },
                         cancellationToken);
 
+                    // Set git user details for the commit
+                    await ProcessRunner.RunAsync(new("git", ["config", "user.name", "github-actions[bot]"])
+                        {
+                            WorkingDirectory = tempDir,
+                        },
+                        cancellationToken);
+
+                    await ProcessRunner.RunAsync(new("git",
+                            ["config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com"])
+                        {
+                            WorkingDirectory = tempDir,
+                        },
+                        cancellationToken);
+
                     // Copy the generated site to the gh-pages branch
                     await CopyDirectory(siteArtifact, tempDir);
 
