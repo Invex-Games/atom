@@ -4,6 +4,7 @@ namespace Atom;
 [GenerateEntryPoint]
 [GenerateSolutionModel]
 internal partial class Build : WorkflowBuildDefinition,
+    IDotnetUserSecrets,
     IAzureKeyVault,
     IDevopsWorkflows,
     IGithubWorkflows,

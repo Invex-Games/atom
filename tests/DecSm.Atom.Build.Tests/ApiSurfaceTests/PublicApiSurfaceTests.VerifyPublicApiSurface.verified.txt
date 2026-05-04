@@ -1483,6 +1483,9 @@
     Members: [
       {
         Name: GetSecret
+      },
+      {
+        Name: Priority
       }
     ]
   },

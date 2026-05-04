@@ -15,6 +15,14 @@
         "DOTNET_ENVIRONMENT": "Development"
       },
       "commandLineArgs": "gen"
+    },
+    "_atom CheckPrForBreakingChanges": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      },
+      "commandLineArgs": "CheckPrForBreakingChanges"
     }
   }
 }

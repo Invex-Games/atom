@@ -49,4 +49,13 @@ public interface ISecretsProvider
     ///     allowing the framework to query other registered providers.
     /// </remarks>
     string? GetSecret(string key);
+
+    /// <summary>
+    ///     Represents the execution or processing priority of the secrets provider.
+    /// </summary>
+    /// <remarks>
+    ///     A higher priority value indicates higher precedence when resolving secrets
+    ///     among multiple providers. The default value is 0.
+    /// </remarks>
+    int Priority => 0;
 }

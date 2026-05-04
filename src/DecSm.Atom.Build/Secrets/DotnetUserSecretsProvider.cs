@@ -17,6 +17,9 @@ internal sealed class DotnetUserSecretsProvider : ISecretsProvider
     /// </remarks>
     public Assembly? SecretsAssembly { get; set; }
 
+    /// <inheritdoc />
+    public int Priority => 1;
+
     /// <summary>
     ///     Retrieves a secret value by its key from the .NET user secrets store.
     /// </summary>
