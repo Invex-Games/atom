@@ -12,7 +12,8 @@ internal partial class Build : WorkflowBuildDefinition,
     ITestTargets,
     IDeployTargets,
     IApproveDependabotPr,
-    ICheckPrForBreakingChanges
+    ICheckPrForBreakingChanges,
+    IDocTargets
 {
     public static readonly string[] PlatformNames =
     [

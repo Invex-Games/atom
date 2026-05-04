@@ -1,0 +1,98 @@
+-   name: Getting Started
+    href: getting-started/introduction.md
+    items:
+        -   name: Introduction
+            href: getting-started/introduction.md
+        -   name: Your First Build
+            href: getting-started/your-first-build.md
+        -   name: Base vs Workflow Build
+            href: getting-started/base-vs-workflow-build.md
+-   name: Core Concepts
+    href: core-concepts/build-definitions.md
+    items:
+        -   name: Build Definitions
+            href: core-concepts/build-definitions.md
+        -   name: Targets
+            href: core-concepts/targets.md
+        -   name: Parameters
+            href: core-concepts/parameters.md
+        -   name: Secrets
+            href: core-concepts/secrets.md
+        -   name: Artifacts
+            href: core-concepts/artifacts.md
+        -   name: Variables
+            href: core-concepts/variables.md
+        -   name: File System
+            href: core-concepts/file-system.md
+        -   name: Process Runner
+            href: core-concepts/process-runner.md
+        -   name: Build Info
+            href: core-concepts/build-info.md
+        -   name: Build Options
+            href: core-concepts/build-options.md
+        -   name: Hosting
+            href: core-concepts/hosting.md
+        -   name: Lifecycle Hooks
+            href: core-concepts/lifecycle-hooks.md
+        -   name: Logging & Reports
+            href: core-concepts/logging-and-reports.md
+        -   name: File Transformations
+            href: core-concepts/file-transformations.md
+-   name: Workflows
+    href: workflows/overview.md
+    items:
+        -   name: Overview
+            href: workflows/overview.md
+        -   name: Workflow Definitions
+            href: workflows/workflow-definitions.md
+        -   name: Triggers
+            href: workflows/triggers.md
+        -   name: Workflow Options
+            href: workflows/workflow-options.md
+        -   name: Variables in Workflows
+            href: workflows/variables-in-workflows.md
+        -   name: Debugging Workflows
+            href: workflows/debugging-workflows.md
+-   name: Modules
+    href: modules/overview.md
+    items:
+        -   name: Overview
+            href: modules/overview.md
+        -   name: .NET
+            href: modules/dotnet.md
+        -   name: GitHub Workflows
+            href: modules/github-workflows.md
+        -   name: DevOps Workflows
+            href: modules/devops-workflows.md
+        -   name: Azure Key Vault
+            href: modules/azure-key-vault.md
+        -   name: Azure Storage
+            href: modules/azure-storage.md
+        -   name: GitVersion
+            href: modules/git-version.md
+-   name: Built-in Targets
+    href: built-in-targets/setup-build-info.md
+    items:
+        -   name: SetupBuildInfo
+            href: built-in-targets/setup-build-info.md
+        -   name: ValidateBuild
+            href: built-in-targets/validate-build.md
+        -   name: GenerateWorkflowFiles
+            href: built-in-targets/generate-workflow-files.md
+-   name: Developer Guide
+    href: developer-guide/writing-a-module.md
+    items:
+        -   name: Writing a Module
+            href: developer-guide/writing-a-module.md
+        -   name: Custom Providers
+            href: developer-guide/custom-providers.md
+        -   name: Source Generators
+            href: developer-guide/source-generators.md
+        -   name: Testing
+            href: developer-guide/testing.md
+-   name: Reference
+    href: reference/cli.md
+    items:
+        -   name: CLI
+            href: reference/cli.md
+
