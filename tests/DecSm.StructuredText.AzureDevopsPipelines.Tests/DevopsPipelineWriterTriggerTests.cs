@@ -58,9 +58,9 @@ internal sealed class DevopsPipelineWriterTriggerTests
             Branches = ["main"],
         }));
 
-        string[] lines = ["trigger:", "  branches: [ main ]"];
-
-        output.ShouldContain(PipelineWriterHelper.JoinLines(lines));
+        output.ShouldContain("trigger:");
+        output.ShouldContain("branches:");
+        output.ShouldContain("include: [ main ]");
     }
 
     [Test]
@@ -147,7 +147,8 @@ internal sealed class DevopsPipelineWriterTriggerTests
         }));
 
         output.ShouldContain("pr:");
-        output.ShouldContain("branches: [ main ]");
+        output.ShouldContain("branches:");
+        output.ShouldContain("include: [ main ]");
     }
 
     // ── PR: Full ──────────────────────────────────────────────────────────────

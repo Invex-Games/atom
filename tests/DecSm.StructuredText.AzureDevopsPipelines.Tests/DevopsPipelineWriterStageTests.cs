@@ -449,7 +449,8 @@ internal sealed class DevopsPipelineWriterStageTests
         var output = PipelineWriterHelper.Write(pipeline);
 
         output.ShouldContain("trigger:");
-        output.ShouldContain("branches: [ main ]");
+        output.ShouldContain("branches:");
+        output.ShouldContain("include: [ main ]");
         output.ShouldContain("variables:");
         output.ShouldContain("buildConfiguration: Release");
         output.ShouldContain("stages:");
