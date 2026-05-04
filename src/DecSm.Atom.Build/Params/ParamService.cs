@@ -141,7 +141,9 @@ internal sealed class ParamService(
     /// </summary>
     private readonly AsyncLocal<ParamSource?> _overrideSources = new();
 
-    private readonly ISecretsProvider[] _secretsProviders = secretsProviders.ToArray();
+    private readonly ISecretsProvider[] _secretsProviders = secretsProviders
+        .OrderByDescending(p => p.Priority)
+        .ToArray();
 
     /// <inheritdoc />
     public IDisposable CreateNoCacheScope() =>

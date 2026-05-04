@@ -5,12 +5,11 @@ public sealed record ReleaseInfo(string CommitHash, SemVer Version);
 public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper, ISetupBuildInfo, IApiSurfaceHelper
 {
     private RootedPath[] FilesToCheck =>
-    [
-        AtomFileSystem.AtomRootDirectory /
-        "DecSm.Atom.Build.Tests" /
-        "ApiSurfaceTests" /
-        "PublicApiSurfaceTests.VerifyPublicApiSurface.verified.txt",
-    ];
+        AtomFileSystem
+            .Directory
+            .GetFiles(AtomFileSystem.AtomRootDirectory / "tests", "*.verified.txt", SearchOption.AllDirectories)
+            .Select(AtomFileSystem.CreateRootedPath)
+            .ToArray();
 
     Target CheckPrForBreakingChanges =>
         t => t
@@ -33,13 +32,27 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
                 Logger.LogDebug("Latest release info: {ReleaseInfo}", latestReleaseInfo);
 
                 if (latestReleaseInfo is null)
+                {
+                    Logger.LogInformation("No previous release found. Skipping breaking changes check.");
+
                     return;
+                }
+
+                Logger.LogInformation(
+                    "Comparing current version {CurrentVersion} with latest release version {LatestVersion} to identify breaking changes.",
+                    currentVersion,
+                    latestReleaseInfo.Version);
 
                 var breakingChanges = IdentifyBreakingChanges(latestReleaseInfo.Version,
                     latestReleaseInfo.CommitHash,
                     currentVersion,
                     currentCommitHash,
                     FilesToCheck);
+
+                Logger.LogInformation(
+                    "Identified {MajorCount} major breaking changes and {MinorCount} minor breaking changes.",
+                    breakingChanges.MajorChanges.Count,
+                    breakingChanges.MinorChanges.Count);
 
                 var body = breakingChanges.MajorChanges.Count > 0
                     ? currentVersion.Major > latestReleaseInfo.Version.Major
@@ -105,9 +118,15 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
                 var hasInvalidChanges = breakingChanges switch
                 {
                     { MajorChanges.Count: > 0 } when currentVersion.Major <= latestReleaseInfo.Version.Major => true,
-                    { MinorChanges.Count: > 0 } when currentVersion.Minor <= latestReleaseInfo.Version.Minor => true,
+                    { MinorChanges.Count: > 0 } when currentVersion.Major <= latestReleaseInfo.Version.Major &&
+                                                     currentVersion.Minor <= latestReleaseInfo.Version.Minor => true,
                     _ => false,
                 };
+
+                Logger.LogInformation("Adding check status to pull request with status: {Status}",
+                    hasInvalidChanges
+                        ? "failure"
+                        : "success");
 
                 await AddCheckStatus(owner,
                     hasInvalidChanges
