@@ -1,0 +1,33 @@
+﻿{
+  IsOutdated: false,
+  ThrowOnWrite: false,
+  GeneratedWorkflows: [
+    {
+      Name: options-workflow,
+      Triggers: [
+        {}
+      ],
+      Options: [
+        {
+          Value: workflow-level
+        }
+      ],
+      Jobs: [
+        {
+          Name: SingleTarget,
+          TargetStep: {
+            Name: SingleTarget,
+            Options: [
+              {
+                Value: workflow-level
+              },
+              {
+                Value: target-level
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

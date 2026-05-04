@@ -1,14 +1,19 @@
 ﻿namespace DecSm.Atom.Workflows.Tests.TestUtils;
 
 [PublicAPI]
-public class TestWorkflowWriter : IWorkflowWriter<TestWorkflowType>
+internal sealed class TestWorkflowWriter : IWorkflowWriter<TestWorkflowType>
 {
     public bool IsOutdated { get; init; }
+
+    public bool ThrowOnWrite { get; init; }
 
     public List<WorkflowModel> GeneratedWorkflows { get; } = [];
 
     public Task Generate(WorkflowModel workflow, CancellationToken cancellationToken = default)
     {
+        if (ThrowOnWrite)
+            throw new StepFailedException("TestWorkflowWriter is configured to throw on write.");
+
         GeneratedWorkflows.Add(workflow);
 
         return Task.CompletedTask;

@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.Tests.BuildTests.Secrets;
 
 [TestFixture]
-public class UserSecretsVaultTests
+internal sealed class UserSecretsVaultTests
 {
     [Test]
     public void UserSecretsVault_WhenMatch_ReturnsSecret()

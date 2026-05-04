@@ -3,7 +3,7 @@ using Verifier = DecSm.Atom.Build.Analyzers.Tests.ExtendedAnalyzerVerifier<DecSm
 namespace DecSm.Atom.Build.Analyzers.Tests;
 
 // ReSharper disable once InconsistentNaming
-public class AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamAnalyzerTests
+public sealed class AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamAnalyzerTests
 {
     private void Configure(
         CSharpAnalyzerTest<AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamAnalyzer, DefaultVerifier>

@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.Tests.BuildTests.Console;
 
 [TestFixture]
-public class ConsoleTests
+internal sealed class ConsoleTests
 {
     [Test]
     public async Task MinimalBuildDefinition_Displays_DefaultConsoleMessage()

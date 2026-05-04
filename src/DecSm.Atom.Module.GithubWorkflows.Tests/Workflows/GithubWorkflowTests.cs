@@ -3,7 +3,7 @@
 namespace DecSm.Atom.Module.GithubWorkflows.Tests.Workflows;
 
 [TestFixture]
-public class GithubWorkflowTests
+internal sealed class GithubWorkflowTests
 {
     private static string WorkflowDir =>
         Environment.OSVersion.Platform is PlatformID.Win32NT

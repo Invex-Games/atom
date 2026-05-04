@@ -1,8 +1,8 @@
-﻿namespace DecSm.Atom.Build.Tests.ClassTests.Params;
+namespace DecSm.Atom.Build.Tests.ClassTests.Params;
 
 [TestFixture]
 [NonParallelizable]
-public class ParamServiceTests
+internal sealed class ParamServiceTests
 {
     [SetUp]
     public void Setup()
@@ -51,7 +51,7 @@ public class ParamServiceTests
         _config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "Params:test-param", "ConfigValue" },
+                ["Params:test-param"] = "ConfigValue",
             })
             .Build();
 
@@ -87,7 +87,7 @@ public class ParamServiceTests
         _config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "Params:test-param", "ConfigValue" },
+                ["Params:test-param"] = "ConfigValue",
             })
             .Build();
 
@@ -123,7 +123,7 @@ public class ParamServiceTests
         _config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "Params:test-param", "ConfigValue" },
+                ["Params:test-param"] = "ConfigValue",
             })
             .Build();
 
@@ -355,7 +355,7 @@ public class ParamServiceTests
         _config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "Params:test-param", "ConfigValue" },
+                ["Params:test-param"] = "ConfigValue",
             })
             .Build();
 
@@ -396,7 +396,7 @@ public class ParamServiceTests
         _config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "Params:test-param", "ConfigValue" },
+                ["Params:test-param"] = "ConfigValue",
             })
             .Build();
 
@@ -437,7 +437,7 @@ public class ParamServiceTests
         _config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "Params:test-param", "ConfigValue" },
+                ["Params:test-param"] = "ConfigValue",
             })
             .Build();
 
@@ -478,7 +478,7 @@ public class ParamServiceTests
         _config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "Params:test-param", "ConfigValue" },
+                ["Params:test-param"] = "ConfigValue",
             })
             .Build();
 
@@ -519,7 +519,7 @@ public class ParamServiceTests
         _config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "Params:test-param", "ConfigValue" },
+                ["Params:test-param"] = "ConfigValue",
             })
             .Build();
 
@@ -560,7 +560,7 @@ public class ParamServiceTests
         _config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "Params:test-param", "ConfigValue" },
+                ["Params:test-param"] = "ConfigValue",
             })
             .Build();
 
@@ -658,7 +658,7 @@ public class ParamServiceTests
         _config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "Params:test-param", "ConfigValue" },
+                ["Params:test-param"] = "ConfigValue",
             })
             .Build();
 
@@ -727,7 +727,7 @@ public class ParamServiceTests
         _config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "Params:test-param", "ConfigValue" },
+                ["Params:test-param"] = "ConfigValue",
             })
             .Build();
 

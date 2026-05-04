@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Tool.Tests;
 
 [TestFixture]
-public class RunCommandTests
+internal sealed class RunCommandTests
 {
     [SetUp]
     public void SetUp()

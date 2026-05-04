@@ -1,7 +1,7 @@
 namespace DecSm.Atom.Build.Tests.ApiSurfaceTests;
 
 [TestFixture]
-public class PublicApiSurfaceTests
+internal sealed class PublicApiSurfaceTests
 {
     [Test]
     public async Task VerifyPublicApiSurface()

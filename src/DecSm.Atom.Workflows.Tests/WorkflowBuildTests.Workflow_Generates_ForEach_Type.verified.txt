@@ -1,0 +1,34 @@
+﻿{
+  IsOutdated: false,
+  ThrowOnWrite: false,
+  GeneratedWorkflows: [
+    {
+      Name: multi-type-workflow,
+      Triggers: [
+        {}
+      ],
+      Jobs: [
+        {
+          Name: SingleTarget,
+          TargetStep: {
+            Name: SingleTarget
+          }
+        }
+      ]
+    },
+    {
+      Name: multi-type-workflow,
+      Triggers: [
+        {}
+      ],
+      Jobs: [
+        {
+          Name: SingleTarget,
+          TargetStep: {
+            Name: SingleTarget
+          }
+        }
+      ]
+    }
+  ]
+}

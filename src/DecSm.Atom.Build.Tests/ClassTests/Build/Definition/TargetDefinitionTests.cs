@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.Tests.ClassTests.Build.Definition;
 
 [TestFixture]
-public class TargetDefinitionTests
+internal sealed class TargetDefinitionTests
 {
     [Test]
     public void WithDescription_SetsDescription()

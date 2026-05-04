@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.Tests.ClassTests.Logging;
 
 [TestFixture]
-public class ReportLoggerTests
+internal sealed class ReportLoggerTests
 {
     [SetUp]
     public void Setup()

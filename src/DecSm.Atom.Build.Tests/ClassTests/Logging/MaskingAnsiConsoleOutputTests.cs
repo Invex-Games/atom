@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.Tests.ClassTests.Logging;
 
 [TestFixture]
-public class MaskingAnsiConsoleOutputTests
+internal sealed class MaskingAnsiConsoleOutputTests
 {
     [SetUp]
     public void SetUp()

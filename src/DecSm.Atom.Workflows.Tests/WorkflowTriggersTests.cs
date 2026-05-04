@@ -1,7 +1,7 @@
 namespace DecSm.Atom.Workflows.Tests;
 
 [TestFixture]
-public class WorkflowTriggersTests
+internal sealed class WorkflowTriggersTests
 {
     [Test]
     public void Manual_ReturnsSingletonManualTrigger()

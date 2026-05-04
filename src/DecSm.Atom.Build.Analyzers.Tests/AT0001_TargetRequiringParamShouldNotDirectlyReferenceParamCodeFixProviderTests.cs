@@ -4,7 +4,7 @@
 namespace DecSm.Atom.Build.Analyzers.Tests;
 
 // ReSharper disable once InconsistentNaming
-public class AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamCodeFixProviderTests
+public sealed class AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamCodeFixProviderTests
 {
     private void Configure(
         CSharpCodeFixTest<AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamAnalyzer,

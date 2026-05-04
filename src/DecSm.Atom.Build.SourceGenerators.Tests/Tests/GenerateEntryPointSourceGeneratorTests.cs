@@ -1,6 +1,6 @@
 ﻿namespace DecSm.Atom.Build.SourceGenerators.Tests.Tests;
 
-public class GenerateEntryPointSourceGeneratorTests
+internal sealed class GenerateEntryPointSourceGeneratorTests
 {
     [Test]
     public async Task EmptyDefinition_GeneratesDefaultSource()

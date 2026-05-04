@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.Tests.ClassTests.Build;
 
 [TestFixture]
-public class BuildResolverTests
+internal sealed class BuildResolverTests
 {
     [SetUp]
     public void Setup() =>

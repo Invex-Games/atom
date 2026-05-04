@@ -1,7 +1,7 @@
 namespace DecSm.Atom.Build.Tests.ClassTests.Util;
 
 [TestFixture]
-public class StringUtilTests
+internal sealed class StringUtilTests
 {
     [Test]
     public void GetLevenshteinDistance_BothNullOrEmpty_ReturnsZero()

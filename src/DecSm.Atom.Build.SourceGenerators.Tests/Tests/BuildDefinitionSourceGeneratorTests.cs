@@ -1,7 +1,7 @@
 ﻿namespace DecSm.Atom.Build.SourceGenerators.Tests.Tests;
 
 [TestFixture]
-public class BuildDefinitionSourceGeneratorTests
+internal sealed class BuildDefinitionSourceGeneratorTests
 {
     [Test]
     public async Task MinimalBuildDefinition_WithoutBaseType_GeneratesSource()
