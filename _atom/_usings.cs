@@ -26,6 +26,7 @@ global using DecSm.Atom.Workflows;
 global using DecSm.Atom.Workflows.Definition;
 global using DecSm.Atom.Workflows.Definition.Triggers;
 global using DecSm.Atom.Workflows.Dotnet;
+global using DecSm.Atom.Workflows.Extensions;
 global using DecSm.Atom.Workflows.Options;
 global using DecSm.StructuredText.Expressions;
 global using DecSm.StructuredText.GithubActions.DependabotConfigModel.Model;
