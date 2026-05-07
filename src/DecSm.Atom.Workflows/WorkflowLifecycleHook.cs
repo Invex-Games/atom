@@ -22,7 +22,7 @@ internal sealed class WorkflowLifecycleHook(
 {
     public async Task BeforeExecute(CancellationToken cancellationToken)
     {
-        if (args.Commands.Any(x => x.Name is nameof(IGenerateWorkflowFiles.GenerateWorkflowFiles)) || !args.HasHeadless)
+        if (args.Commands.Any(x => x.Name is nameof(IGen.Gen)) || !args.HasHeadless)
         {
             logger.LogDebug("Generating workflow files");
             await workflowGenerator.GenerateWorkflows(cancellationToken);

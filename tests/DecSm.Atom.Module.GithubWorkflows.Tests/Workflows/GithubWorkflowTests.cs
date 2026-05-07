@@ -22,7 +22,7 @@ internal sealed class GithubWorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<EmptyBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]));
 
         // Act
         build.Run();
@@ -42,7 +42,7 @@ internal sealed class GithubWorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<SimpleBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -67,7 +67,7 @@ internal sealed class GithubWorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<DependentBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -94,7 +94,7 @@ internal sealed class GithubWorkflowTests
 
         var build = CreateTestHost<ArtifactBuild>(console,
             fileSystem,
-            new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.GenerateWorkflowFiles))]));
+            new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -121,7 +121,7 @@ internal sealed class GithubWorkflowTests
 
         var build = CreateTestHost<CustomArtifactBuild>(console,
             fileSystem,
-            new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.GenerateWorkflowFiles))]),
+            new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]),
             configure: builder => builder.Services.AddSingleton<IArtifactProvider, TestArtifactProvider>());
 
         // Act
@@ -147,7 +147,7 @@ internal sealed class GithubWorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<ManualInputBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -174,7 +174,7 @@ internal sealed class GithubWorkflowTests
         var build1 = CreateTestHost<ManualInputStabilityBuild>(fileSystem: fileSystem,
             commandLineArgs: new(true,
             [
-                new CommandArg(nameof(IWorkflowBuildDefinition.GenerateWorkflowFiles)),
+                new CommandArg(nameof(IWorkflowBuildDefinition.Gen)),
                 new ParamArg("--string-param-without-default",
                     nameof(IManualInputStabilityTarget.StringParamWithoutDefault),
                     "1"),
@@ -198,7 +198,7 @@ internal sealed class GithubWorkflowTests
         var build2 = CreateTestHost<ManualInputStabilityBuild>(fileSystem: fileSystem,
             commandLineArgs: new(true,
             [
-                new CommandArg(nameof(IWorkflowBuildDefinition.GenerateWorkflowFiles)),
+                new CommandArg(nameof(IWorkflowBuildDefinition.Gen)),
                 new ParamArg("--string-param-without-default",
                     nameof(IManualInputStabilityTarget.StringParamWithoutDefault),
                     "2"),
@@ -237,7 +237,7 @@ internal sealed class GithubWorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<SetupDotnetBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -262,7 +262,7 @@ internal sealed class GithubWorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<ReleaseTriggerBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -287,7 +287,7 @@ internal sealed class GithubWorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<EnvironmentBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -312,7 +312,7 @@ internal sealed class GithubWorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<CheckoutOptionBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -337,7 +337,7 @@ internal sealed class GithubWorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<DuplicateDependencyBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -362,7 +362,7 @@ internal sealed class GithubWorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<PermissionsBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -387,7 +387,7 @@ internal sealed class GithubWorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<DependabotBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]));
 
         // Act
         await build.RunAsync();
