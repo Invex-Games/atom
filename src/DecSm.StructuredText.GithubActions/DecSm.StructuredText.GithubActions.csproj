@@ -28,4 +28,8 @@
     <ProjectReference Include="..\DecSm.StructuredText\DecSm.StructuredText.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="DecSm.StructuredText.GithubActions.props" Pack="true" PackagePath="buildTransitive/" />
+  </ItemGroup>
+
 </Project>

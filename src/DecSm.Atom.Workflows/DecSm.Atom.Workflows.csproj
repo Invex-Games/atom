@@ -36,6 +36,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="DecSm.Atom.Workflows.props" Pack="true" PackagePath="buildTransitive/" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Workflows\Expressions\WorkflowExpression.Values.cs">
       <DependentUpon>WorkflowExpression.cs</DependentUpon>
     </Compile>

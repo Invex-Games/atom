@@ -24,4 +24,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="DecSm.Atom.FileSystem.props" Pack="true" PackagePath="buildTransitive/" />
+  </ItemGroup>
+
 </Project>

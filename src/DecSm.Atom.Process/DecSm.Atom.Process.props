@@ -1,0 +1,5 @@
+<Project>
+    <ItemGroup>
+        <Using Include="DecSm.Atom.Process" Global="true"/>
+    </ItemGroup>
+</Project>

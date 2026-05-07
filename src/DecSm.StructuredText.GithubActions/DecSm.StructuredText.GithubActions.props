@@ -1,0 +1,7 @@
+<Project>
+    <ItemGroup>
+        <Using Include="DecSm.StructuredText.GithubActions" Global="true"/>
+        <Using Include="DecSm.StructuredText.GithubActions.DependabotConfigModel" Global="true"/>
+        <Using Include="DecSm.StructuredText.GithubActions.GithubActionModel" Global="true"/>
+    </ItemGroup>
+</Project>
