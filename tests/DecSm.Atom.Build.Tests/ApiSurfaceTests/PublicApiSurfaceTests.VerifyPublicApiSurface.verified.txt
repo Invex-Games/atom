@@ -529,9 +529,6 @@
     Name: DecSm.Atom.Build.Definition.TargetDefinition,
     Members: [
       {
-        Name: Alias
-      },
-      {
         Name: ConsumedArtifacts
       },
       {
@@ -617,9 +614,6 @@
       },
       {
         Name: UsesParam
-      },
-      {
-        Name: WithAlias
       }
     ]
   },
@@ -930,9 +924,6 @@
     Members: [
       {
         Name: <Clone>$
-      },
-      {
-        Name: Alias
       },
       {
         Name: ConsumedArtifacts
