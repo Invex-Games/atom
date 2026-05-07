@@ -1,4 +1,11 @@
 namespace DecSm.Atom.Workflows.Options;
 
 [PublicAPI]
-public sealed record TargetStepCondition(TextExpression Condition) : IBuildOption;
+public sealed record TargetStepCondition(TextExpression Condition) : IBuildOption, IImplicitTargetDependencyOption
+{
+    public IEnumerable<string> TargetNames =>
+        TextExpressionUtils
+            .Flatten(Condition)
+            .OfType<TargetOutputExpression>()
+            .Select(x => x.TargetName);
+}
