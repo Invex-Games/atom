@@ -14,8 +14,7 @@ internal static class WorkflowTestUtils
         where T : BuildDefinition =>
         Atom.TestUtils.TestUtils.CreateTestHost<T>(console,
             fileSystem,
-            commandLineArgs ??
-            new CommandLineArgs(true, [new CommandArg(nameof(IGenerateWorkflowFiles.GenerateWorkflowFiles))]),
+            commandLineArgs ?? new CommandLineArgs(true, [new CommandArg(nameof(IGen.Gen))]),
             buildIdProvider,
             buildVersionProvider,
             x =>

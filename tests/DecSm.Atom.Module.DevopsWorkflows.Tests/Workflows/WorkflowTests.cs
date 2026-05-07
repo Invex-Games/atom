@@ -15,7 +15,7 @@ internal sealed class WorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<MinimalBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IGenerateWorkflowFiles.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         build.Run();
@@ -35,7 +35,7 @@ internal sealed class WorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<SimpleBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IGenerateWorkflowFiles.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -60,7 +60,7 @@ internal sealed class WorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<DependentBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IGenerateWorkflowFiles.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -87,7 +87,7 @@ internal sealed class WorkflowTests
 
         var build = CreateTestHost<ArtifactBuild>(console,
             fileSystem,
-            new(true, [new CommandArg(nameof(IGenerateWorkflowFiles.GenerateWorkflowFiles))]));
+            new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -114,7 +114,7 @@ internal sealed class WorkflowTests
 
         var build = CreateTestHost<CustomArtifactBuild>(console,
             fileSystem,
-            new(true, [new CommandArg(nameof(IGenerateWorkflowFiles.GenerateWorkflowFiles))]),
+            new(true, [new CommandArg(nameof(IGen.Gen))]),
             configure: builder => builder.Services.AddSingleton<IArtifactProvider, TestArtifactProvider>());
 
         // Act
@@ -140,7 +140,7 @@ internal sealed class WorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<ManualInputBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IGenerateWorkflowFiles.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -165,7 +165,7 @@ internal sealed class WorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<SetupDotnetBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IGenerateWorkflowFiles.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -190,7 +190,7 @@ internal sealed class WorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<EnvironmentBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IGenerateWorkflowFiles.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -215,7 +215,7 @@ internal sealed class WorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<CheckoutOptionBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IGenerateWorkflowFiles.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();
@@ -240,7 +240,7 @@ internal sealed class WorkflowTests
         var fileSystem = FileSystemUtils.DefaultMockFileSystem;
 
         var build = CreateTestHost<DuplicateDependencyBuild>(fileSystem: fileSystem,
-            commandLineArgs: new(true, [new CommandArg(nameof(IGenerateWorkflowFiles.GenerateWorkflowFiles))]));
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
 
         // Act
         await build.RunAsync();
