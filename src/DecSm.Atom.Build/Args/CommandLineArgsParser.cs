@@ -10,19 +10,22 @@
 /// </remarks>
 internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IAnsiConsole console)
 {
-    private readonly IReadOnlyDictionary<string, string> _aliasToTargetName = buildDefinition
-        .TargetDefinitions
-        .Select(x =>
-        {
-            var definition = x.Value(new()
+    // Needs lazy initialization to avoid circular dependency with IBuildDefinition
+    // (which may reference CommandLineArgsParser for alias resolution)
+    private IReadOnlyDictionary<string, string> AliasToTargetName =>
+        field ??= buildDefinition
+            .TargetDefinitions
+            .Select(x =>
             {
-                Name = x.Key,
-            });
+                var definition = x.Value(new()
+                {
+                    Name = x.Key,
+                });
 
-            return (Name: x.Key, definition.Alias);
-        })
-        .Where(x => x.Alias is not null)
-        .ToDictionary(x => x.Alias!, x => x.Name, StringComparer.OrdinalIgnoreCase);
+                return (Name: x.Key, definition.Alias);
+            })
+            .Where(x => x.Alias is not null)
+            .ToDictionary(x => x.Alias!, x => x.Name, StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     ///     Parses the provided command-line arguments into a <see cref="CommandLineArgs" /> object.
@@ -111,7 +114,7 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
                     continue;
             }
 
-            if (TryParseCommand(buildDefinition.TargetDefinitions, _aliasToTargetName, rawArg) is { } commandArg)
+            if (TryParseCommand(buildDefinition.TargetDefinitions, AliasToTargetName, rawArg) is { } commandArg)
             {
                 args.Add(commandArg);
 
@@ -124,7 +127,7 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
             var commandMatches = buildDefinition
                 .TargetDefinitions
                 .Keys
-                .Concat(_aliasToTargetName.Keys)
+                .Concat(AliasToTargetName.Keys)
                 .OrderBy(targetDefinition => targetDefinition.GetLevenshteinDistance(rawArg))
                 .Take(3)
                 .ToList();
