@@ -74,7 +74,7 @@ internal sealed class BuildExecutorTests
 
         _commandLineArgs = new(true, [new CommandArg("Test")]);
 
-        var target = new TargetModel("Test", null, false, null)
+        var target = new TargetModel("Test", null, false)
         {
             Tasks =
             [
@@ -152,7 +152,7 @@ internal sealed class BuildExecutorTests
 
         _commandLineArgs = new(true, [new CommandArg("Test")]);
 
-        var target = new TargetModel("Test", null, false, null)
+        var target = new TargetModel("Test", null, false)
         {
             Tasks = [_ => Task.CompletedTask],
             Params = [new(param1, true), new(param2, true)],

@@ -334,40 +334,6 @@ internal sealed class CommandLineArgParserTests
             .ShouldSatisfyAllConditions(x => x.Name.ShouldBe(commandName));
     }
 
-    [TestCase("-g", "Gen")]
-    [TestCase("-G", "Gen")]
-    [TestCase("-b", "Build")]
-    [TestCase("-B", "Build")]
-    public void CommandLineArgsParser_Parses_CommandAlias(string arg, string commandName)
-    {
-        // Arrange
-        string[] rawArgs = [arg];
-        var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
-
-        A
-            .CallTo(() => build.TargetDefinitions)
-            .Returns(new Dictionary<string, Target>
-            {
-                ["Gen"] = definition => definition.WithAlias("-g"),
-                ["Build"] = definition => definition.WithAlias("-b"),
-                ["Test"] = definition => definition,
-            });
-
-        var parser = new CommandLineArgsParser(build, console);
-
-        // Act
-        var parsedArgs = parser.Parse(rawArgs);
-
-        // Assert
-        parsedArgs.Args.ShouldHaveSingleItem();
-
-        parsedArgs
-            .Args[0]
-            .ShouldBeOfType<CommandArg>()
-            .ShouldSatisfyAllConditions(x => x.Name.ShouldBe(commandName));
-    }
-
     [TestCase("Unknown1")]
     [TestCase("asdf")]
     [TestCase("wololo")]

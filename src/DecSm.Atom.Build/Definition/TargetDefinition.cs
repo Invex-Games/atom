@@ -22,11 +22,6 @@ public sealed class TargetDefinition
     public bool Hidden { get; private set; }
 
     /// <summary>
-    ///     Gets the alias for the target, which can be used as a shorthand when invoking the target from the command line.
-    /// </summary>
-    public string? Alias { get; private set; }
-
-    /// <summary>
     ///     Gets the list of asynchronous tasks that will be executed when the target runs.
     /// </summary>
     public List<Func<CancellationToken, Task>> Tasks { get; private set; } = [];
@@ -197,18 +192,6 @@ public sealed class TargetDefinition
     public TargetDefinition IsHidden(bool hidden = true)
     {
         Hidden = hidden;
-
-        return this;
-    }
-
-    /// <summary>
-    ///     Sets the alias for the target, which can be used as a shorthand when invoking the target from the command line.
-    /// </summary>
-    /// <param name="alias">A short alias string (e.g., <c>"-g"</c> for a <c>Gen</c> target).</param>
-    /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
-    public TargetDefinition WithAlias(string alias)
-    {
-        Alias = alias;
 
         return this;
     }
