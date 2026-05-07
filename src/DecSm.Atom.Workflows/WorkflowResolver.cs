@@ -5,7 +5,12 @@
 /// </summary>
 /// <param name="buildModel">The resolved build model.</param>
 /// <param name="buildOptionService">The service providing the resolved set of build options.</param>
-internal sealed class WorkflowResolver(BuildModel buildModel, IBuildOptionService buildOptionService)
+/// <param name="logger">The logger for diagnostics.</param>
+internal sealed class WorkflowResolver(
+    BuildModel buildModel,
+    IBuildOptionService buildOptionService,
+    ILogger<WorkflowResolver> logger
+)
 {
     /// <summary>
     ///     Resolves a <see cref="WorkflowDefinition" /> into a <see cref="WorkflowModel" />,
@@ -94,6 +99,18 @@ internal sealed class WorkflowResolver(BuildModel buildModel, IBuildOptionServic
                         $"Target '{job.Name}' consumes variable '{consumedVariable.VariableName}' from target '{consumedVariable.TargetName}', which does not produce that variable.");
             }
         }
+
+        // Check implicit dependencies and warn if they aren't actually listed as dependencies
+        foreach (var job in definedCommandJobs)
+        foreach (var implicitDependencyOption in job.TargetStep.Options.OfType<IImplicitTargetDependencyOption>())
+        foreach (var implicitDependency in implicitDependencyOption.TargetNames)
+            if (job.JobDependencies.All(x => x != implicitDependency))
+                logger.LogWarning(
+                    "Job '{JobName}' has an implicit dependency on target '{TargetName}' via option '{OptionType}' that is not listed as a dependency. This may lead to unexpected behavior when running the workflow.",
+                    job.Name,
+                    implicitDependency,
+                    implicitDependencyOption.GetType()
+                        .Name);
 
         // Add all targets that are not already defined as jobs
         var jobs = definedCommandJobs

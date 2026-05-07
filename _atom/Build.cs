@@ -1,3 +1,5 @@
+using DecSm.Atom.Workflows.Extensions;
+
 namespace Atom;
 
 [BuildDefinition]
@@ -185,11 +187,11 @@ internal partial class Build : WorkflowBuildDefinition,
                             {
                                 Contents = PermissionsLevel.Write,
                             })),
-                            BuildOptions.Target.RunIfWorkflowCondition(new TargetOutputExpression
-                                {
-                                    OutputName = ParamDefinitions[nameof(ISetupBuildInfo.BuildVersion)].ArgName,
-                                    TargetName = nameof(ISetupBuildInfo.SetupBuildInfo),
-                                }
+                            BuildOptions.Target.RunIfWorkflowCondition(TextExpressions
+                                .Target
+                                .ParamOutput(this,
+                                    nameof(ISetupBuildInfo.SetupBuildInfo),
+                                    nameof(ISetupBuildInfo.BuildVersion))
                                 .Contains("-")
                                 .EqualTo(false)),
                         ],
@@ -204,11 +206,11 @@ internal partial class Build : WorkflowBuildDefinition,
                             {
                                 Contents = PermissionsLevel.Write,
                             })),
-                            BuildOptions.Target.RunIfWorkflowCondition(new TargetOutputExpression
-                                {
-                                    OutputName = ParamDefinitions[nameof(ISetupBuildInfo.BuildVersion)].ArgName,
-                                    TargetName = nameof(ISetupBuildInfo.SetupBuildInfo),
-                                }
+                            BuildOptions.Target.RunIfWorkflowCondition(TextExpressions
+                                .Target
+                                .ParamOutput(this,
+                                    nameof(ISetupBuildInfo.SetupBuildInfo),
+                                    nameof(ISetupBuildInfo.BuildVersion))
                                 .Contains("-")
                                 .EqualTo(false)),
                         ],

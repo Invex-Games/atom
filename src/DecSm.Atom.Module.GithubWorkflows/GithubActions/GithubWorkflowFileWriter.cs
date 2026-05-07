@@ -189,12 +189,12 @@ internal sealed class GithubWorkflowFileWriter(
                     .ToList() switch
                 {
                     { Count: > 1 } options => options[0]
-                        .Value
+                        .Condition
                         .And(options
                             .Skip(1)
-                            .Select(x => x.Value)
+                            .Select(x => x.Condition)
                             .ToArray()),
-                    { Count: 1 } option => option[0].Value,
+                    { Count: 1 } option => option[0].Condition,
                     _ => null,
                 },
             RunsOn = GithubRunsOn.Get(job.TargetStep.Options) is { } runsOn
@@ -657,14 +657,14 @@ internal sealed class GithubWorkflowFileWriter(
 
         if (requiredSecrets.Any(x => x.Param.IsSecret))
         {
-            foreach (var injectedSecret in workflow.Options.OfType<WorkflowSecretInjectionForSecretProvider>())
+            foreach (var injectedSecret in WorkflowSecretInjectionForSecretProvider.GetOptions(workflow.Options))
                 if (buildDefinition.ParamDefinitions.GetValueOrDefault(injectedSecret.SecretName) is
                     { } paramDefinition)
                     targetStepEnv[paramDefinition.ArgName] = TextExpressions
                         .Raw("secrets")[paramDefinition.EnvVarName]
                         .Evaluate();
 
-            foreach (var injectedEvVar in workflow.Options.OfType<WorkflowSecretsInjectionFromEnvironment>())
+            foreach (var injectedEvVar in WorkflowSecretsInjectionFromEnvironment.GetOptions(workflow.Options))
                 if (buildDefinition.ParamDefinitions.GetValueOrDefault(injectedEvVar.SecretName) is { } paramDefinition)
                     targetStepEnv[paramDefinition.ArgName] = TextExpressions
                         .Raw("vars")[paramDefinition.EnvVarName]

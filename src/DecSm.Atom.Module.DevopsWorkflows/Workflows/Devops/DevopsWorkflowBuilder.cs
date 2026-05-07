@@ -321,12 +321,12 @@ internal sealed partial class DevopsWorkflowBuilder(
         var conditionExpression = condition switch
         {
             { Count: > 1 } => condition[0]
-                .Value
+                .Condition
                 .And(condition
                     .Skip(1)
-                    .Select(x => x.Value)
+                    .Select(x => x.Condition)
                     .ToArray()),
-            [_] => condition[0].Value,
+            [_] => condition[0].Condition,
             _ => null,
         };
 
