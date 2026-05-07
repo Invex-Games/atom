@@ -22,7 +22,7 @@ internal sealed class BuildModelTests
     }
 
     private static TargetModel TestTargetModel =>
-        new("TargetModel", null, false, null)
+        new("TargetModel", null, false)
         {
             Tasks = [],
             Params = [],

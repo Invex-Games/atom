@@ -101,7 +101,7 @@ internal sealed class BuildResolver(
                 foreach (var param in x.Params)
                     AddParamAndChildren(param.Param, param.Required, usedParams, paramModels, []);
 
-                return new TargetModel(x.Name, x.Description, x.Hidden, x.Alias)
+                return new TargetModel(x.Name, x.Description, x.Hidden)
                 {
                     Tasks = x.Tasks,
                     Params = usedParams,
