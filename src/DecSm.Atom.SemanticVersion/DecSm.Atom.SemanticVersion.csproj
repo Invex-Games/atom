@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="DecSm.Atom.SemanticVersion.props" Pack="true" PackagePath="buildTransitive/" />
+  </ItemGroup>
+
 </Project>

@@ -32,4 +32,8 @@
     <Folder Include="DevopsPipelineModel\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="DecSm.StructuredText.AzureDevopsPipelines.props" Pack="true" PackagePath="buildTransitive/" />
+  </ItemGroup>
+
 </Project>

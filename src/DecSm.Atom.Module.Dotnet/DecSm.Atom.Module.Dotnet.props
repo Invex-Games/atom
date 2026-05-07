@@ -1,6 +1,10 @@
 <Project>
     <ItemGroup>
-        <Using Include="DecSm.Atom.Module.Dotnet" Global="true"/>
-        <Using Include="DecSm.Atom.Module.Dotnet.Helpers" Global="true"/>
+        <Using Include="DecSm.Atom.Module.Dotnet" Global="true" />
+        <Using Include="DecSm.Atom.Module.Dotnet.Cli" Global="true" />
+        <Using Include="DecSm.Atom.Module.Dotnet.Cli.Generated" Global="true" />
+        <Using Include="DecSm.Atom.Module.Dotnet.Helpers" Global="true" />
+        <Using Include="DecSm.Atom.Module.Dotnet.Model" Global="true" />
+        <Using Include="DecSm.Atom.Module.Dotnet.Model.Util" Global="true" />
     </ItemGroup>
 </Project>

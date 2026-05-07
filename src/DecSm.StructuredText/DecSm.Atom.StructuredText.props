@@ -1,0 +1,5 @@
+<Project>
+    <ItemGroup>
+        <Using Include="DecSm.Atom.StructuredText" Global="true"/>
+    </ItemGroup>
+</Project>

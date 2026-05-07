@@ -1,0 +1,5 @@
+<Project>
+    <ItemGroup>
+        <Using Include="DecSm.Atom.Workflows" Global="true"/>
+    </ItemGroup>
+</Project>
