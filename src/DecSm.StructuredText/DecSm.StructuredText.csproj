@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="DecSm.Atom.StructuredText.props" Pack="true" PackagePath="buildTransitive/" />
+    <None Include="DecSm.StructuredText.props" Pack="true" PackagePath="buildTransitive/" />
   </ItemGroup>
 
 </Project>
