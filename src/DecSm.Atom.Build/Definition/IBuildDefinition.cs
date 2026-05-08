@@ -10,13 +10,14 @@
 ///     for Atom to understand and execute a build.
 /// </remarks>
 [PublicAPI]
+[UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
 public interface IBuildDefinition
 {
     /// <summary>
     ///     Gets the build options applied globally to this build definition.
     ///     Override to supply a custom list of <see cref="IBuildOption" /> instances.
     /// </summary>
-    IReadOnlyList<IBuildOption> Options { get; }
+    IReadOnlyList<IBuildOption> Options => [];
 
     /// <summary>
     ///     Gets the collection of target definitions for the build.

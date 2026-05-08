@@ -19,5 +19,5 @@ namespace DecSm.Atom.Build.Definition;
 ///     </code>
 /// </example>
 [PublicAPI]
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
 public sealed class GenerateSolutionModelAttribute : Attribute;

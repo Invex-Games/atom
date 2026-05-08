@@ -1,7 +1,10 @@
 ﻿namespace DecSm.Atom.Module.DevopsWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class DuplicateDependencyBuild : WorkflowBuildDefinition, IDevopsWorkflows, IDuplicateDependencyTarget
+public partial class DuplicateDependencyBuild : WorkflowBuildDefinition,
+    IWorkflowBuildDefinition,
+    IDevopsWorkflows,
+    IDuplicateDependencyTarget
 {
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [
@@ -13,7 +16,7 @@ public partial class DuplicateDependencyBuild : WorkflowBuildDefinition, IDevops
         },
     ];
 
-    public override IReadOnlyList<IBuildOption> Options => [BuildOptions.Artifacts.UseCustomProvider];
+    public IReadOnlyList<IBuildOption> Options => [BuildOptions.Artifacts.UseCustomProvider];
 }
 
 [ConfigureHostBuilder]
@@ -25,7 +28,7 @@ public partial interface IDuplicateDependencyTarget : IStoreArtifact, IRetrieveA
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildId))
             .ProducesArtifact("artifact-name");
 
-    protected static partial void ConfigureBuilder(IHostApplicationBuilder builder) =>
+    protected static partial void ConfigureBuilderFromIDuplicateDependencyTarget(IHostApplicationBuilder builder) =>
         builder.Services.AddSingleton<IArtifactProvider, TestArtifactProvider>();
 }
 

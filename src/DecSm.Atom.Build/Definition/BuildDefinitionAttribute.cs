@@ -19,5 +19,5 @@
 ///     </code>
 /// </example>
 [PublicAPI]
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
 public sealed class BuildDefinitionAttribute : Attribute;

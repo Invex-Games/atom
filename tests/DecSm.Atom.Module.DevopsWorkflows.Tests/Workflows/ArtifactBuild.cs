@@ -2,6 +2,7 @@
 
 [BuildDefinition]
 public partial class ArtifactBuild : WorkflowBuildDefinition,
+    IWorkflowBuildDefinition,
     IDevopsWorkflows,
     IArtifactTarget1,
     IArtifactTarget2,
@@ -42,6 +43,7 @@ public partial class ArtifactBuild : WorkflowBuildDefinition,
 
 [BuildDefinition]
 public partial class CustomArtifactBuild : WorkflowBuildDefinition,
+    IWorkflowBuildDefinition,
     IDevopsWorkflows,
     IStoreArtifact,
     IRetrieveArtifact,

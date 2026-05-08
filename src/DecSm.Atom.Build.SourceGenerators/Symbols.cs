@@ -4,6 +4,9 @@ public static class Symbols
 {
     public const string BuildDefinitionAttribute = "DecSm.Atom.Build.Definition.BuildDefinitionAttribute";
 
+    public const string BuildDefinitionInterfaceAttribute =
+        "DecSm.Atom.Build.Definition.BuildDefinitionInterfaceAttribute";
+
     public const string GenerateEntryPointAttribute = "DecSm.Atom.Build.Hosting.GenerateEntryPointAttribute";
 
     public const string GenerateInterfaceMembersAttribute =
@@ -11,6 +14,7 @@ public static class Symbols
 
     public const string GenerateSolutionModelAttribute = "DecSm.Atom.Build.Definition.GenerateSolutionModelAttribute";
 
+    public const string BuildDefinition = "DecSm.Atom.Build.Definition.BuildDefinition";
     public const string IBuildDefinition = "DecSm.Atom.Build.Definition.IBuildDefinition";
     public const string IBuildAccessor = "DecSm.Atom.Build.IBuildAccessor";
 
@@ -23,6 +27,8 @@ public static class Symbols
     public const string ConfigureHostAttribute = "DecSm.Atom.Build.Hosting.ConfigureHostAttribute";
     public const string ConfigureHostBuilderAttribute = "DecSm.Atom.Build.Hosting.ConfigureHostBuilderAttribute";
 
+    public const string IBuildOption = "DecSm.Atom.Build.BuildOptions.IBuildOption";
+
     public const string IReadOnlyDictionary = "System.Collections.Generic.IReadOnlyDictionary";
     public const string Dictionary = "System.Collections.Generic.Dictionary";
 }
@@ -30,6 +36,13 @@ public static class Symbols
 public readonly record struct ClassNameWithSourceCode(string ClassName, string? SourceCode)
 {
     public string ClassName { get; } = ClassName;
+
+    public string? SourceCode { get; } = SourceCode;
+}
+
+public readonly record struct InterfaceNameWithSourceCode(string InterfaceName, string? SourceCode)
+{
+    public string InterfaceName { get; } = InterfaceName;
 
     public string? SourceCode { get; } = SourceCode;
 }

@@ -23,7 +23,7 @@ public partial interface IGithubWorkflows : IJobRunsOn
     ///     sets up <see cref="GithubSummaryOutcomeReportWriter" /> for reporting, and adjusts
     ///     artifact and publish paths to GitHub Actions conventions.
     /// </remarks>
-    protected static partial void ConfigureBuilder(IHostApplicationBuilder builder)
+    protected static partial void ConfigureBuilderFromIGithubWorkflows(IHostApplicationBuilder builder)
     {
         builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(IWorkflowWriter),
             typeof(GithubWorkflowFileWriter),

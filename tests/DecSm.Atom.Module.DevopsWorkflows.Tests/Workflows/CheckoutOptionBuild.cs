@@ -1,7 +1,10 @@
 ﻿namespace DecSm.Atom.Module.DevopsWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class CheckoutOptionBuild : WorkflowBuildDefinition, IDevopsWorkflows, ICheckoutOptionTarget
+public partial class CheckoutOptionBuild : WorkflowBuildDefinition,
+    IWorkflowBuildDefinition,
+    IDevopsWorkflows,
+    ICheckoutOptionTarget
 {
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [

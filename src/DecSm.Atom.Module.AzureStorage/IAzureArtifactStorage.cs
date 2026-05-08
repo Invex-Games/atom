@@ -41,6 +41,6 @@ public partial interface IAzureArtifactStorage : IStoreArtifact, IRetrieveArtifa
     ///     implementation for <see cref="IArtifactProvider" />, making Azure Blob Storage
     ///     available for artifact management throughout the build.
     /// </remarks>
-    protected static partial void ConfigureBuilder(IHostApplicationBuilder builder) =>
+    protected static partial void ConfigureBuilderFromIAzureArtifactStorage(IHostApplicationBuilder builder) =>
         builder.Services.AddSingleton<IArtifactProvider, AzureBlobArtifactProvider>();
 }

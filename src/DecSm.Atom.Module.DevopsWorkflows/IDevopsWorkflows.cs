@@ -22,7 +22,7 @@ public partial interface IDevopsWorkflows : IJobRunsOn
     ///     When running inside Azure DevOps Pipelines, it also sets up <see cref="DevopsSummaryOutcomeReportWriter" />
     ///     for reporting and adjusts artifact and publish paths to Azure DevOps conventions.
     /// </remarks>
-    protected static partial void ConfigureBuilder(IHostApplicationBuilder builder)
+    protected static partial void ConfigureBuilderFromIDevopsWorkflows(IHostApplicationBuilder builder)
     {
         builder.Services.TryAddEnumerable(new ServiceDescriptor(typeof(IWorkflowWriter),
             typeof(DevopsWorkflowFileWriter),

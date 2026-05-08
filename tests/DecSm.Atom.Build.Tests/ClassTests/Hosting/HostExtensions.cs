@@ -1,4 +1,6 @@
-﻿namespace DecSm.Atom.Build.Tests.ClassTests.Hosting;
+﻿using DecSm.Atom.Build.BuildOptions;
+
+namespace DecSm.Atom.Build.Tests.ClassTests.Hosting;
 
 [TestFixture]
 internal sealed class HostExtensionsTests
@@ -6,6 +8,8 @@ internal sealed class HostExtensionsTests
     [UsedImplicitly]
     private class TestBuildDefinition(IServiceProvider services) : BuildDefinition(services), IBuildDefinition
     {
+        public IReadOnlyList<IBuildOption> Options => [];
+
         public override IReadOnlyDictionary<string, Target> TargetDefinitions => new Dictionary<string, Target>();
 
         public override IReadOnlyDictionary<string, ParamDefinition> ParamDefinitions =>

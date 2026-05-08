@@ -5,7 +5,7 @@ public abstract class WorkflowBuildDefinition(IServiceProvider services)
     : BuildDefinition(services), IWorkflowBuildDefinition
 {
     /// <inheritdoc />
-    public virtual IReadOnlyList<WorkflowDefinition> Workflows { get; } = [];
+    public abstract IReadOnlyList<WorkflowDefinition> Workflows { get; }
 
     public override void ConfigureDefinitionHost(IHostApplicationBuilder builder)
     {

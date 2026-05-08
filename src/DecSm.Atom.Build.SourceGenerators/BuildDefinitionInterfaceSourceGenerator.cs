@@ -4,26 +4,27 @@
 namespace DecSm.Atom.Build.SourceGenerators;
 
 [Generator]
-public sealed class BuildDefinitionSourceGenerator : IIncrementalGenerator
+public sealed class BuildDefinitionInterfaceSourceGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var classSymbols = context
             .SyntaxProvider
             .ForAttributeWithMetadataName(BuildDefinitionAttribute,
-                static (node, _) => node is ClassDeclarationSyntax,
+                static (node, _) => node is InterfaceDeclarationSyntax,
                 static (context, _) => (INamedTypeSymbol)context.TargetSymbol)
-            .WithTrackingName(nameof(BuildDefinitionSourceGenerator));
+            .WithTrackingName(nameof(BuildDefinitionInterfaceSourceGenerator));
 
         context.RegisterSourceOutput(classSymbols.Select(static (symbol, ct) => GeneratePartial(symbol, ct)),
             static (context, data) =>
             {
                 if (data.SourceCode is not null)
-                    context.AddSource($"{data.ClassName}.g.cs", SourceText.From(data.SourceCode, Encoding.UTF8));
+                    context.AddSource($"{data.InterfaceName.TrimStart('I')}.g.cs",
+                        SourceText.From(data.SourceCode, Encoding.UTF8));
             });
     }
 
-    private static ClassNameWithSourceCode GeneratePartial(
+    private static InterfaceNameWithSourceCode GeneratePartial(
         INamedTypeSymbol classSymbol,
         CancellationToken cancellationToken)
     {
@@ -57,13 +58,10 @@ public sealed class BuildDefinitionSourceGenerator : IIncrementalGenerator
                 ? string.Empty
                 : $"namespace {namespaceName};",
             classSymbol.Name,
-            classSymbol.ToDisplayString(),
             inheritConfigureHostLine,
             [
-                new("Targets",
-                [
-                    GetTargetDefinitionsField(allTargets), GetTargetDefinitionsProperty(allTargets),
-                ]),
+                // new("Options", [GetOptionsOverride(classSymbol)]),
+                new("Targets", [GetTargetDefinitionsField(allTargets), GetTargetDefinitionsProperty(allTargets)]),
                 new("Params",
                 [
                     GetParamDefinitionsField(allParams),
@@ -82,7 +80,6 @@ public sealed class BuildDefinitionSourceGenerator : IIncrementalGenerator
         string globalUsingStaticLine,
         string namespaceLine,
         string classNameSimple,
-        string classNameFull,
         string configureHostInherit,
         CodeRegion[] codeRegions)
     {
@@ -102,11 +99,8 @@ public sealed class BuildDefinitionSourceGenerator : IIncrementalGenerator
                       using System.Diagnostics.CodeAnalysis;
                       using System.Linq.Expressions;
                       using Microsoft.Extensions.DependencyInjection;
-                      using Microsoft.Extensions.Logging;
                       using DecSm.Atom.Build.Definition;
                       using DecSm.Atom.Build.Params;
-                      using DecSm.Atom.FileSystem;
-                      using DecSm.Atom.Process;
 
                       """);
 
@@ -114,39 +108,13 @@ public sealed class BuildDefinitionSourceGenerator : IIncrementalGenerator
 
         sb.AppendLine($$"""
                         [JetBrains.Annotations.PublicAPI]
-                        partial class {{classNameSimple}} : {{IBuildDefinition}}{{configureHostInherit}}
+                        [System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "PossibleInterfaceMemberAmbiguity")]
+                        internal sealed class {{classNameSimple.TrimStart('I')}} : {{BuildDefinition}}, {{classNameSimple}}{{configureHostInherit}}
                         {
                         """);
 
         sb.AppendLine($$"""
-                            public {{classNameSimple}}(System.IServiceProvider services) : base(services) { }
-
-                            private ILogger Logger => Services.GetRequiredService<ILoggerFactory>().CreateLogger("{{classNameFull}}");
-
-                            private IAtomFileSystem FileSystem => GetService<IAtomFileSystem>();
-
-                            private IProcessRunner ProcessRunner => GetService<IProcessRunner>();
-
-                            private T GetService<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] T>()
-                                where T : notnull =>
-                                typeof(T).GetInterface(nameof(IBuildDefinition)) != null
-                                    ? (T)(IBuildDefinition)this
-                                    : Services.GetRequiredService<T>();
-
-                            private IEnumerable<T> GetServices<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] T>()
-                                where T : notnull =>
-                                typeof(T).GetInterface(nameof(IBuildDefinition)) != null
-                                    ? [(T)(IBuildDefinition)this]
-                                    : Services.GetServices<T>();
-
-                            [return: NotNullIfNotNull(nameof(defaultValue))]
-                            private T? GetParam<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
-                                Expression<Func<T?>> parameterExpression,
-                                T? defaultValue = default,
-                                Func<string?, T?>? converter = null) =>
-                                    Services
-                                        .GetRequiredService<IParamService>()
-                                        .GetParam(parameterExpression, defaultValue, converter);
+                            public {{classNameSimple.TrimStart('I')}}(System.IServiceProvider services) : base(services) { }
                         """);
 
         foreach (var codeRegion in codeRegions)
@@ -504,29 +472,5 @@ public sealed class BuildDefinitionSourceGenerator : IIncrementalGenerator
         sb.AppendLine("    }");
 
         return new(sb.ToString(), true);
-    }
-}
-
-public static class StringBuilderExtensions
-{
-    public static void AppendLineIfNotBlank(
-        this StringBuilder sb,
-        string? value,
-        string? conditionalPrefix = null,
-        string? conditionalSuffix = null)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-            return;
-
-        if (conditionalPrefix is not null)
-            sb.AppendLine(conditionalPrefix);
-
-        if (value?.EndsWith("\n") is true)
-            sb.Append(value);
-        else
-            sb.AppendLine(value);
-
-        if (conditionalSuffix is not null)
-            sb.AppendLine(conditionalSuffix);
     }
 }

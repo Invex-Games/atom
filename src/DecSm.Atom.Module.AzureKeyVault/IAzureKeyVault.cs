@@ -79,7 +79,7 @@ public partial interface IAzureKeyVault : IBuildAccessor
     ///     This method registers <see cref="AzureKeySecretsProvider" /> as a singleton service,
     ///     making it available for secret retrieval and workflow option provisioning throughout the build.
     /// </remarks>
-    protected static partial void ConfigureBuilder(IHostApplicationBuilder builder) =>
+    protected static partial void ConfigureBuilderFromIAzureKeyVault(IHostApplicationBuilder builder) =>
         builder
             .Services
             .AddSingleton<ISecretsProvider, AzureKeySecretsProvider>()
