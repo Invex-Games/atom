@@ -13,7 +13,7 @@ public class GenerateSolutionModelSourceGenerator : IIncrementalGenerator
         var classSymbolsProvider = context
             .SyntaxProvider
             .ForAttributeWithMetadataName(GenerateSolutionModelAttribute,
-                static (node, _) => node is ClassDeclarationSyntax,
+                static (node, _) => node is ClassDeclarationSyntax or InterfaceDeclarationSyntax,
                 static (ctx, _) => (INamedTypeSymbol)ctx.TargetSymbol)
             .WithTrackingName(nameof(GenerateSolutionModelSourceGenerator))
             .Collect();

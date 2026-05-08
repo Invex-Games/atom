@@ -23,6 +23,6 @@ public partial interface IDotnetCliHelper : IBuildAccessor
     /// <remarks>
     ///     This method registers <see cref="DotnetCli" /> as the singleton implementation for <see cref="IDotnetCli" />.
     /// </remarks>
-    protected static partial void ConfigureBuilder(IHostApplicationBuilder builder) =>
+    protected static partial void ConfigureBuilderFromIDotnetCliHelper(IHostApplicationBuilder builder) =>
         builder.Services.AddSingleton<IDotnetCli, DotnetCli>();
 }

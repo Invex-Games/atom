@@ -13,7 +13,7 @@ public partial class DuplicateDependencyBuild : WorkflowBuildDefinition, IGithub
         },
     ];
 
-    public override IReadOnlyList<IBuildOption> Options => [BuildOptions.Artifacts.UseCustomProvider];
+    public IReadOnlyList<IBuildOption> Options => [BuildOptions.Artifacts.UseCustomProvider];
 }
 
 [ConfigureHostBuilder]
@@ -25,7 +25,7 @@ public partial interface IDuplicateDependencyTarget : IStoreArtifact, IRetrieveA
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildId))
             .ProducesArtifact("artifact-name");
 
-    protected static partial void ConfigureBuilder(IHostApplicationBuilder builder) =>
+    protected static partial void ConfigureBuilderFromIDuplicateDependencyTarget(IHostApplicationBuilder builder) =>
         builder.Services.AddSingleton<IArtifactProvider, TestArtifactProvider>();
 }
 

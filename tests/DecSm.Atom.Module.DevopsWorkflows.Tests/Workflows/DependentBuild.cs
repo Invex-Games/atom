@@ -1,7 +1,11 @@
 ﻿namespace DecSm.Atom.Module.DevopsWorkflows.Tests.Workflows;
 
 [BuildDefinition]
-public partial class DependentBuild : WorkflowBuildDefinition, IDevopsWorkflows, IDependentTarget1, IDependentTarget2
+public partial class DependentBuild : WorkflowBuildDefinition,
+    IWorkflowBuildDefinition,
+    IDevopsWorkflows,
+    IDependentTarget1,
+    IDependentTarget2
 {
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [

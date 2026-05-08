@@ -93,25 +93,17 @@ public class SetupSourceGenerator : IIncrementalGenerator
             .GetAttributes()
             .Any(attr => attr.AttributeClass?.ToDisplayString() == ConfigureHostAttributeFull);
 
-        var inheritsConfigureBuilder = interfaceSymbol.AllInterfaces.Any(i => i
-            .GetAttributes()
-            .Any(attr => attr.AttributeClass?.ToDisplayString() == ConfigureHostBuilderAttributeFull));
-
-        var inheritsConfigureHost = interfaceSymbol.AllInterfaces.Any(i => i
-            .GetAttributes()
-            .Any(attr => attr.AttributeClass?.ToDisplayString() == ConfigureHostAttributeFull));
-
         var setupBuilderLine = hasConfigureBuilder
             ? $"""
                    [JetBrains.Annotations.UsedImplicitly]
-                   protected {(inheritsConfigureBuilder ? "new " : string.Empty)}static partial void ConfigureBuilder(IHostApplicationBuilder builder);
+                   protected static partial void ConfigureBuilderFrom{@interface}(IHostApplicationBuilder builder);
                """
             : string.Empty;
 
         var setupHostLine = hasConfigureHost
             ? $"""
                    [JetBrains.Annotations.UsedImplicitly]
-                   protected {(inheritsConfigureHost ? "new " : string.Empty)}static partial void ConfigureHost(IHost host);
+                   protected static partial void ConfigureHostFrom{@interface}(IHost host);
                """
             : string.Empty;
 

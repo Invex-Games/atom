@@ -1,7 +1,7 @@
 namespace DecSm.Atom.Workflows.Tests.Builds;
 
 [BuildDefinition]
-public partial class WorkflowWithOptionsBuild : WorkflowBuildDefinition, ISingleTarget
+public partial class WorkflowWithOptionsBuild : WorkflowBuildDefinition, IWorkflowBuildDefinition, ISingleTarget
 {
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [

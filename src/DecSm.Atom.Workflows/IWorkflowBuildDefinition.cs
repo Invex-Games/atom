@@ -1,6 +1,7 @@
 namespace DecSm.Atom.Workflows;
 
 [PublicAPI]
+[UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
 public interface IWorkflowBuildDefinition : IBuildDefinition, IGen
 {
     /// <summary>
@@ -9,5 +10,5 @@ public interface IWorkflowBuildDefinition : IBuildDefinition, IGen
     /// <remarks>
     ///     Workflows define how targets are orchestrated, potentially across different CI/CD platforms.
     /// </remarks>
-    IReadOnlyList<WorkflowDefinition> Workflows { get; }
+    IReadOnlyList<WorkflowDefinition> Workflows => [];
 }

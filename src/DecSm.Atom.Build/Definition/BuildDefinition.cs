@@ -30,9 +30,6 @@ public abstract class BuildDefinition(IServiceProvider services) : IBuildDefinit
     public IServiceProvider Services => services;
 
     /// <inheritdoc />
-    public virtual IReadOnlyList<IBuildOption> Options { get; } = [];
-
-    /// <inheritdoc />
     public abstract IReadOnlyDictionary<string, Target> TargetDefinitions { get; }
 
     /// <inheritdoc />
