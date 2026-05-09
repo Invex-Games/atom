@@ -440,9 +440,6 @@
         Name: ConfigureDefinitionHost
       },
       {
-        Name: Options
-      },
-      {
         Name: ParamDefinitions
       },
       {
@@ -455,6 +452,9 @@
   },
   {
     Name: DecSm.Atom.Build.Definition.BuildDefinitionAttribute
+  },
+  {
+    Name: DecSm.Atom.Build.Definition.BuildDefinitionInterfaceAttribute
   },
   {
     Name: DecSm.Atom.Build.Definition.DefinedParam,
