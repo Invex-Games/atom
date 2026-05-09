@@ -9,8 +9,8 @@
 
 namespace DecSm.Atom.Build.Analyzers {
     using System;
-
-
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -22,15 +22,15 @@ namespace DecSm.Atom.Build.Analyzers {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
-
+        
         private static global::System.Resources.ResourceManager resourceMan;
-
+        
         private static global::System.Globalization.CultureInfo resourceCulture;
-
+        
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Resources() {
         }
-
+        
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -44,7 +44,7 @@ namespace DecSm.Atom.Build.Analyzers {
                 return resourceMan;
             }
         }
-
+        
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -58,7 +58,7 @@ namespace DecSm.Atom.Build.Analyzers {
                 resourceCulture = value;
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Replace with nameof({0}).
         /// </summary>
@@ -67,7 +67,7 @@ namespace DecSm.Atom.Build.Analyzers {
                 return ResourceManager.GetString("AT0001CodeFixTitle", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to TargetDefinition.RequiresParam() should not directly reference a Param property..
         /// </summary>
@@ -76,7 +76,7 @@ namespace DecSm.Atom.Build.Analyzers {
                 return ResourceManager.GetString("AT0001Description", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Parameter &apos;{0}&apos; should be wrapped with nameof operator.
         /// </summary>
@@ -85,13 +85,85 @@ namespace DecSm.Atom.Build.Analyzers {
                 return ResourceManager.GetString("AT0001MessageFormat", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to RequiresParam should use nameof expression.
         /// </summary>
         internal static string AT0001Title {
             get {
                 return ResourceManager.GetString("AT0001Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement &apos;{0}&apos;.
+        /// </summary>
+        internal static string AT0002CodeFixTitle {
+            get {
+                return ResourceManager.GetString("AT0002CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interfaces decorated with [ConfigureHost] must implement the generated partial method ConfigureHostFrom{InterfaceName}..
+        /// </summary>
+        internal static string AT0002Description {
+            get {
+                return ResourceManager.GetString("AT0002Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interface &apos;{0}&apos; is missing the required partial method implementation &apos;{1}&apos;.
+        /// </summary>
+        internal static string AT0002MessageFormat {
+            get {
+                return ResourceManager.GetString("AT0002MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ConfigureHost partial method not implemented.
+        /// </summary>
+        internal static string AT0002Title {
+            get {
+                return ResourceManager.GetString("AT0002Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement &apos;{0}&apos;.
+        /// </summary>
+        internal static string AT0003CodeFixTitle {
+            get {
+                return ResourceManager.GetString("AT0003CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interfaces decorated with [ConfigureHostBuilder] must implement the generated partial method ConfigureBuilderFrom{InterfaceName}..
+        /// </summary>
+        internal static string AT0003Description {
+            get {
+                return ResourceManager.GetString("AT0003Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interface &apos;{0}&apos; is missing the required partial method implementation &apos;{1}&apos;.
+        /// </summary>
+        internal static string AT0003MessageFormat {
+            get {
+                return ResourceManager.GetString("AT0003MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ConfigureHostBuilder partial method not implemented.
+        /// </summary>
+        internal static string AT0003Title {
+            get {
+                return ResourceManager.GetString("AT0003Title", resourceCulture);
             }
         }
     }

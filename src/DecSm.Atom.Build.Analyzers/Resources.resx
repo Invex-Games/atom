@@ -41,4 +41,36 @@
         <value>Replace with nameof({0})</value>
         <comment>The title of the code fix.</comment>
     </data>
+    <data name="AT0002Description" xml:space="preserve">
+        <value>Interfaces decorated with [ConfigureHost] must implement the generated partial method ConfigureHostFrom{InterfaceName}.</value>
+        <comment>An optional longer localizable description of the diagnostic.</comment>
+    </data>
+    <data name="AT0002MessageFormat" xml:space="preserve">
+        <value>Interface '{0}' is missing the required partial method implementation '{1}'</value>
+        <comment>The format-able message the diagnostic displays.</comment>
+    </data>
+    <data name="AT0002Title" xml:space="preserve">
+        <value>ConfigureHost partial method not implemented</value>
+        <comment>The title of the diagnostic.</comment>
+    </data>
+    <data name="AT0002CodeFixTitle" xml:space="preserve">
+        <value>Implement '{0}'</value>
+        <comment>The title of the code fix.</comment>
+    </data>
+    <data name="AT0003Description" xml:space="preserve">
+        <value>Interfaces decorated with [ConfigureHostBuilder] must implement the generated partial method ConfigureBuilderFrom{InterfaceName}.</value>
+        <comment>An optional longer localizable description of the diagnostic.</comment>
+    </data>
+    <data name="AT0003MessageFormat" xml:space="preserve">
+        <value>Interface '{0}' is missing the required partial method implementation '{1}'</value>
+        <comment>The format-able message the diagnostic displays.</comment>
+    </data>
+    <data name="AT0003Title" xml:space="preserve">
+        <value>ConfigureHostBuilder partial method not implemented</value>
+        <comment>The title of the diagnostic.</comment>
+    </data>
+    <data name="AT0003CodeFixTitle" xml:space="preserve">
+        <value>Implement '{0}'</value>
+        <comment>The title of the code fix.</comment>
+    </data>
 </root>
