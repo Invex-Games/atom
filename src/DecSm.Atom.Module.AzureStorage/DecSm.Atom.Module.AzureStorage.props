@@ -1,5 +1,5 @@
 <Project>
     <ItemGroup>
-        <Using Include="DecSm.Atom.Module.AzureStorage" Global="true"/>
+<!--        <Using Include="DecSm.Atom.Module.AzureStorage" Global="true"/>-->
     </ItemGroup>
 </Project>
