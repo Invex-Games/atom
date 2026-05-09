@@ -1,9 +1,9 @@
 <Project>
     <ItemGroup>
-        <Using Include="DecSm.Atom.Module.DevopsWorkflows" Global="true"/>
-        <Using Include="DecSm.Atom.Module.DevopsWorkflows.Extensions" Global="true"/>
-        <Using Include="DecSm.Atom.Module.DevopsWorkflows.Workflows.Devops" Global="true"/>
-        <Using Include="DecSm.Atom.Module.DevopsWorkflows.Workflows.Options" Global="true"/>
-        <Using Include="DecSm.Atom.Module.DevopsWorkflows.Workflows.Steps" Global="true"/>
+<!--        <Using Include="DecSm.Atom.Module.DevopsWorkflows" Global="true"/>-->
+<!--        <Using Include="DecSm.Atom.Module.DevopsWorkflows.Extensions" Global="true"/>-->
+<!--        <Using Include="DecSm.Atom.Module.DevopsWorkflows.Workflows.Devops" Global="true"/>-->
+<!--        <Using Include="DecSm.Atom.Module.DevopsWorkflows.Workflows.Options" Global="true"/>-->
+<!--        <Using Include="DecSm.Atom.Module.DevopsWorkflows.Workflows.Steps" Global="true"/>-->
     </ItemGroup>
 </Project>

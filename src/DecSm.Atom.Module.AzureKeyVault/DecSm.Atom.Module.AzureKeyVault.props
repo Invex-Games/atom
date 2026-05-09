@@ -1,6 +1,6 @@
 <Project>
     <ItemGroup>
-        <Using Include="DecSm.Atom.Module.AzureKeyVault" Global="true"/>
-        <Using Include="DecSm.Atom.Module.AzureKeyVault.Options" Global="true"/>
+<!--        <Using Include="DecSm.Atom.Module.AzureKeyVault" Global="true"/>-->
+<!--        <Using Include="DecSm.Atom.Module.AzureKeyVault.Options" Global="true"/>-->
     </ItemGroup>
 </Project>

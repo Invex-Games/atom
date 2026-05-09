@@ -1,7 +1,7 @@
 <Project>
     <ItemGroup>
-        <Using Include="DecSm.Atom.Module.GitVersion" Global="true"/>
-        <Using Include="DecSm.Atom.Module.GitVersion.Flags" Global="true"/>
-        <Using Include="DecSm.Atom.Module.GitVersion.Providers" Global="true"/>
+<!--        <Using Include="DecSm.Atom.Module.GitVersion" Global="true"/>-->
+<!--        <Using Include="DecSm.Atom.Module.GitVersion.Flags" Global="true"/>-->
+<!--        <Using Include="DecSm.Atom.Module.GitVersion.Providers" Global="true"/>-->
     </ItemGroup>
 </Project>
