@@ -94,10 +94,17 @@ public class AT0003_ConfigureHostBuilderPartialMethodNotImplementedCodeFixProvid
         if (newRoot is CompilationUnitSyntax compilationUnit &&
             compilationUnit.Usings.All(u => u.Name?.ToString() != HostUsing))
         {
+            var eol = root
+                          .DescendantTrivia()
+                          .Where(t => t.IsKind(SyntaxKind.EndOfLineTrivia))
+                          .Select(t => t.ToString())
+                          .FirstOrDefault() ??
+                      "\n";
+
             var usingDirective = SyntaxFactory
                 .UsingDirective(SyntaxFactory.ParseName(HostUsing))
                 .NormalizeWhitespace()
-                .WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed);
+                .WithTrailingTrivia(SyntaxFactory.EndOfLine(eol));
 
             newRoot = compilationUnit.AddUsings(usingDirective);
         }
