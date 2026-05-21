@@ -74,7 +74,7 @@ public interface IDotnetToolInstallHelper : IBuildAccessor
         }
 
         var versionFlag = version != null
-            ? $"-v {version}"
+            ? $"--version {version}"
             : string.Empty;
 
         ProcessRunner.Run(new("dotnet", $"tool update {toolName} {versionFlag} {globalFlag}")
