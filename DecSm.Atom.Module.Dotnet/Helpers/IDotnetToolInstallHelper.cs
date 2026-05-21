@@ -156,7 +156,7 @@ public interface IDotnetToolInstallHelper : IBuildAccessor
         }
 
         var versionFlag = version != null
-            ? $"-v {version}"
+            ? $"--version {version}"
             : string.Empty;
 
         await ProcessRunner.RunAsync(new("dotnet", $"tool update {toolName} {versionFlag} {globalFlag}")
