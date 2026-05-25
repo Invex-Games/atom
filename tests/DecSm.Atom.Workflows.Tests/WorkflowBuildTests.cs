@@ -223,4 +223,41 @@ internal sealed class WorkflowBuildTests
 
         await Verify(writer);
     }
+
+    [Test]
+    public async Task InterfaceBuild_CreatesWorkflow()
+    {
+        // Arrange
+        var writer = new TestWorkflowWriter();
+        using var host = CreateWorkflowTestHost<InterfaceBuild>(workflowWriter: writer);
+
+        // Act
+        await host.RunAsync();
+
+        // Assert
+        writer
+            .GeneratedWorkflows
+            .ShouldHaveSingleItem()
+            .ShouldSatisfyAllConditions(workflow =>
+            {
+                workflow.Name.ShouldBe("single-workflow");
+
+                workflow
+                    .Triggers
+                    .ShouldHaveSingleItem()
+                    .ShouldBeOfType<TestWorkflowTrigger>();
+
+                workflow.Jobs.Count.ShouldBe(1);
+
+                workflow
+                    .Jobs[0]
+                    .ShouldSatisfyAllConditions(job =>
+                    {
+                        job.Name.ShouldBe("InterfaceTarget");
+                        job.TargetStep.Name.ShouldBe("InterfaceTarget");
+                    });
+            });
+
+        await Verify(writer);
+    }
 }
