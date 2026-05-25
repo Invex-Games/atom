@@ -19,7 +19,7 @@ public sealed class BuildDefinitionInterfaceSourceGenerator : IIncrementalGenera
             static (context, data) =>
             {
                 if (data.SourceCode is not null)
-                    context.AddSource($"{data.InterfaceName.TrimStart('I')}.g.cs",
+                    context.AddSource($"{GetClassNameForInterface(data.InterfaceName)}.g.cs",
                         SourceText.From(data.SourceCode, Encoding.UTF8));
             });
     }
@@ -109,12 +109,12 @@ public sealed class BuildDefinitionInterfaceSourceGenerator : IIncrementalGenera
         sb.AppendLine($$"""
                         [JetBrains.Annotations.PublicAPI]
                         [System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "PossibleInterfaceMemberAmbiguity")]
-                        internal sealed class {{classNameSimple.TrimStart('I')}} : {{BuildDefinition}}, {{classNameSimple}}{{configureHostInherit}}
+                        internal sealed class {{GetClassNameForInterface(classNameSimple)}} : {{BuildDefinition}}, {{classNameSimple}}{{configureHostInherit}}
                         {
                         """);
 
         sb.AppendLine($$"""
-                            public {{classNameSimple.TrimStart('I')}}(System.IServiceProvider services) : base(services) { }
+                            public {{GetClassNameForInterface(classNameSimple)}}(System.IServiceProvider services) : base(services) { }
                         """);
 
         foreach (var codeRegion in codeRegions)
@@ -473,4 +473,9 @@ public sealed class BuildDefinitionInterfaceSourceGenerator : IIncrementalGenera
 
         return new(sb.ToString(), true);
     }
+
+    private static string GetClassNameForInterface(string interfaceName) =>
+        interfaceName.Length > 1 && interfaceName[0] is 'I'
+            ? interfaceName.Substring(1)
+            : $"{interfaceName}Impl";
 }

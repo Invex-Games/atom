@@ -1,0 +1,20 @@
+﻿{
+  IsOutdated: false,
+  ThrowOnWrite: false,
+  GeneratedWorkflows: [
+    {
+      Name: single-workflow,
+      Triggers: [
+        {}
+      ],
+      Jobs: [
+        {
+          Name: InterfaceTarget,
+          TargetStep: {
+            Name: InterfaceTarget
+          }
+        }
+      ]
+    }
+  ]
+}

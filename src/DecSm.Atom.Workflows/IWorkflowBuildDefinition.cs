@@ -1,8 +1,9 @@
 namespace DecSm.Atom.Workflows;
 
 [PublicAPI]
+[ConfigureHostBuilder]
 [UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
-public interface IWorkflowBuildDefinition : IBuildDefinition, IGen
+public partial interface IWorkflowBuildDefinition : IBuildDefinition, IGen
 {
     /// <summary>
     ///     Gets the collection of workflow definitions for the build.
@@ -10,5 +11,15 @@ public interface IWorkflowBuildDefinition : IBuildDefinition, IGen
     /// <remarks>
     ///     Workflows define how targets are orchestrated, potentially across different CI/CD platforms.
     /// </remarks>
-    IReadOnlyList<WorkflowDefinition> Workflows => [];
+    IReadOnlyList<WorkflowDefinition> Workflows { get; }
+
+    protected static partial void ConfigureBuilderFromIWorkflowBuildDefinition(IHostApplicationBuilder builder) =>
+        builder
+            .Services
+            .AddSingleton<IWorkflowBuildDefinition>(services =>
+                (IWorkflowBuildDefinition)services.GetRequiredService<IBuildDefinition>())
+            .AddSingleton<IWorkflowContext, WorkflowContext.WorkflowContext>()
+            .AddSingleton<WorkflowGenerator>()
+            .AddSingleton<WorkflowResolver>()
+            .AddSingleton<IAtomLifecycleHook, WorkflowLifecycleHook>();
 }
