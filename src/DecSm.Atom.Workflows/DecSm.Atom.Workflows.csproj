@@ -7,9 +7,9 @@
   <ItemGroup>
     <PackageReference Include="DecSm.Analyzers.PublicApiSurface" Version="0.1.0-rc.11" PrivateAssets="all" />
     <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.7" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.7" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.8" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -29,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DecSm.Atom.Build\DecSm.Atom.Build.csproj" />
     <ProjectReference Include="..\DecSm.Atom.Build.Analyzers\DecSm.Atom.Build.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\DecSm.Atom.Build.SourceGenerators\DecSm.Atom.Build.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\DecSm.StructuredText\DecSm.StructuredText.csproj" />
   </ItemGroup>
 

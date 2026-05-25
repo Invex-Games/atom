@@ -63,7 +63,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-    <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="10.0.7" />
+    <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="10.0.8" />
   </ItemGroup>
 
 </Project>
