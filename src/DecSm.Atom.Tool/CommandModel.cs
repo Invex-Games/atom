@@ -29,6 +29,9 @@ internal sealed class CommandModel
     /// <param name="file">
     ///     Optional. The path to a C# file to run as a file-based DecSm.Atom application.
     /// </param>
+    /// <param name="noRestoreCache">
+    ///     Optional. When set, bypasses the restore cache and always performs a <c>dotnet restore</c>.
+    /// </param>
     /// <param name="cancellationToken">A cancellation token to observe while waiting for the command to complete.</param>
     /// <returns>The exit code of the executed DecSm.Atom build command.</returns>
     [Command("")]
@@ -38,6 +41,7 @@ internal sealed class CommandModel
         [Argument] string[]? runArgs = null,
         [HideDefaultValue] string? project = null,
         [HideDefaultValue] string? file = null,
+        bool noRestoreCache = false,
         CancellationToken cancellationToken = default) =>
         RunCommand.Handle(context
                 .Arguments
@@ -48,6 +52,7 @@ internal sealed class CommandModel
                 : file is { Length: > 0 }
                     ? file
                     : string.Empty,
+            noRestoreCache,
             cancellationToken);
 
     /// <summary>

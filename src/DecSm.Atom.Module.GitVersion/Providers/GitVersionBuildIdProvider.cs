@@ -49,26 +49,9 @@ internal sealed class GitVersionBuildIdProvider(
                 .Output
                 .Trim();
 
-            var hashCache = atomFileSystem.AtomRootDirectory / ".gitversioncache" / currentGitHash;
-
-            JsonElement? jsonOutput = null;
-
             lock (_lock)
             {
-                if (atomFileSystem.File.Exists(hashCache))
-                    try
-                    {
-                        var cachedContent = atomFileSystem.File.ReadAllText(hashCache);
-                        jsonOutput = JsonSerializer.Deserialize(cachedContent, JsonElementContext.Default.JsonElement);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogWarning(ex,
-                            "Failed to read or parse cached GitVersion output. Will re-run GitVersion.");
-
-                        jsonOutput = null;
-                        atomFileSystem.File.Delete(hashCache);
-                    }
+                var jsonOutput = GitVersionCache.TryRead(atomFileSystem, currentGitHash, logger);
 
                 if (jsonOutput is null)
                 {
@@ -82,8 +65,7 @@ internal sealed class GitVersionBuildIdProvider(
                     jsonOutput = JsonSerializer.Deserialize(gitVersionResult.Output,
                         JsonElementContext.Default.JsonElement);
 
-                    atomFileSystem.Directory.CreateDirectory(atomFileSystem.AtomRootDirectory / ".gitversioncache");
-                    atomFileSystem.File.WriteAllText(hashCache, jsonOutput.Value.GetRawText());
+                    GitVersionCache.Write(atomFileSystem, currentGitHash, jsonOutput.Value);
                 }
 
                 var buildId = jsonOutput
