@@ -46,6 +46,12 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
     /// <param name="options">Optional. Configuration options for the testing and staging process.</param>
     /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>A <see cref="Task{TResult}" /> that returns the exit code of the `dotnet test` command.</returns>
+    /// <exception cref="StepFailedException">
+    ///     Thrown when the `dotnet test` invocation fails before producing any test results (e.g. a build error,
+    ///     invalid arguments, or a crashed test host), as opposed to the run completing with failing tests. This is
+    ///     detected by the absence of a TRX results file on a non-zero exit code. Failing tests do not throw and
+    ///     instead surface via the returned exit code and the generated test report.
+    /// </exception>
     /// <remarks>
     ///     <para>
     ///         This method performs the following steps:
@@ -189,6 +195,18 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
             },
             cancellationToken);
 
+        // A non-zero exit code can mean either "tests failed" or "the dotnet test invocation itself failed"
+        // (e.g. build error, missing project, crashed test host). These share exit codes and cannot be reliably
+        // distinguished by code alone. The TRX file is only produced when tests actually ran, so its absence on a
+        // failed result indicates the invocation failed before running any tests - in which case we throw rather
+        // than swallowing the failure and returning a misleading exit code.
+        var trxFile = testOutputDirectory / $"{projectName}.trx";
+
+        if (result.ExitCode is not 0 && !AtomFileSystem.File.Exists(trxFile))
+            throw new StepFailedException(
+                $"dotnet test failed for project {projectName} with exit code {result.ExitCode} before producing any test results. " +
+                "This indicates the test run could not start (e.g. a build error or invalid arguments) rather than failing tests.");
+
         // Copy html file to publish directory
         AtomFileSystem.File.Copy(testOutputDirectory / $"{projectName}.html",
             testResultsPublishDirectory / $"{projectName}.html");
@@ -196,7 +214,7 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
         GenerateTestReport(projectName,
             testOptions.Configuration,
             testOptions.Framework,
-            testOutputDirectory / $"{projectName}.trx");
+            trxFile);
 
         if (!options.IncludeCoverage)
             return result.ExitCode;
