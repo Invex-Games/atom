@@ -15,37 +15,429 @@ debug it like standard code, and automatically generate CI/CD configuration file
 * **Modular**: Pull in capabilities via NuGet packages (GitVersion, Azure KeyVault, etc.).
 * **Source Generators**: Reduces boilerplate by automatically discovering targets and parameters.
 
-## Basic Example
+## Examples
 
-1. Create a new file `Build.cs`
+### Hello World
 
-   ```csharp
-   #:package DecSm.Atom@2.*
-   
-   [BuildDefinition]
-   [GenerateEntryPoint]
-   partial class Build : BuildDefinition
-   {
-       Target SayHello => t => t
-           .Executes(() => Logger.LogInformation("Hello, World!"));
-   }
+> [!NOTE]
+>
+> It is recommended to use the atom dotnet tool to invoke atom projects:
+>
+> `dotnet tool install -g DecSm.Atom.Tool`
+>
+> ` atom ...`
+>
+> However, the dotnet cli can also be used directly:
+>
+> `dotnet run -- ...`
+
+1. Create a .NET 10 project
+
+   ```
+   dotnet new console -n _atom
    ```
 
-2. Execute `dotnet run Build.cs SayHello`
+2. Update the `_atom.csproj` file:
 
-   ```
-   25-12-16 +10:00  DecSm.Atom.Build.BuildExecutor:
-   22:46:01.754 INF Executing build
-   
-   SayHello
-   
-   25-12-16 +10:00  SayHello | Build:
-   22:46:01.790 INF Hello, World!    
+    ```xml
+    <Project Sdk="Microsoft.NET.Sdk.Worker">
+    
+      <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <RootNamespace>Atom</RootNamespace>
+      </PropertyGroup>
+    
+      <ItemGroup>
+        <PackageReference Include="DecSm.Atom.Build" Version="3.*" />
+      </ItemGroup>
+    
+    </Project>
+    ```
 
-   Build Summary
-   
-     SayHello │ Succeeded │ <0.01s
+3. Replace the `Program.cs` file with `IBuild.cs`:
+
+    ```csharp
+    using DecSm.Atom.Build.Definition;
+    using DecSm.Atom.Build.Hosting;
+    
+    namespace Atom;
+    
+    [BuildDefinition]
+    [GenerateEntryPoint]
+    internal interface IBuild : IBuildDefinition
+    {
+        Target HelloWorld =>
+            t => t
+            .DescribedAs("Prints a hello world message to the console")
+            .Executes(() => Logger.LogInformation("Hello, World!"));
+    }
+    ```
+
+4. Execute `atom HelloWorld`
+
+    ```
+    26-06-06 +10:00  DecSm.Atom.Build.BuildExecutor:
+    01:16:47.552 INF Executing build
+    
+    HelloWorld
+    
+    Prints a hello world message to the console
+    
+    26-06-06 +10:00  HelloWorld | Atom.Build:      
+    01:16:47.616 INF Hello, World!
+    
+    
+    Build Summary
+    
+    HelloWorld │ Succeeded │ <0.01s
    ```
+
+### Adding Params
+
+1. Add a parameter to the `IBuild` interface:
+
+   > [!NOTE]
+   >
+   > `.RequiresParam(nameof(...))` is used to ensure the parameter is provided before the target is executed.
+   >
+   > `.UsesParam(nameof(...))` is used to use the parameter if it is provided, but not fail the build if it is not.
+
+    ```csharp
+    using DecSm.Atom.Build.Definition;
+    using DecSm.Atom.Build.Hosting;
+    using DecSm.Atom.Build.Params;
+    
+    namespace Atom;
+    
+    [BuildDefinition]
+    [GenerateEntryPoint]
+    internal interface IBuild : IBuildDefinition
+    {
+        [ParamDefinition("my-name", "My name")]
+        string? MyName => GetParam(() => MyName);
+    
+        Target HelloWorld =>
+            t => t
+                .DescribedAs("Prints a hello world message to the console")
+                .RequiresParam(nameof(MyName))
+                .Executes(() => Logger.LogInformation("Hello, World! I am {MyName}.", MyName));
+    }
+    ```
+
+2. Execute `atom HelloWorld --my-name Frodo
+
+    ```
+    26-06-06 +10:00  DecSm.Atom.Build.BuildExecutor:
+    01:23:25.405 INF Executing build
+
+    HelloWorld
+    
+    Prints a hello world message to the console
+    
+    26-06-06 +10:00  HelloWorld | Atom.Build:
+    01:23:25.467 INF Hello, World! I am Frodo.
+
+    
+    Build Summary
+
+      HelloWorld │ Succeeded │ <0.01s
+    ```
+
+### Adding Secrets
+
+1. Add a secret parameter to the `IBuild` interface:
+
+    ```csharp
+    using DecSm.Atom.Build.Definition;
+    using DecSm.Atom.Build.Hosting;
+    using DecSm.Atom.Build.Params;
+    
+    namespace Atom;
+    
+    [BuildDefinition]
+    [GenerateEntryPoint]
+    internal interface IBuild : IBuildDefinition
+    {
+        [ParamDefinition("my-name", "My name")]
+        string? MyName => GetParam(() => MyName);
+    
+        [SecretDefinition("my-secret", "My secret")]
+        string? MySecret => GetParam(() => MySecret);
+    
+        Target HelloWorld =>
+            t => t
+                .DescribedAs("Prints a hello world message to the console")
+                .RequiresParam(nameof(MyName))
+                .RequiresParam(nameof(MySecret))
+                .Executes(() =>
+                    Logger.LogInformation("Hello, World! I am {MyName} and my secret is {MySecret}.",
+                        MyName,
+                        MySecret));
+    }
+    ```
+
+2. Execute `atom HelloWorld --my-name Frodo --my-secret TheOneRing`
+
+   > [!NOTE]
+   > The secret is masked in the output.
+
+    ```
+    26-06-06 +10:00  DecSm.Atom.Build.BuildExecutor:
+    01:27:08.482 INF Executing build                
+                                                    
+    HelloWorld
+    
+    Prints a hello world message to the console
+    
+    26-06-06 +10:00  HelloWorld | Atom.Build:                        
+    01:27:08.544 INF Hello, World! I am Frodo and my secret is *****.
+                                                                     
+    
+    Build Summary
+                                         
+      HelloWorld │ Succeeded │ <0.01s
+    ```
+
+### Adding Target Dependencies
+
+1. Update the `IBuild` interface:
+
+    ```csharp
+    using DecSm.Atom.Build.Definition;
+    using DecSm.Atom.Build.Hosting;
+    using DecSm.Atom.Build.Params;
+    
+    namespace Atom;
+    
+    [BuildDefinition]
+    [GenerateEntryPoint]
+    internal interface IBuild : IBuildDefinition
+    {
+        [ParamDefinition("my-name", "My name")]
+        string? MyName => GetParam(() => MyName);
+    
+        [SecretDefinition("my-secret", "My secret")]
+        string? MySecret => GetParam(() => MySecret);
+    
+        Target HelloWorld =>
+            t => t
+                .DescribedAs("Prints a hello world message to the console")
+                .RequiresParam(nameof(MyName))
+                .RequiresParam(nameof(MySecret))
+                .Executes(() =>
+                    Logger.LogInformation("Hello, World! I am {MyName} and my secret is {MySecret}.", MyName, MySecret));
+    
+        Target Goodbye =>
+            t => t
+                .DescribedAs("Prints a goodbye message to the console")
+                .DependsOn(nameof(HelloWorld))
+                .Executes(() => Logger.LogInformation("Goodbye!"));
+    }
+    ```
+
+2. Execute `atom Goodbye --my-name Frodo --my-secret TheOneRing`
+
+   > [!NOTE]
+   > The `Goodbye` target depends on the `HelloWorld` target, so both will be executed in the correct order, and the
+   parameters only need to be provided once.
+
+    ```
+    26-06-06 +10:00  DecSm.Atom.Build.BuildExecutor:
+    01:30:12.175 INF Executing build                
+                                                    
+    HelloWorld
+    
+    Prints a hello world message to the console
+    
+    26-06-06 +10:00  HelloWorld | Atom.Build:                        
+    01:30:12.235 INF Hello, World! I am Frodo and my secret is *****.
+                                                                     
+    Goodbye
+    
+    Prints a goodbye message to the console
+    
+    26-06-06 +10:00  Goodbye | Atom.Build:
+    01:30:12.240 INF Goodbye!             
+                                          
+    
+    Build Summary
+                                         
+      HelloWorld │ Succeeded │ <0.01s    
+      Goodbye    │ Succeeded │ <0.01s
+    ```
+
+### Adding Workflow Generation
+
+1. Update the `_atom.csproj` file:
+
+    ```xml
+    <Project Sdk="Microsoft.NET.Sdk.Worker">
+    
+      <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <RootNamespace>Atom</RootNamespace>
+      </PropertyGroup>
+    
+      <ItemGroup>
+        <PackageReference Include="DecSm.Atom.Module.GithubWorkflows" Version="3.*" />
+      </ItemGroup>
+    
+    </Project>
+    ```
+2. Update the `IBuild` interface:
+
+    ```csharp
+    using DecSm.Atom.Build.BuildOptions;
+    using DecSm.Atom.Build.Definition;
+    using DecSm.Atom.Build.Hosting;
+    using DecSm.Atom.Build.Params;
+    using DecSm.Atom.Module.GithubWorkflows.Extensions;
+    using DecSm.Atom.Module.GithubWorkflows.Helpers;
+    using DecSm.Atom.Workflows;
+    using DecSm.Atom.Workflows.Definition;
+    using DecSm.Atom.Workflows.Definition.Triggers;
+    using DecSm.Atom.Workflows.Options;
+    using DecSm.StructuredText.Expressions;
+    
+    namespace Atom;
+    
+    [BuildDefinition]
+    [GenerateEntryPoint]
+    internal interface IBuild : IWorkflowBuildDefinition, IGithubWorkflows
+    {
+    [ParamDefinition("my-name", "My name")]
+    string? MyName => GetParam(() => MyName);
+    
+        [SecretDefinition("my-secret", "My secret")]
+        string? MySecret => GetParam(() => MySecret);
+    
+        Target HelloWorld =>
+            t => t
+                .DescribedAs("Prints a hello world message to the console")
+                .RequiresParam(nameof(MyName))
+                .RequiresParam(nameof(MySecret))
+                .Executes(() =>
+                    Logger.LogInformation("Hello, World! I am {MyName} and my secret is {MySecret}.", MyName, MySecret));
+    
+        Target Goodbye =>
+            t => t
+                .DescribedAs("Prints a goodbye message to the console")
+                .DependsOn(nameof(HelloWorld))
+                .Executes(() => Logger.LogInformation("Goodbye!"));
+    
+        IReadOnlyList<WorkflowDefinition> IWorkflowBuildDefinition.Workflows =>
+        [
+            new("Hello")
+            {
+                Triggers = [WorkflowTriggers.PushToMain],
+                Targets =
+                [
+                    new(nameof(HelloWorld))
+                    {
+                        Options =
+                        [
+                            BuildOptions.Inject.Param(nameof(MyName), TextExpressions.Github.GithubRepositoryOwner),
+                            BuildOptions.Inject.Secret(nameof(MySecret)),
+                        ],
+                    },
+                    new(nameof(Goodbye)),
+                ],
+                Types = [WorkflowTypes.Github.Action],
+            },
+        ];
+    }
+    ```
+
+3. Execute `atom gen`
+
+    ```
+    26-06-06 +10:00  DecSm.Atom.Module.GithubWorkflows.GithubActions.GithubWorkflowFileWriter:                                               
+    01:38:57.388 INF Writing new workflow file:                                  
+                     L:\Repos\DecSm\atom\.github\workflows\Hello.yml             
+                                                                                 
+    
+    26-06-06 +10:00  DecSm.Atom.Build.BuildExecutor:
+    01:38:57.472 INF Executing build                
+                                                    
+    Gen
+    
+    Generates workflow files
+    
+    
+    Build Summary
+                                     
+      Gen    │ Succeeded │ <0.01s
+    ```
+
+   `.github/workflows/Hello.yml`
+
+    ```yaml
+    name: Hello
+    
+    on:
+      push:
+        branches: [ main ]
+    
+    permissions: { }
+    
+    jobs:
+    
+      HelloWorld:
+        runs-on: ubuntu-latest
+        steps:
+    
+          - name: Checkout
+            uses: actions/checkout@v6
+            with:
+              fetch-depth: 0
+    
+          - name: HelloWorld
+            id: HelloWorld
+            run: dotnet run --project _atom/_atom.csproj -- HelloWorld --skip --headless
+            env:
+              my-secret: ${{ secrets.MY_SECRET }}
+              my-name: ${{ github.repository_owner }}
+    
+      Goodbye:
+        needs: [ HelloWorld ]
+        runs-on: ubuntu-latest
+        steps:
+    
+          - name: Checkout
+            uses: actions/checkout@v6
+            with:
+              fetch-depth: 0
+    
+          - name: Goodbye
+            id: Goodbye
+            run: dotnet run --project _atom/_atom.csproj -- Goodbye --skip --headless
+    ```
+
+### File-based Apps
+
+Atom can also be used as a file-based app:
+
+`Atom.cs`
+
+```csharp
+#:sdk Microsoft.NET.Sdk.Worker
+#:package DecSm.Atom.Build@3.*
+
+using DecSm.Atom.Build.Definition;
+using DecSm.Atom.Build.Hosting;
+
+namespace Atom;
+
+[BuildDefinition]
+[GenerateEntryPoint]
+internal interface IBuild : IBuildDefinition
+{
+    Target HelloWorld =>
+        t => t
+            .DescribedAs("Prints a hello world message to the console")
+            .Executes(() => Logger.LogInformation("Hello, World!"));
+}
+```
 
 ## Documentation
 
