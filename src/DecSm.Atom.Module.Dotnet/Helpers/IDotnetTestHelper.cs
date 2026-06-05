@@ -185,6 +185,7 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
                 TransformError = s => s.Contains(", is an invalid character")
                     ? null
                     : s,
+                AllowFailedResult = true,
             },
             cancellationToken);
 
@@ -213,7 +214,7 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
             },
             new("", "")
             {
-                AllowFailedResult = true,
+                AllowFailedResult = false,
             },
             cancellationToken);
 
