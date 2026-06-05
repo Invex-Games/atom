@@ -103,7 +103,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     [
                         BuildOptions.Target.SuppressArtifactPublishing,
                         BuildOptions.Inject.Secret(nameof(GithubToken)),
-                        new GithubTokenPermissionsOption(new Permissions.Exact(new()
+                        BuildOptions.Github.TokenPermissions.Set(new Permissions.Exact(new()
                         {
                             IdTokens = PermissionsLevel.Write,
                             Contents = PermissionsLevel.Write,
