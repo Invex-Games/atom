@@ -57,20 +57,6 @@ public static class FileFinder
         "$RECYCLE.BIN",
     };
 
-    /// <summary>
-    ///     Markers that signal the "Root" of a project.
-    ///     The upward search will stop here.
-    /// </summary>
-    private static readonly HashSet<string> RootMarkers = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ".git",
-        ".slnx",
-        ".sln",
-        "package.json",
-        "go.mod",
-        "Cargo.toml",
-    };
-
     public static IFileInfo? FindFile(
         IFileSystem fileSystem,
         string startDirectory,
@@ -94,9 +80,7 @@ public static class FileFinder
                 return found;
 
             // Stop condition: Don't climb higher than a project root marker
-            if (RootMarkers.Any(marker =>
-                    fileSystem.File.Exists(fileSystem.Path.Combine(currentUp.FullName, marker)) ||
-                    fileSystem.Directory.Exists(fileSystem.Path.Combine(currentUp.FullName, marker))))
+            if (IsRootDirectory(fileSystem, currentUp.FullName))
                 break;
 
             currentUp = currentUp.Parent;
@@ -172,4 +156,26 @@ public static class FileFinder
 
         return null;
     }
+
+    /// <summary>
+    ///     Markers that signal the "Root" of a project.
+    ///     The upward search will stop here.
+    /// </summary>
+    private static readonly HashSet<string> RootMarkers = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ".git",
+        ".slnx",
+        ".sln",
+        "package.json",
+        "go.mod",
+        "Cargo.toml",
+    };
+
+    /// <summary>
+    ///     Determines whether the specified directory contains a project root marker
+    ///     (e.g. a <c>.git</c> folder or a solution file).
+    /// </summary>
+    internal static bool IsRootDirectory(IFileSystem fileSystem, string directory) =>
+        RootMarkers.Any(marker => fileSystem.File.Exists(fileSystem.Path.Combine(directory, marker)) ||
+                                  fileSystem.Directory.Exists(fileSystem.Path.Combine(directory, marker)));
 }

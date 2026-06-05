@@ -9,6 +9,7 @@ internal sealed class RunCommandTests
         _fs = new();
         RunCommand.FileSystem = _fs;
         RunCommand.MockDotnetCli = true;
+        Environment.SetEnvironmentVariable("ATOM_NO_RESTORE_CACHE", null);
     }
 
     [TearDown]
@@ -16,6 +17,7 @@ internal sealed class RunCommandTests
     {
         RunCommand.FileSystem = new FileSystem();
         RunCommand.MockDotnetCli = false;
+        Environment.SetEnvironmentVariable("ATOM_NO_RESTORE_CACHE", null);
     }
 
     private MockFileSystem _fs = null!;
@@ -295,5 +297,203 @@ internal sealed class RunCommandTests
             CancellationToken.None);
 
         result.ShouldBe(0);
+    }
+
+    [Test]
+    public async Task Handle_CacheMiss_PerformsRestore_AndWritesCache()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "_atom.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], string.Empty, CancellationToken.None);
+
+        result.ShouldBe(0);
+        RunCommand.LastUsedNoRestore.ShouldBeFalse();
+
+        _fs
+            .File
+            .Exists(P("work", "obj", ".atom-restore.hash"))
+            .ShouldBeTrue();
+    }
+
+    [Test]
+    public async Task Handle_CacheHit_SkipsRestore()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "_atom.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        // First run performs a restore and writes the cache.
+        await RunCommand.Handle([], string.Empty, CancellationToken.None);
+
+        // Simulate the restore output that 'dotnet restore' would produce.
+        _fs.AddFile(P("work", "obj", "project.assets.json"), new(""));
+
+        // Second run with unchanged inputs should skip the restore.
+        var result = await RunCommand.Handle([], string.Empty, CancellationToken.None);
+
+        result.ShouldBe(0);
+        RunCommand.LastUsedNoRestore.ShouldBeTrue();
+    }
+
+    [Test]
+    public async Task Handle_CacheInvalidated_WhenInputChanges_PerformsRestore()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "_atom.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        await RunCommand.Handle([], string.Empty, CancellationToken.None);
+        _fs.AddFile(P("work", "obj", "project.assets.json"), new(""));
+
+        // Change the project file content - the cached hash should no longer match.
+        _fs.File.WriteAllText(P("work", "_atom.csproj"), "<Project></Project>");
+
+        var result = await RunCommand.Handle([], string.Empty, CancellationToken.None);
+
+        result.ShouldBe(0);
+        RunCommand.LastUsedNoRestore.ShouldBeFalse();
+    }
+
+    [Test]
+    public async Task Handle_CacheInvalidated_WhenDirectoryPackagesChanges_PerformsRestore()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "_atom.csproj"), new(""));
+        _fs.AddFile(P("work", "Directory.Packages.props"), new("<Project></Project>"));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        await RunCommand.Handle([], string.Empty, CancellationToken.None);
+        _fs.AddFile(P("work", "obj", "project.assets.json"), new(""));
+
+        // A walked-up restore input changed - restore should run again.
+        _fs.File.WriteAllText(P("work", "Directory.Packages.props"), "<Project><ItemGroup /></Project>");
+
+        var result = await RunCommand.Handle([], string.Empty, CancellationToken.None);
+
+        result.ShouldBe(0);
+        RunCommand.LastUsedNoRestore.ShouldBeFalse();
+    }
+
+    [Test]
+    public async Task Handle_NoRestoreCacheFlag_AlwaysPerformsRestore()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "_atom.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        await RunCommand.Handle([], string.Empty, CancellationToken.None);
+        _fs.AddFile(P("work", "obj", "project.assets.json"), new(""));
+
+        // Even though the cache would normally hit, the opt-out forces a restore.
+        var result = await RunCommand.Handle([], string.Empty, true, CancellationToken.None);
+
+        result.ShouldBe(0);
+        RunCommand.LastUsedNoRestore.ShouldBeFalse();
+    }
+
+    [Test]
+    public async Task Handle_NoRestoreCacheEnvVar_AlwaysPerformsRestore()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "_atom.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        await RunCommand.Handle([], string.Empty, CancellationToken.None);
+        _fs.AddFile(P("work", "obj", "project.assets.json"), new(""));
+
+        Environment.SetEnvironmentVariable("ATOM_NO_RESTORE_CACHE", "1");
+
+        var result = await RunCommand.Handle([], string.Empty, CancellationToken.None);
+
+        result.ShouldBe(0);
+        RunCommand.LastUsedNoRestore.ShouldBeFalse();
+    }
+
+    [Test]
+    public async Task Handle_BuildCacheMiss_PerformsBuild_AndWritesCache()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "_atom.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        var result = await RunCommand.Handle([], string.Empty, CancellationToken.None);
+
+        result.ShouldBe(0);
+        RunCommand.LastUsedNoBuild.ShouldBeFalse();
+
+        _fs
+            .File
+            .Exists(P("work", "obj", ".atom-build.hash"))
+            .ShouldBeTrue();
+    }
+
+    [Test]
+    public async Task Handle_BuildCacheHit_SkipsBuild()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "_atom.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        // First run builds and writes the cache.
+        await RunCommand.Handle([], string.Empty, CancellationToken.None);
+
+        // Simulate the build output that 'dotnet build' would produce.
+        _fs.AddFile(P("work", "bin", "Debug", "net10.0", "_atom.dll"), new(""));
+
+        // Second run with unchanged inputs should skip the build entirely.
+        var result = await RunCommand.Handle([], string.Empty, CancellationToken.None);
+
+        result.ShouldBe(0);
+        RunCommand.LastUsedNoBuild.ShouldBeTrue();
+        RunCommand.LastUsedNoRestore.ShouldBeFalse(); // --no-build supersedes --no-restore
+    }
+
+    [Test]
+    public async Task Handle_BuildCacheInvalidated_WhenSourceChanges_PerformsBuild()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "_atom.csproj"), new(""));
+        _fs.AddFile(P("work", "Program.cs"), new("// v1"));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        await RunCommand.Handle([], string.Empty, CancellationToken.None);
+        _fs.AddFile(P("work", "bin", "Debug", "net10.0", "_atom.dll"), new(""));
+
+        // A source file changed - the build can no longer be skipped.
+        _fs.File.WriteAllText(P("work", "Program.cs"), "// v2");
+
+        var result = await RunCommand.Handle([], string.Empty, CancellationToken.None);
+
+        result.ShouldBe(0);
+        RunCommand.LastUsedNoBuild.ShouldBeFalse();
+    }
+
+    [Test]
+    public async Task Handle_NoRestoreCacheFlag_AlsoForcesBuild()
+    {
+        var workDir = P("work");
+        _fs.AddDirectory(workDir);
+        _fs.AddFile(P("work", "_atom.csproj"), new(""));
+        _fs.Directory.SetCurrentDirectory(workDir);
+
+        await RunCommand.Handle([], string.Empty, CancellationToken.None);
+        _fs.AddFile(P("work", "bin", "Debug", "net10.0", "_atom.dll"), new(""));
+
+        // Even though the build cache would hit, the opt-out forces a full build.
+        var result = await RunCommand.Handle([], string.Empty, true, CancellationToken.None);
+
+        result.ShouldBe(0);
+        RunCommand.LastUsedNoBuild.ShouldBeFalse();
     }
 }

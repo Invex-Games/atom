@@ -8,7 +8,6 @@ global using DecSm.Atom.Build.FileSystem;
 global using DecSm.Atom.Build.Hosting;
 global using DecSm.Atom.Build.Params;
 global using DecSm.Atom.Build.Secrets;
-global using DecSm.Atom.Process;
 global using DecSm.Atom.Module.AzureKeyVault;
 global using DecSm.Atom.Module.Dotnet.Helpers;
 global using DecSm.Atom.Module.GithubWorkflows;
