@@ -17,7 +17,7 @@ using DecSm.Atom.Process;
 namespace TestNamespace;
 
 [JetBrains.Annotations.PublicAPI]
-partial class MinimalTestDefinition : DecSm.Atom.Build.Definition.IBuildDefinition
+partial class MinimalTestDefinition : DecSm.Atom.Build.Definition.IBuildDefinition, DecSm.Atom.Build.Hosting.IConfigureHost
 {
     public MinimalTestDefinition(System.IServiceProvider services) : base(services) { }
 
@@ -65,4 +65,15 @@ partial class MinimalTestDefinition : DecSm.Atom.Build.Definition.IBuildDefiniti
     public override object? AccessParam(string paramName) => throw new System.ArgumentException($"Param with name '{paramName}' is not defined in the build definition.", nameof(paramName));
 
     #endregion Params
+
+    #region Host
+
+    public void ConfigureBuildHost(Microsoft.Extensions.Hosting.IHost builder) { }
+
+    public void ConfigureBuildHostBuilder(Microsoft.Extensions.Hosting.IHostApplicationBuilder builder)
+    {
+        Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddSingleton<DecSm.Atom.Build.Definition.IBuildDefinition>(builder.Services, static p => (DecSm.Atom.Build.Definition.IBuildDefinition)p.GetRequiredService<DecSm.Atom.Build.Definition.IBuildDefinition>());
+    }
+
+    #endregion Host
 }

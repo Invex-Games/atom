@@ -11,7 +11,7 @@
 /// </remarks>
 [PublicAPI]
 [UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
-public interface IBuildDefinition
+public interface IBuildDefinition : IBuildAccessor
 {
     /// <summary>
     ///     Gets the build options applied globally to this build definition.
