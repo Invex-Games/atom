@@ -1,5 +1,15 @@
 <Project>
     <ItemGroup>
-<!--        <Using Include="DecSm.Atom.Workflows" Global="true"/>-->
+        <Using Include="DecSm.Atom.Workflows" Global="true"/>
+        <Using Include="DecSm.Atom.Workflows.Definition" Global="true"/>
+        <Using Include="DecSm.Atom.Workflows.Definition.Triggers" Global="true"/>
+        <Using Include="DecSm.Atom.Workflows.Dotnet" Global="true"/>
+        <Using Include="DecSm.Atom.Workflows.Dotnet.Nuget" Global="true"/>
+        <Using Include="DecSm.Atom.Workflows.Extensions" Global="true"/>
+        <Using Include="DecSm.Atom.Workflows.Model" Global="true"/>
+        <Using Include="DecSm.Atom.Workflows.Options" Global="true"/>
+        <Using Include="DecSm.Atom.Workflows.Options.Injections" Global="true"/>
+        <Using Include="DecSm.Atom.Workflows.WorkflowContext" Global="true"/>
+        <Using Include="DecSm.Atom.Workflows.Writer" Global="true"/>
     </ItemGroup>
 </Project>

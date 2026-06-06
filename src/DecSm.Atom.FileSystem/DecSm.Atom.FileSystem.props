@@ -1,5 +1,5 @@
 <Project>
     <ItemGroup>
-<!--        <Using Include="DecSm.Atom.FileSystem" Global="true"/>-->
+        <Using Include="DecSm.Atom.FileSystem" Global="true"/>
     </ItemGroup>
 </Project>
