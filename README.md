@@ -9,11 +9,25 @@ debug it like standard code, and automatically generate CI/CD configuration file
 
 ## Why Atom?
 
-* **Zero Context Switching**: Write build logic in C# alongside your application code.
-* **Intellisense & Debugging**: Step through your build process using your IDE.
-* **CI/CD Agnostic**: Define logic once; Atom generates the YAML for GitHub and Azure DevOps.
-* **Modular**: Pull in capabilities via NuGet packages (GitVersion, Azure KeyVault, etc.).
-* **Source Generators**: Reduces boilerplate by automatically discovering targets and parameters.
+### Zero Context Switching
+
+Write build logic in C# alongside your application code.
+
+### Intellisense & Debugging
+
+Step through your build process using your IDE.
+
+### CI/CD Agnostic
+
+Define logic once; Atom generates the YAML for GitHub and Azure DevOps.
+
+### Modular
+
+Pull in capabilities via NuGet packages (GitVersion, Azure KeyVault, etc.).
+
+### Source Generators
+
+Reduces boilerplate by automatically discovering targets and parameters.
 
 ## Examples
 
