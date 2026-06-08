@@ -11,8 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Invex.Atom.Build.Definition;
 using Invex.Atom.Build.Params;
-using Invex.Atom.FileSystem;
-using Invex.Atom.Process;
+using Invex.FileSystem;
+using Invex.Process;
 
 namespace TestNamespace;
 
