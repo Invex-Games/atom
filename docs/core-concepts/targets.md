@@ -109,7 +109,7 @@ Inside a target body you have access to several built-in services via `IBuildAcc
 | Property         | Type               | Description                                   |
 |------------------|--------------------|-----------------------------------------------|
 | `Logger`         | `ILogger`          | Structured logger scoped to the current type. |
-| `AtomFileSystem` | `IAtomFileSystem`  | File system abstraction with path resolution. |
+| `RootedFileSystem` | `IRootedFileSystem`  | File system abstraction with path resolution. |
 | `ProcessRunner`  | `IProcessRunner`   | Execute external processes.                   |
 | `Services`       | `IServiceProvider` | Full DI container.                            |
 

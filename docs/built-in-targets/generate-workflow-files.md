@@ -1,7 +1,7 @@
 # GenerateWorkflowFiles
 
 **Interface:** `IGenerateWorkflowFiles`  
-**Package:** `DecSm.Atom.Workflows`
+**Package:** `Invex.Atom.Workflows`
 
 The `GenerateWorkflowFiles` target generates CI/CD configuration files from your workflow definitions.
 

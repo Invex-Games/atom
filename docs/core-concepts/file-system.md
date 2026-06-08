@@ -1,11 +1,11 @@
 # File System
 
-Atom provides `IAtomFileSystem` — a build-aware file system abstraction that layers path resolution on top of
+Atom provides `IRootedFileSystem` — a build-aware file system abstraction that layers path resolution on top of
 `System.IO.Abstractions.IFileSystem`.
 
-## `IAtomFileSystem`
+## `IRootedFileSystem`
 
-Available via `IBuildAccessor.AtomFileSystem`, this interface gives you:
+Available via `IBuildAccessor.RootedFileSystem`, this interface gives you:
 
 - All standard `IFileSystem` operations (read, write, delete, etc.)
 - **Path resolution** via `GetPath(key)` — looks up well-known paths by key
@@ -14,9 +14,9 @@ Available via `IBuildAccessor.AtomFileSystem`, this interface gives you:
 ### Resolving Well-Known Paths
 
 ```csharp
-var root = AtomFileSystem.GetPath("Root");
-var artifacts = AtomFileSystem.GetPath("Artifacts");
-var publish = AtomFileSystem.GetPath("Publish");
+var root = RootedFileSystem.GetPath("Root");
+var artifacts = RootedFileSystem.GetPath("Artifacts");
+var publish = RootedFileSystem.GetPath("Publish");
 ```
 
 Paths are resolved by querying registered `IPathProvider` implementations in priority order and are cached after first
@@ -24,18 +24,18 @@ resolution.
 
 ## `RootedPath`
 
-`RootedPath` is a value type that wraps an absolute directory/file path and is bound to an `IAtomFileSystem` instance.
+`RootedPath` is a value type that wraps an absolute directory/file path and is bound to an `IRootedFileSystem` instance.
 It supports the `/` operator for path combination:
 
 ```csharp
-var projectDir = AtomFileSystem.GetPath("Root") / "src" / "MyProject";
+var projectDir = RootedFileSystem.GetPath("Root") / "src" / "MyProject";
 var csproj = projectDir / "MyProject.csproj";
 ```
 
 Because a `RootedPath` carries a reference to the file system, you can perform I/O directly:
 
 ```csharp
-var content = AtomFileSystem.File.ReadAllText(csproj);
+var content = RootedFileSystem.File.ReadAllText(csproj);
 ```
 
 ## `IPathProvider`
@@ -66,11 +66,11 @@ For statically determined paths (e.g. source-generated project paths), implement
 ```csharp
 public interface IPathMarker
 {
-    static abstract RootedPath Path(IAtomFileSystem fileSystem);
+    static abstract RootedPath Path(IRootedFileSystem fileSystem);
 }
 ```
 
-Resolve with `AtomFileSystem.GetPath<MyPathMarker>()`.
+Resolve with `RootedFileSystem.GetPath<MyPathMarker>()`.
 
 ## Next Steps
 

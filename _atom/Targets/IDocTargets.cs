@@ -13,28 +13,28 @@ internal interface IDocTargets : IDotnetCliHelper, IGithubHelper, ISetupBuildInf
             .Executes(async cancellationToken =>
             {
                 // First, build analyzers in release mode
-                await DotnetCli.Build([AtomFileSystem.GetPath<Projects.DecSm_Atom_Build_Analyzers>()],
+                await DotnetCli.Build([RootedFileSystem.GetPath<Projects.Invex_Atom_Build_Analyzers>()],
                     new()
                     {
                         Configuration = "Release",
                     },
                     cancellationToken: cancellationToken);
 
-                await DotnetCli.Build([AtomFileSystem.GetPath<Projects.DecSm_Atom_Build_SourceGenerators>()],
+                await DotnetCli.Build([RootedFileSystem.GetPath<Projects.Invex_Atom_Build_SourceGenerators>()],
                     new()
                     {
                         Configuration = "Release",
                     },
                     cancellationToken: cancellationToken);
 
-                var siteDirectory = AtomFileSystem.AtomRootDirectory / "_site";
+                var siteDirectory = RootedFileSystem.AtomRootDirectory / "_site";
 
                 // If .NET 10, we can just do dotnet tool exec docfx
                 if (RuntimeInformation.FrameworkDescription.StartsWith(".NET 10"))
                 {
                     await ProcessRunner.RunAsync(new("dotnet", "tool exec -y docfx")
                         {
-                            WorkingDirectory = AtomFileSystem.AtomRootDirectory,
+                            WorkingDirectory = RootedFileSystem.AtomRootDirectory,
                         },
                         cancellationToken);
                 }
@@ -45,7 +45,7 @@ internal interface IDocTargets : IDotnetCliHelper, IGithubHelper, ISetupBuildInf
 
                     await ProcessRunner.RunAsync(new("dotnet", "tool update docfx -g")
                         {
-                            WorkingDirectory = AtomFileSystem.AtomRootDirectory,
+                            WorkingDirectory = RootedFileSystem.AtomRootDirectory,
                         },
                         cancellationToken);
 
@@ -53,7 +53,7 @@ internal interface IDocTargets : IDotnetCliHelper, IGithubHelper, ISetupBuildInf
 
                     await ProcessRunner.RunAsync(new("dotnet", "docfx")
                         {
-                            WorkingDirectory = AtomFileSystem.AtomRootDirectory,
+                            WorkingDirectory = RootedFileSystem.AtomRootDirectory,
                         },
                         cancellationToken);
                 }
@@ -61,7 +61,7 @@ internal interface IDocTargets : IDotnetCliHelper, IGithubHelper, ISetupBuildInf
                 Logger.LogInformation("DocFX site generated at {Path}", siteDirectory);
 
                 // Copy the generated site to the publish directory
-                await CopyDirectory(siteDirectory, AtomFileSystem.AtomPublishDirectory / GeneratedDocsArtifactName);
+                await CopyDirectory(siteDirectory, RootedFileSystem.AtomPublishDirectory / GeneratedDocsArtifactName);
             });
 
     Target ServeDocs =>
@@ -78,7 +78,7 @@ internal interface IDocTargets : IDotnetCliHelper, IGithubHelper, ISetupBuildInf
                 {
                     await ProcessRunner.RunAsync(new("dotnet", "docfx serve _site --port 8080")
                         {
-                            WorkingDirectory = AtomFileSystem.AtomRootDirectory,
+                            WorkingDirectory = RootedFileSystem.AtomRootDirectory,
                         },
                         cancellationToken);
                 }
@@ -97,18 +97,18 @@ internal interface IDocTargets : IDotnetCliHelper, IGithubHelper, ISetupBuildInf
             .ConsumesArtifact(nameof(BuildDocs), GeneratedDocsArtifactName)
             .Executes(async cancellationToken =>
             {
-                var siteArtifact = AtomFileSystem.AtomArtifactsDirectory / GeneratedDocsArtifactName;
+                var siteArtifact = RootedFileSystem.AtomArtifactsDirectory / GeneratedDocsArtifactName;
 
-                if (!AtomFileSystem.Directory.Exists(siteArtifact))
+                if (!RootedFileSystem.Directory.Exists(siteArtifact))
                     throw new StepFailedException("Site directory '_site' does not exist. Run BuildDocs first.");
 
                 // Create a fresh temporary directory for the gh-pages checkout
-                var tempDir = AtomFileSystem.AtomTempDirectory / "gh-pages-temp";
+                var tempDir = RootedFileSystem.AtomTempDirectory / "gh-pages-temp";
 
-                if (AtomFileSystem.Directory.Exists(tempDir))
+                if (RootedFileSystem.Directory.Exists(tempDir))
                     ForceDeleteDirectory(tempDir);
 
-                AtomFileSystem.Directory.CreateDirectory(tempDir);
+                RootedFileSystem.Directory.CreateDirectory(tempDir);
 
                 try
                 {
@@ -159,7 +159,7 @@ internal interface IDocTargets : IDotnetCliHelper, IGithubHelper, ISetupBuildInf
                     // Get the remote URL from the main repo
                     var remoteResult = await ProcessRunner.RunAsync(new("git", "remote get-url origin")
                         {
-                            WorkingDirectory = AtomFileSystem.AtomRootDirectory,
+                            WorkingDirectory = RootedFileSystem.AtomRootDirectory,
                             OutputLogLevel = LogLevel.Debug,
                         },
                         cancellationToken);
@@ -187,7 +187,7 @@ internal interface IDocTargets : IDotnetCliHelper, IGithubHelper, ISetupBuildInf
                 finally
                 {
                     // Cleanup
-                    if (AtomFileSystem.Directory.Exists(tempDir))
+                    if (RootedFileSystem.Directory.Exists(tempDir))
                         ForceDeleteDirectory(tempDir);
                 }
             });
@@ -200,21 +200,21 @@ internal interface IDocTargets : IDotnetCliHelper, IGithubHelper, ISetupBuildInf
     async Task CopyDirectory(RootedPath sourceDirectory, RootedPath destinationDirectory)
     {
         // Ensure the destination directory exists
-        AtomFileSystem.Directory.CreateDirectory(destinationDirectory);
+        RootedFileSystem.Directory.CreateDirectory(destinationDirectory);
 
         // Copy all files
-        foreach (var file in AtomFileSystem
+        foreach (var file in RootedFileSystem
                      .Directory
                      .GetFiles(sourceDirectory)
-                     .Select(AtomFileSystem.CreateRootedPath))
-            AtomFileSystem.File.Copy(file, destinationDirectory / AtomFileSystem.Path.GetFileName(file), true);
+                     .Select(RootedFileSystem.CreateRootedPath))
+            RootedFileSystem.File.Copy(file, destinationDirectory / RootedFileSystem.Path.GetFileName(file), true);
 
         // Recursively copy all subdirectories
-        foreach (var directory in AtomFileSystem
+        foreach (var directory in RootedFileSystem
                      .Directory
                      .GetDirectories(sourceDirectory)
-                     .Select(AtomFileSystem.CreateRootedPath))
-            await CopyDirectory(directory, destinationDirectory / AtomFileSystem.Path.GetFileName(directory));
+                     .Select(RootedFileSystem.CreateRootedPath))
+            await CopyDirectory(directory, destinationDirectory / RootedFileSystem.Path.GetFileName(directory));
     }
 
     /// <summary>
@@ -223,14 +223,14 @@ internal interface IDocTargets : IDotnetCliHelper, IGithubHelper, ISetupBuildInf
     /// </summary>
     void ForceDeleteDirectory(string path)
     {
-        foreach (var file in AtomFileSystem.Directory.GetFiles(path, "*", SearchOption.AllDirectories))
+        foreach (var file in RootedFileSystem.Directory.GetFiles(path, "*", SearchOption.AllDirectories))
         {
-            var attrs = AtomFileSystem.File.GetAttributes(file);
+            var attrs = RootedFileSystem.File.GetAttributes(file);
 
             if (attrs.HasFlag(FileAttributes.ReadOnly))
-                AtomFileSystem.File.SetAttributes(file, attrs & ~FileAttributes.ReadOnly);
+                RootedFileSystem.File.SetAttributes(file, attrs & ~FileAttributes.ReadOnly);
         }
 
-        AtomFileSystem.Directory.Delete(path, true);
+        RootedFileSystem.Directory.Delete(path, true);
     }
 }

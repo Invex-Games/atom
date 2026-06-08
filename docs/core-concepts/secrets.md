@@ -37,8 +37,8 @@ delegate to the next provider.
 
 | Provider                    | Package                           | Description                                       |
 |-----------------------------|-----------------------------------|---------------------------------------------------|
-| `DotnetUserSecretsProvider` | `DecSm.Atom.Build`                | Reads from .NET User Secrets (local development). |
-| `AzureKeySecretsProvider`   | `DecSm.Atom.Module.AzureKeyVault` | Reads from Azure Key Vault.                       |
+| `DotnetUserSecretsProvider` | `Invex.Atom.Build`                | Reads from .NET User Secrets (local development). |
+| `AzureKeySecretsProvider`   | `Invex.Atom.Module.AzureKeyVault` | Reads from Azure Key Vault.                       |
 
 ### Registering a Custom Provider
 

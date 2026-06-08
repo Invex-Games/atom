@@ -1,13 +1,13 @@
 # Module: .NET
 
-**Package:** `DecSm.Atom.Module.Dotnet`
+**Package:** `Invex.Atom.Module.Dotnet`
 
 Provides helpers and targets for common .NET CLI operations — build, test, pack, publish, and NuGet push.
 
 ## Installation
 
 ```shell
-dotnet add package DecSm.Atom.Module.Dotnet
+dotnet add package Invex.Atom.Module.Dotnet
 ```
 
 ## Usage

@@ -1,0 +1,59 @@
+﻿namespace Invex.Atom.Module.DevopsWorkflows.Tests.Workflows;
+
+[BuildDefinition]
+public partial class DuplicateDependencyBuild : WorkflowBuildDefinition,
+    IWorkflowBuildDefinition,
+    IDevopsWorkflows,
+    IDuplicateDependencyTarget
+{
+    public override IReadOnlyList<WorkflowDefinition> Workflows =>
+    [
+        new("duplicatedependency-workflow")
+        {
+            Triggers = [WorkflowTriggers.Manual],
+            Targets = [new(nameof(IDuplicateDependencyTarget.DuplicateDependencyTarget1))],
+            Types = [WorkflowTypes.Devops.Pipeline],
+        },
+    ];
+
+    public IReadOnlyList<IBuildOption> Options => [BuildOptions.Artifacts.UseCustomProvider];
+}
+
+[ConfigureHostBuilder]
+public partial interface IDuplicateDependencyTarget : IStoreArtifact, IRetrieveArtifact
+{
+    Target DuplicateDependencyTarget1 =>
+        t => t
+            .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildName))
+            .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildId))
+            .ProducesArtifact("artifact-name");
+
+    protected static partial void ConfigureBuilderFromIDuplicateDependencyTarget(IHostApplicationBuilder builder) =>
+        builder.Services.AddSingleton<IArtifactProvider, TestArtifactProvider>();
+}
+
+internal sealed class TestArtifactProvider : IArtifactProvider
+{
+    public Task StoreArtifacts(
+        IEnumerable<string> artifactNames,
+        string? buildId = null,
+        string? buildSlice = null,
+        CancellationToken cancellationToken = default) =>
+        throw new();
+
+    public Task RetrieveArtifacts(
+        IEnumerable<string> artifactNames,
+        string? buildId = null,
+        string? buildSlice = null,
+        CancellationToken cancellationToken = default) =>
+        throw new();
+
+    public Task Cleanup(IEnumerable<string> runIdentifiers, CancellationToken cancellationToken = default) =>
+        throw new();
+
+    public Task<IReadOnlyList<string>> GetStoredRunIdentifiers(
+        string? artifactName = null,
+        string? buildSlice = null,
+        CancellationToken cancellationToken = default) =>
+        throw new();
+}

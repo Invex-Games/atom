@@ -6,17 +6,17 @@ This section contains auto-generated API documentation for all public types in t
 
 | Package                             | Description                                                      |
 |-------------------------------------|------------------------------------------------------------------|
-| `DecSm.Atom.Build`                  | Core framework — build definitions, targets, parameters, hosting |
-| `DecSm.Atom.Workflows`              | Workflow definitions, triggers, and YAML generation              |
-| `DecSm.Atom.FileSystem`             | File system abstraction, path providers, file transformations    |
-| `DecSm.Atom.Process`                | Process runner for executing external tools                      |
-| `DecSm.Atom.SemanticVersion`        | Semantic versioning utilities                                    |
-| `DecSm.Atom.Module.Dotnet`          | .NET CLI helpers                                                 |
-| `DecSm.Atom.Module.GithubWorkflows` | GitHub Actions workflow writer                                   |
-| `DecSm.Atom.Module.DevopsWorkflows` | Azure DevOps Pipelines workflow writer                           |
-| `DecSm.Atom.Module.AzureKeyVault`   | Azure Key Vault secrets provider                                 |
-| `DecSm.Atom.Module.AzureStorage`    | Azure Blob Storage artifact provider                             |
-| `DecSm.Atom.Module.GitVersion`      | GitVersion-based build ID and version                            |
+| `Invex.Atom.Build`                  | Core framework — build definitions, targets, parameters, hosting |
+| `Invex.Atom.Workflows`              | Workflow definitions, triggers, and YAML generation              |
+| `Invex.Atom.FileSystem`             | File system abstraction, path providers, file transformations    |
+| `Invex.Atom.Process`                | Process runner for executing external tools                      |
+| `Invex.Atom.SemanticVersion`        | Semantic versioning utilities                                    |
+| `Invex.Atom.Module.Dotnet`          | .NET CLI helpers                                                 |
+| `Invex.Atom.Module.GithubWorkflows` | GitHub Actions workflow writer                                   |
+| `Invex.Atom.Module.DevopsWorkflows` | Azure DevOps Pipelines workflow writer                           |
+| `Invex.Atom.Module.AzureKeyVault`   | Azure Key Vault secrets provider                                 |
+| `Invex.Atom.Module.AzureStorage`    | Azure Blob Storage artifact provider                             |
+| `Invex.Atom.Module.GitVersion`      | GitVersion-based build ID and version                            |
 
 Browse the namespaces in the sidebar to explore the full API.
 

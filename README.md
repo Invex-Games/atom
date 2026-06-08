@@ -23,7 +23,7 @@ debug it like standard code, and automatically generate CI/CD configuration file
 >
 > It is recommended to use the atom dotnet tool to invoke atom projects:
 >
-> `dotnet tool install -g DecSm.Atom.Tool`
+> `dotnet tool install -g Invex.Atom.Tool`
 >
 > ` atom ...`
 >
@@ -48,7 +48,7 @@ debug it like standard code, and automatically generate CI/CD configuration file
       </PropertyGroup>
     
       <ItemGroup>
-        <PackageReference Include="DecSm.Atom.Build" Version="3.*" />
+        <PackageReference Include="Invex.Atom.Build" Version="3.*" />
       </ItemGroup>
     
     </Project>
@@ -57,8 +57,8 @@ debug it like standard code, and automatically generate CI/CD configuration file
 3. Replace the `Program.cs` file with `IBuild.cs`:
 
     ```csharp
-    using DecSm.Atom.Build.Definition;
-    using DecSm.Atom.Build.Hosting;
+    using Invex.Atom.Build.Definition;
+    using Invex.Atom.Build.Hosting;
     
     namespace Atom;
     
@@ -76,7 +76,7 @@ debug it like standard code, and automatically generate CI/CD configuration file
 4. Execute `atom HelloWorld`
 
     ```
-    26-06-06 +10:00  DecSm.Atom.Build.BuildExecutor:
+    26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
     01:16:47.552 INF Executing build
     
     HelloWorld
@@ -103,9 +103,9 @@ debug it like standard code, and automatically generate CI/CD configuration file
    > `.UsesParam(nameof(...))` is used to use the parameter if it is provided, but not fail the build if it is not.
 
     ```csharp
-    using DecSm.Atom.Build.Definition;
-    using DecSm.Atom.Build.Hosting;
-    using DecSm.Atom.Build.Params;
+    using Invex.Atom.Build.Definition;
+    using Invex.Atom.Build.Hosting;
+    using Invex.Atom.Build.Params;
     
     namespace Atom;
     
@@ -127,7 +127,7 @@ debug it like standard code, and automatically generate CI/CD configuration file
 2. Execute `atom HelloWorld --my-name Frodo
 
     ```
-    26-06-06 +10:00  DecSm.Atom.Build.BuildExecutor:
+    26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
     01:23:25.405 INF Executing build
 
     HelloWorld
@@ -148,9 +148,9 @@ debug it like standard code, and automatically generate CI/CD configuration file
 1. Add a secret parameter to the `IBuild` interface:
 
     ```csharp
-    using DecSm.Atom.Build.Definition;
-    using DecSm.Atom.Build.Hosting;
-    using DecSm.Atom.Build.Params;
+    using Invex.Atom.Build.Definition;
+    using Invex.Atom.Build.Hosting;
+    using Invex.Atom.Build.Params;
     
     namespace Atom;
     
@@ -182,7 +182,7 @@ debug it like standard code, and automatically generate CI/CD configuration file
    > The secret is masked in the output.
 
     ```
-    26-06-06 +10:00  DecSm.Atom.Build.BuildExecutor:
+    26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
     01:27:08.482 INF Executing build                
                                                     
     HelloWorld
@@ -203,9 +203,9 @@ debug it like standard code, and automatically generate CI/CD configuration file
 1. Update the `IBuild` interface:
 
     ```csharp
-    using DecSm.Atom.Build.Definition;
-    using DecSm.Atom.Build.Hosting;
-    using DecSm.Atom.Build.Params;
+    using Invex.Atom.Build.Definition;
+    using Invex.Atom.Build.Hosting;
+    using Invex.Atom.Build.Params;
     
     namespace Atom;
     
@@ -242,7 +242,7 @@ debug it like standard code, and automatically generate CI/CD configuration file
    parameters only need to be provided once.
 
     ```
-    26-06-06 +10:00  DecSm.Atom.Build.BuildExecutor:
+    26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
     01:30:12.175 INF Executing build                
                                                     
     HelloWorld
@@ -279,7 +279,7 @@ debug it like standard code, and automatically generate CI/CD configuration file
       </PropertyGroup>
     
       <ItemGroup>
-        <PackageReference Include="DecSm.Atom.Module.GithubWorkflows" Version="3.*" />
+        <PackageReference Include="Invex.Atom.Module.GithubWorkflows" Version="3.*" />
       </ItemGroup>
     
     </Project>
@@ -287,17 +287,17 @@ debug it like standard code, and automatically generate CI/CD configuration file
 2. Update the `IBuild` interface:
 
     ```csharp
-    using DecSm.Atom.Build.BuildOptions;
-    using DecSm.Atom.Build.Definition;
-    using DecSm.Atom.Build.Hosting;
-    using DecSm.Atom.Build.Params;
-    using DecSm.Atom.Module.GithubWorkflows.Extensions;
-    using DecSm.Atom.Module.GithubWorkflows.Helpers;
-    using DecSm.Atom.Workflows;
-    using DecSm.Atom.Workflows.Definition;
-    using DecSm.Atom.Workflows.Definition.Triggers;
-    using DecSm.Atom.Workflows.Options;
-    using DecSm.StructuredText.Expressions;
+    using Invex.Atom.Build.BuildOptions;
+    using Invex.Atom.Build.Definition;
+    using Invex.Atom.Build.Hosting;
+    using Invex.Atom.Build.Params;
+    using Invex.Atom.Module.GithubWorkflows.Extensions;
+    using Invex.Atom.Module.GithubWorkflows.Helpers;
+    using Invex.Atom.Workflows;
+    using Invex.Atom.Workflows.Definition;
+    using Invex.Atom.Workflows.Definition.Triggers;
+    using Invex.Atom.Workflows.Options;
+    using Invex.StructuredText.Expressions;
     
     namespace Atom;
     
@@ -351,12 +351,12 @@ debug it like standard code, and automatically generate CI/CD configuration file
 3. Execute `atom gen`
 
     ```
-    26-06-06 +10:00  DecSm.Atom.Module.GithubWorkflows.GithubActions.GithubWorkflowFileWriter:                                               
+    26-06-06 +10:00  Invex.Atom.Module.GithubWorkflows.GithubActions.GithubWorkflowFileWriter:                                               
     01:38:57.388 INF Writing new workflow file:                                  
                      L:\Repos\DecSm\atom\.github\workflows\Hello.yml             
                                                                                  
     
-    26-06-06 +10:00  DecSm.Atom.Build.BuildExecutor:
+    26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
     01:38:57.472 INF Executing build                
                                                     
     Gen
@@ -421,10 +421,10 @@ Atom can also be used as a file-based app:
 
 ```csharp
 #:sdk Microsoft.NET.Sdk.Worker
-#:package DecSm.Atom.Build@3.*
+#:package Invex.Atom.Build@3.*
 
-using DecSm.Atom.Build.Definition;
-using DecSm.Atom.Build.Hosting;
+using Invex.Atom.Build.Definition;
+using Invex.Atom.Build.Hosting;
 
 namespace Atom;
 
@@ -456,7 +456,7 @@ internal interface IBuild : IBuildDefinition
 - [Secrets](docs/core-concepts/secrets.md) — Secure parameter handling with `ISecretsProvider`
 - [Artifacts](docs/core-concepts/artifacts.md) — Producing and consuming build artifacts
 - [Variables](docs/core-concepts/variables.md) — Sharing data between targets with workflow variables
-- [File System](docs/core-concepts/file-system.md) — `IAtomFileSystem`, `RootedPath`, and path providers
+- [File System](docs/core-concepts/file-system.md) — `IRootedFileSystem`, `RootedPath`, and path providers
 - [Process Runner](docs/core-concepts/process-runner.md) — Executing external processes
 - [Build Info](docs/core-concepts/build-info.md) — Build ID, version, and timestamp providers
 - [Build Options](docs/core-concepts/build-options.md) — Configuring build behaviour with `IBuildOption`
@@ -478,12 +478,12 @@ internal interface IBuild : IBuildDefinition
 ### Modules
 
 - [Overview](docs/modules/overview.md) — What a module is and how to add one
-- [.NET](docs/modules/dotnet.md) — `DecSm.Atom.Module.Dotnet`
-- [GitHub Workflows](docs/modules/github-workflows.md) — `DecSm.Atom.Module.GithubWorkflows`
-- [DevOps Workflows](docs/modules/devops-workflows.md) — `DecSm.Atom.Module.DevopsWorkflows`
-- [Azure Key Vault](docs/modules/azure-key-vault.md) — `DecSm.Atom.Module.AzureKeyVault`
-- [Azure Storage](docs/modules/azure-storage.md) — `DecSm.Atom.Module.AzureStorage`
-- [GitVersion](docs/modules/git-version.md) — `DecSm.Atom.Module.GitVersion`
+- [.NET](docs/modules/dotnet.md) — `Invex.Atom.Module.Dotnet`
+- [GitHub Workflows](docs/modules/github-workflows.md) — `Invex.Atom.Module.GithubWorkflows`
+- [DevOps Workflows](docs/modules/devops-workflows.md) — `Invex.Atom.Module.DevopsWorkflows`
+- [Azure Key Vault](docs/modules/azure-key-vault.md) — `Invex.Atom.Module.AzureKeyVault`
+- [Azure Storage](docs/modules/azure-storage.md) — `Invex.Atom.Module.AzureStorage`
+- [GitVersion](docs/modules/git-version.md) — `Invex.Atom.Module.GitVersion`
 
 ### Built-in Targets
 
@@ -497,7 +497,7 @@ internal interface IBuild : IBuildDefinition
 - [Custom Providers](docs/developer-guide/custom-providers.md) — Implementing `IArtifactProvider`, `ISecretsProvider`,
   and more
 - [Source Generators](docs/developer-guide/source-generators.md) — How the Atom analysers and source generators work
-- [Testing](docs/developer-guide/testing.md) — Using `DecSm.Atom.TestUtils`
+- [Testing](docs/developer-guide/testing.md) — Using `Invex.Atom.TestUtils`
 
 ### Reference
 

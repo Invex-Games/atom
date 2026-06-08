@@ -5,10 +5,10 @@ public sealed record ReleaseInfo(string CommitHash, SemVer Version);
 public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper, ISetupBuildInfo, IApiSurfaceHelper
 {
     private RootedPath[] FilesToCheck =>
-        AtomFileSystem
+        RootedFileSystem
             .Directory
-            .GetFiles(AtomFileSystem.AtomRootDirectory / "tests", "*.verified.txt", SearchOption.AllDirectories)
-            .Select(AtomFileSystem.CreateRootedPath)
+            .GetFiles(RootedFileSystem.AtomRootDirectory / "tests", "*.verified.txt", SearchOption.AllDirectories)
+            .Select(RootedFileSystem.CreateRootedPath)
             .ToArray();
 
     Target CheckPrForBreakingChanges =>
@@ -20,7 +20,7 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
                 var owner = Github.Variables.RepositoryOwner;
                 Logger.LogDebug("Target repository owner: {Owner}", owner);
 
-                using var repo = new Repository(AtomFileSystem.AtomRootDirectory);
+                using var repo = new Repository(RootedFileSystem.AtomRootDirectory);
 
                 var currentCommitHash = repo.Head.Tip.Sha;
                 Logger.LogDebug("Current commit hash: {CommitHash}", currentCommitHash);
@@ -213,7 +213,7 @@ public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper,
         if (prQueryResult.Id.Value is null)
             throw new StepFailedException("Could not find pull request.");
 
-        using var repo = new Repository(AtomFileSystem.AtomRootDirectory);
+        using var repo = new Repository(RootedFileSystem.AtomRootDirectory);
 
         var checkRunMutation = new Mutation()
             .CreateCheckRun(new CreateCheckRunInput

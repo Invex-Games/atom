@@ -1,0 +1,12 @@
+﻿namespace Invex.Atom.Module.GitVersion;
+
+[PublicAPI]
+[ConfigureHostBuilder]
+public partial interface IGitVersion
+{
+    protected static partial void ConfigureBuilderFromIGitVersion(IHostApplicationBuilder builder) =>
+        builder
+            .Services
+            .AddSingleton<IBuildIdProvider, GitVersionBuildIdProvider>()
+            .AddSingleton<IBuildVersionProvider, GitVersionBuildVersionProvider>();
+}

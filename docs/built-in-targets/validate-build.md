@@ -1,7 +1,7 @@
 # ValidateBuild
 
 **Interface:** `IValidateBuild`  
-**Package:** `DecSm.Atom.Build`
+**Package:** `Invex.Atom.Build`
 
 The `ValidateBuild` target checks the Atom build configuration for common issues.
 

@@ -1,0 +1,14 @@
+namespace Invex.Atom.Module.GithubWorkflows.Steps;
+
+[PublicAPI]
+public sealed record GithubCustomAdditionalStep : IGithubAdditionalStepOption
+{
+    public required Step Step { get; init; }
+
+    public bool Enabled { get; init; } = true;
+
+    public required int Order { get; init; }
+
+    public Step Build() =>
+        Step;
+}

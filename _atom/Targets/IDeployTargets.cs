@@ -15,7 +15,7 @@ internal interface IDeployTargets : INugetHelper, IGithubReleaseHelper, ISetupBu
             .RequiresParam(nameof(NugetApiKey))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildId))
             .ConsumesArtifacts(nameof(IBuildTargets.PackProjects), IBuildTargets.ProjectsToPack)
-            .ConsumesArtifact(nameof(IBuildTargets.PackTool), Projects.DecSm_Atom_Tool.Name, PlatformNames)
+            .ConsumesArtifact(nameof(IBuildTargets.PackTool), Projects.Invex_Atom_Tool.Name, PlatformNames)
             .DependsOn(nameof(ITestTargets.TestProjects))
             .Executes(async cancellationToken =>
             {
@@ -24,12 +24,12 @@ internal interface IDeployTargets : INugetHelper, IGithubReleaseHelper, ISetupBu
                     await PushProject(project, NugetFeed, NugetApiKey, cancellationToken: cancellationToken);
 
                 // Push Atom tool package - platform-specific + multi-targeted
-                foreach (var atomToolPackagePath in AtomFileSystem.Directory.GetFiles(
-                             AtomFileSystem.AtomArtifactsDirectory / Projects.DecSm_Atom_Tool.Name,
+                foreach (var atomToolPackagePath in RootedFileSystem.Directory.GetFiles(
+                             RootedFileSystem.AtomArtifactsDirectory / Projects.Invex_Atom_Tool.Name,
                              "*.nupkg",
                              SearchOption.AllDirectories))
                     await PushPackageToNuget(
-                        AtomFileSystem.AtomArtifactsDirectory / Projects.DecSm_Atom_Tool.Name / atomToolPackagePath,
+                        RootedFileSystem.AtomArtifactsDirectory / Projects.Invex_Atom_Tool.Name / atomToolPackagePath,
                         NugetFeed,
                         NugetApiKey,
                         cancellationToken: cancellationToken);
@@ -42,7 +42,7 @@ internal interface IDeployTargets : INugetHelper, IGithubReleaseHelper, ISetupBu
             .RequiresParam(nameof(NugetApiKey))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildId))
             .ConsumesArtifacts(nameof(IBuildTargets.PackProjects), IBuildTargets.ProjectsToPack)
-            .ConsumesArtifact(nameof(IBuildTargets.PackTool), Projects.DecSm_Atom_Tool.Name, DevopsPlatformNames)
+            .ConsumesArtifact(nameof(IBuildTargets.PackTool), Projects.Invex_Atom_Tool.Name, DevopsPlatformNames)
             .DependsOn(nameof(ITestTargets.TestProjects))
             .Executes(() => Logger.LogInformation("Simulating push to Nuget feed"));
 
@@ -52,7 +52,7 @@ internal interface IDeployTargets : INugetHelper, IGithubReleaseHelper, ISetupBu
             .RequiresParam(nameof(GithubToken))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildVersion))
             .ConsumesArtifacts(nameof(IBuildTargets.PackProjects), IBuildTargets.ProjectsToPack)
-            .ConsumesArtifact(nameof(IBuildTargets.PackTool), Projects.DecSm_Atom_Tool.Name, PlatformNames)
+            .ConsumesArtifact(nameof(IBuildTargets.PackTool), Projects.Invex_Atom_Tool.Name, PlatformNames)
             .ConsumesArtifacts(nameof(ITestTargets.TestProjects),
                 ITestTargets.ProjectsToTest,
                 PlatformNames.SelectMany(platform => FrameworkNames.Select(framework => $"{platform}-{framework}")))

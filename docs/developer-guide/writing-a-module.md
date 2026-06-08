@@ -16,13 +16,13 @@ A module is a NuGet package that provides one or more of:
 1. Create a class library:
 
    ```shell
-   dotnet new classlib -n DecSm.Atom.Module.MyModule
+   dotnet new classlib -n Invex.Atom.Module.MyModule
    ```
 
-2. Add a reference to `DecSm.Atom.Build` (and `DecSm.Atom.Workflows` if your module contributes workflow features):
+2. Add a reference to `Invex.Atom.Build` (and `Invex.Atom.Workflows` if your module contributes workflow features):
 
    ```xml
-   <PackageReference Include="DecSm.Atom.Build" Version="2.*" />
+   <PackageReference Include="Invex.Atom.Build" Version="2.*" />
    ```
 
 3. Create a `.props` file (optional but recommended) to auto-import usings when consumers reference your package.
@@ -56,7 +56,7 @@ public partial interface IMyModule : IBuildAccessor
 
 - **`[ConfigureHostBuilder]`** + `static partial void ConfigureBuilder` — the source generator calls this method when a
   consumer implements the interface. This is how you register services.
-- **`IBuildAccessor`** — gives the interface access to `Logger`, `AtomFileSystem`, `ProcessRunner`, `GetParam`, etc.
+- **`IBuildAccessor`** — gives the interface access to `Logger`, `RootedFileSystem`, `ProcessRunner`, `GetParam`, etc.
 - **Default implementations** — both targets and parameters use default interface members, so consumers don't need to
   implement anything.
 
@@ -92,7 +92,7 @@ The consumer just implements the interface — all targets, parameters, and serv
 
 ## Conventions
 
-- Name your package `DecSm.Atom.Module.<Name>` (or your own prefix).
+- Name your package `Invex.Atom.Module.<Name>` (or your own prefix).
 - Prefix parameter CLI names to avoid collisions (e.g. `mymodule-setting`).
 - Mark the interface with `[PublicAPI]` for API documentation.
 - Provide XML doc comments on all public members.

@@ -54,88 +54,52 @@ jobs:
           nuget-dry-run: true
 
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Build
+        displayName: Invex.Atom.Build
         inputs:
-          artifactName: DecSm.Atom.Build
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Build
+          artifactName: Invex.Atom.Build
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Build
 
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.FileSystem
+        displayName: Invex.Atom.Workflows
         inputs:
-          artifactName: DecSm.Atom.FileSystem
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.FileSystem
+          artifactName: Invex.Atom.Workflows
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Workflows
 
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Process
+        displayName: Invex.Atom.Module.AzureKeyVault
         inputs:
-          artifactName: DecSm.Atom.Process
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Process
+          artifactName: Invex.Atom.Module.AzureKeyVault
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.AzureKeyVault
 
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.SemanticVersion
+        displayName: Invex.Atom.Module.AzureStorage
         inputs:
-          artifactName: DecSm.Atom.SemanticVersion
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.SemanticVersion
+          artifactName: Invex.Atom.Module.AzureStorage
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.AzureStorage
 
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Workflows
+        displayName: Invex.Atom.Module.DevopsWorkflows
         inputs:
-          artifactName: DecSm.Atom.Workflows
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Workflows
+          artifactName: Invex.Atom.Module.DevopsWorkflows
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.DevopsWorkflows
 
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.StructuredText
+        displayName: Invex.Atom.Module.Dotnet
         inputs:
-          artifactName: DecSm.StructuredText
-          targetPath: $(Build.BinariesDirectory)/DecSm.StructuredText
+          artifactName: Invex.Atom.Module.Dotnet
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.Dotnet
 
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.StructuredText.AzureDevopsPipelines
+        displayName: Invex.Atom.Module.GitVersion
         inputs:
-          artifactName: DecSm.StructuredText.AzureDevopsPipelines
-          targetPath: $(Build.BinariesDirectory)/DecSm.StructuredText.AzureDevopsPipelines
+          artifactName: Invex.Atom.Module.GitVersion
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.GitVersion
 
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.StructuredText.GithubActions
+        displayName: Invex.Atom.Module.GithubWorkflows
         inputs:
-          artifactName: DecSm.StructuredText.GithubActions
-          targetPath: $(Build.BinariesDirectory)/DecSm.StructuredText.GithubActions
-
-      - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Module.AzureKeyVault
-        inputs:
-          artifactName: DecSm.Atom.Module.AzureKeyVault
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Module.AzureKeyVault
-
-      - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Module.AzureStorage
-        inputs:
-          artifactName: DecSm.Atom.Module.AzureStorage
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Module.AzureStorage
-
-      - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Module.DevopsWorkflows
-        inputs:
-          artifactName: DecSm.Atom.Module.DevopsWorkflows
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Module.DevopsWorkflows
-
-      - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Module.Dotnet
-        inputs:
-          artifactName: DecSm.Atom.Module.Dotnet
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Module.Dotnet
-
-      - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Module.GitVersion
-        inputs:
-          artifactName: DecSm.Atom.Module.GitVersion
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Module.GitVersion
-
-      - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Module.GithubWorkflows
-        inputs:
-          artifactName: DecSm.Atom.Module.GithubWorkflows
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Module.GithubWorkflows
+          artifactName: Invex.Atom.Module.GithubWorkflows
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.GithubWorkflows
 
   - job: PackTool
     displayName: PackTool
@@ -169,10 +133,10 @@ jobs:
           build-slice: $(job-runs-on)
 
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Tool
+        displayName: Invex.Atom.Tool
         inputs:
-          artifactName: DecSm.Atom.Tool-$(job-runs-on)
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Tool
+          artifactName: Invex.Atom.Tool-$(job-runs-on)
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Tool
 
   - job: TestProjects
     displayName: TestProjects
@@ -238,40 +202,46 @@ jobs:
           build-slice: $(job-runs-on)-$(test-framework)
 
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Build.Tests
+        displayName: Invex.Atom.Build.Tests
         inputs:
-          artifactName: DecSm.Atom.Build.Tests-$(job-runs-on)-$(test-framework)
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Build.Tests
+          artifactName: Invex.Atom.Build.Tests-$(job-runs-on)-$(test-framework)
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Build.Tests
 
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Build.Analyzers.Tests
+        displayName: Invex.Atom.Build.Analyzers.Tests
         inputs:
-          artifactName: DecSm.Atom.Build.Analyzers.Tests-$(job-runs-on)-$(test-framework)
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Build.Analyzers.Tests
+          artifactName: Invex.Atom.Build.Analyzers.Tests-$(job-runs-on)-$(test-framework)
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Build.Analyzers.Tests
 
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Build.SourceGenerators.Tests
+        displayName: Invex.Atom.Build.SourceGenerators.Tests
         inputs:
-          artifactName: DecSm.Atom.Build.SourceGenerators.Tests-$(job-runs-on)-$(test-framework)
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Build.SourceGenerators.Tests
+          artifactName: Invex.Atom.Build.SourceGenerators.Tests-$(job-runs-on)-$(test-framework)
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Build.SourceGenerators.Tests
 
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Module.DevopsWorkflows.Tests
+        displayName: Invex.Atom.Module.DevopsWorkflows.Tests
         inputs:
-          artifactName: DecSm.Atom.Module.DevopsWorkflows.Tests-$(job-runs-on)-$(test-framework)
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Module.DevopsWorkflows.Tests
+          artifactName: Invex.Atom.Module.DevopsWorkflows.Tests-$(job-runs-on)-$(test-framework)
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.DevopsWorkflows.Tests
 
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Module.GithubWorkflows.Tests
+        displayName: Invex.Atom.Module.GithubWorkflows.Tests
         inputs:
-          artifactName: DecSm.Atom.Module.GithubWorkflows.Tests-$(job-runs-on)-$(test-framework)
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Module.GithubWorkflows.Tests
+          artifactName: Invex.Atom.Module.GithubWorkflows.Tests-$(job-runs-on)-$(test-framework)
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.GithubWorkflows.Tests
 
       - task: PublishPipelineArtifact@1
-        displayName: DecSm.Atom.Tool.Tests
+        displayName: Invex.Atom.Workflows.Tests
         inputs:
-          artifactName: DecSm.Atom.Tool.Tests-$(job-runs-on)-$(test-framework)
-          targetPath: $(Build.BinariesDirectory)/DecSm.Atom.Tool.Tests
+          artifactName: Invex.Atom.Workflows.Tests-$(job-runs-on)-$(test-framework)
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Workflows.Tests
+
+      - task: PublishPipelineArtifact@1
+        displayName: Invex.Atom.Tool.Tests
+        inputs:
+          artifactName: Invex.Atom.Tool.Tests-$(job-runs-on)-$(test-framework)
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Tool.Tests
 
   - job: PushToNugetDevops
     displayName: PushToNugetDevops
@@ -293,106 +263,70 @@ jobs:
           version: 10.0.x
 
       - task: DownloadPipelineArtifact@2
-        displayName: DecSm.Atom.Build
+        displayName: Invex.Atom.Build
         inputs:
-          artifact: DecSm.Atom.Build
-          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.Build
+          artifact: Invex.Atom.Build
+          path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Build
 
       - task: DownloadPipelineArtifact@2
-        displayName: DecSm.Atom.FileSystem
+        displayName: Invex.Atom.Workflows
         inputs:
-          artifact: DecSm.Atom.FileSystem
-          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.FileSystem
+          artifact: Invex.Atom.Workflows
+          path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Workflows
 
       - task: DownloadPipelineArtifact@2
-        displayName: DecSm.Atom.Process
+        displayName: Invex.Atom.Module.AzureKeyVault
         inputs:
-          artifact: DecSm.Atom.Process
-          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.Process
+          artifact: Invex.Atom.Module.AzureKeyVault
+          path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Module.AzureKeyVault
 
       - task: DownloadPipelineArtifact@2
-        displayName: DecSm.Atom.SemanticVersion
+        displayName: Invex.Atom.Module.AzureStorage
         inputs:
-          artifact: DecSm.Atom.SemanticVersion
-          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.SemanticVersion
+          artifact: Invex.Atom.Module.AzureStorage
+          path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Module.AzureStorage
 
       - task: DownloadPipelineArtifact@2
-        displayName: DecSm.Atom.Workflows
+        displayName: Invex.Atom.Module.DevopsWorkflows
         inputs:
-          artifact: DecSm.Atom.Workflows
-          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.Workflows
+          artifact: Invex.Atom.Module.DevopsWorkflows
+          path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Module.DevopsWorkflows
 
       - task: DownloadPipelineArtifact@2
-        displayName: DecSm.StructuredText
+        displayName: Invex.Atom.Module.Dotnet
         inputs:
-          artifact: DecSm.StructuredText
-          path: $(Build.ArtifactStagingDirectory)/DecSm.StructuredText
+          artifact: Invex.Atom.Module.Dotnet
+          path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Module.Dotnet
 
       - task: DownloadPipelineArtifact@2
-        displayName: DecSm.StructuredText.AzureDevopsPipelines
+        displayName: Invex.Atom.Module.GitVersion
         inputs:
-          artifact: DecSm.StructuredText.AzureDevopsPipelines
-          path: $(Build.ArtifactStagingDirectory)/DecSm.StructuredText.AzureDevopsPipelines
+          artifact: Invex.Atom.Module.GitVersion
+          path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Module.GitVersion
 
       - task: DownloadPipelineArtifact@2
-        displayName: DecSm.StructuredText.GithubActions
+        displayName: Invex.Atom.Module.GithubWorkflows
         inputs:
-          artifact: DecSm.StructuredText.GithubActions
-          path: $(Build.ArtifactStagingDirectory)/DecSm.StructuredText.GithubActions
+          artifact: Invex.Atom.Module.GithubWorkflows
+          path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Module.GithubWorkflows
 
       - task: DownloadPipelineArtifact@2
-        displayName: DecSm.Atom.Module.AzureKeyVault
+        displayName: Invex.Atom.Tool
         inputs:
-          artifact: DecSm.Atom.Module.AzureKeyVault
-          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.Module.AzureKeyVault
+          artifact: Invex.Atom.Tool-windows-latest
+          path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Tool
 
       - task: DownloadPipelineArtifact@2
-        displayName: DecSm.Atom.Module.AzureStorage
+        displayName: Invex.Atom.Tool
         inputs:
-          artifact: DecSm.Atom.Module.AzureStorage
-          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.Module.AzureStorage
+          artifact: Invex.Atom.Tool-ubuntu-latest
+          path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Tool
 
       - task: DownloadPipelineArtifact@2
-        displayName: DecSm.Atom.Module.DevopsWorkflows
+        displayName: Invex.Atom.Tool
         inputs:
-          artifact: DecSm.Atom.Module.DevopsWorkflows
-          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.Module.DevopsWorkflows
-
-      - task: DownloadPipelineArtifact@2
-        displayName: DecSm.Atom.Module.Dotnet
-        inputs:
-          artifact: DecSm.Atom.Module.Dotnet
-          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.Module.Dotnet
-
-      - task: DownloadPipelineArtifact@2
-        displayName: DecSm.Atom.Module.GitVersion
-        inputs:
-          artifact: DecSm.Atom.Module.GitVersion
-          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.Module.GitVersion
-
-      - task: DownloadPipelineArtifact@2
-        displayName: DecSm.Atom.Module.GithubWorkflows
-        inputs:
-          artifact: DecSm.Atom.Module.GithubWorkflows
-          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.Module.GithubWorkflows
-
-      - task: DownloadPipelineArtifact@2
-        displayName: DecSm.Atom.Tool
-        inputs:
-          artifact: DecSm.Atom.Tool-windows-latest
-          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.Tool
-
-      - task: DownloadPipelineArtifact@2
-        displayName: DecSm.Atom.Tool
-        inputs:
-          artifact: DecSm.Atom.Tool-ubuntu-latest
-          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.Tool
-
-      - task: DownloadPipelineArtifact@2
-        displayName: DecSm.Atom.Tool
-        inputs:
-          artifact: DecSm.Atom.Tool-macos-latest
-          path: $(Build.ArtifactStagingDirectory)/DecSm.Atom.Tool
+          artifact: Invex.Atom.Tool-macos-latest
+          path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Tool
 
       - script: dotnet run --project _atom/_atom.csproj PushToNugetDevops --skip --headless
         displayName: PushToNugetDevops

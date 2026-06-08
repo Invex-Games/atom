@@ -7,10 +7,10 @@ affect your build definition.
 
 | Package                             | Role                                                                                                                                                   |
 |-------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `DecSm.Atom.Build.SourceGenerators` | Generates code for `[BuildDefinition]`, `[GenerateEntryPoint]`, `[ConfigureHostBuilder]`, `[GenerateSolutionModel]`, and `[GenerateInterfaceMembers]`. |
-| `DecSm.Atom.Build.Analyzers`        | Reports diagnostics for common mistakes (e.g. forgetting `partial`, missing attributes).                                                               |
+| `Invex.Atom.Build.SourceGenerators` | Generates code for `[BuildDefinition]`, `[GenerateEntryPoint]`, `[ConfigureHostBuilder]`, `[GenerateSolutionModel]`, and `[GenerateInterfaceMembers]`. |
+| `Invex.Atom.Build.Analyzers`        | Reports diagnostics for common mistakes (e.g. forgetting `partial`, missing attributes).                                                               |
 
-Both are automatically referenced when you add `DecSm.Atom.Build`.
+Both are automatically referenced when you add `Invex.Atom.Build`.
 
 ## What Gets Generated
 

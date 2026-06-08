@@ -11,7 +11,7 @@ This guide walks you through creating a minimal Atom build and running it locall
 Create a file called `Build.cs` anywhere on disk:
 
 ```csharp
-#:package DecSm.Atom@2.*
+#:package Invex.Atom@2.*
 
 [BuildDefinition]
 [GenerateEntryPoint]
@@ -46,15 +46,15 @@ For larger builds you'll typically use a dedicated project.
 
    ```shell
    cd _atom
-   dotnet add package DecSm.Atom
+   dotnet add package Invex.Atom
    ```
 
 3. Replace `Program.cs` with a build definition (or use `[GenerateEntryPoint]` to have the entry point generated for
    you). Here's the minimal version with `[GenerateEntryPoint]`:
 
    ```csharp
-   using DecSm.Atom.Build.Definition;
-   using DecSm.Atom.Build.Hosting;
+   using Invex.Atom.Build.Definition;
+   using Invex.Atom.Build.Hosting;
    
    namespace Atom;
    
@@ -80,7 +80,7 @@ For larger builds you'll typically use a dedicated project.
 ### Expected Output
 
 ```
-25-12-16 +10:00  DecSm.Atom.Build.BuildExecutor:
+25-12-16 +10:00  Invex.Atom.Build.BuildExecutor:
 22:46:01.754 INF Executing build
 
 HelloWorld

@@ -23,7 +23,7 @@ your YAML by hand, stick with `BuildDefinition`.
 
 2. Override the `Workflows` property to declare your pipelines.
 
-3. Add a platform module (`DecSm.Atom.Module.GithubWorkflows` or `DecSm.Atom.Module.DevopsWorkflows`) so Atom knows
+3. Add a platform module (`Invex.Atom.Module.GithubWorkflows` or `Invex.Atom.Module.DevopsWorkflows`) so Atom knows
    which YAML format to emit.
 
 4. Run `dotnet run -- GenerateWorkflowFiles` (alias: `Gen`) to write the files.

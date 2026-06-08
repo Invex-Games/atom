@@ -14,16 +14,16 @@
 // or
 // dotnet run -- Hello -i
 
-// These usings are automatically globally included when using DecSm.Atom from a nuget package
+// These usings are automatically globally included when using Invex.Atom from a nuget package
 
-using DecSm.Atom.Build.Definition;
-using DecSm.Atom.Build.Hosting;
-using DecSm.Atom.Build.Params;
+using Invex.Atom.Build.Definition;
+using Invex.Atom.Build.Hosting;
+using Invex.Atom.Build.Params;
 
 namespace Atom;
 
 /// <summary>
-///     This build definition demonstrates how to define and use parameters within a DecSm.Atom build process.
+///     This build definition demonstrates how to define and use parameters within a Invex.Atom build process.
 ///     It showcases required parameters, parameters with default values, and how to retrieve configuration from
 ///     `appsettings.json`.
 /// </summary>
@@ -39,7 +39,7 @@ namespace Atom;
 ///         <code>dotnet run -- Hello --my-name World</code>
 ///     </para>
 ///     <para>
-///         To have DecSm.Atom interactively prompt for required parameters, use the `--interactive` or `-i` flag:
+///         To have Invex.Atom interactively prompt for required parameters, use the `--interactive` or `-i` flag:
 ///         <code>dotnet run -- Hello --interactive</code>
 ///         or
 ///         <code>dotnet run -- Hello -i</code>
@@ -63,7 +63,7 @@ internal partial class Build : BuildDefinition
     ///     Defines a parameter named "config-item-1" which is populated from `appsettings.json`.
     /// </summary>
     /// <remarks>
-    ///     This property demonstrates how DecSm.Atom can automatically bind configuration values
+    ///     This property demonstrates how Invex.Atom can automatically bind configuration values
     ///     from `appsettings.json` to build parameters. The name "config-item-1" in the `ParamDefinition`
     ///     attribute corresponds to a key in the `appsettings.json` file.
     /// </remarks>

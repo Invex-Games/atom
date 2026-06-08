@@ -403,8 +403,8 @@ FodyWeavers.xsd
 .vscode/
 
 # Atom
-!src/DecSm.Atom.Build/Artifacts
-!src/DecSm.Atom.Tests/Artifacts
+!src/Invex.Atom.Build/Artifacts
+!src/Invex.Atom.Tests/Artifacts
 atom-publish
 
 # DocFX

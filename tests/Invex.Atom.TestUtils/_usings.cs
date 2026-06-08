@@ -1,0 +1,17 @@
+﻿global using System.IO.Abstractions;
+global using System.IO.Abstractions.TestingHelpers;
+global using System.Text;
+global using System.Text.RegularExpressions;
+global using Invex.Atom.Build.Args;
+global using Invex.Atom.Build.Artifacts;
+global using Invex.Atom.Build.BuildOptions;
+global using Invex.Atom.Build.BuildInfo;
+global using Invex.Atom.Build.Definition;
+global using Invex.Atom.Build.Hosting;
+global using Invex.Atom.Build.Util.Scope;
+global using JetBrains.Annotations;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Hosting;
+global using Microsoft.Extensions.Logging;
+global using Spectre.Console;
+global using Spectre.Console.Testing;

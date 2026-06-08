@@ -35,14 +35,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\DecSm.Atom.Module.AzureKeyVault\DecSm.Atom.Module.AzureKeyVault.csproj" />
-    <ProjectReference Include="..\src\DecSm.Atom.Module.DevopsWorkflows\DecSm.Atom.Module.DevopsWorkflows.csproj" />
-    <ProjectReference Include="..\src\DecSm.Atom.Module.Dotnet\DecSm.Atom.Module.Dotnet.csproj" />
-    <ProjectReference Include="..\src\DecSm.Atom.Module.GitVersion\DecSm.Atom.Module.GitVersion.csproj" />
-    <ProjectReference Include="..\src\DecSm.Atom.Workflows\DecSm.Atom.Workflows.csproj" />
-    <ProjectReference Include="..\src\DecSm.Atom.Module.GithubWorkflows\DecSm.Atom.Module.GithubWorkflows.csproj" />
-    <ProjectReference Include="..\src\DecSm.Atom.Build.SourceGenerators\DecSm.Atom.Build.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    <ProjectReference Include="..\src\DecSm.Atom.Build.Analyzers\DecSm.Atom.Build.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\src\Invex.Atom.Module.AzureKeyVault\Invex.Atom.Module.AzureKeyVault.csproj" />
+    <ProjectReference Include="..\src\Invex.Atom.Module.DevopsWorkflows\Invex.Atom.Module.DevopsWorkflows.csproj" />
+    <ProjectReference Include="..\src\Invex.Atom.Module.Dotnet\Invex.Atom.Module.Dotnet.csproj" />
+    <ProjectReference Include="..\src\Invex.Atom.Module.GitVersion\Invex.Atom.Module.GitVersion.csproj" />
+    <ProjectReference Include="..\src\Invex.Atom.Workflows\Invex.Atom.Workflows.csproj" />
+    <ProjectReference Include="..\src\Invex.Atom.Module.GithubWorkflows\Invex.Atom.Module.GithubWorkflows.csproj" />
+    <ProjectReference Include="..\src\Invex.Atom.Build.SourceGenerators\Invex.Atom.Build.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\src\Invex.Atom.Build.Analyzers\Invex.Atom.Build.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 # Module: GitVersion
 
-**Package:** `DecSm.Atom.Module.GitVersion`
+**Package:** `Invex.Atom.Module.GitVersion`
 
 Integrates [GitVersion](https://gitversion.net/) to provide automatic build ID and version numbers based on your Git
 history.
@@ -8,7 +8,7 @@ history.
 ## Installation
 
 ```shell
-dotnet add package DecSm.Atom.Module.GitVersion
+dotnet add package Invex.Atom.Module.GitVersion
 ```
 
 ## Usage

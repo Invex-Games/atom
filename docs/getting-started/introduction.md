@@ -20,13 +20,13 @@ Atom is split into several NuGet packages so you only pull in what you need:
 
 | Package                      | Purpose                                                                    |
 |------------------------------|----------------------------------------------------------------------------|
-| `DecSm.Atom.Build`           | Core framework — build definitions, targets, parameters, hosting.          |
-| `DecSm.Atom.Workflows`       | Workflow definitions, triggers, and YAML generation.                       |
-| `DecSm.Atom.FileSystem`      | `IAtomFileSystem`, `RootedPath`, path providers, and file transformations. |
-| `DecSm.Atom.Process`         | `IProcessRunner` for executing external tools.                             |
-| `DecSm.Atom.SemanticVersion` | Semantic versioning utilities.                                             |
-| `DecSm.Atom.Module.*`        | First-party modules (Dotnet, GitVersion, AzureKeyVault, etc.).             |
-| `DecSm.Atom.Tool`            | The `atom` .NET global tool for running builds from the command line.      |
+| `Invex.Atom.Build`           | Core framework — build definitions, targets, parameters, hosting.          |
+| `Invex.Atom.Workflows`       | Workflow definitions, triggers, and YAML generation.                       |
+| `Invex.Atom.FileSystem`      | `IRootedFileSystem`, `RootedPath`, path providers, and file transformations. |
+| `Invex.Atom.Process`         | `IProcessRunner` for executing external tools.                             |
+| `Invex.Atom.SemanticVersion` | Semantic versioning utilities.                                             |
+| `Invex.Atom.Module.*`        | First-party modules (Dotnet, GitVersion, AzureKeyVault, etc.).             |
+| `Invex.Atom.Tool`            | The `atom` .NET global tool for running builds from the command line.      |
 
 ## How It Works
 

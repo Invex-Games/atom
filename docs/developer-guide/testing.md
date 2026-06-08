@@ -1,18 +1,18 @@
 # Testing
 
-**Package:** `DecSm.Atom.TestUtils`
+**Package:** `Invex.Atom.TestUtils`
 
 Atom provides test utilities for verifying your build definitions, targets, and modules in unit/integration tests.
 
 ## Installation
 
 ```shell
-dotnet add package DecSm.Atom.TestUtils
+dotnet add package Invex.Atom.TestUtils
 ```
 
 ## Usage
 
-`DecSm.Atom.TestUtils` provides helpers for:
+`Invex.Atom.TestUtils` provides helpers for:
 
 - Creating test build definitions
 - Mocking services (file system, process runner, etc.)

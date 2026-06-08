@@ -1,6 +1,6 @@
 # Module: Azure Storage
 
-**Package:** `DecSm.Atom.Module.AzureStorage`
+**Package:** `Invex.Atom.Module.AzureStorage`
 
 Registers Azure Blob Storage as the artifact provider, enabling artifact upload and download via Azure Storage
 containers.
@@ -8,7 +8,7 @@ containers.
 ## Installation
 
 ```shell
-dotnet add package DecSm.Atom.Module.AzureStorage
+dotnet add package Invex.Atom.Module.AzureStorage
 ```
 
 ## Usage

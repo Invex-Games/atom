@@ -23,7 +23,7 @@ internal partial class Build : WorkflowBuildDefinition, IGitVersion, IAzureKeyVa
 1. Install the NuGet package:
 
    ```shell
-   dotnet add package DecSm.Atom.Module.GitVersion
+   dotnet add package Invex.Atom.Module.GitVersion
    ```
 
 2. Implement the module's interface on your build class:
@@ -39,12 +39,12 @@ internal partial class Build : WorkflowBuildDefinition, IGitVersion, IAzureKeyVa
 
 | Package                             | Interface               | Description                                        |
 |-------------------------------------|-------------------------|----------------------------------------------------|
-| `DecSm.Atom.Module.Dotnet`          | *(various)*             | .NET CLI helpers (build, test, pack, publish)      |
-| `DecSm.Atom.Module.GithubWorkflows` | `IGithubWorkflows`      | GitHub Actions workflow writer and helpers         |
-| `DecSm.Atom.Module.DevopsWorkflows` | `IDevopsWorkflows`      | Azure DevOps Pipelines workflow writer and helpers |
-| `DecSm.Atom.Module.AzureKeyVault`   | `IAzureKeyVault`        | Azure Key Vault secrets provider                   |
-| `DecSm.Atom.Module.AzureStorage`    | `IAzureArtifactStorage` | Azure Blob Storage artifact provider               |
-| `DecSm.Atom.Module.GitVersion`      | `IGitVersion`           | GitVersion-based build ID and version providers    |
+| `Invex.Atom.Module.Dotnet`          | *(various)*             | .NET CLI helpers (build, test, pack, publish)      |
+| `Invex.Atom.Module.GithubWorkflows` | `IGithubWorkflows`      | GitHub Actions workflow writer and helpers         |
+| `Invex.Atom.Module.DevopsWorkflows` | `IDevopsWorkflows`      | Azure DevOps Pipelines workflow writer and helpers |
+| `Invex.Atom.Module.AzureKeyVault`   | `IAzureKeyVault`        | Azure Key Vault secrets provider                   |
+| `Invex.Atom.Module.AzureStorage`    | `IAzureArtifactStorage` | Azure Blob Storage artifact provider               |
+| `Invex.Atom.Module.GitVersion`      | `IGitVersion`           | GitVersion-based build ID and version providers    |
 
 ## Module Conventions
 

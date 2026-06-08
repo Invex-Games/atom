@@ -1,5 +1,0 @@
-<Project>
-    <ItemGroup>
-        <Using Include="DecSm.Atom.SemanticVersion" Global="true"/>
-    </ItemGroup>
-</Project>

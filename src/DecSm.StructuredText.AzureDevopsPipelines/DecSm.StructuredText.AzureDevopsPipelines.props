@@ -1,6 +1,0 @@
-<Project>
-    <ItemGroup>
-<!--        <Using Include="DecSm.StructuredText.AzureDevopsPipelines" Global="true"/>-->
-<!--        <Using Include="DecSm.StructuredText.AzureDevopsPipelines.DevopsPipelineModel" Global="true"/>-->
-    </ItemGroup>
-</Project>

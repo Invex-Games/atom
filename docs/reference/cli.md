@@ -15,7 +15,7 @@ dotnet run -- <targets> [options] [--param-name value ...]
 Install the tool:
 
 ```shell
-dotnet tool install --global DecSm.Atom.Tool
+dotnet tool install --global Invex.Atom.Tool
 ```
 
 Then run:
@@ -87,7 +87,7 @@ dotnet run -- -h
 
 ## The `atom` Tool
 
-The `atom` global tool (`DecSm.Atom.Tool`) provides the same interface but discovers your build project automatically:
+The `atom` global tool (`Invex.Atom.Tool`) provides the same interface but discovers your build project automatically:
 
 ```shell
 atom Compile Test --verbose

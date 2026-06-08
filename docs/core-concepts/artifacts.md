@@ -65,8 +65,8 @@ Modules can register alternative providers:
 
 | Provider                    | Package                          | Storage            |
 |-----------------------------|----------------------------------|--------------------|
-| (default)                   | `DecSm.Atom.Build`               | Local file system  |
-| `AzureBlobArtifactProvider` | `DecSm.Atom.Module.AzureStorage` | Azure Blob Storage |
+| (default)                   | `Invex.Atom.Build`               | Local file system  |
+| `AzureBlobArtifactProvider` | `Invex.Atom.Module.AzureStorage` | Azure Blob Storage |
 
 ### Provider API
 

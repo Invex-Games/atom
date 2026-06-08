@@ -2,15 +2,15 @@
 // In the console, run the following command to execute the build:
 // dotnet run -- HelloWorld
 
-// These usings are automatically globally included when using DecSm.Atom from a nuget package
+// These usings are automatically globally included when using Invex.Atom from a nuget package
 
-using DecSm.Atom.Build.Definition;
-using DecSm.Atom.Build.Hosting;
+using Invex.Atom.Build.Definition;
+using Invex.Atom.Build.Hosting;
 
 namespace Atom;
 
 /// <summary>
-///     This build definition provides a minimal example of how to create a build process using DecSm.Atom.
+///     This build definition provides a minimal example of how to create a build process using Invex.Atom.
 ///     It defines a single target, <see cref="HelloWorld" />, which prints a "Hello, World!" message to the console.
 /// </summary>
 /// <remarks>

@@ -1,7 +1,7 @@
 # SetupBuildInfo
 
 **Interface:** `ISetupBuildInfo`  
-**Package:** `DecSm.Atom.Build`
+**Package:** `Invex.Atom.Build`
 
 The `SetupBuildInfo` target initialises the build's identity — name, ID, version, and timestamp — and makes them
 available as workflow variables.

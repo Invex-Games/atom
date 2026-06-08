@@ -1,6 +1,6 @@
 # Module: GitHub Workflows
 
-**Package:** `DecSm.Atom.Module.GithubWorkflows`
+**Package:** `Invex.Atom.Module.GithubWorkflows`
 
 Adds GitHub Actions support to Atom — workflow YAML generation, GitHub-specific build options, variable handling, and
 access to GitHub environment variables.
@@ -8,7 +8,7 @@ access to GitHub environment variables.
 ## Installation
 
 ```shell
-dotnet add package DecSm.Atom.Module.GithubWorkflows
+dotnet add package Invex.Atom.Module.GithubWorkflows
 ```
 
 ## Usage

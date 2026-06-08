@@ -73,7 +73,7 @@ build with the correct targets.
 | Workflow triggers              | Push, pull request, manual (with inputs).                                                                 |
 | Matrix dimensions              | Run a target across multiple OS or framework combinations.                                                |
 | Workflow options               | Checkout steps, deployment environments, run conditions, etc.                                             |
-| Platform modules               | `DecSm.Atom.Module.GithubWorkflows` / `DecSm.Atom.Module.DevopsWorkflows` add platform-specific features. |
+| Platform modules               | `Invex.Atom.Module.GithubWorkflows` / `Invex.Atom.Module.DevopsWorkflows` add platform-specific features. |
 
 ### When to upgrade
 

@@ -1,0 +1,5 @@
+<Project>
+    <ItemGroup>
+        <Using Include="Invex.Atom.Module.AzureStorage" Global="true"/>
+    </ItemGroup>
+</Project>

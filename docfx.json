@@ -5,17 +5,17 @@
       "src": [
         {
           "files": [
-            "src/DecSm.Atom.Build/DecSm.Atom.Build.csproj",
-            "src/DecSm.Atom.Workflows/DecSm.Atom.Workflows.csproj",
-            "src/DecSm.Atom.FileSystem/DecSm.Atom.FileSystem.csproj",
-            "src/DecSm.Atom.Process/DecSm.Atom.Process.csproj",
-            "src/DecSm.Atom.SemanticVersion/DecSm.Atom.SemanticVersion.csproj",
-            "src/DecSm.Atom.Module.AzureKeyVault/DecSm.Atom.Module.AzureKeyVault.csproj",
-            "src/DecSm.Atom.Module.AzureStorage/DecSm.Atom.Module.AzureStorage.csproj",
-            "src/DecSm.Atom.Module.DevopsWorkflows/DecSm.Atom.Module.DevopsWorkflows.csproj",
-            "src/DecSm.Atom.Module.Dotnet/DecSm.Atom.Module.Dotnet.csproj",
-            "src/DecSm.Atom.Module.GithubWorkflows/DecSm.Atom.Module.GithubWorkflows.csproj",
-            "src/DecSm.Atom.Module.GitVersion/DecSm.Atom.Module.GitVersion.csproj"
+            "src/Invex.Atom.Build/Invex.Atom.Build.csproj",
+            "src/Invex.Atom.Workflows/Invex.Atom.Workflows.csproj",
+            "src/Invex.Atom.FileSystem/Invex.Atom.FileSystem.csproj",
+            "src/Invex.Atom.Process/Invex.Atom.Process.csproj",
+            "src/Invex.Atom.SemanticVersion/Invex.Atom.SemanticVersion.csproj",
+            "src/Invex.Atom.Module.AzureKeyVault/Invex.Atom.Module.AzureKeyVault.csproj",
+            "src/Invex.Atom.Module.AzureStorage/Invex.Atom.Module.AzureStorage.csproj",
+            "src/Invex.Atom.Module.DevopsWorkflows/Invex.Atom.Module.DevopsWorkflows.csproj",
+            "src/Invex.Atom.Module.Dotnet/Invex.Atom.Module.Dotnet.csproj",
+            "src/Invex.Atom.Module.GithubWorkflows/Invex.Atom.Module.GithubWorkflows.csproj",
+            "src/Invex.Atom.Module.GitVersion/Invex.Atom.Module.GitVersion.csproj"
           ]
         }
       ],

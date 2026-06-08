@@ -1,6 +1,6 @@
 # Module: Azure Key Vault
 
-**Package:** `DecSm.Atom.Module.AzureKeyVault`
+**Package:** `Invex.Atom.Module.AzureKeyVault`
 
 Integrates Azure Key Vault as a secrets provider, allowing your build to resolve `[SecretDefinition]` parameters from a
 vault.
@@ -8,7 +8,7 @@ vault.
 ## Installation
 
 ```shell
-dotnet add package DecSm.Atom.Module.AzureKeyVault
+dotnet add package Invex.Atom.Module.AzureKeyVault
 ```
 
 ## Usage

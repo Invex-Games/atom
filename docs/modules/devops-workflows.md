@@ -1,6 +1,6 @@
 # Module: DevOps Workflows
 
-**Package:** `DecSm.Atom.Module.DevopsWorkflows`
+**Package:** `Invex.Atom.Module.DevopsWorkflows`
 
 Adds Azure DevOps Pipelines support to Atom — pipeline YAML generation, DevOps-specific options, and access to Azure
 DevOps environment variables.
@@ -8,7 +8,7 @@ DevOps environment variables.
 ## Installation
 
 ```shell
-dotnet add package DecSm.Atom.Module.DevopsWorkflows
+dotnet add package Invex.Atom.Module.DevopsWorkflows
 ```
 
 ## Usage
