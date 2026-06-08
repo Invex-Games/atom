@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Invex.Analyzers.PublicApiSurface" Version="0.1.0-rc.3" PrivateAssets="all" />
+    <PackageReference Include="Invex.Analyzers.PublicApiSurface" Version="0.1.0" PrivateAssets="all" />
     <PackageReference Include="Invex.StructuredText" Version="0.3.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.8" />
@@ -19,7 +19,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Spectre.Console" Version="0.55.2" />
+    <PackageReference Include="Spectre.Console" Version="0.56.0" />
     <PackageReference Include="System.IO.Abstractions" Version="22.1.1" />
     <PackageReference Include="TestableIO.System.IO.Abstractions.Analyzers" Version="2022.0.0">
       <PrivateAssets>all</PrivateAssets>
