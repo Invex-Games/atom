@@ -5,7 +5,6 @@ namespace Atom;
 [GenerateSolutionModel]
 internal interface IBuild : IWorkflowBuildDefinition,
     IDotnetUserSecrets,
-    IAzureKeyVault,
     IDevopsWorkflows,
     IGithubWorkflows,
     IGitVersion,
@@ -44,7 +43,6 @@ internal interface IBuild : IWorkflowBuildDefinition,
     [
         BuildOptions.GitVersion.ProvideBuildId,
         BuildOptions.GitVersion.ProvideBuildVersion,
-        BuildOptions.AzureKeyVault.UseAzureKeyVault,
         BuildOptions.Steps.SetupDotnet.Dotnet100X(),
     ];
 
@@ -182,7 +180,10 @@ internal interface IBuild : IWorkflowBuildDefinition,
                             .EqualTo(false)),
                     ],
                 },
-                new(nameof(PushToNuget)),
+                new(nameof(PushToNuget))
+                {
+                    Options = [BuildOptions.Inject.Secret(nameof(NugetApiKey))],
+                },
                 new(nameof(PushToRelease))
                 {
                     Options =

@@ -333,8 +333,4 @@ jobs:
         name: PushToNugetDevops
         env:
           build-id: $(build-id)
-          azure-vault-app-secret: $(AZURE_VAULT_APP_SECRET)
-          azure-vault-address: $(AZURE_VAULT_ADDRESS)
-          azure-vault-tenant-id: $(AZURE_VAULT_TENANT_ID)
-          azure-vault-app-id: $(AZURE_VAULT_APP_ID)
           nuget-dry-run: true

@@ -1,8 +1,8 @@
 # Atom
 
-[![Validate](https://github.com/DecSmith42/atom/actions/workflows/Validate.yml/badge.svg)](https://github.com/DecSmith42/atom/actions/workflows/Validate.yml)
-[![Build](https://github.com/DecSmith42/atom/actions/workflows/Build.yml/badge.svg)](https://github.com/DecSmith42/atom/actions/workflows/Build.yml)
-[![Dependabot Updates](https://github.com/DecSmith42/atom/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/DecSmith42/atom/actions/workflows/dependabot/dependabot-updates)
+[![Validate](https://github.com/Invex-Games/atom/actions/workflows/Validate.yml/badge.svg)](https://github.com/Invex-Games/atom/actions/workflows/Validate.yml)
+[![Build](https://github.com/Invex-Games/atom/actions/workflows/Build.yml/badge.svg)](https://github.com/Invex-Games/atom/actions/workflows/Build.yml)
+[![Dependabot Updates](https://github.com/Invex-Games/atom/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/Invex-Games/atom/actions/workflows/dependabot/dependabot-updates)
 
 Atom is an opinionated, type-safe build automation framework for .NET. It enables you to define your build logic in C#,
 debug it like standard code, and automatically generate CI/CD configuration files for GitHub Actions and Azure DevOps.
@@ -367,7 +367,7 @@ Reduces boilerplate by automatically discovering targets and parameters.
     ```
     26-06-06 +10:00  Invex.Atom.Module.GithubWorkflows.GithubActions.GithubWorkflowFileWriter:                                               
     01:38:57.388 INF Writing new workflow file:                                  
-                     L:\Repos\DecSm\atom\.github\workflows\Hello.yml             
+                     L:\Repos\Invex-Games\atom\.github\workflows\Hello.yml             
                                                                                  
     
     26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:

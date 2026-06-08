@@ -35,7 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Invex.Atom.Module.AzureKeyVault\Invex.Atom.Module.AzureKeyVault.csproj" />
     <ProjectReference Include="..\src\Invex.Atom.Module.DevopsWorkflows\Invex.Atom.Module.DevopsWorkflows.csproj" />
     <ProjectReference Include="..\src\Invex.Atom.Module.Dotnet\Invex.Atom.Module.Dotnet.csproj" />
     <ProjectReference Include="..\src\Invex.Atom.Module.GitVersion\Invex.Atom.Module.GitVersion.csproj" />
