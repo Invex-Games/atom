@@ -243,7 +243,10 @@ internal interface IBuild : IWorkflowBuildDefinition,
                         BuildOptions.Steps.SetupDotnet.Dotnet90X(),
                     ],
                 },
-                new(nameof(PushToNugetDevops)),
+                new(nameof(PushToNugetDevops))
+                {
+                    Options = [BuildOptions.Inject.Secret(nameof(NugetApiKey))],
+                },
             ],
             Types = [WorkflowTypes.Devops.Pipeline],
             Options = [BuildOptions.Inject.Param(nameof(NugetDryRun), true), BuildOptions.Devops.VariableGroup.Atom],
