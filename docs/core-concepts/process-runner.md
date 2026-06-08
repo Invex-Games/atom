@@ -3,6 +3,12 @@
 `IProcessRunner` provides a structured way to execute external processes with logging, output capture, and error
 handling built in.
 
+> [!NOTE]
+> The process runner types (`IProcessRunner`, `ProcessRunOptions`, `ProcessRunResult`) ship in the standalone
+> [`Invex.Process`](https://www.nuget.org/packages/Invex.Process) package, maintained in its own repository. You don't
+> need to reference it directly — it is pulled in transitively by `Invex.Atom.Build` and surfaced through
+> `IBuildAccessor.ProcessRunner`.
+
 ## Basic Usage
 
 Access the process runner via `IBuildAccessor.ProcessRunner`:

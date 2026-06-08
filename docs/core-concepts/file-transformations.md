@@ -4,6 +4,11 @@
 useful when a build step needs a file modified temporarily (e.g. patching a version in a `.csproj`) without permanently
 altering it.
 
+> [!NOTE]
+> `TransformFileScope` and `TransformMultiFileScope` ship in the standalone
+> [`Invex.FileSystem`](https://www.nuget.org/packages/Invex.FileSystem) package, maintained in its own repository. It is
+> pulled in transitively by `Invex.Atom.Build`, so no direct reference is required.
+
 ## How It Works
 
 1. The file's current content is captured.

@@ -18,15 +18,25 @@ full IDE support — IntelliSense, refactoring, and step-through debugging.
 
 Atom is split into several NuGet packages so you only pull in what you need:
 
-| Package                      | Purpose                                                                    |
-|------------------------------|----------------------------------------------------------------------------|
-| `Invex.Atom.Build`           | Core framework — build definitions, targets, parameters, hosting.          |
-| `Invex.Atom.Workflows`       | Workflow definitions, triggers, and YAML generation.                       |
-| `Invex.Atom.FileSystem`      | `IRootedFileSystem`, `RootedPath`, path providers, and file transformations. |
-| `Invex.Atom.Process`         | `IProcessRunner` for executing external tools.                             |
-| `Invex.Atom.SemanticVersion` | Semantic versioning utilities.                                             |
-| `Invex.Atom.Module.*`        | First-party modules (Dotnet, GitVersion, AzureKeyVault, etc.).             |
-| `Invex.Atom.Tool`            | The `atom` .NET global tool for running builds from the command line.      |
+| Package                | Purpose                                                               |
+|------------------------|-----------------------------------------------------------------------|
+| `Invex.Atom.Build`     | Core framework — build definitions, targets, parameters, hosting.     |
+| `Invex.Atom.Workflows` | Workflow definitions, triggers, and YAML generation.                  |
+| `Invex.Atom.Module.*`  | First-party modules (Dotnet, GitVersion, AzureKeyVault, etc.).        |
+| `Invex.Atom.Tool`      | The `atom` .NET global tool for running builds from the command line. |
+
+### Foundational Libraries
+
+Several lower-level building blocks live in their own repositories and are published as standalone packages. You don't
+normally reference these directly — they are pulled in transitively by `Invex.Atom.Build` — but their types surface
+through Atom (for example via `IBuildAccessor.RootedFileSystem` and `IBuildAccessor.ProcessRunner`):
+
+| Package                 | Purpose                                                                      |
+|-------------------------|------------------------------------------------------------------------------|
+| `Invex.FileSystem`      | `IRootedFileSystem`, `RootedPath`, path providers, and file transformations. |
+| `Invex.Process`         | `IProcessRunner` for executing external tools.                               |
+| `Invex.SemanticVersion` | Semantic versioning utilities.                                               |
+| `Invex.StructuredText`  | Structured text / YAML writing used by the workflow generators.              |
 
 ## How It Works
 

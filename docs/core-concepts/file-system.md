@@ -3,6 +3,12 @@
 Atom provides `IRootedFileSystem` — a build-aware file system abstraction that layers path resolution on top of
 `System.IO.Abstractions.IFileSystem`.
 
+> [!NOTE]
+> The rooted file system types (`IRootedFileSystem`, `RootedPath`, `IPathProvider`, `TransformFileScope`, etc.) ship in
+> the standalone [`Invex.FileSystem`](https://www.nuget.org/packages/Invex.FileSystem) package, maintained in its own
+> repository. You don't need to reference it directly — it is pulled in transitively by `Invex.Atom.Build` and surfaced
+> through `IBuildAccessor.RootedFileSystem`.
+
 ## `IRootedFileSystem`
 
 Available via `IBuildAccessor.RootedFileSystem`, this interface gives you:
