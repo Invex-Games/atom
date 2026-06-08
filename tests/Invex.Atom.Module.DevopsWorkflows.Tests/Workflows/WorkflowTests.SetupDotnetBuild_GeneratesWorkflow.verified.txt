@@ -1,0 +1,26 @@
+﻿name: setup-dotnet
+
+trigger:
+  branches:
+    include: [ main ]
+
+jobs:
+
+  - job: SetupDotnetTarget
+    displayName: SetupDotnetTarget
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+      - checkout: self
+        enabled: true
+        fetchDepth: 0
+
+      - task: UseDotNet@2
+        displayName: Setup .NET 9.0.x
+        inputs:
+          version: 9.0.x
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj SetupDotnetTarget --skip --headless
+        displayName: SetupDotnetTarget
+        name: SetupDotnetTarget

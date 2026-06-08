@@ -1,0 +1,4 @@
+﻿{
+  IsOutdated: false,
+  ThrowOnWrite: false
+}

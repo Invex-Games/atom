@@ -1,0 +1,83 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dotnet/docfx/main/schemas/docfx.schema.json",
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [
+            "src/Invex.Atom.Build/Invex.Atom.Build.csproj",
+            "src/Invex.Atom.Workflows/Invex.Atom.Workflows.csproj",
+            "src/Invex.Atom.FileSystem/Invex.Atom.FileSystem.csproj",
+            "src/Invex.Atom.Process/Invex.Atom.Process.csproj",
+            "src/Invex.Atom.SemanticVersion/Invex.Atom.SemanticVersion.csproj",
+            "src/Invex.Atom.Module.AzureKeyVault/Invex.Atom.Module.AzureKeyVault.csproj",
+            "src/Invex.Atom.Module.AzureStorage/Invex.Atom.Module.AzureStorage.csproj",
+            "src/Invex.Atom.Module.DevopsWorkflows/Invex.Atom.Module.DevopsWorkflows.csproj",
+            "src/Invex.Atom.Module.Dotnet/Invex.Atom.Module.Dotnet.csproj",
+            "src/Invex.Atom.Module.GithubWorkflows/Invex.Atom.Module.GithubWorkflows.csproj",
+            "src/Invex.Atom.Module.GitVersion/Invex.Atom.Module.GitVersion.csproj"
+          ]
+        }
+      ],
+      "dest": "api",
+      "properties": {
+        "TargetFramework": "net10.0"
+      },
+      "filter": "docs/filterConfig.yml"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "toc.yml",
+          "index.md",
+          "README.md"
+        ]
+      },
+      {
+        "files": [
+          "api/**.yml",
+          "api/index.md"
+        ]
+      },
+      {
+        "files": [
+          "docs/toc.yml",
+          "docs/**/*.md"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "output": "_site",
+    "globalMetadataFiles": [],
+    "fileMetadataFiles": [],
+    "globalMetadata": {
+      "_appTitle": "Atom",
+      "_appName": "Atom",
+      "_appFooter": "Atom — Build Automation for .NET",
+      "_enableSearch": true,
+      "_disableContribution": false,
+      "_disableToc": false,
+      "_gitContribute": {
+        "repo": "https://github.com/Invex-Games/atom",
+        "branch": "main"
+      }
+    },
+    "template": [
+      "default",
+      "modern"
+    ],
+    "postProcessors": [],
+    "keepFileLink": false,
+    "disableGitFeatures": false
+  }
+}
+
+

@@ -1,0 +1,22 @@
+<Project>
+  <ItemGroup>
+    <Using Include="Invex.Atom.Build" Global="true" />
+    <Using Include="Invex.Atom.Build.Args" Global="true" />
+    <Using Include="Invex.Atom.Build.Artifacts" Global="true" />
+    <Using Include="Invex.Atom.Build.BuildInfo" Global="true" />
+    <Using Include="Invex.Atom.Build.BuildOptions" Global="true" />
+    <Using Include="Invex.Atom.Build.Definition" Global="true" />
+    <Using Include="Invex.Atom.Build.Exceptions" Global="true" />
+    <Using Include="Invex.Atom.Build.FileSystem" Global="true" />
+    <Using Include="Invex.Atom.Build.Help" Global="true" />
+    <Using Include="Invex.Atom.Build.Hosting" Global="true" />
+    <Using Include="Invex.Atom.Build.Logging" Global="true" />
+    <Using Include="Invex.Atom.Build.Model" Global="true" />
+    <Using Include="Invex.Atom.Build.Params" Global="true" />
+    <Using Include="Invex.Atom.Build.Reports" Global="true" />
+    <Using Include="Invex.Atom.Build.Secrets" Global="true" />
+    <Using Include="Invex.Atom.Build.Util" Global="true" />
+    <Using Include="Invex.Atom.Build.Util.Scope" Global="true" />
+    <Using Include="Invex.Atom.Build.Variables" Global="true" />
+  </ItemGroup>
+</Project>

@@ -1,7 +1,0 @@
-<Project>
-    <ItemGroup>
-        <Using Include="DecSm.Atom.Module.GithubWorkflows" Global="true"/>
-        <Using Include="DecSm.Atom.Module.GithubWorkflows.Generation" Global="true"/>
-        <Using Include="DecSm.Atom.Module.GithubWorkflows.Generation.Options" Global="true"/>
-    </ItemGroup>
-</Project>

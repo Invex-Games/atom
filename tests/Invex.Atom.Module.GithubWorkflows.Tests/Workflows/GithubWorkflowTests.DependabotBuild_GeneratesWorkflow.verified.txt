@@ -1,0 +1,58 @@
+﻿version: 2
+
+registries:
+  registry-1:
+    type: cargo-registry
+    url: url1
+
+updates:
+  - package-ecosystem: package-ecosystem-1
+    directory: "directory"
+    schedule:
+      interval: daily
+      day: monday
+      time: "02:00"
+      timezone: UTC
+    allow:
+      - dependency-name: "dep-name"
+        dependency-type: all
+    assignees: [ assignee1 ]
+    commit-message:
+      prefix: "prefix"
+      prefix-development: "prefix-dev"
+      include: scope
+    cooldown:
+      default-days: 1
+      semver-major-days: 2
+      semver-minor-days: 3
+      semver-patch-days: 4
+      include: [ include1 ]
+      exclude: [ exclude1 ]
+    exclude-paths: [ exclude-path1, exclude-path2 ]
+    groups:
+      group-1:
+        applies-to: security-updates
+        dependency-type: production
+        patterns: [ "pattern-1", "pattern-2" ]
+        exclude-patterns: [ "exclude-pattern-1", "exclude-pattern-2" ]
+        update-types: [ major, minor ]
+        group-by: dependency-name
+    ignore:
+      - dependency-name: "dep-name"
+        update-types: [ version-update:semver-major ]
+        versions: [ "1.0.0", "2.0.0" ]
+    insecure-external-code-execution: allow
+    labels: [ label1, label2 ]
+    milestone: 1
+    name: "update-deps"
+    open-pull-requests-limit: 5
+    pull-request-branch-name:
+      separator: "-"
+    rebase-strategy: auto
+    registries: "*"
+    target-branch: main
+    vendor: true
+    versioning-strategy: increase
+    patterns: [ pattern1, pattern2 ]
+    multi-ecosystem-group: multi-ecosystem-group
+

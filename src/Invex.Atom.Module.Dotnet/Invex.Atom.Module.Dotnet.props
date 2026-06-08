@@ -1,0 +1,8 @@
+<Project>
+    <ItemGroup>
+        <Using Include="Invex.Atom.Module.Dotnet" Global="true" />
+        <Using Include="Invex.Atom.Module.Dotnet.Helpers" Global="true" />
+        <Using Include="Invex.Atom.Module.Dotnet.Model" Global="true" />
+        <Using Include="Invex.Atom.Module.Dotnet.Util" Global="true" />
+    </ItemGroup>
+</Project>

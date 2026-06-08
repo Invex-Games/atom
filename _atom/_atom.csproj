@@ -4,13 +4,21 @@
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>Atom</RootNamespace>
     <UserSecretsId>661f5aa6-694c-4890-85c0-9b72f0bea988</UserSecretsId>
+    <PublishSingleFile>true</PublishSingleFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../images/icon.png" Pack="true" PackagePath="\" />
+    <None Include="../readme.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <CompilerVisibleProperty Include="MSBuildProjectDirectory" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="LibGit2Sharp" Version="0.31.0" />
+    <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="10.0.8" />
     <PackageReference Include="Octokit.GraphQL" Version="0.4.0-beta" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
       <PrivateAssets>all</PrivateAssets>
@@ -27,13 +35,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DecSm.Atom.Module.AzureKeyVault\DecSm.Atom.Module.AzureKeyVault.csproj" />
-    <ProjectReference Include="..\DecSm.Atom.Module.DevopsWorkflows\DecSm.Atom.Module.DevopsWorkflows.csproj" />
-    <ProjectReference Include="..\DecSm.Atom.Module.Dotnet\DecSm.Atom.Module.Dotnet.csproj" />
-    <ProjectReference Include="..\DecSm.Atom.Module.GitVersion\DecSm.Atom.Module.GitVersion.csproj" />
-    <ProjectReference Include="..\DecSm.Atom\DecSm.Atom.csproj" />
-    <ProjectReference Include="..\DecSm.Atom.Module.GithubWorkflows\DecSm.Atom.Module.GithubWorkflows.csproj" />
-    <ProjectReference Include="..\DecSm.Atom.SourceGenerators\DecSm.Atom.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\src\Invex.Atom.Module.DevopsWorkflows\Invex.Atom.Module.DevopsWorkflows.csproj" />
+    <ProjectReference Include="..\src\Invex.Atom.Module.Dotnet\Invex.Atom.Module.Dotnet.csproj" />
+    <ProjectReference Include="..\src\Invex.Atom.Module.GitVersion\Invex.Atom.Module.GitVersion.csproj" />
+    <ProjectReference Include="..\src\Invex.Atom.Workflows\Invex.Atom.Workflows.csproj" />
+    <ProjectReference Include="..\src\Invex.Atom.Module.GithubWorkflows\Invex.Atom.Module.GithubWorkflows.csproj" />
+    <ProjectReference Include="..\src\Invex.Atom.Build.SourceGenerators\Invex.Atom.Build.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\src\Invex.Atom.Build.Analyzers\Invex.Atom.Build.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>

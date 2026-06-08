@@ -1,0 +1,14 @@
+global using System.Text.RegularExpressions;
+global using Azure.Storage.Blobs;
+global using Azure.Storage.Blobs.Models;
+global using Invex.Atom.Build.Artifacts;
+global using Invex.Atom.Build.BuildInfo;
+global using Invex.Atom.Build.FileSystem;
+global using Invex.Atom.Build.Hosting;
+global using Invex.Atom.Build.Params;
+global using Invex.Atom.Build.Reports;
+global using Invex.Atom.Build.Util;
+global using JetBrains.Annotations;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Hosting;
+global using Microsoft.Extensions.Logging;

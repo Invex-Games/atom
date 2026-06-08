@@ -1,0 +1,46 @@
+<Solution>
+  <Folder Name="/Analyzers/">
+    <Project Path="src/Invex.Atom.Build.Analyzers/Invex.Atom.Build.Analyzers.csproj" />
+    <Project Path="src/Invex.Atom.Build.SourceGenerators/Invex.Atom.Build.SourceGenerators.csproj" />
+  </Folder>
+  <Folder Name="/Core/">
+    <Project Path="src/Invex.Atom.Build/Invex.Atom.Build.csproj" />
+    <Project Path="src/Invex.Atom.Workflows/Invex.Atom.Workflows.csproj" />
+  </Folder>
+  <Folder Name="/Modules/">
+    <Project Path="src/Invex.Atom.Module.AzureKeyVault/Invex.Atom.Module.AzureKeyVault.csproj" />
+    <Project Path="src/Invex.Atom.Module.AzureStorage/Invex.Atom.Module.AzureStorage.csproj" />
+    <Project Path="src/Invex.Atom.Module.DevopsWorkflows/Invex.Atom.Module.DevopsWorkflows.csproj" />
+    <Project Path="src/Invex.Atom.Module.Dotnet/Invex.Atom.Module.Dotnet.csproj" />
+    <Project Path="src/Invex.Atom.Module.GithubWorkflows/Invex.Atom.Module.GithubWorkflows.csproj" />
+    <Project Path="src/Invex.Atom.Module.GitVersion/Invex.Atom.Module.GitVersion.csproj" />
+  </Folder>
+  <Folder Name="/Samples/">
+    <Project Path="samples/Invex.Atom.Analyzers.Sample/Invex.Atom.Analyzers.Sample.csproj" />
+    <Project Path="samples/Sample_01_HelloWorld/Sample_01_HelloWorld.csproj" />
+    <Project Path="samples/Sample_02_Params/Sample_02_Params.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="tests/Invex.Atom.TestUtils/Invex.Atom.TestUtils.csproj" />
+  </Folder>
+  <Folder Name="/Tests/Analyzers/">
+    <Project Path="tests/Invex.Atom.Build.Analyzers.Tests/Invex.Atom.Build.Analyzers.Tests.csproj" />
+    <Project Path="tests/Invex.Atom.Build.SourceGenerators.Tests/Invex.Atom.Build.SourceGenerators.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/Core/">
+    <Project Path="tests/Invex.Atom.Build.Tests/Invex.Atom.Build.Tests.csproj" />
+    <Project Path="tests/Invex.Atom.Workflows.Tests/Invex.Atom.Workflows.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/Modules/">
+    <Project Path="tests/Invex.Atom.Module.DevopsWorkflows.Tests/Invex.Atom.Module.DevopsWorkflows.Tests.csproj" />
+    <Project Path="tests/Invex.Atom.Module.GithubWorkflows.Tests/Invex.Atom.Module.GithubWorkflows.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/Tools/">
+    <Project Path="tests/Invex.Atom.Tool.Tests/Invex.Atom.Tool.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Tools/">
+    <Project Path="src/Invex.Atom.DotnetCliGenerator/Invex.Atom.DotnetCliGenerator.csproj" />
+    <Project Path="src/Invex.Atom.Tool/Invex.Atom.Tool.csproj" />
+  </Folder>
+  <Project Path="_atom/_atom.csproj" />
+</Solution>

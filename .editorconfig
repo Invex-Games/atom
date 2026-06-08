@@ -62,7 +62,7 @@ csharp_blank_lines_before_multiline_statements = 1
 csharp_remove_blank_lines_near_braces_in_code = true
 csharp_remove_blank_lines_near_braces_in_declarations = true
 csharp_braces_for_ifelse = not_required_for_both # actually behaves as `required for either`
-csharp_braces_for_using = required_for_multiline
+csharp_braces_for_using = not_required
 csharp_braces_for_while = required_for_multiline
 csharp_empty_block_style = together_same_line
 csharp_indent_preprocessor_if = usual_indent
@@ -122,6 +122,9 @@ dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggest
 dotnet_style_prefer_collection_expression = true
 dotnet_separate_import_directive_groups = false
 dotnet_sort_system_directives_first = true
+
+# .NET code quality rules
+dotnet_code_quality.DecSm_Analyzers_ValidPublicApiAttributes = UnstableAPI
 
 [*.{received,verified}.{txt,xml,json}]
 # Verify settings

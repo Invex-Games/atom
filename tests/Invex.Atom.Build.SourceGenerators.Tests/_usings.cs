@@ -1,0 +1,9 @@
+﻿global using System.Reflection;
+global using System.Runtime.CompilerServices;
+global using Basic.Reference.Assemblies;
+global using Invex.Atom.Build.Definition;
+global using Invex.Atom.Build.SourceGenerators.Tests.Utils;
+global using DiffEngine;
+global using Microsoft.CodeAnalysis;
+global using Microsoft.CodeAnalysis.CSharp;
+global using NUnit.Framework;

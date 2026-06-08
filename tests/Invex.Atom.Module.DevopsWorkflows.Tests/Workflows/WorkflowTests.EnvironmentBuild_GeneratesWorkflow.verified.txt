@@ -1,0 +1,23 @@
+﻿name: environment-workflow
+
+trigger: none
+
+jobs:
+
+  - deployment: EnvironmentTarget
+    displayName: EnvironmentTarget
+    pool:
+      vmImage: ubuntu-latest
+    environment: test-env-1
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+
+            - checkout: self
+              enabled: true
+              fetchDepth: 0
+
+            - script: dotnet run --project AtomTest/AtomTest.csproj EnvironmentTarget --skip --headless
+              displayName: EnvironmentTarget
+              name: EnvironmentTarget

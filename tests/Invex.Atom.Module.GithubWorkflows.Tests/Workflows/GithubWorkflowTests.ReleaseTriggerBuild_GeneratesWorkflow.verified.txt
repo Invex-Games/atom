@@ -1,0 +1,23 @@
+﻿name: releasetrigger-workflow
+
+on:
+  release:
+    types: [ released ]
+
+permissions: { }
+
+jobs:
+
+  ReleaseTriggerTarget:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: ReleaseTriggerTarget
+        id: ReleaseTriggerTarget
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ReleaseTriggerTarget --skip --headless
+

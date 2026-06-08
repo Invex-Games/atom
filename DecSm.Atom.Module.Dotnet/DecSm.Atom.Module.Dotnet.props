@@ -1,6 +1,0 @@
-<Project>
-    <ItemGroup>
-        <Using Include="DecSm.Atom.Module.Dotnet" Global="true"/>
-        <Using Include="DecSm.Atom.Module.Dotnet.Helpers" Global="true"/>
-    </ItemGroup>
-</Project>

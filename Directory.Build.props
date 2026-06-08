@@ -5,7 +5,7 @@
 
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageDescription>An opinionated task and build automation framework#</PackageDescription>
+    <PackageDescription>An opinionated task and build automation framework</PackageDescription>
     <EnablePackageValidation>true</EnablePackageValidation>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
 
@@ -14,17 +14,17 @@
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);CA1873;CS1591;NU5104;RCS1001;RCS1003;RCS1123;</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="../images/icon.png" Pack="true" PackagePath="\" />
-    <None Include="../readme.md" Pack="true" PackagePath="\" />
+    <None Include="../../images/icon.png" Pack="true" PackagePath="\" />
+    <None Include="../../readme.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>

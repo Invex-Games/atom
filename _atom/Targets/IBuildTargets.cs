@@ -4,13 +4,14 @@ internal interface IBuildTargets : IDotnetPackHelper, IDotnetPublishHelper
 {
     static readonly string[] ProjectsToPack =
     [
-        Projects.DecSm_Atom.Name,
-        Projects.DecSm_Atom_Module_AzureKeyVault.Name,
-        Projects.DecSm_Atom_Module_AzureStorage.Name,
-        Projects.DecSm_Atom_Module_DevopsWorkflows.Name,
-        Projects.DecSm_Atom_Module_Dotnet.Name,
-        Projects.DecSm_Atom_Module_GitVersion.Name,
-        Projects.DecSm_Atom_Module_GithubWorkflows.Name,
+        Projects.Invex_Atom_Build.Name,
+        Projects.Invex_Atom_Workflows.Name,
+        Projects.Invex_Atom_Module_AzureKeyVault.Name,
+        Projects.Invex_Atom_Module_AzureStorage.Name,
+        Projects.Invex_Atom_Module_DevopsWorkflows.Name,
+        Projects.Invex_Atom_Module_Dotnet.Name,
+        Projects.Invex_Atom_Module_GitVersion.Name,
+        Projects.Invex_Atom_Module_GithubWorkflows.Name,
     ];
 
     Target PackProjects =>
@@ -26,14 +27,14 @@ internal interface IBuildTargets : IDotnetPackHelper, IDotnetPublishHelper
     Target PackTool =>
         t => t
             .DescribedAs("Packs the Atom tool into a nuget package")
-            .ProducesArtifact(Projects.DecSm_Atom_Tool.Name)
+            .ProducesArtifact(Projects.Invex_Atom_Tool.Name)
             .Executes(async cancellationToken =>
             {
                 var runtimeIdentifier = RuntimeInformation.RuntimeIdentifier;
 
                 Logger.LogInformation("Packing AOT Atom tool for runtime {RuntimeIdentifier}", runtimeIdentifier);
 
-                await DotnetPackAndStage(FileSystem.GetPath<Projects.DecSm_Atom_Tool>(),
+                await DotnetPackAndStage(RootedFileSystem.GetPath<Projects.Invex_Atom_Tool>(),
                     new()
                     {
                         PackOptions = new()
@@ -51,7 +52,7 @@ internal interface IBuildTargets : IDotnetPackHelper, IDotnetPublishHelper
                 {
                     Logger.LogInformation("Packing Atom tool for non-native AOT");
 
-                    await DotnetPackAndStage(FileSystem.GetPath<Projects.DecSm_Atom_Tool>(),
+                    await DotnetPackAndStage(RootedFileSystem.GetPath<Projects.Invex_Atom_Tool>(),
                         new()
                         {
                             ClearPublishDirectory = false,

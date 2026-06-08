@@ -1,5 +1,0 @@
-<Project>
-    <ItemGroup>
-        <Using Include="DecSm.Atom.Module.GitVersion" Global="true"/>
-    </ItemGroup>
-</Project>

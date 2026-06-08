@@ -1,9 +1,0 @@
-﻿global using System.Reflection;
-global using System.Runtime.CompilerServices;
-global using Basic.Reference.Assemblies;
-global using DecSm.Atom.Build.Definition;
-global using DecSm.Atom.SourceGenerators.Tests.Utils;
-global using DiffEngine;
-global using Microsoft.CodeAnalysis;
-global using Microsoft.CodeAnalysis.CSharp;
-global using NUnit.Framework;

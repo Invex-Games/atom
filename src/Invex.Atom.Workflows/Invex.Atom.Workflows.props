@@ -1,0 +1,15 @@
+<Project>
+    <ItemGroup>
+        <Using Include="Invex.Atom.Workflows" Global="true"/>
+        <Using Include="Invex.Atom.Workflows.Definition" Global="true"/>
+        <Using Include="Invex.Atom.Workflows.Definition.Triggers" Global="true"/>
+        <Using Include="Invex.Atom.Workflows.Dotnet" Global="true"/>
+        <Using Include="Invex.Atom.Workflows.Dotnet.Nuget" Global="true"/>
+        <Using Include="Invex.Atom.Workflows.Extensions" Global="true"/>
+        <Using Include="Invex.Atom.Workflows.Model" Global="true"/>
+        <Using Include="Invex.Atom.Workflows.Options" Global="true"/>
+        <Using Include="Invex.Atom.Workflows.Options.Injections" Global="true"/>
+        <Using Include="Invex.Atom.Workflows.WorkflowContext" Global="true"/>
+        <Using Include="Invex.Atom.Workflows.Writer" Global="true"/>
+    </ItemGroup>
+</Project>

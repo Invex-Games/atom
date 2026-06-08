@@ -1,0 +1,23 @@
+﻿name: environment-workflow
+
+on:
+  workflow_dispatch:
+
+permissions: { }
+
+jobs:
+
+  EnvironmentTarget:
+    runs-on: ubuntu-latest
+    environment: test-env-1
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: EnvironmentTarget
+        id: EnvironmentTarget
+        run: dotnet run --project AtomTest/AtomTest.csproj -- EnvironmentTarget --skip --headless
+

@@ -1,11 +1,8 @@
 namespace Atom.Targets;
 
-public interface IApproveDependabotPr : IGithubHelper
+public interface IApproveDependabotPr : IGithubHelper, IPullRequestHelper
 {
     const string DependabotActorName = "dependabot[bot]";
-
-    [ParamDefinition("pull-request-number", "The pull request number to approve.")]
-    int PullRequestNumber => GetParam(() => PullRequestNumber);
 
     [SecretDefinition("dependabot-enable-auto-merge-pat",
         "A GitHub PAT with permissions to enable auto-merge on pull requests.")]
