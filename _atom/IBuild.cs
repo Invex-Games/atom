@@ -13,7 +13,8 @@ internal interface IBuild : IWorkflowBuildDefinition,
     IDeployTargets,
     IApproveDependabotPr,
     ICheckPrForBreakingChanges,
-    IDocTargets
+    IDocTargets,
+    IWaitForCopilotReview
 {
     static readonly string[] PlatformNames =
     [
@@ -112,6 +113,15 @@ internal interface IBuild : IWorkflowBuildDefinition,
                             TextExpressions.Github.GithubEvent["number"]),
                         BuildOptions.Target.RunIfWorkflowCondition(
                             TextExpressions.Github.GithubEventName.EqualToString("pull_request")),
+                    ],
+                },
+                new(nameof(WaitForCopilotReview))
+                {
+                    Options =
+                    [
+                        BuildOptions.Inject.Secret(nameof(GithubToken)),
+                        BuildOptions.Inject.Param(nameof(PullRequestNumber),
+                            TextExpressions.Github.GithubEvent["number"]),
                     ],
                 },
             ],

@@ -1,10 +1,10 @@
-namespace Atom.Targets;
+namespace Atom.RepoUtils;
 
-public sealed record BreakingChanges(IReadOnlyList<Change> MajorChanges, IReadOnlyList<Change> MinorChanges);
+internal sealed record BreakingChanges(IReadOnlyList<Change> MajorChanges, IReadOnlyList<Change> MinorChanges);
 
-public sealed record Change(RootedPath Path, List<Line> AddedLines, List<Line> DeletedLines);
+internal sealed record Change(RootedPath Path, List<Line> AddedLines, List<Line> DeletedLines);
 
-public interface IApiSurfaceHelper : IBuildAccessor
+internal interface IApiSurfaceHelper : IBuildAccessor
 {
     BreakingChanges IdentifyBreakingChanges(
         SemVer oldVersion,

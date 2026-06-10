@@ -1,8 +1,8 @@
-namespace Atom.Targets;
+namespace Atom.RepoUtils;
 
-public sealed record ReleaseInfo(string CommitHash, SemVer Version);
+internal sealed record ReleaseInfo(string CommitHash, SemVer Version);
 
-public interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper, ISetupBuildInfo, IApiSurfaceHelper
+internal interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper, ISetupBuildInfo, IApiSurfaceHelper
 {
     private RootedPath[] FilesToCheck =>
         RootedFileSystem
