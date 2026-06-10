@@ -247,7 +247,7 @@ jobs:
   PublishDocs:
     permissions:
       contents: write
-    needs: [ BuildDocs, SetupBuildInfo ]
+    needs: [ SetupBuildInfo, BuildDocs ]
     if: contains(needs.SetupBuildInfo.outputs.build-version, '-') == false
     runs-on: ubuntu-latest
     steps:

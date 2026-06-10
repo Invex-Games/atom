@@ -1,6 +1,6 @@
-namespace Atom.Targets;
+namespace Atom.RepoUtils;
 
-public interface IPullRequestHelper : IBuildAccessor
+internal interface IPullRequestHelper : IBuildAccessor
 {
     [ParamDefinition("pull-request-number", "The pull request number to approve.")]
     int PullRequestNumber => GetParam(() => PullRequestNumber);

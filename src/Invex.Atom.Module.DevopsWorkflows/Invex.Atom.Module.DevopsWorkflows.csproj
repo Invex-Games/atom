@@ -5,11 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Invex.StructuredText.AzureDevopsPipelines" Version="0.3.0" />
+    <PackageReference Include="Invex.StructuredText.AzureDevopsPipelines" Version="1.0.0" />
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Invex.Analyzers.PublicApiSurface" Version="0.1.0" PrivateAssets="all" />
+
+    <PackageReference Include="Invex.RepoUtils.PublicApiAnalyzers" Version="1.4.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
