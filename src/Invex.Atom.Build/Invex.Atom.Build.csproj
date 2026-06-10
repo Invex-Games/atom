@@ -7,17 +7,18 @@
   <ItemGroup>
     <PackageReference Include="Invex.FileSystem" Version="0.1.0" />
     <PackageReference Include="Invex.Process" Version="0.2.0" />
-    <PackageReference Include="Invex.SemanticVersion" Version="0.2.0" />
+    <PackageReference Include="Invex.SemanticVersion" Version="1.0.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.9" />
     <PackageReference Include="Spectre.Console" Version="0.56.0" />
     <PackageReference Include="System.IO.Abstractions" Version="22.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Invex.Analyzers.PublicApiSurface" Version="0.1.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.9" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
