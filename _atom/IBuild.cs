@@ -306,6 +306,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     Options =
                     [
                         BuildOptions.Inject.Secret(nameof(GithubToken)),
+                        BuildOptions.Inject.Secret(nameof(DependabotEnableAutoMergePat)),
                         BuildOptions.Inject.Param(nameof(PullRequestNumber),
                             TextExpressions.Github.GithubEvent["number"]),
                         BuildOptions.Target.RunIfWorkflowCondition(
