@@ -1,5 +1,9 @@
 namespace Invex.Atom.Build.SourceGenerators;
 
+/// <summary>
+///     Generates a strongly-typed model of the solution's projects for types marked with
+///     <c>[GenerateSolutionModel]</c>, parsed from the <c>.sln</c> or <c>.slnx</c> file.
+/// </summary>
 [Generator]
 public class GenerateSolutionModelSourceGenerator : IIncrementalGenerator
 {
@@ -8,6 +12,7 @@ public class GenerateSolutionModelSourceGenerator : IIncrementalGenerator
                                                             """,
         RegexOptions.Multiline | RegexOptions.Compiled);
 
+    /// <inheritdoc />
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var classSymbolsProvider = context

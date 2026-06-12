@@ -14,14 +14,17 @@ public class AT0003_ConfigureHostBuilderPartialMethodNotImplementedCodeFixProvid
 {
     private const string HostUsing = "Microsoft.Extensions.Hosting";
 
+    /// <inheritdoc />
     public sealed override ImmutableArray<string> FixableDiagnosticIds { get; } =
     [
         AT0003_ConfigureHostBuilderPartialMethodNotImplementedAnalyzer.DiagnosticId,
     ];
 
+    /// <inheritdoc />
     public sealed override FixAllProvider GetFixAllProvider() =>
         WellKnownFixAllProviders.BatchFixer;
 
+    /// <inheritdoc />
     public sealed override Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         var diagnostic = context.Diagnostics.First();

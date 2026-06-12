@@ -1,6 +1,6 @@
 ﻿namespace Invex.Atom.Build.SourceGenerators;
 
-public static class Symbols
+internal static class Symbols
 {
     public const string BuildDefinitionAttribute = "Invex.Atom.Build.Definition.BuildDefinitionAttribute";
 
@@ -33,35 +33,35 @@ public static class Symbols
     public const string Dictionary = "System.Collections.Generic.Dictionary";
 }
 
-public readonly record struct ClassNameWithSourceCode(string ClassName, string? SourceCode)
+internal readonly record struct ClassNameWithSourceCode(string ClassName, string? SourceCode)
 {
     public string ClassName { get; } = ClassName;
 
     public string? SourceCode { get; } = SourceCode;
 }
 
-public readonly record struct InterfaceNameWithSourceCode(string InterfaceName, string? SourceCode)
+internal readonly record struct InterfaceNameWithSourceCode(string InterfaceName, string? SourceCode)
 {
     public string InterfaceName { get; } = InterfaceName;
 
     public string? SourceCode { get; } = SourceCode;
 }
 
-public readonly record struct CodeRegion(string? RegionName, string[] RegionBlocks)
+internal readonly record struct CodeRegion(string? RegionName, string[] RegionBlocks)
 {
     public string? RegionName { get; } = RegionName;
 
     public string[] RegionBlocks { get; } = RegionBlocks;
 }
 
-public readonly record struct TargetData(IPropertySymbol Property, INamedTypeSymbol Type)
+internal readonly record struct TargetData(IPropertySymbol Property, INamedTypeSymbol Type)
 {
     public IPropertySymbol Property { get; } = Property;
 
     public INamedTypeSymbol Type { get; } = Type;
 }
 
-public readonly record struct ParamData(IPropertySymbol Property, AttributeData Attribute, INamedTypeSymbol Type)
+internal readonly record struct ParamData(IPropertySymbol Property, AttributeData Attribute, INamedTypeSymbol Type)
 {
     public IPropertySymbol Property { get; } = Property;
 
@@ -70,35 +70,35 @@ public readonly record struct ParamData(IPropertySymbol Property, AttributeData 
     public INamedTypeSymbol Type { get; } = Type;
 }
 
-public readonly record struct TargetsAndParams(ImmutableArray<TargetData> Targets, ImmutableArray<ParamData> Params)
+internal readonly record struct TargetsAndParams(ImmutableArray<TargetData> Targets, ImmutableArray<ParamData> Params)
 {
     public ImmutableArray<TargetData> Targets { get; } = Targets;
 
     public ImmutableArray<ParamData> Params { get; } = Params;
 }
 
-public readonly record struct TextResult(string Text, bool Any)
+internal readonly record struct TextResult(string Text, bool Any)
 {
     public string Text { get; } = Text;
 
     public bool Any { get; } = Any;
 }
 
-public readonly record struct TypeWithProperty(INamedTypeSymbol Type, IPropertySymbol Property)
+internal readonly record struct TypeWithProperty(INamedTypeSymbol Type, IPropertySymbol Property)
 {
     public INamedTypeSymbol Type { get; } = Type;
 
     public IPropertySymbol Property { get; } = Property;
 }
 
-public readonly record struct TypeWithMethod(INamedTypeSymbol Type, IMethodSymbol Method)
+internal readonly record struct TypeWithMethod(INamedTypeSymbol Type, IMethodSymbol Method)
 {
     public INamedTypeSymbol Type { get; } = Type;
 
     public IMethodSymbol Method { get; } = Method;
 }
 
-public readonly record struct PropertiesWithMethods(
+internal readonly record struct PropertiesWithMethods(
     ImmutableArray<TypeWithProperty> Properties,
     ImmutableArray<TypeWithMethod> Methods
 )

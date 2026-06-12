@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>
-    <NoWarn>$(NoWarn);CS1573;</NoWarn>
+    <!-- CS1591 suppressed: this project contains large amounts of generated code (Cli/Generated) -->
+    <NoWarn>$(NoWarn);CS1573;CS1591;</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

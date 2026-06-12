@@ -10,14 +10,17 @@
 public class AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamCodeFixProvider : CodeFixProvider
 {
     // Specify the diagnostic IDs that this provider can fix
+    /// <inheritdoc />
     public sealed override ImmutableArray<string> FixableDiagnosticIds { get; } =
     [
         AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamAnalyzer.DiagnosticId,
     ];
 
+    /// <inheritdoc />
     public sealed override FixAllProvider GetFixAllProvider() =>
         WellKnownFixAllProviders.BatchFixer;
 
+    /// <inheritdoc />
     public sealed override Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         // Get the diagnostic being fixed

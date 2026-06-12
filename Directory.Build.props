@@ -13,7 +13,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>$(NoWarn);CA1873;CS1591;NU5104;RCS1001;RCS1003;RCS1123;</NoWarn>
+    <NoWarn>$(NoWarn);CA1873;NU5104;RCS1001;RCS1003;RCS1123;</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 

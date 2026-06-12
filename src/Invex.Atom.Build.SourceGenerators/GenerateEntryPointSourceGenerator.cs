@@ -1,8 +1,13 @@
 namespace Invex.Atom.Build.SourceGenerators;
 
+/// <summary>
+///     Generates a program entry point that runs the Atom host for types marked with
+///     <c>[GenerateEntryPoint]</c>.
+/// </summary>
 [Generator]
 public class GenerateEntryPointSourceGenerator : IIncrementalGenerator
 {
+    /// <inheritdoc />
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var classSymbols = context

@@ -3,9 +3,14 @@
 
 namespace Invex.Atom.Build.SourceGenerators;
 
+/// <summary>
+///     Generates the partial implementation of interfaces marked with <c>[BuildDefinition]</c>, populating
+///     target and parameter collections from the inherited target interfaces.
+/// </summary>
 [Generator]
 public sealed class BuildDefinitionInterfaceSourceGenerator : IIncrementalGenerator
 {
+    /// <inheritdoc />
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var classSymbols = context

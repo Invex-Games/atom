@@ -9,6 +9,9 @@
 #pragma warning restore RS1038
 public class AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamAnalyzer : DiagnosticAnalyzer
 {
+    /// <summary>
+    ///     The diagnostic ID reported by this analyzer: <c>AT0001</c>.
+    /// </summary>
     public const string DiagnosticId = "AT0001";
 
     // The category of the diagnostic (Design, Naming etc.).
@@ -39,8 +42,10 @@ public class AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamAnalyzer 
         Description);
 
     // Keep in mind: you have to list your rules here.
+    /// <inheritdoc />
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = [Rule];
 
+    /// <inheritdoc />
     public override void Initialize(AnalysisContext context)
     {
         // You must call this method to avoid analyzing generated code.

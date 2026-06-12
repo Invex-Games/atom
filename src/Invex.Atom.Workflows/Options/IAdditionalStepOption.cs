@@ -1,5 +1,13 @@
 namespace Invex.Atom.Workflows.Options;
 
+/// <summary>
+///     A build option that contributes an additional step to a workflow job, ordered relative to the
+///     job's target step.
+/// </summary>
+/// <remarks>
+///     Implementations represent platform-rendered steps such as repository checkout
+///     (<see cref="CheckoutStep" />) or .NET SDK setup (<see cref="SetupDotnetStep" />).
+/// </remarks>
 [PublicAPI]
 public interface IAdditionalStepOption : IBuildOption
 {

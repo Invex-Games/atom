@@ -1,8 +1,12 @@
 ﻿namespace Invex.Atom.Build.FileSystem;
 
 /// <summary>
-///     Provides constants for key directory paths and an extension method for path provider registration.
+///     Provides well-known path keys used to identify key directories in the Atom build system.
 /// </summary>
+/// <remarks>
+///     These keys are used by <see cref="IPathProvider" /> implementations to identify which
+///     directory path is being resolved.
+/// </remarks>
 [PublicAPI]
 public static class AtomPaths
 {

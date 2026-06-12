@@ -6,8 +6,7 @@
 /// <remarks>
 ///     This interface outlines the fundamental elements of a build, including its targets, parameters,
 ///     workflow configurations, and global options. Implementations, typically derived from
-///     <see cref="BuildDefinition" /> or <see cref="BuildDefinition" />, serve as the central point
-///     for Atom to understand and execute a build.
+///     <see cref="BuildDefinition" />, serve as the central point for Atom to understand and execute a build.
 /// </remarks>
 [PublicAPI]
 [UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]

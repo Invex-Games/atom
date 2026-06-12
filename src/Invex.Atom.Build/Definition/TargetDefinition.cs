@@ -275,7 +275,7 @@ public sealed class TargetDefinition
     /// <summary>
     ///     Adds a dependency on another target.
     /// </summary>
-    /// <param name="target">The workflow target definition to depend on.</param>
+    /// <param name="target">The target definition to depend on.</param>
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
     public TargetDefinition DependsOn(TargetDefinition target)
     {
@@ -287,7 +287,7 @@ public sealed class TargetDefinition
     /// <summary>
     ///     Specifies that this target may use the provided parameters.
     /// </summary>
-    /// <param name="paramNames">An array of parameter names that may be used.</param>
+    /// <param name="paramNames">The names of the parameters that may be used.</param>
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
     public TargetDefinition UsesParam(params IEnumerable<string> paramNames)
     {
@@ -300,7 +300,7 @@ public sealed class TargetDefinition
     /// <summary>
     ///     Specifies that this target requires the provided parameters.
     /// </summary>
-    /// <param name="paramNames">An array of parameter names that are required.</param>
+    /// <param name="paramNames">The names of the parameters that are required.</param>
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
     public TargetDefinition RequiresParam(params IEnumerable<string> paramNames)
     {
@@ -326,12 +326,12 @@ public sealed class TargetDefinition
     /// <summary>
     ///     Declares multiple artifacts that this target produces.
     /// </summary>
-    /// <param name="artifactName">The names of the artifacts.</param>
+    /// <param name="artifactNames">The names of the artifacts.</param>
     /// <param name="buildSlice">An optional build slice associated with the artifacts.</param>
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
-    public TargetDefinition ProducesArtifacts(IEnumerable<string> artifactName, string? buildSlice = null)
+    public TargetDefinition ProducesArtifacts(IEnumerable<string> artifactNames, string? buildSlice = null)
     {
-        ProducedArtifacts.AddRange(artifactName.Select(x => new ProducedArtifact(x, buildSlice)));
+        ProducedArtifacts.AddRange(artifactNames.Select(x => new ProducedArtifact(x, buildSlice)));
 
         return this;
     }

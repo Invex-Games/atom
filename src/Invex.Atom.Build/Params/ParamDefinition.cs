@@ -48,6 +48,11 @@ public sealed record ParamDefinition(string Name)
     /// </summary>
     public required IReadOnlyList<string> ChainedParams { get; init; }
 
+    /// <summary>
+    ///     Implicitly converts a <see cref="ParamDefinition" /> to its programmatic <see cref="Name" />.
+    /// </summary>
+    /// <param name="definition">The parameter definition to convert.</param>
+    /// <returns>The programmatic (C#) name of the parameter.</returns>
     public static implicit operator string(ParamDefinition definition) =>
         definition.Name;
 }

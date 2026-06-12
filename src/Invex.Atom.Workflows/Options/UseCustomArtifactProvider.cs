@@ -5,7 +5,7 @@
 /// </summary>
 /// <remarks>
 ///     <para>
-///         When <see cref="ToggleBuildOption.Enabled" />, the workflow will use the
+///         When enabled (see <see cref="ToggleBuildOption.Enabled" />), the workflow will use the
 ///         <see cref="IStoreArtifact.StoreArtifact" /> and <see cref="IRetrieveArtifact.RetrieveArtifact" /> targets,
 ///         which delegate to the registered <see cref="IArtifactProvider" /> implementation.
 ///     </para>
@@ -27,7 +27,8 @@
 /// [
 ///     new("MyWorkflow")
 ///     {
-///         Options = [UseCustomArtifactProvider.Enabled],
+///         Options = [BuildOptions.Artifacts.UseCustomProvider],
+///         // or equivalently: Options = [new UseCustomArtifactProvider()],
 ///         // ... other workflow configurations
 ///     }
 /// ];

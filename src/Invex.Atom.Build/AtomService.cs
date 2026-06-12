@@ -29,7 +29,7 @@
 ///         This service is registered and managed by the .NET Generic Host (
 ///         <see cref="Microsoft.Extensions.Hosting.IHost" />)
 ///         and is typically configured via the <c>AddAtom</c> extension method in the
-///         <c>Invex.Atom.Hosting.HostExtensions</c> class.
+///         <c>Invex.Atom.Build.Hosting.HostExtensions</c> class.
 ///     </para>
 ///     <example>
 ///         While <c>AtomService</c> is internal, its operation is primarily influenced by command-line arguments passed to
@@ -48,7 +48,7 @@
 /// atom --help
 /// </code>
 ///         This will cause <c>AtomService</c> to invoke <see cref="IHelpService.ShowHelp" />.
-///         Generating workflows:
+///         Executing a target:
 ///         <code>
 /// atom Build
 /// </code>
