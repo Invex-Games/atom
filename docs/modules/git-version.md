@@ -13,11 +13,19 @@ dotnet add package Invex.Atom.Module.GitVersion
 
 ## Usage
 
+Implement `IGitVersion` **and** enable the corresponding build options:
+
 ```csharp
 [BuildDefinition]
 [GenerateEntryPoint]
 internal partial class Build : BuildDefinition, IGitVersion
 {
+    public override IReadOnlyList<IBuildOption> Options =>
+    [
+        BuildOptions.GitVersion.ProvideBuildId,
+        BuildOptions.GitVersion.ProvideBuildVersion,
+    ];
+
     // BuildId and BuildVersion are now sourced from GitVersion.
 }
 ```
@@ -32,17 +40,10 @@ When `IGitVersion` is implemented, the module registers:
 These replace the default providers, so `BuildId` and `BuildVersion` in your `IBuildInfo` are automatically populated
 from GitVersion output.
 
-## Workflow Options
-
-Enable at the build level:
-
-```csharp
-public override IReadOnlyList<IBuildOption> Options =>
-[
-    BuildOptions.GitVersion.ProvideBuildId,
-    BuildOptions.GitVersion.ProvideBuildVersion,
-];
-```
+> [!IMPORTANT]
+> The providers only activate when the corresponding flag is enabled in `Options`. If `IGitVersion` is implemented but
+> a flag is missing, resolving `BuildId` / `BuildVersion` throws an error telling you to enable the flag. This lets you
+> opt in to GitVersion for the version, the ID, or both.
 
 ## Prerequisites
 

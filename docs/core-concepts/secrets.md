@@ -27,11 +27,13 @@ secret store:
 public interface ISecretsProvider
 {
     string? GetSecret(string key);
+
+    int Priority => 0;
 }
 ```
 
-Register your provider in the DI container. Multiple providers are queried in registration order — return `null` to
-delegate to the next provider.
+Register your provider in the DI container. Multiple providers are queried in descending `Priority` order (ties
+preserve registration order) — return `null` to delegate to the next provider.
 
 ### Built-in Providers
 

@@ -72,7 +72,7 @@ For statically determined paths (e.g. source-generated project paths), implement
 ```csharp
 public interface IPathMarker
 {
-    static abstract RootedPath Path(IRootedFileSystem fileSystem);
+    static abstract RootedPath Path(IFileSystem fileSystem);
 }
 ```
 

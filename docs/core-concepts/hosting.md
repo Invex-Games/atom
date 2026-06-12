@@ -49,22 +49,24 @@ If you need full control over `Main`, omit this attribute and write your own.
 
 ## `[ConfigureHostBuilder]` / `[ConfigureHost]`
 
-Module interfaces can use `[ConfigureHostBuilder]` to have the source generator call a static `ConfigureBuilder` method
-when the interface is implemented:
+Module interfaces can use `[ConfigureHostBuilder]` to have the source generator call a static partial method named
+`ConfigureBuilderFrom{InterfaceName}` when the interface is implemented:
 
 ```csharp
 [ConfigureHostBuilder]
 public partial interface IGitVersion
 {
-    protected static partial void ConfigureBuilder(IHostApplicationBuilder builder) =>
+    protected static partial void ConfigureBuilderFromIGitVersion(IHostApplicationBuilder builder) =>
         builder.Services
             .AddSingleton<IBuildIdProvider, GitVersionBuildIdProvider>()
             .AddSingleton<IBuildVersionProvider, GitVersionBuildVersionProvider>();
 }
 ```
 
-When your `Build` class implements `IGitVersion`, the generated code automatically calls `ConfigureBuilder` during host
-setup.
+When your `Build` class implements `IGitVersion`, the generated code automatically calls
+`ConfigureBuilderFromIGitVersion` during host setup. (`[ConfigureHost]` works the same way for configuring the built
+`IHost`, with a method named `ConfigureHostFrom{InterfaceName}`.) The Atom analyzers (AT0002/AT0003) verify that the
+required partial method is implemented.
 
 ## `ConfigureDefinitionHost`
 

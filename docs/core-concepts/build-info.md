@@ -1,28 +1,30 @@
 # Build Info
 
-Atom provides a pluggable system for determining the build's identity: its **name**, **ID**, **version**, and *
-*timestamp**.
+Atom provides a pluggable system for determining the build's identity: its **name**, **ID**, **version**, and
+**timestamp**.
 
 ## `IBuildInfo`
 
-The `IBuildInfo` interface exposes:
+The `IBuildInfo` interface exposes the following parameters. Each can be overridden on the command line (e.g.
+`--build-name`, `--build-id`, `--build-version`, `--build-timestamp`, `--build-slice`):
 
-| Property         | Type             | Description                                    |
-|------------------|------------------|------------------------------------------------|
-| `BuildName`      | `string`         | Logical name of the build (e.g. `"MyProject"`) |
-| `BuildId`        | `string`         | Unique identifier for this build run           |
-| `BuildVersion`   | `string`         | Semantic version string                        |
-| `BuildTimestamp` | `DateTimeOffset` | When the build started                         |
+| Property         | Type      | Description                                                                  |
+|------------------|-----------|------------------------------------------------------------------------------|
+| `BuildName`      | `string`  | Logical name of the build (defaults to the solution file or root directory) |
+| `BuildId`        | `string`  | Unique identifier for this build run                                         |
+| `BuildVersion`   | `SemVer`  | Semantic version of the build                                                |
+| `BuildTimestamp` | `long`    | Build timestamp in Unix epoch seconds                                        |
+| `BuildSlice`     | `string?` | Optional identifier for a build variation in matrix jobs                     |
 
 ## Providers
 
 Each piece of build info is resolved by a dedicated provider interface:
 
-| Interface                 | Default                         | Description                     |
-|---------------------------|---------------------------------|---------------------------------|
-| `IBuildIdProvider`        | `DefaultBuildIdProvider`        | Returns a GUID-based ID         |
-| `IBuildVersionProvider`   | `DefaultBuildVersionProvider`   | Returns `"0.0.0"`               |
-| `IBuildTimestampProvider` | `DefaultBuildTimestampProvider` | Returns `DateTimeOffset.UtcNow` |
+| Interface                 | Default                         | Description                                                                  |
+|---------------------------|---------------------------------|------------------------------------------------------------------------------|
+| `IBuildIdProvider`        | `DefaultBuildIdProvider`        | Combines the build version and timestamp (e.g. `"1.2.3-1672531200"`)        |
+| `IBuildVersionProvider`   | `DefaultBuildVersionProvider`   | Parses version properties from `Directory.Build.props`; falls back to 1.0.0 |
+| `IBuildTimestampProvider` | `DefaultBuildTimestampProvider` | Returns the current time as Unix epoch seconds                              |
 
 ### Replacing a Provider
 

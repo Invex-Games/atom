@@ -34,8 +34,9 @@ AtomHost.Run<Build>(args);
 
 ### `[ConfigureHostBuilder]`
 
-For interfaces marked with `[ConfigureHostBuilder]`, the generator ensures that when a `[BuildDefinition]` class
-implements the interface, the static `ConfigureBuilder` method is called during host setup.
+For interfaces marked with `[ConfigureHostBuilder]`, the generator declares a `ConfigureBuilderFrom{InterfaceName}`
+partial method and ensures that when a `[BuildDefinition]` class implements the interface, that method is called during
+host setup.
 
 ### `[GenerateSolutionModel]`
 

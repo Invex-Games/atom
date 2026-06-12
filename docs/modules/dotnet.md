@@ -12,20 +12,32 @@ dotnet add package Invex.Atom.Module.Dotnet
 
 ## Usage
 
-The module exposes several interfaces with pre-built targets for .NET CLI commands. Implement the relevant interfaces on
-your build class to gain access to the targets and their parameters.
+The module exposes several interfaces with pre-built helper methods for .NET CLI commands. Implement the relevant
+interfaces on your build class (or your own target interfaces) to gain access to the helpers and their parameters:
+
+| Interface                  | Purpose                                                                    |
+|----------------------------|----------------------------------------------------------------------------|
+| `IDotnetCli`               | Strongly-typed wrappers for the full `dotnet` CLI surface.                 |
+| `IDotnetCliHelper`         | Base helper for invoking the .NET CLI.                                     |
+| `IDotnetPackHelper`        | `DotnetPackAndStage` — packs a project and stages the `.nupkg` output.     |
+| `IDotnetPublishHelper`     | Publishes a project and stages the output.                                 |
+| `IDotnetTestHelper`        | Runs test projects and collects results/coverage (TRX models included).    |
+| `IDotnetToolInstallHelper` | Installs .NET tools.                                                       |
+| `INugetHelper`             | NuGet feed management and push operations.                                 |
 
 ## Features
 
-- **CLI wrappers**: Strongly-typed wrappers around `dotnet build`, `dotnet test`, `dotnet pack`, `dotnet publish`, and
-  `dotnet nuget push`.
-- **Build helpers**: Utility methods for common .NET build patterns.
-- **Framework labels**: `WorkflowLabels.Dotnet.Framework.*` constants for matrix dimensions (`Net_8_0`, `Net_9_0`,
-  `Net_10_0`, etc.).
+- **CLI wrappers**: Strongly-typed wrappers around `dotnet build`, `dotnet test`, `dotnet pack`, `dotnet publish`,
+  `dotnet nuget push`, and the rest of the `dotnet` CLI.
+- **Build helpers**: Utility methods for common .NET build patterns (pack & stage, publish & stage, test with
+  reporting, tool installation).
+- **Version transformation**: `TransformProjectVersionScope` temporarily rewrites project versions from the build's
+  version providers during packing.
 
 ## Workflow Integration
 
-Use the framework labels for matrix builds:
+Framework labels for matrix builds are provided by the `Invex.Atom.Workflows` package
+(`WorkflowLabels.Dotnet.Framework.*`):
 
 ```csharp
 new MatrixDimension(nameof(ITestTargets.TestFramework))

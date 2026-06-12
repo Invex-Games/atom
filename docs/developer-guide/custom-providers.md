@@ -87,7 +87,19 @@ Replace how the build identity is determined:
 ```csharp
 public class MyVersionProvider : IBuildVersionProvider
 {
-    public string BuildVersion => ReadVersionFromSomewhere();
+    // Version is a SemVer, not a string.
+    public SemVer Version => SemVer.Parse(ReadVersionFromSomewhere());
+}
+
+public class MyBuildIdProvider : IBuildIdProvider
+{
+    public string BuildId => Guid.NewGuid().ToString();
+}
+
+public class MyTimestampProvider : IBuildTimestampProvider
+{
+    // Seconds since the Unix epoch (UTC).
+    public long Timestamp => DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 }
 ```
 

@@ -34,7 +34,7 @@ targets map to CI/CD jobs — and generate the corresponding YAML files.
 ```csharp
 [BuildDefinition]
 [GenerateEntryPoint]
-internal partial class Build : WorkflowBuildDefinition
+internal partial class Build : WorkflowBuildDefinition, IGithubWorkflows
 {
     private Target Compile => t => t
         .DescribedAs("Compiles the solution")
@@ -61,25 +61,25 @@ internal partial class Build : WorkflowBuildDefinition
 }
 ```
 
-Running `dotnet run -- GenerateWorkflowFiles` (or `dotnet run -- Gen`) writes a GitHub Actions YAML file that calls your
-build with the correct targets.
+Running `dotnet run -- Gen` writes a GitHub Actions YAML file that calls your build with the correct targets.
+Inheriting `IGithubWorkflows` (from `Invex.Atom.Module.GithubWorkflows`) registers the GitHub Actions workflow writer.
 
 ### What `WorkflowBuildDefinition` adds
 
-| Feature                        | Description                                                                                               |
-|--------------------------------|-----------------------------------------------------------------------------------------------------------|
-| `Workflows` property           | Declare named workflows with triggers, targets, and platform types.                                       |
-| `GenerateWorkflowFiles` target | Generates YAML for each workflow.                                                                         |
-| Workflow triggers              | Push, pull request, manual (with inputs).                                                                 |
-| Matrix dimensions              | Run a target across multiple OS or framework combinations.                                                |
-| Workflow options               | Checkout steps, deployment environments, run conditions, etc.                                             |
-| Platform modules               | `Invex.Atom.Module.GithubWorkflows` / `Invex.Atom.Module.DevopsWorkflows` add platform-specific features. |
+| Feature              | Description                                                                                               |
+|----------------------|-----------------------------------------------------------------------------------------------------------|
+| `Workflows` property | Declare named workflows with triggers, targets, and platform types.                                       |
+| `Gen` target         | Generates YAML for each workflow.                                                                         |
+| Workflow triggers    | Push, pull request, manual (with inputs).                                                                 |
+| Matrix dimensions    | Run a target across multiple OS or framework combinations.                                                |
+| Workflow options     | Checkout steps, deployment environments, run conditions, etc.                                             |
+| Platform modules     | `Invex.Atom.Module.GithubWorkflows` / `Invex.Atom.Module.DevopsWorkflows` add platform-specific features. |
 
 ### When to upgrade
 
 You can always start with `BuildDefinition` and switch to `WorkflowBuildDefinition` later — the change is additive. Your
 existing targets, parameters, and modules continue to work unchanged; you just gain the `Workflows` property and the
-`GenerateWorkflowFiles` target.
+`Gen` target.
 
 ## Next Steps
 

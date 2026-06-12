@@ -77,7 +77,7 @@
             href: built-in-targets/setup-build-info.md
         -   name: ValidateBuild
             href: built-in-targets/validate-build.md
-        -   name: GenerateWorkflowFiles
+        -   name: Gen (Generate Workflow Files)
             href: built-in-targets/generate-workflow-files.md
 -   name: Developer Guide
     href: developer-guide/writing-a-module.md

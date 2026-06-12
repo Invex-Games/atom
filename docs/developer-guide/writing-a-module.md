@@ -47,32 +47,41 @@ public partial interface IMyModule : IBuildAccessor
             Logger.LogInformation("Setting: {Setting}", MySetting);
         });
 
-    protected static partial void ConfigureBuilder(IHostApplicationBuilder builder) =>
-        builder.Services.AddSingleton<IMyService, MyService>();
+    protected static partial void ConfigureBuilderFromIMyModule(IHostApplicationBuilder builder) =>
+        builder.Services.TryAddSingleton<IMyService, MyService>();
 }
 ```
 
 ### Key Points
 
-- **`[ConfigureHostBuilder]`** + `static partial void ConfigureBuilder` — the source generator calls this method when a
-  consumer implements the interface. This is how you register services.
+- **`[ConfigureHostBuilder]`** + `static partial void ConfigureBuilderFrom{InterfaceName}` — the source generator
+  declares this partial method (named after the interface, e.g. `ConfigureBuilderFromIMyModule`) and calls it when a
+  consumer implements the interface. This is how you register services. The `AT0003` analyzer reports an error if the
+  method body is missing.
 - **`IBuildAccessor`** — gives the interface access to `Logger`, `RootedFileSystem`, `ProcessRunner`, `GetParam`, etc.
 - **Default implementations** — both targets and parameters use default interface members, so consumers don't need to
   implement anything.
 
 ## Extend Build Options (Optional)
 
-If your module needs workflow-level options, extend the static `BuildOptions` class:
+If your module needs workflow-level options, define your own option type and expose it via the static `BuildOptions`
+class. A simple on/off toggle can derive from `ToggleBuildOption`:
 
 ```csharp
+// A toggle option (Enabled defaults to true).
+public sealed record UseSomethingOption : ToggleBuildOption;
+
 public static class BuildOptions
 {
     public static class MyModule
     {
-        public static IBuildOption UseSomething => new ToggleBuildOption("MyModule.UseSomething");
+        public static UseSomethingOption UseSomething => new();
+        public static UseSomethingOption DisableSomething => new() { Enabled = false };
     }
 }
 ```
+
+Check the toggle with the `IsEnabled` extension when generating workflows.
 
 ## Package and Publish
 
