@@ -6,9 +6,11 @@
 /// <remarks>
 ///     This parser identifies known options (e.g., <c>--help</c>), parameters, and commands (targets) by referencing an
 ///     <see cref="IBuildDefinition" />.
-///     Unrecognized arguments will invalidate the result and trigger diagnostic messages.
+///     Parsing never throws or writes output; any problems (unknown arguments, missing values) are collected as
+///     <see cref="ParseError" /> objects on the returned <see cref="CommandLineArgs" />, to be reported by the
+///     application once the host is fully constructed.
 /// </remarks>
-internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IAnsiConsole console)
+internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition)
 {
     /// <summary>
     ///     Parses the provided command-line arguments into a <see cref="CommandLineArgs" /> object.
@@ -16,11 +18,9 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
     /// <param name="rawArgs">A read-only list of string arguments from the application's entry point.</param>
     /// <returns>
     ///     A <see cref="CommandLineArgs" /> object representing the parsed arguments. Check the
-    ///     <see cref="CommandLineArgs.IsValid" /> property to determine if parsing was successful.
+    ///     <see cref="CommandLineArgs.IsValid" /> property to determine if parsing was successful; when it is false,
+    ///     <see cref="CommandLineArgs.Errors" /> describes each problem encountered.
     /// </returns>
-    /// <exception cref="CommandLineException">
-    ///     Thrown if an argument requiring a value is provided without one (e.g., <c>--project</c> or a defined parameter).
-    /// </exception>
     /// <example>
     ///     <code>
     ///       var rawArgs = new[] { "Build", "--version", "1.0.0", "-s" };
@@ -35,8 +35,7 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
         var rawArgsArray = rawArgs.ToArray();
 
         List<IArg> args = [];
-
-        var isValid = true;
+        List<ParseError> errors = [];
 
         for (var i = 0; i < rawArgsArray.Length; i++)
         {
@@ -47,10 +46,14 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
                 if (optionArg is ProjectArg)
                 {
                     if (i == rawArgsArray.Length - 1)
-                        throw new CommandLineException("Missing value for -[-p]roject option. Usage: --project <path>")
+                    {
+                        errors.Add(new("Missing value for -[-p]roject option. Usage: --project <path>")
                         {
                             ArgumentName = "project",
-                        };
+                        });
+
+                        continue;
+                    }
 
                     optionArg = new ProjectArg(rawArgsArray[i + 1]);
                     i++;
@@ -65,36 +68,40 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
             if (rawArg.StartsWith("--"))
             {
                 var argParam = rawArg[2..];
-                var matchedParam = false;
 
-                foreach (var buildParam in buildDefinition.ParamDefinitions.Where(buildParam =>
-                             string.Equals(argParam, buildParam.Value.ArgName, StringComparison.OrdinalIgnoreCase)))
+                var buildParam = buildDefinition.ParamDefinitions.FirstOrDefault(buildParam =>
+                    string.Equals(argParam, buildParam.Value.ArgName, StringComparison.OrdinalIgnoreCase));
+
+                if (buildParam.Key is not null)
                 {
                     if (i == rawArgsArray.Length - 1)
-                        throw new CommandLineException(
-                            $"Missing value for parameter '{argParam}'. Usage: --{argParam} <value>")
+                    {
+                        errors.Add(new($"Missing value for parameter '{argParam}'. Usage: --{argParam} <value>")
                         {
                             ArgumentName = argParam,
-                        };
+                        });
+
+                        continue;
+                    }
 
                     var nextArg = rawArgsArray[i + 1];
 
                     if (nextArg.StartsWith("--"))
-                        throw new CommandLineException(
+                    {
+                        errors.Add(new(
                             $"Missing value for parameter '{argParam}'. The next argument '{nextArg}' looks like another option. Usage: --{argParam} <value>")
                         {
                             ArgumentName = argParam,
-                        };
+                        });
+
+                        continue;
+                    }
 
                     args.Add(new ParamArg(buildParam.Value.ArgName, buildParam.Key, nextArg));
                     i++;
-                    matchedParam = true;
 
-                    break;
-                }
-
-                if (matchedParam)
                     continue;
+                }
             }
 
             if (TryParseCommand(buildDefinition.TargetDefinitions, rawArg) is { } commandArg)
@@ -104,24 +111,12 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
                 continue;
             }
 
-            console.WriteLine();
-            console.WriteLine($"Unknown argument '{rawArg}'", new(Color.Red));
-
             var commandMatches = buildDefinition
                 .TargetDefinitions
                 .Keys
                 .OrderBy(targetDefinition => targetDefinition.GetLevenshteinDistance(rawArg))
                 .Take(3)
                 .ToList();
-
-            if (commandMatches.Count > 0)
-            {
-                console.WriteLine();
-                console.WriteLine("Similar commands", new(Color.Yellow));
-
-                foreach (var possibleMatch in commandMatches)
-                    console.WriteLine($"  {possibleMatch}");
-            }
 
             var paramMatches = buildDefinition
                 .ParamDefinitions
@@ -131,21 +126,15 @@ internal sealed class CommandLineArgsParser(IBuildDefinition buildDefinition, IA
                 .Take(3)
                 .ToList();
 
-            if (paramMatches.Count > 0)
+            errors.Add(new($"Unknown argument '{rawArg}'")
             {
-                console.WriteLine();
-                console.WriteLine("Similar parameters", new(Color.Yellow));
-
-                foreach (var possibleMatch in paramMatches)
-                    console.WriteLine($"  --{possibleMatch}");
-            }
-
-            console.WriteLine();
-
-            isValid = false;
+                ArgumentName = rawArg,
+                SimilarCommands = commandMatches,
+                SimilarParams = paramMatches,
+            });
         }
 
-        return new(isValid, args.ToList());
+        return new(errors.Count == 0, args, errors);
     }
 
     /// <summary>

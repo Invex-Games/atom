@@ -46,7 +46,7 @@ through Atom (for example via `IBuildAccessor.RootedFileSystem` and `IBuildAcces
 3. Inside that class you declare **targets** — lambda-based definitions that describe what to execute, their
    dependencies, required parameters, and produced artifacts.
 4. You run the build with `dotnet run -- <TargetName>` (or via the `atom` global tool).
-5. If you use `WorkflowBuildDefinition`, running the `GenerateWorkflowFiles` target emits platform-specific YAML that
+5. If you use `WorkflowBuildDefinition`, running the `Gen` target emits platform-specific YAML that
    invokes your same build on CI.
 
 ## Next Steps

@@ -5,8 +5,8 @@ namespace Invex.Atom.Workflows;
 /// </summary>
 /// <remarks>
 ///     <para>
-///         When running in non-headless mode or when the <c>--gen</c> flag is provided, this hook
-///         will automatically generate workflow files before build targets are executed.
+///         When running in non-headless mode or when the <c>Gen</c> target (see <see cref="IGen.Gen" />) is
+///         invoked, this hook will automatically generate workflow files before build targets are executed.
 ///     </para>
 ///     <para>
 ///         When running in headless mode (CI/CD), if workflows are found to be outdated,
@@ -30,7 +30,7 @@ internal sealed class WorkflowLifecycleHook(
         else if (await workflowGenerator.WorkflowsOutdated(cancellationToken))
         {
             throw new WorkflowOutdatedException(
-                "One or more workflows are out of date. To regenerate workflows, run the build with the --gen flag.");
+                "One or more workflows are out of date. To regenerate workflows, run the 'Gen' target.");
         }
     }
 }

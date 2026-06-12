@@ -1,8 +1,10 @@
 ﻿namespace Invex.Atom.Build;
 
 /// <summary>
-///     See <see cref="SetupBuildInfo" />
+///     Provides the <see cref="SetupBuildInfo" /> target, which initializes core build information
+///     (name, ID, version, and timestamp) as build variables for consumption by other targets.
 /// </summary>
+/// <seealso cref="SetupBuildInfo" />
 [PublicAPI]
 public interface ISetupBuildInfo : IBuildInfo, IVariablesHelper, IReportsHelper
 {
@@ -100,36 +102,27 @@ public interface ISetupBuildInfo : IBuildInfo, IVariablesHelper, IReportsHelper
     /// </remarks>
     /// <example>
     ///     <para>
-    ///         While <c>SetupBuildInfo</c> is often implicitly part of a default build definition, here's how you might
-    ///         conceptualize its use and the consumption of variables it produces. Assume <c>BuildName</c> is set in the
-    ///         build definition (e.g., by inheriting from <c>IBuildInfo</c>).
+    ///         While <c>SetupBuildInfo</c> is often implicitly part of a default build definition, here's how a custom
+    ///         target can depend on it and consume the variables it produces. Variables are consumed via the
+    ///         corresponding build parameters (declared with <see cref="TargetDefinition.ConsumesVariable" /> and read
+    ///         with <c>GetParam</c>).
     ///     </para>
     ///     <code lang="csharp">
-    /// // In your Atom build definition (e.g., Build.cs)
-    /// public class MyBuild : BuildDefinition, ISetupBuildInfo
+    /// // In a target interface within your Atom build project
+    /// public interface IPackage : ISetupBuildInfo
     /// {
-    ///     // ISetupBuildInfo members (BuildIdProvider, etc.) would be implicitly available
-    ///     // or explicitly implemented if not using a base class that provides them.
-    ///     // The BuildName property is inherited from IBuildInfo
-    ///     public override string BuildName => "MyAwesomeProject";
-    ///     // A custom target that depends on SetupBuildInfo having run
     ///     Target Package => t => t
     ///         .DependsOn(nameof(ISetupBuildInfo.SetupBuildInfo)) // Ensures build info is set up
-    ///         .Executes(async () =>
+    ///         .ConsumesVariable(nameof(ISetupBuildInfo.SetupBuildInfo), nameof(BuildVersion))
+    ///         .Executes(() =>
     ///         {
-    ///             // Retrieve variables set by SetupBuildInfo
-    ///             var buildId = await GetVariable&lt;string&gt;("BuildId");
-    ///             var buildVersion = await GetVariable&lt;string&gt;("BuildVersion");
-    ///             var buildTimestamp = await GetVariable&lt;string&gt;("BuildTimestamp");
-    ///             // Log or use these variables
-    ///             LogInformation($"Packaging {BuildName} version {buildVersion} (Build ID: {buildId}, Timestamp: {buildTimestamp})");
+    ///             // BuildVersion is resolved from the variable written by SetupBuildInfo
+    ///             Logger.LogInformation("Packaging {Name} version {Version}", BuildName, BuildVersion);
     ///             // ... further packaging logic ...
     ///         });
-    ///     // Main build flow
-    ///     Target Default => t => t.DependsOn(Package);
     /// }
     /// // To run this build (assuming Atom CLI):
-    /// // atom Default
+    /// // atom Package
     /// </code>
     /// </example>
     /// <returns>

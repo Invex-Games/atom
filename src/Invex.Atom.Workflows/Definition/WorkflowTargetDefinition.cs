@@ -20,6 +20,10 @@ public sealed record WorkflowTargetDefinition(string Name)
     /// <summary>
     ///     Creates a <see cref="WorkflowStepModel" /> from this target definition.
     /// </summary>
+    /// <param name="workflowOptions">
+    ///     The workflow-level options to merge with this target's own <see cref="Options" />.
+    ///     Target-level options take precedence over workflow-level options of the same type.
+    /// </param>
     /// <returns>A new <see cref="WorkflowStepModel" /> instance.</returns>
     public WorkflowStepModel CreateModel(IEnumerable<IBuildOption> workflowOptions) =>
         new()

@@ -1,5 +1,8 @@
 namespace Invex.Atom.Build;
 
+/// <summary>
+///     Describes the Atom build project being executed, including its name and application style.
+/// </summary>
 [PublicAPI]
 public sealed record AtomProjectData
 {

@@ -10,15 +10,23 @@ public static class TaskExtensions
     /// <summary>
     ///     Retries awaiting the provided <see cref="Task" /> when it faults, up to a specified number of attempts.
     /// </summary>
-    /// <param name="task">The task to await.</param>
+    /// <param name="task">The task to await. If <c>null</c>, a completed task is returned.</param>
     /// <param name="retryCount">The number of retries to attempt after the initial failure.</param>
-    /// <param name="retryDelay">The delay between retry attempts.</param>
+    /// <param name="retryDelay">The delay between retry attempts. Defaults to no delay.</param>
     /// <returns>
-    ///     A task that completes when the underlying task succeeds, or throws an <see cref="AggregateException" /> after
-    ///     all retries fail.
+    ///     A task that completes when the underlying task succeeds, or rethrows the original exception (wrapped in an
+    ///     <see cref="AggregateException" /> when multiple attempts fail) after all retries are exhausted.
     /// </returns>
     /// <remarks>
-    ///     Cancellation-related exceptions are immediately rethrown and do not trigger a retry.
+    ///     <para>
+    ///         Cancellation-related exceptions are immediately rethrown and do not trigger a retry.
+    ///     </para>
+    ///     <para>
+    ///         Note that awaiting the same <see cref="Task" /> instance again does not re-execute the underlying
+    ///         operation; once the task has faulted, every subsequent await observes the same failure. To re-execute
+    ///         the operation on each attempt, use the <see cref="WithRetry(Func{Task}, int, TimeSpan, CancellationToken)" />
+    ///         overload instead.
+    ///     </para>
     /// </remarks>
     public static Task WithRetry(this Task? task, int retryCount = 5, TimeSpan retryDelay = default)
     {
@@ -70,15 +78,23 @@ public static class TaskExtensions
     ///     Retries awaiting the provided <see cref="Task{TResult}" /> when it faults, up to a specified number of attempts.
     /// </summary>
     /// <typeparam name="T">The result type of the task.</typeparam>
-    /// <param name="task">The task to await.</param>
+    /// <param name="task">The task to await. If <c>null</c>, a completed task with a default result is returned.</param>
     /// <param name="retryCount">The number of retries to attempt after the initial failure.</param>
     /// <param name="retryDelay">The delay between retry attempts. Defaults to 1 second if not specified.</param>
     /// <returns>
-    ///     A task that completes with the result if successful, or throws an <see cref="AggregateException" /> after all
-    ///     retries fail.
+    ///     A task that completes with the result if successful, or rethrows the original exception (wrapped in an
+    ///     <see cref="AggregateException" /> when multiple attempts fail) after all retries are exhausted.
     /// </returns>
     /// <remarks>
-    ///     Cancellation-related exceptions are immediately rethrown and do not trigger a retry.
+    ///     <para>
+    ///         Cancellation-related exceptions are immediately rethrown and do not trigger a retry.
+    ///     </para>
+    ///     <para>
+    ///         Note that awaiting the same <see cref="Task{TResult}" /> instance again does not re-execute the underlying
+    ///         operation; once the task has faulted, every subsequent await observes the same failure. To re-execute
+    ///         the operation on each attempt, use the
+    ///         <see cref="WithRetry{T}(Func{Task{T}}, int, TimeSpan, CancellationToken)" /> overload instead.
+    ///     </para>
     /// </remarks>
     public static Task<T> WithRetry<T>(this Task<T>? task, int retryCount = 5, TimeSpan retryDelay = default)
     {

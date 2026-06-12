@@ -58,12 +58,16 @@ WorkflowTriggers.PullRequest(
 // Simple manual dispatch
 WorkflowTriggers.Manual
 
-// With inputs
+// With inputs (signature: name, description, required, [choices], [default])
 WorkflowTriggers.ManualWithInputs(
-    new ManualStringInput("version", "Version to deploy"),
-    new ManualBoolInput("dry-run", "Dry run mode"),
-    new ManualChoiceInput("environment", "Target environment", ["staging", "production"]))
+    new ManualStringInput("version", "Version to deploy", required: true),
+    new ManualBoolInput("dry-run", "Dry run mode", required: false),
+    new ManualChoiceInput("environment", "Target environment", required: true, ["staging", "production"]))
 ```
+
+> [!TIP]
+> Use the `ForParam(...)` factory on each input type to build an input directly from a `ParamDefinition`, keeping the
+> input name and description in sync with the parameter.
 
 ### Manual Input Types
 

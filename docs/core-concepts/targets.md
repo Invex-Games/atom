@@ -28,7 +28,6 @@ The property name becomes the target name on the command line: `dotnet run -- Co
 t => t
     .DescribedAs("Human-readable description for help output")
     .IsHidden()          // hide from default help; still executable
-    .WithAlias("c")      // short alias for the CLI
 ```
 
 ### Execution
@@ -52,10 +51,13 @@ You can call `.Executes()` multiple times — tasks run in order.
 
 ```csharp
 t => t
-    .DependsOn(Restore)               // inferred from property expression
+    .DependsOn(Restore)                // name inferred from the argument expression
     .DependsOn(nameof(Compile))        // by name
-    .DependsOn(Compile, Test)          // multiple at once
 ```
+
+> [!NOTE]
+> When passing a target directly, the name is inferred from the argument expression, so pass the target property
+> itself (e.g. `DependsOn(Restore)`) rather than a local variable. Call `DependsOn` once per dependency.
 
 Dependencies are resolved transitively. If `Pack` depends on `Compile` and `Compile` depends on `Restore`, running
 `Pack` executes `Restore → Compile → Pack`.
@@ -95,8 +97,8 @@ Target MyCompile => t => t
     .Executes(() => Logger.LogInformation("Extra step after build"));
 ```
 
-By default the extending target's tasks run **before** the base target's tasks. Pass `runExtensionAfter: true` to
-reverse the order:
+By default the base target's tasks run **before** the extending target's tasks. Pass `runExtensionAfter: true` to
+reverse the order (your tasks first, then the base target's):
 
 ```csharp
 .Extends<IDotnetTargets>(x => x.DotnetBuild, runExtensionAfter: true)

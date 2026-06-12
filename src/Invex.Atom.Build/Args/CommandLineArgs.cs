@@ -24,13 +24,18 @@ public sealed record CommandLineArgs
     ///     line. This list provides access to raw argument objects like <see cref="HelpArg" />, <see cref="CommandArg" />, or
     ///     <see cref="ParamArg" />.
     /// </param>
+    /// <param name="Errors">
+    ///     The <see cref="ParseError" /> objects describing any problems encountered while parsing the raw arguments.
+    ///     When non-empty, <see cref="IsValid" /> is forced to false.
+    /// </param>
     /// <remarks>
     ///     An instance of this record is created by the <see cref="CommandLineArgsParser" /> after parsing the raw string
     ///     arguments provided to the Atom application.
     /// </remarks>
-    public CommandLineArgs(bool IsValid, IEnumerable<IArg> Args)
+    public CommandLineArgs(bool IsValid, IEnumerable<IArg> Args, IEnumerable<ParseError>? Errors = null)
     {
-        this.IsValid = IsValid;
+        this.Errors = Errors?.ToList() ?? [];
+        this.IsValid = IsValid && this.Errors.Count == 0;
 
         this.Args = Args.ToList();
     }
@@ -40,6 +45,16 @@ public sealed record CommandLineArgs
     ///     false, the Atom application will typically terminate or display help.
     /// </summary>
     public bool IsValid { get; init; }
+
+    /// <summary>
+    ///     A read-only list of <see cref="ParseError" /> objects describing any problems encountered while parsing the
+    ///     raw arguments, such as unknown arguments or options that are missing their values.
+    /// </summary>
+    /// <remarks>
+    ///     Parsing never throws or writes to the console; errors are collected here and reported by the Atom
+    ///     application after the host is fully constructed, so that all output can be masked for secrets.
+    /// </remarks>
+    public IReadOnlyList<ParseError> Errors { get; init; }
 
     /// <summary>
     ///     A read-only list of <see cref="IArg" /> objects representing the individual arguments parsed from the command
@@ -173,7 +188,9 @@ public sealed record CommandLineArgs
     {
         var errors = new List<string>();
 
-        if (!IsValid)
+        errors.AddRange(Errors.Select(error => error.Message));
+
+        if (!IsValid && Errors.Count == 0)
             errors.Add("One or more arguments could not be parsed");
 
         errors.AddRange(Commands

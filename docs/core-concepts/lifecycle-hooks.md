@@ -42,8 +42,8 @@ Multiple hooks can be registered. They run in registration order.
 
 ## Built-in Hooks
 
-The `WorkflowLifecycleHook` (registered by `WorkflowBuildDefinition`) uses `BeforeExecute` to check whether generated
-workflow files are outdated and warns or fails accordingly.
+The `WorkflowLifecycleHook` (registered by `IWorkflowBuildDefinition`) uses `BeforeExecute` to regenerate workflow
+files in interactive mode, or — in headless mode — to fail the build when the generated files are outdated.
 
 ## Next Steps
 

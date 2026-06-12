@@ -1,22 +1,24 @@
 ﻿namespace Invex.Atom.Workflows.Options.Injections;
 
 /// <summary>
-///     Represents a workflow option that injects an environment variable into the workflow execution context.
+///     A workflow option that injects a parameter whose value is sourced from the workflow's environment.
 /// </summary>
+/// <param name="Value">The name of the parameter to inject from the workflow environment.</param>
 /// <remarks>
-///     This allows workflows to access custom environment variables that are not part of the default runtime environment.
-///     For sensitive values, consider using <see cref="WorkflowSecretsInjectionFromEnvironment" />.
+///     Typically created via <c>BuildOptions.Inject.ParamFromWorkflowEnvironment(name)</c>.
+///     For sensitive values, use <see cref="WorkflowSecretsInjectionFromEnvironment" /> instead.
 /// </remarks>
-/// <example>
-///     <code>
-/// // Inject a build configuration environment variable
-/// var buildConfig = WorkflowEnvironmentInjection.Create("BUILD_CONFIGURATION", "Release");
-/// // Add to workflow configuration
-/// var workflowDefinition = new WorkflowDefinition().WithAddedOptions(buildConfig);
-///     </code>
-/// </example>
 [PublicAPI]
 public sealed record WorkflowParamInjectionFromEnvironment(string Value) : IBuildOption;
 
+/// <summary>
+///     A workflow option that injects an environment variable with the provided value expression into
+///     the workflow execution context.
+/// </summary>
+/// <param name="Name">The name of the environment variable.</param>
+/// <param name="Value">The expression that produces the variable value in the workflow.</param>
+/// <remarks>
+///     Typically created via <c>BuildOptions.Inject.EnvironmentVariable(name, value)</c>.
+/// </remarks>
 [PublicAPI]
 public sealed record WorkflowEnvironmentVariableInjection(string Name, TextExpression Value) : IBuildOption;

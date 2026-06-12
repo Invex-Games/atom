@@ -4,12 +4,17 @@ using DeclarationResult =
 
 namespace Invex.Atom.Build.SourceGenerators;
 
+/// <summary>
+///     Generates host configuration wiring for interfaces marked with <c>[ConfigureHostBuilder]</c> or
+///     <c>[ConfigureHost]</c>, declaring the partial configure methods that implementations provide.
+/// </summary>
 [Generator]
 public class SetupSourceGenerator : IIncrementalGenerator
 {
     private const string ConfigureHostBuilderAttributeFull = "Invex.Atom.Build.Hosting.ConfigureHostBuilderAttribute";
     private const string ConfigureHostAttributeFull = "Invex.Atom.Build.Hosting.ConfigureHostAttribute";
 
+    /// <inheritdoc />
     public void Initialize(IncrementalGeneratorInitializationContext context) =>
         context.RegisterSourceOutput(context.CompilationProvider.Combine(context
                 .SyntaxProvider

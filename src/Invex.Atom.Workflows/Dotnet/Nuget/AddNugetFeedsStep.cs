@@ -15,10 +15,16 @@ public sealed record AddNugetFeedsStep : IAdditionalStepOption
     /// </summary>
     public IReadOnlyList<NugetFeedOptions> FeedsToAdd { get; init; } = [];
 
+    /// <summary>
+    ///     Gets a value indicating whether the Atom tool version installed on the agent should be kept in
+    ///     sync with the referenced Atom library version. Defaults to <c>true</c>.
+    /// </summary>
     public bool SyncAtomToolVersionToLibraryVersion { get; init; } = true;
 
+    /// <inheritdoc />
     public bool Enabled { get; init; } = true;
 
+    /// <inheritdoc />
     public int Order { get; init; } = -100;
 
     /// <summary>

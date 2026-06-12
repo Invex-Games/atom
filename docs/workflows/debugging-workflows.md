@@ -10,7 +10,7 @@ useful for inspecting exactly what Atom generates.
 
 ## Running Locally
 
-When you execute `dotnet run -- GenerateWorkflowFiles` (or `Gen`), the platform-specific writers produce the actual YAML
+When you execute `dotnet run -- Gen`, the platform-specific writers produce the actual YAML
 files. You can compare these against your expectations by:
 
 1. Running `Gen` and diffing the generated YAML.
@@ -18,9 +18,10 @@ files. You can compare these against your expectations by:
 
 ## Checking for Outdated Workflows
 
-The `WorkflowLifecycleHook` runs during `BeforeExecute` and detects when the YAML on disk doesn't match what the current
-build definition would generate. This helps catch cases where you've changed targets or workflows but forgotten to
-regenerate.
+The `WorkflowLifecycleHook` runs during `BeforeExecute`. In interactive (non-headless) mode it regenerates the workflow
+files automatically; in headless mode (CI) it detects when the YAML on disk doesn't match what the current build
+definition would generate and fails the build with a `WorkflowOutdatedException`. This helps catch cases where you've
+changed targets or workflows but forgotten to regenerate.
 
 ## Tips
 

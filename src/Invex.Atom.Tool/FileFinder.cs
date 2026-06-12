@@ -1,5 +1,8 @@
 ﻿namespace Invex.Atom.Tool;
 
+/// <summary>
+///     Locates project files by searching upward to the project root and downward through subdirectories.
+/// </summary>
 public static class FileFinder
 {
     private const int MaxDownstreamDepth = 4;
@@ -57,6 +60,25 @@ public static class FileFinder
         "$RECYCLE.BIN",
     };
 
+    /// <summary>
+    ///     Searches for the first existing file matching one of the provided names, starting from the given
+    ///     directory.
+    /// </summary>
+    /// <param name="fileSystem">The file system abstraction to search with.</param>
+    /// <param name="startDirectory">
+    ///     The directory to start from. If this is itself an existing file path, that file is returned directly.
+    /// </param>
+    /// <param name="fileNames">The candidate file names to look for, in priority order.</param>
+    /// <param name="checkParentSubfolderMatches">
+    ///     When searching upward, also check for the file inside a subfolder whose name matches the file name
+    ///     without its extension (e.g., <c>MyProj/MyProj.csproj</c>).
+    /// </param>
+    /// <returns>The first matching file, or <c>null</c> if none is found.</returns>
+    /// <remarks>
+    ///     The search first walks up the directory tree, stopping at a project root marker (e.g., a
+    ///     <c>.git</c> folder or solution file), then performs a depth-limited breadth-first search of
+    ///     subdirectories, skipping common build, dependency, and VCS folders.
+    /// </remarks>
     public static IFileInfo? FindFile(
         IFileSystem fileSystem,
         string startDirectory,

@@ -14,32 +14,20 @@ namespace Invex.Atom.Workflows;
 ///         to ensure reproducibility and prevent unintended modifications to workflow files.
 ///     </para>
 ///     <para>
-///         To resolve this error, run the build with the <c>--gen</c> flag to regenerate the workflow files,
-///         then commit the updated files to your repository.
+///         To resolve this error, run the <c>Gen</c> target (see <see cref="IGen.Gen" />) to regenerate the
+///         workflow files, then commit the updated files to your repository.
 ///     </para>
 /// </remarks>
 /// <example>
 ///     <para>Typical CI/CD failure scenario and resolution:</para>
 ///     <code>
 /// // In CI/CD pipeline, the build fails with:
-/// // "One or more workflows are out of date. To regenerate workflows, run the build with the --gen flag."
-/// 
+/// // "One or more workflows are out of date. To regenerate workflows, run the 'Gen' target."
+///
 /// // To fix locally:
-/// // 1. Run: dotnet run --project ./Build --gen
+/// // 1. Run: dotnet run --project _atom Gen
 /// // 2. Commit the regenerated workflow files
 /// // 3. Push to repository
-/// 
-/// // Example of catching this exception:
-/// try
-/// {
-///     await atomService.RunAsync();
-/// }
-/// catch (WorkflowOutdatedException ex)
-/// {
-///     Console.WriteLine($"Workflows need regeneration: {ex.Message}");
-///     Console.WriteLine("Run the build with the --gen flag to regenerate workflows.");
-///     Environment.ExitCode = 3;
-/// }
 /// </code>
 /// </example>
 /// <seealso cref="AtomException" />

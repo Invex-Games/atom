@@ -3,9 +3,15 @@
 
 namespace Invex.Atom.Build.SourceGenerators;
 
+/// <summary>
+///     Generates the partial implementation of classes marked with <c>[BuildDefinition]</c>, populating
+///     <c>TargetDefinitions</c>, <c>ParamDefinitions</c>, and parameter accessors from the inherited
+///     target interfaces.
+/// </summary>
 [Generator]
 public sealed class BuildDefinitionSourceGenerator : IIncrementalGenerator
 {
+    /// <inheritdoc />
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var classSymbols = context
@@ -504,7 +510,7 @@ public sealed class BuildDefinitionSourceGenerator : IIncrementalGenerator
     }
 }
 
-public static class StringBuilderExtensions
+internal static class StringBuilderExtensions
 {
     public static void AppendLineIfNotBlank(
         this StringBuilder sb,

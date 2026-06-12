@@ -11,8 +11,9 @@
 ///     </para>
 ///     <para>
 ///         The framework automatically discovers and queries registered providers when resolving parameters
-///         marked with <see cref="SecretDefinitionAttribute" />. Providers are queried in registration order,
-///         creating a fallback chain (e.g., from a cloud provider to local user secrets).
+///         marked with <see cref="SecretDefinitionAttribute" />. Providers are queried in descending
+///         <see cref="Priority" /> order (ties preserve registration order), creating a fallback chain
+///         (e.g., from a cloud provider to local user secrets).
 ///     </para>
 /// </remarks>
 /// <example>
@@ -23,9 +24,9 @@
 ///     public string? GetSecret(string key) => MySecureStore.Get(key);
 /// }
 /// // 2. Register the provider in your build definition
-/// protected override void ConfigureServices(IServiceCollection services)
+/// public override void ConfigureDefinitionHost(IHostApplicationBuilder builder)
 /// {
-///     services.AddSingleton&lt;ISecretsProvider, MySecretsProvider&gt;();
+///     builder.Services.AddSingleton&lt;ISecretsProvider, MySecretsProvider&gt;();
 /// }
 /// // 3. Use a secret parameter in a target
 /// [SecretDefinition("my-api-key", "An API key.")]
@@ -51,11 +52,12 @@ public interface ISecretsProvider
     string? GetSecret(string key);
 
     /// <summary>
-    ///     Represents the execution or processing priority of the secrets provider.
+    ///     Gets the resolution priority of the secrets provider.
     /// </summary>
     /// <remarks>
-    ///     A higher priority value indicates higher precedence when resolving secrets
-    ///     among multiple providers. The default value is 0.
+    ///     Providers with a higher priority value are queried first when resolving secrets among
+    ///     multiple providers; providers with equal priority are queried in registration order.
+    ///     The default value is 0.
     /// </remarks>
     int Priority => 0;
 }

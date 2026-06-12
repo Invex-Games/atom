@@ -29,7 +29,7 @@
 ///         This service is registered and managed by the .NET Generic Host (
 ///         <see cref="Microsoft.Extensions.Hosting.IHost" />)
 ///         and is typically configured via the <c>AddAtom</c> extension method in the
-///         <c>Invex.Atom.Hosting.HostExtensions</c> class.
+///         <c>Invex.Atom.Build.Hosting.HostExtensions</c> class.
 ///     </para>
 ///     <example>
 ///         While <c>AtomService</c> is internal, its operation is primarily influenced by command-line arguments passed to
@@ -48,7 +48,7 @@
 /// atom --help
 /// </code>
 ///         This will cause <c>AtomService</c> to invoke <see cref="IHelpService.ShowHelp" />.
-///         Generating workflows:
+///         Executing a target:
 ///         <code>
 /// atom Build
 /// </code>
@@ -69,6 +69,7 @@ internal sealed class AtomService(
     IHostApplicationLifetime lifetime,
     ReportService reportService,
     IEnumerable<IAtomLifecycleHook> lifecycleHooks,
+    IAnsiConsole console,
     ILogger<AtomService> logger
 ) : BackgroundService
 {
@@ -78,15 +79,10 @@ internal sealed class AtomService(
         {
             if (!args.IsValid)
             {
-                var errors = args.GetValidationErrors();
+                WriteArgErrors();
+                Environment.ExitCode = 1;
 
-                var errorMessage = string.Join(Environment.NewLine,
-                    "Invalid command-line arguments:",
-                    string.Join(Environment.NewLine, errors.Select(e => $"  - {e}")),
-                    "",
-                    "Run with --help for usage information.");
-
-                throw new CommandLineException(errorMessage);
+                return;
             }
 
             if (args.HasHelp || !args.Commands.Any())
@@ -140,5 +136,47 @@ internal sealed class AtomService(
         {
             lifetime.StopApplication();
         }
+    }
+
+    /// <summary>
+    ///     Writes the command-line parse errors to the console, including suggestions for similar
+    ///     commands and parameters where available.
+    /// </summary>
+    private void WriteArgErrors()
+    {
+        var errors = args.Errors.Count > 0
+            ? args.Errors
+            : args
+                .GetValidationErrors()
+                .Select(error => new ParseError(error))
+                .ToList();
+
+        foreach (var error in errors)
+        {
+            console.WriteLine();
+            console.WriteLine(error.Message, new(Color.Red));
+
+            if (error.SimilarCommands.Count > 0)
+            {
+                console.WriteLine();
+                console.WriteLine("Similar commands", new(Color.Yellow));
+
+                foreach (var possibleMatch in error.SimilarCommands)
+                    console.WriteLine($"  {possibleMatch}");
+            }
+
+            if (error.SimilarParams.Count > 0)
+            {
+                console.WriteLine();
+                console.WriteLine("Similar parameters", new(Color.Yellow));
+
+                foreach (var possibleMatch in error.SimilarParams)
+                    console.WriteLine($"  --{possibleMatch}");
+            }
+        }
+
+        console.WriteLine();
+        console.WriteLine("Run with --help for usage information.", new(Color.Yellow));
+        console.WriteLine();
     }
 }

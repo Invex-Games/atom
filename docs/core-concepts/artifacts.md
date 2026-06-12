@@ -60,13 +60,17 @@ You can also consume an artifact across all slices:
 
 ## `IArtifactProvider`
 
-The actual storage and retrieval is handled by an `IArtifactProvider`. The default provider uses the local file system.
-Modules can register alternative providers:
+When targets run on **separate CI jobs**, artifacts must be transported between machines. By default, workflows use
+the CI platform's native artifact mechanism (e.g. `actions/upload-artifact` on GitHub Actions). Alternatively, you can
+register an `IArtifactProvider` and enable it with the `UseCustomArtifactProvider` workflow option
+(`BuildOptions.Artifacts.UseCustomProvider`), which routes artifacts through the hidden `StoreArtifact` /
+`RetrieveArtifact` targets instead:
 
 | Provider                    | Package                          | Storage            |
 |-----------------------------|----------------------------------|--------------------|
-| (default)                   | `Invex.Atom.Build`               | Local file system  |
 | `AzureBlobArtifactProvider` | `Invex.Atom.Module.AzureStorage` | Azure Blob Storage |
+
+Locally, artifacts are simply directories under the Atom publish/artifacts paths — no provider is required.
 
 ### Provider API
 

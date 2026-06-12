@@ -6,9 +6,9 @@ mechanism.
 
 ## How It Works
 
-1. A target declares `.ProducesVariable("BuildVersion")` and writes it with `WriteVariable`.
-2. A downstream target declares `.ConsumesVariable(nameof(SetupBuildInfo), "BuildVersion")`.
-3. **Locally**: the variable is stored in-memory and read directly.
+1. A target declares `.ProducesVariable(nameof(BuildVersion))` and writes it with `WriteVariable`.
+2. A downstream target declares `.ConsumesVariable(nameof(SetupVersion), nameof(BuildVersion))`.
+3. **Locally**: the variable is persisted to a job-scoped JSON file and loaded back into the consuming target.
 4. **In CI**: the `WorkflowResolver` detects the dependency, creates a job boundary if needed, and the platform module
    maps the variable to:
     - **GitHub Actions**: job outputs (`${{ needs.job.outputs.var }}`)
@@ -27,21 +27,28 @@ The built-in `AtomVariableProvider` handles local execution.
 
 ## Example
 
+A variable is always backed by a `[ParamDefinition]` property of the same name. The producing target writes the value;
+consuming targets read it back through that parameter (the executor loads consumed variables automatically before the
+target runs):
+
 ```csharp
+[ParamDefinition("build-version", "The computed build version")]
+string? BuildVersion => GetParam(() => BuildVersion);
+
 Target SetupVersion => t => t
-    .ProducesVariable("BuildVersion")
+    .ProducesVariable(nameof(BuildVersion))
     .Executes(async ct =>
     {
-        await WriteVariable("BuildVersion", "1.2.3", ct);
+        await WriteVariable(nameof(BuildVersion), "1.2.3", ct);
     });
 
 Target Pack => t => t
-    .ConsumesVariable(nameof(SetupVersion), "BuildVersion")
     .DependsOn(SetupVersion)
-    .Executes(async ct =>
+    .ConsumesVariable(nameof(SetupVersion), nameof(BuildVersion))
+    .Executes(() =>
     {
-        var version = await ReadVariable(nameof(SetupVersion), "BuildVersion", ct);
-        // use version
+        // BuildVersion resolves to the value written by SetupVersion
+        Logger.LogInformation("Packing version {Version}", BuildVersion);
     });
 ```
 

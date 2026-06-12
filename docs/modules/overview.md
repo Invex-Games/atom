@@ -51,7 +51,8 @@ internal partial class Build : WorkflowBuildDefinition, IGitVersion, IAzureKeyVa
 - Modules expose their functionality through **interfaces** that extend `IBuildAccessor`.
 - Targets are defined as `Target` properties on the interface with default implementations.
 - Parameters are declared with `[ParamDefinition]` or `[SecretDefinition]`.
-- Service registration uses the `[ConfigureHostBuilder]` attribute with a static partial `ConfigureBuilder` method.
+- Service registration uses the `[ConfigureHostBuilder]` attribute with a static partial
+  `ConfigureBuilderFrom{InterfaceName}` method.
 - Build options are extended via the static `BuildOptions` class using extension-like patterns.
 
 ## Next Steps

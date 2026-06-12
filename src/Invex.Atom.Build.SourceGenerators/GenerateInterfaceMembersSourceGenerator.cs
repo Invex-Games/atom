@@ -1,5 +1,9 @@
 ﻿namespace Invex.Atom.Build.SourceGenerators;
 
+/// <summary>
+///     Generates interface member declarations for classes marked with <c>[GenerateInterfaceMembers]</c>,
+///     mirroring the public properties and methods of the class onto a companion interface.
+/// </summary>
 [Generator]
 public class GenerateInterfaceMembersSourceGenerator : IIncrementalGenerator
 {
@@ -20,6 +24,7 @@ public class GenerateInterfaceMembersSourceGenerator : IIncrementalGenerator
         ".ctor", "ConfigureBuilder", "GetService", "GetServices", "GetParam",
     ];
 
+    /// <inheritdoc />
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var classSymbols = context

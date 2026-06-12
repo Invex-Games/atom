@@ -10,6 +10,9 @@ namespace Invex.Atom.Build.Analyzers;
 #pragma warning restore RS1038
 public class AT0002_ConfigureHostPartialMethodNotImplementedAnalyzer : DiagnosticAnalyzer
 {
+    /// <summary>
+    ///     The diagnostic ID reported by this analyzer: <c>AT0002</c>.
+    /// </summary>
     public const string DiagnosticId = "AT0002";
 
     private const string Category = "Usage";
@@ -38,8 +41,10 @@ public class AT0002_ConfigureHostPartialMethodNotImplementedAnalyzer : Diagnosti
         true,
         Description);
 
+    /// <inheritdoc />
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = [Rule];
 
+    /// <inheritdoc />
     public override void Initialize(AnalysisContext context)
     {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);

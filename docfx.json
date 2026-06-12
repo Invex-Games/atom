@@ -7,9 +7,6 @@
           "files": [
             "src/Invex.Atom.Build/Invex.Atom.Build.csproj",
             "src/Invex.Atom.Workflows/Invex.Atom.Workflows.csproj",
-            "src/Invex.Atom.FileSystem/Invex.Atom.FileSystem.csproj",
-            "src/Invex.Atom.Process/Invex.Atom.Process.csproj",
-            "src/Invex.Atom.SemanticVersion/Invex.Atom.SemanticVersion.csproj",
             "src/Invex.Atom.Module.AzureKeyVault/Invex.Atom.Module.AzureKeyVault.csproj",
             "src/Invex.Atom.Module.AzureStorage/Invex.Atom.Module.AzureStorage.csproj",
             "src/Invex.Atom.Module.DevopsWorkflows/Invex.Atom.Module.DevopsWorkflows.csproj",

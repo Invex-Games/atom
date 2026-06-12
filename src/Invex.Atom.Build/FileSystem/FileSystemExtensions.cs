@@ -1,5 +1,9 @@
 namespace Invex.Atom.Build.FileSystem;
 
+/// <summary>
+///     Provides extension members on <see cref="IRootedFileSystem" /> for accessing well-known
+///     Atom directories.
+/// </summary>
 [PublicAPI]
 public static class FileSystemExtensions
 {
