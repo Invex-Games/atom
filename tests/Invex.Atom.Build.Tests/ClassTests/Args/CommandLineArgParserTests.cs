@@ -1,4 +1,4 @@
-namespace Invex.Atom.Build.Tests.ClassTests.Args;
+﻿namespace Invex.Atom.Build.Tests.ClassTests.Args;
 
 [TestFixture]
 internal sealed class CommandLineArgParserTests
@@ -9,8 +9,7 @@ internal sealed class CommandLineArgParserTests
         // Arrange
         string[] rawArgs = [];
         var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
-        var parser = new CommandLineArgsParser(build, console);
+        var parser = new CommandLineArgsParser(build);
 
         // Act
         var parsedArgs = parser.Parse(rawArgs);
@@ -28,8 +27,7 @@ internal sealed class CommandLineArgParserTests
         // Arrange
         string[] rawArgs = [arg];
         var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
-        var parser = new CommandLineArgsParser(build, console);
+        var parser = new CommandLineArgsParser(build);
 
         // Act
         var parsedArgs = parser.Parse(rawArgs);
@@ -51,8 +49,7 @@ internal sealed class CommandLineArgParserTests
         // Arrange
         string[] rawArgs = [arg];
         var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
-        var parser = new CommandLineArgsParser(build, console);
+        var parser = new CommandLineArgsParser(build);
 
         // Act
         var parsedArgs = parser.Parse(rawArgs);
@@ -74,8 +71,7 @@ internal sealed class CommandLineArgParserTests
         // Arrange
         string[] rawArgs = [arg];
         var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
-        var parser = new CommandLineArgsParser(build, console);
+        var parser = new CommandLineArgsParser(build);
 
         // Act
         var parsedArgs = parser.Parse(rawArgs);
@@ -97,8 +93,7 @@ internal sealed class CommandLineArgParserTests
         // Arrange
         string[] rawArgs = [arg];
         var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
-        var parser = new CommandLineArgsParser(build, console);
+        var parser = new CommandLineArgsParser(build);
 
         // Act
         var parsedArgs = parser.Parse(rawArgs);
@@ -120,8 +115,7 @@ internal sealed class CommandLineArgParserTests
         // Arrange
         string[] rawArgs = [arg, value];
         var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
-        var parser = new CommandLineArgsParser(build, console);
+        var parser = new CommandLineArgsParser(build);
 
         // Act
         var parsedArgs = parser.Parse(rawArgs);
@@ -137,18 +131,22 @@ internal sealed class CommandLineArgParserTests
 
     [TestCase("-p")]
     [TestCase("--project")]
-    public void CommandLineArgsParser_ProjectArg_MissingValue_ThrowsException(string arg)
+    public void CommandLineArgsParser_ProjectArg_MissingValue_ReturnsError(string arg)
     {
         // Arrange
         string[] rawArgs = [arg];
         var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
-        var parser = new CommandLineArgsParser(build, console);
+        var parser = new CommandLineArgsParser(build);
 
-        // Act / Assert
-        var ex = Should.Throw<CommandLineException>(() => parser.Parse(rawArgs));
-        ex.ArgumentName.ShouldBe("project");
-        ex.Message.ShouldContain("Missing value");
+        // Act
+        var parsedArgs = parser.Parse(rawArgs);
+
+        // Assert
+        parsedArgs.IsValid.ShouldBeFalse();
+
+        var error = parsedArgs.Errors.ShouldHaveSingleItem();
+        error.ArgumentName.ShouldBe("project");
+        error.Message.ShouldContain("Missing value");
     }
 
     [TestCase("--param1", "param1", "Param1")]
@@ -160,7 +158,6 @@ internal sealed class CommandLineArgParserTests
         // Arrange
         string[] rawArgs = [arg, "value"];
         var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
 
         A
             .CallTo(() => build.ParamDefinitions)
@@ -192,7 +189,7 @@ internal sealed class CommandLineArgParserTests
                 },
             });
 
-        var parser = new CommandLineArgsParser(build, console);
+        var parser = new CommandLineArgsParser(build);
 
         // Act
         var parsedArgs = parser.Parse(rawArgs);
@@ -214,7 +211,6 @@ internal sealed class CommandLineArgParserTests
         // Arrange
         string[] rawArgs = ["--param1", "--param2"];
         var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
 
         A
             .CallTo(() => build.ParamDefinitions)
@@ -246,12 +242,27 @@ internal sealed class CommandLineArgParserTests
                 },
             });
 
-        var parser = new CommandLineArgsParser(build, console);
+        var parser = new CommandLineArgsParser(build);
 
-        // Act / Assert
-        var ex = Should.Throw<CommandLineException>(() => parser.Parse(rawArgs));
-        ex.ArgumentName.ShouldBe("param1");
-        ex.Message.ShouldContain("Missing value for parameter");
+        // Act
+        var parsedArgs = parser.Parse(rawArgs);
+
+        // Assert
+        parsedArgs.IsValid.ShouldBeFalse();
+
+        parsedArgs.Errors.ShouldSatisfyAllConditions(errors => errors.Count.ShouldBe(2),
+            errors => errors[0]
+                .ArgumentName
+                .ShouldBe("param1"),
+            errors => errors[0]
+                .Message
+                .ShouldContain("Missing value for parameter"),
+            errors => errors[1]
+                .ArgumentName
+                .ShouldBe("param2"),
+            errors => errors[1]
+                .Message
+                .ShouldContain("Missing value for parameter"));
     }
 
     [Test]
@@ -260,7 +271,6 @@ internal sealed class CommandLineArgParserTests
         // Arrange
         string[] rawArgs = ["--param1"];
         var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
 
         A
             .CallTo(() => build.ParamDefinitions)
@@ -292,12 +302,17 @@ internal sealed class CommandLineArgParserTests
                 },
             });
 
-        var parser = new CommandLineArgsParser(build, console);
+        var parser = new CommandLineArgsParser(build);
 
-        // Act / Assert
-        var ex = Should.Throw<CommandLineException>(() => parser.Parse(rawArgs));
-        ex.ArgumentName.ShouldBe("param1");
-        ex.Message.ShouldContain("Missing value for parameter");
+        // Act
+        var parsedArgs = parser.Parse(rawArgs);
+
+        // Assert
+        parsedArgs.IsValid.ShouldBeFalse();
+
+        var error = parsedArgs.Errors.ShouldHaveSingleItem();
+        error.ArgumentName.ShouldBe("param1");
+        error.Message.ShouldContain("Missing value for parameter");
     }
 
     [TestCase("Command1", "Command1")]
@@ -309,7 +324,6 @@ internal sealed class CommandLineArgParserTests
         // Arrange
         string[] rawArgs = [arg];
         var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
 
         A
             .CallTo(() => build.TargetDefinitions)
@@ -320,7 +334,7 @@ internal sealed class CommandLineArgParserTests
                 ["Command3"] = definition => definition,
             });
 
-        var parser = new CommandLineArgsParser(build, console);
+        var parser = new CommandLineArgsParser(build);
 
         // Act
         var parsedArgs = parser.Parse(rawArgs);
@@ -342,7 +356,6 @@ internal sealed class CommandLineArgParserTests
         // Arrange
         string[] rawArgs = [arg];
         var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
 
         A
             .CallTo(() => build.TargetDefinitions)
@@ -357,13 +370,19 @@ internal sealed class CommandLineArgParserTests
             .CallTo(() => build.ParamDefinitions)
             .Returns(new Dictionary<string, ParamDefinition>());
 
-        var parser = new CommandLineArgsParser(build, console);
+        var parser = new CommandLineArgsParser(build);
 
         // Act
         var parsedArgs = parser.Parse(rawArgs);
 
         // Assert
         parsedArgs.IsValid.ShouldBeFalse();
+
+        var error = parsedArgs.Errors.ShouldHaveSingleItem();
+        error.ArgumentName.ShouldBe(arg);
+        error.Message.ShouldBe($"Unknown argument '{arg}'");
+        error.SimilarCommands.ShouldBe(["Command1", "Command2", "Command3"], true);
+        error.SimilarParams.ShouldBeEmpty();
     }
 
     [Test]
@@ -372,7 +391,6 @@ internal sealed class CommandLineArgParserTests
         // Arrange
         string[] rawArgs = ["-h", "--param1", "value1", "--param2", "value2", "Command1"];
         var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
 
         A
             .CallTo(() => build.ParamDefinitions)
@@ -413,7 +431,7 @@ internal sealed class CommandLineArgParserTests
                 ["Command3"] = definition => definition,
             });
 
-        var parser = new CommandLineArgsParser(build, console);
+        var parser = new CommandLineArgsParser(build);
 
         // Act
         var parsedArgs = parser.Parse(rawArgs);
@@ -443,7 +461,6 @@ internal sealed class CommandLineArgParserTests
         // Arrange
         string[] rawArgs = ["--param1", "value1", "--param2", "value2", "Command1", "--skip"];
         var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
 
         A
             .CallTo(() => build.ParamDefinitions)
@@ -484,7 +501,7 @@ internal sealed class CommandLineArgParserTests
                 ["Command3"] = definition => definition,
             });
 
-        var parser = new CommandLineArgsParser(build, console);
+        var parser = new CommandLineArgsParser(build);
 
         // Act
         var parsedArgs = parser.Parse(rawArgs);
@@ -514,7 +531,6 @@ internal sealed class CommandLineArgParserTests
         // Arrange
         string[] rawArgs = ["--param1", "value1", "--param2", "value2", "Command1", "-s", "--param3", "value3"];
         var build = A.Fake<IBuildDefinition>();
-        var console = new TestConsole();
 
         A
             .CallTo(() => build.ParamDefinitions)
@@ -555,7 +571,7 @@ internal sealed class CommandLineArgParserTests
                 ["Command3"] = definition => definition,
             });
 
-        var parser = new CommandLineArgsParser(build, console);
+        var parser = new CommandLineArgsParser(build);
 
         // Act
         var parsedArgs = parser.Parse(rawArgs);

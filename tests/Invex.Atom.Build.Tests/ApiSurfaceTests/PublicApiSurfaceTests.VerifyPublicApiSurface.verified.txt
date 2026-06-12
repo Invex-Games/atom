@@ -44,6 +44,9 @@
         Name: Equals
       },
       {
+        Name: Errors
+      },
+      {
         Name: GetHashCode
       },
       {
@@ -170,6 +173,41 @@
       },
       {
         Name: ParamValue
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: Invex.Atom.Build.Args.ParseError,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: ArgumentName
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: Message
+      },
+      {
+        Name: SimilarCommands
+      },
+      {
+        Name: SimilarParams
       },
       {
         Name: ToString

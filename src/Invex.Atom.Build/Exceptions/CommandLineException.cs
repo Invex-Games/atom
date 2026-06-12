@@ -5,20 +5,13 @@ namespace Invex.Atom.Build.Exceptions;
 /// </summary>
 /// <remarks>
 ///     <para>
-///         This exception is thrown when the command-line argument parser detects invalid or malformed arguments.
-///         Common scenarios include:
+///         This exception signals that build execution cannot proceed because of a problem with the
+///         command-line input. Note that <see cref="Args.CommandLineArgsParser" /> itself does not throw;
+///         it collects parse problems as <see cref="Args.ParseError" /> objects on
+///         <see cref="Args.CommandLineArgs.Errors" />, which are reported once the application host is
+///         fully constructed. This exception is reserved for argument-related failures detected later,
+///         such as during parameter resolution.
 ///     </para>
-///     <list type="bullet">
-///         <item>
-///             <description>Missing parameter values (e.g., <c>--project</c> without a path)</description>
-///         </item>
-///         <item>
-///             <description>Invalid argument syntax (e.g., parameter value that looks like another option)</description>
-///         </item>
-///         <item>
-///             <description>Unknown parameters or flags</description>
-///         </item>
-///     </list>
 ///     <para>
 ///         The <see cref="ArgumentName" /> property, when set, identifies the specific command-line argument
 ///         that caused the error, making it easier to diagnose and fix the issue.
@@ -28,25 +21,18 @@ namespace Invex.Atom.Build.Exceptions;
 ///     </para>
 /// </remarks>
 /// <example>
-///     <para>Example 1: Missing parameter value</para>
+///     <para>Example 1: Throwing for an argument-related failure</para>
 ///     <code>
-/// throw new CommandLineException("Missing value for --project option. Usage: --project &lt;path&gt;")
-/// {
-///     ArgumentName = "project"
-/// };
-/// </code>
-///     <para>Example 2: Invalid argument syntax</para>
-///     <code>
-/// throw new CommandLineException("Missing value for parameter 'output'. The next argument '--verbose' looks like another option. Usage: --output &lt;value&gt;")
+/// throw new CommandLineException("Parameter 'output' could not be resolved to a valid path.")
 /// {
 ///     ArgumentName = "output"
 /// };
 /// </code>
-///     <para>Example 3: How to catch and provide user guidance</para>
+///     <para>Example 2: How to catch and provide user guidance</para>
 ///     <code>
 /// try
 /// {
-///     var args = commandLineArgsParser.Parse(commandLineArgs);
+///     await executor.Execute(cancellationToken);
 /// }
 /// catch (CommandLineException ex)
 /// {
@@ -61,7 +47,8 @@ namespace Invex.Atom.Build.Exceptions;
 /// </code>
 /// </example>
 /// <seealso cref="AtomException" />
-/// <seealso cref="Args.CommandLineArgsParser" />
+/// <seealso cref="Args.CommandLineArgs" />
+/// <seealso cref="Args.ParseError" />
 [PublicAPI]
 [Serializable]
 public class CommandLineException : AtomException

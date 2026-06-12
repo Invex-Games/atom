@@ -287,4 +287,33 @@ internal sealed class CommandLineArgsTests
         var errors = args.GetValidationErrors();
         errors.Count.ShouldBeGreaterThanOrEqualTo(3);
     }
+
+    [Test]
+    public void Errors_WhenPresent_ForcesIsValidFalse()
+    {
+        var args = new CommandLineArgs(true, [], [new("Unknown argument 'asdf'")]);
+
+        args.IsValid.ShouldBeFalse();
+        args.Errors.ShouldHaveSingleItem();
+    }
+
+    [Test]
+    public void GetValidationErrors_WhenParseErrorsPresent_ContainsTheirMessages()
+    {
+        var args = new CommandLineArgs(false,
+            [],
+            [
+                new("Unknown argument 'asdf'"),
+                new("Missing value for parameter 'param1'. Usage: --param1 <value>")
+                {
+                    ArgumentName = "param1",
+                },
+            ]);
+
+        var errors = args.GetValidationErrors();
+
+        errors.ShouldContain("Unknown argument 'asdf'");
+        errors.ShouldContain(e => e.Contains("Missing value for parameter 'param1'"));
+        errors.ShouldNotContain(e => e.Contains("could not be parsed"));
+    }
 }
