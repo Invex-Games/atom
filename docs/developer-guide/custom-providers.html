@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Custom Providers | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Custom Providers | Atom ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/docs/developer-guide/custom-providers.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="custom-providers">Custom Providers</h1>
+
+<p>Atom uses a provider pattern for several extensibility points. Implement these interfaces to integrate with custom
+backends.</p>
+<h2 id="isecretsprovider"><code>ISecretsProvider</code></h2>
+<p>Retrieve secrets from a custom store:</p>
+<pre><code class="lang-csharp">public class MySecretsProvider : ISecretsProvider
+{
+    public string? GetSecret(string key)
+    {
+        // Return the secret value, or null to delegate to the next provider.
+        return MyVault.TryGet(key);
+    }
+}
+</code></pre>
+<p>Register it:</p>
+<pre><code class="lang-csharp">builder.Services.AddSingleton&lt;ISecretsProvider, MySecretsProvider&gt;();
+</code></pre>
+<p>Multiple providers form a chain — return <code>null</code> to pass through.</p>
+<h2 id="iartifactprovider"><code>IArtifactProvider</code></h2>
+<p>Store and retrieve build artifacts in a custom location:</p>
+<pre><code class="lang-csharp">public class MyArtifactProvider : IArtifactProvider
+{
+    public IReadOnlyList&lt;string&gt; RequiredParams =&gt; [&quot;my-storage-url&quot;];
+
+    public Task StoreArtifacts(IEnumerable&lt;string&gt; artifactNames, string? buildId, string? buildSlice, CancellationToken ct)
+    {
+        // Upload artifacts
+    }
+
+    public Task RetrieveArtifacts(IEnumerable&lt;string&gt; artifactNames, string? buildId, string? buildSlice, CancellationToken ct)
+    {
+        // Download artifacts
+    }
+
+    public Task Cleanup(IEnumerable&lt;string&gt; runIdentifiers, CancellationToken ct)
+    {
+        // Remove old artifacts
+    }
+
+    public Task&lt;IReadOnlyList&lt;string&gt;&gt; GetStoredRunIdentifiers(string? artifactName, string? buildSlice, CancellationToken ct)
+    {
+        // List known runs
+    }
+}
+</code></pre>
+<p>Register as a singleton — only one <code>IArtifactProvider</code> is active at a time.</p>
+<h2 id="ivariableprovider"><code>IVariableProvider</code></h2>
+<p>Read and write workflow variables via a custom mechanism:</p>
+<pre><code class="lang-csharp">public class MyVariableProvider : IVariableProvider
+{
+    public Task&lt;bool&gt; WriteVariable(string variableName, string variableValue, CancellationToken ct)
+    {
+        // Return true if handled, false to delegate
+    }
+
+    public Task&lt;bool&gt; ReadVariable(string jobName, string variableName, CancellationToken ct)
+    {
+        // Return true if found, false to delegate
+    }
+}
+</code></pre>
+<p>Multiple providers form a chain.</p>
+<h2 id="ibuildidprovider--ibuildversionprovider--ibuildtimestampprovider"><code>IBuildIdProvider</code> / <code>IBuildVersionProvider</code> / <code>IBuildTimestampProvider</code></h2>
+<p>Replace how the build identity is determined:</p>
+<pre><code class="lang-csharp">public class MyVersionProvider : IBuildVersionProvider
+{
+    // Version is a SemVer, not a string.
+    public SemVer Version =&gt; SemVer.Parse(ReadVersionFromSomewhere());
+}
+
+public class MyBuildIdProvider : IBuildIdProvider
+{
+    public string BuildId =&gt; Guid.NewGuid().ToString();
+}
+
+public class MyTimestampProvider : IBuildTimestampProvider
+{
+    // Seconds since the Unix epoch (UTC).
+    public long Timestamp =&gt; DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+}
+</code></pre>
+<h2 id="ipathprovider"><code>IPathProvider</code></h2>
+<p>Add custom well-known paths:</p>
+<pre><code class="lang-csharp">public class MyPathProvider : IPathProvider
+{
+    public RootedPath? GetPath(string key) =&gt; key switch
+    {
+        &quot;MyCustomPath&quot; =&gt; new RootedPath(fileSystem, &quot;/custom/path&quot;),
+        _ =&gt; null,
+    };
+}
+</code></pre>
+<h2 id="ioutcomereportwriter"><code>IOutcomeReportWriter</code></h2>
+<p>Write build reports to a custom destination:</p>
+<pre><code class="lang-csharp">public class MyReportWriter : IOutcomeReportWriter
+{
+    // Write report data to Slack, email, a database, etc.
+}
+</code></pre>
+<h2 id="next-steps">Next Steps</h2>
+<p>→ <a href="source-generators.html">Source Generators</a></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/docs/developer-guide/custom-providers.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

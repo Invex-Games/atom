@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Module: GitHub Workflows | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Module: GitHub Workflows | Atom ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/docs/modules/github-workflows.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="module-github-workflows">Module: GitHub Workflows</h1>
+
+<p><strong>Package:</strong> <code>Invex.Atom.Module.GithubWorkflows</code></p>
+<p>Adds GitHub Actions support to Atom — workflow YAML generation, GitHub-specific build options, variable handling, and
+access to GitHub environment variables.</p>
+<h2 id="installation">Installation</h2>
+<pre><code class="lang-shell">dotnet add package Invex.Atom.Module.GithubWorkflows
+</code></pre>
+<h2 id="usage">Usage</h2>
+<pre><code class="lang-csharp">[BuildDefinition]
+[GenerateEntryPoint]
+internal partial class Build : WorkflowBuildDefinition, IGithubWorkflows
+{
+    public override IReadOnlyList&lt;WorkflowDefinition&gt; Workflows =&gt;
+    [
+        new(&quot;CI&quot;)
+        {
+            Triggers = [WorkflowTriggers.PushToMain],
+            Targets = [new(nameof(Compile))],
+            Types = [WorkflowTypes.Github.Action],
+        },
+    ];
+}
+</code></pre>
+<p>Running <code>dotnet run -- Gen</code> generates <code>.github/workflows/CI.yml</code>.</p>
+<h2 id="features">Features</h2>
+<h3 id="workflow-generation">Workflow Generation</h3>
+<p>The module provides a <code>WorkflowFileWriter</code> that generates GitHub Actions YAML files in <code>.github/workflows/</code>.</p>
+<h3 id="github-static-class"><code>Github</code> Static Class</h3>
+<p>Access all GitHub Actions environment variables in a typed way:</p>
+<pre><code class="lang-csharp">if (Github.IsGithubActions)
+{
+    var sha = Github.Variables.Sha;
+    var ref = Github.Variables.Ref;
+}
+</code></pre>
+<h3 id="variable-provider">Variable Provider</h3>
+<p><code>GithubVariableProvider</code> writes variables to <code>$GITHUB_OUTPUT</code> and reads them from job outputs, enabling cross-job data
+sharing.</p>
+<h3 id="report-writer">Report Writer</h3>
+<p><code>GithubSummaryOutcomeReportWriter</code> writes build report data to the GitHub Actions job summary (<code>$GITHUB_STEP_SUMMARY</code>).</p>
+<h3 id="runner-labels">Runner Labels</h3>
+<p>Use <code>WorkflowLabels.Github.RunsOn.*</code> constants for runner selection:</p>
+<pre><code class="lang-csharp">WorkflowLabels.Github.RunsOn.Ubuntu_Latest
+WorkflowLabels.Github.RunsOn.Windows_Latest
+WorkflowLabels.Github.RunsOn.MacOs_Latest
+</code></pre>
+<h3 id="github-specific-options">GitHub-Specific Options</h3>
+<ul>
+<li><code>BuildOptions.Github.RunsOn.SetByMatrix</code> — set the runner from a matrix dimension</li>
+<li><code>GithubTokenPermissionsOption</code> — fine-grained <code>GITHUB_TOKEN</code> permissions</li>
+<li>GitHub-specific triggers (e.g. <code>release</code> events)</li>
+</ul>
+<h3 id="dependabot-configuration">Dependabot Configuration</h3>
+<p>Generate Dependabot configuration alongside your workflow files:</p>
+<pre><code class="lang-csharp">WorkflowPresets.Github.Dependabot(new()
+{
+    Updates =
+    [
+        new()
+        {
+            Directory = &quot;/&quot;,
+            PackageEcosystem = WorkflowLabels.Github.Dependabot.NugetEcosystem,
+            Schedule = new() { Interval = ScheduleInterval.Daily },
+        },
+    ],
+})
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/docs/modules/github-workflows.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

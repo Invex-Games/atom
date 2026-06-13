@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Artifacts | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Artifacts | Atom ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/artifacts.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="artifacts">Artifacts</h1>
+
+<p>Artifacts are files or directories produced by one target and consumed by another. Atom tracks artifact dependencies to
+ensure correct execution order, especially in workflow scenarios where different targets may run on different machines.</p>
+<h2 id="producing-artifacts">Producing Artifacts</h2>
+<p>Declare that a target produces an artifact:</p>
+<pre><code class="lang-csharp">Target Pack =&gt; t =&gt; t
+    .DescribedAs(&quot;Packs NuGet packages&quot;)
+    .ProducesArtifact(&quot;packages&quot;)
+    .Executes(async () =&gt;
+    {
+        // write files to the artifact directory
+    });
+</code></pre>
+<p>You can produce multiple artifacts:</p>
+<pre><code class="lang-csharp">.ProducesArtifacts([&quot;packages&quot;, &quot;binaries&quot;])
+</code></pre>
+<h2 id="consuming-artifacts">Consuming Artifacts</h2>
+<p>Declare that a target consumes an artifact from another target:</p>
+<pre><code class="lang-csharp">Target Deploy =&gt; t =&gt; t
+    .ConsumesArtifact(nameof(Pack), &quot;packages&quot;)
+    .Executes(async () =&gt;
+    {
+        // read files from the artifact directory
+    });
+</code></pre>
+<p>Multiple artifacts from the same or different targets:</p>
+<pre><code class="lang-csharp">.ConsumesArtifacts(nameof(Pack), [&quot;packages&quot;, &quot;binaries&quot;])
+</code></pre>
+<h2 id="build-slices">Build Slices</h2>
+<p>Artifacts can be scoped to a <strong>build slice</strong> — a named variation within a matrix build (e.g. a specific OS or
+framework):</p>
+<pre><code class="lang-csharp">.ProducesArtifact(&quot;tool&quot;, buildSlice: &quot;windows-x64&quot;)
+.ConsumesArtifact(nameof(PackTool), &quot;tool&quot;, buildSlice: &quot;windows-x64&quot;)
+</code></pre>
+<p>You can also consume an artifact across all slices:</p>
+<pre><code class="lang-csharp">.ConsumesArtifact(nameof(PackTool), &quot;tool&quot;, buildSlices: [&quot;windows-x64&quot;, &quot;linux-x64&quot;])
+</code></pre>
+<h2 id="iartifactprovider"><code>IArtifactProvider</code></h2>
+<p>When targets run on <strong>separate CI jobs</strong>, artifacts must be transported between machines. By default, workflows use
+the CI platform's native artifact mechanism (e.g. <code>actions/upload-artifact</code> on GitHub Actions). Alternatively, you can
+register an <code>IArtifactProvider</code> and enable it with the <code>UseCustomArtifactProvider</code> workflow option
+(<code>BuildOptions.Artifacts.UseCustomProvider</code>), which routes artifacts through the hidden <code>StoreArtifact</code> /
+<code>RetrieveArtifact</code> targets instead:</p>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Package</th>
+<th>Storage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AzureBlobArtifactProvider</code></td>
+<td><code>Invex.Atom.Module.AzureStorage</code></td>
+<td>Azure Blob Storage</td>
+</tr>
+</tbody>
+</table>
+<p>Locally, artifacts are simply directories under the Atom publish/artifacts paths — no provider is required.</p>
+<h3 id="provider-api">Provider API</h3>
+<pre><code class="lang-csharp">public interface IArtifactProvider
+{
+    Task StoreArtifacts(IEnumerable&lt;string&gt; artifactNames, ...);
+    Task RetrieveArtifacts(IEnumerable&lt;string&gt; artifactNames, ...);
+    Task Cleanup(IEnumerable&lt;string&gt; runIdentifiers, ...);
+    Task&lt;IReadOnlyList&lt;string&gt;&gt; GetStoredRunIdentifiers(...);
+}
+</code></pre>
+<h2 id="next-steps">Next Steps</h2>
+<p>→ <a href="variables.html">Variables</a></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/artifacts.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
