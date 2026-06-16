@@ -7,7 +7,6 @@ internal sealed class DevopsWorkflowFileWriter(
 ) : WorkflowFileWriter<DevopsWorkflowType>(fileSystem, logger)
 {
     private readonly IRootedFileSystem _fileSystem = fileSystem;
-    private readonly DevopsPipelineWriter _pipelineWriter = new();
 
     protected override string FileExtension => "yml";
 
@@ -16,8 +15,10 @@ internal sealed class DevopsWorkflowFileWriter(
     protected override string WriteWorkflow(WorkflowModel workflow)
     {
         var devopsPipeline = workflowBuilder.Build(workflow);
-        _pipelineWriter.Write(devopsPipeline);
 
-        return _pipelineWriter.TextWriter.ToString();
+        var writer = new DevopsPipelineWriter();
+        writer.Write(devopsPipeline);
+
+        return writer.TextWriter.ToString();
     }
 }
