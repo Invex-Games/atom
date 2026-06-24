@@ -1,0 +1,465 @@
+{
+  "source_base_path": "/home/runner/work/atom/atom",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "README.md",
+      "output": {
+        ".html": {
+          "relative_path": "README.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/built-in-targets/generate-workflow-files.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/built-in-targets/generate-workflow-files.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/built-in-targets/setup-build-info.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/built-in-targets/setup-build-info.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/built-in-targets/validate-build.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/built-in-targets/validate-build.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/artifacts.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/artifacts.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/build-definitions.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/build-definitions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/build-info.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/build-info.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/build-options.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/build-options.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/file-system.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/file-system.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/file-transformations.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/file-transformations.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/hosting.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/hosting.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/lifecycle-hooks.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/lifecycle-hooks.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/logging-and-reports.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/logging-and-reports.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/parameters.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/parameters.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/process-runner.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/process-runner.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/secrets.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/secrets.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/targets.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/targets.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/variables.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/variables.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/developer-guide/custom-providers.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/developer-guide/custom-providers.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/developer-guide/source-generators.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/developer-guide/source-generators.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/developer-guide/testing.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/developer-guide/testing.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/developer-guide/writing-a-module.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/developer-guide/writing-a-module.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/getting-started/base-vs-workflow-build.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/getting-started/base-vs-workflow-build.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/getting-started/introduction.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/getting-started/introduction.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/getting-started/your-first-build.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/getting-started/your-first-build.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/modules/azure-key-vault.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/modules/azure-key-vault.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/modules/azure-storage.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/modules/azure-storage.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/modules/devops-workflows.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/modules/devops-workflows.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/modules/dotnet.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/modules/dotnet.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/modules/git-version.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/modules/git-version.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/modules/github-workflows.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/modules/github-workflows.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/modules/overview.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/modules/overview.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/reference/cli.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/reference/cli.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "docs/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/toc.html"
+        },
+        ".json": {
+          "relative_path": "docs/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/workflows/debugging-workflows.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/workflows/debugging-workflows.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/workflows/overview.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/workflows/overview.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/workflows/triggers.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/workflows/triggers.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/workflows/variables-in-workflows.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/workflows/variables-in-workflows.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/workflows/workflow-definitions.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/workflows/workflow-definitions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/workflows/workflow-options.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/workflows/workflow-options.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/icon.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/icon.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

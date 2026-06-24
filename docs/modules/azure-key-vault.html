@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Module: Azure Key Vault | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Module: Azure Key Vault | Atom ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/docs/modules/azure-key-vault.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="module-azure-key-vault">Module: Azure Key Vault</h1>
+
+<p><strong>Package:</strong> <code>Invex.Atom.Module.AzureKeyVault</code></p>
+<p>Integrates Azure Key Vault as a secrets provider, allowing your build to resolve <code>[SecretDefinition]</code> parameters from a
+vault.</p>
+<h2 id="installation">Installation</h2>
+<pre><code class="lang-shell">dotnet add package Invex.Atom.Module.AzureKeyVault
+</code></pre>
+<h2 id="usage">Usage</h2>
+<pre><code class="lang-csharp">[BuildDefinition]
+[GenerateEntryPoint]
+internal partial class Build : BuildDefinition, IAzureKeyVault
+{
+    // All IAzureKeyVault parameters are now available.
+}
+</code></pre>
+<h2 id="configuration-parameters">Configuration Parameters</h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>CLI Arg</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AzureVaultAddress</code></td>
+<td><code>--azure-vault-address</code></td>
+<td>URI of the Azure Key Vault</td>
+</tr>
+<tr>
+<td><code>AzureVaultTenantId</code></td>
+<td><code>--azure-vault-tenant-id</code></td>
+<td>Azure AD Tenant ID</td>
+</tr>
+<tr>
+<td><code>AzureVaultAppId</code></td>
+<td><code>--azure-vault-app-id</code></td>
+<td>App Registration Client ID</td>
+</tr>
+<tr>
+<td><code>AzureVaultAppSecret</code></td>
+<td><code>--azure-vault-app-secret</code></td>
+<td>App Registration Client Secret</td>
+</tr>
+<tr>
+<td><code>AzureVaultAuthPort</code></td>
+<td><code>--azure-vault-auth-port</code></td>
+<td>Local auth redirect port (default: 3421)</td>
+</tr>
+</tbody>
+</table>
+<p>These parameters can be provided via environment variables, <code>appsettings.json</code>, or the command line.</p>
+<h2 id="how-it-works">How It Works</h2>
+<p>When <code>IAzureKeyVault</code> is implemented, the module registers:</p>
+<ul>
+<li><code>AzureKeySecretsProvider</code> as an <code>ISecretsProvider</code> — queries the vault for secret values.</li>
+<li><code>AzureKeyOptionsProvider</code> as an <code>IBuildOptionProvider</code> — contributes workflow options for injecting vault credentials
+in CI.</li>
+</ul>
+<h2 id="value-injection-customisation">Value Injection Customisation</h2>
+<p>Control how each vault parameter is injected in workflows:</p>
+<pre><code class="lang-csharp">AzureKeyVaultValueInjections AzureKeyVaultValueInjections =&gt; new(
+    Address: AzureKeyVaultValueInjectionType.EnvironmentVariable,
+    TenantId: AzureKeyVaultValueInjectionType.EnvironmentVariable,
+    AppId: AzureKeyVaultValueInjectionType.EnvironmentVariable,
+    AppSecret: AzureKeyVaultValueInjectionType.Secret);
+</code></pre>
+<h2 id="workflow-option">Workflow Option</h2>
+<p>Enable vault integration at the build level:</p>
+<pre><code class="lang-csharp">public override IReadOnlyList&lt;IBuildOption&gt; Options =&gt;
+[
+    BuildOptions.AzureKeyVault.UseAzureKeyVault,
+];
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/docs/modules/azure-key-vault.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

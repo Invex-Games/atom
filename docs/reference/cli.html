@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>CLI Reference | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="CLI Reference | Atom ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/docs/reference/cli.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="cli-reference">CLI Reference</h1>
+
+<p>Atom builds are invoked via <code>dotnet run</code> or the <code>atom</code> global tool.</p>
+<h2 id="invocation">Invocation</h2>
+<h3 id="via-dotnet-run">Via <code>dotnet run</code></h3>
+<pre><code class="lang-shell">dotnet run -- &lt;targets&gt; [options] [--param-name value ...]
+</code></pre>
+<h3 id="via-the-atom-global-tool">Via the <code>atom</code> Global Tool</h3>
+<p>Install the tool:</p>
+<pre><code class="lang-shell">dotnet tool install --global Invex.Atom.Tool
+</code></pre>
+<p>Then run:</p>
+<pre><code class="lang-shell">atom &lt;targets&gt; [options] [--param-name value ...]
+</code></pre>
+<p>The tool discovers your Atom project (defaults to the <code>_atom</code> directory) and runs it.</p>
+<h2 id="targets">Targets</h2>
+<p>Specify one or more target names to execute:</p>
+<pre><code class="lang-shell">dotnet run -- Compile Test Pack
+</code></pre>
+<p>Targets execute in dependency order. Duplicates are resolved automatically.</p>
+<h2 id="options">Options</h2>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Short</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td><code>-h</code></td>
+<td>Display help information</td>
+</tr>
+<tr>
+<td><code>--skip</code></td>
+<td><code>-s</code></td>
+<td>Skip execution of dependent targets</td>
+</tr>
+<tr>
+<td><code>--headless</code></td>
+<td><code>-hl</code></td>
+<td>Non-interactive mode (no prompts, plain output)</td>
+</tr>
+<tr>
+<td><code>--verbose</code></td>
+<td><code>-v</code></td>
+<td>Enable verbose (debug-level) logging</td>
+</tr>
+<tr>
+<td><code>--interactive</code></td>
+<td><code>-i</code></td>
+<td>Prompt for missing required parameters</td>
+</tr>
+<tr>
+<td><code>--project &lt;name&gt;</code></td>
+<td><code>-p &lt;name&gt;</code></td>
+<td>Specify the Atom project directory (default: <code>_atom</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="parameters">Parameters</h2>
+<p>Pass parameter values with <code>--&lt;param-name&gt; &lt;value&gt;</code>:</p>
+<pre><code class="lang-shell">dotnet run -- Deploy --api-key sk-123 --environment production
+</code></pre>
+<p>Parameter names use kebab-case on the command line and are matched to <code>[ParamDefinition]</code> attributes.</p>
+<h2 id="examples">Examples</h2>
+<pre><code class="lang-shell"># Run a single target
+dotnet run -- Compile
+
+# Run multiple targets
+dotnet run -- Compile Test
+
+# Pass parameters
+dotnet run -- Deploy --configuration Release --api-key sk-123
+
+# Interactive mode (prompt for missing params)
+dotnet run -- Deploy -i
+
+# Skip dependencies
+dotnet run -- Pack -s
+
+# Verbose output
+dotnet run -- Compile -v
+
+# Use a custom project directory
+dotnet run -- Compile -p MyBuildProject
+
+# Show help
+dotnet run -- -h
+</code></pre>
+<h2 id="the-atom-tool">The <code>atom</code> Tool</h2>
+<p>The <code>atom</code> global tool (<code>Invex.Atom.Tool</code>) provides the same interface but discovers your build project automatically:</p>
+<pre><code class="lang-shell">atom Compile Test --verbose
+</code></pre>
+<p>It searches for the Atom project in the current directory tree (or the directory specified by <code>-p</code>).</p>
+<h3 id="restore--build-caching">Restore &amp; Build Caching</h3>
+<p>Because a consuming project's Atom build is distributed as source, the <code>atom</code> tool would normally trigger a
+<code>dotnet restore</code> and <code>dotnet build</code> on every invocation. To avoid this, the tool caches hashes of the relevant
+inputs and skips work that isn't needed:</p>
+<ul>
+<li><strong>Restore</strong> is skipped (<code>--no-restore</code>) when the build project file plus any <code>Directory.Build.props</code>,
+<code>Directory.Build.targets</code>, <code>Directory.Packages.props</code>, <code>nuget.config</code> and <code>global.json</code> files (found while
+walking up to the project root) are unchanged.</li>
+<li><strong>Build</strong> is skipped (<code>--no-build</code>) when, in addition to the restore inputs, every <code>.cs</code> source file under the
+build project (excluding <code>bin</code>/<code>obj</code>) is unchanged and a previous build output exists. <code>--no-build</code> implies
+<code>--no-restore</code>.</li>
+</ul>
+<p>The hashes are stored in the build project's <code>obj/.atom-restore.hash</code> and <code>obj/.atom-build.hash</code> files, so they
+are automatically invalidated by <code>dotnet clean</code> and never committed to source control.</p>
+<blockquote>
+<p>Note: source changes in projects referenced via <code>&lt;ProjectReference&gt;</code> are not tracked by the build cache. If your
+build project references other projects by source, force a full build with the opt-out below.</p>
+</blockquote>
+<p>To force a full restore and build regardless of the caches, use either:</p>
+<pre><code class="lang-shell"># CLI flag
+atom Compile --no-restore-cache
+
+# Environment variable (any value other than &quot;0&quot;/&quot;false&quot; enables the opt-out)
+ATOM_NO_RESTORE_CACHE=1 atom Compile
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/docs/reference/cli.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

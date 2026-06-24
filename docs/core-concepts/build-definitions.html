@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Build Definitions | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Build Definitions | Atom ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/build-definitions.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="build-definitions">Build Definitions</h1>
+
+<p>A <strong>build definition</strong> is the central class of an Atom build. It declares which targets exist, what parameters are
+available, and how the build host is configured.</p>
+<h2 id="the-builddefinition-attribute">The <code>[BuildDefinition]</code> Attribute</h2>
+<p>Every build definition class must be:</p>
+<ol>
+<li>Decorated with <code>[BuildDefinition]</code></li>
+<li>Marked <code>partial</code> (so source generators can augment it)</li>
+<li>Derived from <code>BuildDefinition</code> (or <code>WorkflowBuildDefinition</code>)</li>
+</ol>
+<pre><code class="lang-csharp">[BuildDefinition]
+[GenerateEntryPoint]
+internal partial class Build : BuildDefinition
+{
+    // targets, parameters, etc.
+}
+</code></pre>
+<h2 id="what-the-source-generator-does">What the Source Generator Does</h2>
+<p>When you apply <code>[BuildDefinition]</code>, the Atom source generator automatically:</p>
+<ul>
+<li>Discovers all <code>Target</code> properties (including those from implemented interfaces) and populates the <code>TargetDefinitions</code>
+dictionary.</li>
+<li>Discovers all <code>[ParamDefinition]</code> / <code>[SecretDefinition]</code> properties and populates the <code>ParamDefinitions</code> dictionary.</li>
+<li>Generates the <code>AccessParam</code> method so the framework can inspect parameter values.</li>
+</ul>
+<p>This means you never need to manually register targets or parameters — just declare them and the generator wires
+everything up.</p>
+<h2 id="generateentrypoint"><code>[GenerateEntryPoint]</code></h2>
+<p>Adding this attribute causes the source generator to emit a <code>Program.cs</code> with a <code>Main</code> method:</p>
+<pre><code class="lang-csharp">// Auto-generated
+AtomHost.Run&lt;Build&gt;(args);
+</code></pre>
+<p>If you need custom host configuration, omit <code>[GenerateEntryPoint]</code> and write your own entry point:</p>
+<pre><code class="lang-csharp">var builder = AtomHost.CreateAtomBuilder&lt;Build&gt;(args);
+// customise builder.Services, builder.Configuration, etc.
+builder.Build().UseAtom().Run();
+</code></pre>
+<h2 id="composing-with-interfaces">Composing with Interfaces</h2>
+<p>Targets and parameters are typically defined in <strong>interfaces</strong> so they can be shared across builds or published in
+module packages:</p>
+<pre><code class="lang-csharp">public interface IMyTargets : IBuildAccessor
+{
+    [ParamDefinition(&quot;greeting&quot;, &quot;The greeting message&quot;)]
+    string Greeting =&gt; GetParam(() =&gt; Greeting, &quot;Hello&quot;);
+
+    Target SayGreeting =&gt; t =&gt; t
+        .DescribedAs(&quot;Says a greeting&quot;)
+        .Executes(() =&gt; Logger.LogInformation(Greeting));
+}
+
+[BuildDefinition]
+[GenerateEntryPoint]
+internal partial class Build : BuildDefinition, IMyTargets { }
+</code></pre>
+<p>The source generator discovers <code>SayGreeting</code> and <code>Greeting</code> from <code>IMyTargets</code> and includes them in the build model.</p>
+<h2 id="generatesolutionmodel"><code>[GenerateSolutionModel]</code></h2>
+<p>When applied alongside <code>[BuildDefinition]</code>, this attribute generates a typed model of your solution's projects, giving
+you compile-time access to project paths.</p>
+<h2 id="configuredefinitionhost"><code>ConfigureDefinitionHost</code></h2>
+<p>Override <code>ConfigureDefinitionHost</code> on your build class to register additional services before the build runs:</p>
+<pre><code class="lang-csharp">public override void ConfigureDefinitionHost(IHostApplicationBuilder builder)
+{
+    base.ConfigureDefinitionHost(builder);
+    builder.Services.AddSingleton&lt;IMyService, MyService&gt;();
+}
+</code></pre>
+<h2 id="next-steps">Next Steps</h2>
+<p>→ <a href="targets.html">Targets</a></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/build-definitions.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

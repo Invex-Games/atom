@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Build Info | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Build Info | Atom ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/build-info.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="build-info">Build Info</h1>
+
+<p>Atom provides a pluggable system for determining the build's identity: its <strong>name</strong>, <strong>ID</strong>, <strong>version</strong>, and
+<strong>timestamp</strong>.</p>
+<h2 id="ibuildinfo"><code>IBuildInfo</code></h2>
+<p>The <code>IBuildInfo</code> interface exposes the following parameters. Each can be overridden on the command line (e.g.
+<code>--build-name</code>, <code>--build-id</code>, <code>--build-version</code>, <code>--build-timestamp</code>, <code>--build-slice</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BuildName</code></td>
+<td><code>string</code></td>
+<td>Logical name of the build (defaults to the solution file or root directory)</td>
+</tr>
+<tr>
+<td><code>BuildId</code></td>
+<td><code>string</code></td>
+<td>Unique identifier for this build run</td>
+</tr>
+<tr>
+<td><code>BuildVersion</code></td>
+<td><code>SemVer</code></td>
+<td>Semantic version of the build</td>
+</tr>
+<tr>
+<td><code>BuildTimestamp</code></td>
+<td><code>long</code></td>
+<td>Build timestamp in Unix epoch seconds</td>
+</tr>
+<tr>
+<td><code>BuildSlice</code></td>
+<td><code>string?</code></td>
+<td>Optional identifier for a build variation in matrix jobs</td>
+</tr>
+</tbody>
+</table>
+<h2 id="providers">Providers</h2>
+<p>Each piece of build info is resolved by a dedicated provider interface:</p>
+<table>
+<thead>
+<tr>
+<th>Interface</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IBuildIdProvider</code></td>
+<td><code>DefaultBuildIdProvider</code></td>
+<td>Combines the build version and timestamp (e.g. <code>&quot;1.2.3-1672531200&quot;</code>)</td>
+</tr>
+<tr>
+<td><code>IBuildVersionProvider</code></td>
+<td><code>DefaultBuildVersionProvider</code></td>
+<td>Parses version properties from <code>Directory.Build.props</code>; falls back to 1.0.0</td>
+</tr>
+<tr>
+<td><code>IBuildTimestampProvider</code></td>
+<td><code>DefaultBuildTimestampProvider</code></td>
+<td>Returns the current time as Unix epoch seconds</td>
+</tr>
+</tbody>
+</table>
+<h3 id="replacing-a-provider">Replacing a Provider</h3>
+<p>Register your own implementation in the DI container. For example, the <strong>GitVersion</strong> module replaces both the ID and
+version providers:</p>
+<pre><code class="lang-csharp">builder.Services
+    .AddSingleton&lt;IBuildIdProvider, GitVersionBuildIdProvider&gt;()
+    .AddSingleton&lt;IBuildVersionProvider, GitVersionBuildVersionProvider&gt;();
+</code></pre>
+<h2 id="setupbuildinfo-target"><code>SetupBuildInfo</code> Target</h2>
+<p>The built-in <code>ISetupBuildInfo</code> interface provides a <code>SetupBuildInfo</code> target that:</p>
+<ol>
+<li>Reads the build name, ID, version, and timestamp from the providers.</li>
+<li>Writes each as a <a href="variables.html">workflow variable</a> (<code>BuildName</code>, <code>BuildId</code>, <code>BuildVersion</code>, <code>BuildTimestamp</code>).</li>
+<li>Adds a &quot;Run Information&quot; section to the build report.</li>
+<li>Logs the values.</li>
+</ol>
+<p>Most builds include <code>SetupBuildInfo</code> as a dependency of their first real target.</p>
+<p>See <a href="../built-in-targets/setup-build-info.html">SetupBuildInfo</a> for details.</p>
+<h2 id="next-steps">Next Steps</h2>
+<p>→ <a href="build-options.html">Build Options</a></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/build-info.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
