@@ -64,7 +64,7 @@ internal interface IDeployTargets : INugetHelper, IGithubReleaseHelper, ISetupBu
 
     Target CreateGithubRelease =>
         d => d
-            .DescribedAs("Creates a release on Github.")
+            .DescribedAs("Creates a release on GitHub.")
             .RequiresParam(nameof(GithubToken))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildVersion))
             .Executes(async () => await CreateRelease(
