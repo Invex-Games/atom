@@ -77,8 +77,11 @@ public interface IGithubReleaseHelper : IGithubHelper
         if (!string.IsNullOrEmpty(targetCommitish))
             newRelease.TargetCommitish = targetCommitish;
 
-        return await client.Repository.Release.Create(long.Parse(Github.Variables.RepositoryId), newRelease);
-    }
+        if (!long.TryParse(Github.Variables.RepositoryId, out var repositoryId))
+            throw new InvalidOperationException(
+                $"Unable to parse GitHub repository id from '{Github.VariableNames.RepositoryId}' (value: '{Github.Variables.RepositoryId}').");
+
+        return await client.Repository.Release.Create(repositoryId, newRelease);
 
     /// <summary>
     ///     Uploads a build artifact to a specified GitHub Release.
