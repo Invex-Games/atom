@@ -213,6 +213,26 @@ internal interface IBuild : IWorkflowBuildDefinition,
             ],
             Types = [WorkflowTypes.Github.Action],
         },
+        new("CreateRelease")
+        {
+            Triggers = [WorkflowTriggers.Manual],
+            Targets =
+            [
+                new(nameof(SetupBuildInfo)),
+                new(nameof(CreateGithubRelease))
+                {
+                    Options =
+                    [
+                        BuildOptions.Inject.Secret(nameof(GithubToken)),
+                        new GithubTokenPermissionsOption(new Permissions.Exact(new()
+                        {
+                            Contents = PermissionsLevel.Write,
+                        })),
+                    ],
+                },
+            ],
+            Types = [WorkflowTypes.Github.Action],
+        },
 
         // Test devops
         new("Test_Devops_Build")
