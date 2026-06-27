@@ -11,6 +11,76 @@
 public interface IGithubReleaseHelper : IGithubHelper
 {
     /// <summary>
+    ///     Creates a GitHub Release for a new tag, tagging a specific commit or the latest commit on a branch.
+    /// </summary>
+    /// <param name="tagName">
+    ///     The name of the tag to create for the release (e.g. "v1.0.0"). The tag is created if it does not
+    ///     already exist.
+    /// </param>
+    /// <param name="targetCommitish">
+    ///     Specifies the commitish value that determines where the Git tag is created from. This can be a branch name
+    ///     (in which case the tag is created from the latest commit on that branch) or a commit SHA (in which case the
+    ///     tag is created from that specific commit). If <c>null</c> or empty, the repository's default branch is used.
+    /// </param>
+    /// <param name="name">
+    ///     The display name of the release. If <c>null</c>, the <paramref name="tagName" /> is used as the
+    ///     release name.
+    /// </param>
+    /// <param name="body">The description/body text of the release. May be <c>null</c> for an empty body.</param>
+    /// <param name="draft">If <c>true</c>, the release is created as an unpublished draft. Defaults to <c>false</c>.</param>
+    /// <param name="prerelease">If <c>true</c>, the release is flagged as a pre-release. Defaults to <c>false</c>.</param>
+    /// <param name="dryRunWhenNotRunningInGithubActions">
+    ///     If <c>true</c> (default), the create operation will be simulated (logged but not executed)
+    ///     when the build is not running in a GitHub Actions environment.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task" /> that resolves to the created <see cref="Release" />, or <c>null</c> when the operation
+    ///     was simulated because the build is not running in GitHub Actions.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">Thrown if the GitHub repository ID cannot be parsed.</exception>
+    /// <remarks>
+    ///     GitHub automatically creates the Git tag <paramref name="tagName" /> from <paramref name="targetCommitish" />
+    ///     as part of creating the release.
+    /// </remarks>
+    [PublicAPI]
+    async Task<Release?> CreateRelease(
+        string tagName,
+        string? targetCommitish = null,
+        string? name = null,
+        string? body = null,
+        bool draft = false,
+        bool prerelease = false,
+        bool dryRunWhenNotRunningInGithubActions = true)
+    {
+        if (!Github.IsGithubActions && dryRunWhenNotRunningInGithubActions)
+        {
+            Logger.LogWarning(
+                "Not running in GitHub Actions, simulating creation of release {TagName} targeting {TargetCommitish}.",
+                tagName,
+                string.IsNullOrEmpty(targetCommitish)
+                    ? "<default branch>"
+                    : targetCommitish);
+
+            return null;
+        }
+
+        var client = new GitHubClient(new("Invex.Atom"), new InMemoryCredentialStore(new(GithubToken)));
+
+        var newRelease = new NewRelease(tagName)
+        {
+            Name = name ?? tagName,
+            Body = body,
+            Draft = draft,
+            Prerelease = prerelease,
+        };
+
+        if (!string.IsNullOrEmpty(targetCommitish))
+            newRelease.TargetCommitish = targetCommitish;
+
+        return await client.Repository.Release.Create(long.Parse(Github.Variables.RepositoryId), newRelease);
+    }
+
+    /// <summary>
     ///     Uploads a build artifact to a specified GitHub Release.
     /// </summary>
     /// <param name="artifactName">

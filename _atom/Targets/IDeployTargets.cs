@@ -61,4 +61,11 @@ internal interface IDeployTargets : INugetHelper, IGithubReleaseHelper, ISetupBu
                 foreach (var artifact in IBuildTargets.ProjectsToPack.Concat(ITestTargets.ProjectsToTest))
                     await UploadArtifactToRelease(artifact, $"v{BuildVersion}");
             });
+
+    Target CreateGithubRelease =>
+        d => d
+            .DescribedAs("Creates a release on Github.")
+            .RequiresParam(nameof(GithubToken))
+            .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildVersion))
+            .Executes(async () => await CreateRelease($"v{BuildVersion}", "main", $"v{BuildVersion}"));
 }
