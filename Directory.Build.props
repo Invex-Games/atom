@@ -4,7 +4,7 @@
     <Authors>Declan Smith</Authors>
 
     <PackageIcon>icon.png</PackageIcon>
-    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageDescription>An opinionated task and build automation framework</PackageDescription>
     <EnablePackageValidation>true</EnablePackageValidation>
@@ -25,8 +25,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="../../images/icon.png" Pack="true" PackagePath="\" />
-    <None Include="../../readme.md" Pack="true" PackagePath="\" />
-    <None Include="../../LICENSE.txt" Pack="true" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)images/icon.png" Pack="true" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)LICENSE.txt" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>
