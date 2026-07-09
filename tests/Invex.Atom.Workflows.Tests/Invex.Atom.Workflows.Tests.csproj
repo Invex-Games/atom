@@ -16,7 +16,7 @@
     <PackageReference Include="Shouldly" Version="4.3.0" />
     <PackageReference Include="Spectre.Console.Testing" Version="0.57.2" />
     <PackageReference Include="TestableIO.System.IO.Abstractions.TestingHelpers" Version="22.1.1" />
-    <PackageReference Include="Verify.NUnit" Version="31.20.0" />
+    <PackageReference Include="Verify.NUnit" Version="31.22.0" />
   </ItemGroup>
 
   <ItemGroup>
