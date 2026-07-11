@@ -25,6 +25,8 @@ internal sealed class PushPackageToNugetTests
 
     private static INugetHelper CreateSut(IProcessRunner processRunner, CommandLineArgs? commandLineArgs = null)
     {
+        commandLineArgs ??= new(true, [new ParamArg("nuget-dry-run", nameof(INugetHelper.NugetDryRun), "false")]);
+
         var host = CreateTestHost<NugetHelperBuild>(commandLineArgs: commandLineArgs,
             configure: builder => builder.Services.AddSingleton(processRunner));
 
