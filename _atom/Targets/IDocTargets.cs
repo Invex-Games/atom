@@ -26,4 +26,13 @@ internal interface IDocTargets : IDocFxHelper
             .DependsOn(nameof(SetupBuildInfo))
             .Executes(cancellationToken =>
                 PublishDocFxDocsToGithub(GithubToken, GeneratedDocsArtifactName, cancellationToken));
+
+    Target PublishReleaseDocs =>
+        t => t
+            .DescribedAs("Publishes validated release documentation to Github Pages.")
+            .RequiresParam(nameof(GithubToken))
+            .ConsumesArtifact(nameof(BuildDocs), GeneratedDocsArtifactName)
+            .DependsOn(nameof(IDeployTargets.DeployRelease))
+            .Executes(cancellationToken =>
+                PublishDocFxDocsToGithub(GithubToken, GeneratedDocsArtifactName, cancellationToken));
 }

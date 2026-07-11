@@ -512,6 +512,7 @@ internal interface IBuild : IBuildDefinition
   and more
 - [Source Generators](docs/developer-guide/source-generators.md) — How the Atom analysers and source generators work
 - [Testing](docs/developer-guide/testing.md) — Using `Invex.Atom.TestUtils`
+- [Releasing Atom](docs/developer-guide/releasing-atom.md) — Protected release process and rollback
 
 ### Reference
 

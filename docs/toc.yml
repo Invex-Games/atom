@@ -90,9 +90,10 @@
             href: developer-guide/source-generators.md
         -   name: Testing
             href: developer-guide/testing.md
+        -   name: Releasing Atom
+            href: developer-guide/releasing-atom.md
 -   name: Reference
     href: reference/cli.md
     items:
         -   name: CLI
             href: reference/cli.md
-
