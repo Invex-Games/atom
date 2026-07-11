@@ -18,9 +18,12 @@ internal sealed class ReleaseHelperSubject(IServiceProvider services) : IGithubR
 }
 
 [TestFixture]
+[NonParallelizable]
 internal sealed class GithubReleaseHelperTests
 {
     private const long RepositoryId = 99999L;
+    private string? _originalGithubActions;
+    private string? _originalRepositoryId;
 
     // Returns an IGithubReleaseHelper so default interface methods are callable without an extra cast.
     private static IGithubReleaseHelper BuildHelper(IGithubReleaseApi? api = null)
@@ -34,12 +37,20 @@ internal sealed class GithubReleaseHelperTests
     }
 
     [SetUp]
-    public void SetUp() =>
+    public void SetUp()
+    {
+        _originalGithubActions = Environment.GetEnvironmentVariable("GITHUB_ACTIONS");
+        _originalRepositoryId = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY_ID");
+        Environment.SetEnvironmentVariable("GITHUB_ACTIONS", "false");
         Environment.SetEnvironmentVariable("GITHUB_REPOSITORY_ID", RepositoryId.ToString());
+    }
 
     [TearDown]
-    public void TearDown() =>
-        Environment.SetEnvironmentVariable("GITHUB_REPOSITORY_ID", null);
+    public void TearDown()
+    {
+        Environment.SetEnvironmentVariable("GITHUB_ACTIONS", _originalGithubActions);
+        Environment.SetEnvironmentVariable("GITHUB_REPOSITORY_ID", _originalRepositoryId);
+    }
 
     // CreateRelease payload and exact target
 
