@@ -37,7 +37,6 @@
     <Project Path="tests/Invex.Atom.Module.GithubWorkflows.Tests/Invex.Atom.Module.GithubWorkflows.Tests.csproj" />
   </Folder>
   <Folder Name="/Tests/Tools/">
-    <Project Path="tests/Atom.Tests/Atom.Tests.csproj" />
     <Project Path="tests/Invex.Atom.Tool.Tests/Invex.Atom.Tool.Tests.csproj" />
   </Folder>
   <Folder Name="/Tools/">

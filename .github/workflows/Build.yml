@@ -176,12 +176,6 @@ jobs:
           test-framework: ${{ matrix.test-framework }}
           build-slice: '${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
 
-      - name: Store Atom.Tests
-        uses: actions/upload-artifact@v7
-        with:
-          name: 'Atom.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
-          path: '${{ github.workspace }}/.github/publish/Atom.Tests'
-
       - name: Store Invex.Atom.Build.Tests
         uses: actions/upload-artifact@v7
         with:

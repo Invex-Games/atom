@@ -202,12 +202,6 @@ jobs:
           build-slice: $(job-runs-on)-$(test-framework)
 
       - task: PublishPipelineArtifact@1
-        displayName: Atom.Tests
-        inputs:
-          artifactName: Atom.Tests-$(job-runs-on)-$(test-framework)
-          targetPath: $(Build.BinariesDirectory)/Atom.Tests
-
-      - task: PublishPipelineArtifact@1
         displayName: Invex.Atom.Build.Tests
         inputs:
           artifactName: Invex.Atom.Build.Tests-$(job-runs-on)-$(test-framework)

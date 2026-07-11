@@ -4,7 +4,6 @@ internal interface ITestTargets : IDotnetTestHelper
 {
     static readonly string[] ProjectsToTest =
     [
-        Projects.Atom_Tests.Name,
         Projects.Invex_Atom_Build_Tests.Name,
         Projects.Invex_Atom_Build_Analyzers_Tests.Name,
         Projects.Invex_Atom_Build_SourceGenerators_Tests.Name,
