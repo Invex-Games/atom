@@ -1,0 +1,23 @@
+﻿name: pull-request-auto-cancel
+
+trigger: none
+pr:
+  autoCancel: true
+  branches:
+    include: [ main, develop ]
+
+jobs:
+
+  - job: PullRequestTarget
+    displayName: PullRequestTarget
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+      - checkout: self
+        enabled: true
+        fetchDepth: 0
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj PullRequestTarget --skip --headless
+        displayName: PullRequestTarget
+        name: PullRequestTarget

@@ -157,6 +157,40 @@ public static class DevopsBuildOptionsExtensions
             step;
     }
 
+    /// <summary>
+    ///     Creates Azure Pipelines concurrency options.
+    /// </summary>
+    [PublicAPI]
+    public sealed class DevopsConcurrencyOptions
+    {
+        /// <summary>
+        ///     Runs only the latest pipeline waiting on an exclusive lock, cancelling earlier waiting runs.
+        /// </summary>
+        public DevopsConcurrencyOption RunLatest => field ??= new(TextExpressions.Raw("runLatest"));
+
+        /// <summary>
+        ///     Runs every pipeline waiting on an exclusive lock in sequence.
+        /// </summary>
+        public DevopsConcurrencyOption Sequential => field ??= new(TextExpressions.Raw("sequential"));
+    }
+
+    /// <summary>
+    ///     Creates Azure Pipelines pull request options.
+    /// </summary>
+    [PublicAPI]
+    public sealed class DevopsPullRequestOptions
+    {
+        /// <summary>
+        ///     Cancels an in-progress pull request run when a new commit is pushed to the pull request.
+        /// </summary>
+        public DevopsPullRequestOption AutoCancel => field ??= new(true);
+
+        /// <summary>
+        ///     Allows in-progress pull request runs to continue when new commits are pushed.
+        /// </summary>
+        public DevopsPullRequestOption KeepRunning => field ??= new(false);
+    }
+
     [PublicAPI]
     public sealed class DevopsOptions
     {
@@ -167,6 +201,16 @@ public static class DevopsBuildOptionsExtensions
         public DevopsVariableGroupOptions VariableGroup => field ??= new();
 
         public DevopsStepsOptions Steps => field ??= new();
+
+        /// <summary>
+        ///     Gets options that control how pipeline runs wait on exclusive locks.
+        /// </summary>
+        public DevopsConcurrencyOptions Concurrency => field ??= new();
+
+        /// <summary>
+        ///     Gets options that control pull request pipeline behavior.
+        /// </summary>
+        public DevopsPullRequestOptions PullRequest => field ??= new();
 
         public ProvideDevopsRunIdAsWorkflowId ProvideDevopsRunIdAsWorkflowId => field ??= new();
     }

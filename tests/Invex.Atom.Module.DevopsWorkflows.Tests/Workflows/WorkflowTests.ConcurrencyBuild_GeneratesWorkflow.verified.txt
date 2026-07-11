@@ -1,0 +1,22 @@
+﻿name: concurrency-workflow
+
+trigger:
+  branches:
+    include: [ main ]
+lockBehavior: sequential
+
+jobs:
+
+  - job: ConcurrencyTarget
+    displayName: ConcurrencyTarget
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+      - checkout: self
+        enabled: true
+        fetchDepth: 0
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj ConcurrencyTarget --skip --headless
+        displayName: ConcurrencyTarget
+        name: ConcurrencyTarget

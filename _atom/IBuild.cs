@@ -307,7 +307,12 @@ internal interface IBuild : IWorkflowBuildDefinition,
                 },
             ],
             Types = [WorkflowTypes.Devops.Pipeline],
-            Options = [BuildOptions.Inject.Param(nameof(NugetDryRun), true), BuildOptions.Devops.VariableGroup.Atom],
+            Options =
+            [
+                BuildOptions.Inject.Param(nameof(NugetDryRun), true),
+                BuildOptions.Devops.VariableGroup.Atom,
+                BuildOptions.Devops.PullRequest.AutoCancel,
+            ],
         },
 
         // Dependabot

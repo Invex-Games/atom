@@ -23,6 +23,8 @@ internal sealed partial class DevopsWorkflowBuilder(
             Pr = BuildPr(workflow),
             Parameters = BuildParameters(workflow),
             Variables = BuildVariables(workflow),
+            LockBehavior = DevopsConcurrencyOption.Get(workflow.Options)
+                ?.LockBehavior,
         };
 
     private static Trigger? BuildTrigger(WorkflowModel workflow)
@@ -115,6 +117,8 @@ internal sealed partial class DevopsWorkflowBuilder(
 
     private static Pr? BuildPr(WorkflowModel workflow)
     {
+        var pullRequestOption = DevopsPullRequestOption.Get(workflow.Options);
+
         var prTriggers = workflow
             .Triggers
             .OfType<GitPullRequestTrigger>()
@@ -145,7 +149,7 @@ internal sealed partial class DevopsWorkflowBuilder(
         if (!hasBranches && !hasPaths)
             return null;
 
-        if (!hasPaths && includedBranches.Length > 0 && excludedBranches.Length is 0)
+        if (pullRequestOption is null && !hasPaths && includedBranches.Length > 0 && excludedBranches.Length is 0)
             return new Pr.BranchList
             {
                 Branches = new(includedBranches.Select(TextExpressions.Raw)),
@@ -174,6 +178,9 @@ internal sealed partial class DevopsWorkflowBuilder(
                         ? new TextExpressionCollection(excludedPaths.Select(TextExpressions.Raw))
                         : null,
                 }
+                : null,
+            AutoCancel = pullRequestOption is not null
+                ? TextExpressions.From(pullRequestOption.AutoCancel)
                 : null,
         };
     }

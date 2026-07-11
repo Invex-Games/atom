@@ -4,6 +4,7 @@ trigger:
   branches:
     include: [ main ]
 pr:
+  autoCancel: true
   branches:
     include: [ main ]
 variables:
