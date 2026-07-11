@@ -68,5 +68,30 @@ WorkflowLabels.Devops.Pool.MacOs_Latest
 
 - `BuildOptions.Devops.DevopsPool.SetByMatrix` — set the agent pool from a matrix dimension
 - `BuildOptions.Devops.VariableGroup.*` — reference Azure DevOps variable groups
+- `BuildOptions.Devops.Concurrency.RunLatest` — run only the latest pipeline waiting on an exclusive lock
+- `BuildOptions.Devops.Concurrency.Sequential` — run every pipeline waiting on an exclusive lock in sequence
+- `BuildOptions.Devops.PullRequest.AutoCancel` — cancel an in-progress PR run when a new commit is pushed
+- `BuildOptions.Devops.PullRequest.KeepRunning` — allow in-progress PR runs to finish after new commits
 - `ProvideDevopsRunIdAsWorkflowId` — use the DevOps run ID as the Atom build ID
 
+Configure the lock behavior on a `WorkflowDefinition`:
+
+```csharp
+Options =
+[
+    BuildOptions.Devops.Concurrency.Sequential,
+];
+```
+
+Azure Pipelines applies `lockBehavior` to resources protected by an
+[exclusive lock check](https://learn.microsoft.com/azure/devops/pipelines/process/approvals#exclusive-lock).
+
+Configure pull request auto-cancellation alongside a pull request trigger:
+
+```csharp
+new("Validate")
+{
+    Triggers = [WorkflowTriggers.PullInto("main", "develop")],
+    Options = [BuildOptions.Devops.PullRequest.AutoCancel],
+}
+```

@@ -2,7 +2,7 @@ namespace Atom.RepoUtils;
 
 internal sealed record ReleaseInfo(string CommitHash, SemVer Version);
 
-internal interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper, ISetupBuildInfo, IApiSurfaceHelper
+internal interface ICheckPrForBreakingChanges : ISetupBuildInfo, IApiSurfaceHelper
 {
     private RootedPath[] FilesToCheck =>
         RootedFileSystem
@@ -13,13 +13,9 @@ internal interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelpe
 
     Target CheckPrForBreakingChanges =>
         t => t
-            .RequiresParam(nameof(GithubToken), nameof(PullRequestNumber))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildVersion))
-            .Executes(async cancellationToken =>
+            .Executes(() =>
             {
-                var owner = Github.Variables.RepositoryOwner;
-                Logger.LogDebug("Target repository owner: {Owner}", owner);
-
                 using var repo = new Repository(RootedFileSystem.AtomRootDirectory);
 
                 var currentCommitHash = repo.Head.Tip.Sha;
@@ -123,17 +119,10 @@ internal interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelpe
                     _ => false,
                 };
 
-                Logger.LogInformation("Adding check status to pull request with status: {Status}",
-                    hasInvalidChanges
-                        ? "failure"
-                        : "success");
+                Logger.LogInformation("{BreakingChangesReport}", body);
 
-                await AddCheckStatus(owner,
-                    hasInvalidChanges
-                        ? "failure"
-                        : "success",
-                    body,
-                    cancellationToken);
+                if (hasInvalidChanges)
+                    throw new StepFailedException("Breaking API changes require an appropriate version bump.");
             });
 
     ReleaseInfo? FindLatestReleaseInfo(Repository repo, SemVer currentVersion)
@@ -167,80 +156,5 @@ internal interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelpe
         var version = releaseVersions.MaxBy(x => x.Version)!;
 
         return new(version.Tag.Target.Sha, version.Version);
-    }
-
-    private async Task AddCheckStatus(
-        string owner,
-        string status,
-        string description,
-        CancellationToken cancellationToken)
-    {
-        var repository = Github.Variables
-            .Repository
-            .Split('/')
-            .Last();
-
-        Logger.LogDebug("Target repository: {Repository}", repository);
-
-        var productHeader = new ProductHeaderValue("Atom");
-        var connection = new Connection(productHeader, new InMemoryCredentialStore(GithubToken));
-
-        var repoQuery = new Query()
-            .Repository(repository, owner)
-            .Select(r => new
-            {
-                r.Id,
-            })
-            .Compile();
-
-        var repoQueryResult = await connection.Run(repoQuery, cancellationToken: cancellationToken);
-
-        if (repoQueryResult.Id.Value is null)
-            throw new StepFailedException("Could not find repository.");
-
-        var prQuery = new Query()
-            .Repository(repository, owner)
-            .PullRequest(PullRequestNumber)
-            .Select(p => new
-            {
-                p.Id,
-                p.HeadRefOid,
-            })
-            .Compile();
-
-        var prQueryResult = await connection.Run(prQuery, cancellationToken: cancellationToken);
-
-        if (prQueryResult.Id.Value is null)
-            throw new StepFailedException("Could not find pull request.");
-
-        using var repo = new Repository(RootedFileSystem.AtomRootDirectory);
-
-        var checkRunMutation = new Mutation()
-            .CreateCheckRun(new CreateCheckRunInput
-            {
-                RepositoryId = repoQueryResult.Id,
-                Name = "API Surface Breaking Changes Check",
-                HeadSha = prQueryResult.HeadRefOid,
-                Status = RequestableCheckStatusState.Completed,
-                Conclusion = status == "success"
-                    ? CheckConclusionState.Success
-                    : CheckConclusionState.Failure,
-                CompletedAt = DateTimeOffset.UtcNow,
-                Output = new()
-                {
-                    Title = "Breaking Changes Analysis",
-                    Summary = description,
-                },
-            })
-            .Select(x => new
-            {
-                x.ClientMutationId,
-            })
-            .Compile();
-
-        var checkRunResult = await connection.Run(checkRunMutation, cancellationToken: cancellationToken);
-
-        if (checkRunResult is null)
-            throw new StepFailedException("Could not create check run.");
     }
 }

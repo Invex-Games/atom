@@ -494,7 +494,7 @@ internal interface IBuild : IBuildDefinition
 - [Overview](docs/modules/overview.md) — What a module is and how to add one
 - [.NET](docs/modules/dotnet.md) — `Invex.Atom.Module.Dotnet`
 - [GitHub Workflows](docs/modules/github-workflows.md) — `Invex.Atom.Module.GithubWorkflows`
-- [DevOps Workflows](docs/modules/devops-workflows.md) — `Invex.Atom.Module.DevopsWorkflows`
+- [DevOps Workflows](docs/modules/devops-workflows.md) — Azure Pipelines generation, pools, PR controls, and concurrency
 - [Azure Key Vault](docs/modules/azure-key-vault.md) — `Invex.Atom.Module.AzureKeyVault`
 - [Azure Storage](docs/modules/azure-storage.md) — `Invex.Atom.Module.AzureStorage`
 - [GitVersion](docs/modules/git-version.md) — `Invex.Atom.Module.GitVersion`
@@ -512,6 +512,7 @@ internal interface IBuild : IBuildDefinition
   and more
 - [Source Generators](docs/developer-guide/source-generators.md) — How the Atom analysers and source generators work
 - [Testing](docs/developer-guide/testing.md) — Using `Invex.Atom.TestUtils`
+- [Releasing Atom](docs/developer-guide/releasing-atom.md) — Protected release process and rollback
 
 ### Reference
 

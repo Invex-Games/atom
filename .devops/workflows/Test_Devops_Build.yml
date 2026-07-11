@@ -4,6 +4,7 @@ trigger:
   branches:
     include: [ main ]
 pr:
+  autoCancel: true
   branches:
     include: [ main ]
 variables:
@@ -224,6 +225,12 @@ jobs:
         inputs:
           artifactName: Invex.Atom.Module.DevopsWorkflows.Tests-$(job-runs-on)-$(test-framework)
           targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.DevopsWorkflows.Tests
+
+      - task: PublishPipelineArtifact@1
+        displayName: Invex.Atom.Module.Dotnet.Tests
+        inputs:
+          artifactName: Invex.Atom.Module.Dotnet.Tests-$(job-runs-on)-$(test-framework)
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.Dotnet.Tests
 
       - task: PublishPipelineArtifact@1
         displayName: Invex.Atom.Module.GithubWorkflows.Tests

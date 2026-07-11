@@ -234,6 +234,43 @@ public static class WorkflowOptionsExtensions
             new(permissions);
     }
 
+    /// <summary>
+    ///     Creates GitHub Actions workflow concurrency options.
+    /// </summary>
+    [PublicAPI]
+    public sealed class GithubConcurrencyOptions
+    {
+        /// <summary>
+        ///     Configures a workflow concurrency group.
+        /// </summary>
+        /// <param name="group">The concurrency group key.</param>
+        /// <param name="cancelInProgress">Whether to cancel an in-progress workflow in the same group.</param>
+        /// <returns>The workflow concurrency option.</returns>
+        public GithubConcurrencyOption Set(TextExpression group, TextExpression? cancelInProgress = null) =>
+            new(group, cancelInProgress);
+
+        /// <summary>
+        ///     Configures a workflow concurrency group.
+        /// </summary>
+        /// <param name="group">The concurrency group key.</param>
+        /// <param name="cancelInProgress">Whether to cancel an in-progress workflow in the same group.</param>
+        /// <returns>The workflow concurrency option.</returns>
+        public GithubConcurrencyOption Set(TextExpression group, bool cancelInProgress) =>
+            new(group, TextExpressions.From(cancelInProgress));
+
+        /// <summary>
+        ///     Configures a workflow concurrency group.
+        /// </summary>
+        /// <param name="group">The concurrency group key.</param>
+        /// <param name="cancelInProgress">Whether to cancel an in-progress workflow in the same group.</param>
+        /// <returns>The workflow concurrency option.</returns>
+        public GithubConcurrencyOption Set(string group, bool? cancelInProgress = null) =>
+            new(TextExpressions.Raw(group),
+                cancelInProgress.HasValue
+                    ? TextExpressions.From(cancelInProgress.Value)
+                    : null);
+    }
+
     [PublicAPI]
     public sealed class GithubDependabotOptions
     {
@@ -257,6 +294,8 @@ public static class WorkflowOptionsExtensions
         public GithubRunsOnOptions RunsOn => field ??= new();
 
         public GithubTokenPermissionsOptions TokenPermissions => field ??= new();
+
+        public GithubConcurrencyOptions Concurrency => field ??= new();
 
         public GithubDependabotOptions Dependabot => field ??= new();
 

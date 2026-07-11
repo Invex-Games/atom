@@ -100,8 +100,19 @@ public interface INugetHelper : IBuildInfo
     /// <param name="configFile">Optional path to a NuGet configuration file to use instead of the default one.</param>
     /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
+    /// <exception cref="StepFailedException">
+    ///     Thrown when the <c>dotnet nuget push</c> process exits with a non-zero exit code.
+    ///     The exception message includes the exit code and the sanitized standard error output;
+    ///     any occurrence of <paramref name="apiKey" /> in the stderr is replaced with <c>[REDACTED]</c>
+    ///     to prevent credential exposure in logs and error reports.
+    /// </exception>
     /// <remarks>
-    ///     If <see cref="NugetDryRun" /> is <c>true</c>, the push operation will be simulated.
+    ///     <para>If <see cref="NugetDryRun" /> is <c>true</c>, the push operation will be simulated and no
+    ///     process will be started.</para>
+    ///     <para>
+    ///         If <paramref name="cancellationToken" /> is cancelled while the process is running, the underlying
+    ///         <see cref="OperationCanceledException" /> propagates to the caller unchanged.
+    ///     </para>
     /// </remarks>
     [PublicAPI]
     async Task PushPackageToNuget(
@@ -126,12 +137,22 @@ public interface INugetHelper : IBuildInfo
             ? $" --configfile \"{configFile}\""
             : string.Empty;
 
-        var processRunResult = await ProcessRunner.RunAsync(new("dotnet",
-                $"nuget push \"{packagePath}\"{configFileFlag} --source {feed} --api-key {apiKey}"),
+        var processRunResult = await ProcessRunner.RunAsync(
+            new("dotnet", $"nuget push \"{packagePath}\"{configFileFlag} --source {feed} --api-key {apiKey}")
+            {
+                AllowFailedResult = true,
+            },
             cancellationToken);
 
         if (processRunResult.ExitCode is not 0)
-            Logger.LogError("Failed to push package to Nuget: {ProcessRunResult}", processRunResult.Error);
+        {
+            var sanitizedStderr = apiKey.Length > 0
+                ? processRunResult.Error.Replace(apiKey, "[REDACTED]", StringComparison.Ordinal)
+                : processRunResult.Error;
+
+            throw new StepFailedException(
+                $"NuGet push failed with exit code {processRunResult.ExitCode}. Stderr: {sanitizedStderr}");
+        }
 
         Logger.LogInformation("Package pushed");
     }

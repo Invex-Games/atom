@@ -54,6 +54,44 @@ internal sealed class WorkflowTests
     }
 
     [Test]
+    public async Task ConcurrencyBuild_GeneratesWorkflow()
+    {
+        // Arrange
+        var fileSystem = FileSystemUtils.DefaultMockFileSystem;
+
+        var build = CreateTestHost<ConcurrencyBuild>(fileSystem: fileSystem,
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
+
+        // Act
+        await build.RunAsync();
+
+        // Assert
+        var workflow = await fileSystem.File.ReadAllTextAsync($"{WorkflowDir}concurrency-workflow.yml");
+
+        await Verify(workflow);
+        await TestContext.Out.WriteAsync(workflow);
+    }
+
+    [Test]
+    public async Task PullRequestAutoCancelBuild_GeneratesWorkflow()
+    {
+        // Arrange
+        var fileSystem = FileSystemUtils.DefaultMockFileSystem;
+
+        var build = CreateTestHost<PullRequestAutoCancelBuild>(fileSystem: fileSystem,
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
+
+        // Act
+        await build.RunAsync();
+
+        // Assert
+        var workflow = await fileSystem.File.ReadAllTextAsync($"{WorkflowDir}pull-request-auto-cancel.yml");
+
+        await Verify(workflow);
+        await TestContext.Out.WriteAsync(workflow);
+    }
+
+    [Test]
     public async Task DependentBuild_GeneratesWorkflow()
     {
         // Arrange
