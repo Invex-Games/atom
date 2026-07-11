@@ -1,0 +1,27 @@
+﻿name: concurrency-workflow
+
+on:
+  push:
+    branches: [ main ]
+
+permissions: { }
+
+concurrency:
+  group: '${{ github.workflow }}-${{ github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+
+  ConcurrencyTarget:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: ConcurrencyTarget
+        id: ConcurrencyTarget
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ConcurrencyTarget --skip --headless
+

@@ -22,7 +22,34 @@ internal sealed class GithubWorkflowFileWriter(
         var actionWriter = new GithubActionWriter();
         actionWriter.Write(resolvedWorkflow);
 
-        return actionWriter.TextWriter.ToString();
+        return EnsureConcurrencyGroupKey(actionWriter.TextWriter.ToString(), resolvedWorkflow.Concurrency);
+    }
+
+    private static string EnsureConcurrencyGroupKey(string workflow, Concurrency? concurrency)
+    {
+        if (concurrency is null)
+            return workflow;
+
+        const string concurrencyHeader = "concurrency:";
+        var headerIndex = workflow.IndexOf(concurrencyHeader, StringComparison.Ordinal);
+
+        if (headerIndex < 0)
+            throw new InvalidOperationException("The GitHub Actions writer did not serialize workflow concurrency.");
+
+        var groupLineIndex = headerIndex + concurrencyHeader.Length;
+
+        while (groupLineIndex < workflow.Length && workflow[groupLineIndex] is '\r' or '\n')
+            groupLineIndex++;
+
+        const string indentation = "  ";
+
+        if (!workflow
+                .AsSpan(groupLineIndex)
+                .StartsWith(indentation))
+            throw new InvalidOperationException("The GitHub Actions writer serialized an invalid concurrency group.");
+
+        // Invex.StructuredText.GithubActions 1.2 omits the required key while retaining the correctly formatted value.
+        return workflow.Insert(groupLineIndex + indentation.Length, "group: ");
     }
 
     private GithubAction BuildWorkflow(WorkflowModel workflow) =>
@@ -36,6 +63,13 @@ internal sealed class GithubWorkflowFileWriter(
                 .ToList(),
             Permissions = BuildPermissions(GithubTokenPermissionsOption.Get(workflow.Options) ??
                                            BuildOptions.Github.TokenPermissions.NoneAll),
+            Concurrency = GithubConcurrencyOption.Get(workflow.Options) is { } concurrency
+                ? new()
+                {
+                    Group = concurrency.Group,
+                    CancelInProgress = concurrency.CancelInProgress,
+                }
+                : null,
         };
 
     private List<On> BuildTriggers(WorkflowModel workflow) =>

@@ -90,7 +90,24 @@ WorkflowLabels.Github.RunsOn.MacOs_Latest
 
 - `BuildOptions.Github.RunsOn.SetByMatrix` — set the runner from a matrix dimension
 - `GithubTokenPermissionsOption` — fine-grained `GITHUB_TOKEN` permissions
+- `BuildOptions.Github.Concurrency.Set(...)` — limit concurrent workflow runs sharing a group
 - GitHub-specific triggers (e.g. `release` events)
+
+Configure concurrency on a `WorkflowDefinition` with a literal group or a text expression:
+
+```csharp
+Options =
+[
+    BuildOptions.Github.Concurrency.Set(
+        TextExpressions.Concat(
+        [
+            TextExpressions.Github.GithubWorkflow.Evaluate(),
+            "-",
+            TextExpressions.Github.GithubRef.Evaluate(),
+        ]),
+        true),
+];
+```
 
 ### Dependabot Configuration
 
@@ -110,4 +127,3 @@ WorkflowPresets.Github.Dependabot(new()
     ],
 })
 ```
-

@@ -40,6 +40,12 @@ internal interface IBuild : IWorkflowBuildDefinition,
         WorkflowLabels.Dotnet.Framework.Net_10_0,
     ];
 
+    static readonly IBuildOption CancelSupersededWorkflowRuns = BuildOptions.Github.Concurrency.Set(
+        TextExpressions.Concat([
+            TextExpressions.Github.GithubWorkflow.Evaluate(), "-", TextExpressions.Github.GithubRef.Evaluate(),
+        ]),
+        true);
+
     IReadOnlyList<IBuildOption> IBuildDefinition.Options =>
     [
         BuildOptions.GitVersion.ProvideBuildId,
@@ -128,6 +134,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                 },
             ],
             Types = [WorkflowTypes.Github.Action],
+            Options = [CancelSupersededWorkflowRuns],
         },
         new("Build")
         {
@@ -177,6 +184,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                 new(nameof(BuildDocs)),
             ],
             Types = [WorkflowTypes.Github.Action],
+            Options = [CancelSupersededWorkflowRuns],
         },
         new("CreateRelease")
         {
@@ -364,6 +372,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                 },
             ],
             Types = [WorkflowTypes.Github.Action],
+            Options = [CancelSupersededWorkflowRuns],
         },
     ];
 }
