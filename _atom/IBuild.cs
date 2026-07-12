@@ -46,6 +46,12 @@ internal interface IBuild : IWorkflowBuildDefinition,
         ]),
         true);
 
+    static readonly TextExpression PreReleaseInput = TextExpressions
+        .Raw("inputs")["pre-release"];
+
+    static readonly TextExpression StableOrPreReleaseBranch =
+        TextExpressions.Raw("(github.ref == 'refs/heads/main' || inputs.pre-release)");
+
     IReadOnlyList<IBuildOption> IBuildDefinition.Options =>
     [
         BuildOptions.GitVersion.ProvideBuildId,
@@ -138,14 +144,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
         },
         new("Build")
         {
-            Triggers =
-            [
-                WorkflowTriggers.Manual,
-                new GitPushTrigger
-                {
-                    IncludedBranches = ["main", "feature/**", "patch/**"],
-                },
-            ],
+            Triggers = [WorkflowTriggers.PushToMain],
             Targets =
             [
                 new(nameof(SetupBuildInfo)),
@@ -238,11 +237,15 @@ internal interface IBuild : IWorkflowBuildDefinition,
                         {
                             Contents = PermissionsLevel.Write,
                         })),
-                        BuildOptions.Deploy.ToEnvironment("production"),
+                        BuildOptions.Deploy.ToEnvironment(PreReleaseInput
+                            .And(TextExpressions.From("pre-production"))
+                            .Or(TextExpressions.From("production"))
+                            .Evaluate()),
                         BuildOptions.Target.RunIfWorkflowCondition(
                             TextExpressions.Github.GithubEventName.EqualToString("workflow_dispatch")),
                         BuildOptions.Target.RunIfWorkflowCondition(
-                            TextExpressions.Github.GithubRef.EqualToString("refs/heads/main")),
+                            TextExpressions.Github.GithubRefType.EqualToString("branch")),
+                        BuildOptions.Target.RunIfWorkflowCondition(StableOrPreReleaseBranch),
                     ],
                 },
                 new(nameof(PublishReleaseDocs))
@@ -259,6 +262,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                             TextExpressions.Github.GithubEventName.EqualToString("workflow_dispatch")),
                         BuildOptions.Target.RunIfWorkflowCondition(
                             TextExpressions.Github.GithubRef.EqualToString("refs/heads/main")),
+                        BuildOptions.Target.RunIfWorkflowCondition(PreReleaseInput.Not()),
                     ],
                 },
             ],

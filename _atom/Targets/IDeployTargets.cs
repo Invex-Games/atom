@@ -13,7 +13,7 @@ internal interface IDeployTargets : INugetHelper, IGithubReleaseHelper, ISetupBu
     [SecretDefinition("nuget-push-api-key", "The API key to use to push to Nuget.")]
     string NugetApiKey => GetParam(() => NugetApiKey)!;
 
-    [ParamDefinition("pre-release", "Whether to publish the release as a pre-release.")]
+    [ParamDefinition("pre-release", "Publish the release as a pre-release.")]
     bool PreRelease => GetParam(() => PreRelease);
 
     Target PushToNuget =>
@@ -40,7 +40,7 @@ internal interface IDeployTargets : INugetHelper, IGithubReleaseHelper, ISetupBu
 
     Target DeployRelease =>
         d => d
-            .DescribedAs("Publishes a validated release from a protected main-branch workflow.")
+            .DescribedAs("Publishes a validated stable or pre-release from a trusted workflow.")
             .RequiresParam(nameof(GithubToken), nameof(NugetFeed), nameof(NugetApiKey))
             .UsesParam(nameof(PreRelease))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildVersion))
@@ -140,9 +140,14 @@ internal interface IDeployTargets : INugetHelper, IGithubReleaseHelper, ISetupBu
             return;
         }
 
-        if (!string.Equals(Github.Variables.EventName, "workflow_dispatch", StringComparison.Ordinal) ||
-            !string.Equals(Github.Variables.Ref, "refs/heads/main", StringComparison.Ordinal))
-            throw new StepFailedException("Production releases may only be manually dispatched from refs/heads/main.");
+        if (!string.Equals(Github.Variables.EventName, "workflow_dispatch", StringComparison.Ordinal))
+            throw new StepFailedException("Releases may only be manually dispatched.");
+
+        if (!Github.Variables.Ref.StartsWith("refs/heads/", StringComparison.Ordinal))
+            throw new StepFailedException("Releases may only be created from branches.");
+
+        if (!PreRelease && !string.Equals(Github.Variables.Ref, "refs/heads/main", StringComparison.Ordinal))
+            throw new StepFailedException("Production releases may only be dispatched from refs/heads/main.");
     }
 
     private void ValidateLocalReleaseArtifacts()

@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       pre-release:
-        description: Whether to publish the release as a pre-release.
+        description: Publish the release as a pre-release.
         required: false
         default: false
         type: boolean
@@ -256,9 +256,9 @@ jobs:
     permissions:
       contents: write
     needs: [ PackProjects, PackTool, TestProjects, SetupBuildInfo ]
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'workflow_dispatch' && github.ref_type == 'branch' && (github.ref == 'refs/heads/main' || inputs.pre-release)
     runs-on: ubuntu-latest
-    environment: production
+    environment: ${{ inputs.pre-release && 'pre-production' || 'production' }}
     steps:
 
       - name: Checkout
@@ -1232,7 +1232,7 @@ jobs:
     permissions:
       contents: write
     needs: [ DeployRelease, BuildDocs ]
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && !inputs.pre-release
     runs-on: ubuntu-latest
     environment: production
     steps:
