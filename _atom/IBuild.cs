@@ -188,7 +188,10 @@ internal interface IBuild : IWorkflowBuildDefinition,
         },
         new("CreateRelease")
         {
-            Triggers = [WorkflowTriggers.Manual],
+            Triggers =
+            [
+                WorkflowTriggers.ManualWithInputs(ManualBoolInput.ForParam(ParamDefinitions[nameof(PreRelease)])),
+            ],
             Targets =
             [
                 new(nameof(SetupBuildInfo)),

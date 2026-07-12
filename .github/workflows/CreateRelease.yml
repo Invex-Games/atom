@@ -2,6 +2,12 @@ name: CreateRelease
 
 on:
   workflow_dispatch:
+    inputs:
+      pre-release:
+        description: Whether to publish the release as a pre-release.
+        required: false
+        default: false
+        type: boolean
 
 permissions: { }
 
@@ -1217,6 +1223,7 @@ jobs:
         id: DeployRelease
         run: dotnet run --project _atom/_atom.csproj -- DeployRelease --skip --headless
         env:
+          pre-release: ${{ inputs.pre-release }}
           build-version: ${{ needs.SetupBuildInfo.outputs.build-version }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           nuget-push-api-key: ${{ secrets.NUGET_PUSH_API_KEY }}

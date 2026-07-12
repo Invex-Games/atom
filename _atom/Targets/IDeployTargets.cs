@@ -13,6 +13,9 @@ internal interface IDeployTargets : INugetHelper, IGithubReleaseHelper, ISetupBu
     [SecretDefinition("nuget-push-api-key", "The API key to use to push to Nuget.")]
     string NugetApiKey => GetParam(() => NugetApiKey)!;
 
+    [ParamDefinition("pre-release", "Whether to publish the release as a pre-release.")]
+    bool PreRelease => GetParam(() => PreRelease);
+
     Target PushToNuget =>
         t => t
             .DescribedAs("Pushes the packages to Nuget")
@@ -39,6 +42,7 @@ internal interface IDeployTargets : INugetHelper, IGithubReleaseHelper, ISetupBu
         d => d
             .DescribedAs("Publishes a validated release from a protected main-branch workflow.")
             .RequiresParam(nameof(GithubToken), nameof(NugetFeed), nameof(NugetApiKey))
+            .UsesParam(nameof(PreRelease))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildVersion))
             .ConsumesArtifacts(nameof(IBuildTargets.PackProjects), IBuildTargets.ProjectsToPack)
             .ConsumesArtifact(nameof(IBuildTargets.PackTool), Projects.Invex_Atom_Tool.Name, PlatformNames)
@@ -50,8 +54,12 @@ internal interface IDeployTargets : INugetHelper, IGithubReleaseHelper, ISetupBu
                 ValidateTrustedReleaseContext();
                 ValidateLocalReleaseArtifacts();
 
-                var tag = $"v{BuildVersion.Major}.{BuildVersion.Minor}.{BuildVersion.Patch}";
-                var draft = await CreateRelease(tag, Github.Variables.Sha, tag, draft: true);
+                var version = PreRelease
+                    ? BuildVersion.ToString()
+                    : $"{BuildVersion.Major}.{BuildVersion.Minor}.{BuildVersion.Patch}";
+
+                var tag = $"v{version}";
+                var draft = await CreateRelease(tag, Github.Variables.Sha, tag, draft: true, prerelease: PreRelease);
 
                 if (draft is null)
                 {
