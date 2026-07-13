@@ -46,12 +46,6 @@ internal interface IBuild : IWorkflowBuildDefinition,
         ]),
         true);
 
-    static readonly TextExpression PreReleaseInput = TextExpressions
-        .Raw("inputs")["pre-release"];
-
-    static readonly TextExpression StableOrPreReleaseBranch =
-        TextExpressions.Raw("(github.ref == 'refs/heads/main' || inputs.pre-release)");
-
     IReadOnlyList<IBuildOption> IBuildDefinition.Options =>
     [
         BuildOptions.GitVersion.ProvideBuildId,
@@ -113,11 +107,16 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     Options =
                     [
                         BuildOptions.Target.SuppressArtifactPublishing,
+                        BuildOptions.Inject.Secret(nameof(GithubToken)),
                         BuildOptions.Github.TokenPermissions.Set(new Permissions.Exact(new()
                         {
-                            Contents = PermissionsLevel.Read,
-                            PullRequests = PermissionsLevel.Read,
+                            IdTokens = PermissionsLevel.Write,
+                            Contents = PermissionsLevel.Write,
+                            PullRequests = PermissionsLevel.Write,
+                            Checks = PermissionsLevel.Write,
                         })),
+                        BuildOptions.Inject.Param(nameof(PullRequestNumber),
+                            TextExpressions.Github.GithubEvent["number"]),
                         BuildOptions.Target.RunIfWorkflowCondition(
                             TextExpressions.Github.GithubEventName.EqualToString("pull_request")),
                     ],
@@ -127,15 +126,8 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     Options =
                     [
                         BuildOptions.Inject.Secret(nameof(GithubToken)),
-                        BuildOptions.Github.TokenPermissions.Set(new Permissions.Exact(new()
-                        {
-                            Contents = PermissionsLevel.Read,
-                            PullRequests = PermissionsLevel.Read,
-                        })),
                         BuildOptions.Inject.Param(nameof(PullRequestNumber),
                             TextExpressions.Github.GithubEvent["number"]),
-                        BuildOptions.Target.RunIfWorkflowCondition(
-                            TextExpressions.Github.GithubEventName.EqualToString("pull_request")),
                     ],
                 },
             ],
@@ -144,7 +136,15 @@ internal interface IBuild : IWorkflowBuildDefinition,
         },
         new("Build")
         {
-            Triggers = [WorkflowTriggers.PushToMain],
+            Triggers =
+            [
+                WorkflowTriggers.Manual,
+                new GitPushTrigger
+                {
+                    IncludedBranches = ["main", "feature/**", "patch/**"],
+                },
+                new GithubTrigger(new On.Release([On.Release.ReleaseType.released])),
+            ],
             Targets =
             [
                 new(nameof(SetupBuildInfo)),
@@ -181,92 +181,45 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     ],
                 },
                 new(nameof(BuildDocs)),
+                new(nameof(PublishDocs))
+                {
+                    Options =
+                    [
+                        BuildOptions.Inject.Secret(nameof(GithubToken)),
+                        new GithubTokenPermissionsOption(new Permissions.Exact(new()
+                        {
+                            Contents = PermissionsLevel.Write,
+                        })),
+                        BuildOptions.Target.RunIfWorkflowCondition(TextExpressions
+                            .Target
+                            .ParamOutput(this, nameof(SetupBuildInfo), nameof(BuildVersion))
+                            .Contains("-")
+                            .EqualTo(false)),
+                    ],
+                },
+                new(nameof(PushToNuget))
+                {
+                    Options = [BuildOptions.Inject.Secret(nameof(NugetApiKey))],
+                },
+                new(nameof(PushToRelease))
+                {
+                    Options =
+                    [
+                        BuildOptions.Inject.Secret(nameof(GithubToken)),
+                        new GithubTokenPermissionsOption(new Permissions.Exact(new()
+                        {
+                            Contents = PermissionsLevel.Write,
+                        })),
+                        BuildOptions.Target.RunIfWorkflowCondition(TextExpressions
+                            .Target
+                            .ParamOutput(this, nameof(SetupBuildInfo), nameof(BuildVersion))
+                            .Contains("-")
+                            .EqualTo(false)),
+                    ],
+                },
             ],
             Types = [WorkflowTypes.Github.Action],
             Options = [CancelSupersededWorkflowRuns],
-        },
-        new("CreateRelease")
-        {
-            Triggers =
-            [
-                WorkflowTriggers.ManualWithInputs(ManualBoolInput.ForParam(ParamDefinitions[nameof(PreRelease)])),
-            ],
-            Targets =
-            [
-                new(nameof(SetupBuildInfo)),
-                new(nameof(PackProjects)),
-                new(nameof(PackTool))
-                {
-                    MatrixDimensions =
-                    [
-                        new(nameof(JobRunsOn))
-                        {
-                            Values = PlatformNames.ToList(),
-                        },
-                    ],
-                    Options = [BuildOptions.Github.RunsOn.SetByMatrix],
-                },
-                new(nameof(TestProjects))
-                {
-                    MatrixDimensions =
-                    [
-                        new(nameof(JobRunsOn))
-                        {
-                            Values = PlatformNames.ToList(),
-                        },
-                        new(nameof(TestFramework))
-                        {
-                            Values = FrameworkNames.ToList(),
-                        },
-                    ],
-                    Options =
-                    [
-                        BuildOptions.Github.RunsOn.SetByMatrix,
-                        BuildOptions.Steps.SetupDotnet.Dotnet80X(),
-                        BuildOptions.Steps.SetupDotnet.Dotnet90X(),
-                    ],
-                },
-                new(nameof(BuildDocs)),
-                new(nameof(DeployRelease))
-                {
-                    Options =
-                    [
-                        BuildOptions.Inject.Secret(nameof(GithubToken)),
-                        BuildOptions.Inject.Secret(nameof(NugetApiKey)),
-                        new GithubTokenPermissionsOption(new Permissions.Exact(new()
-                        {
-                            Contents = PermissionsLevel.Write,
-                        })),
-                        BuildOptions.Deploy.ToEnvironment(PreReleaseInput
-                            .And(TextExpressions.From("pre-production"))
-                            .Or(TextExpressions.From("production"))
-                            .Evaluate()),
-                        BuildOptions.Target.RunIfWorkflowCondition(
-                            TextExpressions.Github.GithubEventName.EqualToString("workflow_dispatch")),
-                        BuildOptions.Target.RunIfWorkflowCondition(
-                            TextExpressions.Github.GithubRefType.EqualToString("branch")),
-                        BuildOptions.Target.RunIfWorkflowCondition(StableOrPreReleaseBranch),
-                    ],
-                },
-                new(nameof(PublishReleaseDocs))
-                {
-                    Options =
-                    [
-                        BuildOptions.Inject.Secret(nameof(GithubToken)),
-                        new GithubTokenPermissionsOption(new Permissions.Exact(new()
-                        {
-                            Contents = PermissionsLevel.Write,
-                        })),
-                        BuildOptions.Deploy.ToEnvironment("production"),
-                        BuildOptions.Target.RunIfWorkflowCondition(
-                            TextExpressions.Github.GithubEventName.EqualToString("workflow_dispatch")),
-                        BuildOptions.Target.RunIfWorkflowCondition(
-                            TextExpressions.Github.GithubRef.EqualToString("refs/heads/main")),
-                        BuildOptions.Target.RunIfWorkflowCondition(PreReleaseInput.Not()),
-                    ],
-                },
-            ],
-            Types = [WorkflowTypes.Github.Action],
         },
 
         // Test devops

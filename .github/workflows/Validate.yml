@@ -146,8 +146,10 @@ jobs:
 
   CheckPrForBreakingChanges:
     permissions:
-      contents: read
-      pull-requests: read
+      checks: write
+      contents: write
+      id-token: write
+      pull-requests: write
     needs: [ SetupBuildInfo ]
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -168,12 +170,10 @@ jobs:
         run: dotnet run --project _atom/_atom.csproj -- CheckPrForBreakingChanges --skip --headless
         env:
           build-version: ${{ needs.SetupBuildInfo.outputs.build-version }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ github.event.number }}
 
   WaitForCopilotReview:
-    permissions:
-      contents: read
-      pull-requests: read
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
 

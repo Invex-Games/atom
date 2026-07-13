@@ -8,7 +8,6 @@ internal interface ITestTargets : IDotnetTestHelper
         Projects.Invex_Atom_Build_Analyzers_Tests.Name,
         Projects.Invex_Atom_Build_SourceGenerators_Tests.Name,
         Projects.Invex_Atom_Module_DevopsWorkflows_Tests.Name,
-        Projects.Invex_Atom_Module_Dotnet_Tests.Name,
         Projects.Invex_Atom_Module_GithubWorkflows_Tests.Name,
         Projects.Invex_Atom_Workflows_Tests.Name,
         Projects.Invex_Atom_Tool_Tests.Name,

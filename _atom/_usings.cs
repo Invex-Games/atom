@@ -1,5 +1,4 @@
 global using System.Runtime.InteropServices;
-global using System.Runtime.CompilerServices;
 global using Atom.RepoUtils;
 global using Atom.Targets;
 global using Invex.Atom.Build;
@@ -37,5 +36,3 @@ global using Octokit.GraphQL.Internal;
 global using Octokit.GraphQL.Model;
 global using Commit = LibGit2Sharp.Commit;
 global using Repository = LibGit2Sharp.Repository;
-
-[assembly: InternalsVisibleTo("Atom.Tests")]

@@ -50,27 +50,10 @@ if (Github.IsGithubActions)
 }
 ```
 
-### Release Helper
-
-Implement `IGithubReleaseHelper` to create GitHub Releases and upload artifacts from your targets. `CreateRelease`
-tags a commit (or the latest commit on a branch via `targetCommitish`) and creates the release for that tag:
-
-```csharp
-// Tag the latest commit on the 'main' branch and create a release for it.
-await CreateRelease($"v{BuildVersion}", "main", name: $"v{BuildVersion}");
-
-// Tag a specific commit SHA instead.
-await CreateRelease("v1.2.3", "0a1b2c3d", body: "Release notes...", prerelease: true);
-```
-
-Use `UploadArtifactToRelease` / `UploadAssetToRelease` to attach assets to an existing release. When not running in
-GitHub Actions these operations are simulated (logged only) by default.
-
 ### Variable Provider
 
 `GithubVariableProvider` writes variables to `$GITHUB_OUTPUT` and reads them from job outputs, enabling cross-job data
 sharing.
-
 
 ### Report Writer
 

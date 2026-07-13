@@ -227,12 +227,6 @@ jobs:
           targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.DevopsWorkflows.Tests
 
       - task: PublishPipelineArtifact@1
-        displayName: Invex.Atom.Module.Dotnet.Tests
-        inputs:
-          artifactName: Invex.Atom.Module.Dotnet.Tests-$(job-runs-on)-$(test-framework)
-          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.Dotnet.Tests
-
-      - task: PublishPipelineArtifact@1
         displayName: Invex.Atom.Module.GithubWorkflows.Tests
         inputs:
           artifactName: Invex.Atom.Module.GithubWorkflows.Tests-$(job-runs-on)-$(test-framework)

@@ -6,7 +6,6 @@ global using Invex.Atom.Build.Artifacts;
 global using Invex.Atom.Build;
 global using Invex.Atom.Build.BuildOptions;
 global using Invex.Atom.Build.Definition;
-global using Invex.Atom.Build.Exceptions;
 global using Invex.Atom.Build.Model;
 global using Invex.Atom.Build.Logging;
 global using Invex.Atom.Build.Params;
