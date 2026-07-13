@@ -5,20 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Invex.FileSystem" Version="1.1.0" />
-    <PackageReference Include="Invex.Process" Version="1.1.0" />
-    <PackageReference Include="Invex.SemanticVersion" Version="1.1.0" />
+    <PackageReference Include="Invex.FileSystem" Version="1.2.0" />
+    <PackageReference Include="Invex.Process" Version="1.2.0" />
+    <PackageReference Include="Invex.SemanticVersion" Version="1.2.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.9" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.9" />
     <PackageReference Include="Spectre.Console" Version="0.57.2" />
-    <PackageReference Include="System.IO.Abstractions" Version="22.1.1" />
+    <PackageReference Include="System.IO.Abstractions" Version="22.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-
-    <PackageReference Include="Invex.RepoUtils.PublicApiAnalyzers" Version="1.6.0">
+    <PackageReference Include="Invex.RepoUtils.PublicApiAnalyzers" Version="1.7.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
