@@ -20,15 +20,19 @@ internal interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelpe
                 var owner = Github.Variables.RepositoryOwner;
                 Logger.LogDebug("Target repository owner: {Owner}", owner);
 
-                using var repo = new Repository(RootedFileSystem.AtomRootDirectory);
-
-                var currentCommitHash = repo.Head.Tip.Sha;
+                var currentCommitResult = await ProcessRunner.RunAsync(new("git", "rev-parse HEAD")
+                    {
+                        WorkingDirectory = RootedFileSystem.AtomRootDirectory,
+                        OutputLogLevel = LogLevel.Debug,
+                    },
+                    cancellationToken);
+                var currentCommitHash = currentCommitResult.Output.Trim();
                 Logger.LogDebug("Current commit hash: {CommitHash}", currentCommitHash);
 
                 var currentVersion = BuildVersion;
                 Logger.LogDebug("Current version: {Version}", currentVersion);
 
-                var latestReleaseInfo = FindLatestReleaseInfo(repo, currentVersion);
+                var latestReleaseInfo = await FindLatestReleaseInfo(currentVersion, cancellationToken);
                 Logger.LogDebug("Latest release info: {ReleaseInfo}", latestReleaseInfo);
 
                 if (latestReleaseInfo is null)
@@ -43,10 +47,11 @@ internal interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelpe
                     currentVersion,
                     latestReleaseInfo.Version);
 
-                var breakingChanges = IdentifyBreakingChanges(latestReleaseInfo.Version,
+                var breakingChanges = await IdentifyBreakingChanges(latestReleaseInfo.Version,
                     latestReleaseInfo.CommitHash,
                     currentVersion,
                     currentCommitHash,
+                    cancellationToken,
                     FilesToCheck);
 
                 Logger.LogInformation(
@@ -136,23 +141,30 @@ internal interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelpe
                     cancellationToken);
             });
 
-    ReleaseInfo? FindLatestReleaseInfo(Repository repo, SemVer currentVersion)
+    private async Task<ReleaseInfo?> FindLatestReleaseInfo(
+        SemVer currentVersion,
+        CancellationToken cancellationToken)
     {
-        var releaseVersions = repo
-            .Tags
-            .Select(x => new
+        var tagsResult = await ProcessRunner.RunAsync(new("git", ["tag", "--list", "v*"])
             {
-                Tag = x,
-                Version = !x.FriendlyName.StartsWith('v')
-                    ? null
-                    : !SemVer.TryParse(x.FriendlyName[1..], out var version)
+                WorkingDirectory = RootedFileSystem.AtomRootDirectory,
+                OutputLogLevel = LogLevel.Debug,
+            },
+            cancellationToken);
+        var releaseVersions = tagsResult
+            .Output
+            .Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(tag => new
+            {
+                Tag = tag,
+                Version = !SemVer.TryParse(tag[1..], out var version)
                         ? null
                         : version,
             })
             .Where(x => x.Version is not null && x.Version < currentVersion)
             .Select(x => new
             {
-                Tag = x.Tag!,
+                x.Tag,
                 Version = x.Version!,
             })
             .ToList();
@@ -165,8 +177,14 @@ internal interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelpe
         }
 
         var version = releaseVersions.MaxBy(x => x.Version)!;
+        var commitResult = await ProcessRunner.RunAsync(new("git", ["rev-list", "-n", "1", version.Tag])
+            {
+                WorkingDirectory = RootedFileSystem.AtomRootDirectory,
+                OutputLogLevel = LogLevel.Debug,
+            },
+            cancellationToken);
 
-        return new(version.Tag.Target.Sha, version.Version);
+        return new(commitResult.Output.Trim(), version.Version);
     }
 
     private async Task AddCheckStatus(
@@ -212,8 +230,6 @@ internal interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelpe
 
         if (prQueryResult.Id.Value is null)
             throw new StepFailedException("Could not find pull request.");
-
-        using var repo = new Repository(RootedFileSystem.AtomRootDirectory);
 
         var checkRunMutation = new Mutation()
             .CreateCheckRun(new CreateCheckRunInput
