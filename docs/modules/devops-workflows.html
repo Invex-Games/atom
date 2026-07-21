@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Module: DevOps Workflows | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Module: DevOps Workflows | Atom ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/docs/modules/devops-workflows.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="module-devops-workflows">Module: DevOps Workflows</h1>
+
+<p><strong>Package:</strong> <code>Invex.Atom.Module.DevopsWorkflows</code></p>
+<p>Adds Azure DevOps Pipelines support to Atom — pipeline YAML generation, DevOps-specific options, and access to Azure
+DevOps environment variables.</p>
+<h2 id="installation">Installation</h2>
+<pre><code class="lang-shell">dotnet add package Invex.Atom.Module.DevopsWorkflows
+</code></pre>
+<h2 id="usage">Usage</h2>
+<pre><code class="lang-csharp">[BuildDefinition]
+[GenerateEntryPoint]
+internal partial class Build : WorkflowBuildDefinition, IDevopsWorkflows
+{
+    public override IReadOnlyList&lt;WorkflowDefinition&gt; Workflows =&gt;
+    [
+        new(&quot;Build&quot;)
+        {
+            Triggers = [WorkflowTriggers.PushToMain],
+            Targets = [new(nameof(Compile))],
+            Types = [WorkflowTypes.Devops.Pipeline],
+        },
+    ];
+}
+</code></pre>
+<h2 id="features">Features</h2>
+<h3 id="pipeline-generation">Pipeline Generation</h3>
+<p>Generates Azure DevOps Pipeline YAML files.</p>
+<h3 id="devops-static-class"><code>Devops</code> Static Class</h3>
+<p>Access Azure DevOps environment variables:</p>
+<pre><code class="lang-csharp">if (Devops.IsDevopsPipelines)
+{
+    var buildId = Devops.Variables.BuildBuildId;
+    var branch = Devops.Variables.BuildSourceBranch;
+}
+</code></pre>
+<h3 id="variable-provider">Variable Provider</h3>
+<p><code>DevopsVariableProvider</code> maps Atom variables to Azure DevOps pipeline variables.</p>
+<h3 id="report-writer">Report Writer</h3>
+<p><code>DevopsSummaryOutcomeReportWriter</code> writes build report data to the Azure DevOps build summary.</p>
+<h3 id="pool-labels">Pool Labels</h3>
+<pre><code class="lang-csharp">WorkflowLabels.Devops.Pool.Ubuntu_Latest
+WorkflowLabels.Devops.Pool.Windows_Latest
+WorkflowLabels.Devops.Pool.MacOs_Latest
+</code></pre>
+<h3 id="devops-specific-options">DevOps-Specific Options</h3>
+<ul>
+<li><code>BuildOptions.Devops.DevopsPool.SetByMatrix</code> — set the agent pool from a matrix dimension</li>
+<li><code>BuildOptions.Devops.VariableGroup.*</code> — reference Azure DevOps variable groups</li>
+<li><code>BuildOptions.Devops.Concurrency.RunLatest</code> — run only the latest pipeline waiting on an exclusive lock</li>
+<li><code>BuildOptions.Devops.Concurrency.Sequential</code> — run every pipeline waiting on an exclusive lock in sequence</li>
+<li><code>BuildOptions.Devops.PullRequest.AutoCancel</code> — cancel an in-progress PR run when a new commit is pushed</li>
+<li><code>BuildOptions.Devops.PullRequest.KeepRunning</code> — allow in-progress PR runs to finish after new commits</li>
+<li><code>ProvideDevopsRunIdAsWorkflowId</code> — use the DevOps run ID as the Atom build ID</li>
+</ul>
+<p>Configure the lock behavior on a <code>WorkflowDefinition</code>:</p>
+<pre><code class="lang-csharp">Options =
+[
+    BuildOptions.Devops.Concurrency.Sequential,
+];
+</code></pre>
+<p>Azure Pipelines applies <code>lockBehavior</code> to resources protected by an
+<a href="https://learn.microsoft.com/azure/devops/pipelines/process/approvals#exclusive-lock">exclusive lock check</a>.</p>
+<p>Configure pull request auto-cancellation alongside a pull request trigger:</p>
+<pre><code class="lang-csharp">new(&quot;Validate&quot;)
+{
+    Triggers = [WorkflowTriggers.PullInto(&quot;main&quot;, &quot;develop&quot;)],
+    Options = [BuildOptions.Devops.PullRequest.AutoCancel],
+}
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/docs/modules/devops-workflows.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

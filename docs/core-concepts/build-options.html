@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Build Options | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Build Options | Atom ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/build-options.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="build-options">Build Options</h1>
+
+<p>Build options are configuration flags that modify the behaviour of the build or workflow at definition time.</p>
+<h2 id="ibuildoption"><code>IBuildOption</code></h2>
+<p>All build options implement the marker interface <code>IBuildOption</code>. Options can be applied at three levels:</p>
+<ol>
+<li><strong>Build-wide</strong> — via the <code>Options</code> property on your build definition</li>
+<li><strong>Workflow-wide</strong> — via <code>WorkflowDefinition.Options</code></li>
+<li><strong>Per-target</strong> — via <code>WorkflowTargetDefinition.Options</code></li>
+</ol>
+<pre><code class="lang-csharp">public override IReadOnlyList&lt;IBuildOption&gt; Options =&gt;
+[
+    BuildOptions.GitVersion.ProvideBuildId,
+    BuildOptions.GitVersion.ProvideBuildVersion,
+];
+</code></pre>
+<h2 id="togglebuildoption"><code>ToggleBuildOption</code></h2>
+<p>A simple on/off option:</p>
+<pre><code class="lang-csharp">BuildOptions.Target.SuppressArtifactPublishing
+</code></pre>
+<h2 id="common-options">Common Options</h2>
+<p>Options are accessed via the static <code>BuildOptions</code> class, which is extended by modules. Examples:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BuildOptions.Target.SuppressArtifactPublishing</code></td>
+<td>Prevents artifact upload for a target</td>
+</tr>
+<tr>
+<td><code>BuildOptions.Steps.SetupDotnet.Dotnet80X()</code></td>
+<td>Adds a setup step to install .NET 8</td>
+</tr>
+<tr>
+<td><code>BuildOptions.Github.RunsOn.SetByMatrix</code></td>
+<td>Sets the runner from the matrix dimension</td>
+</tr>
+<tr>
+<td><code>BuildOptions.Inject.Param(name, value)</code></td>
+<td>Injects a parameter value at workflow level</td>
+</tr>
+<tr>
+<td><code>BuildOptions.Inject.Secret(name)</code></td>
+<td>Injects a secret from the CI platform</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ibuildoptionprovider"><code>IBuildOptionProvider</code></h2>
+<p>Modules can contribute options dynamically by implementing <code>IBuildOptionProvider</code>. The framework collects all providers
+and merges their options at build time.</p>
+<h2 id="next-steps">Next Steps</h2>
+<p>→ <a href="hosting.html">Hosting</a></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/build-options.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Parameters | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Parameters | Atom ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/parameters.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="parameters">Parameters</h1>
+
+<p>Parameters allow you to pass configuration values into your build from multiple sources.</p>
+<h2 id="defining-a-parameter">Defining a Parameter</h2>
+<p>Use <code>[ParamDefinition]</code> on a property and <code>GetParam()</code> to resolve its value:</p>
+<pre><code class="lang-csharp">[ParamDefinition(&quot;my-param&quot;, &quot;Description shown in help&quot;)]
+string? MyParam =&gt; GetParam(() =&gt; MyParam);
+</code></pre>
+<p>The first argument is the <strong>command-line name</strong> (kebab-case by convention). The property name is used internally for
+<code>RequiresParam</code>/<code>UsesParam</code>.</p>
+<h3 id="with-a-default-value">With a Default Value</h3>
+<pre><code class="lang-csharp">[ParamDefinition(&quot;configuration&quot;, &quot;Build configuration&quot;)]
+string Configuration =&gt; GetParam(() =&gt; Configuration, &quot;Release&quot;);
+</code></pre>
+<h3 id="with-a-custom-converter">With a Custom Converter</h3>
+<pre><code class="lang-csharp">[ParamDefinition(&quot;retry-count&quot;, &quot;Number of retries&quot;)]
+int RetryCount =&gt; GetParam(() =&gt; RetryCount, 3, s =&gt; int.Parse(s!));
+</code></pre>
+<h2 id="resolution-order">Resolution Order</h2>
+<p>When <code>GetParam</code> is called, Atom resolves the value from the following sources (first match wins):</p>
+<ol>
+<li><strong>Cache</strong> — a previously resolved value for this build run</li>
+<li><strong>Command-line arguments</strong> — <code>--my-param value</code></li>
+<li><strong>Environment variables</strong> — <code>MY_PARAM=value</code></li>
+<li><strong>Configuration</strong> — <code>appsettings.json</code> under the <code>Params</code> section</li>
+<li><strong>Secrets</strong> — registered <code>ISecretsProvider</code> implementations</li>
+</ol>
+<p>You can restrict which sources are checked using the <code>sources</code> parameter:</p>
+<pre><code class="lang-csharp">[ParamDefinition(&quot;api-url&quot;, &quot;API endpoint&quot;, sources: ParamSource.Configuration | ParamSource.EnvironmentVariables)]
+string? ApiUrl =&gt; GetParam(() =&gt; ApiUrl);
+</code></pre>
+<h3 id="paramsource-flags"><code>ParamSource</code> Flags</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Cache</code></td>
+<td>Previously resolved value</td>
+</tr>
+<tr>
+<td><code>CommandLineArgs</code></td>
+<td><code>--param-name value</code></td>
+</tr>
+<tr>
+<td><code>EnvironmentVariables</code></td>
+<td>Environment variable matching the param name</td>
+</tr>
+<tr>
+<td><code>Configuration</code></td>
+<td><code>appsettings.json</code> / <code>appsettings.{env}.json</code></td>
+</tr>
+<tr>
+<td><code>Secrets</code></td>
+<td>Registered <code>ISecretsProvider</code> implementations</td>
+</tr>
+<tr>
+<td><code>All</code></td>
+<td>All of the above (default)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="requiring-parameters">Requiring Parameters</h2>
+<p>Mark a parameter as required for a target so the build fails early if it's missing:</p>
+<pre><code class="lang-csharp">Target Deploy =&gt; t =&gt; t
+    .RequiresParam(nameof(ApiKey))
+    .Executes(() =&gt; { /* ... */ });
+</code></pre>
+<h2 id="interactive-prompting">Interactive Prompting</h2>
+<p>When running with <code>--interactive</code> (or <code>-i</code>), Atom will prompt the user for any required parameter that hasn't been
+provided:</p>
+<pre><code class="lang-shell">dotnet run -- Deploy --interactive
+</code></pre>
+<h2 id="chained-parameters">Chained Parameters</h2>
+<p>A parameter can depend on other parameters:</p>
+<pre><code class="lang-csharp">[ParamDefinition(&quot;full-url&quot;, &quot;Complete URL&quot;, chainedParams: [&quot;base-url&quot;, &quot;path&quot;])]
+string? FullUrl =&gt; GetParam(() =&gt; FullUrl);
+</code></pre>
+<h2 id="configuration-file">Configuration File</h2>
+<p>Parameters can be set in <code>appsettings.json</code>:</p>
+<pre><code class="lang-json">{
+  &quot;Params&quot;: {
+    &quot;configuration&quot;: &quot;Release&quot;,
+    &quot;my-param&quot;: &quot;some-value&quot;
+  }
+}
+</code></pre>
+<p>Environment-specific overrides work via <code>appsettings.{DOTNET_ENVIRONMENT}.json</code>.</p>
+<h2 id="next-steps">Next Steps</h2>
+<p>→ <a href="secrets.html">Secrets</a></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/parameters.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

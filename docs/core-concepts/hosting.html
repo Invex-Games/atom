@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Hosting | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Hosting | Atom ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/hosting.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="hosting">Hosting</h1>
+
+<p>Atom uses the standard .NET <code>IHost</code> / <code>HostApplicationBuilder</code> infrastructure under the hood. The <code>AtomHost</code> class
+provides convenience methods for setting up and running the host.</p>
+<h2 id="atomhostruntargs"><code>AtomHost.Run&lt;T&gt;(args)</code></h2>
+<p>The simplest way to start an Atom build:</p>
+<pre><code class="lang-csharp">AtomHost.Run&lt;Build&gt;(args);
+</code></pre>
+<p>This is what <code>[GenerateEntryPoint]</code> generates for you in <code>Program.cs</code>.</p>
+<h2 id="atomhostcreateatombuildertargs"><code>AtomHost.CreateAtomBuilder&lt;T&gt;(args)</code></h2>
+<p>For custom host configuration, use the builder pattern:</p>
+<pre><code class="lang-csharp">var builder = AtomHost.CreateAtomBuilder&lt;Build&gt;(args);
+
+// Add your own services
+builder.Services.AddSingleton&lt;IMyService, MyService&gt;();
+
+// Add configuration sources
+builder.Configuration.AddJsonFile(&quot;custom.json&quot;, optional: true);
+
+builder.Build().UseAtom().Run();
+</code></pre>
+<p>The builder automatically:</p>
+<ul>
+<li>Loads <code>appsettings.json</code> and <code>appsettings.{env}.json</code></li>
+<li>Reads the <code>DOTNET_ENVIRONMENT</code> / <code>ASPNETCORE_ENVIRONMENT</code> variable</li>
+<li>Registers all core Atom services</li>
+</ul>
+<h2 id="generateentrypoint"><code>[GenerateEntryPoint]</code></h2>
+<p>Apply this attribute to your build definition class to have the source generator create the entry point:</p>
+<pre><code class="lang-csharp">[BuildDefinition]
+[GenerateEntryPoint]
+internal partial class Build : BuildDefinition { /* ... */ }
+</code></pre>
+<p>If you need full control over <code>Main</code>, omit this attribute and write your own.</p>
+<h2 id="configurehostbuilder--configurehost"><code>[ConfigureHostBuilder]</code> / <code>[ConfigureHost]</code></h2>
+<p>Module interfaces can use <code>[ConfigureHostBuilder]</code> to have the source generator call a static partial method named
+<code>ConfigureBuilderFrom{InterfaceName}</code> when the interface is implemented:</p>
+<pre><code class="lang-csharp">[ConfigureHostBuilder]
+public partial interface IGitVersion
+{
+    protected static partial void ConfigureBuilderFromIGitVersion(IHostApplicationBuilder builder) =&gt;
+        builder.Services
+            .AddSingleton&lt;IBuildIdProvider, GitVersionBuildIdProvider&gt;()
+            .AddSingleton&lt;IBuildVersionProvider, GitVersionBuildVersionProvider&gt;();
+}
+</code></pre>
+<p>When your <code>Build</code> class implements <code>IGitVersion</code>, the generated code automatically calls
+<code>ConfigureBuilderFromIGitVersion</code> during host setup. (<code>[ConfigureHost]</code> works the same way for configuring the built
+<code>IHost</code>, with a method named <code>ConfigureHostFrom{InterfaceName}</code>.) The Atom analyzers (AT0002/AT0003) verify that the
+required partial method is implemented.</p>
+<h2 id="configuredefinitionhost"><code>ConfigureDefinitionHost</code></h2>
+<p>Override this virtual method on your build class for one-off service registration:</p>
+<pre><code class="lang-csharp">public override void ConfigureDefinitionHost(IHostApplicationBuilder builder)
+{
+    base.ConfigureDefinitionHost(builder);
+    builder.Services.AddSingleton&lt;IMyService, MyService&gt;();
+}
+</code></pre>
+<h2 id="next-steps">Next Steps</h2>
+<p>→ <a href="lifecycle-hooks.html">Lifecycle Hooks</a></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/hosting.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

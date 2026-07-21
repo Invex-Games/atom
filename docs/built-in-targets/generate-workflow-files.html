@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Gen (Generate Workflow Files) | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Gen (Generate Workflow Files) | Atom ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/docs/built-in-targets/generate-workflow-files.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="gen-generate-workflow-files">Gen (Generate Workflow Files)</h1>
+
+<p><strong>Interface:</strong> <code>IGen</code><br>
+<strong>Package:</strong> <code>Invex.Atom.Workflows</code></p>
+<p>The <code>Gen</code> target generates CI/CD configuration files from your workflow definitions.</p>
+<h2 id="what-it-does">What It Does</h2>
+<ol>
+<li>Resolves each <code>WorkflowDefinition</code> in your build's <code>Workflows</code> property.</li>
+<li>Analyses the target dependency graph, artifact dependencies, and variable dependencies.</li>
+<li>Maps targets into jobs and creates a platform-neutral <code>WorkflowModel</code>.</li>
+<li>Invokes each registered <code>IWorkflowWriter</code> (one per platform type) to render and write the YAML files.</li>
+</ol>
+<h2 id="generated-file-locations">Generated File Locations</h2>
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Output Directory</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GitHub Actions</td>
+<td><code>.github/workflows/</code></td>
+</tr>
+<tr>
+<td>Azure DevOps</td>
+<td><code>.devops/workflows/</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="usage">Usage</h2>
+<pre><code class="lang-shell">dotnet run --project _atom Gen
+# or, with the atom global tool
+atom Gen
+</code></pre>
+<h2 id="requirements">Requirements</h2>
+<p>Your build must:</p>
+<ol>
+<li>Inherit from <code>WorkflowBuildDefinition</code> (or implement <code>IWorkflowBuildDefinition</code>).</li>
+<li>Override the <code>Workflows</code> property with at least one definition.</li>
+<li>Inherit a platform module interface (<code>IGithubWorkflows</code>, <code>IDevopsWorkflows</code>, or both) so the corresponding
+workflow writer is registered.</li>
+</ol>
+<h2 id="automatic-generation--outdated-file-detection">Automatic Generation &amp; Outdated File Detection</h2>
+<p>You usually don't need to run <code>Gen</code> explicitly during local development: when the build runs in <strong>interactive
+(non-headless) mode</strong>, the <code>WorkflowLifecycleHook</code> regenerates workflow files automatically before any targets execute.</p>
+<p>When the build runs in <strong>headless mode</strong> (the <code>--headless</code> flag, typical in CI), files are <em>not</em> regenerated. Instead,
+if the files on disk are out of date with the current definitions, the build fails early with a
+<code>WorkflowOutdatedException</code>, prompting you to run the <code>Gen</code> target locally and commit the regenerated files.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/docs/built-in-targets/generate-workflow-files.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

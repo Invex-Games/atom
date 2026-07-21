@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Targets | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Targets | Atom ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/targets.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="targets">Targets</h1>
+
+<p>A <strong>target</strong> is the fundamental unit of work in an Atom build. Each target has a name, an optional description,
+dependencies on other targets, and one or more tasks to execute.</p>
+<h2 id="defining-a-target">Defining a Target</h2>
+<p>Targets are declared as properties of type <code>Target</code> (a delegate alias for <code>Func&lt;TargetDefinition, TargetDefinition&gt;</code>):</p>
+<pre><code class="lang-csharp">private Target Compile =&gt; t =&gt; t
+    .DescribedAs(&quot;Compiles the solution&quot;)
+    .Executes(() =&gt;
+    {
+        // build logic here
+    });
+</code></pre>
+<p>The property name becomes the target name on the command line: <code>dotnet run -- Compile</code>.</p>
+<h2 id="fluent-api">Fluent API</h2>
+<p><code>TargetDefinition</code> exposes a fluent API for configuring every aspect of a target:</p>
+<h3 id="description--visibility">Description &amp; Visibility</h3>
+<pre><code class="lang-csharp">t =&gt; t
+    .DescribedAs(&quot;Human-readable description for help output&quot;)
+    .IsHidden()          // hide from default help; still executable
+</code></pre>
+<h3 id="execution">Execution</h3>
+<p>Targets can execute synchronous actions, async tasks, or async tasks with cancellation:</p>
+<pre><code class="lang-csharp">// Synchronous
+t =&gt; t.Executes(() =&gt; Console.WriteLine(&quot;done&quot;))
+
+// Async
+t =&gt; t.Executes(async () =&gt; await DoWorkAsync())
+
+// Async with CancellationToken
+t =&gt; t.Executes(async cancellationToken =&gt; await DoWorkAsync(cancellationToken))
+</code></pre>
+<p>You can call <code>.Executes()</code> multiple times — tasks run in order.</p>
+<h3 id="dependencies">Dependencies</h3>
+<pre><code class="lang-csharp">t =&gt; t
+    .DependsOn(Restore)                // name inferred from the argument expression
+    .DependsOn(nameof(Compile))        // by name
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>When passing a target directly, the name is inferred from the argument expression, so pass the target property
+itself (e.g. <code>DependsOn(Restore)</code>) rather than a local variable. Call <code>DependsOn</code> once per dependency.</p>
+</div>
+<p>Dependencies are resolved transitively. If <code>Pack</code> depends on <code>Compile</code> and <code>Compile</code> depends on <code>Restore</code>, running
+<code>Pack</code> executes <code>Restore → Compile → Pack</code>.</p>
+<h3 id="parameters">Parameters</h3>
+<pre><code class="lang-csharp">t =&gt; t
+    .RequiresParam(nameof(MyName))     // build fails if not provided
+    .UsesParam(nameof(Verbosity))      // optional; documented but not enforced
+</code></pre>
+<h3 id="artifacts">Artifacts</h3>
+<pre><code class="lang-csharp">t =&gt; t
+    .ProducesArtifact(&quot;packages&quot;)
+    .ConsumesArtifact(nameof(Pack), &quot;packages&quot;)
+</code></pre>
+<h3 id="variables">Variables</h3>
+<pre><code class="lang-csharp">t =&gt; t
+    .ProducesVariable(&quot;BuildVersion&quot;)
+    .ConsumesVariable(nameof(SetupBuildInfo), &quot;BuildVersion&quot;)
+</code></pre>
+<h2 id="extending-targets">Extending Targets</h2>
+<p>A target can extend another target defined in an interface, inheriting its tasks, dependencies, parameters, artifacts,
+and variables:</p>
+<pre><code class="lang-csharp">Target MyCompile =&gt; t =&gt; t
+    .Extends&lt;IDotnetTargets&gt;(x =&gt; x.DotnetBuild)
+    .Executes(() =&gt; Logger.LogInformation(&quot;Extra step after build&quot;));
+</code></pre>
+<p>By default the base target's tasks run <strong>before</strong> the extending target's tasks. Pass <code>runExtensionAfter: true</code> to
+reverse the order (your tasks first, then the base target's):</p>
+<pre><code class="lang-csharp">.Extends&lt;IDotnetTargets&gt;(x =&gt; x.DotnetBuild, runExtensionAfter: true)
+</code></pre>
+<h2 id="accessing-services">Accessing Services</h2>
+<p>Inside a target body you have access to several built-in services via <code>IBuildAccessor</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Logger</code></td>
+<td><code>ILogger</code></td>
+<td>Structured logger scoped to the current type.</td>
+</tr>
+<tr>
+<td><code>RootedFileSystem</code></td>
+<td><code>IRootedFileSystem</code></td>
+<td>File system abstraction with path resolution.</td>
+</tr>
+<tr>
+<td><code>ProcessRunner</code></td>
+<td><code>IProcessRunner</code></td>
+<td>Execute external processes.</td>
+</tr>
+<tr>
+<td><code>Services</code></td>
+<td><code>IServiceProvider</code></td>
+<td>Full DI container.</td>
+</tr>
+</tbody>
+</table>
+<p>Use <code>GetService&lt;T&gt;()</code> or <code>GetServices&lt;T&gt;()</code> for any other registered service.</p>
+<h2 id="running-targets">Running Targets</h2>
+<pre><code class="lang-shell"># Single target
+dotnet run -- Compile
+
+# Multiple targets
+dotnet run -- Compile Test
+
+# Skip dependencies
+dotnet run -- Pack --skip
+</code></pre>
+<h2 id="next-steps">Next Steps</h2>
+<p>→ <a href="parameters.html">Parameters</a></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/targets.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
