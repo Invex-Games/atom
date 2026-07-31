@@ -241,6 +241,28 @@ internal sealed class BuildResolverTests
     }
 
     [Test]
+    public void Resolve_WithMissingParam_ThrowsException()
+    {
+        // Arrange
+        var buildDefinition = new TestBuildDefinition(_services)
+        {
+            ManualTargetDefinitions = new Dictionary<string, Target>
+            {
+                ["Target1"] = t => t.RequiresParam("MissingParam"),
+            },
+        };
+
+        var commandLineArgs = new CommandLineArgs(true, [new CommandArg("Target1")]);
+        var paramService = A.Fake<IParamService>();
+        var logger = A.Fake<ILogger<BuildResolver>>();
+        var buildResolver = new BuildResolver(buildDefinition, paramService, commandLineArgs, logger);
+
+        // Act & Assert
+        var ex = Should.Throw<BuildConfigurationException>(buildResolver.Resolve);
+        ex.Message.ShouldBe("Target 'Target1' references parameter 'MissingParam' which is not defined in the build.");
+    }
+
+    [Test]
     public void Resolve_WithComplexCircularDependency_ThrowsException()
     {
         // Arrange - Three node cycle: A -> B -> C -> A

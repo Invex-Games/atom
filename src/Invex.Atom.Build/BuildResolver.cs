@@ -99,7 +99,7 @@ internal sealed class BuildResolver(
                 var usedParams = new List<UsedParam>();
 
                 foreach (var param in x.Params)
-                    AddParamAndChildren(param.Param, param.Required, usedParams, paramModels, []);
+                    AddParamAndChildren(x.Name, param.Param, param.Required, usedParams, paramModels, []);
 
                 return new TargetModel(x.Name, x.Description, x.Hidden)
                 {
@@ -261,12 +261,14 @@ internal sealed class BuildResolver(
     /// <summary>
     ///     Recursively adds a parameter and its chained dependencies to the list of used parameters for a target.
     /// </summary>
+    /// <param name="target">The name of the target that references the parameter.</param>
     /// <param name="param">The name of the parameter to add.</param>
     /// <param name="required">A value indicating whether the parameter is required.</param>
     /// <param name="usedParams">The list of used parameters to add to.</param>
     /// <param name="paramModels">A dictionary of all available parameter models.</param>
     /// <param name="visited">A set of already-visited parameter names to detect and prevent circular chains.</param>
     private static void AddParamAndChildren(
+        string target,
         string param,
         bool required,
         List<UsedParam> usedParams,
@@ -276,10 +278,13 @@ internal sealed class BuildResolver(
         if (!visited.Add(param))
             return;
 
-        var model = paramModels[param];
+        if (!paramModels.TryGetValue(param, out var model))
+            throw new BuildConfigurationException(
+                $"Target '{target}' references parameter '{param}' which is not defined in the build.");
+
         usedParams.Add(new(model, required));
 
         foreach (var chainedParam in model.ChainedParams)
-            AddParamAndChildren(chainedParam, required, usedParams, paramModels, visited);
+            AddParamAndChildren(target, chainedParam, required, usedParams, paramModels, visited);
     }
 }
