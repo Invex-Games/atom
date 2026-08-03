@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class GitPushTrigger | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class GitPushTrigger | Atom ">
+      
+      <meta name="description" content="Represents a workflow trigger that activates when code is pushed to a Git repository.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/new/main/apiSpec/new?filename=Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger.md&amp;value=---%0Auid%3A%20Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger">
+
+
+
+  <h1 id="Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger" data-uid="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger" class="text-break">
+Class GitPushTrigger  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Definition/Triggers/GitPushTrigger.cs/#L21"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Invex.html">Invex</a>.<a class="xref" href="Invex.Atom.html">Atom</a>.<a class="xref" href="Invex.Atom.Workflows.html">Workflows</a>.<a class="xref" href="Invex.Atom.Workflows.Definition.html">Definition</a>.<a class="xref" href="Invex.Atom.Workflows.Definition.Triggers.html">Triggers</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Workflows.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Represents a workflow trigger that activates when code is pushed to a Git repository.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+public sealed record GitPushTrigger : IWorkflowTrigger</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">GitPushTrigger</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="Invex.Atom.Workflows.Definition.Triggers.IWorkflowTrigger.html">IWorkflowTrigger</a></div>
+    </dd>
+  </dl>
+
+
+
+
+
+  <h2 id="Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_examples">Examples</h2>
+  <pre><code class="lang-csharp">// Trigger on pushes to the main branch only
+var mainTrigger = GitPushTrigger.ToMain;
+// Trigger on pushes to any branch, excluding documentation changes
+var featureTrigger = new GitPushTrigger
+{
+    ExcludedPaths = ["docs/**", "*.md"]
+};</code></pre>
+
+
+  <h2 id="Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>This trigger supports filtering by branches, file paths, and tags to control workflow execution.
+When filter lists are empty, no filtering is applied for that category.</p>
+</div>
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_ExcludedBranches_" data-uid="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger.ExcludedBranches*"></a>
+
+  <h3 id="Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_ExcludedBranches" data-uid="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger.ExcludedBranches">
+  ExcludedBranches
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Definition/Triggers/GitPushTrigger.cs/#L33"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the list of branch patterns that should NOT trigger the workflow. Takes precedence over
+<a class="xref" href="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger.html#Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_IncludedBranches">IncludedBranches</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;string&gt; ExcludedBranches { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;<span class="xref">string</span>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_ExcludedPaths_" data-uid="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger.ExcludedPaths*"></a>
+
+  <h3 id="Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_ExcludedPaths" data-uid="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger.ExcludedPaths">
+  ExcludedPaths
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Definition/Triggers/GitPushTrigger.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the list of file path patterns that should NOT trigger the workflow. Takes precedence over
+<a class="xref" href="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger.html#Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_IncludedPaths">IncludedPaths</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;string&gt; ExcludedPaths { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;<span class="xref">string</span>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_ExcludedTags_" data-uid="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger.ExcludedTags*"></a>
+
+  <h3 id="Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_ExcludedTags" data-uid="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger.ExcludedTags">
+  ExcludedTags
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Definition/Triggers/GitPushTrigger.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the list of tag patterns that should NOT trigger the workflow. Takes precedence over
+<a class="xref" href="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger.html#Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_IncludedTags">IncludedTags</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;string&gt; ExcludedTags { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;<span class="xref">string</span>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_IncludedBranches_" data-uid="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger.IncludedBranches*"></a>
+
+  <h3 id="Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_IncludedBranches" data-uid="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger.IncludedBranches">
+  IncludedBranches
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Definition/Triggers/GitPushTrigger.cs/#L27"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the list of branch patterns that should trigger the workflow.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;string&gt; IncludedBranches { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;<span class="xref">string</span>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_IncludedPaths_" data-uid="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger.IncludedPaths*"></a>
+
+  <h3 id="Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_IncludedPaths" data-uid="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger.IncludedPaths">
+  IncludedPaths
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Definition/Triggers/GitPushTrigger.cs/#L38"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the list of file path patterns that should trigger the workflow.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;string&gt; IncludedPaths { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;<span class="xref">string</span>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_IncludedTags_" data-uid="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger.IncludedTags*"></a>
+
+  <h3 id="Invex_Atom_Workflows_Definition_Triggers_GitPushTrigger_IncludedTags" data-uid="Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger.IncludedTags">
+  IncludedTags
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Definition/Triggers/GitPushTrigger.cs/#L49"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the list of tag patterns that should trigger the workflow.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;string&gt; IncludedTags { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;<span class="xref">string</span>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Definition/Triggers/GitPushTrigger.cs/#L21" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

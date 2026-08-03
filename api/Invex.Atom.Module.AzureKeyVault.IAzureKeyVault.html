@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Interface IAzureKeyVault | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Interface IAzureKeyVault | Atom ">
+      
+      <meta name="description" content="Provides integration with Azure Key Vault for managing secrets and configuration.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault">
+
+
+
+  <h1 id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault" data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault" class="text-break">
+Interface IAzureKeyVault  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Invex.html">Invex</a>.<a class="xref" href="Invex.Atom.html">Atom</a>.<a class="xref" href="Invex.Atom.Module.html">Module</a>.<a class="xref" href="Invex.Atom.Module.AzureKeyVault.html">AzureKeyVault</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Module.AzureKeyVault.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Provides integration with Azure Key Vault for managing secrets and configuration.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+public interface IAzureKeyVault : IBuildAccessor</code></pre>
+  </div>
+
+
+
+
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_Services">IBuildAccessor.Services</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_Logger">IBuildAccessor.Logger</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_RootedFileSystem">IBuildAccessor.RootedFileSystem</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_ProcessRunner">IBuildAccessor.ProcessRunner</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_GetService__1">IBuildAccessor.GetService&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_GetServices__1">IBuildAccessor.GetServices&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_GetParam__1_System_Linq_Expressions_Expression_System_Func___0_____0_System_Func_System_String___0__">IBuildAccessor.GetParam&lt;T&gt;(Expression&lt;Func&lt;T&gt;&gt;, T, Func&lt;string, T&gt;)</a>
+    </div>
+  </dd></dl>
+
+
+
+
+  <h2 id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>This interface defines the parameters required to connect to an Azure Key Vault
+and configures the necessary services for retrieving secrets.</p>
+</div>
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureKeyVaultValueInjections_" data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.AzureKeyVaultValueInjections*"></a>
+
+  <h3 id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureKeyVaultValueInjections" data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.AzureKeyVaultValueInjections">
+  AzureKeyVaultValueInjections
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.AzureKeyVault/IAzureKeyVault.cs/#L72"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Configures how Azure Key Vault parameter values are injected into the build process.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">AzureKeyVaultValueInjections AzureKeyVaultValueInjections { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.AzureKeyVault.AzureKeyVaultValueInjections.html">AzureKeyVaultValueInjections</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureKeyVaultValueInjections_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This property allows customization of the source for each Azure Key Vault related parameter.
+By default, most parameters are expected from environment variables, while the app secret is
+expected from a secure secret store.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultAddress_" data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.AzureVaultAddress*"></a>
+
+  <h3 id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultAddress" data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.AzureVaultAddress">
+  AzureVaultAddress
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.AzureKeyVault/IAzureKeyVault.cs/#L21"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the address (URI) of the Azure Key Vault.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParamDefinition(&quot;azure-vault-address&quot;, &quot;Address for the Azure Vault&quot;, ParamSource.All, null)]
+string? AzureVaultAddress { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultAddress_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This parameter is crucial for identifying which Azure Key Vault instance to connect to.
+It can be provided via command-line arguments, environment variables, or <code>appsettings.json</code>.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultAppId_" data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.AzureVaultAppId*"></a>
+
+  <h3 id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultAppId" data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.AzureVaultAppId">
+  AzureVaultAppId
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.AzureKeyVault/IAzureKeyVault.cs/#L40"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the Application (Client) ID for the App Registration that has access to the Azure Key Vault.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParamDefinition(&quot;azure-vault-app-id&quot;, &quot;Azure ID for App Registration that has access to the Azure Vault&quot;, ParamSource.All, null)]
+string? AzureVaultAppId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultAppId_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This ID is used for service principal authentication to Azure Key Vault.
+Ensure the registered application has appropriate permissions (e.g., Get, List) on secrets in the vault.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultAppSecret_" data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.AzureVaultAppSecret*"></a>
+
+  <h3 id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultAppSecret" data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.AzureVaultAppSecret">
+  AzureVaultAppSecret
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.AzureKeyVault/IAzureKeyVault.cs/#L50"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the client secret for the App Registration that has access to the Azure Key Vault.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParamDefinition(&quot;azure-vault-app-secret&quot;, &quot;Azure Secret for App Registration that has access to the Azure Vault&quot;, ParamSource.All, null)]
+string? AzureVaultAppSecret { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultAppSecret_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This secret is used in conjunction with the <a class="xref" href="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.html#Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultAppId">AzureVaultAppId</a> for authenticating
+the application to Azure Key Vault. It should be treated as sensitive information.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultAuthPort_" data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.AzureVaultAuthPort*"></a>
+
+  <h3 id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultAuthPort" data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.AzureVaultAuthPort">
+  AzureVaultAuthPort
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.AzureKeyVault/IAzureKeyVault.cs/#L60"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the port number for the local authentication redirect during the Azure Key Vault authentication process.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParamDefinition(&quot;azure-vault-auth-port&quot;, &quot;Port for local auth redirect (default 3421). Set to 0 to use a random port.&quot;, ParamSource.All, null)]
+int AzureVaultAuthPort { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">int</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultAuthPort_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This port is used when performing device code or interactive authentication flows.
+The default port is 3421. Setting this to 0 will select a random available port.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultTenantId_" data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.AzureVaultTenantId*"></a>
+
+  <h3 id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultTenantId" data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.AzureVaultTenantId">
+  AzureVaultTenantId
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.AzureKeyVault/IAzureKeyVault.cs/#L30"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the Tenant ID associated with the Azure Key Vault.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParamDefinition(&quot;azure-vault-tenant-id&quot;, &quot;Tenant ID for the Azure Vault&quot;, ParamSource.All, null)]
+string? AzureVaultTenantId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_AzureVaultTenantId_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>The Tenant ID is part of the authentication process to ensure access to the correct Azure Active Directory tenant.</p>
+</div>
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_ConfigureBuilderFromIAzureKeyVault_" data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.ConfigureBuilderFromIAzureKeyVault*"></a>
+
+  <h3 id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_ConfigureBuilderFromIAzureKeyVault_Microsoft_Extensions_Hosting_IHostApplicationBuilder_" data-uid="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.ConfigureBuilderFromIAzureKeyVault(Microsoft.Extensions.Hosting.IHostApplicationBuilder)">
+  ConfigureBuilderFromIAzureKeyVault(IHostApplicationBuilder)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Configures the host builder to add Azure Key Vault services.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[UsedImplicitly]
+protected static void ConfigureBuilderFromIAzureKeyVault(IHostApplicationBuilder builder)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>builder</code> <span class="xref">IHostApplicationBuilder</span></dt>
+    <dd><p>The host application builder.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_AzureKeyVault_IAzureKeyVault_ConfigureBuilderFromIAzureKeyVault_Microsoft_Extensions_Hosting_IHostApplicationBuilder__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method registers <a class="xref" href="Invex.Atom.Module.AzureKeyVault.AzureKeySecretsProvider.html">AzureKeySecretsProvider</a> as a singleton service,
+making it available for secret retrieval and workflow option provisioning throughout the build.</p>
+</div>
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

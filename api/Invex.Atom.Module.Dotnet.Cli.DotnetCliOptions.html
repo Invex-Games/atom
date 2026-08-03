@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class DotnetCliOptions | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class DotnetCliOptions | Atom ">
+      
+      <meta name="description" content="Represents a set of options for configuring the execution of .NET CLI commands.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/new/main/apiSpec/new?filename=Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions.md&amp;value=---%0Auid%3A%20Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions">
+
+
+
+  <h1 id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions" class="text-break">
+Class DotnetCliOptions  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Cli/DotnetCliOptions.cs/#L11"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Invex.html">Invex</a>.<a class="xref" href="Invex.Atom.html">Atom</a>.<a class="xref" href="Invex.Atom.Module.html">Module</a>.<a class="xref" href="Invex.Atom.Module.Dotnet.html">Dotnet</a>.<a class="xref" href="Invex.Atom.Module.Dotnet.Cli.html">Cli</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Module.Dotnet.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Represents a set of options for configuring the execution of .NET CLI commands.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+public sealed record DotnetCliOptions</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">DotnetCliOptions</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+  <h2 id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>This record provides properties to control various aspects of how a .NET CLI process is run,
+including working directory, logging levels, error handling, environment variables, and output transformations.
+It is designed to be similar to <span class="xref">Invex.Process.ProcessRunOptions</span> but specifically tailored for .NET CLI operations.</p>
+</div>
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_AllowFailedResult_" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.AllowFailedResult*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_AllowFailedResult" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.AllowFailedResult">
+  AllowFailedResult
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Cli/DotnetCliOptions.cs/#L128"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets a value indicating whether the .NET CLI command execution should tolerate non-zero exit codes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool AllowFailedResult { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd><p><code>true</code> if the command execution should return normally even when the exit code is non-zero;
+<code>false</code> if a <a class="xref" href="Invex.Atom.Build.Exceptions.StepFailedException.html">StepFailedException</a> should be thrown for non-zero exit codes.
+Defaults to <code>false</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_AllowFailedResult_examples">Examples</h4>
+  <pre><code class="lang-csharp">// Strict mode - throw on any failure (default)
+var strictOptions = new DotnetCliOptions();
+// Tolerant mode - handle failures manually
+var tolerantOptions = new DotnetCliOptions { AllowFailedResult = true };
+var result = await DotnetCli.RunAsync("test", tolerantOptions);
+if (result.ExitCode != 0)
+{
+    // Handle the test failure case appropriately
+    logger.LogWarning("dotnet test failed: {Error}", result.Error);
+}</code></pre>
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_AllowFailedResult_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>
+    When set to <code>false</code> (the default), any non-zero exit code from the executed command
+    will cause the <span class="xref">Invex.Process.IProcessRunner</span> to throw a <a class="xref" href="Invex.Atom.Build.Exceptions.StepFailedException.html">StepFailedException</a>,
+    which is appropriate for build automation scenarios where command failures should halt execution.
+</p>
+<p>
+    When set to <code>true</code>, the command execution completes normally regardless of the exit code,
+    allowing the caller to inspect the <span class="xref">Invex.Process.ProcessRunResult.ExitCode</span> and handle failures
+    appropriately. This is useful for optional operations or when the exit code carries semantic
+    meaning beyond success/failure.
+</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_EnvironmentVariables_" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.EnvironmentVariables*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_EnvironmentVariables" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.EnvironmentVariables">
+  EnvironmentVariables
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Cli/DotnetCliOptions.cs/#L143"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the environment variables to be used by the .NET CLI process during execution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Dictionary&lt;string, string?&gt; EnvironmentVariables { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Dictionary</span>&lt;<span class="xref">string</span>, <span class="xref">string</span>&gt;</dt>
+    <dd><p>A dictionary where keys represent the names of the environment variables and values represent their corresponding
+values.
+A value of <code>null</code> for any variable indicates that it should be removed from the environment.</p>
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_EnvironmentVariables_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>These environment variables are passed to the process when it is executed, potentially overriding inherited
+variables from the current environment. If not set, the process will inherit the current environment's variables by
+default.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_ErrorLogLevel_" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.ErrorLogLevel*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_ErrorLogLevel" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.ErrorLogLevel">
+  ErrorLogLevel
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Cli/DotnetCliOptions.cs/#L91"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the log level for standard error messages from the executed .NET CLI command.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LogLevel ErrorLogLevel { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">LogLevel</span></dt>
+    <dd><p>The <span class="xref">Microsoft.Extensions.Logging.LogLevel</span> used when logging each line of standard error from the command.
+Defaults to <span class="xref">Microsoft.Extensions.Logging.LogLevel.Warning</span>.</p>
+</dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_ErrorLogLevel_examples">Examples</h4>
+  <pre><code class="lang-csharp">var options = new DotnetCliOptions { ErrorLogLevel = LogLevel.Error };</code></pre>
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_ErrorLogLevel_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This property controls how error output from the .NET CLI command is logged. Warning level is
+the default as error output typically indicates issues that should be visible in production logs.
+For commands that use stderr for non-error information (like progress updates), consider
+using <span class="xref">Microsoft.Extensions.Logging.LogLevel.Debug</span> or <span class="xref">Microsoft.Extensions.Logging.LogLevel.Information</span>.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_InvocationLogLevel_" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.InvocationLogLevel*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_InvocationLogLevel" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.InvocationLogLevel">
+  InvocationLogLevel
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Cli/DotnetCliOptions.cs/#L51"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the log level for messages indicating the invocation of the .NET CLI command.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LogLevel InvocationLogLevel { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">LogLevel</span></dt>
+    <dd><p>The <span class="xref">Microsoft.Extensions.Logging.LogLevel</span> used when logging the command start information,
+including the executable name, arguments, and working directory. Defaults to <span class="xref">Microsoft.Extensions.Logging.LogLevel.Information</span>.</p>
+</dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_InvocationLogLevel_examples">Examples</h4>
+  <pre><code class="lang-csharp">var options = new DotnetCliOptions { InvocationLogLevel = LogLevel.Debug };</code></pre>
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_InvocationLogLevel_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This property controls the visibility of command invocation logging. Setting this to a higher level
+(e.g., <span class="xref">Microsoft.Extensions.Logging.LogLevel.Debug</span>) reduces log verbosity in production scenarios, while lower levels
+(e.g., <span class="xref">Microsoft.Extensions.Logging.LogLevel.Trace</span>) provide more detailed execution tracking.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_OutputLogLevel_" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.OutputLogLevel*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_OutputLogLevel" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.OutputLogLevel">
+  OutputLogLevel
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Cli/DotnetCliOptions.cs/#L71"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the log level for standard output messages from the executed .NET CLI command.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LogLevel OutputLogLevel { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">LogLevel</span></dt>
+    <dd><p>The <span class="xref">Microsoft.Extensions.Logging.LogLevel</span> used when logging each line of standard output from the command.
+Defaults to <span class="xref">Microsoft.Extensions.Logging.LogLevel.Debug</span>.</p>
+</dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_OutputLogLevel_examples">Examples</h4>
+  <pre><code class="lang-csharp">var options = new DotnetCliOptions { OutputLogLevel = LogLevel.Information };</code></pre>
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_OutputLogLevel_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This property controls how standard output from the .NET CLI command is logged. Debug level is
+the default as it provides detailed execution information without overwhelming production logs.
+For commands that produce important output that should always be visible, consider using
+<span class="xref">Microsoft.Extensions.Logging.LogLevel.Information</span> or higher.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_TransformError_" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.TransformError*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_TransformError" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.TransformError">
+  TransformError
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Cli/DotnetCliOptions.cs/#L196"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>An optional per-line transformation applied to the standard error (stderr) of the executed .NET CLI command.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Func&lt;string, string?&gt;? TransformError { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Func</span>&lt;<span class="xref">string</span>, <span class="xref">string</span>&gt;</dt>
+    <dd><p>A delegate that receives the raw line of text read from stderr (without a trailing newline) and
+returns the transformed text to be logged and captured. Returning <code>null</code> suppresses the line
+completely (it will neither be logged nor stored in <span class="xref">Invex.Process.ProcessRunResult.Error</span>).
+If not set, the original text is used as-is.</p>
+</dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_TransformError_examples">Examples</h4>
+  <pre><code class="lang-csharp">var options = new DotnetCliOptions
+{
+    // Strip ANSI escape sequences from dotnet run stderr
+    TransformError = line =&gt; System.Text.RegularExpressions.Regex.Replace(line, "\u001B\\[[0-9;]*[A-Za-z]", string.Empty)
+};</code></pre>
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_TransformError_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Some .NET CLI commands might write progress or informational messages to stderr. Use this transformation
+to downsample, redact, or normalize such messages. As with <a class="xref" href="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.html#Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_TransformOutput">TransformOutput</a>, keep the delegate
+efficient to avoid affecting command throughput.</p>
+</div>
+
+
+  <dl class="typelist seealso">
+    <dt>See Also</dt>
+    <dd>
+    <div><a class="xref" href="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.html#Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_TransformOutput">TransformOutput</a></div>
+    </dd>
+  </dl>
+
+
+  <a id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_TransformOutput_" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.TransformOutput*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_TransformOutput" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.TransformOutput">
+  TransformOutput
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Cli/DotnetCliOptions.cs/#L170"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>An optional per-line transformation applied to the standard output (stdout) of the executed .NET CLI command.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Func&lt;string, string?&gt;? TransformOutput { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Func</span>&lt;<span class="xref">string</span>, <span class="xref">string</span>&gt;</dt>
+    <dd><p>A delegate that receives the raw line of text read from stdout (without a trailing newline) and
+returns the transformed text to be logged and captured. Returning <code>null</code> suppresses the line
+completely (it will neither be logged nor stored in <span class="xref">Invex.Process.ProcessRunResult.Output</span>).
+If not set, the original text is used as-is.</p>
+</dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_TransformOutput_examples">Examples</h4>
+  <pre><code class="lang-csharp">var options = new DotnetCliOptions
+{
+    // Hide lines that start with "info :" from dotnet build output
+    TransformOutput = line =&gt; line.StartsWith("info :", StringComparison.OrdinalIgnoreCase) ? null : line
+};</code></pre>
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_TransformOutput_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>The transformation is invoked once for each line of stdout as it is produced by the command.
+Use this to filter noisy lines, redact sensitive data (like tokens), or normalize output
+(e.g., remove ANSI color codes). Keep the transformation fast and side-effect free; it may be
+called frequently for verbose commands.</p>
+</div>
+
+
+  <dl class="typelist seealso">
+    <dt>See Also</dt>
+    <dd>
+    <div><a class="xref" href="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.html#Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_TransformError">TransformError</a></div>
+    </dd>
+  </dl>
+
+
+  <a id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_WorkingDirectory_" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.WorkingDirectory*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_WorkingDirectory" data-uid="Invex.Atom.Module.Dotnet.Cli.DotnetCliOptions.WorkingDirectory">
+  WorkingDirectory
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Cli/DotnetCliOptions.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the working directory for the .NET CLI command execution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string? WorkingDirectory { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd><p>The path to the directory where the command should be executed, or <code>null</code> to use
+the current application's working directory. Relative paths are resolved relative to
+the current working directory.</p>
+</dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_WorkingDirectory_examples">Examples</h4>
+  <pre><code class="lang-csharp">var options = new DotnetCliOptions { WorkingDirectory = "./src/MyProject" };</code></pre>
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Cli_DotnetCliOptions_WorkingDirectory_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>When specified, this directory becomes the current working directory for the child process,
+affecting relative path resolution and file operations within the executed command.
+The directory must exist when the process is started, or the execution will fail.</p>
+</div>
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Cli/DotnetCliOptions.cs/#L11" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

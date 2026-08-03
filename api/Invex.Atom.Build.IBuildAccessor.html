@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Interface IBuildAccessor | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Interface IBuildAccessor | Atom ">
+      
+      <meta name="description" content="Provides base functionality for accessing services and parameters within the Atom build system.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/new/main/apiSpec/new?filename=Invex_Atom_Build_IBuildAccessor.md&amp;value=---%0Auid%3A%20Invex.Atom.Build.IBuildAccessor%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Build.IBuildAccessor">
+
+
+
+  <h1 id="Invex_Atom_Build_IBuildAccessor" data-uid="Invex.Atom.Build.IBuildAccessor" class="text-break">
+Interface IBuildAccessor  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/IBuildAccessor.cs/#L10"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Invex.html">Invex</a>.<a class="xref" href="Invex.Atom.html">Atom</a>.<a class="xref" href="Invex.Atom.Build.html">Build</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Build.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Provides base functionality for accessing services and parameters within the Atom build system.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+public interface IBuildAccessor</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="Invex_Atom_Build_IBuildAccessor_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>This interface serves as a foundation for target definitions and helpers, offering convenient access
+to logging, file system operations, process execution, and parameter retrieval.</p>
+</div>
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Build_IBuildAccessor_Logger_" data-uid="Invex.Atom.Build.IBuildAccessor.Logger*"></a>
+
+  <h3 id="Invex_Atom_Build_IBuildAccessor_Logger" data-uid="Invex.Atom.Build.IBuildAccessor.Logger">
+  Logger
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/IBuildAccessor.cs/#L21"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a logger instance for the implementing type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ILogger Logger { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">ILogger</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Build_IBuildAccessor_ProcessRunner_" data-uid="Invex.Atom.Build.IBuildAccessor.ProcessRunner*"></a>
+
+  <h3 id="Invex_Atom_Build_IBuildAccessor_ProcessRunner" data-uid="Invex.Atom.Build.IBuildAccessor.ProcessRunner">
+  ProcessRunner
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/IBuildAccessor.cs/#L33"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the process runner service for executing external processes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IProcessRunner ProcessRunner { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IProcessRunner</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Build_IBuildAccessor_RootedFileSystem_" data-uid="Invex.Atom.Build.IBuildAccessor.RootedFileSystem*"></a>
+
+  <h3 id="Invex_Atom_Build_IBuildAccessor_RootedFileSystem" data-uid="Invex.Atom.Build.IBuildAccessor.RootedFileSystem">
+  RootedFileSystem
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/IBuildAccessor.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the Atom file system service for file and directory operations.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IRootedFileSystem RootedFileSystem { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IRootedFileSystem</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Build_IBuildAccessor_Services_" data-uid="Invex.Atom.Build.IBuildAccessor.Services*"></a>
+
+  <h3 id="Invex_Atom_Build_IBuildAccessor_Services" data-uid="Invex.Atom.Build.IBuildAccessor.Services">
+  Services
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/IBuildAccessor.cs/#L16"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the service provider for resolving dependencies.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IServiceProvider Services { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IServiceProvider</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Invex_Atom_Build_IBuildAccessor_GetParam_" data-uid="Invex.Atom.Build.IBuildAccessor.GetParam*"></a>
+
+  <h3 id="Invex_Atom_Build_IBuildAccessor_GetParam__1_System_Linq_Expressions_Expression_System_Func___0_____0_System_Func_System_String___0__" data-uid="Invex.Atom.Build.IBuildAccessor.GetParam``1(System.Linq.Expressions.Expression{System.Func{``0}},``0,System.Func{System.String,``0})">
+  GetParam&lt;T&gt;(Expression&lt;Func&lt;T?&gt;&gt;, T?, Func&lt;string?, T?&gt;?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/IBuildAccessor.cs/#L74"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Retrieves a parameter value using a strongly-typed expression.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">T? GetParam&lt;T&gt;(Expression&lt;Func&lt;T?&gt;&gt; parameterExpression, T? defaultValue = default, Func&lt;string?, T?&gt;? converter = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>parameterExpression</code> <span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;T&gt;&gt;</dt>
+    <dd><p>An expression identifying the parameter (e.g., <code>() =&gt; MyParam</code>).</p>
+</dd>
+    <dt><code>defaultValue</code> <span class="xref">T</span></dt>
+    <dd><p>The default value to return if the parameter is not found.</p>
+</dd>
+    <dt><code>converter</code> <span class="xref">Func</span>&lt;<span class="xref">string</span>, T&gt;</dt>
+    <dd><p>An optional function to convert the parameter value from a string.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">T</span></dt>
+    <dd><p>The resolved parameter value, or the default value if not found.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of the parameter.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Build_IBuildAccessor_GetService_" data-uid="Invex.Atom.Build.IBuildAccessor.GetService*"></a>
+
+  <h3 id="Invex_Atom_Build_IBuildAccessor_GetService__1" data-uid="Invex.Atom.Build.IBuildAccessor.GetService``1">
+  GetService&lt;T&gt;()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/IBuildAccessor.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a required service from the dependency injection container.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">T GetService&lt;T&gt;() where T : notnull</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">T</span></dt>
+    <dd><p>The service instance.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of service to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_IBuildAccessor_GetService__1_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the requested type <code class="typeparamref">T</code> implements <a class="xref" href="Invex.Atom.Build.Definition.IBuildDefinition.html">IBuildDefinition</a>, this method
+returns the current instance cast to that type, rather than resolving from the service provider.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Build_IBuildAccessor_GetServices_" data-uid="Invex.Atom.Build.IBuildAccessor.GetServices*"></a>
+
+  <h3 id="Invex_Atom_Build_IBuildAccessor_GetServices__1" data-uid="Invex.Atom.Build.IBuildAccessor.GetServices``1">
+  GetServices&lt;T&gt;()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/IBuildAccessor.cs/#L59"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Retrieves all registered services of a specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerable&lt;T&gt; GetServices&lt;T&gt;() where T : notnull</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IEnumerable</span>&lt;T&gt;</dt>
+    <dd><p>A collection of service instances.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of the services to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_IBuildAccessor_GetServices__1_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the requested type <code class="typeparamref">T</code> implements <a class="xref" href="Invex.Atom.Build.Definition.IBuildDefinition.html">IBuildDefinition</a>, this method
+returns a collection containing only the current instance cast to that type.</p>
+</div>
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/IBuildAccessor.cs/#L10" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

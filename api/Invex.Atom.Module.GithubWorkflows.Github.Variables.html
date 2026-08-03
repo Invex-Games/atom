@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class Github.Variables | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class Github.Variables | Atom ">
+      
+      <meta name="description" content="Provides access to GitHub Actions environment variables as strongly-typed properties.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/new/main/apiSpec/new?filename=Invex_Atom_Module_GithubWorkflows_Github_Variables.md&amp;value=---%0Auid%3A%20Invex.Atom.Module.GithubWorkflows.Github.Variables%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables">
+
+
+
+  <h1 id="Invex_Atom_Module_GithubWorkflows_Github_Variables" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables" class="text-break">
+Class Github.Variables  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L260"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Invex.html">Invex</a>.<a class="xref" href="Invex.Atom.html">Atom</a>.<a class="xref" href="Invex.Atom.Module.html">Module</a>.<a class="xref" href="Invex.Atom.Module.GithubWorkflows.html">GithubWorkflows</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Module.GithubWorkflows.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Provides access to GitHub Actions environment variables as strongly-typed properties.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+public static class Github.Variables</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">Github.Variables</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+  <h2 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>Each property corresponds to a GitHub Actions environment variable,
+returning its value or an empty string if the variable is not set.</p>
+</div>
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Actions_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Actions*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Actions" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Actions">
+  Actions
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L269"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_ACTIONS</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string Actions { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Actions_examples">Examples</h4>
+  <p>true</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Actor_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Actor*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Actor" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Actor">
+  Actor
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L287"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_ACTOR</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string Actor { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Actor_examples">Examples</h4>
+  <p>ArthurDent</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_ActorId_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.ActorId*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_ActorId" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.ActorId">
+  ActorId
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L278"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_ACTOR_ID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string ActorId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_ActorId_examples">Examples</h4>
+  <p>1234567</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_ApiUrl_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.ApiUrl*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_ApiUrl" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.ApiUrl">
+  ApiUrl
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L295"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_API_URL</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string ApiUrl { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_ApiUrl_examples">Examples</h4>
+  <p><a href="https://api.github.com">https://api.github.com</a></p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_BaseRef_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.BaseRef*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_BaseRef" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.BaseRef">
+  BaseRef
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L303"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_BASE_REF</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BaseRef { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_BaseRef_examples">Examples</h4>
+  <p>main</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Env_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Env*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Env" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Env">
+  Env
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L312"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_ENV</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string Env { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Env_examples">Examples</h4>
+  <p>/home/runner/work/_temp/<em>runner_file_commands/set_env</em>[GUID]</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_EventName_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.EventName*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_EventName" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.EventName">
+  EventName
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L320"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_EVENT_NAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string EventName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_EventName_examples">Examples</h4>
+  <p>pull_request</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_EventPath_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.EventPath*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_EventPath" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.EventPath">
+  EventPath
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L329"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_EVENT_PATH</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string EventPath { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_EventPath_examples">Examples</h4>
+  <p>/home/runner/work/_temp/_github_workflow/event.json</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_GraphqlUrl_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.GraphqlUrl*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_GraphqlUrl" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.GraphqlUrl">
+  GraphqlUrl
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L338"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_GRAPHQL_URL</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string GraphqlUrl { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_GraphqlUrl_examples">Examples</h4>
+  <p><a href="https://api.github.com/graphql">https://api.github.com/graphql</a></p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_HeadRef_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.HeadRef*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_HeadRef" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.HeadRef">
+  HeadRef
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L347"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_HEAD_REF</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string HeadRef { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_HeadRef_examples">Examples</h4>
+  <p>my-branch</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Job_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Job*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Job" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Job">
+  Job
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L356"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_JOB</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string Job { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Job_examples">Examples</h4>
+  <p>BuildApp</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Output_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Output*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Output" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Output">
+  Output
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L364"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_OUTPUT</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string Output { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Output_examples">Examples</h4>
+  <p>/home/runner/work/_temp/<em>runner_file_commands/set_output</em>[GUID]</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Path_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Path*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Path" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Path">
+  Path
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L372"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_PATH</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string Path { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Path_examples">Examples</h4>
+  <p>/home/runner/work/_temp/<em>runner_file_commands/add_path</em>[GUID]</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Ref_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Ref*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Ref" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Ref">
+  Ref
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L407"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_REF</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string Ref { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Ref_examples">Examples</h4>
+  <p>refs/pull/4/merge</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RefName_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RefName*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RefName" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RefName">
+  RefName
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L380"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_REF_NAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RefName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RefName_examples">Examples</h4>
+  <p>4/my-branch</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RefProtected_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RefProtected*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RefProtected" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RefProtected">
+  RefProtected
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L389"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_REF_PROTECTED</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RefProtected { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RefProtected_examples">Examples</h4>
+  <p>false</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RefType_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RefType*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RefType" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RefType">
+  RefType
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L398"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_REF_TYPE</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RefType { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RefType_examples">Examples</h4>
+  <p>branch</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Repository_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Repository*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Repository" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Repository">
+  Repository
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L442"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_REPOSITORY</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string Repository { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Repository_examples">Examples</h4>
+  <p>ArthurDent/my-project</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RepositoryId_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RepositoryId*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RepositoryId" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RepositoryId">
+  RepositoryId
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L415"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_REPOSITORY_ID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RepositoryId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RepositoryId_examples">Examples</h4>
+  <p>123456789</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RepositoryOwner_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RepositoryOwner*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RepositoryOwner" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RepositoryOwner">
+  RepositoryOwner
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L433"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_REPOSITORY_OWNER</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RepositoryOwner { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RepositoryOwner_examples">Examples</h4>
+  <p>ArthurDent</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RepositoryOwnerId_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RepositoryOwnerId*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RepositoryOwnerId" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RepositoryOwnerId">
+  RepositoryOwnerId
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L424"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_REPOSITORY_OWNER_ID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RepositoryOwnerId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RepositoryOwnerId_examples">Examples</h4>
+  <p>1234567</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RetentionDays_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RetentionDays*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RetentionDays" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RetentionDays">
+  RetentionDays
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L451"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_RETENTION_DAYS</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RetentionDays { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RetentionDays_examples">Examples</h4>
+  <p>90</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunAttempt_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunAttempt*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunAttempt" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunAttempt">
+  RunAttempt
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L460"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_RUN_ATTEMPT</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RunAttempt { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunAttempt_examples">Examples</h4>
+  <p>1</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunId_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunId*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunId" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunId">
+  RunId
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L469"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_RUN_ID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RunId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunId_examples">Examples</h4>
+  <p>9876543210</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunNumber_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunNumber*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunNumber" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunNumber">
+  RunNumber
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L477"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_RUN_NUMBER</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RunNumber { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunNumber_examples">Examples</h4>
+  <p>1</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerArch_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerArch*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerArch" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerArch">
+  RunnerArch
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L565"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>RUNNER_ARCH</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RunnerArch { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerArch_examples">Examples</h4>
+  <p>X64</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerDebug_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerDebug*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerDebug" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerDebug">
+  RunnerDebug
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L574"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>RUNNER_DEBUG</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RunnerDebug { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerDebug_examples">Examples</h4>
+  <p>1</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerEnvironment_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerEnvironment*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerEnvironment" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerEnvironment">
+  RunnerEnvironment
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L583"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>RUNNER_ENVIRONMENT</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RunnerEnvironment { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerEnvironment_examples">Examples</h4>
+  <p>github-hosted</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerName_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerName*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerName" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerName">
+  RunnerName
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L592"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>RUNNER_NAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RunnerName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerName_examples">Examples</h4>
+  <p>GitHubActions 6</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerOs_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerOs*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerOs" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerOs">
+  RunnerOs
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L601"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>RUNNER_OS</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RunnerOs { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerOs_examples">Examples</h4>
+  <p>Linux</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerPerfLog_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerPerfLog*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerPerfLog" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerPerfLog">
+  RunnerPerfLog
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L610"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>RUNNER_PERFLOG</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RunnerPerfLog { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerPerfLog_examples">Examples</h4>
+  <p>/home/runner/perflog</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerTemp_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerTemp*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerTemp" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerTemp">
+  RunnerTemp
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L619"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>RUNNER_TEMP</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RunnerTemp { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerTemp_examples">Examples</h4>
+  <p>/home/runner/work/_temp</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerToolCache_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerToolCache*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerToolCache" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerToolCache">
+  RunnerToolCache
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L628"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>RUNNER_TOOL_CACHE</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RunnerToolCache { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerToolCache_examples">Examples</h4>
+  <p>/opt/hostedtoolcache</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerTrackingId_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerTrackingId*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerTrackingId" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerTrackingId">
+  RunnerTrackingId
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L637"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>RUNNER_TRACKING_ID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RunnerTrackingId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerTrackingId_examples">Examples</h4>
+  <p>github_3cf77bfa-2ce5-4b4c-b736-d6a7b5c16537</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerUser_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerUser*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerUser" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerUser">
+  RunnerUser
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L646"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>RUNNER_USER</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RunnerUser { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerUser_examples">Examples</h4>
+  <p>runner</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerWorkspace_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerWorkspace*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerWorkspace" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.RunnerWorkspace">
+  RunnerWorkspace
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L655"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>RUNNER_WORKSPACE</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string RunnerWorkspace { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_RunnerWorkspace_examples">Examples</h4>
+  <p>/home/runner/work/my-project</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_ServerUrl_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.ServerUrl*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_ServerUrl" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.ServerUrl">
+  ServerUrl
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L486"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_SERVER_URL</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string ServerUrl { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_ServerUrl_examples">Examples</h4>
+  <p><a href="https://github.com">https://github.com</a></p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Sha_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Sha*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Sha" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Sha">
+  Sha
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L495"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_SHA</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string Sha { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Sha_examples">Examples</h4>
+  <p>[SHA]</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_State_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.State*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_State" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.State">
+  State
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L503"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_STATE</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string State { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_State_examples">Examples</h4>
+  <p>/home/runner/work/_temp/<em>runner_file_commands/save_state</em>[GUID]</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_StepSummary_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.StepSummary*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_StepSummary" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.StepSummary">
+  StepSummary
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L511"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_STEP_SUMMARY</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string StepSummary { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_StepSummary_examples">Examples</h4>
+  <p>/home/runner/work/_temp/<em>runner_file_commands/step_summary</em>[GUID]</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_TriggeringActor_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.TriggeringActor*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_TriggeringActor" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.TriggeringActor">
+  TriggeringActor
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L520"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_TRIGGERING_ACTOR</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string TriggeringActor { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_TriggeringActor_examples">Examples</h4>
+  <p>ArthurDent</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Workflow_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Workflow*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Workflow" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Workflow">
+  Workflow
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L547"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_WORKFLOW</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string Workflow { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Workflow_examples">Examples</h4>
+  <p>build</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_WorkflowRef_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.WorkflowRef*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_WorkflowRef" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.WorkflowRef">
+  WorkflowRef
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L529"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_WORKFLOW_REF</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string WorkflowRef { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_WorkflowRef_examples">Examples</h4>
+  <p>ArthurDent/my-project/.github/workflows/BuildApp.yml@refs/pull/4/merge</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_WorkflowSha_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.WorkflowSha*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_WorkflowSha" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.WorkflowSha">
+  WorkflowSha
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L538"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_WORKFLOW_SHA</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string WorkflowSha { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_WorkflowSha_examples">Examples</h4>
+  <p>[SHA]</p>
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Workspace_" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Workspace*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Workspace" data-uid="Invex.Atom.Module.GithubWorkflows.Github.Variables.Workspace">
+  Workspace
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L556"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>GITHUB_WORKSPACE</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string Workspace { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Github_Variables_Workspace_examples">Examples</h4>
+  <p>/home/runner/work/my-project/my-project</p>
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Github.cs/#L260" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

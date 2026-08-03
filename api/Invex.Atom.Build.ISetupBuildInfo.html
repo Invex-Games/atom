@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Interface ISetupBuildInfo | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Interface ISetupBuildInfo | Atom ">
+      
+      <meta name="description" content="Provides the  target, which initializes core build information (name, ID, version, and timestamp) as build variables for consumption by other targets.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/new/main/apiSpec/new?filename=Invex_Atom_Build_ISetupBuildInfo.md&amp;value=---%0Auid%3A%20Invex.Atom.Build.ISetupBuildInfo%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Build.ISetupBuildInfo">
+
+
+
+  <h1 id="Invex_Atom_Build_ISetupBuildInfo" data-uid="Invex.Atom.Build.ISetupBuildInfo" class="text-break">
+Interface ISetupBuildInfo  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/ISetupBuildInfo.cs/#L8"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Invex.html">Invex</a>.<a class="xref" href="Invex.Atom.html">Atom</a>.<a class="xref" href="Invex.Atom.Build.html">Build</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Build.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Provides the <a class="xref" href="Invex.Atom.Build.ISetupBuildInfo.html#Invex_Atom_Build_ISetupBuildInfo_SetupBuildInfo">SetupBuildInfo</a> target, which initializes core build information
+(name, ID, version, and timestamp) as build variables for consumption by other targets.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+public interface ISetupBuildInfo : IBuildInfo, IVariablesHelper, IReportsHelper, IBuildAccessor</code></pre>
+  </div>
+
+
+
+
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildName">IBuildInfo.BuildName</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildId">IBuildInfo.BuildId</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildVersion">IBuildInfo.BuildVersion</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildTimestamp">IBuildInfo.BuildTimestamp</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildSlice">IBuildInfo.BuildSlice</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.Variables.IVariablesHelper.html#Invex_Atom_Build_Variables_IVariablesHelper_WriteVariable_System_String_System_String_System_Threading_CancellationToken_">IVariablesHelper.WriteVariable(string, string, CancellationToken)</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.Reports.IReportsHelper.html#Invex_Atom_Build_Reports_IReportsHelper_AddReportData_Invex_Atom_Build_Reports_IReportData_">IReportsHelper.AddReportData(IReportData)</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_Services">IBuildAccessor.Services</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_Logger">IBuildAccessor.Logger</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_RootedFileSystem">IBuildAccessor.RootedFileSystem</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_ProcessRunner">IBuildAccessor.ProcessRunner</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_GetService__1">IBuildAccessor.GetService&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_GetServices__1">IBuildAccessor.GetServices&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_GetParam__1_System_Linq_Expressions_Expression_System_Func___0_____0_System_Func_System_String___0__">IBuildAccessor.GetParam&lt;T&gt;(Expression&lt;Func&lt;T&gt;&gt;, T, Func&lt;string, T&gt;)</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Build_ISetupBuildInfo_SetupBuildInfo_" data-uid="Invex.Atom.Build.ISetupBuildInfo.SetupBuildInfo*"></a>
+
+  <h3 id="Invex_Atom_Build_ISetupBuildInfo_SetupBuildInfo" data-uid="Invex.Atom.Build.ISetupBuildInfo.SetupBuildInfo">
+  SetupBuildInfo
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/ISetupBuildInfo.cs/#L134"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the build target responsible for setting up the build ID, version, and timestamp.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Target SetupBuildInfo { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Build.Definition.Target.html">Target</a></dt>
+    <dd><p>A <a class="xref" href="Invex.Atom.Build.Definition.Target.html">Target</a> configured to initialize build information variables and report data.</p>
+</dd>
+  </dl>
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_ISetupBuildInfo_SetupBuildInfo_examples">Examples</h4>
+  <p>
+    While <code>SetupBuildInfo</code> is often implicitly part of a default build definition, here's how a custom
+    target can depend on it and consume the variables it produces. Variables are consumed via the
+    corresponding build parameters (declared with <a class="xref" href="Invex.Atom.Build.Definition.TargetDefinition.html#Invex_Atom_Build_Definition_TargetDefinition_ConsumesVariable_System_String_System_String_">ConsumesVariable(string, string)</a> and read
+    with <code>GetParam</code>).
+</p>
+<pre><code class="lang-csharp">// In a target interface within your Atom build project
+public interface IPackage : ISetupBuildInfo
+{
+    Target Package =&gt; t =&gt; t
+        .DependsOn(nameof(ISetupBuildInfo.SetupBuildInfo)) // Ensures build info is set up
+        .ConsumesVariable(nameof(ISetupBuildInfo.SetupBuildInfo), nameof(BuildVersion))
+        .Executes(() =&gt;
+        {
+            // BuildVersion is resolved from the variable written by SetupBuildInfo
+            Logger.LogInformation("Packaging {Name} version {Version}", BuildName, BuildVersion);
+            // ... further packaging logic ...
+        });
+}
+// To run this build (assuming Atom CLI):
+// atom Package</code></pre>
+
+
+  <h4 class="section" id="Invex_Atom_Build_ISetupBuildInfo_SetupBuildInfo_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>
+    The <code>SetupBuildInfo</code> target is a foundational step in the Atom build pipeline. It performs several key
+    actions:
+<pre><code>&lt;ul&gt;&lt;li&gt;
+            Retrieves the build name (from &lt;xref href=&quot;Invex.Atom.Build.BuildInfo.IBuildInfo.BuildName&quot; data-throw-if-not-resolved=&quot;false&quot;&gt;&lt;/xref&gt;) and writes it as a build
+            variable named
+            &quot;BuildName&quot;.
+        &lt;/li&gt;&lt;li&gt;
+            Retrieves the build ID (from &lt;xref href=&quot;Invex.Atom.Build.BuildInfo.IBuildInfo.BuildId&quot; data-throw-if-not-resolved=&quot;false&quot;&gt;&lt;/xref&gt;) and writes it as a build variable
+            named &quot;BuildId&quot;.
+        &lt;/li&gt;&lt;li&gt;
+            Retrieves the build version (from &lt;xref href=&quot;Invex.Atom.Build.BuildInfo.IBuildInfo.BuildVersion&quot; data-throw-if-not-resolved=&quot;false&quot;&gt;&lt;/xref&gt;) and writes it as a build
+            variable
+            named
+            &quot;BuildVersion&quot;.
+        &lt;/li&gt;&lt;li&gt;
+            Retrieves the build timestamp (from &lt;xref href=&quot;Invex.Atom.Build.BuildInfo.IBuildInfo.BuildTimestamp&quot; data-throw-if-not-resolved=&quot;false&quot;&gt;&lt;/xref&gt;), converts it to a
+            string,
+            and
+            writes it
+            as a build variable named &quot;BuildTimestamp&quot;.
+        &lt;/li&gt;&lt;li&gt;
+            Adds a &quot;Run Information&quot; section to the build report, displaying the build name, version,
+            ID, and timestamp.
+        &lt;/li&gt;&lt;li&gt;
+            Logs the build ID, version, and timestamp using the configured logger for
+            &lt;code&gt;ISetupBuildInfo&lt;/code&gt;.
+        &lt;/li&gt;&lt;/ul&gt;
+</code></pre>
+
+<p>
+    This target is marked as hidden (<code>IsHidden()</code>), meaning it's not typically intended for direct invocation
+    by users but is
+    expected to run as a dependency for other targets or as part of an initial setup sequence.
+</p>
+<p>
+    It produces the following build variables, which can be consumed by subsequent targets in the build process:
+<pre><code>&lt;ul&gt;&lt;li&gt;&lt;span class=&quot;term&quot;&gt;
+            &lt;code&gt;BuildName&lt;/code&gt;
+        &lt;/span&gt;The name of the build.&lt;/li&gt;&lt;li&gt;&lt;span class=&quot;term&quot;&gt;
+            &lt;code&gt;BuildId&lt;/code&gt;
+        &lt;/span&gt;The unique identifier for the build execution.&lt;/li&gt;&lt;li&gt;&lt;span class=&quot;term&quot;&gt;
+            &lt;code&gt;BuildVersion&lt;/code&gt;
+        &lt;/span&gt;The version of the software being built.&lt;/li&gt;&lt;li&gt;&lt;span class=&quot;term&quot;&gt;
+            &lt;code&gt;BuildTimestamp&lt;/code&gt;
+        &lt;/span&gt;The timestamp of the build (as a string).&lt;/li&gt;&lt;/ul&gt;
+</code></pre>
+
+<p>
+    Successful execution relies on the correct registration and functioning of <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildIdProvider.html">IBuildIdProvider</a>,
+    <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildVersionProvider.html">IBuildVersionProvider</a>, and <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildTimestampProvider.html">IBuildTimestampProvider</a> services within the Atom
+    framework.
+</p>
+</div>
+
+
+  <dl class="typelist seealso">
+    <dt>See Also</dt>
+    <dd>
+    <div><a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildName">BuildName</a></div>
+    <div><a class="xref" href="Invex.Atom.Build.Variables.IVariablesHelper.html#Invex_Atom_Build_Variables_IVariablesHelper_WriteVariable_System_String_System_String_System_Threading_CancellationToken_">WriteVariable</a>(<span class="xref">string</span>, <span class="xref">string</span>, <span class="xref">CancellationToken</span>)</div>
+    <div><a class="xref" href="Invex.Atom.Build.Reports.IReportsHelper.html#Invex_Atom_Build_Reports_IReportsHelper_AddReportData_Invex_Atom_Build_Reports_IReportData_">AddReportData</a>(<a class="xref" href="Invex.Atom.Build.Reports.IReportData.html">IReportData</a>)</div>
+    </dd>
+  </dl>
+
+
+  <h2 id="seealso">See Also</h2>
+  <div class="seealso">
+      <div><a class="xref" href="Invex.Atom.Build.ISetupBuildInfo.html#Invex_Atom_Build_ISetupBuildInfo_SetupBuildInfo">SetupBuildInfo</a></div>
+  </div>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/ISetupBuildInfo.cs/#L8" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

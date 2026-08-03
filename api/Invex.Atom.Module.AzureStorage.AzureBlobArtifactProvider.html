@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class AzureBlobArtifactProvider | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class AzureBlobArtifactProvider | Atom ">
+      
+      <meta name="description" content="Provides an implementation of  for storing and retrieving build artifacts in Azure Blob Storage.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/new/main/apiSpec/new?filename=Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider.md&amp;value=---%0Auid%3A%20Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider">
+
+
+
+  <h1 id="Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider" data-uid="Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider" class="text-break">
+Class AzureBlobArtifactProvider  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.AzureStorage/AzureBlobArtifactProvider.cs/#L11"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Invex.html">Invex</a>.<a class="xref" href="Invex.Atom.html">Atom</a>.<a class="xref" href="Invex.Atom.Module.html">Module</a>.<a class="xref" href="Invex.Atom.Module.AzureStorage.html">AzureStorage</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Module.AzureStorage.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Provides an implementation of <a class="xref" href="Invex.Atom.Build.Artifacts.IArtifactProvider.html">IArtifactProvider</a> for storing and retrieving
+build artifacts in Azure Blob Storage.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+public sealed class AzureBlobArtifactProvider : IArtifactProvider</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">AzureBlobArtifactProvider</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="Invex.Atom.Build.Artifacts.IArtifactProvider.html">IArtifactProvider</a></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+  <h2 id="Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>This provider uses the Azure Storage SDK to interact with blob containers,
+allowing for robust artifact management within Invex.Atom build processes.</p>
+</div>
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider__ctor_" data-uid="Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider.#ctor*"></a>
+
+  <h3 id="Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider__ctor_Invex_Atom_Build_BuildInfo_IBuildInfo_Invex_Atom_Build_Params_IParamService_Invex_Atom_Build_Reports_ReportService_Invex_FileSystem_IRootedFileSystem_Invex_Atom_Build_BuildInfo_IBuildIdProvider_Microsoft_Extensions_Logging_ILogger_Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider__" data-uid="Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider.#ctor(Invex.Atom.Build.BuildInfo.IBuildInfo,Invex.Atom.Build.Params.IParamService,Invex.Atom.Build.Reports.ReportService,Invex.FileSystem.IRootedFileSystem,Invex.Atom.Build.BuildInfo.IBuildIdProvider,Microsoft.Extensions.Logging.ILogger{Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider})">
+  AzureBlobArtifactProvider(IBuildInfo, IParamService, ReportService, IRootedFileSystem, IBuildIdProvider, ILogger&lt;AzureBlobArtifactProvider&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.AzureStorage/AzureBlobArtifactProvider.cs/#L11"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Provides an implementation of <a class="xref" href="Invex.Atom.Build.Artifacts.IArtifactProvider.html">IArtifactProvider</a> for storing and retrieving
+build artifacts in Azure Blob Storage.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public AzureBlobArtifactProvider(IBuildInfo buildInfo, IParamService paramService, ReportService reportService, IRootedFileSystem fileSystem, IBuildIdProvider buildIdProvider, ILogger&lt;AzureBlobArtifactProvider&gt; logger)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>buildInfo</code> <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html">IBuildInfo</a></dt>
+    <dd></dd>
+    <dt><code>paramService</code> <a class="xref" href="Invex.Atom.Build.Params.IParamService.html">IParamService</a></dt>
+    <dd></dd>
+    <dt><code>reportService</code> <a class="xref" href="Invex.Atom.Build.Reports.ReportService.html">ReportService</a></dt>
+    <dd></dd>
+    <dt><code>fileSystem</code> <span class="xref">IRootedFileSystem</span></dt>
+    <dd></dd>
+    <dt><code>buildIdProvider</code> <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildIdProvider.html">IBuildIdProvider</a></dt>
+    <dd></dd>
+    <dt><code>logger</code> <span class="xref">ILogger</span>&lt;<a class="xref" href="Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider.html">AzureBlobArtifactProvider</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider__ctor_Invex_Atom_Build_BuildInfo_IBuildInfo_Invex_Atom_Build_Params_IParamService_Invex_Atom_Build_Reports_ReportService_Invex_FileSystem_IRootedFileSystem_Invex_Atom_Build_BuildInfo_IBuildIdProvider_Microsoft_Extensions_Logging_ILogger_Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider___remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This provider uses the Azure Storage SDK to interact with blob containers,
+allowing for robust artifact management within Invex.Atom build processes.</p>
+</div>
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider_RequiredParams_" data-uid="Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider.RequiredParams*"></a>
+
+  <h3 id="Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider_RequiredParams" data-uid="Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider.RequiredParams">
+  RequiredParams
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.AzureStorage/AzureBlobArtifactProvider.cs/#L24"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a list of required parameters for this artifact provider to function correctly.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;string&gt; RequiredParams { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;<span class="xref">string</span>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider_Cleanup_" data-uid="Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider.Cleanup*"></a>
+
+  <h3 id="Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider_Cleanup_System_Collections_Generic_IEnumerable_System_String__System_Threading_CancellationToken_" data-uid="Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider.Cleanup(System.Collections.Generic.IEnumerable{System.String},System.Threading.CancellationToken)">
+  Cleanup(IEnumerable&lt;string&gt;, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.AzureStorage/AzureBlobArtifactProvider.cs/#L257"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Cleans up artifacts associated with specified run identifiers from Azure Blob Storage.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task Cleanup(IEnumerable&lt;string&gt; runIdentifiers, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>runIdentifiers</code> <span class="xref">IEnumerable</span>&lt;<span class="xref">string</span>&gt;</dt>
+    <dd><p>A list of build IDs for which to clean up artifacts.</p>
+</dd>
+    <dt><code>cancellationToken</code> <span class="xref">CancellationToken</span></dt>
+    <dd><p>A cancellation token to observe while waiting for the task to complete.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Task</span></dt>
+    <dd><p>A <span class="xref">System.Threading.Tasks.Task</span> representing the asynchronous operation.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider_GetStoredRunIdentifiers_" data-uid="Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider.GetStoredRunIdentifiers*"></a>
+
+  <h3 id="Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider_GetStoredRunIdentifiers_System_String_System_String_System_Threading_CancellationToken_" data-uid="Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider.GetStoredRunIdentifiers(System.String,System.String,System.Threading.CancellationToken)">
+  GetStoredRunIdentifiers(string?, string?, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.AzureStorage/AzureBlobArtifactProvider.cs/#L298"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a list of stored run identifiers (build IDs) that have artifacts in Azure Blob Storage.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;IReadOnlyList&lt;string&gt;&gt; GetStoredRunIdentifiers(string? artifactName = null, string? buildSlice = null, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>artifactName</code> <span class="xref">string</span></dt>
+    <dd><p>Optional. Filters the run identifiers to those that contain a specific artifact name.</p>
+</dd>
+    <dt><code>buildSlice</code> <span class="xref">string</span></dt>
+    <dd><p>Optional. Filters the run identifiers to those that contain artifacts for a specific build
+slice.</p>
+</dd>
+    <dt><code>cancellationToken</code> <span class="xref">CancellationToken</span></dt>
+    <dd><p>A cancellation token to observe while waiting for the task to complete.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Task</span>&lt;<span class="xref">IReadOnlyList</span>&lt;<span class="xref">string</span>&gt;&gt;</dt>
+    <dd><p>A read-only list of unique build IDs.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider_RetrieveArtifacts_" data-uid="Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider.RetrieveArtifacts*"></a>
+
+  <h3 id="Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider_RetrieveArtifacts_System_Collections_Generic_IEnumerable_System_String__System_String_System_String_System_Threading_CancellationToken_" data-uid="Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider.RetrieveArtifacts(System.Collections.Generic.IEnumerable{System.String},System.String,System.String,System.Threading.CancellationToken)">
+  RetrieveArtifacts(IEnumerable&lt;string&gt;, string?, string?, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.AzureStorage/AzureBlobArtifactProvider.cs/#L150"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Retrieves build artifacts from Azure Blob Storage.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task RetrieveArtifacts(IEnumerable&lt;string&gt; artifactNames, string? buildId = null, string? buildSlice = null, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>artifactNames</code> <span class="xref">IEnumerable</span>&lt;<span class="xref">string</span>&gt;</dt>
+    <dd><p>A list of artifact names to retrieve.</p>
+</dd>
+    <dt><code>buildId</code> <span class="xref">string</span></dt>
+    <dd><p>Optional. The unique identifier for the build from which to retrieve artifacts. If not provided,
+the current build ID will be used.</p>
+</dd>
+    <dt><code>buildSlice</code> <span class="xref">string</span></dt>
+    <dd><p>Optional. The slice identifier of the artifacts to retrieve. If not provided, the build slice
+from <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html">IBuildInfo</a> will be used.</p>
+</dd>
+    <dt><code>cancellationToken</code> <span class="xref">CancellationToken</span></dt>
+    <dd><p>A cancellation token to observe while waiting for the task to complete.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Task</span></dt>
+    <dd><p>A <span class="xref">System.Threading.Tasks.Task</span> representing the asynchronous operation.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><span class="xref">InvalidOperationException</span></dt>
+    <dd><p>Thrown if a build ID is required but not available, or if no blobs are found for the specified artifact.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider_StoreArtifacts_" data-uid="Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider.StoreArtifacts*"></a>
+
+  <h3 id="Invex_Atom_Module_AzureStorage_AzureBlobArtifactProvider_StoreArtifacts_System_Collections_Generic_IEnumerable_System_String__System_String_System_String_System_Threading_CancellationToken_" data-uid="Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider.StoreArtifacts(System.Collections.Generic.IEnumerable{System.String},System.String,System.String,System.Threading.CancellationToken)">
+  StoreArtifacts(IEnumerable&lt;string&gt;, string?, string?, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.AzureStorage/AzureBlobArtifactProvider.cs/#L50"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Stores build artifacts in Azure Blob Storage.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task StoreArtifacts(IEnumerable&lt;string&gt; artifactNames, string? buildId = null, string? slice = null, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>artifactNames</code> <span class="xref">IEnumerable</span>&lt;<span class="xref">string</span>&gt;</dt>
+    <dd><p>A list of artifact names to store. Each name corresponds to a directory in the Atom publish
+directory.</p>
+</dd>
+    <dt><code>buildId</code> <span class="xref">string</span></dt>
+    <dd><p>Optional. The unique identifier for the build. If not provided, the current build ID from
+<a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildIdProvider.html">IBuildIdProvider</a> will be used.</p>
+</dd>
+    <dt><code>slice</code> <span class="xref">string</span></dt>
+    <dd><p>Optional. A slice identifier to categorize artifacts within a build. If not provided, the build
+slice from <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html">IBuildInfo</a> will be used.</p>
+</dd>
+    <dt><code>cancellationToken</code> <span class="xref">CancellationToken</span></dt>
+    <dd><p>A cancellation token to observe while waiting for the task to complete.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Task</span></dt>
+    <dd><p>A <span class="xref">System.Threading.Tasks.Task</span> representing the asynchronous operation.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><span class="xref">InvalidOperationException</span></dt>
+    <dd><p>Thrown if a build ID is required but not available, or if no files are found in an artifact directory.</p>
+</dd>
+  </dl>
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.AzureStorage/AzureBlobArtifactProvider.cs/#L11" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

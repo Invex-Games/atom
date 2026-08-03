@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Interface IDotnetPackHelper | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Interface IDotnetPackHelper | Atom ">
+      
+      <meta name="description" content="Provides helper methods for packing .NET projects into NuGet packages and staging them for publishing.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/new/main/apiSpec/new?filename=Invex_Atom_Module_Dotnet_Helpers_IDotnetPackHelper.md&amp;value=---%0Auid%3A%20Invex.Atom.Module.Dotnet.Helpers.IDotnetPackHelper%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Module.Dotnet.Helpers.IDotnetPackHelper">
+
+
+
+  <h1 id="Invex_Atom_Module_Dotnet_Helpers_IDotnetPackHelper" data-uid="Invex.Atom.Module.Dotnet.Helpers.IDotnetPackHelper" class="text-break">
+Interface IDotnetPackHelper  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Helpers/IDotnetPackHelper.cs/#L10"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Invex.html">Invex</a>.<a class="xref" href="Invex.Atom.html">Atom</a>.<a class="xref" href="Invex.Atom.Module.html">Module</a>.<a class="xref" href="Invex.Atom.Module.Dotnet.html">Dotnet</a>.<a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.html">Helpers</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Module.Dotnet.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Provides helper methods for packing .NET projects into NuGet packages and staging them for publishing.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+public interface IDotnetPackHelper : IDotnetCliHelper, IBuildInfo, IBuildAccessor</code></pre>
+  </div>
+
+
+
+
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.IDotnetCliHelper.html#Invex_Atom_Module_Dotnet_Helpers_IDotnetCliHelper_DotnetCli">IDotnetCliHelper.DotnetCli</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.IDotnetCliHelper.html#Invex_Atom_Module_Dotnet_Helpers_IDotnetCliHelper_ConfigureBuilderFromIDotnetCliHelper_Microsoft_Extensions_Hosting_IHostApplicationBuilder_">IDotnetCliHelper.ConfigureBuilderFromIDotnetCliHelper(IHostApplicationBuilder)</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildName">IBuildInfo.BuildName</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildId">IBuildInfo.BuildId</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildVersion">IBuildInfo.BuildVersion</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildTimestamp">IBuildInfo.BuildTimestamp</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildSlice">IBuildInfo.BuildSlice</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_Services">IBuildAccessor.Services</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_Logger">IBuildAccessor.Logger</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_RootedFileSystem">IBuildAccessor.RootedFileSystem</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_ProcessRunner">IBuildAccessor.ProcessRunner</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_GetService__1">IBuildAccessor.GetService&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_GetServices__1">IBuildAccessor.GetServices&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_GetParam__1_System_Linq_Expressions_Expression_System_Func___0_____0_System_Func_System_String___0__">IBuildAccessor.GetParam&lt;T&gt;(Expression&lt;Func&lt;T&gt;&gt;, T, Func&lt;string, T&gt;)</a>
+    </div>
+  </dd></dl>
+
+
+
+
+  <h2 id="Invex_Atom_Module_Dotnet_Helpers_IDotnetPackHelper_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>This interface extends <a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.IDotnetCliHelper.html">IDotnetCliHelper</a> to utilize the .NET CLI for packing operations
+and <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html">IBuildInfo</a> to leverage build version information.</p>
+</div>
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Invex_Atom_Module_Dotnet_Helpers_IDotnetPackHelper_DotnetPackAndStage_" data-uid="Invex.Atom.Module.Dotnet.Helpers.IDotnetPackHelper.DotnetPackAndStage*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Helpers_IDotnetPackHelper_DotnetPackAndStage_Invex_FileSystem_RootedPath_Invex_Atom_Module_Dotnet_Helpers_DotnetPackAndStageOptions_System_Threading_CancellationToken_" data-uid="Invex.Atom.Module.Dotnet.Helpers.IDotnetPackHelper.DotnetPackAndStage(Invex.FileSystem.RootedPath,Invex.Atom.Module.Dotnet.Helpers.DotnetPackAndStageOptions,System.Threading.CancellationToken)">
+  DotnetPackAndStage(RootedPath, DotnetPackAndStageOptions?, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Helpers/IDotnetPackHelper.cs/#L82"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Packs a .NET project specified by its path and stages the resulting NuGet package.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+Task DotnetPackAndStage(RootedPath projectPath, DotnetPackAndStageOptions? options = null, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>projectPath</code> <span class="xref">RootedPath</span></dt>
+    <dd><p>The full path to the project file (e.g., &quot;src/MyProject/MyProject.csproj&quot;).</p>
+</dd>
+    <dt><code>options</code> <a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.DotnetPackAndStageOptions.html">DotnetPackAndStageOptions</a></dt>
+    <dd><p>Optional. Configuration options for the packing and staging process.</p>
+</dd>
+    <dt><code>cancellationToken</code> <span class="xref">CancellationToken</span></dt>
+    <dd><p>A cancellation token to observe while waiting for the task to complete.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Task</span></dt>
+    <dd><p>A <span class="xref">System.Threading.Tasks.Task</span> representing the asynchronous operation.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Helpers_IDotnetPackHelper_DotnetPackAndStage_Invex_FileSystem_RootedPath_Invex_Atom_Module_Dotnet_Helpers_DotnetPackAndStageOptions_System_Threading_CancellationToken__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>
+    This method performs the following steps:
+<pre><code>&lt;ol&gt;&lt;li&gt;Determines the output directory for the NuGet package.&lt;/li&gt;&lt;li&gt;Cleans up existing package directories if specified.&lt;/li&gt;&lt;li&gt;
+            Applies version transformations to project files if
+            &lt;xref href=&quot;Invex.Atom.Module.Dotnet.Helpers.DotnetPackAndStageOptions.SetVersionsFromProviders&quot; data-throw-if-not-resolved=&quot;false&quot;&gt;&lt;/xref&gt; is &lt;code&gt;true&lt;/code&gt;.
+        &lt;/li&gt;&lt;li&gt;
+            Executes the `dotnet pack` command using
+            &lt;xref href=&quot;Invex.Atom.Module.Dotnet.Cli.IDotnetCli.Pack(Invex.FileSystem.RootedPath%2cInvex.Atom.Module.Dotnet.Cli.PackOptions%2cInvex.Process.ProcessRunOptions%2cSystem.Threading.CancellationToken)&quot; data-throw-if-not-resolved=&quot;false&quot;&gt;&lt;/xref&gt;.
+        &lt;/li&gt;&lt;li&gt;Locates the generated `.nupkg` file.&lt;/li&gt;&lt;li&gt;Moves the `.nupkg` file to the Atom publish directory for the project.&lt;/li&gt;&lt;/ol&gt;
+</code></pre>
+
+<p>
+    The <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildVersion">BuildVersion</a> is used for naming the NuGet package and for version transformation.
+</p>
+</div>
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Build.Exceptions.StepFailedException.html">StepFailedException</a></dt>
+    <dd><p>Thrown if the packed NuGet package is not found after the operation.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Invex_Atom_Module_Dotnet_Helpers_IDotnetPackHelper_DotnetPackAndStage_" data-uid="Invex.Atom.Module.Dotnet.Helpers.IDotnetPackHelper.DotnetPackAndStage*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Helpers_IDotnetPackHelper_DotnetPackAndStage_System_String_Invex_Atom_Module_Dotnet_Helpers_DotnetPackAndStageOptions_System_Threading_CancellationToken_" data-uid="Invex.Atom.Module.Dotnet.Helpers.IDotnetPackHelper.DotnetPackAndStage(System.String,Invex.Atom.Module.Dotnet.Helpers.DotnetPackAndStageOptions,System.Threading.CancellationToken)">
+  DotnetPackAndStage(string, DotnetPackAndStageOptions?, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Helpers/IDotnetPackHelper.cs/#L26"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Packs a .NET project by its name and stages the resulting NuGet package.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+Task DotnetPackAndStage(string projectName, DotnetPackAndStageOptions? options = null, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>projectName</code> <span class="xref">string</span></dt>
+    <dd><p>The name of the project to pack (e.g., &quot;MyProject.Core&quot;).</p>
+</dd>
+    <dt><code>options</code> <a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.DotnetPackAndStageOptions.html">DotnetPackAndStageOptions</a></dt>
+    <dd><p>Optional. Configuration options for the packing and staging process.</p>
+</dd>
+    <dt><code>cancellationToken</code> <span class="xref">CancellationToken</span></dt>
+    <dd><p>A cancellation token to observe while waiting for the task to complete.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Task</span></dt>
+    <dd><p>A <span class="xref">System.Threading.Tasks.Task</span> representing the asynchronous operation.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Helpers_IDotnetPackHelper_DotnetPackAndStage_System_String_Invex_Atom_Module_Dotnet_Helpers_DotnetPackAndStageOptions_System_Threading_CancellationToken__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method first locates the project file based on its name, then calls
+<a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.IDotnetPackHelper.html#Invex_Atom_Module_Dotnet_Helpers_IDotnetPackHelper_DotnetPackAndStage_Invex_FileSystem_RootedPath_Invex_Atom_Module_Dotnet_Helpers_DotnetPackAndStageOptions_System_Threading_CancellationToken_">DotnetPackAndStage(RootedPath, DotnetPackAndStageOptions?, CancellationToken)</a>
+with the resolved path.</p>
+</div>
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Build.Exceptions.StepFailedException.html">StepFailedException</a></dt>
+    <dd><p>Thrown if the project file cannot be located.</p>
+</dd>
+  </dl>
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Helpers/IDotnetPackHelper.cs/#L10" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

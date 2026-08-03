@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class GithubCheckoutStep | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class GithubCheckoutStep | Atom ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/new/main/apiSpec/new?filename=Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep.md&amp;value=---%0Auid%3A%20Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep">
+
+
+
+  <h1 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep" class="text-break">
+Class GithubCheckoutStep  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L3"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Invex.html">Invex</a>.<a class="xref" href="Invex.Atom.html">Atom</a>.<a class="xref" href="Invex.Atom.Module.html">Module</a>.<a class="xref" href="Invex.Atom.Module.GithubWorkflows.html">GithubWorkflows</a>.<a class="xref" href="Invex.Atom.Module.GithubWorkflows.Steps.html">Steps</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Module.GithubWorkflows.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"></div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+public sealed record GithubCheckoutStep : CheckoutStep, IGithubAdditionalStepOption, IAdditionalStepOption, IBuildOption</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><a class="xref" href="Invex.Atom.Workflows.Options.CheckoutStep.html">CheckoutStep</a></div>
+      <div><span class="xref">GithubCheckoutStep</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="Invex.Atom.Module.GithubWorkflows.Steps.IGithubAdditionalStepOption.html">IGithubAdditionalStepOption</a></div>
+      <div><a class="xref" href="Invex.Atom.Workflows.Options.IAdditionalStepOption.html">IAdditionalStepOption</a></div>
+      <div><a class="xref" href="Invex.Atom.Build.BuildOptions.IBuildOption.html">IBuildOption</a></div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="Invex.Atom.Workflows.Options.CheckoutStep.html#Invex_Atom_Workflows_Options_CheckoutStep_Enabled">CheckoutStep.Enabled</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Workflows.Options.CheckoutStep.html#Invex_Atom_Workflows_Options_CheckoutStep_Order">CheckoutStep.Order</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Branch_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Branch*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Branch" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Branch">
+  Branch
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L17"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The branch, tag or SHA to checkout. When checking out the repository that
+triggered a workflow, this defaults to the reference or SHA for that event.
+Otherwise, uses the default branch.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? Branch { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Clean_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Clean*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Clean" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Clean">
+  Clean
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L96"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether to execute <code>git clean -ffdx &amp;&amp; git reset --hard HEAD</code> before fetching.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? Clean { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Clean_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default: true</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_FetchDepth_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.FetchDepth*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_FetchDepth" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.FetchDepth">
+  FetchDepth
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L120"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Number of commits to fetch. 0 indicates all history for all branches and tags.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? FetchDepth { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_FetchDepth_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default: 1</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_FetchTags_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.FetchTags*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_FetchTags" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.FetchTags">
+  FetchTags
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L126"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether to fetch tags, even if fetch-depth &gt; 0.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? FetchTags { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_FetchTags_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default: false</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Filter_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Filter*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Filter" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Filter">
+  Filter
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L102"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Partially clone against a given filter. Overrides sparse-checkout if set.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? Filter { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Filter_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default: null</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_GithubServerUrl_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.GithubServerUrl*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_GithubServerUrl" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.GithubServerUrl">
+  GithubServerUrl
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L166"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The base URL for the GitHub instance that you are trying to clone from, will use
+environment defaults to fetch from the same instance that the workflow is
+running from unless specified. Example URLs are <a href="https://github.com">https://github.com</a> or
+<a href="https://my-ghes-server.example.com">https://my-ghes-server.example.com</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? GithubServerUrl { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Lfs_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Lfs*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Lfs" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Lfs">
+  Lfs
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L138"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether to download Git-LFS files.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? Lfs { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Lfs_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default: false</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Path_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Path*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Path" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Path">
+  Path
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L90"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Relative path under $GITHUB_WORKSPACE to place the repository.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? Path { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_PersistCredentials_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.PersistCredentials*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_PersistCredentials" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.PersistCredentials">
+  PersistCredentials
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L85"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether to configure the token or SSH key with the local git config.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? PersistCredentials { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_PersistCredentials_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default: true</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Repository_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Repository*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Repository" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Repository">
+  Repository
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L10"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Repository name with owner. For example, actions/checkout.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? Repository { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Repository_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default: ${{ github.repository }}</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SetSafeDirectory_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.SetSafeDirectory*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SetSafeDirectory" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.SetSafeDirectory">
+  SetSafeDirectory
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L158"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Add repository path as safe.directory for Git global config by running
+<code>git config --global --add safe.directory &lt;path&gt;</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? SetSafeDirectory { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SetSafeDirectory_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default: true</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_ShowProgress_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.ShowProgress*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_ShowProgress" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.ShowProgress">
+  ShowProgress
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L132"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether to show progress status output when fetching.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? ShowProgress { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_ShowProgress_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default: true</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SparseCheckout_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.SparseCheckout*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SparseCheckout" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.SparseCheckout">
+  SparseCheckout
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L108"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Do a sparse checkout on given patterns. Each pattern should be separated with new lines.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? SparseCheckout { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SparseCheckout_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default: null</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SparseCheckoutConeMode_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.SparseCheckoutConeMode*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SparseCheckoutConeMode" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.SparseCheckoutConeMode">
+  SparseCheckoutConeMode
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L114"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Specifies whether to use cone-mode when doing a sparse checkout.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? SparseCheckoutConeMode { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SparseCheckoutConeMode_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default: true</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SshKey_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.SshKey*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SshKey" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.SshKey">
+  SshKey
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L57"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>SSH key used to fetch the repository. The SSH key is configured with the local
+git config, which enables your scripts to run authenticated git commands. The
+post-job step removes the SSH key.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? SshKey { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SshKey_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>
+    We recommend using a service account with the least permissions necessary.
+</p>
+<p>
+    <a href="https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets">
+        Learn
+        more about creating and using encrypted secrets
+    </a>
+</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SshKnownHosts_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.SshKnownHosts*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SshKnownHosts" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.SshKnownHosts">
+  SshKnownHosts
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L65"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Known hosts in addition to the user and global host key database. The public SSH
+keys for a host may be obtained using the utility <code>ssh-keyscan</code>. For example,
+<code>ssh-keyscan github.com</code>. The public key for github.com is always implicitly
+added.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? SshKnownHosts { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SshStrict_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.SshStrict*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SshStrict" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.SshStrict">
+  SshStrict
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L73"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether to perform strict host key checking. When true, adds the options
+<code>StrictHostKeyChecking=yes</code> and <code>CheckHostIP=no</code> to the SSH command line. Use
+the input <code>ssh-known-hosts</code> to configure additional hosts.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? SshStrict { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SshStrict_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default: true</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SshUser_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.SshUser*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SshUser" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.SshUser">
+  SshUser
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L79"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The user to use when connecting to the remote SSH host. By default 'git' is used.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? SshUser { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_SshUser_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default: git</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Submodules_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Submodules*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Submodules" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Submodules">
+  Submodules
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L151"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether to checkout submodules: <code>true</code> to checkout submodules or <code>recursive</code> to
+recursively checkout submodules.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? Submodules { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Submodules_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>
+    When the <code>ssh-key</code> input is not provided, SSH URLs beginning with
+    <code>git@github.com:</code> are converted to HTTPS.
+</p>
+<p>Default: false</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Token_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Token*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Token" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Token">
+  Token
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L38"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Personal access token (PAT) used to fetch the repository. The PAT is configured
+with the local git config, which enables your scripts to run authenticated git
+commands. The post-job step removes the PAT.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? Token { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Token_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>
+    We recommend using a service account with the least permissions necessary. Also
+    when generating a new PAT, select the least scopes necessary.
+</p>
+<p>
+    <a href="https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets">
+        Learn
+        more about creating and using encrypted secrets
+    </a>
+</p>
+<p>Default: ${{ github.token }}</p>
+</div>
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Build_" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Build*"></a>
+
+  <h3 id="Invex_Atom_Module_GithubWorkflows_Steps_GithubCheckoutStep_Build" data-uid="Invex.Atom.Module.GithubWorkflows.Steps.GithubCheckoutStep.Build">
+  Build()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L168"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Step Build()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Step</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.GithubWorkflows/Steps/GithubCheckoutStep.cs/#L3" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Interface INugetHelper | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Interface INugetHelper | Atom ">
+      
+      <meta name="description" content="Provides helper methods for interacting with NuGet, such as pushing packages and managing NuGet configuration.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/new/main/apiSpec/new?filename=Invex_Atom_Module_Dotnet_Helpers_INugetHelper.md&amp;value=---%0Auid%3A%20Invex.Atom.Module.Dotnet.Helpers.INugetHelper%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper">
+
+
+
+  <h1 id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper" data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper" class="text-break">
+Interface INugetHelper  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Helpers/INugetHelper.cs/#L10"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Invex.html">Invex</a>.<a class="xref" href="Invex.Atom.html">Atom</a>.<a class="xref" href="Invex.Atom.Module.html">Module</a>.<a class="xref" href="Invex.Atom.Module.Dotnet.html">Dotnet</a>.<a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.html">Helpers</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Module.Dotnet.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Provides helper methods for interacting with NuGet, such as pushing packages and managing NuGet configuration.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+public interface INugetHelper : IBuildInfo, IBuildAccessor</code></pre>
+  </div>
+
+
+
+
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildName">IBuildInfo.BuildName</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildId">IBuildInfo.BuildId</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildVersion">IBuildInfo.BuildVersion</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildTimestamp">IBuildInfo.BuildTimestamp</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildSlice">IBuildInfo.BuildSlice</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_Services">IBuildAccessor.Services</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_Logger">IBuildAccessor.Logger</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_RootedFileSystem">IBuildAccessor.RootedFileSystem</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_ProcessRunner">IBuildAccessor.ProcessRunner</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_GetService__1">IBuildAccessor.GetService&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_GetServices__1">IBuildAccessor.GetServices&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_GetParam__1_System_Linq_Expressions_Expression_System_Func___0_____0_System_Func_System_String___0__">IBuildAccessor.GetParam&lt;T&gt;(Expression&lt;Func&lt;T&gt;&gt;, T, Func&lt;string, T&gt;)</a>
+    </div>
+  </dd></dl>
+
+
+
+
+  <h2 id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>This interface extends <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html">IBuildInfo</a> to leverage build version information
+and provides functionality for common NuGet operations within a Invex.Atom build.</p>
+</div>
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_NugetConfigPath_" data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.NugetConfigPath*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_NugetConfigPath" data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.NugetConfigPath">
+  NugetConfigPath
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Helpers/INugetHelper.cs/#L31"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the path to the default NuGet configuration file (<code>NuGet.Config</code>) for the current operating system.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">RootedPath NugetConfigPath { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">RootedPath</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_NugetConfigPath_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This property determines the standard location where NuGet configuration files are expected.
+On Windows, it's typically <code>%APPDATA%\NuGet\NuGet.Config</code>.
+On Linux/macOS, it's typically <code>$HOME/.nuget/NuGet.Config</code>.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_NugetDryRun_" data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.NugetDryRun*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_NugetDryRun" data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.NugetDryRun">
+  NugetDryRun
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Helpers/INugetHelper.cs/#L20"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether NuGet write operations (like pushing packages) should be performed as a dry run.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParamDefinition(&quot;nuget-dry-run&quot;, &quot;Whether to perform a dry run of nuget write operations.&quot;, ParamSource.All, null)]
+bool NugetDryRun { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_NugetDryRun_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>When <code>true</code>, NuGet operations that modify remote feeds will be simulated and logged,
+but no actual changes will be made. This is useful for testing build configurations.</p>
+</div>
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_CreateNugetConfigOverwriteScope_" data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.CreateNugetConfigOverwriteScope*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_CreateNugetConfigOverwriteScope_Invex_Atom_Module_Dotnet_Model_NugetFeed___System_Boolean_System_Threading_CancellationToken_" data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.CreateNugetConfigOverwriteScope(Invex.Atom.Module.Dotnet.Model.NugetFeed[],System.Boolean,System.Threading.CancellationToken)">
+  CreateNugetConfigOverwriteScope(NugetFeed[], bool, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Helpers/INugetHelper.cs/#L247"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a <span class="xref">Invex.FileSystem.TransformFileScope</span> that temporarily overwrites the default NuGet.Config file
+with a configuration that includes the specified NuGet feeds and their credentials.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+Task CreateNugetConfigOverwriteScope(NugetFeed[] feeds, bool skipIfExists = false, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>feeds</code> <a class="xref" href="Invex.Atom.Module.Dotnet.Model.NugetFeed.html">NugetFeed</a>[]</dt>
+    <dd><p>An array of <a class="xref" href="Invex.Atom.Module.Dotnet.Model.NugetFeed.html">NugetFeed</a> objects to include in the configuration.</p>
+</dd>
+    <dt><code>skipIfExists</code> <span class="xref">bool</span></dt>
+    <dd><p>If <code>true</code>, and all specified feeds are already present in the existing NuGet.Config,
+no overwrite will occur, and an empty scope will be returned.</p>
+</dd>
+    <dt><code>cancellationToken</code> <span class="xref">CancellationToken</span></dt>
+    <dd><p>A cancellation token to observe while waiting for the task to complete.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Task</span></dt>
+    <dd><p>A <span class="xref">System.Threading.Tasks.Task&lt;TResult&gt;</span> that returns a <span class="xref">Invex.FileSystem.TransformFileScope</span> instance.
+Disposing this scope will restore the original NuGet.Config file.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_CreateNugetConfigOverwriteScope_Invex_Atom_Module_Dotnet_Model_NugetFeed___System_Boolean_System_Threading_CancellationToken__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method generates a <code>NuGet.Config</code> XML structure including <code>&lt;packageSources&gt;</code> and <code>&lt; packageSourceCredentials&gt;</code> based on the provided feed information. Passwords are included as clear text if
+specified via <a class="xref" href="Invex.Atom.Module.Dotnet.Model.NugetFeed.html#Invex_Atom_Module_Dotnet_Model_NugetFeed_PlainTextPassword">PlainTextPassword</a>.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_CreateNugetConfigOverwriteScope_" data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.CreateNugetConfigOverwriteScope*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_CreateNugetConfigOverwriteScope_System_String_System_Threading_CancellationToken_" data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.CreateNugetConfigOverwriteScope(System.String,System.Threading.CancellationToken)">
+  CreateNugetConfigOverwriteScope(string, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Helpers/INugetHelper.cs/#L222"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a <span class="xref">Invex.FileSystem.TransformFileScope</span> that temporarily overwrites the default NuGet.Config file
+with the provided content.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+Task&lt;TransformFileScope&gt; CreateNugetConfigOverwriteScope(string contents, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>contents</code> <span class="xref">string</span></dt>
+    <dd><p>The new content for the NuGet.Config file.</p>
+</dd>
+    <dt><code>cancellationToken</code> <span class="xref">CancellationToken</span></dt>
+    <dd><p>A cancellation token to observe while waiting for the task to complete.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Task</span>&lt;<span class="xref">TransformFileScope</span>&gt;</dt>
+    <dd><p>A <span class="xref">System.Threading.Tasks.Task&lt;TResult&gt;</span> that returns a <span class="xref">Invex.FileSystem.TransformFileScope</span> instance.
+Disposing this scope will restore the original NuGet.Config file.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_IsNugetPackageVersionPublished_" data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.IsNugetPackageVersionPublished*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_IsNugetPackageVersionPublished_System_String_System_String_System_String_System_String_System_Threading_CancellationToken_" data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.IsNugetPackageVersionPublished(System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+  IsNugetPackageVersionPublished(string, string, string, string?, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Helpers/INugetHelper.cs/#L155"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Checks if a specific version of a NuGet package is already published to a given feed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+Task&lt;bool&gt; IsNugetPackageVersionPublished(string projectName, string version, string feedUrl, string? feedKey = null, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>projectName</code> <span class="xref">string</span></dt>
+    <dd><p>The name of the NuGet package (e.g., &quot;MyProject.Core&quot;).</p>
+</dd>
+    <dt><code>version</code> <span class="xref">string</span></dt>
+    <dd><p>The semantic version of the package (e.g., &quot;1.0.0&quot;).</p>
+</dd>
+    <dt><code>feedUrl</code> <span class="xref">string</span></dt>
+    <dd><p>The URL of the NuGet feed (e.g., &quot;https://api.nuget.org/v3/index.json&quot;).</p>
+</dd>
+    <dt><code>feedKey</code> <span class="xref">string</span></dt>
+    <dd><p>Optional API key for authenticated feeds.</p>
+</dd>
+    <dt><code>cancellationToken</code> <span class="xref">CancellationToken</span></dt>
+    <dd><p>A cancellation token to observe while waiting for the task to complete.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Task</span>&lt;<span class="xref">bool</span>&gt;</dt>
+    <dd><p>A <span class="xref">System.Threading.Tasks.Task&lt;TResult&gt;</span> that returns <code>true</code> if the package version is published, otherwise <code>false</code>
+.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><span class="xref">InvalidOperationException</span></dt>
+    <dd><p>Thrown if the NuGet feed's registration base URL cannot be found or if the
+status check fails unexpectedly.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_PushPackageToNuget_" data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.PushPackageToNuget*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_PushPackageToNuget_Invex_FileSystem_RootedPath_System_String_System_String_Invex_FileSystem_RootedPath_System_Threading_CancellationToken_" data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.PushPackageToNuget(Invex.FileSystem.RootedPath,System.String,System.String,Invex.FileSystem.RootedPath,System.Threading.CancellationToken)">
+  PushPackageToNuget(RootedPath, string, string, RootedPath?, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Helpers/INugetHelper.cs/#L106"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Pushes a specific NuGet package file to a NuGet feed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+Task PushPackageToNuget(RootedPath packagePath, string feed, string apiKey, RootedPath? configFile = null, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>packagePath</code> <span class="xref">RootedPath</span></dt>
+    <dd><p>The full path to the <code>.nupkg</code> file to push.</p>
+</dd>
+    <dt><code>feed</code> <span class="xref">string</span></dt>
+    <dd><p>The NuGet feed URL to push the package to.</p>
+</dd>
+    <dt><code>apiKey</code> <span class="xref">string</span></dt>
+    <dd><p>The API key for authenticating with the NuGet feed.</p>
+</dd>
+    <dt><code>configFile</code> <span class="xref">RootedPath</span></dt>
+    <dd><p>Optional path to a NuGet configuration file to use instead of the default one.</p>
+</dd>
+    <dt><code>cancellationToken</code> <span class="xref">CancellationToken</span></dt>
+    <dd><p>A cancellation token to observe while waiting for the task to complete.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Task</span></dt>
+    <dd><p>A <span class="xref">System.Threading.Tasks.Task</span> representing the asynchronous operation.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_PushPackageToNuget_Invex_FileSystem_RootedPath_System_String_System_String_Invex_FileSystem_RootedPath_System_Threading_CancellationToken__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If <a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.html#Invex_Atom_Module_Dotnet_Helpers_INugetHelper_NugetDryRun">NugetDryRun</a> is <code>true</code>, the push operation will be simulated.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_PushProject_" data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.PushProject*"></a>
+
+  <h3 id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_PushProject_System_String_System_String_System_String_Invex_FileSystem_RootedPath_System_Threading_CancellationToken_" data-uid="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.PushProject(System.String,System.String,System.String,Invex.FileSystem.RootedPath,System.Threading.CancellationToken)">
+  PushProject(string, string, string, RootedPath?, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Helpers/INugetHelper.cs/#L71"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Pushes a NuGet package for a specific project to a NuGet feed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+Task PushProject(string projectName, string feed, string apiKey, RootedPath? configFile = null, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>projectName</code> <span class="xref">string</span></dt>
+    <dd><p>The name of the project whose package is to be pushed.</p>
+</dd>
+    <dt><code>feed</code> <span class="xref">string</span></dt>
+    <dd><p>The NuGet feed URL to push the package to.</p>
+</dd>
+    <dt><code>apiKey</code> <span class="xref">string</span></dt>
+    <dd><p>The API key for authenticating with the NuGet feed.</p>
+</dd>
+    <dt><code>configFile</code> <span class="xref">RootedPath</span></dt>
+    <dd><p>Optional path to a NuGet configuration file to use instead of the default one.</p>
+</dd>
+    <dt><code>cancellationToken</code> <span class="xref">CancellationToken</span></dt>
+    <dd><p>A cancellation token to observe while waiting for the task to complete.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Task</span></dt>
+    <dd><p>A <span class="xref">System.Threading.Tasks.Task</span> representing the asynchronous operation.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_Dotnet_Helpers_INugetHelper_PushProject_System_String_System_String_System_String_Invex_FileSystem_RootedPath_System_Threading_CancellationToken__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>
+    This method expects the project to have been built and its NuGet package (`.nupkg`)
+    to be available in the Atom artifacts directory, named according to the project name
+    and the <a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html#Invex_Atom_Build_BuildInfo_IBuildInfo_BuildVersion">BuildVersion</a>.
+</p>
+<p>
+    It requires the `dotnet` CLI to be installed and available in the system's PATH.
+</p>
+<p>
+    If <a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.html#Invex_Atom_Module_Dotnet_Helpers_INugetHelper_NugetDryRun">NugetDryRun</a> is <code>true</code>, the push operation will be simulated.
+</p>
+</div>
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.Dotnet/Helpers/INugetHelper.cs/#L10" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

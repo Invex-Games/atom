@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class DevopsBuildOptionsExtensions.DevopsPoolOptions | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class DevopsBuildOptionsExtensions.DevopsPoolOptions | Atom ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/new/main/apiSpec/new?filename=Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions.md&amp;value=---%0Auid%3A%20Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions">
+
+
+
+  <h1 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions" class="text-break">
+Class DevopsBuildOptionsExtensions.DevopsPoolOptions  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L7"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Invex.html">Invex</a>.<a class="xref" href="Invex.Atom.html">Atom</a>.<a class="xref" href="Invex.Atom.Module.html">Module</a>.<a class="xref" href="Invex.Atom.Module.DevopsWorkflows.html">DevopsWorkflows</a>.<a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Extensions.html">Extensions</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Module.DevopsWorkflows.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"></div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+[SuppressMessage(&quot;ReSharper&quot;, &quot;InconsistentNaming&quot;)]
+public sealed class DevopsBuildOptionsExtensions.DevopsPoolOptions</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">DevopsBuildOptionsExtensions.DevopsPoolOptions</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_MacOs_14_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.MacOs_14*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_MacOs_14" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.MacOs_14">
+  MacOs_14
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L68"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool MacOs_14 { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_MacOs_15_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.MacOs_15*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_MacOs_15" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.MacOs_15">
+  MacOs_15
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L62"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool MacOs_15 { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_MacOs_Latest_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.MacOs_Latest*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_MacOs_Latest" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.MacOs_Latest">
+  MacOs_Latest
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool MacOs_Latest { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_SetByMatrix_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.SetByMatrix*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_SetByMatrix" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.SetByMatrix">
+  SetByMatrix
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L74"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool SetByMatrix { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_Ubuntu_22_04_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.Ubuntu_22_04*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_Ubuntu_22_04" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.Ubuntu_22_04">
+  Ubuntu_22_04
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L49"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool Ubuntu_22_04 { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_Ubuntu_24_04_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.Ubuntu_24_04*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_Ubuntu_24_04" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.Ubuntu_24_04">
+  Ubuntu_24_04
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L43"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool Ubuntu_24_04 { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_Ubuntu_Latest_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.Ubuntu_Latest*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_Ubuntu_Latest" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.Ubuntu_Latest">
+  Ubuntu_Latest
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L37"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool Ubuntu_Latest { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_Windows_2022_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.Windows_2022*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_Windows_2022" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.Windows_2022">
+  Windows_2022
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L30"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool Windows_2022 { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_Windows_2025_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.Windows_2025*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_Windows_2025" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.Windows_2025">
+  Windows_2025
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L24"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool Windows_2025 { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_Windows_2025_Vs2026_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.Windows_2025_Vs2026*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_Windows_2025_Vs2026" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.Windows_2025_Vs2026">
+  Windows_2025_Vs2026
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L12"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool Windows_2025_Vs2026 { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_Windows_Latest_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.Windows_Latest*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_Windows_Latest" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.Windows_Latest">
+  Windows_Latest
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L18"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool Windows_Latest { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_From_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.From*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_From_Invex_StructuredText_Expressions_TextExpression_Invex_StructuredText_Expressions_TextExpression_System_Collections_Generic_IEnumerable_Invex_StructuredText_Expressions_TextExpression__" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.From(Invex.StructuredText.Expressions.TextExpression,Invex.StructuredText.Expressions.TextExpression,System.Collections.Generic.IEnumerable{Invex.StructuredText.Expressions.TextExpression})">
+  From(TextExpression?, TextExpression?, IEnumerable&lt;TextExpression&gt;?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L118"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool From(TextExpression? name = null, TextExpression? hostedImageName = null, IEnumerable&lt;TextExpression&gt;? demands = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>name</code> <span class="xref">TextExpression</span></dt>
+    <dd></dd>
+    <dt><code>hostedImageName</code> <span class="xref">TextExpression</span></dt>
+    <dd></dd>
+    <dt><code>demands</code> <span class="xref">IEnumerable</span>&lt;<span class="xref">TextExpression</span>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_From_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.From*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_From_System_String_System_String_System_Collections_Generic_IEnumerable_System_String__" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.From(System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+  From(string?, string?, IEnumerable&lt;string&gt;?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L129"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool From(string? name = null, string? hostedImageName = null, IEnumerable&lt;string&gt;? demands = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>name</code> <span class="xref">string</span></dt>
+    <dd></dd>
+    <dt><code>hostedImageName</code> <span class="xref">string</span></dt>
+    <dd></dd>
+    <dt><code>demands</code> <span class="xref">IEnumerable</span>&lt;<span class="xref">string</span>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_FromDemands_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.FromDemands*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_FromDemands_Invex_StructuredText_Expressions_TextExpression___" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.FromDemands(Invex.StructuredText.Expressions.TextExpression[])">
+  FromDemands(params TextExpression[])
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L104"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool FromDemands(params TextExpression[] demands)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>demands</code> <span class="xref">TextExpression</span>[]</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_FromDemands_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.FromDemands*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_FromDemands_System_String___" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.FromDemands(System.String[])">
+  FromDemands(params string[])
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L110"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool FromDemands(params string[] demands)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>demands</code> <span class="xref">string</span>[]</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_FromHostedImage_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.FromHostedImage*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_FromHostedImage_Invex_StructuredText_Expressions_TextExpression_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.FromHostedImage(Invex.StructuredText.Expressions.TextExpression)">
+  FromHostedImage(TextExpression)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L92"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool FromHostedImage(TextExpression hostedImageName)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>hostedImageName</code> <span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_FromHostedImage_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.FromHostedImage*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_FromHostedImage_System_String_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.FromHostedImage(System.String)">
+  FromHostedImage(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L98"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool FromHostedImage(string hostedImageName)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>hostedImageName</code> <span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_FromName_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.FromName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_FromName_Invex_StructuredText_Expressions_TextExpression_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.FromName(Invex.StructuredText.Expressions.TextExpression)">
+  FromName(TextExpression)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L80"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool FromName(TextExpression name)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>name</code> <span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_FromName_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.FromName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Extensions_DevopsBuildOptionsExtensions_DevopsPoolOptions_FromName_System_String_" data-uid="Invex.Atom.Module.DevopsWorkflows.Extensions.DevopsBuildOptionsExtensions.DevopsPoolOptions.FromName(System.String)">
+  FromName(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L86"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DevopsPool FromName(string name)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>name</code> <span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPool.html">DevopsPool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Extensions/DevopsBuildOptionsExtensions.cs/#L7" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

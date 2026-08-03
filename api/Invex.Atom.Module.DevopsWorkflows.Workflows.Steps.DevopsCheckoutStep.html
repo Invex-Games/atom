@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class DevopsCheckoutStep | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class DevopsCheckoutStep | Atom ">
+      
+      <meta name="description" content="Represents a workflow option for configuring the checkout step in Azure DevOps Pipelines.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/new/main/apiSpec/new?filename=Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep.md&amp;value=---%0Auid%3A%20Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep">
+
+
+
+  <h1 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep" class="text-break">
+Class DevopsCheckoutStep  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L6"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Invex.html">Invex</a>.<a class="xref" href="Invex.Atom.html">Atom</a>.<a class="xref" href="Invex.Atom.Module.html">Module</a>.<a class="xref" href="Invex.Atom.Module.DevopsWorkflows.html">DevopsWorkflows</a>.<a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.html">Workflows</a>.<a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.html">Steps</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Module.DevopsWorkflows.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Represents a workflow option for configuring the checkout step in Azure DevOps Pipelines.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+public sealed record DevopsCheckoutStep : CheckoutStep, IDevopsAdditionalStepOption, IAdditionalStepOption, IBuildOption</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><a class="xref" href="Invex.Atom.Workflows.Options.CheckoutStep.html">CheckoutStep</a></div>
+      <div><span class="xref">DevopsCheckoutStep</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.IDevopsAdditionalStepOption.html">IDevopsAdditionalStepOption</a></div>
+      <div><a class="xref" href="Invex.Atom.Workflows.Options.IAdditionalStepOption.html">IAdditionalStepOption</a></div>
+      <div><a class="xref" href="Invex.Atom.Build.BuildOptions.IBuildOption.html">IBuildOption</a></div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="Invex.Atom.Workflows.Options.CheckoutStep.html#Invex_Atom_Workflows_Options_CheckoutStep_Enabled">CheckoutStep.Enabled</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Workflows.Options.CheckoutStep.html#Invex_Atom_Workflows_Options_CheckoutStep_Order">CheckoutStep.Order</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Clean_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Clean*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Clean" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Clean">
+  Clean
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L17"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether to clean the repository before checkout.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? Clean { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Condition_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Condition*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Condition" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Condition">
+  Condition
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L47"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Evaluate this condition expression to determine whether to run this task.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? Condition { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_ContinueOnError_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.ContinueOnError*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_ContinueOnError" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.ContinueOnError">
+  ContinueOnError
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Continue running even on failure?</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? ContinueOnError { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_DisplayName_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.DisplayName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_DisplayName" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.DisplayName">
+  DisplayName
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L57"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Human-readable name for the task.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? DisplayName { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_EnableRun_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.EnableRun*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_EnableRun" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.EnableRun">
+  EnableRun
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Run this task when the job runs?</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? EnableRun { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Env_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Env*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Env" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Env">
+  Env
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L72"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Variables to map into the process's environment.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyDictionary&lt;string, TextExpression&gt;? Env { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyDictionary</span>&lt;<span class="xref">string</span>, <span class="xref">TextExpression</span>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_FetchDepth_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.FetchDepth*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_FetchDepth" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.FetchDepth">
+  FetchDepth
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L22"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Number of commits to fetch (depth). 0 indicates all history.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? FetchDepth { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Lfs_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Lfs*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Lfs" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Lfs">
+  Lfs
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L27"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether to download Git-LFS files.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? Lfs { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Name_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Name*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Name" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Name">
+  Name
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L77"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>ID of the step.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? Name { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Path_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Path*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Path" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Path">
+  Path
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L37"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Path to check out source code, relative to $(Agent.BuildDirectory).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? Path { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_PersistCredentials_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.PersistCredentials*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_PersistCredentials" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.PersistCredentials">
+  PersistCredentials
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L42"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Persist credentials for later use by the Git command-line tool.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? PersistCredentials { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Repository_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Repository*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Repository" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Repository">
+  Repository
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L12"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Repository to check out. Valid values: &quot;self&quot; | &quot;none&quot; or repository resource name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression Repository { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_RetryCountOnTaskFailure_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.RetryCountOnTaskFailure*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_RetryCountOnTaskFailure" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.RetryCountOnTaskFailure">
+  RetryCountOnTaskFailure
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L87"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Number of retries if the task fails.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? RetryCountOnTaskFailure { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Submodules_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Submodules*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Submodules" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Submodules">
+  Submodules
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether to checkout submodules.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? Submodules { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Target_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Target*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Target" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Target">
+  Target
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L62"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Environment in which to run this task.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public StepTarget? Target { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">StepTarget</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_TimeoutInMinutes_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.TimeoutInMinutes*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_TimeoutInMinutes" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.TimeoutInMinutes">
+  TimeoutInMinutes
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L82"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Time to wait for this task to complete before the server kills it.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextExpression? TimeoutInMinutes { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TextExpression</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Build_" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Build*"></a>
+
+  <h3 id="Invex_Atom_Module_DevopsWorkflows_Workflows_Steps_DevopsCheckoutStep_Build" data-uid="Invex.Atom.Module.DevopsWorkflows.Workflows.Steps.DevopsCheckoutStep.Build">
+  Build()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L89"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Step Build()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Step</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Module.DevopsWorkflows/Workflows/Steps/DevopsCheckoutStep.cs/#L6" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

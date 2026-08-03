@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class CommandLineArgs | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class CommandLineArgs | Atom ">
+      
+      <meta name="description" content="Contains the parsed command-line arguments for an Atom build execution, providing a structured representation of user input.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/new/main/apiSpec/new?filename=Invex_Atom_Build_Args_CommandLineArgs.md&amp;value=---%0Auid%3A%20Invex.Atom.Build.Args.CommandLineArgs%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Build.Args.CommandLineArgs">
+
+
+
+  <h1 id="Invex_Atom_Build_Args_CommandLineArgs" data-uid="Invex.Atom.Build.Args.CommandLineArgs" class="text-break">
+Class CommandLineArgs  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L11"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Invex.html">Invex</a>.<a class="xref" href="Invex.Atom.html">Atom</a>.<a class="xref" href="Invex.Atom.Build.html">Build</a>.<a class="xref" href="Invex.Atom.Build.Args.html">Args</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Build.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Contains the parsed command-line arguments for an Atom build execution, providing a structured representation of
+user input.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+public sealed record CommandLineArgs</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">CommandLineArgs</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+  <h2 id="Invex_Atom_Build_Args_CommandLineArgs_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>An instance of this record is created by the <span class="xref">Invex.Atom.Build.Args.CommandLineArgsParser</span> after parsing the raw string
+arguments provided to the Atom application.</p>
+</div>
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Invex_Atom_Build_Args_CommandLineArgs__ctor_" data-uid="Invex.Atom.Build.Args.CommandLineArgs.#ctor*"></a>
+
+  <h3 id="Invex_Atom_Build_Args_CommandLineArgs__ctor_System_Boolean_System_Collections_Generic_IEnumerable_Invex_Atom_Build_Args_IArg__System_Collections_Generic_IEnumerable_Invex_Atom_Build_Args_ParseError__" data-uid="Invex.Atom.Build.Args.CommandLineArgs.#ctor(System.Boolean,System.Collections.Generic.IEnumerable{Invex.Atom.Build.Args.IArg},System.Collections.Generic.IEnumerable{Invex.Atom.Build.Args.ParseError})">
+  CommandLineArgs(bool, IEnumerable&lt;IArg&gt;, IEnumerable&lt;ParseError&gt;?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Contains the parsed command-line arguments for an Atom build execution, providing a structured representation of
+user input.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CommandLineArgs(bool IsValid, IEnumerable&lt;IArg&gt; Args, IEnumerable&lt;ParseError&gt;? Errors = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>IsValid</code> <span class="xref">bool</span></dt>
+    <dd><p>A value indicating whether the command-line arguments were parsed successfully and are valid. If
+false, the Atom application will typically terminate or display help.</p>
+</dd>
+    <dt><code>Args</code> <span class="xref">IEnumerable</span>&lt;<a class="xref" href="Invex.Atom.Build.Args.IArg.html">IArg</a>&gt;</dt>
+    <dd><p>A read-only list of <a class="xref" href="Invex.Atom.Build.Args.IArg.html">IArg</a> objects representing the individual arguments parsed from the command
+line. This list provides access to raw argument objects like <a class="xref" href="Invex.Atom.Build.Args.HelpArg.html">HelpArg</a>, <a class="xref" href="Invex.Atom.Build.Args.CommandArg.html">CommandArg</a>, or
+<a class="xref" href="Invex.Atom.Build.Args.ParamArg.html">ParamArg</a>.</p>
+</dd>
+    <dt><code>Errors</code> <span class="xref">IEnumerable</span>&lt;<a class="xref" href="Invex.Atom.Build.Args.ParseError.html">ParseError</a>&gt;</dt>
+    <dd><p>The <a class="xref" href="Invex.Atom.Build.Args.ParseError.html">ParseError</a> objects describing any problems encountered while parsing the raw arguments.
+When non-empty, <a class="xref" href="Invex.Atom.Build.Args.CommandLineArgs.html#Invex_Atom_Build_Args_CommandLineArgs_IsValid">IsValid</a> is forced to false.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_Args_CommandLineArgs__ctor_System_Boolean_System_Collections_Generic_IEnumerable_Invex_Atom_Build_Args_IArg__System_Collections_Generic_IEnumerable_Invex_Atom_Build_Args_ParseError___remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>An instance of this record is created by the <span class="xref">Invex.Atom.Build.Args.CommandLineArgsParser</span> after parsing the raw string
+arguments provided to the Atom application.</p>
+</div>
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Build_Args_CommandLineArgs_Args_" data-uid="Invex.Atom.Build.Args.CommandLineArgs.Args*"></a>
+
+  <h3 id="Invex_Atom_Build_Args_CommandLineArgs_Args" data-uid="Invex.Atom.Build.Args.CommandLineArgs.Args">
+  Args
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>A read-only list of <a class="xref" href="Invex.Atom.Build.Args.IArg.html">IArg</a> objects representing the individual arguments parsed from the command
+line. This list provides access to raw argument objects like <a class="xref" href="Invex.Atom.Build.Args.HelpArg.html">HelpArg</a>, <a class="xref" href="Invex.Atom.Build.Args.CommandArg.html">CommandArg</a>, or
+<a class="xref" href="Invex.Atom.Build.Args.ParamArg.html">ParamArg</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;IArg&gt; Args { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="Invex.Atom.Build.Args.IArg.html">IArg</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Build_Args_CommandLineArgs_Commands_" data-uid="Invex.Atom.Build.Args.CommandLineArgs.Commands*"></a>
+
+  <h3 id="Invex_Atom_Build_Args_CommandLineArgs_Commands" data-uid="Invex.Atom.Build.Args.CommandLineArgs.Commands">
+  Commands
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L160"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a read-only list of command arguments (<a class="xref" href="Invex.Atom.Build.Args.CommandArg.html">CommandArg</a>) from the command line.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;CommandArg&gt; Commands { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="Invex.Atom.Build.Args.CommandArg.html">CommandArg</a>&gt;</dt>
+    <dd><p>A read-only list of <a class="xref" href="Invex.Atom.Build.Args.CommandArg.html">CommandArg</a> objects.</p>
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_Args_CommandLineArgs_Commands_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Each <a class="xref" href="Invex.Atom.Build.Args.CommandArg.html">CommandArg</a> represents a target to be executed.
+For <code>atom Clean Build</code>, this list would contain &quot;Clean&quot; and &quot;Build&quot;.</p>
+</div>
+
+
+  <dl class="typelist seealso">
+    <dt>See Also</dt>
+    <dd>
+    <div><a class="xref" href="Invex.Atom.Build.Args.CommandArg.html">CommandArg</a></div>
+    </dd>
+  </dl>
+
+
+  <a id="Invex_Atom_Build_Args_CommandLineArgs_Errors_" data-uid="Invex.Atom.Build.Args.CommandLineArgs.Errors*"></a>
+
+  <h3 id="Invex_Atom_Build_Args_CommandLineArgs_Errors" data-uid="Invex.Atom.Build.Args.CommandLineArgs.Errors">
+  Errors
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L57"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>A read-only list of <a class="xref" href="Invex.Atom.Build.Args.ParseError.html">ParseError</a> objects describing any problems encountered while parsing the
+raw arguments, such as unknown arguments or options that are missing their values.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;ParseError&gt; Errors { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="Invex.Atom.Build.Args.ParseError.html">ParseError</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_Args_CommandLineArgs_Errors_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Parsing never throws or writes to the console; errors are collected here and reported by the Atom
+application after the host is fully constructed, so that all output can be masked for secrets.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Build_Args_CommandLineArgs_HasHeadless_" data-uid="Invex.Atom.Build.Args.CommandLineArgs.HasHeadless*"></a>
+
+  <h3 id="Invex_Atom_Build_Args_CommandLineArgs_HasHeadless" data-uid="Invex.Atom.Build.Args.CommandLineArgs.HasHeadless">
+  HasHeadless
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L99"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether the headless argument (<code>-hl</code> or <code>--headless</code>) was provided.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasHeadless { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd><p>true if the headless argument is present; otherwise, false.</p>
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_Args_CommandLineArgs_HasHeadless_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This mode is used for non-interactive environments like CI/CD pipelines, where user prompts should be disabled.
+Running <code>atom MyCommand --headless</code> or <code>atom MyCommand -hl</code> will result in this property being true.</p>
+</div>
+
+
+  <dl class="typelist seealso">
+    <dt>See Also</dt>
+    <dd>
+    <div><a class="xref" href="Invex.Atom.Build.Args.HeadlessArg.html">HeadlessArg</a></div>
+    </dd>
+  </dl>
+
+
+  <a id="Invex_Atom_Build_Args_CommandLineArgs_HasHelp_" data-uid="Invex.Atom.Build.Args.CommandLineArgs.HasHelp*"></a>
+
+  <h3 id="Invex_Atom_Build_Args_CommandLineArgs_HasHelp" data-uid="Invex.Atom.Build.Args.CommandLineArgs.HasHelp">
+  HasHelp
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L76"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether the help argument (<code>-h</code> or <code>--help</code>) was provided.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasHelp { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd><p>true if the help argument is present; otherwise, false.</p>
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_Args_CommandLineArgs_HasHelp_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>When this property is true, the Atom application should display help information and exit.
+Running <code>atom --help</code> or <code>atom -h</code> will result in this property being true.</p>
+</div>
+
+
+  <dl class="typelist seealso">
+    <dt>See Also</dt>
+    <dd>
+    <div><a class="xref" href="Invex.Atom.Build.Args.HelpArg.html">HelpArg</a></div>
+    <div><a class="xref" href="Invex.Atom.Build.Help.IHelpService.html">IHelpService</a></div>
+    </dd>
+  </dl>
+
+
+  <a id="Invex_Atom_Build_Args_CommandLineArgs_HasInteractive_" data-uid="Invex.Atom.Build.Args.CommandLineArgs.HasInteractive*"></a>
+
+  <h3 id="Invex_Atom_Build_Args_CommandLineArgs_HasInteractive" data-uid="Invex.Atom.Build.Args.CommandLineArgs.HasInteractive">
+  HasInteractive
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L135"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether the interactive argument (<code>-i</code> or <code>--interactive</code>) was provided.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasInteractive { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd><p>true if the interactive argument is present; otherwise, false.</p>
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_Args_CommandLineArgs_HasInteractive_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This flag suggests that the Atom application may prompt the user for input if needed for certain parameters.
+Running <code>atom MyCommand -i</code> will result in this property being true.</p>
+</div>
+
+
+  <dl class="typelist seealso">
+    <dt>See Also</dt>
+    <dd>
+    <div><a class="xref" href="Invex.Atom.Build.Args.InteractiveArg.html">InteractiveArg</a></div>
+    <div><span class="xref">ParamService</span></div>
+    </dd>
+  </dl>
+
+
+  <a id="Invex_Atom_Build_Args_CommandLineArgs_HasProject_" data-uid="Invex.Atom.Build.Args.CommandLineArgs.HasProject*"></a>
+
+  <h3 id="Invex_Atom_Build_Args_CommandLineArgs_HasProject" data-uid="Invex.Atom.Build.Args.CommandLineArgs.HasProject">
+  HasProject
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L123"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether the project argument (<code>-p</code> or <code>--project</code>) was provided.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasProject { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd><p>true if the project argument is present; otherwise, false.</p>
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_Args_CommandLineArgs_HasProject_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This argument allows specifying a custom Atom project directory, overriding the default.
+Running <code>atom -p MyAtomProject</code> will result in this property being true.</p>
+</div>
+
+
+  <dl class="typelist seealso">
+    <dt>See Also</dt>
+    <dd>
+    <div><a class="xref" href="Invex.Atom.Build.Args.ProjectArg.html">ProjectArg</a></div>
+    <div><a class="xref" href="Invex.Atom.Build.Args.CommandLineArgs.html#Invex_Atom_Build_Args_CommandLineArgs_ProjectName">ProjectName</a></div>
+    </dd>
+  </dl>
+
+
+  <a id="Invex_Atom_Build_Args_CommandLineArgs_HasSkip_" data-uid="Invex.Atom.Build.Args.CommandLineArgs.HasSkip*"></a>
+
+  <h3 id="Invex_Atom_Build_Args_CommandLineArgs_HasSkip" data-uid="Invex.Atom.Build.Args.CommandLineArgs.HasSkip">
+  HasSkip
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L88"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether the skip argument (<code>-s</code> or <code>--skip</code>) was provided.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasSkip { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd><p>true if the skip argument is present; otherwise, false.</p>
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_Args_CommandLineArgs_HasSkip_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This flag instructs the build executor to skip the execution of dependent targets.
+Running <code>atom MyTarget --skip</code> or <code>atom MyTarget -s</code> will result in this property being true.</p>
+</div>
+
+
+  <dl class="typelist seealso">
+    <dt>See Also</dt>
+    <dd>
+    <div><a class="xref" href="Invex.Atom.Build.Args.SkipArg.html">SkipArg</a></div>
+    <div><span class="xref">BuildExecutor</span></div>
+    </dd>
+  </dl>
+
+
+  <a id="Invex_Atom_Build_Args_CommandLineArgs_HasVerbose_" data-uid="Invex.Atom.Build.Args.CommandLineArgs.HasVerbose*"></a>
+
+  <h3 id="Invex_Atom_Build_Args_CommandLineArgs_HasVerbose" data-uid="Invex.Atom.Build.Args.CommandLineArgs.HasVerbose">
+  HasVerbose
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L111"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether the verbose argument (<code>-v</code> or <code>--verbose</code>) was provided.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasVerbose { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd><p>true if the verbose argument is present; otherwise, false.</p>
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_Args_CommandLineArgs_HasVerbose_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>When true, the Atom application should output more detailed logging information for debugging or diagnostics.
+Running <code>atom MyCommand --verbose</code> or <code>atom MyCommand -v</code> will result in this property being true.</p>
+</div>
+
+
+  <dl class="typelist seealso">
+    <dt>See Also</dt>
+    <dd>
+    <div><a class="xref" href="Invex.Atom.Build.Args.VerboseArg.html">VerboseArg</a></div>
+    <div><a class="xref" href="Invex.Atom.Build.Logging.LogOptions.html#Invex_Atom_Build_Logging_LogOptions_IsVerboseEnabled">IsVerboseEnabled</a></div>
+    </dd>
+  </dl>
+
+
+  <a id="Invex_Atom_Build_Args_CommandLineArgs_IsValid_" data-uid="Invex.Atom.Build.Args.CommandLineArgs.IsValid*"></a>
+
+  <h3 id="Invex_Atom_Build_Args_CommandLineArgs_IsValid" data-uid="Invex.Atom.Build.Args.CommandLineArgs.IsValid">
+  IsValid
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L47"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>A value indicating whether the command-line arguments were parsed successfully and are valid. If
+false, the Atom application will typically terminate or display help.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsValid { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Build_Args_CommandLineArgs_Params_" data-uid="Invex.Atom.Build.Args.CommandLineArgs.Params*"></a>
+
+  <h3 id="Invex_Atom_Build_Args_CommandLineArgs_Params" data-uid="Invex.Atom.Build.Args.CommandLineArgs.Params">
+  Params
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L146"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a read-only list of parameter arguments (<a class="xref" href="Invex.Atom.Build.Args.ParamArg.html">ParamArg</a>) from the command line.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;ParamArg&gt; Params { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="Invex.Atom.Build.Args.ParamArg.html">ParamArg</a>&gt;</dt>
+    <dd><p>A read-only list of <a class="xref" href="Invex.Atom.Build.Args.ParamArg.html">ParamArg</a> objects.</p>
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_Args_CommandLineArgs_Params_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Each <a class="xref" href="Invex.Atom.Build.Args.ParamArg.html">ParamArg</a> represents a key-value pair (e.g., <code>--my-param value</code>).
+For <code>atom --param1 value1</code>, this list would contain one <a class="xref" href="Invex.Atom.Build.Args.ParamArg.html">ParamArg</a> object.</p>
+</div>
+
+
+  <dl class="typelist seealso">
+    <dt>See Also</dt>
+    <dd>
+    <div><a class="xref" href="Invex.Atom.Build.Args.ParamArg.html">ParamArg</a></div>
+    </dd>
+  </dl>
+
+
+  <a id="Invex_Atom_Build_Args_CommandLineArgs_ProjectName_" data-uid="Invex.Atom.Build.Args.CommandLineArgs.ProjectName*"></a>
+
+  <h3 id="Invex_Atom_Build_Args_CommandLineArgs_ProjectName" data-uid="Invex.Atom.Build.Args.CommandLineArgs.ProjectName">
+  ProjectName
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L176"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the project name specified by the project argument (<code>-p</code> or <code>--project</code>).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string ProjectName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd><p>The specified project name, or &quot;_atom&quot; if not provided.</p>
+</dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_Args_CommandLineArgs_ProjectName_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the project argument is not provided, this defaults to &quot;_atom&quot;.
+The Atom project typically resides in a directory with this name.
+If <code>atom -p MyBuildScripts</code> is run, this property will be &quot;MyBuildScripts&quot;.</p>
+</div>
+
+
+  <dl class="typelist seealso">
+    <dt>See Also</dt>
+    <dd>
+    <div><a class="xref" href="Invex.Atom.Build.Args.ProjectArg.html">ProjectArg</a></div>
+    <div><a class="xref" href="Invex.Atom.Build.Args.CommandLineArgs.html#Invex_Atom_Build_Args_CommandLineArgs_HasProject">HasProject</a></div>
+    </dd>
+  </dl>
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Invex_Atom_Build_Args_CommandLineArgs_GetValidationErrors_" data-uid="Invex.Atom.Build.Args.CommandLineArgs.GetValidationErrors*"></a>
+
+  <h3 id="Invex_Atom_Build_Args_CommandLineArgs_GetValidationErrors" data-uid="Invex.Atom.Build.Args.CommandLineArgs.GetValidationErrors">
+  GetValidationErrors()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L187"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a list of validation errors for the current command-line arguments.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;string&gt; GetValidationErrors()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;<span class="xref">string</span>&gt;</dt>
+    <dd><p>A read-only list of error messages. An empty list indicates no validation errors.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Args/CommandLineArgs.cs/#L11" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class WorkflowFileWriter&lt;T&gt; | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class WorkflowFileWriter&lt;T&gt; | Atom ">
+      
+      <meta name="description" content="An abstract base class for generating platform-specific workflow files (e.g., for GitHub Actions or Azure DevOps).">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/new/main/apiSpec/new?filename=Invex_Atom_Workflows_Writer_WorkflowFileWriter_1.md&amp;value=---%0Auid%3A%20Invex.Atom.Workflows.Writer.WorkflowFileWriter%601%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1">
+
+
+
+  <h1 id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1" data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1" class="text-break">
+Class WorkflowFileWriter&lt;T&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Writer/WorkflowFileWriter.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Invex.html">Invex</a>.<a class="xref" href="Invex.Atom.html">Atom</a>.<a class="xref" href="Invex.Atom.Workflows.html">Workflows</a>.<a class="xref" href="Invex.Atom.Workflows.Writer.html">Writer</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Workflows.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>An abstract base class for generating platform-specific workflow files (e.g., for GitHub Actions or Azure DevOps).</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+public abstract class WorkflowFileWriter&lt;T&gt; : IWorkflowWriter&lt;T&gt;, IWorkflowWriter where T : IWorkflowType</code></pre>
+  </div>
+
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The workflow type this writer handles, which must implement <a class="xref" href="Invex.Atom.Workflows.IWorkflowType.html">IWorkflowType</a>.</p>
+</dd>
+  </dl>
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">WorkflowFileWriter&lt;T&gt;</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="Invex.Atom.Workflows.Writer.IWorkflowWriter-1.html">IWorkflowWriter</a>&lt;T&gt;</div>
+      <div><a class="xref" href="Invex.Atom.Workflows.Writer.IWorkflowWriter.html">IWorkflowWriter</a></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist derived">
+    <dt>Derived</dt>
+    <dd>
+      <div><a class="xref" href="Invex.Atom.Module.GithubWorkflows.DependabotConfig.DependabotConfigFileWriter.html">DependabotConfigFileWriter</a></div>
+      <div><a class="xref" href="Invex.Atom.Workflows.DebugWorkflowWriter.html">DebugWorkflowWriter</a></div>
+    </dd>
+  </dl>
+
+
+
+
+
+  <h2 id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>This class provides a template for writing structured workflow files, handling file I/O, change detection,
+and indentation. Concrete implementations must override <a class="xref" href="Invex.Atom.Workflows.Writer.WorkflowFileWriter-1.html#Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_WriteWorkflow_Invex_Atom_Workflows_Model_WorkflowModel_">WriteWorkflow(WorkflowModel)</a> to define the specific
+file format and <a class="xref" href="Invex.Atom.Workflows.Writer.WorkflowFileWriter-1.html#Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_FileExtension">FileExtension</a> to specify the file extension.</p>
+</div>
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1__ctor_" data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1.#ctor*"></a>
+
+  <h3 id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1__ctor_Invex_FileSystem_IRootedFileSystem_Microsoft_Extensions_Logging_ILogger_Invex_Atom_Workflows_Writer_WorkflowFileWriter__0___" data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1.#ctor(Invex.FileSystem.IRootedFileSystem,Microsoft.Extensions.Logging.ILogger{Invex.Atom.Workflows.Writer.WorkflowFileWriter{`0}})">
+  WorkflowFileWriter(IRootedFileSystem, ILogger&lt;WorkflowFileWriter&lt;T&gt;&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Writer/WorkflowFileWriter.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>An abstract base class for generating platform-specific workflow files (e.g., for GitHub Actions or Azure DevOps).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected WorkflowFileWriter(IRootedFileSystem fileSystem, ILogger&lt;WorkflowFileWriter&lt;T&gt;&gt; logger)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>fileSystem</code> <span class="xref">IRootedFileSystem</span></dt>
+    <dd><p>The file system service for file operations.</p>
+</dd>
+    <dt><code>logger</code> <span class="xref">ILogger</span>&lt;<a class="xref" href="Invex.Atom.Workflows.Writer.WorkflowFileWriter-1.html">WorkflowFileWriter</a>&lt;T&gt;&gt;</dt>
+    <dd><p>The logger for diagnostics.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1__ctor_Invex_FileSystem_IRootedFileSystem_Microsoft_Extensions_Logging_ILogger_Invex_Atom_Workflows_Writer_WorkflowFileWriter__0____remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This class provides a template for writing structured workflow files, handling file I/O, change detection,
+and indentation. Concrete implementations must override <a class="xref" href="Invex.Atom.Workflows.Writer.WorkflowFileWriter-1.html#Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_WriteWorkflow_Invex_Atom_Workflows_Model_WorkflowModel_">WriteWorkflow(WorkflowModel)</a> to define the specific
+file format and <a class="xref" href="Invex.Atom.Workflows.Writer.WorkflowFileWriter-1.html#Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_FileExtension">FileExtension</a> to specify the file extension.</p>
+</div>
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_FileExtension_" data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1.FileExtension*"></a>
+
+  <h3 id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_FileExtension" data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1.FileExtension">
+  FileExtension
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Writer/WorkflowFileWriter.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the file extension for the generated workflow file (e.g., &quot;yml&quot;).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract string FileExtension { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_FileLocation_" data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1.FileLocation*"></a>
+
+  <h3 id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_FileLocation" data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1.FileLocation">
+  FileLocation
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Writer/WorkflowFileWriter.cs/#L27"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the root directory where workflow files should be generated. Defaults to the Atom root directory.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual RootedPath FileLocation { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">RootedPath</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_TabSize_" data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1.TabSize*"></a>
+
+  <h3 id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_TabSize" data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1.TabSize">
+  TabSize
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Writer/WorkflowFileWriter.cs/#L22"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the number of spaces to use for each indentation level. Defaults to 2.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual int TabSize { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">int</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_CheckForOutdatedWorkflow_" data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1.CheckForOutdatedWorkflow*"></a>
+
+  <h3 id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_CheckForOutdatedWorkflow_Invex_Atom_Workflows_Model_WorkflowModel_System_Threading_CancellationToken_" data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1.CheckForOutdatedWorkflow(Invex.Atom.Workflows.Model.WorkflowModel,System.Threading.CancellationToken)">
+  CheckForOutdatedWorkflow(WorkflowModel, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Writer/WorkflowFileWriter.cs/#L77"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Checks if the existing workflow file is outdated and needs to be regenerated.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;bool&gt; CheckForOutdatedWorkflow(WorkflowModel workflow, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>workflow</code> <a class="xref" href="Invex.Atom.Workflows.Model.WorkflowModel.html">WorkflowModel</a></dt>
+    <dd><p>The workflow model to compare against the existing file.</p>
+</dd>
+    <dt><code>cancellationToken</code> <span class="xref">CancellationToken</span></dt>
+    <dd><p>A cancellation token.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Task</span>&lt;<span class="xref">bool</span>&gt;</dt>
+    <dd><p><code>true</code> if the workflow file is missing or outdated; otherwise, <code>false</code>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_Generate_" data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1.Generate*"></a>
+
+  <h3 id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_Generate_Invex_Atom_Workflows_Model_WorkflowModel_System_Threading_CancellationToken_" data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1.Generate(Invex.Atom.Workflows.Model.WorkflowModel,System.Threading.CancellationToken)">
+  Generate(WorkflowModel, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Writer/WorkflowFileWriter.cs/#L39"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Generates a workflow file from the provided model, writing it only if the content has changed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task Generate(WorkflowModel workflow, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>workflow</code> <a class="xref" href="Invex.Atom.Workflows.Model.WorkflowModel.html">WorkflowModel</a></dt>
+    <dd><p>The workflow model to generate.</p>
+</dd>
+    <dt><code>cancellationToken</code> <span class="xref">CancellationToken</span></dt>
+    <dd><p>A cancellation token.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Task</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_WriteWorkflow_" data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1.WriteWorkflow*"></a>
+
+  <h3 id="Invex_Atom_Workflows_Writer_WorkflowFileWriter_1_WriteWorkflow_Invex_Atom_Workflows_Model_WorkflowModel_" data-uid="Invex.Atom.Workflows.Writer.WorkflowFileWriter`1.WriteWorkflow(Invex.Atom.Workflows.Model.WorkflowModel)">
+  WriteWorkflow(WorkflowModel)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Writer/WorkflowFileWriter.cs/#L108"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>When overridden in a derived class, writes the content of the workflow file using the provided helper methods.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract string WriteWorkflow(WorkflowModel workflow)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>workflow</code> <a class="xref" href="Invex.Atom.Workflows.Model.WorkflowModel.html">WorkflowModel</a></dt>
+    <dd><p>The workflow model to write.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Workflows/Writer/WorkflowFileWriter.cs/#L14" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

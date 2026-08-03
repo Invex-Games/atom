@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class BuildModel | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class BuildModel | Atom ">
+      
+      <meta name="description" content="Represents the complete model of a build, including all targets and their states.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/new/main/apiSpec/new?filename=Invex_Atom_Build_Model_BuildModel.md&amp;value=---%0Auid%3A%20Invex.Atom.Build.Model.BuildModel%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Build.Model.BuildModel">
+
+
+
+  <h1 id="Invex_Atom_Build_Model_BuildModel" data-uid="Invex.Atom.Build.Model.BuildModel" class="text-break">
+Class BuildModel  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Model/BuildModel.cs/#L10"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Invex.html">Invex</a>.<a class="xref" href="Invex.Atom.html">Atom</a>.<a class="xref" href="Invex.Atom.Build.html">Build</a>.<a class="xref" href="Invex.Atom.Build.Model.html">Model</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Build.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Represents the complete model of a build, including all targets and their states.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PublicAPI]
+public sealed record BuildModel</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">BuildModel</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+  <h2 id="Invex_Atom_Build_Model_BuildModel_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>This model is generated by Atom on startup and serves as the primary source of information for the build.
+It is immutable by design, except the values in <a class="xref" href="Invex.Atom.Build.Model.BuildModel.html#Invex_Atom_Build_Model_BuildModel_TargetStates">TargetStates</a>.</p>
+</div>
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Build_Model_BuildModel_CurrentTarget_" data-uid="Invex.Atom.Build.Model.BuildModel.CurrentTarget*"></a>
+
+  <h3 id="Invex_Atom_Build_Model_BuildModel_CurrentTarget" data-uid="Invex.Atom.Build.Model.BuildModel.CurrentTarget">
+  CurrentTarget
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Model/BuildModel.cs/#L33"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the target that is currently running.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TargetModel? CurrentTarget { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Build.Model.TargetModel.html">TargetModel</a></dt>
+    <dd><p>The currently running <a class="xref" href="Invex.Atom.Build.Model.TargetModel.html">TargetModel</a>, or <code>null</code> if no target is running.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Build_Model_BuildModel_DeclaringAssembly_" data-uid="Invex.Atom.Build.Model.BuildModel.DeclaringAssembly*"></a>
+
+  <h3 id="Invex_Atom_Build_Model_BuildModel_DeclaringAssembly" data-uid="Invex.Atom.Build.Model.BuildModel.DeclaringAssembly">
+  DeclaringAssembly
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Model/BuildModel.cs/#L27"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the assembly in which the build was defined.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public required Assembly DeclaringAssembly { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Assembly</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Build_Model_BuildModel_TargetStates_" data-uid="Invex.Atom.Build.Model.BuildModel.TargetStates*"></a>
+
+  <h3 id="Invex_Atom_Build_Model_BuildModel_TargetStates" data-uid="Invex.Atom.Build.Model.BuildModel.TargetStates">
+  TargetStates
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Model/BuildModel.cs/#L22"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a read-only dictionary mapping each target to its current state.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public required IReadOnlyDictionary&lt;TargetModel, TargetState&gt; TargetStates { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyDictionary</span>&lt;<a class="xref" href="Invex.Atom.Build.Model.TargetModel.html">TargetModel</a>, <a class="xref" href="Invex.Atom.Build.Model.TargetState.html">TargetState</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+  <dl class="typelist seealso">
+    <dt>See Also</dt>
+    <dd>
+    <div><a class="xref" href="Invex.Atom.Build.Model.TargetState.html">TargetState</a></div>
+    </dd>
+  </dl>
+
+
+  <a id="Invex_Atom_Build_Model_BuildModel_Targets_" data-uid="Invex.Atom.Build.Model.BuildModel.Targets*"></a>
+
+  <h3 id="Invex_Atom_Build_Model_BuildModel_Targets" data-uid="Invex.Atom.Build.Model.BuildModel.Targets">
+  Targets
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Model/BuildModel.cs/#L16"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a read-only list of all targets defined in the build, regardless of their execution status.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public required IReadOnlyList&lt;TargetModel&gt; Targets { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="Invex.Atom.Build.Model.TargetModel.html">TargetModel</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Invex_Atom_Build_Model_BuildModel_GetTarget_" data-uid="Invex.Atom.Build.Model.BuildModel.GetTarget*"></a>
+
+  <h3 id="Invex_Atom_Build_Model_BuildModel_GetTarget_System_String_" data-uid="Invex.Atom.Build.Model.BuildModel.GetTarget(System.String)">
+  GetTarget(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Model/BuildModel.cs/#L42"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a target by its name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TargetModel GetTarget(string name)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>name</code> <span class="xref">string</span></dt>
+    <dd><p>The name of the target to retrieve.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Build.Model.TargetModel.html">TargetModel</a></dt>
+    <dd><p>The <a class="xref" href="Invex.Atom.Build.Model.TargetModel.html">TargetModel</a> with the specified name.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><span class="xref">ArgumentException</span></dt>
+    <dd><p>Thrown if no target with the specified name is found.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Invex_Atom_Build_Model_BuildModel_GetTargetState_" data-uid="Invex.Atom.Build.Model.BuildModel.GetTargetState*"></a>
+
+  <h3 id="Invex_Atom_Build_Model_BuildModel_GetTargetState_Invex_Atom_Build_Model_TargetModel_" data-uid="Invex.Atom.Build.Model.BuildModel.GetTargetState(Invex.Atom.Build.Model.TargetModel)">
+  GetTargetState(TargetModel)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Model/BuildModel.cs/#L51"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the state of a target.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TargetState GetTargetState(TargetModel target)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>target</code> <a class="xref" href="Invex.Atom.Build.Model.TargetModel.html">TargetModel</a></dt>
+    <dd><p>The target whose state to retrieve.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Build.Model.TargetState.html">TargetState</a></dt>
+    <dd><p>The <a class="xref" href="Invex.Atom.Build.Model.TargetState.html">TargetState</a> for the specified target.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><span class="xref">InvalidOperationException</span></dt>
+    <dd><p>Thrown if the target is not present in the build model target states.</p>
+</dd>
+  </dl>
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/v3.7.0/src/Invex.Atom.Build/Model/BuildModel.cs/#L10" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom — Build Automation for .NET
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
