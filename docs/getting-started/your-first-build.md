@@ -4,18 +4,18 @@ This guide walks you through creating a minimal Atom build and running it locall
 
 ## Prerequisites
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download) or later
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)
 
 ## Option 1 — Single-File Build (Simplest)
 
 Create a file called `Build.cs` anywhere on disk:
 
 ```csharp
-#:package Invex.Atom@2.*
+#:package Invex.Atom.Build@3.*
 
 [BuildDefinition]
 [GenerateEntryPoint]
-partial class Build : BuildDefinition
+internal interface IBuild : IBuildDefinition
 {
     Target SayHello => t => t
         .DescribedAs("Prints a hello world message")
@@ -29,8 +29,9 @@ Run it:
 dotnet run Build.cs SayHello
 ```
 
-That's it. The `#:package` directive pulls in the Atom NuGet package automatically, `[GenerateEntryPoint]`
-source-generates a `Main` method, and the `SayHello` target is discovered and executed.
+That's it. The `#:package` directive pulls in `Invex.Atom.Build`, `[GenerateEntryPoint]` source-generates
+a `Main` method, and the `SayHello` target is discovered and executed. Interface-based builds are
+the recommended pattern because they compose naturally with module interfaces.
 
 ## Option 2 — Project-Based Build
 
@@ -46,23 +47,20 @@ For larger builds you'll typically use a dedicated project.
 
    ```shell
    cd _atom
-   dotnet add package Invex.Atom
+   dotnet add package Invex.Atom.Build
    ```
 
-3. Replace `Program.cs` with a build definition (or use `[GenerateEntryPoint]` to have the entry point generated for
-   you). Here's the minimal version with `[GenerateEntryPoint]`:
+3. Replace `Program.cs` with the recommended interface-based build definition. `[GenerateEntryPoint]`
+   generates the entry point for you:
 
    ```csharp
-   using Invex.Atom.Build.Definition;
-   using Invex.Atom.Build.Hosting;
-   
    namespace Atom;
    
    [BuildDefinition]
    [GenerateEntryPoint]
-   internal partial class Build : BuildDefinition
+   internal interface IBuild : IBuildDefinition
    {
-       private Target HelloWorld => t => t
+       Target HelloWorld => t => t
            .DescribedAs("Prints a hello world message")
            .Executes(() =>
            {
@@ -70,6 +68,9 @@ For larger builds you'll typically use a dedicated project.
            });
    }
    ```
+
+   If the build needs to override class members such as `ConfigureDefinitionHost`, use an
+   `internal partial class Build : BuildDefinition` instead.
 
 4. Run the build:
 
@@ -139,4 +140,3 @@ Parameters can also be supplied via `appsettings.json`:
 ## Next Steps
 
 → [Base vs Workflow Build](base-vs-workflow-build.md) — understand when you need workflow support
-

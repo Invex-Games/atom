@@ -22,7 +22,7 @@ A module is a NuGet package that provides one or more of:
 2. Add a reference to `Invex.Atom.Build` (and `Invex.Atom.Workflows` if your module contributes workflow features):
 
    ```xml
-   <PackageReference Include="Invex.Atom.Build" Version="2.*" />
+   <PackageReference Include="Invex.Atom.Build" Version="3.*" />
    ```
 
 3. Create a `.props` file (optional but recommended) to auto-import usings when consumers reference your package.
@@ -110,4 +110,3 @@ The consumer just implements the interface — all targets, parameters, and serv
 ## Next Steps
 
 → [Custom Providers](custom-providers.md)
-

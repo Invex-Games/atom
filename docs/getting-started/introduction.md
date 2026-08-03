@@ -8,7 +8,7 @@ full IDE support — IntelliSense, refactoring, and step-through debugging.
 
 | Concept              | Description                                                                                                            |
 |----------------------|------------------------------------------------------------------------------------------------------------------------|
-| **Build Definition** | A C# class that declares your targets, parameters, and build configuration.                                            |
+| **Build Definition** | A C# interface (recommended) or partial class that declares your targets, parameters, and build configuration.     |
 | **Target**           | A named unit of work (compile, test, pack, deploy, etc.) with optional dependencies on other targets.                  |
 | **Parameter**        | A value that can be supplied via the command line, environment variable, `appsettings.json`, or a secrets provider.    |
 | **Module**           | A NuGet package that adds reusable targets, parameters, or service registrations to your build.                        |
@@ -41,9 +41,10 @@ through Atom (for example via `IBuildAccessor.RootedFileSystem` and `IBuildAcces
 ## How It Works
 
 1. You create a C# project (or a single `.cs` file) that references the Atom packages.
-2. You define a class decorated with `[BuildDefinition]` that inherits from `BuildDefinition` (or
-   `WorkflowBuildDefinition` if you need CI/CD generation).
-3. Inside that class you declare **targets** — lambda-based definitions that describe what to execute, their
+2. You define an interface decorated with `[BuildDefinition]` that extends `IBuildDefinition` (or
+   `IWorkflowBuildDefinition` if you need CI/CD generation). A partial class deriving from
+   `BuildDefinition` or `WorkflowBuildDefinition` is the alternative when class-specific overrides are needed.
+3. Inside that build definition you declare **targets** — lambda-based definitions that describe what to execute, their
    dependencies, required parameters, and produced artifacts.
 4. You run the build with `dotnet run -- <TargetName>` (or via the `atom` global tool).
 5. If you use `WorkflowBuildDefinition`, running the `Gen` target emits platform-specific YAML that
@@ -52,4 +53,3 @@ through Atom (for example via `IBuildAccessor.RootedFileSystem` and `IBuildAcces
 ## Next Steps
 
 → [Your First Build](your-first-build.md)
-

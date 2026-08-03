@@ -16,10 +16,11 @@ Both are automatically referenced when you add `Invex.Atom.Build`.
 
 ### `[BuildDefinition]`
 
-For a class decorated with `[BuildDefinition]`, the generator emits:
+For a build definition decorated with `[BuildDefinition]` (either an interface extending
+`IBuildDefinition` or a partial class deriving from `BuildDefinition`), the generator emits:
 
-- `TargetDefinitions` — a dictionary mapping target names to `Target` delegates, collected from the class and all
-  implemented interfaces.
+- `TargetDefinitions` — a dictionary mapping target names to `Target` delegates, collected from the build definition and
+  all implemented interfaces.
 - `ParamDefinitions` — a dictionary mapping parameter names to `ParamDefinition` records, collected from
   `[ParamDefinition]` / `[SecretDefinition]` attributes.
 - `AccessParam` — a method that can read any declared parameter by name.
@@ -70,4 +71,3 @@ To inspect the generated code:
 ## Next Steps
 
 → [Testing](testing.md)
-

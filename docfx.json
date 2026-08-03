@@ -34,6 +34,7 @@
       },
       {
         "files": [
+          "api/toc.yml",
           "api/**.yml",
           "api/index.md"
         ]
@@ -48,7 +49,8 @@
     "resource": [
       {
         "files": [
-          "images/**"
+          "images/**",
+          "LICENSE.txt"
         ]
       }
     ],
@@ -58,6 +60,7 @@
     "globalMetadata": {
       "_appTitle": "Atom",
       "_appName": "Atom",
+      "_appLogoPath": "images/icon.png",
       "_appFooter": "Atom — Build Automation for .NET",
       "_enableSearch": true,
       "_disableContribution": false,
@@ -71,10 +74,11 @@
       "default",
       "modern"
     ],
+    "theme": [
+      "docfx-theme"
+    ],
     "postProcessors": [],
     "keepFileLink": false,
     "disableGitFeatures": false
   }
 }
-
-

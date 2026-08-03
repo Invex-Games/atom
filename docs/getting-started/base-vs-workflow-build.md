@@ -1,11 +1,25 @@
 # Base Build vs Workflow Build
 
-Atom offers two base classes for your build definition. Which one you choose depends on whether you need to generate
-CI/CD pipeline files.
+Atom supports interface and partial-class build definitions. Prefer the interface pathway for consumer
+builds; choose the partial-class alternative when you need class-specific host configuration. In
+either pathway, choose the base contract according to whether you need to generate CI/CD files.
 
-## `BuildDefinition` — The Base Build
+## Basic builds
 
-Use `BuildDefinition` when you only need to run builds locally (or you manage your CI YAML by hand).
+Use `IBuildDefinition` when you only need to run builds locally (or you manage your CI YAML by hand):
+
+```csharp
+[BuildDefinition]
+[GenerateEntryPoint]
+internal interface IBuild : IBuildDefinition
+{
+    Target Compile => t => t
+        .DescribedAs("Compiles the solution")
+        .Executes(() => { /* ... */ });
+}
+```
+
+The partial-class equivalent is:
 
 ```csharp
 [BuildDefinition]
@@ -18,7 +32,7 @@ internal partial class Build : BuildDefinition
 }
 ```
 
-`BuildDefinition` gives you:
+Both forms provide:
 
 - Target discovery and execution with dependency resolution
 - Parameter and secret management
@@ -26,26 +40,26 @@ internal partial class Build : BuildDefinition
 - Process runner, file system, logging, reports
 - All core concepts documented in this guide
 
-## `WorkflowBuildDefinition` — Adding CI/CD Generation
+## Workflow builds
 
-`WorkflowBuildDefinition` extends `BuildDefinition` with the ability to define **workflows** — descriptions of how your
-targets map to CI/CD jobs — and generate the corresponding YAML files.
+Use `IWorkflowBuildDefinition` when the build also defines CI/CD workflows. Add a platform module
+interface such as `IGithubWorkflows` or `IDevopsWorkflows` to register the corresponding writer:
 
 ```csharp
 [BuildDefinition]
 [GenerateEntryPoint]
-internal partial class Build : WorkflowBuildDefinition, IGithubWorkflows
+internal interface IBuild : IWorkflowBuildDefinition, IGithubWorkflows
 {
-    private Target Compile => t => t
+    Target Compile => t => t
         .DescribedAs("Compiles the solution")
         .Executes(() => { /* ... */ });
 
-    private Target Test => t => t
+    Target Test => t => t
         .DescribedAs("Runs tests")
-        .DependsOn(Compile)
+        .DependsOn(nameof(Compile))
         .Executes(() => { /* ... */ });
 
-    public override IReadOnlyList<WorkflowDefinition> Workflows =>
+    IReadOnlyList<WorkflowDefinition> IWorkflowBuildDefinition.Workflows =>
     [
         new("CI")
         {
@@ -61,10 +75,13 @@ internal partial class Build : WorkflowBuildDefinition, IGithubWorkflows
 }
 ```
 
-Running `dotnet run -- Gen` writes a GitHub Actions YAML file that calls your build with the correct targets.
-Inheriting `IGithubWorkflows` (from `Invex.Atom.Module.GithubWorkflows`) registers the GitHub Actions workflow writer.
+The partial-class equivalent derives from `WorkflowBuildDefinition` instead:
+`internal partial class Build : WorkflowBuildDefinition, IGithubWorkflows`.
 
-### What `WorkflowBuildDefinition` adds
+Running `dotnet run -- Gen` writes a GitHub Actions YAML file that calls the build with the correct targets.
+`IGithubWorkflows` comes from `Invex.Atom.Module.GithubWorkflows`.
+
+### What workflow builds add
 
 | Feature              | Description                                                                                               |
 |----------------------|-----------------------------------------------------------------------------------------------------------|
@@ -77,12 +94,11 @@ Inheriting `IGithubWorkflows` (from `Invex.Atom.Module.GithubWorkflows`) registe
 
 ### When to upgrade
 
-You can always start with `BuildDefinition` and switch to `WorkflowBuildDefinition` later — the change is additive. Your
-existing targets, parameters, and modules continue to work unchanged; you just gain the `Workflows` property and the
-`Gen` target.
+You can start with `IBuildDefinition` and later change it to `IWorkflowBuildDefinition`; existing
+targets, parameters, and module interfaces can remain unchanged while you add the `Workflows`
+property and `Gen` target.
 
 ## Next Steps
 
 → [Build Definitions](../core-concepts/build-definitions.md) — deep dive into the `[BuildDefinition]` attribute and
 source generators
-
