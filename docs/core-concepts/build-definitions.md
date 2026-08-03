@@ -1,24 +1,47 @@
 # Build Definitions
 
-A **build definition** is the central class of an Atom build. It declares which targets exist, what parameters are
-available, and how the build host is configured.
+A **build definition** is the central entry point for an Atom build. It declares which targets exist, what parameters
+are available, and how the build host is configured. For consumer builds, the recommended approach is an interface
+that extends `IBuildDefinition`; use a partial class when the build needs class-specific host configuration.
 
-## The `[BuildDefinition]` Attribute
+## Recommended: interface-based builds
 
-Every build definition class must be:
+Define the build as an interface annotated with `[BuildDefinition]` and `[GenerateEntryPoint]`:
 
-1. Decorated with `[BuildDefinition]`
-2. Marked `partial` (so source generators can augment it)
-3. Derived from `BuildDefinition` (or `WorkflowBuildDefinition`)
+```csharp
+[BuildDefinition]
+[GenerateEntryPoint]
+internal interface IBuild : IBuildDefinition
+{
+    Target SayHello => t => t
+        .DescribedAs("Prints a greeting")
+        .Executes(() => Logger.LogInformation("Hello, World!"));
+}
+```
+
+This pattern is recommended because the build can compose targets, parameters, and host
+configuration from module interfaces without putting all implementation in one type. The generated
+entry point discovers the interface members and runs the build.
+
+## Alternative: partial class builds
+
+Use a partial class when the build itself needs to override virtual members such as
+`ConfigureDefinitionHost`:
 
 ```csharp
 [BuildDefinition]
 [GenerateEntryPoint]
 internal partial class Build : BuildDefinition
 {
-    // targets, parameters, etc.
+    Target SayHello => t => t
+        .DescribedAs("Prints a greeting")
+        .Executes(() => Logger.LogInformation("Hello, World!"));
 }
 ```
+
+The class must be `partial` so source generators can augment it, and it must derive from
+`BuildDefinition` or `WorkflowBuildDefinition`. It can also implement module interfaces in the
+same way as an interface-based build.
 
 ## What the Source Generator Does
 
@@ -49,7 +72,7 @@ var builder = AtomHost.CreateAtomBuilder<Build>(args);
 builder.Build().UseAtom().Run();
 ```
 
-## Composing with Interfaces
+## Composing module interfaces
 
 Targets and parameters are typically defined in **interfaces** so they can be shared across builds or published in
 module packages:
@@ -92,4 +115,3 @@ public override void ConfigureDefinitionHost(IHostApplicationBuilder builder)
 ## Next Steps
 
 → [Targets](targets.md)
-

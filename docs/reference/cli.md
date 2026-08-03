@@ -1,13 +1,22 @@
 # CLI Reference
 
-Atom builds are invoked via `dotnet run` or the `atom` global tool.
+Atom builds are invoked via `dotnet run` or the `atom` global tool. The repository currently
+requires the .NET 10 SDK. Libraries may target `net8.0`, `net9.0`, and `net10.0`.
 
 ## Invocation
 
-### Via `dotnet run`
+### Via `dotnet run` (project-based)
 
 ```shell
-dotnet run -- <targets> [options] [--param-name value ...]
+dotnet run --project _atom -- <targets> [options] [--param-name value ...]
+```
+
+For a project located in the current directory, `dotnet run -- <targets> ...` is also sufficient.
+
+To run a file-based build:
+
+```shell
+dotnet run Build.cs <targets> [options] [--param-name value ...]
 ```
 
 ### Via the `atom` Global Tool
@@ -24,7 +33,8 @@ Then run:
 atom <targets> [options] [--param-name value ...]
 ```
 
-The tool discovers your Atom project (defaults to the `_atom` directory) and runs it.
+The tool searches the current directory and its parents for `_atom`, `_build`, `Atom`, or `Build`
+projects/files. On case-sensitive systems it also checks lowercase `atom` and `build`.
 
 ## Targets
 
@@ -45,17 +55,21 @@ Targets execute in dependency order. Duplicates are resolved automatically.
 | `--headless`       | `-hl`       | Non-interactive mode (no prompts, plain output)       |
 | `--verbose`        | `-v`        | Enable verbose (debug-level) logging                  |
 | `--interactive`    | `-i`        | Prompt for missing required parameters                |
-| `--project <name>` | `-p <name>` | Specify the Atom project directory (default: `_atom`) |
+| `--project <name>` | `-p <name>` | Specify the Atom project or project name |
+| `--file <path>`    | `-f <path>` | Specify a file-based C# build |
+| `--no-restore-cache` |             | Force restore and build instead of using the Atom caches |
 
 ## Parameters
 
 Pass parameter values with `--<param-name> <value>`:
 
 ```shell
-dotnet run -- Deploy --api-key sk-123 --environment production
+dotnet run --project _atom -- Deploy --api-key example-key --environment production
 ```
 
-Parameter names use kebab-case on the command line and are matched to `[ParamDefinition]` attributes.
+Parameter names use kebab-case on the command line and are matched to `[ParamDefinition]`
+attributes. Avoid passing real secrets on the command line because shell history and process
+diagnostics may expose them; use a secret provider, user secrets, or CI secret injection instead.
 
 ## Examples
 
@@ -66,8 +80,8 @@ dotnet run -- Compile
 # Run multiple targets
 dotnet run -- Compile Test
 
-# Pass parameters
-dotnet run -- Deploy --configuration Release --api-key sk-123
+# Pass parameters (use a secret provider for real credentials)
+dotnet run --project _atom -- Deploy --configuration Release --api-key example-key
 
 # Interactive mode (prompt for missing params)
 dotnet run -- Deploy -i
@@ -78,8 +92,11 @@ dotnet run -- Pack -s
 # Verbose output
 dotnet run -- Compile -v
 
-# Use a custom project directory
-dotnet run -- Compile -p MyBuildProject
+# Use a custom project with the global tool
+atom --project MyBuildProject Compile
+
+# Run a file-based build with the global tool
+atom --file Build.cs SayHello
 
 # Show help
 dotnet run -- -h
@@ -93,7 +110,20 @@ The `atom` global tool (`Invex.Atom.Tool`) provides the same interface but disco
 atom Compile Test --verbose
 ```
 
-It searches for the Atom project in the current directory tree (or the directory specified by `-p`).
+It searches the current directory and parent directories, and does not search arbitrary child
+directories. Use `--project` or `--file` to select a specific build.
+
+### Adding a NuGet source
+
+The `nuget-add` command adds a package source to the user-level NuGet configuration:
+
+```shell
+atom nuget-add my-feed https://example.invalid/nuget/index.json
+```
+
+If `NUGET_TOKEN_MY_FEED` is set, its value is used as the feed password. This command writes
+credentials to the user configuration; review the resulting NuGet configuration and protect it
+appropriately.
 
 ### Restore & Build Caching
 
@@ -123,5 +153,4 @@ atom Compile --no-restore-cache
 # Environment variable (any value other than "0"/"false" enables the opt-out)
 ATOM_NO_RESTORE_CACHE=1 atom Compile
 ```
-
 

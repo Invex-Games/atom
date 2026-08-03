@@ -7,6 +7,17 @@
 Atom is an opinionated, type-safe build automation framework for .NET. It enables you to define your build logic in C#,
 debug it like standard code, and automatically generate CI/CD configuration files for GitHub Actions and Azure DevOps.
 
+## Requirements
+
+- .NET 10 SDK
+- A .NET project containing an Atom build definition (commonly `_atom/_atom.csproj`)
+
+Install the CLI once if you want to invoke builds from any directory:
+
+```shell
+dotnet tool install --global Invex.Atom.Tool
+```
+
 ## Why Atom?
 
 ### Zero Context Switching
@@ -35,15 +46,15 @@ Reduces boilerplate by automatically discovering targets and parameters.
 
 > [!NOTE]
 >
-> It is recommended to use the atom dotnet tool to invoke atom projects:
+> It is recommended to use the `atom` dotnet tool to invoke Atom projects:
 >
-> `dotnet tool install -g Invex.Atom.Tool`
+> `dotnet tool install --global Invex.Atom.Tool`
 >
-> ` atom ...`
+> `atom ...`
 >
 > However, the dotnet cli can also be used directly:
 >
-> `dotnet run -- ...`
+> `dotnet run --project _atom -- ...`
 
 1. Create a .NET 10 project
 

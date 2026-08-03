@@ -31,8 +31,9 @@ atom Gen
 
 Your build must:
 
-1. Inherit from `WorkflowBuildDefinition` (or implement `IWorkflowBuildDefinition`).
-2. Override the `Workflows` property with at least one definition.
+1. Implement `IWorkflowBuildDefinition` (or derive from `WorkflowBuildDefinition`).
+2. Define `IWorkflowBuildDefinition.Workflows` with at least one definition. Interface builds
+   explicitly implement the property; partial classes override it.
 3. Inherit a platform module interface (`IGithubWorkflows`, `IDevopsWorkflows`, or both) so the corresponding
    workflow writer is registered.
 

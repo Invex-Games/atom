@@ -48,7 +48,8 @@
     "resource": [
       {
         "files": [
-          "images/**"
+          "images/**",
+          "LICENSE.txt"
         ]
       }
     ],
@@ -76,5 +77,4 @@
     "disableGitFeatures": false
   }
 }
-
 

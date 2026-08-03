@@ -6,31 +6,34 @@ and automatically generate the platform-specific YAML files for GitHub Actions a
 ## When Do You Need Workflows?
 
 Use workflows when you want Atom to **generate** your CI/CD configuration. If you only run builds locally or maintain
-your YAML by hand, stick with `BuildDefinition`.
+your YAML by hand, stick with `IBuildDefinition`.
 
 ## Enabling Workflows
 
-1. Inherit from `WorkflowBuildDefinition` instead of `BuildDefinition`:
+1. Extend `IWorkflowBuildDefinition` instead of `IBuildDefinition`:
 
    ```csharp
    [BuildDefinition]
    [GenerateEntryPoint]
-   internal partial class Build : WorkflowBuildDefinition
+   internal interface IBuild : IWorkflowBuildDefinition
    {
        // ...
    }
    ```
 
-2. Override the `Workflows` property to declare your pipelines.
+   The alternative partial-class form derives from `WorkflowBuildDefinition`.
+
+2. Define the `Workflows` property to declare your pipelines. Interface builds explicitly
+   implement `IWorkflowBuildDefinition.Workflows`; partial classes override it.
 
 3. Add a platform module (`Invex.Atom.Module.GithubWorkflows` or `Invex.Atom.Module.DevopsWorkflows`) so Atom knows
    which YAML format to emit.
 
 4. Run `dotnet run -- Gen` to write the files.
 
-## What `WorkflowBuildDefinition` Adds
+## What workflow builds add
 
-`WorkflowBuildDefinition` extends `BuildDefinition` with:
+Both `IWorkflowBuildDefinition` and `WorkflowBuildDefinition` provide:
 
 | Feature                 | Description                                                                    |
 |-------------------------|--------------------------------------------------------------------------------|
@@ -51,4 +54,3 @@ your YAML by hand, stick with `BuildDefinition`.
 ## Next Steps
 
 → [Workflow Definitions](workflow-definitions.md)
-
