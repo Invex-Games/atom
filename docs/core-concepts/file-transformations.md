@@ -64,7 +64,8 @@ scope.CancelRestore(); // file keeps the transformed content
 For transforming multiple files atomically, use `TransformMultiFileScope` which manages a collection of
 `TransformFileScope` instances.
 
-## Next Steps
+## Next steps
 
-→ [Workflows Overview](../workflows/overview.md)
-
+- [Workflows Overview](../workflows/overview.md): generate CI/CD workflows from your build.
+- [File System](file-system.md): the rooted file system the scopes operate on.
+- [.NET](../modules/dotnet.md): `TransformProjectVersionScope` builds on these scopes for project versions.

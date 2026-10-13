@@ -1,7 +1,7 @@
 # Logging & Reports
 
 Atom provides structured logging via [Spectre.Console](https://spectreconsole.net/) and a report system for capturing
-build summary data.
+build summary data. Use them to make build output readable locally and in CI job summaries.
 
 ## Logging
 
@@ -65,7 +65,11 @@ Report data is rendered by `IOutcomeReportWriter` implementations:
 
 Platform-specific writers are registered by their respective modules.
 
-## Next Steps
+## Next steps
 
-→ [File Transformations](file-transformations.md)
-
+- [File Transformations](file-transformations.md): temporary, reversible file edits.
+- [Custom Providers](../developer-guide/custom-providers.md): write reports to your own destination.
+- <xref:Invex.Atom.Build.Reports.IReportsHelper>
+- <xref:Invex.Atom.Build.Reports.IOutcomeReportWriter>
+- <xref:Invex.Atom.Build.Reports.TextReportData>
+- <xref:Invex.Atom.Build.Reports.ListReportData>

@@ -1,9 +1,8 @@
 # Gen (Generate Workflow Files)
 
-**Interface:** `IGen`  
-**Package:** `Invex.Atom.Workflows`
+The `Gen` target generates CI/CD configuration files from your workflow definitions. Every workflow build has it; run it after changing targets or workflows.
 
-The `Gen` target generates CI/CD configuration files from your workflow definitions.
+**Interface:** `IGen` · **Package:** `Invex.Atom.Workflows`
 
 ## What It Does
 
@@ -45,3 +44,10 @@ You usually don't need to run `Gen` explicitly during local development: when th
 When the build runs in **headless mode** (the `--headless` flag, typical in CI), files are *not* regenerated. Instead,
 if the files on disk are out of date with the current definitions, the build fails early with a
 `WorkflowOutdatedException`, prompting you to run the `Gen` target locally and commit the regenerated files.
+
+## See also
+
+- [Workflow Definitions](../workflows/workflow-definitions.md): what `Gen` generates from.
+- [Debugging Workflows](../workflows/debugging-workflows.md): inspect the resolved model.
+- <xref:Invex.Atom.Workflows.IGen>
+- <xref:Invex.Atom.Workflows.WorkflowOutdatedException>

@@ -1,6 +1,6 @@
 # Build Options
 
-Build options are configuration flags that modify the behaviour of the build or workflow at definition time.
+Build options are configuration flags that modify the behaviour of the build or workflow at definition time. You use them to switch module features on and to tune individual workflow targets.
 
 ## `IBuildOption`
 
@@ -43,7 +43,11 @@ Options are accessed via the static `BuildOptions` class, which is extended by m
 Modules can contribute options dynamically by implementing `IBuildOptionProvider`. The framework collects all providers
 and merges their options at build time.
 
-## Next Steps
+## Next steps
 
-→ [Hosting](hosting.md)
-
+- [Hosting](hosting.md): configure the build host.
+- [Workflow Options](../workflows/workflow-options.md): options that shape generated workflows.
+- <xref:Invex.Atom.Build.BuildOptions.IBuildOption>
+- <xref:Invex.Atom.Build.BuildOptions.BuildOptions>
+- <xref:Invex.Atom.Build.BuildOptions.ToggleBuildOption>
+- <xref:Invex.Atom.Build.BuildOptions.IBuildOptionProvider>

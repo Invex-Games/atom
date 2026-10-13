@@ -1,7 +1,7 @@
 # Build Info
 
 Atom provides a pluggable system for determining the build's identity: its **name**, **ID**, **version**, and
-**timestamp**.
+**timestamp**. Read this when you need to version packages or identify a build run.
 
 ## `IBuildInfo`
 
@@ -50,7 +50,12 @@ Most builds include `SetupBuildInfo` as a dependency of their first real target.
 
 See [SetupBuildInfo](../built-in-targets/setup-build-info.md) for details.
 
-## Next Steps
+## Next steps
 
-→ [Build Options](build-options.md)
-
+- [Build Options](build-options.md): configure build behaviour.
+- [SetupBuildInfo](../built-in-targets/setup-build-info.md): the target that publishes build info as variables.
+- [GitVersion](../modules/git-version.md): derive the ID and version from Git history.
+- <xref:Invex.Atom.Build.BuildInfo.IBuildInfo>
+- <xref:Invex.Atom.Build.BuildInfo.IBuildIdProvider>
+- <xref:Invex.Atom.Build.BuildInfo.IBuildVersionProvider>
+- <xref:Invex.Atom.Build.BuildInfo.IBuildTimestampProvider>

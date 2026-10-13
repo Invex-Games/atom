@@ -2,6 +2,7 @@
 
 Workflows are an optional layer on top of the base build system. They let you define how your targets map to CI/CD jobs
 and automatically generate the platform-specific YAML files for GitHub Actions and Azure DevOps Pipelines.
+Read this before the rest of the workflow pages.
 
 ## When Do You Need Workflows?
 
@@ -51,6 +52,9 @@ Both `IWorkflowBuildDefinition` and `WorkflowBuildDefinition` provide:
 4. A platform-specific `WorkflowFileWriter` (e.g. for GitHub Actions or Azure DevOps) renders the model to YAML and
    writes it to disk.
 
-## Next Steps
+## Next steps
 
-→ [Workflow Definitions](workflow-definitions.md)
+- [Workflow Definitions](workflow-definitions.md): declare workflows, targets, and platforms.
+- [Base vs Workflow Build](../getting-started/base-vs-workflow-build.md): choose the right base contract.
+- <xref:Invex.Atom.Workflows.IWorkflowBuildDefinition>
+- <xref:Invex.Atom.Workflows.WorkflowBuildDefinition>

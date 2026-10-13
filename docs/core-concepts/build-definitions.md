@@ -112,6 +112,11 @@ public override void ConfigureDefinitionHost(IHostApplicationBuilder builder)
 }
 ```
 
-## Next Steps
+## Next steps
 
-→ [Targets](targets.md)
+- [Targets](targets.md): define the units of work in a build.
+- [Hosting](hosting.md): entry points and host configuration.
+- [Source Generators](../developer-guide/source-generators.md): what the generators emit.
+- <xref:Invex.Atom.Build.Definition.BuildDefinitionAttribute>
+- <xref:Invex.Atom.Build.Definition.IBuildDefinition>
+- <xref:Invex.Atom.Build.Definition.BuildDefinition>
