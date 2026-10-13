@@ -1,7 +1,8 @@
 # Targets
 
 A **target** is the fundamental unit of work in an Atom build. Each target has a name, an optional description,
-dependencies on other targets, and one or more tasks to execute.
+dependencies on other targets, and one or more tasks to execute. Every build definition is made of targets, so read
+this page before the rest of the core concepts.
 
 ## Defining a Target
 
@@ -61,6 +62,66 @@ t => t
 
 Dependencies are resolved transitively. If `Pack` depends on `Compile` and `Compile` depends on `Restore`, running
 `Pack` executes `Restore → Compile → Pack`.
+
+#### Example
+
+This build adds a `Goodbye` target that depends on the `HelloWorld` target from
+[Secrets](secrets.md#example):
+
+```csharp
+[BuildDefinition]
+[GenerateEntryPoint]
+internal interface IBuild : IBuildDefinition
+{
+    [ParamDefinition("my-name", "My name")]
+    string? MyName => GetParam(() => MyName);
+
+    [SecretDefinition("my-secret", "My secret")]
+    string? MySecret => GetParam(() => MySecret);
+
+    Target HelloWorld =>
+        t => t
+            .DescribedAs("Prints a hello world message to the console")
+            .RequiresParam(nameof(MyName))
+            .RequiresParam(nameof(MySecret))
+            .Executes(() =>
+                Logger.LogInformation("Hello, World! I am {MyName} and my secret is {MySecret}.", MyName, MySecret));
+
+    Target Goodbye =>
+        t => t
+            .DescribedAs("Prints a goodbye message to the console")
+            .DependsOn(nameof(HelloWorld))
+            .Executes(() => Logger.LogInformation("Goodbye!"));
+}
+```
+
+Running `atom Goodbye --my-name Frodo --my-secret TheOneRing` executes both targets in the correct order, and the
+parameters only need to be provided once:
+
+```text
+26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
+01:30:12.175 INF Executing build
+
+HelloWorld
+
+Prints a hello world message to the console
+
+26-06-06 +10:00  HelloWorld | Atom.Build:
+01:30:12.235 INF Hello, World! I am Frodo and my secret is *****.
+
+Goodbye
+
+Prints a goodbye message to the console
+
+26-06-06 +10:00  Goodbye | Atom.Build:
+01:30:12.240 INF Goodbye!
+
+
+Build Summary
+
+  HelloWorld │ Succeeded │ <0.01s
+  Goodbye    │ Succeeded │ <0.01s
+```
 
 ### Parameters
 
@@ -130,7 +191,10 @@ dotnet run -- Compile Test
 dotnet run -- Pack --skip
 ```
 
-## Next Steps
+## Next steps
 
-→ [Parameters](parameters.md)
-
+- [Parameters](parameters.md): pass values into targets.
+- [Artifacts](artifacts.md) and [Variables](variables.md): share outputs between targets.
+- <xref:Invex.Atom.Build.Definition.TargetDefinition>
+- <xref:Invex.Atom.Build.Definition.Target>
+- <xref:Invex.Atom.Build.IBuildAccessor>

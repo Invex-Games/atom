@@ -1,10 +1,9 @@
 # SetupBuildInfo
 
-**Interface:** `ISetupBuildInfo`  
-**Package:** `Invex.Atom.Build`
-
 The `SetupBuildInfo` target initialises the build's identity — name, ID, version, and timestamp — and makes them
-available as workflow variables.
+available as workflow variables. Include it in workflows whose later targets need the build version or ID.
+
+**Interface:** `ISetupBuildInfo` · **Package:** `Invex.Atom.Build`
 
 ## What It Does
 
@@ -47,3 +46,8 @@ public override IReadOnlyList<WorkflowDefinition> Workflows =>
 
 This target is marked as **hidden** — it doesn't appear in default help output but is still executable.
 
+## See also
+
+- [Build Info](../core-concepts/build-info.md): the providers behind each value.
+- [Variables](../core-concepts/variables.md): consuming the produced variables.
+- <xref:Invex.Atom.Build.ISetupBuildInfo>

@@ -1,6 +1,6 @@
 # Variables in Workflows
 
-When running locally, variables are shared in-memory between targets. In CI/CD workflows, targets may run in separate
+When running locally, variables are persisted to a job-scoped file that later targets read back. In CI/CD workflows, targets may run in separate
 jobs on different machines. Atom bridges this gap by mapping variables to the platform's native output/variable
 mechanism.
 
@@ -54,7 +54,8 @@ Target Pack => t => t
 
 In the generated YAML, `SetupVersion` and `Pack` will be in separate jobs with the variable passed as a job output.
 
-## Next Steps
+## Next steps
 
-→ [Debugging Workflows](debugging-workflows.md)
-
+- [Debugging Workflows](debugging-workflows.md): inspect what Atom generates.
+- [Variables](../core-concepts/variables.md): producing and consuming variables.
+- <xref:Invex.Atom.Build.Variables.IVariableProvider>

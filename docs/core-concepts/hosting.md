@@ -1,7 +1,7 @@
 # Hosting
 
 Atom uses the standard .NET `IHost` / `HostApplicationBuilder` infrastructure under the hood. The `AtomHost` class
-provides convenience methods for setting up and running the host.
+provides convenience methods for setting up and running the host. Read this when you need custom services, configuration sources, or your own entry point.
 
 ## `AtomHost.Run<T>(args)`
 
@@ -80,7 +80,11 @@ public override void ConfigureDefinitionHost(IHostApplicationBuilder builder)
 }
 ```
 
-## Next Steps
+## Next steps
 
-→ [Lifecycle Hooks](lifecycle-hooks.md)
-
+- [Lifecycle Hooks](lifecycle-hooks.md): run code before and after target execution.
+- [Writing a Module](../developer-guide/writing-a-module.md): register services from a module interface.
+- <xref:Invex.Atom.Build.Hosting.AtomHost>
+- <xref:Invex.Atom.Build.Hosting.GenerateEntryPointAttribute>
+- <xref:Invex.Atom.Build.Hosting.ConfigureHostBuilderAttribute>
+- <xref:Invex.Atom.Build.Hosting.ConfigureHostAttribute>

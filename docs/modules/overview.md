@@ -1,7 +1,7 @@
 # Modules Overview
 
 A **module** is a NuGet package that adds reusable functionality to an Atom build — targets, parameters, service
-registrations, or workflow options.
+registrations, or workflow options. Add one when you need an integration that the core packages do not provide.
 
 ## How Modules Work
 
@@ -55,8 +55,7 @@ internal partial class Build : WorkflowBuildDefinition, IGitVersion, IAzureKeyVa
   `ConfigureBuilderFrom{InterfaceName}` method.
 - Build options are extended via the static `BuildOptions` class using extension-like patterns.
 
-## Next Steps
+## Next steps
 
-→ Individual module
-pages: [.NET](dotnet.md) · [GitHub Workflows](github-workflows.md) · [DevOps Workflows](devops-workflows.md) · [Azure Key Vault](azure-key-vault.md) · [Azure Storage](azure-storage.md) · [GitVersion](git-version.md)
-
+- Module pages: [.NET](dotnet.md) · [GitHub Workflows](github-workflows.md) · [DevOps Workflows](devops-workflows.md) · [Azure Key Vault](azure-key-vault.md) · [Azure Storage](azure-storage.md) · [GitVersion](git-version.md)
+- [Writing a Module](../developer-guide/writing-a-module.md): build and publish your own module.

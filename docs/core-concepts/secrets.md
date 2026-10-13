@@ -1,7 +1,8 @@
 # Secrets
 
 Secrets are parameters that contain sensitive values (API keys, connection strings, passwords). Atom provides
-first-class support for masking them in logs and resolving them from secure stores.
+first-class support for masking them in logs and resolving them from secure stores. Use a secret instead of a plain
+parameter whenever the value must never appear in build output.
 
 ## Defining a Secret
 
@@ -17,6 +18,63 @@ secret:
 
 - Its value is **masked** in all log output.
 - It can be resolved from registered `ISecretsProvider` implementations in addition to the standard sources.
+
+## Example
+
+This build extends the parameter example from [Your First Build](../getting-started/your-first-build.md) with a
+secret:
+
+```csharp
+using Invex.Atom.Build.Definition;
+using Invex.Atom.Build.Hosting;
+using Invex.Atom.Build.Params;
+
+namespace Atom;
+
+[BuildDefinition]
+[GenerateEntryPoint]
+internal interface IBuild : IBuildDefinition
+{
+    [ParamDefinition("my-name", "My name")]
+    string? MyName => GetParam(() => MyName);
+
+    [SecretDefinition("my-secret", "My secret")]
+    string? MySecret => GetParam(() => MySecret);
+
+    Target HelloWorld =>
+        t => t
+            .DescribedAs("Prints a hello world message to the console")
+            .RequiresParam(nameof(MyName))
+            .RequiresParam(nameof(MySecret))
+            .Executes(() =>
+                Logger.LogInformation("Hello, World! I am {MyName} and my secret is {MySecret}.",
+                    MyName,
+                    MySecret));
+}
+```
+
+Run it with `atom HelloWorld --my-name Frodo --my-secret TheOneRing`. The secret is masked in the output:
+
+```text
+26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
+01:27:08.482 INF Executing build
+
+HelloWorld
+
+Prints a hello world message to the console
+
+26-06-06 +10:00  HelloWorld | Atom.Build:
+01:27:08.544 INF Hello, World! I am Frodo and my secret is *****.
+
+
+Build Summary
+
+  HelloWorld │ Succeeded │ <0.01s
+```
+
+> [!WARNING]
+> Passing a real secret on the command line can expose it through shell history and process diagnostics. Use a
+> secrets provider, .NET user secrets, or CI secret injection for real credentials.
 
 ## `ISecretsProvider`
 
@@ -39,7 +97,7 @@ preserve registration order) — return `null` to delegate to the next provider.
 
 | Provider                    | Package                           | Description                                       |
 |-----------------------------|-----------------------------------|---------------------------------------------------|
-| `DotnetUserSecretsProvider` | `Invex.Atom.Build`                | Reads from .NET User Secrets (local development). |
+| `DotnetUserSecretsProvider` | `Invex.Atom.Build`                | Reads from .NET User Secrets (local development). Enabled by `IDotnetUserSecrets`. |
 | `AzureKeySecretsProvider`   | `Invex.Atom.Module.AzureKeyVault` | Reads from Azure Key Vault.                       |
 
 ### Registering a Custom Provider
@@ -55,9 +113,24 @@ public override void ConfigureDefinitionHost(IHostApplicationBuilder builder)
 ## .NET User Secrets
 
 The built-in `DotnetUserSecretsProvider` integrates with `dotnet user-secrets`. This is the recommended approach for
-local development — secrets stay out of source control and are resolved automatically.
+local development — secrets stay out of source control and are resolved automatically. Implement `IDotnetUserSecrets` on
+your build definition to register it, and give the build project a `UserSecretsId`:
 
-## Next Steps
+```csharp
+[BuildDefinition]
+[GenerateEntryPoint]
+internal interface IBuild : IBuildDefinition, IDotnetUserSecrets
+{
+    [SecretDefinition("my-secret", "My secret")]
+    string? MySecret => GetParam(() => MySecret);
+}
+```
 
-→ [Artifacts](artifacts.md)
+## Next steps
 
+- [Artifacts](artifacts.md): pass files between targets.
+- [Azure Key Vault](../modules/azure-key-vault.md): resolve secrets from a vault.
+- [Custom Providers](../developer-guide/custom-providers.md): implement your own `ISecretsProvider`.
+- <xref:Invex.Atom.Build.Params.SecretDefinitionAttribute>
+- <xref:Invex.Atom.Build.Secrets.ISecretsProvider>
+- <xref:Invex.Atom.Build.Secrets.IDotnetUserSecrets>

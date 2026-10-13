@@ -68,6 +68,11 @@ To inspect the generated code:
 
 2. Build the project. Generated files appear under `obj/Debug/net*/generated/`.
 
-## Next Steps
+## Next steps
 
-→ [Testing](testing.md)
+- [Testing](testing.md): test build definitions and modules.
+- [Build Definitions](../core-concepts/build-definitions.md): the attributes from a consumer's point of view.
+- <xref:Invex.Atom.Build.Definition.BuildDefinitionAttribute>
+- <xref:Invex.Atom.Build.Hosting.GenerateEntryPointAttribute>
+- <xref:Invex.Atom.Build.Definition.GenerateSolutionModelAttribute>
+- <xref:Invex.Atom.Build.Definition.GenerateInterfaceMembersAttribute>
