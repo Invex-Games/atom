@@ -1,6 +1,6 @@
 # Triggers
 
-Triggers define when a workflow starts. Atom provides a fluent API via the `WorkflowTriggers` helper class. Every workflow definition needs at least one trigger.
+Triggers define when a workflow starts. Atom provides a fluent API via the `WorkflowTriggers` helper class. A definition with no triggers is allowed; for Azure DevOps it is written with `trigger: none`, so pushes do not start the pipeline and it can still be queued manually.
 
 ## Built-in Trigger Shortcuts
 
