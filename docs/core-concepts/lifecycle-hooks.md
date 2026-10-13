@@ -1,7 +1,7 @@
 # Lifecycle Hooks
 
 `IAtomLifecycleHook` lets you run code at specific points in the Atom build lifecycle without modifying target
-definitions.
+definitions. Use one for cross-cutting checks or cleanup that should happen on every run.
 
 ## Interface
 
@@ -45,7 +45,8 @@ Multiple hooks can be registered. They run in registration order.
 The `WorkflowLifecycleHook` (registered by `IWorkflowBuildDefinition`) uses `BeforeExecute` to regenerate workflow
 files in interactive mode, or — in headless mode — to fail the build when the generated files are outdated.
 
-## Next Steps
+## Next steps
 
-→ [Logging & Reports](logging-and-reports.md)
-
+- [Logging & Reports](logging-and-reports.md): add data to the build summary.
+- [Debugging Workflows](../workflows/debugging-workflows.md): the built-in workflow hook in action.
+- <xref:Invex.Atom.Build.IAtomLifecycleHook>

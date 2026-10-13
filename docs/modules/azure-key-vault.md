@@ -1,9 +1,9 @@
-# Module: Azure Key Vault
-
-**Package:** `Invex.Atom.Module.AzureKeyVault`
+# Azure Key Vault
 
 Integrates Azure Key Vault as a secrets provider, allowing your build to resolve `[SecretDefinition]` parameters from a
-vault.
+vault. Use it when your secrets live in Azure Key Vault rather than in CI secret stores or user secrets.
+
+**Package:** `Invex.Atom.Module.AzureKeyVault`
 
 ## Installation
 
@@ -65,3 +65,9 @@ public override IReadOnlyList<IBuildOption> Options =>
 ];
 ```
 
+## See also
+
+- [Secrets](../core-concepts/secrets.md): how secrets are declared and resolved.
+- <xref:Invex.Atom.Module.AzureKeyVault.IAzureKeyVault>
+- <xref:Invex.Atom.Module.AzureKeyVault.AzureKeySecretsProvider>
+- <xref:Invex.Atom.Module.AzureKeyVault.AzureKeyVaultValueInjections>

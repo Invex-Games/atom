@@ -1,8 +1,8 @@
-# Base Build vs Workflow Build
+# Base vs Workflow Build
 
 Atom supports interface and partial-class build definitions. Prefer the interface pathway for consumer
 builds; choose the partial-class alternative when you need class-specific host configuration. In
-either pathway, choose the base contract according to whether you need to generate CI/CD files.
+either pathway, choose the base contract according to whether you need to generate CI/CD files. Read this when deciding whether your build should also generate CI/CD files.
 
 ## Basic builds
 
@@ -98,7 +98,9 @@ You can start with `IBuildDefinition` and later change it to `IWorkflowBuildDefi
 targets, parameters, and module interfaces can remain unchanged while you add the `Workflows`
 property and `Gen` target.
 
-## Next Steps
+## Next steps
 
-→ [Build Definitions](../core-concepts/build-definitions.md) — deep dive into the `[BuildDefinition]` attribute and
-source generators
+- [Build Definitions](../core-concepts/build-definitions.md): the `[BuildDefinition]` attribute and source generators.
+- [Workflows Overview](../workflows/overview.md): what workflow builds add and how generation works.
+- <xref:Invex.Atom.Build.Definition.IBuildDefinition>
+- <xref:Invex.Atom.Workflows.IWorkflowBuildDefinition>
