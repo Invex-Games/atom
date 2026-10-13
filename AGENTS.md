@@ -17,8 +17,8 @@ for .NET. Keep changes focused; `README.md` and `docs/` describe consumer-facing
 | `samples/` | Small consumer examples |
 | `docs/`, `api/` | DocFX documentation source and generated API content |
 
-The solution is `Invex.Atom.slnx`. The repository currently requires the .NET 10 SDK; libraries
-and tests target `net8.0`, `net9.0`, and `net10.0`, while the build project targets `net10.0`.
+The solution is `Invex.Atom.slnx`. The repository currently requires the .NET 10 SDK; libraries,
+tests, and the build project all target `net10.0`.
 There is no `global.json`, so use the installed .NET 10 SDK selected by the environment.
 
 ## Build, test, and cleanup
