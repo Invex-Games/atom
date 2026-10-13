@@ -1,16 +1,44 @@
 # Atom
 
-[![Validate](https://github.com/Invex-Games/atom/actions/workflows/Validate.yml/badge.svg)](https://github.com/Invex-Games/atom/actions/workflows/Validate.yml)
 [![Build](https://github.com/Invex-Games/atom/actions/workflows/Build.yml/badge.svg)](https://github.com/Invex-Games/atom/actions/workflows/Build.yml)
-[![Dependabot Updates](https://github.com/Invex-Games/atom/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/Invex-Games/atom/actions/workflows/dependabot/dependabot-updates)
+[![NuGet](https://img.shields.io/nuget/v/Invex.Atom.Build.svg)](https://www.nuget.org/packages/Invex.Atom.Build)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Invex-Games/atom/blob/main/LICENSE.txt)
+[![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0%20%7C%2010.0-512BD4.svg)](https://dotnet.microsoft.com/)
 
 Atom is an opinionated, type-safe build automation framework for .NET. It enables you to define your build logic in C#,
 debug it like standard code, and automatically generate CI/CD configuration files for GitHub Actions and Azure DevOps.
 
-## Requirements
+## Packages
 
-- .NET 10 SDK
-- A .NET project containing an Atom build definition (commonly `_atom/_atom.csproj`)
+| Package                                                                                                 | What it does                                                          |
+|---------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| [Invex.Atom.Build](https://www.nuget.org/packages/Invex.Atom.Build)                                     | Core framework: build definitions, targets, parameters, hosting.     |
+| [Invex.Atom.Workflows](https://www.nuget.org/packages/Invex.Atom.Workflows)                             | Workflow definitions, triggers, options, and the `Gen` target.        |
+| [Invex.Atom.Module.Dotnet](https://www.nuget.org/packages/Invex.Atom.Module.Dotnet)                     | .NET CLI wrappers and build, test, pack, publish, and NuGet helpers.  |
+| [Invex.Atom.Module.GithubWorkflows](https://www.nuget.org/packages/Invex.Atom.Module.GithubWorkflows)   | GitHub Actions workflow and Dependabot generation.                    |
+| [Invex.Atom.Module.DevopsWorkflows](https://www.nuget.org/packages/Invex.Atom.Module.DevopsWorkflows)   | Azure DevOps Pipelines workflow generation.                           |
+| [Invex.Atom.Module.AzureKeyVault](https://www.nuget.org/packages/Invex.Atom.Module.AzureKeyVault)       | Azure Key Vault secrets provider.                                     |
+| [Invex.Atom.Module.AzureStorage](https://www.nuget.org/packages/Invex.Atom.Module.AzureStorage)         | Azure Blob Storage artifact provider.                                 |
+| [Invex.Atom.Module.GitVersion](https://www.nuget.org/packages/Invex.Atom.Module.GitVersion)             | GitVersion-based build ID and version.                                |
+| [Invex.Atom.Tool](https://www.nuget.org/packages/Invex.Atom.Tool)                                       | The `atom` .NET global tool for running builds from any directory.    |
+
+## Features
+
+- **Zero context switching.** Write build logic in C# alongside your application code.
+- **IntelliSense and debugging.** Step through your build process using your IDE.
+- **CI/CD agnostic.** Define logic once; Atom generates the YAML for GitHub Actions and Azure DevOps.
+- **Modular.** Pull in capabilities via NuGet packages (GitVersion, Azure Key Vault, and more).
+- **Source generators.** Targets and parameters are discovered automatically, so there is no registration boilerplate.
+
+## Installation
+
+Atom build projects require the .NET 10 SDK. The libraries target `net8.0`, `net9.0`, and `net10.0`.
+
+Add the core package to your build project (commonly `_atom/_atom.csproj`):
+
+```shell
+dotnet add package Invex.Atom.Build
+```
 
 Install the CLI once if you want to invoke builds from any directory:
 
@@ -18,516 +46,199 @@ Install the CLI once if you want to invoke builds from any directory:
 dotnet tool install --global Invex.Atom.Tool
 ```
 
-## Why Atom?
+## Quick start
 
-### Zero Context Switching
+1. Create a .NET 10 project:
 
-Write build logic in C# alongside your application code.
-
-### Intellisense & Debugging
-
-Step through your build process using your IDE.
-
-### CI/CD Agnostic
-
-Define logic once; Atom generates the YAML for GitHub and Azure DevOps.
-
-### Modular
-
-Pull in capabilities via NuGet packages (GitVersion, Azure KeyVault, etc.).
-
-### Source Generators
-
-Reduces boilerplate by automatically discovering targets and parameters.
-
-## Examples
-
-### Hello World
-
-> [!NOTE]
->
-> It is recommended to use the `atom` dotnet tool to invoke Atom projects:
->
-> `dotnet tool install --global Invex.Atom.Tool`
->
-> `atom ...`
->
-> However, the dotnet cli can also be used directly:
->
-> `dotnet run --project _atom -- ...`
-
-1. Create a .NET 10 project
-
-   ```
+   ```shell
    dotnet new console -n _atom
    ```
 
-2. Update the `_atom.csproj` file:
+2. Replace the contents of `_atom.csproj`:
 
-    ```xml
-    <Project Sdk="Microsoft.NET.Sdk.Worker">
-    
-      <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <RootNamespace>Atom</RootNamespace>
-      </PropertyGroup>
-    
-      <ItemGroup>
-        <PackageReference Include="Invex.Atom.Build" Version="3.*" />
-      </ItemGroup>
-    
-    </Project>
-    ```
+   ```xml
+   <Project Sdk="Microsoft.NET.Sdk.Worker">
 
-3. Replace the `Program.cs` file with `IBuild.cs`:
+     <PropertyGroup>
+       <TargetFramework>net10.0</TargetFramework>
+       <RootNamespace>Atom</RootNamespace>
+     </PropertyGroup>
 
-    ```csharp
-    using Invex.Atom.Build.Definition;
-    using Invex.Atom.Build.Hosting;
-    
-    namespace Atom;
-    
-    [BuildDefinition]
-    [GenerateEntryPoint]
-    internal interface IBuild : IBuildDefinition
-    {
-        Target HelloWorld =>
-            t => t
-            .DescribedAs("Prints a hello world message to the console")
-            .Executes(() => Logger.LogInformation("Hello, World!"));
-    }
-    ```
+     <ItemGroup>
+       <PackageReference Include="Invex.Atom.Build" Version="3.*" />
+     </ItemGroup>
 
-4. Execute `atom HelloWorld`
-
-    ```
-    26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
-    01:16:47.552 INF Executing build
-    
-    HelloWorld
-    
-    Prints a hello world message to the console
-    
-    26-06-06 +10:00  HelloWorld | Atom.Build:      
-    01:16:47.616 INF Hello, World!
-    
-    
-    Build Summary
-    
-    HelloWorld │ Succeeded │ <0.01s
+   </Project>
    ```
 
-### Adding Params
+3. Replace `Program.cs` with `IBuild.cs`:
 
-1. Add a parameter to the `IBuild` interface:
+   ```csharp
+   using Invex.Atom.Build.Definition;
+   using Invex.Atom.Build.Hosting;
 
-   > [!NOTE]
-   >
-   > `.RequiresParam(nameof(...))` is used to ensure the parameter is provided before the target is executed.
-   >
-   > `.UsesParam(nameof(...))` is used to use the parameter if it is provided, but not fail the build if it is not.
+   namespace Atom;
 
-    ```csharp
-    using Invex.Atom.Build.Definition;
-    using Invex.Atom.Build.Hosting;
-    using Invex.Atom.Build.Params;
-    
-    namespace Atom;
-    
-    [BuildDefinition]
-    [GenerateEntryPoint]
-    internal interface IBuild : IBuildDefinition
-    {
-        [ParamDefinition("my-name", "My name")]
-        string? MyName => GetParam(() => MyName);
-    
-        Target HelloWorld =>
-            t => t
-                .DescribedAs("Prints a hello world message to the console")
-                .RequiresParam(nameof(MyName))
-                .Executes(() => Logger.LogInformation("Hello, World! I am {MyName}.", MyName));
-    }
-    ```
+   [BuildDefinition]
+   [GenerateEntryPoint]
+   internal interface IBuild : IBuildDefinition
+   {
+       Target HelloWorld =>
+           t => t
+               .DescribedAs("Prints a hello world message to the console")
+               .Executes(() => Logger.LogInformation("Hello, World!"));
+   }
+   ```
 
-2. Execute `atom HelloWorld --my-name Frodo
+4. Run the target with `atom HelloWorld` (or `dotnet run --project _atom -- HelloWorld`):
 
-    ```
-    26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
-    01:23:25.405 INF Executing build
+   ```text
+   26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
+   01:16:47.552 INF Executing build
 
-    HelloWorld
-    
-    Prints a hello world message to the console
-    
-    26-06-06 +10:00  HelloWorld | Atom.Build:
-    01:23:25.467 INF Hello, World! I am Frodo.
+   HelloWorld
 
-    
-    Build Summary
+   Prints a hello world message to the console
 
-      HelloWorld │ Succeeded │ <0.01s
-    ```
+   26-06-06 +10:00  HelloWorld | Atom.Build:
+   01:16:47.616 INF Hello, World!
 
-### Adding Secrets
+   Build Summary
 
-1. Add a secret parameter to the `IBuild` interface:
+     HelloWorld │ Succeeded │ <0.01s
+   ```
 
-    ```csharp
-    using Invex.Atom.Build.Definition;
-    using Invex.Atom.Build.Hosting;
-    using Invex.Atom.Build.Params;
-    
-    namespace Atom;
-    
-    [BuildDefinition]
-    [GenerateEntryPoint]
-    internal interface IBuild : IBuildDefinition
-    {
-        [ParamDefinition("my-name", "My name")]
-        string? MyName => GetParam(() => MyName);
-    
-        [SecretDefinition("my-secret", "My secret")]
-        string? MySecret => GetParam(() => MySecret);
-    
-        Target HelloWorld =>
-            t => t
-                .DescribedAs("Prints a hello world message to the console")
-                .RequiresParam(nameof(MyName))
-                .RequiresParam(nameof(MySecret))
-                .Executes(() =>
-                    Logger.LogInformation("Hello, World! I am {MyName} and my secret is {MySecret}.",
-                        MyName,
-                        MySecret));
-    }
-    ```
+## Usage
 
-2. Execute `atom HelloWorld --my-name Frodo --my-secret TheOneRing`
+### Parameters and secrets
 
-   > [!NOTE]
-   > The secret is masked in the output.
+Declare a parameter with `[ParamDefinition]` (or a secret with `[SecretDefinition]`, which is masked in logs) and
+require it on a target:
 
-    ```
-    26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
-    01:27:08.482 INF Executing build                
-                                                    
-    HelloWorld
-    
-    Prints a hello world message to the console
-    
-    26-06-06 +10:00  HelloWorld | Atom.Build:                        
-    01:27:08.544 INF Hello, World! I am Frodo and my secret is *****.
-                                                                     
-    
-    Build Summary
-                                         
-      HelloWorld │ Succeeded │ <0.01s
-    ```
+```csharp
+[ParamDefinition("my-name", "My name")]
+string? MyName => GetParam(() => MyName);
 
-### Adding Target Dependencies
+[SecretDefinition("my-secret", "My secret")]
+string? MySecret => GetParam(() => MySecret);
 
-1. Update the `IBuild` interface:
+Target HelloWorld =>
+    t => t
+        .RequiresParam(nameof(MyName))
+        .RequiresParam(nameof(MySecret))
+        .Executes(() => Logger.LogInformation("I am {MyName} and my secret is {MySecret}.", MyName, MySecret));
+```
 
-    ```csharp
-    using Invex.Atom.Build.Definition;
-    using Invex.Atom.Build.Hosting;
-    using Invex.Atom.Build.Params;
-    
-    namespace Atom;
-    
-    [BuildDefinition]
-    [GenerateEntryPoint]
-    internal interface IBuild : IBuildDefinition
-    {
-        [ParamDefinition("my-name", "My name")]
-        string? MyName => GetParam(() => MyName);
-    
-        [SecretDefinition("my-secret", "My secret")]
-        string? MySecret => GetParam(() => MySecret);
-    
-        Target HelloWorld =>
-            t => t
-                .DescribedAs("Prints a hello world message to the console")
-                .RequiresParam(nameof(MyName))
-                .RequiresParam(nameof(MySecret))
-                .Executes(() =>
-                    Logger.LogInformation("Hello, World! I am {MyName} and my secret is {MySecret}.", MyName, MySecret));
-    
-        Target Goodbye =>
-            t => t
-                .DescribedAs("Prints a goodbye message to the console")
-                .DependsOn(nameof(HelloWorld))
-                .Executes(() => Logger.LogInformation("Goodbye!"));
-    }
-    ```
+Run it with `atom HelloWorld --my-name Frodo --my-secret TheOneRing`. See
+[Parameters](https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/parameters.md) and
+[Secrets](https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/secrets.md).
 
-2. Execute `atom Goodbye --my-name Frodo --my-secret TheOneRing`
+### Target dependencies
 
-   > [!NOTE]
-   > The `Goodbye` target depends on the `HelloWorld` target, so both will be executed in the correct order, and the
-   parameters only need to be provided once.
+Targets run in dependency order, and parameters only need to be provided once:
 
-    ```
-    26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
-    01:30:12.175 INF Executing build                
-                                                    
-    HelloWorld
-    
-    Prints a hello world message to the console
-    
-    26-06-06 +10:00  HelloWorld | Atom.Build:                        
-    01:30:12.235 INF Hello, World! I am Frodo and my secret is *****.
-                                                                     
-    Goodbye
-    
-    Prints a goodbye message to the console
-    
-    26-06-06 +10:00  Goodbye | Atom.Build:
-    01:30:12.240 INF Goodbye!             
-                                          
-    
-    Build Summary
-                                         
-      HelloWorld │ Succeeded │ <0.01s    
-      Goodbye    │ Succeeded │ <0.01s
-    ```
+```csharp
+Target Goodbye =>
+    t => t
+        .DescribedAs("Prints a goodbye message to the console")
+        .DependsOn(nameof(HelloWorld))
+        .Executes(() => Logger.LogInformation("Goodbye!"));
+```
 
-### Adding Workflow Generation
+`atom Goodbye --my-name Frodo --my-secret TheOneRing` runs `HelloWorld` and then `Goodbye`. See
+[Targets](https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/targets.md).
 
-1. Update the `_atom.csproj` file:
+### Workflow generation
 
-    ```xml
-    <Project Sdk="Microsoft.NET.Sdk.Worker">
-    
-      <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <RootNamespace>Atom</RootNamespace>
-      </PropertyGroup>
-    
-      <ItemGroup>
-        <PackageReference Include="Invex.Atom.Module.GithubWorkflows" Version="3.*" />
-      </ItemGroup>
-    
-    </Project>
-    ```
-2. Update the `IBuild` interface:
+Reference `Invex.Atom.Module.GithubWorkflows`, extend `IWorkflowBuildDefinition`, and declare a workflow:
 
-    ```csharp
-    using Invex.Atom.Build.BuildOptions;
-    using Invex.Atom.Build.Definition;
-    using Invex.Atom.Build.Hosting;
-    using Invex.Atom.Build.Params;
-    using Invex.Atom.Module.GithubWorkflows.Extensions;
-    using Invex.Atom.Module.GithubWorkflows.Helpers;
-    using Invex.Atom.Workflows;
-    using Invex.Atom.Workflows.Definition;
-    using Invex.Atom.Workflows.Definition.Triggers;
-    using Invex.Atom.Workflows.Options;
-    using Invex.StructuredText.Expressions;
-    
-    namespace Atom;
-    
-    [BuildDefinition]
-    [GenerateEntryPoint]
-    internal interface IBuild : IWorkflowBuildDefinition, IGithubWorkflows
-    {
-    [ParamDefinition("my-name", "My name")]
-    string? MyName => GetParam(() => MyName);
-    
-        [SecretDefinition("my-secret", "My secret")]
-        string? MySecret => GetParam(() => MySecret);
-    
-        Target HelloWorld =>
-            t => t
-                .DescribedAs("Prints a hello world message to the console")
-                .RequiresParam(nameof(MyName))
-                .RequiresParam(nameof(MySecret))
-                .Executes(() =>
-                    Logger.LogInformation("Hello, World! I am {MyName} and my secret is {MySecret}.", MyName, MySecret));
-    
-        Target Goodbye =>
-            t => t
-                .DescribedAs("Prints a goodbye message to the console")
-                .DependsOn(nameof(HelloWorld))
-                .Executes(() => Logger.LogInformation("Goodbye!"));
-    
-        IReadOnlyList<WorkflowDefinition> IWorkflowBuildDefinition.Workflows =>
-        [
-            new("Hello")
-            {
-                Triggers = [WorkflowTriggers.PushToMain],
-                Targets =
-                [
-                    new(nameof(HelloWorld))
-                    {
-                        Options =
-                        [
-                            BuildOptions.Inject.Param(nameof(MyName), TextExpressions.Github.GithubRepositoryOwner),
-                            BuildOptions.Inject.Secret(nameof(MySecret)),
-                        ],
-                    },
-                    new(nameof(Goodbye)),
-                ],
-                Types = [WorkflowTypes.Github.Action],
-            },
-        ];
-    }
-    ```
+```csharp
+using Invex.StructuredText.Expressions;
 
-3. Execute `atom gen`
+[BuildDefinition]
+[GenerateEntryPoint]
+internal interface IBuild : IWorkflowBuildDefinition, IGithubWorkflows
+{
+    // targets and parameters as above
 
-    ```
-    26-06-06 +10:00  Invex.Atom.Module.GithubWorkflows.GithubActions.GithubWorkflowFileWriter:                                               
-    01:38:57.388 INF Writing new workflow file:                                  
-                     L:\Repos\Invex-Games\atom\.github\workflows\Hello.yml             
-                                                                                 
-    
-    26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
-    01:38:57.472 INF Executing build                
-                                                    
-    Gen
-    
-    Generates workflow files
-    
-    
-    Build Summary
-                                     
-      Gen    │ Succeeded │ <0.01s
-    ```
+    IReadOnlyList<WorkflowDefinition> IWorkflowBuildDefinition.Workflows =>
+    [
+        new("Hello")
+        {
+            Triggers = [WorkflowTriggers.PushToMain],
+            Targets =
+            [
+                new(nameof(HelloWorld))
+                {
+                    Options =
+                    [
+                        BuildOptions.Inject.Param(nameof(MyName), TextExpressions.Github.GithubRepositoryOwner),
+                        BuildOptions.Inject.Secret(nameof(MySecret)),
+                    ],
+                },
+                new(nameof(Goodbye)),
+            ],
+            Types = [WorkflowTypes.Github.Action],
+        },
+    ];
+}
+```
 
-   `.github/workflows/Hello.yml`
+`atom Gen` writes `.github/workflows/Hello.yml`, with one job per target and the parameter and secret injected from
+GitHub. See [Workflow Definitions](https://github.com/Invex-Games/atom/blob/main/docs/workflows/workflow-definitions.md).
 
-    ```yaml
-    name: Hello
-    
-    on:
-      push:
-        branches: [ main ]
-    
-    permissions: { }
-    
-    jobs:
-    
-      HelloWorld:
-        runs-on: ubuntu-latest
-        steps:
-    
-          - name: Checkout
-            uses: actions/checkout@v6
-            with:
-              fetch-depth: 0
-    
-          - name: HelloWorld
-            id: HelloWorld
-            run: dotnet run --project _atom/_atom.csproj -- HelloWorld --skip --headless
-            env:
-              my-secret: ${{ secrets.MY_SECRET }}
-              my-name: ${{ github.repository_owner }}
-    
-      Goodbye:
-        needs: [ HelloWorld ]
-        runs-on: ubuntu-latest
-        steps:
-    
-          - name: Checkout
-            uses: actions/checkout@v6
-            with:
-              fetch-depth: 0
-    
-          - name: Goodbye
-            id: Goodbye
-            run: dotnet run --project _atom/_atom.csproj -- Goodbye --skip --headless
-    ```
+### File-based apps
 
-### File-based Apps
-
-Atom can also be used as a file-based app:
-
-`Atom.cs`
+A build can also be a single `Atom.cs` file run with `dotnet run Atom.cs HelloWorld`:
 
 ```csharp
 #:sdk Microsoft.NET.Sdk.Worker
 #:package Invex.Atom.Build@3.*
 
-using Invex.Atom.Build.Definition;
-using Invex.Atom.Build.Hosting;
-
-namespace Atom;
-
 [BuildDefinition]
 [GenerateEntryPoint]
 internal interface IBuild : IBuildDefinition
 {
-    Target HelloWorld =>
-        t => t
-            .DescribedAs("Prints a hello world message to the console")
-            .Executes(() => Logger.LogInformation("Hello, World!"));
+    Target HelloWorld => t => t.Executes(() => Logger.LogInformation("Hello, World!"));
 }
 ```
 
+See [Your First Build](https://github.com/Invex-Games/atom/blob/main/docs/getting-started/your-first-build.md).
+
 ## Documentation
 
-### Getting Started
+Full documentation: [https://invex-games.github.io/atom/](https://invex-games.github.io/atom/)
 
-- [Introduction](docs/getting-started/introduction.md) — What Atom is and why you'd use it
-- [Your First Build](docs/getting-started/your-first-build.md) — Create a minimal build and run it
-- [Base vs Workflow Build](docs/getting-started/base-vs-workflow-build.md) — `BuildDefinition` vs
-  `WorkflowBuildDefinition`
+| Guide                                                                                                             | Contents                                                                                                  |
+|-------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
+| [Introduction](https://github.com/Invex-Games/atom/blob/main/docs/getting-started/introduction.md)                | What Atom is, when to use it, and how the packages fit together.                                          |
+| [Your First Build](https://github.com/Invex-Games/atom/blob/main/docs/getting-started/your-first-build.md)        | Create a project-based or file-based build and run it.                                                    |
+| [Base vs Workflow Build](https://github.com/Invex-Games/atom/blob/main/docs/getting-started/base-vs-workflow-build.md) | `IBuildDefinition` vs `IWorkflowBuildDefinition`.                                                     |
+| [Core Concepts](https://github.com/Invex-Games/atom/blob/main/docs/core-concepts/build-definitions.md)            | Build definitions, targets, parameters, secrets, artifacts, variables, file system, hosting, and more.    |
+| [Workflows](https://github.com/Invex-Games/atom/blob/main/docs/workflows/overview.md)                             | Workflow definitions, triggers, options, variables across jobs, and debugging.                            |
+| [Modules](https://github.com/Invex-Games/atom/blob/main/docs/modules/overview.md)                                 | .NET, GitHub Workflows, DevOps Workflows, Azure Key Vault, Azure Storage, and GitVersion.                 |
+| [Built-in Targets](https://github.com/Invex-Games/atom/blob/main/docs/built-in-targets/setup-build-info.md)       | `SetupBuildInfo`, `ValidateBuild`, and `Gen`.                                                              |
+| [Developer Guide](https://github.com/Invex-Games/atom/blob/main/docs/developer-guide/writing-a-module.md)         | Writing modules, custom providers, source generators, and testing.                                        |
+| [CLI Reference](https://github.com/Invex-Games/atom/blob/main/docs/reference/cli.md)                              | Command-line options and the `atom` global tool.                                                          |
+| [API Reference](https://github.com/Invex-Games/atom/blob/main/api/index.md)                                       | Key types per package, linked into the generated reference.                                               |
 
-### Core Concepts
+## Development
 
-- [Build Definitions](docs/core-concepts/build-definitions.md) — The `[BuildDefinition]` attribute and source generators
-- [Targets](docs/core-concepts/targets.md) — Defining targets with the fluent `TargetDefinition` API
-- [Parameters](docs/core-concepts/parameters.md) — Declaring, requiring, and resolving parameters
-- [Secrets](docs/core-concepts/secrets.md) — Secure parameter handling with `ISecretsProvider`
-- [Artifacts](docs/core-concepts/artifacts.md) — Producing and consuming build artifacts
-- [Variables](docs/core-concepts/variables.md) — Sharing data between targets with workflow variables
-- [File System](docs/core-concepts/file-system.md) — `IRootedFileSystem`, `RootedPath`, and path providers
-- [Process Runner](docs/core-concepts/process-runner.md) — Executing external processes
-- [Build Info](docs/core-concepts/build-info.md) — Build ID, version, and timestamp providers
-- [Build Options](docs/core-concepts/build-options.md) — Configuring build behaviour with `IBuildOption`
-- [Hosting](docs/core-concepts/hosting.md) — `AtomHost`, `[GenerateEntryPoint]`, and host configuration
-- [Lifecycle Hooks](docs/core-concepts/lifecycle-hooks.md) — `IAtomLifecycleHook` for pre/post-build logic
-- [Logging & Reports](docs/core-concepts/logging-and-reports.md) — Spectre console output and report data
-- [File Transformations](docs/core-concepts/file-transformations.md) — Temporary, reversible file edits with
-  `TransformFileScope`
+The solution is `Invex.Atom.slnx` and requires the .NET 10 SDK:
 
-### Workflows
+```shell
+dotnet build Invex.Atom.slnx
+dotnet test Invex.Atom.slnx
+```
 
-- [Overview](docs/workflows/overview.md) — What workflows add on top of a base build
-- [Workflow Definitions](docs/workflows/workflow-definitions.md) — `WorkflowDefinition`, targets, and types
-- [Triggers](docs/workflows/triggers.md) — Push, pull request, and manual triggers
-- [Workflow Options](docs/workflows/workflow-options.md) — Checkout, deployment, conditions, and more
-- [Variables in Workflows](docs/workflows/variables-in-workflows.md) — Cross-job data sharing
-- [Debugging Workflows](docs/workflows/debugging-workflows.md) — Local workflow simulation
+Atom builds itself with the build definition in `_atom/`. Build or preview the DocFX documentation with:
 
-### Modules
+```shell
+atom BuildDocs
+atom ServeDocs
+```
 
-- [Overview](docs/modules/overview.md) — What a module is and how to add one
-- [.NET](docs/modules/dotnet.md) — `Invex.Atom.Module.Dotnet`
-- [GitHub Workflows](docs/modules/github-workflows.md) — `Invex.Atom.Module.GithubWorkflows`
-- [DevOps Workflows](docs/modules/devops-workflows.md) — Azure Pipelines generation, pools, PR controls, and concurrency
-- [Azure Key Vault](docs/modules/azure-key-vault.md) — `Invex.Atom.Module.AzureKeyVault`
-- [Azure Storage](docs/modules/azure-storage.md) — `Invex.Atom.Module.AzureStorage`
-- [GitVersion](docs/modules/git-version.md) — `Invex.Atom.Module.GitVersion`
-
-### Built-in Targets
-
-- [SetupBuildInfo](docs/built-in-targets/setup-build-info.md) — Initialises build ID, version, and timestamp
-- [ValidateBuild](docs/built-in-targets/validate-build.md) — Checks the build for common issues
-- [GenerateWorkflowFiles](docs/built-in-targets/generate-workflow-files.md) — Generates CI/CD YAML files
-
-### Developer Guide
-
-- [Writing a Module](docs/developer-guide/writing-a-module.md) — Creating a reusable Atom module NuGet package
-- [Custom Providers](docs/developer-guide/custom-providers.md) — Implementing `IArtifactProvider`, `ISecretsProvider`,
-  and more
-- [Source Generators](docs/developer-guide/source-generators.md) — How the Atom analysers and source generators work
-- [Testing](docs/developer-guide/testing.md) — Using `Invex.Atom.TestUtils`
-
-### Reference
-
-- [CLI](docs/reference/cli.md) — Command-line arguments and the Atom global tool
-- [API Reference](api/index.md) — Auto-generated API documentation (via DocFX)
+`dotnet run --project _atom -- <target>` is equivalent to `atom <target>`.
 
 ## AI Disclaimer
 
@@ -537,4 +248,4 @@ Generative AI was also used to assist in writing tests and documentation.
 
 ## License
 
-Atom is released under the [MIT License](LICENSE.txt).
+Atom is released under the [MIT License](https://github.com/Invex-Games/atom/blob/main/LICENSE.txt).

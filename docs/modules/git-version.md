@@ -1,9 +1,9 @@
-# Module: GitVersion
-
-**Package:** `Invex.Atom.Module.GitVersion`
+# GitVersion
 
 Integrates [GitVersion](https://gitversion.net/) to provide automatic build ID and version numbers based on your Git
-history.
+history. Use it when versions should come from tags and branches instead of `Directory.Build.props`.
+
+**Package:** `Invex.Atom.Module.GitVersion`
 
 ## Installation
 
@@ -55,3 +55,8 @@ dotnet tool install --global GitVersion.Tool
 
 Configure it via `GitVersion.yml` in your repository root.
 
+## See also
+
+- [Build Info](../core-concepts/build-info.md): the providers GitVersion replaces.
+- [SetupBuildInfo](../built-in-targets/setup-build-info.md): publishes the version as a variable.
+- <xref:Invex.Atom.Module.GitVersion.IGitVersion>

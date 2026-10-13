@@ -41,7 +41,7 @@
 -   name: Workflows
     href: workflows/overview.md
     items:
-        -   name: Overview
+        -   name: Workflows Overview
             href: workflows/overview.md
         -   name: Workflow Definitions
             href: workflows/workflow-definitions.md
@@ -56,7 +56,7 @@
 -   name: Modules
     href: modules/overview.md
     items:
-        -   name: Overview
+        -   name: Modules Overview
             href: modules/overview.md
         -   name: .NET
             href: modules/dotnet.md
@@ -93,6 +93,6 @@
 -   name: Reference
     href: reference/cli.md
     items:
-        -   name: CLI
+        -   name: CLI Reference
             href: reference/cli.md
 

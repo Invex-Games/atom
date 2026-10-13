@@ -1,7 +1,7 @@
 # Variables
 
 Variables allow targets to share simple string values with downstream targets. Unlike parameters (which are inputs),
-variables are **outputs** produced during execution.
+variables are **outputs** produced during execution. Use them when a later target needs a value, such as a computed version, that an earlier target produces.
 
 Every variable is backed by a **parameter**: the variable name must match a property declared with `[ParamDefinition]`.
 Producing a target writes the value; consuming targets read it back through the same parameter.
@@ -64,7 +64,9 @@ public interface IVariableProvider
 The built-in `AtomVariableProvider` handles local execution. Platform modules (GitHub, DevOps) register their own
 providers for CI environments.
 
-## Next Steps
+## Next steps
 
-→ [File System](file-system.md)
-
+- [Variables in Workflows](../workflows/variables-in-workflows.md): how variables cross CI job boundaries.
+- [File System](file-system.md): resolve paths inside targets.
+- <xref:Invex.Atom.Build.Variables.IVariablesHelper>
+- <xref:Invex.Atom.Build.Variables.IVariableProvider>

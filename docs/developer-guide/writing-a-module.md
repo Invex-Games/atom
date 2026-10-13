@@ -1,6 +1,6 @@
 # Writing a Module
 
-This guide covers how to create a reusable Atom module and publish it as a NuGet package.
+This guide covers how to create a reusable Atom module and publish it as a NuGet package. Write one when several builds need the same targets, parameters, or services.
 
 ## What Is a Module?
 
@@ -107,6 +107,10 @@ The consumer just implements the interface — all targets, parameters, and serv
 - Provide XML doc comments on all public members.
 - Include a `.props` file to auto-import common namespaces.
 
-## Next Steps
+## Next steps
 
-→ [Custom Providers](custom-providers.md)
+- [Custom Providers](custom-providers.md): extension points a module can implement.
+- [Hosting](../core-concepts/hosting.md): `[ConfigureHostBuilder]` and `[ConfigureHost]`.
+- <xref:Invex.Atom.Build.IBuildAccessor>
+- <xref:Invex.Atom.Build.Hosting.ConfigureHostBuilderAttribute>
+- <xref:Invex.Atom.Build.BuildOptions.ToggleBuildOption>

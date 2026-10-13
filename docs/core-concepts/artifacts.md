@@ -1,7 +1,7 @@
 # Artifacts
 
 Artifacts are files or directories produced by one target and consumed by another. Atom tracks artifact dependencies to
-ensure correct execution order, especially in workflow scenarios where different targets may run on different machines.
+ensure correct execution order, especially in workflow scenarios where different targets may run on different machines. You need them when one target's output files are another target's input.
 
 ## Producing Artifacts
 
@@ -84,7 +84,10 @@ public interface IArtifactProvider
 }
 ```
 
-## Next Steps
+## Next steps
 
-→ [Variables](variables.md)
-
+- [Variables](variables.md): share string values instead of files.
+- [Azure Storage](../modules/azure-storage.md): store artifacts in Azure Blob Storage.
+- <xref:Invex.Atom.Build.Artifacts.IArtifactProvider>
+- <xref:Invex.Atom.Build.Artifacts.IStoreArtifact>
+- <xref:Invex.Atom.Build.Artifacts.IRetrieveArtifact>

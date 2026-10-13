@@ -1,9 +1,9 @@
-# Module: DevOps Workflows
-
-**Package:** `Invex.Atom.Module.DevopsWorkflows`
+# DevOps Workflows
 
 Adds Azure DevOps Pipelines support to Atom — pipeline YAML generation, DevOps-specific options, and access to Azure
-DevOps environment variables.
+DevOps environment variables. Add it when you want Atom to generate Azure Pipelines YAML.
+
+**Package:** `Invex.Atom.Module.DevopsWorkflows`
 
 ## Installation
 
@@ -95,3 +95,12 @@ new("Validate")
     Options = [BuildOptions.Devops.PullRequest.AutoCancel],
 }
 ```
+
+## See also
+
+- [Workflow Definitions](../workflows/workflow-definitions.md): declaring workflows.
+- [GitHub Workflows](github-workflows.md): the GitHub Actions counterpart.
+- <xref:Invex.Atom.Module.DevopsWorkflows.IDevopsWorkflows>
+- <xref:Invex.Atom.Module.DevopsWorkflows.Devops>
+- <xref:Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsConcurrencyOption>
+- <xref:Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPullRequestOption>

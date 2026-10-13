@@ -1,9 +1,10 @@
-# Module: Azure Storage
-
-**Package:** `Invex.Atom.Module.AzureStorage`
+# Azure Storage
 
 Registers Azure Blob Storage as the artifact provider, enabling artifact upload and download via Azure Storage
-containers.
+containers. Use it when artifacts must move between CI jobs through storage you control instead of the platform's
+artifact mechanism.
+
+**Package:** `Invex.Atom.Module.AzureStorage`
 
 ## Installation
 
@@ -40,3 +41,8 @@ retrieve, cleanup, list) go through Azure Blob Storage instead of the local file
 This is particularly useful in CI/CD workflows where artifacts need to be shared across jobs running on different
 machines.
 
+## See also
+
+- [Artifacts](../core-concepts/artifacts.md): producing and consuming artifacts and enabling a custom provider.
+- <xref:Invex.Atom.Module.AzureStorage.IAzureArtifactStorage>
+- <xref:Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider>
