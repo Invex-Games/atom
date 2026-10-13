@@ -1,7 +1,7 @@
 # Process Runner
 
 `IProcessRunner` provides a structured way to execute external processes with logging, output capture, and error
-handling built in.
+handling built in. Use it whenever a target needs to call a command-line tool.
 
 > [!NOTE]
 > The process runner types (`IProcessRunner`, `ProcessRunOptions`, `ProcessRunResult`) ship in the standalone
@@ -69,7 +69,8 @@ if (result.ExitCode != 0)
     Logger.LogWarning("Tests failed with exit code {Code}", result.ExitCode);
 ```
 
-## Next Steps
+## Next steps
 
-→ [Build Info](build-info.md)
-
+- [Build Info](build-info.md): build ID, version, and timestamp.
+- [.NET](../modules/dotnet.md): typed wrappers for the `dotnet` CLI built on the process runner.
+- <xref:Invex.Atom.Build.IBuildAccessor>

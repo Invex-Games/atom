@@ -142,7 +142,8 @@ inputs and skips work that isn't needed:
 The hashes are stored in the build project's `obj/.atom-restore.hash` and `obj/.atom-build.hash` files, so they
 are automatically invalidated by `dotnet clean` and never committed to source control.
 
-> Note: source changes in projects referenced via `<ProjectReference>` are not tracked by the build cache. If your
+> [!NOTE]
+> Source changes in projects referenced via `<ProjectReference>` are not tracked by the build cache. If your
 > build project references other projects by source, force a full build with the opt-out below.
 
 To force a full restore and build regardless of the caches, use either:
@@ -155,3 +156,8 @@ atom Compile --no-restore-cache
 ATOM_NO_RESTORE_CACHE=1 atom Compile
 ```
 
+## See also
+
+- [Your First Build](../getting-started/your-first-build.md): run your first target.
+- [Parameters](../core-concepts/parameters.md): how parameter values are resolved.
+- <xref:Invex.Atom.Build.Args.CommandLineArgs>

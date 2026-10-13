@@ -1,8 +1,8 @@
 # Testing
 
-**Package:** `Invex.Atom.TestUtils`
+Atom provides test utilities for verifying your build definitions, targets, and modules in unit/integration tests. Use them when you want to verify build definitions or modules without running a real build.
 
-Atom provides test utilities for verifying your build definitions, targets, and modules in unit/integration tests.
+**Package:** `Invex.Atom.TestUtils`
 
 ## Installation
 
@@ -71,3 +71,10 @@ Verify that your workflow definitions produce the expected YAML by:
 - Use `System.IO.Abstractions.TestingHelpers` (already a dependency) for in-memory file system testing.
 - Mock `IProcessRunner` to avoid executing real processes in tests.
 - Use snapshot testing to verify generated YAML doesn't change unexpectedly.
+
+## See also
+
+- [Writing a Module](writing-a-module.md): the module patterns you will be testing.
+- [Custom Providers](custom-providers.md): providers you may want to fake.
+- <xref:Invex.Atom.Build.Model.BuildModel>
+- <xref:Invex.Atom.Build.Args.CommandLineArgs>

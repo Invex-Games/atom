@@ -28,8 +28,7 @@
       {
         "files": [
           "toc.yml",
-          "index.md",
-          "README.md"
+          "index.md"
         ]
       },
       {
@@ -55,16 +54,13 @@
       }
     ],
     "output": "_site",
-    "globalMetadataFiles": [],
-    "fileMetadataFiles": [],
     "globalMetadata": {
       "_appTitle": "Atom",
       "_appName": "Atom",
       "_appLogoPath": "images/icon.png",
-      "_appFooter": "Atom — Build Automation for .NET",
+      "_appFooter": "Atom · MIT License · Invex Games",
       "_enableSearch": true,
       "_disableContribution": false,
-      "_disableToc": false,
       "_gitContribute": {
         "repo": "https://github.com/Invex-Games/atom",
         "branch": "main"
@@ -76,9 +72,6 @@
     ],
     "theme": [
       "docfx-theme"
-    ],
-    "postProcessors": [],
-    "keepFileLink": false,
-    "disableGitFeatures": false
+    ]
   }
 }

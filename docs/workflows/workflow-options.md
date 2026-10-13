@@ -1,7 +1,7 @@
 # Workflow Options
 
-Workflow options fine-tune how targets behave when running as CI/CD jobs. They can be applied at the workflow level (
-affecting all targets) or per-target.
+Workflow options fine-tune how targets behave when running as CI/CD jobs. They can be applied at the workflow level
+(affecting all targets) or per-target. Reach for them when the default generated job is not quite what you need.
 
 ## Common Options
 
@@ -117,7 +117,11 @@ public sealed record MyCustomOption(string Value) : IBuildOption;
 
 Platform modules can then inspect the options during YAML generation.
 
-## Next Steps
+## Next steps
 
-→ [Variables in Workflows](variables-in-workflows.md)
-
+- [Variables in Workflows](variables-in-workflows.md): pass values between jobs.
+- [Build Options](../core-concepts/build-options.md): how options are applied and merged.
+- <xref:Invex.Atom.Workflows.Options.WorkflowBuildOptionsExtensions>
+- <xref:Invex.Atom.Workflows.Options.DeployToEnvironment>
+- <xref:Invex.Atom.Workflows.Options.TargetCondition>
+- <xref:Invex.Atom.Module.GithubWorkflows.Options.GithubTokenPermissionsOption>

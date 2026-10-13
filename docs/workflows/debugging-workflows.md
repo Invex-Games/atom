@@ -1,6 +1,6 @@
 # Debugging Workflows
 
-Atom includes a `DebugWorkflowType` that lets you simulate workflow generation locally without pushing to CI.
+Atom includes a `DebugWorkflowType` that lets you simulate workflow generation locally without pushing to CI. Use it when a generated workflow does not look the way you expect.
 
 ## `DebugWorkflowType`
 
@@ -30,7 +30,10 @@ changed targets or workflows but forgotten to regenerate.
 - The workflow resolver will log warnings for missing variable/artifact declarations.
 - All your targets execute the same code locally and on CI; only the variable/artifact transport differs.
 
-## Next Steps
+## Next steps
 
-→ [Modules Overview](../modules/overview.md)
-
+- [Modules Overview](../modules/overview.md): add platform and tool integrations.
+- [Gen](../built-in-targets/generate-workflow-files.md): automatic generation and outdated-file detection.
+- <xref:Invex.Atom.Workflows.DebugWorkflowType>
+- <xref:Invex.Atom.Workflows.DebugWorkflowWriter>
+- <xref:Invex.Atom.Workflows.WorkflowOutdatedException>

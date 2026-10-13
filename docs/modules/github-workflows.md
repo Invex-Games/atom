@@ -1,9 +1,9 @@
-# Module: GitHub Workflows
-
-**Package:** `Invex.Atom.Module.GithubWorkflows`
+# GitHub Workflows
 
 Adds GitHub Actions support to Atom — workflow YAML generation, GitHub-specific build options, variable handling, and
-access to GitHub environment variables.
+access to GitHub environment variables. Add it when you want Atom to generate GitHub Actions workflows.
+
+**Package:** `Invex.Atom.Module.GithubWorkflows`
 
 ## Installation
 
@@ -110,3 +110,12 @@ WorkflowPresets.Github.Dependabot(new()
     ],
 })
 ```
+
+## See also
+
+- [Workflow Definitions](../workflows/workflow-definitions.md): a full GitHub Actions example.
+- [Workflow Options](../workflows/workflow-options.md): runner, token, and condition options.
+- [DevOps Workflows](devops-workflows.md): the Azure DevOps counterpart.
+- <xref:Invex.Atom.Module.GithubWorkflows.Helpers.IGithubWorkflows>
+- <xref:Invex.Atom.Module.GithubWorkflows.Github>
+- <xref:Invex.Atom.Module.GithubWorkflows.Options.GithubTrigger>
