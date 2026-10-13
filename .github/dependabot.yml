@@ -16,6 +16,9 @@ updates:
     groups:
       nuget-deps:
         patterns: [ "*" ]
+    ignore:
+      - dependency-name: "Verify.NUnit"
+        update-types: [ version-update:semver-major ]
     open-pull-requests-limit: 10
     registries: [ nuget ]
     target-branch: main
