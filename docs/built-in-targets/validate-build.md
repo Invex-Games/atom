@@ -1,9 +1,8 @@
 # ValidateBuild
 
-**Interface:** `IValidateBuild`  
-**Package:** `Invex.Atom.Build`
+The `ValidateBuild` target checks the Atom build configuration for common issues. Run it to catch configuration mistakes, such as undocumented targets, before they reach CI.
 
-The `ValidateBuild` target checks the Atom build configuration for common issues.
+**Interface:** `IValidateBuild` · **Package:** `Invex.Atom.Build`
 
 ## What It Does
 
@@ -33,8 +32,13 @@ Target MyTarget => t => t
 
 Warnings appear in the build report. Example:
 
-```
+```text
 Warnings:
   - Target 'MyTarget' has no description.
 ```
 
+## See also
+
+- [Targets](../core-concepts/targets.md): describing targets with `DescribedAs`.
+- <xref:Invex.Atom.Build.IValidateBuild>
+- <xref:Invex.Atom.Build.Exceptions.StepFailedException>

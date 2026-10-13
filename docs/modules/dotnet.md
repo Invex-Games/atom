@@ -1,8 +1,8 @@
-# Module: .NET
+# .NET
+
+Provides helpers and targets for common .NET CLI operations — build, test, pack, publish, and NuGet push. Add it to any build that compiles, tests, or packages .NET projects.
 
 **Package:** `Invex.Atom.Module.Dotnet`
-
-Provides helpers and targets for common .NET CLI operations — build, test, pack, publish, and NuGet push.
 
 ## Installation
 
@@ -56,3 +56,11 @@ BuildOptions.Steps.SetupDotnet.Dotnet80X()
 BuildOptions.Steps.SetupDotnet.Dotnet90X()
 ```
 
+## See also
+
+- [Process Runner](../core-concepts/process-runner.md): the runner the CLI wrappers use.
+- [Workflow Options](../workflows/workflow-options.md): setup steps for CI runners.
+- <xref:Invex.Atom.Module.Dotnet.Cli.IDotnetCli>
+- <xref:Invex.Atom.Module.Dotnet.Helpers.IDotnetPackHelper>
+- <xref:Invex.Atom.Module.Dotnet.Helpers.IDotnetTestHelper>
+- <xref:Invex.Atom.Module.Dotnet.Util.TransformProjectVersionScope>

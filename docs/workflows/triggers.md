@@ -1,6 +1,6 @@
 # Triggers
 
-Triggers define when a workflow starts. Atom provides a fluent API via the `WorkflowTriggers` helper class.
+Triggers define when a workflow starts. Atom provides a fluent API via the `WorkflowTriggers` helper class. A definition with no triggers is allowed; for Azure DevOps it is written with `trigger: none`, so pushes do not start the pipeline and it can still be queued manually.
 
 ## Built-in Trigger Shortcuts
 
@@ -99,7 +99,11 @@ Triggers =
 ],
 ```
 
-## Next Steps
+## Next steps
 
-→ [Workflow Options](workflow-options.md)
-
+- [Workflow Options](workflow-options.md): fine-tune targets in generated workflows.
+- [GitHub Workflows](../modules/github-workflows.md): GitHub-specific triggers.
+- <xref:Invex.Atom.Workflows.Definition.Triggers.WorkflowTriggers>
+- <xref:Invex.Atom.Workflows.Definition.Triggers.GitPushTrigger>
+- <xref:Invex.Atom.Workflows.Definition.Triggers.GitPullRequestTrigger>
+- <xref:Invex.Atom.Workflows.Definition.Triggers.ManualTrigger>

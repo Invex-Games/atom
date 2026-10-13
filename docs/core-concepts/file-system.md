@@ -1,7 +1,7 @@
 # File System
 
 Atom provides `IRootedFileSystem` — a build-aware file system abstraction that layers path resolution on top of
-`System.IO.Abstractions.IFileSystem`.
+`System.IO.Abstractions.IFileSystem`. Use it for any file access inside a target so paths resolve relative to the repository and stay testable.
 
 > [!NOTE]
 > The rooted file system types (`IRootedFileSystem`, `RootedPath`, `IPathProvider`, `TransformFileScope`, etc.) ship in
@@ -78,7 +78,9 @@ public interface IPathMarker
 
 Resolve with `RootedFileSystem.GetPath<MyPathMarker>()`.
 
-## Next Steps
+## Next steps
 
-→ [Process Runner](process-runner.md)
-
+- [Process Runner](process-runner.md): run external tools from targets.
+- [File Transformations](file-transformations.md): temporary, reversible file edits.
+- <xref:Invex.Atom.Build.IBuildAccessor>
+- <xref:Invex.Atom.Build.FileSystem.AtomPaths>

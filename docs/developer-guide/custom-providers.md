@@ -1,7 +1,7 @@
 # Custom Providers
 
 Atom uses a provider pattern for several extensibility points. Implement these interfaces to integrate with custom
-backends.
+backends. Implement one when the built-in providers and modules do not cover your secret store, artifact storage, or reporting target.
 
 ## `ISecretsProvider`
 
@@ -129,7 +129,11 @@ public class MyReportWriter : IOutcomeReportWriter
 }
 ```
 
-## Next Steps
+## Next steps
 
-→ [Source Generators](source-generators.md)
-
+- [Source Generators](source-generators.md): how Atom wires builds together.
+- [Writing a Module](writing-a-module.md): package providers for reuse.
+- <xref:Invex.Atom.Build.Secrets.ISecretsProvider>
+- <xref:Invex.Atom.Build.Artifacts.IArtifactProvider>
+- <xref:Invex.Atom.Build.Variables.IVariableProvider>
+- <xref:Invex.Atom.Build.Reports.IOutcomeReportWriter>

@@ -1,6 +1,6 @@
 # Parameters
 
-Parameters allow you to pass configuration values into your build from multiple sources.
+Parameters allow you to pass configuration values into your build from multiple sources. Use one whenever a target needs a value that changes between runs or environments.
 
 ## Defining a Parameter
 
@@ -99,7 +99,9 @@ Parameters can be set in `appsettings.json`:
 
 Environment-specific overrides work via `appsettings.{DOTNET_ENVIRONMENT}.json`.
 
-## Next Steps
+## Next steps
 
-→ [Secrets](secrets.md)
-
+- [Secrets](secrets.md): parameters whose values are masked and resolved from secret stores.
+- [CLI Reference](../reference/cli.md): passing parameters on the command line.
+- <xref:Invex.Atom.Build.Params.ParamDefinitionAttribute>
+- <xref:Invex.Atom.Build.Params.ParamSource>
