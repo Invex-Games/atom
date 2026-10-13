@@ -1,7 +1,8 @@
 # CLI Reference
 
 Atom builds are invoked via `dotnet run` or the `atom` global tool. The repository currently
-requires the .NET 10 SDK. Libraries may target `net8.0`, `net9.0`, and `net10.0`.
+requires the .NET 10 SDK, and Atom's own packages target `net10.0`. The projects your build
+compiles can target any framework that SDK supports.
 
 ## Invocation
 

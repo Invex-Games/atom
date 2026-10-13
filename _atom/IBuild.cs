@@ -35,8 +35,6 @@ internal interface IBuild : IWorkflowBuildDefinition,
 
     static readonly string[] FrameworkNames =
     [
-        WorkflowLabels.Dotnet.Framework.Net_8_0,
-        WorkflowLabels.Dotnet.Framework.Net_9_0,
         WorkflowLabels.Dotnet.Framework.Net_10_0,
     ];
 
@@ -94,8 +92,6 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     [
                         BuildOptions.Target.SuppressArtifactPublishing,
                         BuildOptions.Github.RunsOn.SetByMatrix,
-                        BuildOptions.Steps.SetupDotnet.Dotnet80X(),
-                        BuildOptions.Steps.SetupDotnet.Dotnet90X(),
                     ],
                 },
                 new(nameof(BuildDocs))
@@ -176,8 +172,6 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     Options =
                     [
                         BuildOptions.Github.RunsOn.SetByMatrix,
-                        BuildOptions.Steps.SetupDotnet.Dotnet80X(),
-                        BuildOptions.Steps.SetupDotnet.Dotnet90X(),
                     ],
                 },
                 new(nameof(BuildDocs)),
@@ -257,8 +251,6 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     Options =
                     [
                         BuildOptions.Devops.DevopsPool.SetByMatrix,
-                        BuildOptions.Steps.SetupDotnet.Dotnet80X(),
-                        BuildOptions.Steps.SetupDotnet.Dotnet90X(),
                     ],
                 },
                 new(nameof(PushToNugetDevops))
