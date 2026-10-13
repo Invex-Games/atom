@@ -309,6 +309,16 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     },
                     TargetBranch = "main",
                     OpenPullRequestsLimit = 10,
+                    Ignore =
+                    [
+                        // Verify 33 adds a maintenance-fee SponsorCheck that fails test builds (SC021).
+                        new()
+                        {
+                            DependencyName = "Verify.NUnit",
+                            UpdateTypes = [SemverUpdateType.VersionUpdateSemverMajor],
+                            Versions = null,
+                        },
+                    ],
                 },
             ],
         }),
