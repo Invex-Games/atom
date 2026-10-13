@@ -1,5 +1,5 @@
--   name: Guides
-    href: docs/toc.yml
-    homepage: docs/getting-started/introduction.md
--   name: API Reference
-    href: api/toc.yml
+- name: Docs
+  href: docs/
+  homepage: docs/introduction.md
+- name: API Reference
+  href: api/
