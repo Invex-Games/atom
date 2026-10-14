@@ -47,17 +47,19 @@ public partial interface IMyModule : IBuildAccessor
             Logger.LogInformation("Setting: {Setting}", MySetting);
         });
 
-    protected static partial void ConfigureBuilderFromIMyModule(IHostApplicationBuilder builder) =>
+    protected static partial void ConfigureHostBuilderFromIMyModule(IHostApplicationBuilder builder) =>
         builder.Services.TryAddSingleton<IMyService, MyService>();
 }
 ```
 
 ### Key Points
 
-- **`[ConfigureHostBuilder]`** + `static partial void ConfigureBuilderFrom{InterfaceName}` — the source generator
-  declares this partial method (named after the interface, e.g. `ConfigureBuilderFromIMyModule`) and calls it when a
+- **`[ConfigureHostBuilder]`** + `static partial void ConfigureHostBuilderFrom{InterfaceName}` — the source generator
+  declares this partial method (named after the interface, e.g. `ConfigureHostBuilderFromIMyModule`) and calls it when a
   consumer implements the interface. This is how you register services. The `AT0003` analyzer reports an error if the
-  method body is missing.
+  method body is missing. The hook is static and runs before any build definition is constructed.
+- **`[ConfigureHost]`** + `static partial void ConfigureHostFrom{InterfaceName}(IHost host)` — the same pattern for
+  configuring the built host; it runs when `UseAtom` is called. `AT0002` reports a missing body.
 - **`IBuildAccessor`** — gives the interface access to `Logger`, `RootedFileSystem`, `ProcessRunner`, `GetParam`, etc.
 - **Default implementations** — both targets and parameters use default interface members, so consumers don't need to
   implement anything.

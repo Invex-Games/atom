@@ -469,9 +469,6 @@
         Name: AccessParam
       },
       {
-        Name: ConfigureDefinitionHost
-      },
-      {
         Name: ParamDefinitions
       },
       {
@@ -528,9 +525,6 @@
     Members: [
       {
         Name: AccessParam
-      },
-      {
-        Name: ConfigureDefinitionHost
       },
       {
         Name: Options
@@ -773,10 +767,10 @@
     Name: Invex.Atom.Build.Hosting.IConfigureHost,
     Members: [
       {
-        Name: ConfigureBuildHost
+        Name: ConfigureHost
       },
       {
-        Name: ConfigureBuildHostBuilder
+        Name: ConfigureHostBuilder
       }
     ]
   },

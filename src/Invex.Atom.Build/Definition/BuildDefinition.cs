@@ -8,6 +8,14 @@
 ///     The <see cref="TargetDefinitions" /> and <see cref="ParamDefinitions" /> properties are populated by source
 ///     generators based on the interfaces and attributes used in the derived class. A derived class must be
 ///     decorated with <see cref="BuildDefinitionAttribute" />.
+///     <para>
+///         The generated part of the class also implements <see cref="Invex.Atom.Build.Hosting.IConfigureHost" />
+///         and declares the optional partial methods
+///         <c>static partial void OnConfigureHostBuilder(IHostApplicationBuilder builder)</c> and
+///         <c>static partial void OnConfigureHost(IHost host)</c>. Implement them in the derived class to register
+///         services or configure the host. They run after the module hooks, without constructing the build
+///         definition.
+///     </para>
 /// </remarks>
 /// <example>
 ///     A typical build definition:
@@ -37,7 +45,4 @@ public abstract class BuildDefinition(IServiceProvider services) : IBuildDefinit
 
     /// <inheritdoc />
     public abstract object? AccessParam(string paramName);
-
-    /// <inheritdoc />
-    public virtual void ConfigureDefinitionHost(IHostApplicationBuilder builder) { }
 }

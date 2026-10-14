@@ -17,7 +17,7 @@ using Invex.Process;
 namespace TestNamespace;
 
 [JetBrains.Annotations.PublicAPI]
-partial class MinimalTestDefinition : Invex.Atom.Build.Definition.IBuildDefinition
+partial class MinimalTestDefinition : Invex.Atom.Build.Definition.IBuildDefinition, Invex.Atom.Build.Hosting.IConfigureHost
 {
     public MinimalTestDefinition(System.IServiceProvider services) : base(services) { }
 
@@ -65,4 +65,22 @@ partial class MinimalTestDefinition : Invex.Atom.Build.Definition.IBuildDefiniti
     public override object? AccessParam(string paramName) => throw new System.ArgumentException($"Param with name '{paramName}' is not defined in the build definition.", nameof(paramName));
 
     #endregion Params
+
+    #region Host
+
+    public static void ConfigureHostBuilder(Microsoft.Extensions.Hosting.IHostApplicationBuilder builder)
+    {
+        OnConfigureHostBuilder(builder);
+    }
+
+    public static void ConfigureHost(Microsoft.Extensions.Hosting.IHost host)
+    {
+        OnConfigureHost(host);
+    }
+
+    static partial void OnConfigureHostBuilder(Microsoft.Extensions.Hosting.IHostApplicationBuilder builder);
+
+    static partial void OnConfigureHost(Microsoft.Extensions.Hosting.IHost host);
+
+    #endregion Host
 }

@@ -33,11 +33,9 @@
 ///     public async ValueTask&lt;string?&gt; GetSecretAsync(string key, CancellationToken cancellationToken) =>
 ///         await MySecureStore.GetAsync(key, cancellationToken);
 /// }
-/// // 2. Register the provider in your build definition
-/// public override void ConfigureDefinitionHost(IHostApplicationBuilder builder)
-/// {
+/// // 2. Register the provider from your partial build class
+/// static partial void OnConfigureHostBuilder(IHostApplicationBuilder builder) =>
 ///     builder.Services.AddSingleton&lt;ISecretsProvider, MySecretsProvider&gt;();
-/// }
 /// // 3. Use a secret parameter in a target
 /// [SecretDefinition("my-api-key", "An API key.")]
 /// string MyApiKey => GetParam(() => MyApiKey);

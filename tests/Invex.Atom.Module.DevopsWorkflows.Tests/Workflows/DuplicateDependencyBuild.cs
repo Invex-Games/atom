@@ -28,7 +28,7 @@ public partial interface IDuplicateDependencyTarget : IStoreArtifact, IRetrieveA
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildId))
             .ProducesArtifact("artifact-name");
 
-    protected static partial void ConfigureBuilderFromIDuplicateDependencyTarget(IHostApplicationBuilder builder) =>
+    protected static partial void ConfigureHostBuilderFromIDuplicateDependencyTarget(IHostApplicationBuilder builder) =>
         builder.Services.AddSingleton<IArtifactProvider, TestArtifactProvider>();
 }
 

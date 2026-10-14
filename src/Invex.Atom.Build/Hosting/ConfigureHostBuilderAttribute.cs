@@ -1,30 +1,26 @@
 ﻿namespace Invex.Atom.Build.Hosting;
 
 /// <summary>
-///     Marks an interface as a source for host builder configuration, triggering source generation to apply its logic.
+///     Marks an interface as a source of host builder configuration for any build definition that implements it.
 /// </summary>
 /// <remarks>
-///     When an interface is decorated with this attribute, any methods it contains named <c>Configure</c>
-///     with a single <see cref="IHostApplicationBuilder" /> parameter will be automatically discovered. The source
-///     generator
-///     then implements <see cref="IConfigureHost.ConfigureBuildHostBuilder" /> on the build definition, calling these
-///     methods to apply the specified configurations to the host builder before the host is built.
+///     The interface must be <see langword="partial" />. The source generator declares
+///     <c>protected static partial void ConfigureHostBuilderFrom{InterfaceName}(IHostApplicationBuilder builder)</c> on
+///     the interface, which the interface must implement (analyzer AT0003 reports a missing implementation). The
+///     generated <see cref="IConfigureHost.ConfigureHostBuilder" /> of every build definition that implements the
+///     interface calls this method before the host is built, without constructing the build definition.
 /// </remarks>
 /// <example>
 ///     <code>
-/// // 1. Define an interface with the attribute
 /// [ConfigureHostBuilder]
-/// public interface IMyHostBuilderConfigurator
+/// public partial interface IMyModule
 /// {
-///     void Configure(IHostApplicationBuilder builder)
-///     {
-///         // Configuration logic here
-///     }
+///     protected static partial void ConfigureHostBuilderFromIMyModule(IHostApplicationBuilder builder) =>
+///         builder.Services.AddSingleton&lt;IMyService, MyService&gt;();
 /// }
-/// // 2. Implement the interface in your build definition
+///
 /// [BuildDefinition]
-/// partial class Build : IMyHostBuilderConfigurator;
-/// // The source generator will now apply the Configure method during host builder setup.
+/// internal partial class Build : BuildDefinition, IMyModule;
 ///     </code>
 /// </example>
 [PublicAPI]

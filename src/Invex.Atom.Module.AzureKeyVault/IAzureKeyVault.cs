@@ -144,7 +144,7 @@ public partial interface IAzureKeyVault : IBuildAccessor
     ///     <see cref="IBuildOptionProvider" /> that injects the vault connection parameters into generated workflows.
     ///     Both implementations are internal to this module.
     /// </remarks>
-    protected static partial void ConfigureBuilderFromIAzureKeyVault(IHostApplicationBuilder builder) =>
+    protected static partial void ConfigureHostBuilderFromIAzureKeyVault(IHostApplicationBuilder builder) =>
         builder
             .Services
             .AddSingleton<ISecretsProvider, AzureKeyVaultSecretsProvider>()

@@ -101,7 +101,7 @@ public class SetupSourceGenerator : IIncrementalGenerator
         var setupBuilderLine = hasConfigureBuilder
             ? $"""
                    [JetBrains.Annotations.UsedImplicitly]
-                   protected static partial void ConfigureBuilderFrom{@interface}(IHostApplicationBuilder builder);
+                   protected static partial void ConfigureHostBuilderFrom{@interface}(IHostApplicationBuilder builder);
                """
             : string.Empty;
 
