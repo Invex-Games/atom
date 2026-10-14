@@ -202,6 +202,12 @@ jobs:
           name: 'Invex.Atom.Module.AzureStorage.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
           path: '${{ github.workspace }}/.github/publish/Invex.Atom.Module.AzureStorage.Tests'
 
+      - name: Store Invex.Atom.Module.Dotnet.Tests
+        uses: actions/upload-artifact@v7
+        with:
+          name: 'Invex.Atom.Module.Dotnet.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
+          path: '${{ github.workspace }}/.github/publish/Invex.Atom.Module.Dotnet.Tests'
+
       - name: Store Invex.Atom.Module.DevopsWorkflows.Tests
         uses: actions/upload-artifact@v7
         with:
@@ -667,6 +673,42 @@ jobs:
         with:
           name: Invex.Atom.Module.AzureStorage.Tests-macos-latest-net10.0
           path: '${{ github.workspace }}/.github/artifacts/Invex.Atom.Module.AzureStorage.Tests'
+
+      - name: Retrieve Invex.Atom.Module.Dotnet.Tests
+        uses: actions/download-artifact@v8
+        with:
+          name: Invex.Atom.Module.Dotnet.Tests-windows-latest-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/Invex.Atom.Module.Dotnet.Tests'
+
+      - name: Retrieve Invex.Atom.Module.Dotnet.Tests
+        uses: actions/download-artifact@v8
+        with:
+          name: Invex.Atom.Module.Dotnet.Tests-windows-11-arm-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/Invex.Atom.Module.Dotnet.Tests'
+
+      - name: Retrieve Invex.Atom.Module.Dotnet.Tests
+        uses: actions/download-artifact@v8
+        with:
+          name: Invex.Atom.Module.Dotnet.Tests-ubuntu-latest-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/Invex.Atom.Module.Dotnet.Tests'
+
+      - name: Retrieve Invex.Atom.Module.Dotnet.Tests
+        uses: actions/download-artifact@v8
+        with:
+          name: Invex.Atom.Module.Dotnet.Tests-ubuntu-24.04-arm-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/Invex.Atom.Module.Dotnet.Tests'
+
+      - name: Retrieve Invex.Atom.Module.Dotnet.Tests
+        uses: actions/download-artifact@v8
+        with:
+          name: Invex.Atom.Module.Dotnet.Tests-macos-15-intel-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/Invex.Atom.Module.Dotnet.Tests'
+
+      - name: Retrieve Invex.Atom.Module.Dotnet.Tests
+        uses: actions/download-artifact@v8
+        with:
+          name: Invex.Atom.Module.Dotnet.Tests-macos-latest-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/Invex.Atom.Module.Dotnet.Tests'
 
       - name: Retrieve Invex.Atom.Module.DevopsWorkflows.Tests
         uses: actions/download-artifact@v8
