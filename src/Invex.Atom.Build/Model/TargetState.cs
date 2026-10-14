@@ -10,7 +10,7 @@ public sealed record TargetState(string Name)
     /// <summary>
     ///     Gets or sets the current execution status of the target.
     /// </summary>
-    public TargetRunState Status { get; set; } = TargetRunState.Uninitialized;
+    public TargetRunState Status { get; internal set; } = TargetRunState.Uninitialized;
 
     /// <summary>
     ///     Gets or sets the duration of the target's execution.
@@ -18,5 +18,5 @@ public sealed record TargetState(string Name)
     /// <remarks>
     ///     This value is <c>null</c> until the target has completed execution (succeeded or failed).
     /// </remarks>
-    public TimeSpan? RunDuration { get; set; }
+    public TimeSpan? RunDuration { get; internal set; }
 }

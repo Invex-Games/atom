@@ -3,8 +3,7 @@
 /// <summary>
 ///     Represents the root model for code coverage summary data, typically deserialized from a JSON report.
 /// </summary>
-[PublicAPI]
-public sealed record CoverageModel
+internal sealed record CoverageModel
 {
     /// <summary>
     ///     Gets the summary of the code coverage report.
@@ -16,8 +15,7 @@ public sealed record CoverageModel
 /// <summary>
 ///     Represents a detailed summary of code coverage metrics.
 /// </summary>
-[PublicAPI]
-public sealed record CoverageSummary
+internal sealed record CoverageSummary
 {
     /// <summary>
     ///     Gets the date and time when the coverage report was generated.
