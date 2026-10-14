@@ -7,7 +7,7 @@ namespace Invex.Atom.Module.Dotnet.Cli;
 public partial interface IDotnetCli
 {
     /// <summary>
-    ///     Run a local tool. Note that this command cannot be used to run a global tool. 
+    ///     Run a local tool. Note that this command cannot be used to run a global tool.
     /// </summary>
     /// <param name="commandName">
     ///     The command name of the tool to run.
@@ -31,7 +31,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -42,19 +42,20 @@ internal partial class DotnetCli
         ToolRunOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "tool run",
             commandName,
             $"{string.Join(" ", toolArguments)}",
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -68,8 +69,9 @@ public sealed record ToolRunOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -79,6 +81,6 @@ public sealed record ToolRunOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

@@ -81,7 +81,8 @@ internal partial class DotnetCli
         PublishOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "publish",
             $"{string.Join(" ", projectOrSolutionOrFile)}",
@@ -98,7 +99,8 @@ internal partial class DotnetCli
         PublishOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "publish",
             projectOrSolutionOrFile,
@@ -115,7 +117,8 @@ internal partial class DotnetCli
         PublishOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "publish",
             projectOrSolutionOrFile,
@@ -260,15 +263,6 @@ public sealed record PublishOptions
     ///     Do not build the project before publishing. Implies --no-restore.
     /// </summary>
     public System.Boolean? NoBuild
-    {
-        get;
-        init;
-    }
-
-    /// <summary>
-    ///
-    /// </summary>
-    public System.Boolean? NoCache
     {
         get;
         init;
@@ -423,7 +417,8 @@ public sealed record PublishOptions
         init;
     }
 
-    public override string ToString()    {
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -474,9 +469,6 @@ public sealed record PublishOptions
                 : null,
             NoBuild is true
                 ? "--no-build"
-                : null,
-            NoCache is true
-                ? "--no-cache"
                 : null,
             NoDependencies is true
                 ? "--no-dependencies"

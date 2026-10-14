@@ -64,7 +64,8 @@ internal partial class DotnetCli
         NugetWhyOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "nuget why",
             projectorsolution,
@@ -82,7 +83,8 @@ internal partial class DotnetCli
         NugetWhyOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "nuget why",
             projectorsolution,
@@ -108,7 +110,8 @@ public sealed record NugetWhyOptions
         init;
     }
 
-    public override string ToString()    {
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {

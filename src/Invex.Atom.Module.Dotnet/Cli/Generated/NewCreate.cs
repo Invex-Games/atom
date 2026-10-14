@@ -31,7 +31,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -42,19 +42,20 @@ internal partial class DotnetCli
         NewCreateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "new create",
             templateShortName,
             $"{string.Join(" ", templateArgs)}",
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -68,7 +69,7 @@ public sealed record NewCreateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Forces content to be generated even if it would change existing files.
     /// </summary>
@@ -77,7 +78,7 @@ public sealed record NewCreateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The name for the output being created. If no name is specified, the name of the output directory is used.
     /// </summary>
@@ -86,7 +87,7 @@ public sealed record NewCreateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Disables checking for the template package updates when instantiating a template.
     /// </summary>
@@ -95,7 +96,7 @@ public sealed record NewCreateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Location to place the generated output.
     /// </summary>
@@ -104,7 +105,7 @@ public sealed record NewCreateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The project that should be used for context evaluation.
     /// </summary>
@@ -113,8 +114,9 @@ public sealed record NewCreateOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -139,6 +141,6 @@ public sealed record NewCreateOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

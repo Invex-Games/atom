@@ -27,7 +27,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -37,18 +37,19 @@ internal partial class DotnetCli
         ToolListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "tool list",
             packageId,
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -62,7 +63,7 @@ public sealed record ToolListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     List tools installed for the current user.
     /// </summary>
@@ -71,7 +72,7 @@ public sealed record ToolListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     List the tools installed in the local tool manifest.
     /// </summary>
@@ -80,7 +81,7 @@ public sealed record ToolListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The directory containing the tools to list.
     /// </summary>
@@ -89,8 +90,9 @@ public sealed record ToolListOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -109,6 +111,6 @@ public sealed record ToolListOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

@@ -23,7 +23,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
@@ -35,7 +35,7 @@ internal partial class DotnetCli
         processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", (options ?? new()).ToString())
             : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
-    
+
 }
 [PublicAPI]
 public sealed record ToolRestoreOptions
@@ -48,7 +48,7 @@ public sealed record ToolRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The NuGet configuration file to use.
     /// </summary>
@@ -57,7 +57,7 @@ public sealed record ToolRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Prevent restoring multiple projects in parallel.
     /// </summary>
@@ -66,7 +66,7 @@ public sealed record ToolRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Treat package source failures as warnings.
     /// </summary>
@@ -75,7 +75,7 @@ public sealed record ToolRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -84,16 +84,7 @@ public sealed record ToolRestoreOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Do not cache packages and http requests.
-    /// </summary>
-    public System.Boolean? NoCache
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     Do not cache packages and http requests.
     /// </summary>
@@ -102,7 +93,7 @@ public sealed record ToolRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Path to the manifest file.
     /// </summary>
@@ -111,7 +102,7 @@ public sealed record ToolRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -120,8 +111,9 @@ public sealed record ToolRestoreOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -140,9 +132,6 @@ public sealed record ToolRestoreOptions
             Interactive is true
                 ? "--interactive"
                 : null,
-            NoCache is true
-                ? "--no-cache"
-                : null,
             NoHttpCache is true
                 ? "--no-http-cache"
                 : null,
@@ -155,6 +144,6 @@ public sealed record ToolRestoreOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

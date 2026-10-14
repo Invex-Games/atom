@@ -81,7 +81,8 @@ internal partial class DotnetCli
         CleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "clean",
             $"{string.Join(" ", projectOrSolutionOrFile)}",
@@ -98,7 +99,8 @@ internal partial class DotnetCli
         CleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "clean",
             projectOrSolutionOrFile,
@@ -115,7 +117,8 @@ internal partial class DotnetCli
         CleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "clean",
             projectOrSolutionOrFile,
@@ -246,7 +249,8 @@ public sealed record CleanOptions
         init;
     }
 
-    public override string ToString()    {
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {

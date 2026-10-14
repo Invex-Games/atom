@@ -50,7 +50,8 @@ internal partial class DotnetCli
         System.String slnFile,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "solution",
             slnFile,
@@ -65,7 +66,8 @@ internal partial class DotnetCli
         Invex.FileSystem.RootedPath slnFile,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "solution",
             slnFile,

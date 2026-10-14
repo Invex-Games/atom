@@ -35,7 +35,7 @@ public partial interface IDotnetCli
     ///              Example:
     ///                dotnet workload search version maui@9.0.0-rc.1.24453.9 ios@17.5.9270-net9-rc1
     ///                9.0.201
-    ///         
+    ///
     /// </summary>
     /// <param name="workloadVersion">
     ///     Output workload manifest versions associated with the provided workload version.
@@ -55,7 +55,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -65,18 +65,19 @@ internal partial class DotnetCli
         WorkloadSearchVersionOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "workload search version",
             $"{string.Join(" ", workloadVersion)}",
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -90,20 +91,21 @@ public sealed record WorkloadSearchVersionOptions
         get;
         init;
     }
-    
+
     public System.Boolean? IncludePreviews
     {
         get;
         init;
     }
-    
+
     public System.Int32? Take
     {
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -119,6 +121,6 @@ public sealed record WorkloadSearchVersionOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

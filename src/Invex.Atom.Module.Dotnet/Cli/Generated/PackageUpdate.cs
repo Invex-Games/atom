@@ -27,7 +27,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -37,18 +37,19 @@ internal partial class DotnetCli
         PackageUpdateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "package update",
             $"{string.Join(" ", packages)}",
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -62,7 +63,7 @@ public sealed record PackageUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Path to a project or solution file, or a directory.
     /// </summary>
@@ -71,7 +72,7 @@ public sealed record PackageUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the verbosity level of the command. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -80,7 +81,7 @@ public sealed record PackageUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Upgrade packages with known vulnerabilities.
     /// </summary>
@@ -89,8 +90,9 @@ public sealed record PackageUpdateOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -109,6 +111,6 @@ public sealed record PackageUpdateOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

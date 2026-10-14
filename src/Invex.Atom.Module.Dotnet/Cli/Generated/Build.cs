@@ -81,7 +81,8 @@ internal partial class DotnetCli
         BuildOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "build",
             $"{string.Join(" ", projectOrSolutionOrFile)}",
@@ -98,7 +99,8 @@ internal partial class DotnetCli
         BuildOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "build",
             projectOrSolutionOrFile,
@@ -115,7 +117,8 @@ internal partial class DotnetCli
         BuildOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "build",
             projectOrSolutionOrFile,
@@ -248,15 +251,6 @@ public sealed record BuildOptions
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
     public System.Boolean? Interactive
-    {
-        get;
-        init;
-    }
-
-    /// <summary>
-    ///
-    /// </summary>
-    public System.Boolean? NoCache
     {
         get;
         init;
@@ -419,7 +413,8 @@ public sealed record BuildOptions
         init;
     }
 
-    public override string ToString()    {
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -467,9 +462,6 @@ public sealed record BuildOptions
                 : null,
             Interactive is true
                 ? "--interactive"
-                : null,
-            NoCache is true
-                ? "--no-cache"
                 : null,
             NoDependencies is true
                 ? "--no-dependencies"

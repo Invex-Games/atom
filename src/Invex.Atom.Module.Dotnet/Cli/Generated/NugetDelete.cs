@@ -12,7 +12,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -22,18 +22,19 @@ internal partial class DotnetCli
         NugetDeleteOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "nuget delete",
             $"{string.Join(" ", packagePaths)}",
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -44,13 +45,13 @@ public sealed record NugetDeleteOptions
         get;
         init;
     }
-    
+
     public System.Boolean? ForceEnglishOutput
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -59,26 +60,27 @@ public sealed record NugetDeleteOptions
         get;
         init;
     }
-    
+
     public System.Boolean? NoServiceEndpoint
     {
         get;
         init;
     }
-    
+
     public System.Boolean? NonInteractive
     {
         get;
         init;
     }
-    
+
     public System.String? Source
     {
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -103,6 +105,6 @@ public sealed record NugetDeleteOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

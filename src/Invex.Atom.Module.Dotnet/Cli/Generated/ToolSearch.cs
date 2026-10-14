@@ -27,7 +27,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -37,18 +37,19 @@ internal partial class DotnetCli
         ToolSearchOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "tool search",
             searchTerm,
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -62,7 +63,7 @@ public sealed record ToolSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Include pre-release packages.
     /// </summary>
@@ -71,7 +72,7 @@ public sealed record ToolSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The number of results to skip, for pagination.
     /// </summary>
@@ -80,7 +81,7 @@ public sealed record ToolSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The number of results to return, for pagination.
     /// </summary>
@@ -89,8 +90,9 @@ public sealed record ToolSearchOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -109,6 +111,6 @@ public sealed record ToolSearchOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

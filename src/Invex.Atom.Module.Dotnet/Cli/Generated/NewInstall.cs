@@ -87,7 +87,8 @@ internal partial class DotnetCli
         NewInstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "new install",
             $"{string.Join(" ", package)}",
@@ -104,7 +105,8 @@ internal partial class DotnetCli
         NewInstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "new install",
             package,
@@ -121,7 +123,8 @@ internal partial class DotnetCli
         NewInstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "new install",
             package,
@@ -165,7 +168,8 @@ public sealed record NewInstallOptions
         init;
     }
 
-    public override string ToString()    {
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {

@@ -27,7 +27,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -37,18 +37,19 @@ internal partial class DotnetCli
         ToolUninstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "tool uninstall",
             packageId,
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -62,7 +63,7 @@ public sealed record ToolUninstallOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Uninstall the tool and remove it from the local tool manifest.
     /// </summary>
@@ -71,7 +72,7 @@ public sealed record ToolUninstallOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Path to the manifest file.
     /// </summary>
@@ -80,7 +81,7 @@ public sealed record ToolUninstallOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The directory containing the tool to uninstall.
     /// </summary>
@@ -89,8 +90,9 @@ public sealed record ToolUninstallOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -109,6 +111,6 @@ public sealed record ToolUninstallOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

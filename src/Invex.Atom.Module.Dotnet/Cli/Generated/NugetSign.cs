@@ -12,7 +12,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -22,18 +22,19 @@ internal partial class DotnetCli
         NugetSignOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "nuget sign",
             $"{string.Join(" ", packagePaths)}",
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -44,67 +45,67 @@ public sealed record NugetSignOptions
         get;
         init;
     }
-    
+
     public System.String? CertificatePassword
     {
         get;
         init;
     }
-    
+
     public System.String? CertificatePath
     {
         get;
         init;
     }
-    
+
     public System.String? CertificateStoreLocation
     {
         get;
         init;
     }
-    
+
     public System.String? CertificateStoreName
     {
         get;
         init;
     }
-    
+
     public System.String? CertificateSubjectName
     {
         get;
         init;
     }
-    
+
     public System.String? HashAlgorithm
     {
         get;
         init;
     }
-    
+
     public System.String? Output
     {
         get;
         init;
     }
-    
+
     public System.Boolean? Overwrite
     {
         get;
         init;
     }
-    
+
     public System.String? TimestampHashAlgorithm
     {
         get;
         init;
     }
-    
+
     public System.String? Timestamper
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -113,8 +114,9 @@ public sealed record NugetSignOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -157,6 +159,6 @@ public sealed record NugetSignOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

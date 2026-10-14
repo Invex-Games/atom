@@ -81,7 +81,8 @@ internal partial class DotnetCli
         RestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "restore",
             $"{string.Join(" ", projectOrSolutionOrFile)}",
@@ -98,7 +99,8 @@ internal partial class DotnetCli
         RestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "restore",
             projectOrSolutionOrFile,
@@ -115,7 +117,8 @@ internal partial class DotnetCli
         RestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "restore",
             projectOrSolutionOrFile,
@@ -257,15 +260,6 @@ public sealed record RestoreOptions
     }
 
     /// <summary>
-    ///
-    /// </summary>
-    public System.Boolean? NoCache
-    {
-        get;
-        init;
-    }
-
-    /// <summary>
     ///     Do not restore project-to-project references and only restore the specified project.
     /// </summary>
     public System.Boolean? NoDependencies
@@ -367,7 +361,8 @@ public sealed record RestoreOptions
         init;
     }
 
-    public override string ToString()    {
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -415,9 +410,6 @@ public sealed record RestoreOptions
                 : null,
             LockedMode is true
                 ? "--locked-mode"
-                : null,
-            NoCache is true
-                ? "--no-cache"
                 : null,
             NoDependencies is true
                 ? "--no-dependencies"

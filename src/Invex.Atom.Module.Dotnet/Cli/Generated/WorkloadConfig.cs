@@ -24,7 +24,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
@@ -36,7 +36,7 @@ internal partial class DotnetCli
         processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", (options ?? new()).ToString())
             : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
-    
+
 }
 [PublicAPI]
 public sealed record WorkloadConfigOptions
@@ -49,8 +49,9 @@ public sealed record WorkloadConfigOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -60,6 +61,6 @@ public sealed record WorkloadConfigOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

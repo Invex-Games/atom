@@ -27,7 +27,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -37,18 +37,19 @@ internal partial class DotnetCli
         PackageSearchOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "package search",
             searchTerm,
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -62,7 +63,7 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Require that the search term exactly match the name of the package. Causes `--take` and `--skip` options to be ignored.
     /// </summary>
@@ -71,7 +72,7 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Format the output accordingly. Either `table`, or `json`. The default value is `table`.
     /// </summary>
@@ -80,7 +81,7 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -89,7 +90,7 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Include prerelease packages.
     /// </summary>
@@ -98,7 +99,7 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Number of results to skip, to allow pagination. Default 0.
     /// </summary>
@@ -107,7 +108,7 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The package source to search. You can pass multiple `--source` options to search multiple package sources. Example: `--source https://api.nuget.org/v3/index.json`.
     /// </summary>
@@ -116,7 +117,7 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Number of results to return. Default 20.
     /// </summary>
@@ -125,7 +126,7 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Display this amount of details in the output: `normal`, `minimal`, `detailed`. The default is `normal`
     /// </summary>
@@ -134,8 +135,9 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -169,6 +171,6 @@ public sealed record PackageSearchOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

@@ -27,7 +27,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -37,18 +37,19 @@ internal partial class DotnetCli
         ToolUpdateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "tool update",
             packageId,
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -62,7 +63,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Update all tools.
     /// </summary>
@@ -71,7 +72,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allow package downgrade when installing a .NET tool package.
     /// </summary>
@@ -80,7 +81,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The NuGet configuration file to use.
     /// </summary>
@@ -89,7 +90,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Prevent restoring multiple projects in parallel.
     /// </summary>
@@ -98,7 +99,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The target framework to install the tool for.
     /// </summary>
@@ -107,7 +108,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Install the tool for the current user.
     /// </summary>
@@ -116,7 +117,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Treat package source failures as warnings.
     /// </summary>
@@ -125,7 +126,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -134,7 +135,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Install the tool and add to the local tool manifest (default).
     /// </summary>
@@ -143,16 +144,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Do not cache packages and http requests.
-    /// </summary>
-    public System.Boolean? NoCache
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     Do not cache packages and http requests.
     /// </summary>
@@ -161,7 +153,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Include pre-release packages.
     /// </summary>
@@ -170,7 +162,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Replace all NuGet package sources to use during installation with these.
     /// </summary>
@@ -179,7 +171,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Path to the manifest file.
     /// </summary>
@@ -188,7 +180,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The directory where the tool will be installed. The directory will be created if it does not exist.
     /// </summary>
@@ -197,7 +189,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -206,7 +198,7 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The version of the tool package to install.
     /// </summary>
@@ -215,8 +207,9 @@ public sealed record ToolUpdateOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -250,9 +243,6 @@ public sealed record ToolUpdateOptions
             Local is true
                 ? "--local"
                 : null,
-            NoCache is true
-                ? "--no-cache"
-                : null,
             NoHttpCache is true
                 ? "--no-http-cache"
                 : null,
@@ -277,6 +267,6 @@ public sealed record ToolUpdateOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 
