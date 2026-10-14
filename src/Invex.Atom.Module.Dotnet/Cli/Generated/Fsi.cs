@@ -28,14 +28,10 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "fsi",
-            $"{string.Join(" ", arguments)}",
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "fsi" };
+        DotnetCliArgs.AddPositional(args, arguments);
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
     public Task<ProcessRunResult> Fsi(
@@ -44,14 +40,10 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "fsi",
-            arguments,
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "fsi" };
+        DotnetCliArgs.AddPositional(args, arguments);
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }

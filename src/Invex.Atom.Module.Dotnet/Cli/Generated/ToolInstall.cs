@@ -16,7 +16,7 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -39,15 +39,11 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "tool install",
-            packageId,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "tool", "install" };
+        DotnetCliArgs.AddPositional(args, packageId);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }
@@ -226,70 +222,36 @@ public sealed record DotnetToolInstallOptions
         init;
     }
 
-    public override string ToString()
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
     {
-        return string.Join(' ',
-        new[]
-        {
-            AddSource is not null
-                ? $"--add-source {string.Join(" --add-source ", AddSource)}"
-                : null,
-            AllowDowngrade is true
-                ? "--allow-downgrade"
-                : null,
-            AllowRollForward is true
-                ? "--allow-roll-forward"
-                : null,
-            Arch is not null
-                ? $"--arch {Arch}"
-                : null,
-            ConfigFile is not null
-                ? $"--configfile {ConfigFile}"
-                : null,
-            CreateManifestIfNeeded is true
-                ? "--create-manifest-if-needed"
-                : null,
-            DisableParallel is true
-                ? "--disable-parallel"
-                : null,
-            Framework is not null
-                ? $"--framework {Framework}"
-                : null,
-            Global is true
-                ? "--global"
-                : null,
-            IgnoreFailedSources is true
-                ? "--ignore-failed-sources"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            Local is true
-                ? "--local"
-                : null,
-            NoHttpCache is true
-                ? "--no-http-cache"
-                : null,
-            Prerelease is true
-                ? "--prerelease"
-                : null,
-            Source is not null
-                ? $"--source {string.Join(" --source ", Source)}"
-                : null,
-            ToolManifest is not null
-                ? $"--tool-manifest {ToolManifest}"
-                : null,
-            ToolPath is not null
-                ? $"--tool-path {ToolPath}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
-                : null,
-            Version is not null
-                ? $"--version {Version}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--add-source", AddSource);
+        DotnetCliArgs.AddFlag(args, "--allow-downgrade", AllowDowngrade);
+        DotnetCliArgs.AddFlag(args, "--allow-roll-forward", AllowRollForward);
+        DotnetCliArgs.AddOption(args, "--arch", Arch);
+        DotnetCliArgs.AddOption(args, "--configfile", ConfigFile);
+        DotnetCliArgs.AddBool(args, "--create-manifest-if-needed", CreateManifestIfNeeded);
+        DotnetCliArgs.AddFlag(args, "--disable-parallel", DisableParallel);
+        DotnetCliArgs.AddOption(args, "--framework", Framework);
+        DotnetCliArgs.AddFlag(args, "--global", Global);
+        DotnetCliArgs.AddFlag(args, "--ignore-failed-sources", IgnoreFailedSources);
+        DotnetCliArgs.AddFlag(args, "--interactive", Interactive);
+        DotnetCliArgs.AddFlag(args, "--local", Local);
+        DotnetCliArgs.AddFlag(args, "--no-http-cache", NoHttpCache);
+        DotnetCliArgs.AddFlag(args, "--prerelease", Prerelease);
+        DotnetCliArgs.AddOption(args, "--source", Source);
+        DotnetCliArgs.AddOption(args, "--tool-manifest", ToolManifest);
+        DotnetCliArgs.AddOption(args, "--tool-path", ToolPath);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+        DotnetCliArgs.AddOption(args, "--version", Version);
+
+        return args;
     }
 
 }

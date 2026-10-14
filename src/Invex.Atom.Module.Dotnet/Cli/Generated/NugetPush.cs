@@ -24,15 +24,11 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "nuget push",
-            $"{string.Join(" ", packagePaths)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "nuget", "push" };
+        DotnetCliArgs.AddPositional(args, packagePaths);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }
@@ -115,49 +111,29 @@ public sealed record DotnetNugetPushOptions
         init;
     }
 
-    public override string ToString()
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
     {
-        return string.Join(' ',
-        new[]
-        {
-            ApiKey is not null
-                ? $"--api-key {ApiKey}"
-                : null,
-            ConfigFile is not null
-                ? $"--configfile {ConfigFile}"
-                : null,
-            DisableBuffering is true
-                ? "--disable-buffering"
-                : null,
-            ForceEnglishOutput is true
-                ? "--force-english-output"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            NoServiceEndpoint is true
-                ? "--no-service-endpoint"
-                : null,
-            NoSymbols is true
-                ? "--no-symbols"
-                : null,
-            SkipDuplicate is true
-                ? "--skip-duplicate"
-                : null,
-            Source is not null
-                ? $"--source {Source}"
-                : null,
-            SymbolApiKey is not null
-                ? $"--symbol-api-key {SymbolApiKey}"
-                : null,
-            SymbolSource is not null
-                ? $"--symbol-source {SymbolSource}"
-                : null,
-            Timeout is not null
-                ? $"--timeout {Timeout}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--api-key", ApiKey);
+        DotnetCliArgs.AddOption(args, "--configfile", ConfigFile);
+        DotnetCliArgs.AddFlag(args, "--disable-buffering", DisableBuffering);
+        DotnetCliArgs.AddFlag(args, "--force-english-output", ForceEnglishOutput);
+        DotnetCliArgs.AddFlag(args, "--interactive", Interactive);
+        DotnetCliArgs.AddFlag(args, "--no-service-endpoint", NoServiceEndpoint);
+        DotnetCliArgs.AddFlag(args, "--no-symbols", NoSymbols);
+        DotnetCliArgs.AddFlag(args, "--skip-duplicate", SkipDuplicate);
+        DotnetCliArgs.AddOption(args, "--source", Source);
+        DotnetCliArgs.AddOption(args, "--symbol-api-key", SymbolApiKey);
+        DotnetCliArgs.AddOption(args, "--symbol-source", SymbolSource);
+        DotnetCliArgs.AddOption(args, "--timeout", Timeout);
+
+        return args;
     }
 
 }

@@ -25,6 +25,29 @@ interfaces on your build class (or your own target interfaces) to gain access to
 | `IDotnetToolInstallHelper` | Installs .NET tools.                                                       |
 | `INugetHelper`             | NuGet feed management and push operations.                                 |
 
+### Calling the CLI directly
+
+`IDotnetCli` has one method per documented `dotnet` command (noun-first forms such as `PackageAdd` and
+`ReferenceAdd`; hidden and legacy commands are not generated). Each command's options are a `Dotnet<Command>Options`
+record:
+
+```csharp
+await DotnetCli.Build(RootedFileSystem.AtomRootDirectory / "My Project" / "MyProject.csproj",
+    new DotnetBuildOptions
+    {
+        Configuration = "Release",
+        NoLogo = true,
+        Verbosity = VerbosityOptions.Minimal,
+        Property = new Dictionary<string, string> { ["ContinuousIntegrationBuild"] = "true" },
+    },
+    cancellationToken: cancellationToken);
+```
+
+Every argument is passed to `dotnet` as a separate value, so paths and values containing spaces or quotes need no
+manual quoting. Flags such as `NoLogo` are emitted only when `true`; options that take a boolean value, such as
+`SelfContained`, are emitted as `--self-contained true` or `--self-contained false` when set. Use
+`ToArguments()` on an options record to see the arguments it produces.
+
 ## Features
 
 - **CLI wrappers**: Strongly-typed wrappers around `dotnet build`, `dotnet test`, `dotnet pack`, `dotnet publish`,

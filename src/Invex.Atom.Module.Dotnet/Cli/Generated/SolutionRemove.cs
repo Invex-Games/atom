@@ -13,7 +13,7 @@ public partial interface IDotnetCli
     ///     The project paths or names to remove from the solution.
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -34,14 +34,10 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "solution remove",
-            $"{string.Join(" ", projectPath)}",
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "solution", "remove" };
+        DotnetCliArgs.AddPositional(args, projectPath);
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }

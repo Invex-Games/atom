@@ -24,15 +24,11 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "nuget sign",
-            $"{string.Join(" ", packagePaths)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "nuget", "sign" };
+        DotnetCliArgs.AddPositional(args, packagePaths);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }
@@ -115,49 +111,29 @@ public sealed record DotnetNugetSignOptions
         init;
     }
 
-    public override string ToString()
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
     {
-        return string.Join(' ',
-        new[]
-        {
-            CertificateFingerprint is not null
-                ? $"--certificate-fingerprint {CertificateFingerprint}"
-                : null,
-            CertificatePassword is not null
-                ? $"--certificate-password {CertificatePassword}"
-                : null,
-            CertificatePath is not null
-                ? $"--certificate-path {CertificatePath}"
-                : null,
-            CertificateStoreLocation is not null
-                ? $"--certificate-store-location {CertificateStoreLocation}"
-                : null,
-            CertificateStoreName is not null
-                ? $"--certificate-store-name {CertificateStoreName}"
-                : null,
-            CertificateSubjectName is not null
-                ? $"--certificate-subject-name {CertificateSubjectName}"
-                : null,
-            HashAlgorithm is not null
-                ? $"--hash-algorithm {HashAlgorithm}"
-                : null,
-            Output is not null
-                ? $"--output {Output}"
-                : null,
-            Overwrite is true
-                ? "--overwrite"
-                : null,
-            TimestampHashAlgorithm is not null
-                ? $"--timestamp-hash-algorithm {TimestampHashAlgorithm}"
-                : null,
-            Timestamper is not null
-                ? $"--timestamper {Timestamper}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--certificate-fingerprint", CertificateFingerprint);
+        DotnetCliArgs.AddOption(args, "--certificate-password", CertificatePassword);
+        DotnetCliArgs.AddOption(args, "--certificate-path", CertificatePath);
+        DotnetCliArgs.AddOption(args, "--certificate-store-location", CertificateStoreLocation);
+        DotnetCliArgs.AddOption(args, "--certificate-store-name", CertificateStoreName);
+        DotnetCliArgs.AddOption(args, "--certificate-subject-name", CertificateSubjectName);
+        DotnetCliArgs.AddOption(args, "--hash-algorithm", HashAlgorithm);
+        DotnetCliArgs.AddOption(args, "--output", Output);
+        DotnetCliArgs.AddFlag(args, "--overwrite", Overwrite);
+        DotnetCliArgs.AddOption(args, "--timestamp-hash-algorithm", TimestampHashAlgorithm);
+        DotnetCliArgs.AddOption(args, "--timestamper", Timestamper);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+
+        return args;
     }
 
 }

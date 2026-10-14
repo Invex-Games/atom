@@ -19,6 +19,6 @@ public class VerbosityTests
             {
                 Verbosity = VerbosityOptions.Quiet,
             }
-            .ToString()
-            .ShouldBe("--verbosity quiet");
+            .ToArguments()
+            .ShouldBe(["--verbosity", "quiet"]);
 }

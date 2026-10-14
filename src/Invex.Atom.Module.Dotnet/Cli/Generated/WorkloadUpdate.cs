@@ -13,7 +13,7 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -31,10 +31,13 @@ internal partial class DotnetCli
         DotnetWorkloadUpdateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    ) =>
-        processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", (options ?? new()).ToString())
-            : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "workload", "update" };
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
+    }
 
 }
 [PublicAPI]
@@ -166,55 +169,31 @@ public sealed record DotnetWorkloadUpdateOptions
         init;
     }
 
-    public override string ToString()
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
     {
-        return string.Join(' ',
-        new[]
-        {
-            AdvertisingManifestsOnly is true
-                ? "--advertising-manifests-only"
-                : null,
-            ConfigFile is not null
-                ? $"--configfile {ConfigFile}"
-                : null,
-            DisableParallel is true
-                ? "--disable-parallel"
-                : null,
-            FromHistory is not null
-                ? $"--from-history {FromHistory}"
-                : null,
-            FromPreviousSdk is true
-                ? "--from-previous-sdk"
-                : null,
-            IgnoreFailedSources is true
-                ? "--ignore-failed-sources"
-                : null,
-            IncludePreviews is true
-                ? "--include-previews"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            ManifestsOnly is not null
-                ? $"--manifests-only {ManifestsOnly}"
-                : null,
-            NoHttpCache is true
-                ? "--no-http-cache"
-                : null,
-            Source is not null
-                ? $"--source {string.Join(" --source ", Source)}"
-                : null,
-            TempDir is not null
-                ? $"--temp-dir {TempDir}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
-                : null,
-            Version is not null
-                ? $"--version {string.Join(" --version ", Version)}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+        var args = new List<string>();
+        DotnetCliArgs.AddFlag(args, "--advertising-manifests-only", AdvertisingManifestsOnly);
+        DotnetCliArgs.AddOption(args, "--configfile", ConfigFile);
+        DotnetCliArgs.AddFlag(args, "--disable-parallel", DisableParallel);
+        DotnetCliArgs.AddOption(args, "--from-history", FromHistory);
+        DotnetCliArgs.AddBool(args, "--from-previous-sdk", FromPreviousSdk);
+        DotnetCliArgs.AddFlag(args, "--ignore-failed-sources", IgnoreFailedSources);
+        DotnetCliArgs.AddBool(args, "--include-previews", IncludePreviews);
+        DotnetCliArgs.AddFlag(args, "--interactive", Interactive);
+        DotnetCliArgs.AddOption(args, "--manifests-only", ManifestsOnly);
+        DotnetCliArgs.AddFlag(args, "--no-http-cache", NoHttpCache);
+        DotnetCliArgs.AddOption(args, "--source", Source);
+        DotnetCliArgs.AddOption(args, "--temp-dir", TempDir);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+        DotnetCliArgs.AddOption(args, "--version", Version);
+
+        return args;
     }
 
 }
