@@ -6,15 +6,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>atom</ToolCommandName>
     <PackageId>Invex.Atom.Tool</PackageId>
-  </PropertyGroup>
-
-  <!-- Conditional framework version to support NuGet tool -->
-  <PropertyGroup Condition="$(RuntimeIdentifier) != ''">
     <TargetFramework>net10.0</TargetFramework>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="$(RuntimeIdentifier) == ''">
-    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(TargetFramework) == 'net10.0'">

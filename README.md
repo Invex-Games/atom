@@ -32,7 +32,7 @@ debug it like standard code, and automatically generate CI/CD configuration file
 
 ## Installation
 
-Atom build projects require the .NET 10 SDK. The libraries target `net8.0`, `net9.0`, and `net10.0`.
+Atom build projects require the .NET 10 SDK. The libraries target `net10.0`.
 
 Add the core package to your build project (commonly `_atom/_atom.csproj`):
 
