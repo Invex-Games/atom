@@ -12,16 +12,12 @@
 internal sealed class GitVersionBuildVersionProvider(
     IDotnetToolInstallHelper dotnetToolInstallHelper,
     IProcessRunner processRunner,
-    IBuildDefinition buildDefinition,
+    IBuildOptionService buildOptionService,
     IRootedFileSystem fileSystem,
     ILogger<GitVersionBuildVersionProvider> logger
 ) : IBuildVersionProvider
 {
-    #if NET9_0_OR_GREATER
     private readonly Lock _lock = new();
-    #else
-    private readonly object _lock = new();
-    #endif
 
     /// <summary>
     ///     Gets the semantic version of the build, derived from GitVersion's output.
@@ -33,7 +29,7 @@ internal sealed class GitVersionBuildVersionProvider(
     {
         get
         {
-            if (!GitVersionProvideBuildVersionFlag.IsEnabled(buildDefinition))
+            if (!GitVersionProvideBuildVersionFlag.IsEnabled(buildOptionService.Options))
                 throw new InvalidOperationException(
                     "GitVersion is not enabled for build version generation. Ensure GitVersionProvideBuildVersionFlag is enabled.");
 

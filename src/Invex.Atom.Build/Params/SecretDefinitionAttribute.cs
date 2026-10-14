@@ -4,9 +4,7 @@ namespace Invex.Atom.Build.Params;
 ///     Defines a secret parameter for a build target, which will be masked in logs and can be resolved from secret stores.
 /// </summary>
 /// <remarks>
-///     This attribute inherits from <see cref="ParamDefinitionAttribute" /> and sets the
-///     <see cref="ParamDefinitionAttribute.IsSecret" />
-///     property to <c>true</c>. Use this for sensitive values like API keys or passwords.
+///     This attribute sets <see cref="ParamDefinitionAttributeBase.IsSecret" /> to <c>true</c>. Use this for sensitive values like API keys or passwords.
 /// </remarks>
 /// <example>
 ///     <code>
@@ -18,7 +16,8 @@ namespace Invex.Atom.Build.Params;
 ///     </code>
 /// </example>
 [PublicAPI]
-public class SecretDefinitionAttribute : ParamDefinitionAttribute
+[AttributeUsage(AttributeTargets.Property)]
+public sealed class SecretDefinitionAttribute : ParamDefinitionAttributeBase
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="SecretDefinitionAttribute" /> class.
@@ -31,8 +30,5 @@ public class SecretDefinitionAttribute : ParamDefinitionAttribute
         string argName,
         string description,
         ParamSource sources = ParamSource.All,
-        string[]? chainedParams = null) : base(argName, description, sources, chainedParams)
-    {
-        IsSecret = true;
-    }
+        string[]? chainedParams = null) : base(argName, description, sources, chainedParams, true) { }
 }

@@ -1,7 +1,5 @@
 ﻿namespace Invex.Atom.Build.Params;
 
-// NOTE: If the constructor args are modified, the BuildDefinitionSourceGenerator will need to be updated
-
 /// <summary>
 ///     Defines a parameter for a build target, specifying its command-line name, description, and resolution sources.
 /// </summary>
@@ -20,7 +18,7 @@
 /// </example>
 [PublicAPI]
 [AttributeUsage(AttributeTargets.Property)]
-public class ParamDefinitionAttribute : Attribute
+public sealed class ParamDefinitionAttribute : ParamDefinitionAttributeBase
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="ParamDefinitionAttribute" /> class.
@@ -33,36 +31,5 @@ public class ParamDefinitionAttribute : Attribute
         string argName,
         string description,
         ParamSource sources = ParamSource.All,
-        string[]? chainedParams = null)
-    {
-        ArgName = argName;
-        Description = description;
-        Sources = sources;
-        ChainedParams = chainedParams ?? [];
-    }
-
-    /// <summary>
-    ///     Gets the name of the parameter on the command line.
-    /// </summary>
-    public string ArgName { get; }
-
-    /// <summary>
-    ///     Gets the description of the parameter.
-    /// </summary>
-    public string Description { get; }
-
-    /// <summary>
-    ///     Gets the sources from which the parameter can be resolved.
-    /// </summary>
-    public ParamSource Sources { get; }
-
-    /// <summary>
-    ///     Gets a value indicating whether the parameter is a secret.
-    /// </summary>
-    public bool IsSecret { get; protected init; }
-
-    /// <summary>
-    ///     Gets an array of other parameters that this parameter depends on.
-    /// </summary>
-    public string[] ChainedParams { get; }
+        string[]? chainedParams = null) : base(argName, description, sources, chainedParams, false) { }
 }
