@@ -47,7 +47,7 @@ public static class MsBuildUtil
     /// <example>
     ///     <code>
     /// var projectXml = File.ReadAllText("MyProject.csproj");
-    /// var version = new SemVer("1.2.3-beta.4");
+    /// var version = SemVer.Parse("1.2.3-beta.4");
     /// var updatedXml = MsBuildUtil.SetVersionInfo(projectXml, version);
     /// File.WriteAllText("MyProject.csproj", updatedXml);
     /// </code>
