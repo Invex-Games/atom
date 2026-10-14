@@ -3,10 +3,10 @@
 [TestFixture]
 internal sealed class AzureCredentialFactoryTests
 {
-    private static readonly Dictionary<string, string?> GithubEnvironment = new()
+    private static readonly Dictionary<string, string?> GitHubEnvironment = new()
     {
-        [AzureCredentialFactory.GithubTokenRequestUrlVariable] = "https://token.actions.example/request?api-version=2",
-        [AzureCredentialFactory.GithubTokenRequestTokenVariable] = "request-token",
+        [AzureCredentialFactory.GitHubTokenRequestUrlVariable] = "https://token.actions.example/request?api-version=2",
+        [AzureCredentialFactory.GitHubTokenRequestTokenVariable] = "request-token",
     };
 
     private static readonly Dictionary<string, string?> AzurePipelinesEnvironment = new()
@@ -36,16 +36,16 @@ internal sealed class AzureCredentialFactoryTests
         };
 
     [Test]
-    public void Select_WithClientSecret_PrefersClientSecretEvenInGithubActions() =>
+    public void Select_WithClientSecret_PrefersClientSecretEvenInGitHubActions() =>
         AzureCredentialFactory
-            .Select(Settings(clientSecret: "secret"), Env(GithubEnvironment))
+            .Select(Settings(clientSecret: "secret"), Env(GitHubEnvironment))
             .ShouldBe(AzureCredentialKind.ClientSecret);
 
     [Test]
-    public void Select_InGithubActionsWithIdToken_UsesGithubOidc() =>
+    public void Select_InGitHubActionsWithIdToken_UsesGitHubOidc() =>
         AzureCredentialFactory
-            .Select(Settings(), Env(GithubEnvironment))
-            .ShouldBe(AzureCredentialKind.GithubActionsOidc);
+            .Select(Settings(), Env(GitHubEnvironment))
+            .ShouldBe(AzureCredentialKind.GitHubActionsOidc);
 
     [Test]
     public void Select_InAzurePipelinesWithServiceConnection_UsesAzurePipelinesOidc() =>
@@ -73,11 +73,11 @@ internal sealed class AzureCredentialFactoryTests
     public void Select_WithoutTenantOrClient_UsesDefaultEvenWithSecretAndOidc()
     {
         AzureCredentialFactory
-            .Select(Settings(null, clientSecret: "secret"), Env(GithubEnvironment))
+            .Select(Settings(null, clientSecret: "secret"), Env(GitHubEnvironment))
             .ShouldBe(AzureCredentialKind.Default);
 
         AzureCredentialFactory
-            .Select(Settings(clientId: null, clientSecret: "secret"), Env(GithubEnvironment))
+            .Select(Settings(clientId: null, clientSecret: "secret"), Env(GitHubEnvironment))
             .ShouldBe(AzureCredentialKind.Default);
     }
 
@@ -88,7 +88,7 @@ internal sealed class AzureCredentialFactoryTests
             .ShouldBe(AzureCredentialKind.DefaultWithInteractiveFallback);
 
     [Test]
-    public void Select_WithUnexpandedDevopsMacros_TreatsValuesAsUnset() =>
+    public void Select_WithUnexpandedDevOpsMacros_TreatsValuesAsUnset() =>
         AzureCredentialFactory
             .Select(Settings(clientSecret: "$(AZURE_KEY_VAULT_CLIENT_SECRET)",
                     serviceConnectionId: "$(AZURE_KEY_VAULT_SERVICE_CONNECTION_ID)"),
@@ -107,7 +107,7 @@ internal sealed class AzureCredentialFactoryTests
             .ShouldBe(expected);
 
     [TestCase(AzureCredentialKind.ClientSecret, typeof(ClientSecretCredential))]
-    [TestCase(AzureCredentialKind.GithubActionsOidc, typeof(ClientAssertionCredential))]
+    [TestCase(AzureCredentialKind.GitHubActionsOidc, typeof(ClientAssertionCredential))]
     [TestCase(AzureCredentialKind.AzurePipelinesOidc, typeof(AzurePipelinesCredential))]
     [TestCase(AzureCredentialKind.Default, typeof(DefaultAzureCredential))]
     [TestCase(AzureCredentialKind.DefaultWithInteractiveFallback, typeof(ChainedTokenCredential))]
@@ -117,7 +117,7 @@ internal sealed class AzureCredentialFactoryTests
         var (settings, environment) = expectedKind switch
         {
             AzureCredentialKind.ClientSecret => (Settings(clientSecret: "secret"), EmptyEnvironment),
-            AzureCredentialKind.GithubActionsOidc => (Settings(), GithubEnvironment),
+            AzureCredentialKind.GitHubActionsOidc => (Settings(), GitHubEnvironment),
             AzureCredentialKind.AzurePipelinesOidc => (Settings(serviceConnectionId: "connection"),
                 AzurePipelinesEnvironment),
             AzureCredentialKind.Default => (Settings(), EmptyEnvironment),
@@ -133,14 +133,14 @@ internal sealed class AzureCredentialFactoryTests
     }
 
     [Test]
-    public async Task GetGithubActionsOidcTokenAsync_RequestsTokenForEntraAudience()
+    public async Task GetGitHubActionsOidcTokenAsync_RequestsTokenForEntraAudience()
     {
         // Arrange
         var handler = new RecordingHandler("""{"count":1,"value":"github-jwt"}""");
         using var httpClient = new HttpClient(handler);
 
         // Act
-        var token = await AzureCredentialFactory.GetGithubActionsOidcTokenAsync(httpClient,
+        var token = await AzureCredentialFactory.GetGitHubActionsOidcTokenAsync(httpClient,
             "https://token.actions.example/request?api-version=2",
             "request-token",
             CancellationToken.None);
@@ -160,14 +160,14 @@ internal sealed class AzureCredentialFactoryTests
     }
 
     [Test]
-    public async Task GetGithubActionsOidcTokenAsync_WithoutToken_Throws()
+    public async Task GetGitHubActionsOidcTokenAsync_WithoutToken_Throws()
     {
         // Arrange
         using var httpClient = new HttpClient(new RecordingHandler("{}"));
 
         // Act & Assert
         await Should.ThrowAsync<InvalidOperationException>(() =>
-            AzureCredentialFactory.GetGithubActionsOidcTokenAsync(httpClient,
+            AzureCredentialFactory.GetGitHubActionsOidcTokenAsync(httpClient,
                 "https://token.actions.example/request",
                 "request-token",
                 CancellationToken.None));

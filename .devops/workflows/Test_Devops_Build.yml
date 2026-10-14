@@ -79,10 +79,10 @@ jobs:
           targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.AzureStorage
 
       - task: PublishPipelineArtifact@1
-        displayName: Invex.Atom.Module.DevopsWorkflows
+        displayName: Invex.Atom.Module.DevOpsWorkflows
         inputs:
-          artifactName: Invex.Atom.Module.DevopsWorkflows
-          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.DevopsWorkflows
+          artifactName: Invex.Atom.Module.DevOpsWorkflows
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.DevOpsWorkflows
 
       - task: PublishPipelineArtifact@1
         displayName: Invex.Atom.Module.Dotnet
@@ -97,10 +97,10 @@ jobs:
           targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.GitVersion
 
       - task: PublishPipelineArtifact@1
-        displayName: Invex.Atom.Module.GithubWorkflows
+        displayName: Invex.Atom.Module.GitHubWorkflows
         inputs:
-          artifactName: Invex.Atom.Module.GithubWorkflows
-          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.GithubWorkflows
+          artifactName: Invex.Atom.Module.GitHubWorkflows
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.GitHubWorkflows
 
   - job: PackTool
     displayName: PackTool
@@ -211,16 +211,16 @@ jobs:
           targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.Dotnet.Tests
 
       - task: PublishPipelineArtifact@1
-        displayName: Invex.Atom.Module.DevopsWorkflows.Tests
+        displayName: Invex.Atom.Module.DevOpsWorkflows.Tests
         inputs:
-          artifactName: Invex.Atom.Module.DevopsWorkflows.Tests-$(job-runs-on)-$(test-framework)
-          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.DevopsWorkflows.Tests
+          artifactName: Invex.Atom.Module.DevOpsWorkflows.Tests-$(job-runs-on)-$(test-framework)
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.DevOpsWorkflows.Tests
 
       - task: PublishPipelineArtifact@1
-        displayName: Invex.Atom.Module.GithubWorkflows.Tests
+        displayName: Invex.Atom.Module.GitHubWorkflows.Tests
         inputs:
-          artifactName: Invex.Atom.Module.GithubWorkflows.Tests-$(job-runs-on)-$(test-framework)
-          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.GithubWorkflows.Tests
+          artifactName: Invex.Atom.Module.GitHubWorkflows.Tests-$(job-runs-on)-$(test-framework)
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.GitHubWorkflows.Tests
 
       - task: PublishPipelineArtifact@1
         displayName: Invex.Atom.Workflows.Tests
@@ -278,10 +278,10 @@ jobs:
           path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Module.AzureStorage
 
       - task: DownloadPipelineArtifact@2
-        displayName: Invex.Atom.Module.DevopsWorkflows
+        displayName: Invex.Atom.Module.DevOpsWorkflows
         inputs:
-          artifact: Invex.Atom.Module.DevopsWorkflows
-          path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Module.DevopsWorkflows
+          artifact: Invex.Atom.Module.DevOpsWorkflows
+          path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Module.DevOpsWorkflows
 
       - task: DownloadPipelineArtifact@2
         displayName: Invex.Atom.Module.Dotnet
@@ -296,10 +296,10 @@ jobs:
           path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Module.GitVersion
 
       - task: DownloadPipelineArtifact@2
-        displayName: Invex.Atom.Module.GithubWorkflows
+        displayName: Invex.Atom.Module.GitHubWorkflows
         inputs:
-          artifact: Invex.Atom.Module.GithubWorkflows
-          path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Module.GithubWorkflows
+          artifact: Invex.Atom.Module.GitHubWorkflows
+          path: $(Build.ArtifactStagingDirectory)/Invex.Atom.Module.GitHubWorkflows
 
       - task: DownloadPipelineArtifact@2
         displayName: Invex.Atom.Tool

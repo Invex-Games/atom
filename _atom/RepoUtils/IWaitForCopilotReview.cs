@@ -5,7 +5,7 @@ namespace Atom.RepoUtils;
 ///     This fills the gap where GitHub cannot natively wait for a Copilot review before completing an
 ///     auto-merge, allowing the target to be sequenced ahead of an auto-merge step.
 /// </summary>
-internal interface IWaitForCopilotReview : ICopilotReviewHelper, IPullRequestHelper, IGithubHelper
+internal interface IWaitForCopilotReview : ICopilotReviewHelper, IPullRequestHelper, IGitHubHelper
 {
     /// <summary>
     ///     The login of the Copilot reviewer bot to wait for. Defaults to
@@ -32,7 +32,7 @@ internal interface IWaitForCopilotReview : ICopilotReviewHelper, IPullRequestHel
 
     /// <summary>
     ///     An optional GitHub personal access token used to read the Copilot review state. When not
-    ///     supplied, the default <see cref="IGithubHelper.GithubToken" /> is used instead. A dedicated PAT
+    ///     supplied, the default <see cref="IGitHubHelper.GitHubToken" /> is used instead. A dedicated PAT
     ///     can be provided for cases where the default workflow token cannot read the review state (for
     ///     example on some Dependabot-created pull requests).
     /// </summary>
@@ -49,7 +49,7 @@ internal interface IWaitForCopilotReview : ICopilotReviewHelper, IPullRequestHel
         t => t
             .RequiresParam(nameof(PullRequestNumber))
             .UsesParam(nameof(CopilotReviewerLogin))
-            .UsesParam(nameof(GithubToken))
+            .UsesParam(nameof(GitHubToken))
             .UsesParam(nameof(CopilotReviewTimeoutSeconds))
             .UsesParam(nameof(CopilotReviewPollIntervalSeconds))
             .UsesParam(nameof(CopilotReviewToken))
@@ -57,12 +57,12 @@ internal interface IWaitForCopilotReview : ICopilotReviewHelper, IPullRequestHel
             {
                 // Prefer the dedicated PAT when supplied, otherwise fall back to the default token.
                 var token = string.IsNullOrWhiteSpace(CopilotReviewToken)
-                    ? GithubToken
+                    ? GitHubToken
                     : CopilotReviewToken;
 
                 if (string.IsNullOrWhiteSpace(token))
                     throw new StepFailedException(
-                        $"A GitHub token is required. Provide '{nameof(GithubToken)}' or '{nameof(CopilotReviewToken)}'.");
+                        $"A GitHub token is required. Provide '{nameof(GitHubToken)}' or '{nameof(CopilotReviewToken)}'.");
 
                 await WaitForCopilotReviewToComplete(PullRequestNumber,
                     token,

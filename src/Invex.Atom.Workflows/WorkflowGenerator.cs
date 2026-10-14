@@ -37,7 +37,7 @@ internal sealed class WorkflowGenerator(
             {
                 logger.LogWarning(
                     "No workflow writer found for workflow type {WorkflowType} in workflow {WorkflowName}. " +
-                    "The workflow will not be generated. Ensure the appropriate module (e.g., Invex.Atom.Module.GithubWorkflows) is referenced.",
+                    "The workflow will not be generated. Ensure the appropriate module (e.g., Invex.Atom.Module.GitHubWorkflows) is referenced.",
                     workflowType.GetType()
                         .Name,
                     workflowDefinition.Name);

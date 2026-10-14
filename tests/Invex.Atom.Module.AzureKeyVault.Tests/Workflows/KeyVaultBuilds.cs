@@ -1,7 +1,7 @@
 ﻿namespace Invex.Atom.Module.AzureKeyVault.Tests.Workflows;
 
 [BuildDefinition]
-public partial class GithubKeyVaultBuild : WorkflowBuildDefinition, IGithubWorkflows, IAzureKeyVault, IVaultTarget
+public partial class GitHubKeyVaultBuild : WorkflowBuildDefinition, IGitHubWorkflows, IAzureKeyVault, IVaultTarget
 {
     public IReadOnlyList<IBuildOption> Options => [BuildOptions.AzureKeyVault.UseAzureKeyVault];
 
@@ -23,20 +23,20 @@ public partial class GithubKeyVaultBuild : WorkflowBuildDefinition, IGithubWorkf
                     // Allows the job to request an OIDC token for workload identity federation
                     Options =
                     [
-                        new GithubTokenPermissionsOption(new PermissionsEvent
+                        new GitHubTokenPermissionsOption(new PermissionsEvent
                         {
                             IdTokens = PermissionsLevel.Write,
                         }),
                     ],
                 },
             ],
-            Types = [WorkflowTypes.Github.Action],
+            Types = [WorkflowTypes.GitHub.Action],
         },
     ];
 }
 
 [BuildDefinition]
-public partial class DevopsKeyVaultBuild : WorkflowBuildDefinition, IDevopsWorkflows, IAzureKeyVault, IVaultTarget
+public partial class DevOpsKeyVaultBuild : WorkflowBuildDefinition, IDevOpsWorkflows, IAzureKeyVault, IVaultTarget
 {
     public IReadOnlyList<IBuildOption> Options => [BuildOptions.AzureKeyVault.UseAzureKeyVault];
 
@@ -66,7 +66,7 @@ public partial class DevopsKeyVaultBuild : WorkflowBuildDefinition, IDevopsWorkf
                     ],
                 },
             ],
-            Types = [WorkflowTypes.Devops.Pipeline],
+            Types = [WorkflowTypes.DevOps.Pipeline],
         },
     ];
 }

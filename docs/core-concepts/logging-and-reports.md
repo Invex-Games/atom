@@ -60,8 +60,8 @@ Report data is rendered by `IOutcomeReportWriter` implementations:
 | Writer                             | Description                              |
 |------------------------------------|------------------------------------------|
 | `ConsoleOutcomeReportWriter`       | Writes to the console (always active)    |
-| `GithubSummaryOutcomeReportWriter` | Writes to the GitHub Actions job summary |
-| `DevopsSummaryOutcomeReportWriter` | Writes to the Azure DevOps build summary |
+| `GitHubSummaryOutcomeReportWriter` | Writes to the GitHub Actions job summary |
+| `DevOpsSummaryOutcomeReportWriter` | Writes to the Azure DevOps build summary |
 
 Platform-specific writers are registered by their respective modules.
 

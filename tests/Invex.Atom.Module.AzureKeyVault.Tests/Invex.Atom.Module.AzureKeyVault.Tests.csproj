@@ -52,8 +52,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Invex.Atom.Module.AzureKeyVault\Invex.Atom.Module.AzureKeyVault.csproj" />
-    <ProjectReference Include="..\..\src\Invex.Atom.Module.DevopsWorkflows\Invex.Atom.Module.DevopsWorkflows.csproj" />
-    <ProjectReference Include="..\..\src\Invex.Atom.Module.GithubWorkflows\Invex.Atom.Module.GithubWorkflows.csproj" />
+    <ProjectReference Include="..\..\src\Invex.Atom.Module.DevOpsWorkflows\Invex.Atom.Module.DevOpsWorkflows.csproj" />
+    <ProjectReference Include="..\..\src\Invex.Atom.Module.GitHubWorkflows\Invex.Atom.Module.GitHubWorkflows.csproj" />
     <ProjectReference Include="..\..\src\Invex.Atom.Build.SourceGenerators\Invex.Atom.Build.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\Invex.Atom.TestUtils\Invex.Atom.TestUtils.csproj" />
   </ItemGroup>

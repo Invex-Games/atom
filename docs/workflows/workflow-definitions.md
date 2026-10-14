@@ -17,7 +17,7 @@ public override IReadOnlyList<WorkflowDefinition> Workflows =>
             new(nameof(Compile)),
             new(nameof(Test)),
         ],
-        Types = [WorkflowTypes.Github.Action],
+        Types = [WorkflowTypes.GitHub.Action],
     },
 ];
 ```
@@ -39,13 +39,13 @@ GitHub Actions workflow.
      </PropertyGroup>
 
      <ItemGroup>
-       <PackageReference Include="Invex.Atom.Module.GithubWorkflows" Version="3.*" />
+       <PackageReference Include="Invex.Atom.Module.GitHubWorkflows" Version="3.*" />
      </ItemGroup>
 
    </Project>
    ```
 
-2. Extend `IWorkflowBuildDefinition` and `IGithubWorkflows`, and declare the workflow. The parameter is injected from a
+2. Extend `IWorkflowBuildDefinition` and `IGitHubWorkflows`, and declare the workflow. The parameter is injected from a
    GitHub expression and the secret from the repository's secrets:
 
    ```csharp
@@ -53,8 +53,8 @@ GitHub Actions workflow.
    using Invex.Atom.Build.Definition;
    using Invex.Atom.Build.Hosting;
    using Invex.Atom.Build.Params;
-   using Invex.Atom.Module.GithubWorkflows.Extensions;
-   using Invex.Atom.Module.GithubWorkflows.Helpers;
+   using Invex.Atom.Module.GitHubWorkflows.Extensions;
+   using Invex.Atom.Module.GitHubWorkflows.Helpers;
    using Invex.Atom.Workflows;
    using Invex.Atom.Workflows.Definition;
    using Invex.Atom.Workflows.Definition.Triggers;
@@ -65,7 +65,7 @@ GitHub Actions workflow.
 
    [BuildDefinition]
    [GenerateEntryPoint]
-   internal interface IBuild : IWorkflowBuildDefinition, IGithubWorkflows
+   internal interface IBuild : IWorkflowBuildDefinition, IGitHubWorkflows
    {
        [ParamDefinition("my-name", "My name")]
        string? MyName => GetParam(() => MyName);
@@ -98,13 +98,13 @@ GitHub Actions workflow.
                    {
                        Options =
                        [
-                           BuildOptions.Inject.Param(nameof(MyName), TextExpressions.Github.GithubRepositoryOwner),
+                           BuildOptions.Inject.Param(nameof(MyName), TextExpressions.GitHub.GitHubRepositoryOwner),
                            BuildOptions.Inject.Secret(nameof(MySecret)),
                        ],
                    },
                    new(nameof(Goodbye)),
                ],
-               Types = [WorkflowTypes.Github.Action],
+               Types = [WorkflowTypes.GitHub.Action],
            },
        ];
    }
@@ -113,7 +113,7 @@ GitHub Actions workflow.
 3. Run the [`Gen`](../built-in-targets/generate-workflow-files.md) target with `atom gen`:
 
    ```text
-   26-06-06 +10:00  Invex.Atom.Module.GithubWorkflows.GithubActions.GithubWorkflowFileWriter:
+   26-06-06 +10:00  Invex.Atom.Module.GitHubWorkflows.GitHubActions.GitHubWorkflowFileWriter:
    01:38:57.388 INF Writing new workflow file:
                     L:\Repos\Invex-Games\atom\.github\workflows\Hello.yml
 
@@ -198,7 +198,7 @@ new(nameof(Test))
             Values = ["ubuntu-latest", "windows-latest"],
         },
     ],
-    Options = [BuildOptions.Github.RunsOn.SetByMatrix],
+    Options = [BuildOptions.GitHub.RunsOn.SetByMatrix],
 }
 ```
 
@@ -227,8 +227,8 @@ The `Types` list determines which platforms receive generated files:
 
 | Type                            | Platform                              |
 |---------------------------------|---------------------------------------|
-| `WorkflowTypes.Github.Action`   | GitHub Actions (`.github/workflows/`) |
-| `WorkflowTypes.Devops.Pipeline` | Azure DevOps Pipelines                |
+| `WorkflowTypes.GitHub.Action`   | GitHub Actions (`.github/workflows/`) |
+| `WorkflowTypes.DevOps.Pipeline` | Azure DevOps Pipelines                |
 
 You can target multiple platforms from the same workflow definition.
 
@@ -242,7 +242,7 @@ new("Build")
     Options =
     [
         BuildOptions.Inject.Param(nameof(NugetDryRun), true),
-        BuildOptions.Devops.VariableGroup.Atom,
+        BuildOptions.DevOps.VariableGroup.Atom,
     ],
     // ...
 }
@@ -279,11 +279,11 @@ new("Validate")
             Options =
             [
                 BuildOptions.Target.SuppressArtifactPublishing,
-                BuildOptions.Github.RunsOn.SetByMatrix,
+                BuildOptions.GitHub.RunsOn.SetByMatrix,
             ],
         },
     ],
-    Types = [WorkflowTypes.Github.Action],
+    Types = [WorkflowTypes.GitHub.Action],
 }
 ```
 

@@ -49,7 +49,7 @@ The vault is accessed with a Microsoft Entra token credential, chosen in this or
    ```csharp
    new(nameof(MyTarget))
    {
-       Options = [new GithubTokenPermissionsOption(new PermissionsEvent { IdTokens = PermissionsLevel.Write })],
+       Options = [new GitHubTokenPermissionsOption(new PermissionsEvent { IdTokens = PermissionsLevel.Write })],
    }
    ```
 

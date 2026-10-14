@@ -1,6 +1,6 @@
 namespace Atom.RepoUtils;
 
-internal interface IApproveDependabotPr : IGithubHelper, IPullRequestHelper
+internal interface IApproveDependabotPr : IGitHubHelper, IPullRequestHelper
 {
     const string DependabotActorName = "dependabot[bot]";
 
@@ -13,15 +13,15 @@ internal interface IApproveDependabotPr : IGithubHelper, IPullRequestHelper
             .RequiresParam(nameof(PullRequestNumber), nameof(DependabotEnableAutoMergePat))
             .Executes(async cancellationToken =>
             {
-                var actor = Github.Variables.Actor;
-                var owner = Github.Variables.RepositoryOwner;
+                var actor = GitHub.Variables.Actor;
+                var owner = GitHub.Variables.RepositoryOwner;
 
-                var repo = Github.Variables
+                var repo = GitHub.Variables
                     .Repository
                     .Split('/')
                     .Last();
 
-                Logger.LogInformation("Github API action context: {Context}",
+                Logger.LogInformation("GitHub API action context: {Context}",
                     new
                     {
                         Actor = actor,
