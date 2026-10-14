@@ -3,7 +3,7 @@
 [![Build](https://github.com/Invex-Games/atom/actions/workflows/Build.yml/badge.svg)](https://github.com/Invex-Games/atom/actions/workflows/Build.yml)
 [![NuGet](https://img.shields.io/nuget/v/Invex.Atom.Build.svg)](https://www.nuget.org/packages/Invex.Atom.Build)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Invex-Games/atom/blob/main/LICENSE.txt)
-[![.NET](https://img.shields.io/badge/.NET-8.0%20%7C%209.0%20%7C%2010.0-512BD4.svg)](https://dotnet.microsoft.com/)
+[![.NET](https://img.shields.io/badge/.NET-10.0-512BD4.svg)](https://dotnet.microsoft.com/)
 
 Atom is an opinionated, type-safe build automation framework for .NET. It enables you to define your build logic in C#,
 debug it like standard code, and automatically generate CI/CD configuration files for GitHub Actions and Azure DevOps.
