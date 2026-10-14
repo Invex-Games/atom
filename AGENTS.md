@@ -19,7 +19,7 @@ for .NET. Keep changes focused; `README.md` and `docs/` describe consumer-facing
 
 The solution is `Invex.Atom.slnx`. The repository currently requires the .NET 10 SDK; libraries,
 tests, and the build project all target `net10.0`.
-There is no `global.json`, so use the installed .NET 10 SDK selected by the environment.
+`global.json` pins SDK `10.0.0` with `rollForward: latestMajor`, so any installed .NET 10 or later SDK is used.
 
 ## Build, test, and cleanup
 
@@ -62,8 +62,9 @@ BuildTools installation. Cleanup honors `.editorconfig` and `Invex.Atom.sln.DotS
 - Add XML documentation to every new public type and member in `src/`, matching the existing
   style and accurately describing nullability, return values, retries, and caching.
 - Add `[PublicAPI]` to new public types where the public API analyzer applies.
-- Some generated-code projects and tests explicitly suppress `CS1591`; do not broaden the
-  repository-wide warning suppressions to hide missing documentation.
+- `CS1591` is enforced repository-wide. Only tests, samples, `_atom/`, and the generated-code module projects
+  (`Invex.Atom.Module.Dotnet`, `.DevopsWorkflows`, `.GithubWorkflows`) suppress it in their own `.csproj`; do not
+  broaden those suppressions to hide missing documentation.
 - Keep cross-member implementation helpers `internal`; expose only the intended consumer API.
 - The IDE can report false errors for `[GeneratedRegex]` partial members; `dotnet build` is the
   source of truth for those members.
@@ -116,6 +117,23 @@ tests compare output with committed `*.verified.txt` files. A mismatch creates a
    remove `.received.txt`, and rerun `dotnet test`.
 3. Keep approved snapshot changes intentional because PR validation checks the snapshots for
    breaking API changes.
+
+## Documentation
+
+Docs follow the shared Invex documentation standard used by every Invex library:
+
+- **README.md** is also the NuGet readme. Keep the fixed section order (title, badges, pitch, Packages, Features,
+  Installation, Quick start, Usage, Documentation, Development, License) and use absolute links only
+  (`https://github.com/Invex-Games/atom/blob/main/...` or the docs site), so they work on nuget.org.
+- **DocFX site** (`docfx.json`, `toc.yml`, `index.md`, `docs/`, `api/index.md`), published to
+  https://invex-games.github.io/atom/. `docs/getting-started/introduction.md` and
+  `docs/getting-started/your-first-build.md` come first; every page opens with one to three sentences on what it covers
+  and ends with a "See also" or "Next steps" list. Link API types with `<xref:Namespace.Type>`, not file paths.
+- **`api/index.md`** is the only hand-written file under `api/`; everything else there is generated. Put per-type
+  detail in XML docs, not in hand-written API pages.
+- **XML docs are enforced.** `CS1591` is not suppressed for shipped projects, so every public type and member needs
+  `<summary>`, plus `<param>`, `<typeparam>`, `<returns>` and `<exception>` where they apply, `<remarks>` for
+  non-obvious behaviour, and `<see cref>`/`<paramref>`/`<see langword>` for references.
 
 ## Change checklist
 
