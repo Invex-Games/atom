@@ -35,5 +35,4 @@ changed targets or workflows but forgotten to regenerate.
 - [Modules Overview](../modules/overview.md): add platform and tool integrations.
 - [Gen](../built-in-targets/generate-workflow-files.md): automatic generation and outdated-file detection.
 - <xref:Invex.Atom.Workflows.DebugWorkflowType>
-- <xref:Invex.Atom.Workflows.DebugWorkflowWriter>
 - <xref:Invex.Atom.Workflows.WorkflowOutdatedException>
