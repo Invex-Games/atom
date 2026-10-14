@@ -1,0 +1,29 @@
+﻿name: devops-key-vault-workflow
+
+trigger: none
+pr:
+  branches:
+    include: [ main ]
+
+jobs:
+
+  - job: VaultTarget
+    displayName: VaultTarget
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+      - checkout: self
+        enabled: true
+        fetchDepth: 0
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj VaultTarget --skip --headless
+        displayName: VaultTarget
+        name: VaultTarget
+        env:
+          azure-key-vault-client-secret: $(AZURE_KEY_VAULT_CLIENT_SECRET)
+          azure-key-vault-address: $(AZURE_KEY_VAULT_ADDRESS)
+          azure-key-vault-tenant-id: $(AZURE_KEY_VAULT_TENANT_ID)
+          azure-key-vault-client-id: $(AZURE_KEY_VAULT_CLIENT_ID)
+          azure-key-vault-service-connection-id: $(AZURE_KEY_VAULT_SERVICE_CONNECTION_ID)
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)

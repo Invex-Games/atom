@@ -1,0 +1,30 @@
+﻿name: github-key-vault-workflow
+
+on:
+  pull_request:
+    branches: [ main ]
+
+permissions: { }
+
+jobs:
+
+  VaultTarget:
+    permissions:
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: VaultTarget
+        id: VaultTarget
+        run: dotnet run --project AtomTest/AtomTest.csproj -- VaultTarget --skip --headless
+        env:
+          azure-key-vault-client-secret: ${{ secrets.AZURE_KEY_VAULT_CLIENT_SECRET }}
+          azure-key-vault-address: ${{ vars.AZURE_KEY_VAULT_ADDRESS }}
+          azure-key-vault-tenant-id: ${{ vars.AZURE_KEY_VAULT_TENANT_ID }}
+          azure-key-vault-client-id: ${{ vars.AZURE_KEY_VAULT_CLIENT_ID }}
+

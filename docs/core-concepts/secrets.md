@@ -109,10 +109,12 @@ their own timeouts to network calls. Code that reads secrets dynamically can cal
 
 ### Built-in Providers
 
-| Provider                    | Package                           | Description                                       |
-|-----------------------------|-----------------------------------|---------------------------------------------------|
-| `DotnetUserSecretsProvider` | `Invex.Atom.Build`                | Reads from .NET User Secrets (local development). Enabled by `IDotnetUserSecrets`. |
-| `AzureKeySecretsProvider`   | `Invex.Atom.Module.AzureKeyVault` | Reads from Azure Key Vault.                       |
+Implement one of these interfaces on your build definition to register its provider:
+
+| Interface            | Package                           | Description                                                     |
+|----------------------|-----------------------------------|-----------------------------------------------------------------|
+| `IDotnetUserSecrets` | `Invex.Atom.Build`                | Reads from .NET User Secrets (local development).               |
+| `IAzureKeyVault`     | `Invex.Atom.Module.AzureKeyVault` | Reads from Azure Key Vault (client secret, OIDC or Entra login). |
 
 ### Registering a Custom Provider
 
