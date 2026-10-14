@@ -10,13 +10,17 @@ Retrieve secrets from a custom store:
 ```csharp
 public class MySecretsProvider : ISecretsProvider
 {
-    public string? GetSecret(string key)
+    public async ValueTask<string?> GetSecretAsync(string key, CancellationToken cancellationToken)
     {
         // Return the secret value, or null to delegate to the next provider.
-        return MyVault.TryGet(key);
+        return await MyVault.TryGetAsync(key, cancellationToken);
     }
 }
 ```
+
+Atom prefetches the secrets used by the targets being run asynchronously, passing the build's cancellation token. A
+secret that was not prefetched is resolved by blocking on `GetSecretAsync` with `CancellationToken.None`, so apply a
+timeout to any network call (see [Secrets](../core-concepts/secrets.md#prefetching-and-synchronous-access)).
 
 Register it:
 

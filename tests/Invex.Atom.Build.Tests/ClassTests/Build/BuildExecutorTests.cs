@@ -209,4 +209,83 @@ internal sealed class BuildExecutorTests
         logOutput.ShouldContain("param-1");
         logOutput.ShouldContain("param-2");
     }
+
+    [Test]
+    public async Task Execute_WithSecretParams_PrefetchesSecretsOfPendingTargetsWithBuildToken()
+    {
+        // Arrange
+        ParamModel CreateParam(string name, bool isSecret) =>
+            new(name)
+            {
+                ArgName = name.ToLowerInvariant(),
+                Description = name,
+                DefaultValue = null,
+                Sources = ParamSource.All,
+                IsSecret = isSecret,
+                ChainedParams = [],
+            };
+
+        TargetModel CreateTarget(string name, params UsedParam[] usedParams) =>
+            new(name, null, false)
+            {
+                Tasks = [_ => Task.CompletedTask],
+                Params = usedParams,
+                ConsumedArtifacts = [],
+                ProducedArtifacts = [],
+                ConsumedVariables = [],
+                ProducedVariables = [],
+                Dependencies = [],
+                DeclaringAssembly = Assembly.GetExecutingAssembly(),
+            };
+
+        _commandLineArgs = new(true, [new CommandArg("Run")]);
+
+        var runTarget = CreateTarget("Run",
+            new(CreateParam("RunSecret", true), false),
+            new(CreateParam("RunPlain", false), false));
+
+        var skippedTarget = CreateTarget("Skipped", new UsedParam(CreateParam("SkippedSecret", true), false));
+
+        _buildModel = new()
+        {
+            Targets = [runTarget, skippedTarget],
+            TargetStates = new Dictionary<TargetModel, TargetState>
+            {
+                {
+                    runTarget, new(runTarget.Name)
+                    {
+                        Status = TargetRunState.PendingRun,
+                    }
+                },
+                {
+                    skippedTarget, new(skippedTarget.Name)
+                    {
+                        Status = TargetRunState.Skipped,
+                    }
+                },
+            },
+            DeclaringAssembly = Assembly.GetExecutingAssembly(),
+        };
+
+        using var cts = new CancellationTokenSource();
+
+        var buildExecutor = new BuildExecutor(_commandLineArgs,
+            _buildModel,
+            _paramService,
+            _variableService,
+            _outcomeReporters,
+            _console,
+            _reportService,
+            _logger);
+
+        // Act
+        await buildExecutor.Execute(cts.Token);
+
+        // Assert
+        A
+            .CallTo(() => _paramService.PrefetchSecretsAsync(
+                A<IEnumerable<string>>.That.Matches(names => names.SequenceEqual(new[] { "RunSecret" })),
+                cts.Token))
+            .MustHaveHappenedOnceExactly();
+    }
 }
