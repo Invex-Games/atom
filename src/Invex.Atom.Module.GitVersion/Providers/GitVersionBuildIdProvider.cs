@@ -10,16 +10,12 @@
 internal sealed class GitVersionBuildIdProvider(
     IDotnetToolInstallHelper dotnetToolInstallHelper,
     IProcessRunner processRunner,
-    IBuildDefinition buildDefinition,
+    IBuildOptionService buildOptionService,
     IRootedFileSystem fileSystem,
     ILogger<GitVersionBuildIdProvider> logger
 ) : IBuildIdProvider
 {
-    #if NET9_0_OR_GREATER
     private readonly Lock _lock = new();
-    #else
-    private readonly object _lock = new();
-    #endif
 
     /// <summary>
     ///     Gets the build ID, derived from GitVersion's FullSemVer.
@@ -34,7 +30,7 @@ internal sealed class GitVersionBuildIdProvider(
     {
         get
         {
-            if (!GitVersionProvideBuildIdFlag.IsEnabled(buildDefinition))
+            if (!GitVersionProvideBuildIdFlag.IsEnabled(buildOptionService.Options))
                 throw new InvalidOperationException(
                     "GitVersion is not enabled for build ID generation. Ensure GitVersionProvideBuildIdFlag is enabled.");
 

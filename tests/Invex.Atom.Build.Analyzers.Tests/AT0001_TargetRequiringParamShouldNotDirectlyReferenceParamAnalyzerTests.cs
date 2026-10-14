@@ -77,4 +77,41 @@ public sealed class AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamAn
 
         await Verifier.VerifyAnalyzerAsync(text, Configure, expected);
     }
+
+    [Fact]
+    public async Task TargetWithRequiresParamOfDirectSecretAmongOtherArgs_AlertDiagnostic()
+    {
+        const string text = """
+                            using Invex.Atom.Build;
+                            using Invex.Atom.Build.Definition;
+                            using Invex.Atom.Build.Params;
+
+                            public interface IMyTarget : IBuildAccessor
+                            {
+                                [ParamDefinition("my-param-1", "My Param 1")]
+                                string MyParam1 => GetParam(() => MyParam1)!;
+
+                                [SecretDefinition("my-secret-1", "My Secret 1")]
+                                string MySecret1 => GetParam(() => MySecret1)!;
+
+                                string NotParam1 { get; }
+
+                                Target MyTarget => t => t.RequiresParam(NotParam1, MyParam1, MySecret1);
+                            }
+                            """;
+
+        DiagnosticResult[] expected =
+        [
+            Verifier
+                .Diagnostic()
+                .WithSpan(15, 56, 15, 64)
+                .WithArguments("MyParam1"),
+            Verifier
+                .Diagnostic()
+                .WithSpan(15, 66, 15, 75)
+                .WithArguments("MySecret1"),
+        ];
+
+        await Verifier.VerifyAnalyzerAsync(text, Configure, expected);
+    }
 }

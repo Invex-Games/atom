@@ -404,19 +404,10 @@
         Name: Get
       },
       {
-        Name: Get
-      },
-      {
-        Name: GetOptions
-      },
-      {
         Name: GetOptions
       },
       {
         Name: GetOptionsGrouped
-      },
-      {
-        Name: IsEnabled
       },
       {
         Name: IsEnabled
@@ -1174,7 +1165,10 @@
     ]
   },
   {
-    Name: Invex.Atom.Build.Params.ParamDefinitionAttribute,
+    Name: Invex.Atom.Build.Params.ParamDefinitionAttribute
+  },
+  {
+    Name: Invex.Atom.Build.Params.ParamDefinitionAttributeBase,
     Members: [
       {
         Name: ArgName

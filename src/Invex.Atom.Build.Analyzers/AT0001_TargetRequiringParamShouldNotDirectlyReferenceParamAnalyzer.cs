@@ -90,29 +90,32 @@ public class AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamAnalyzer 
 
         foreach (var argumentOperation in argOperations)
         {
-            if (argumentOperation.Value is not ICollectionExpressionOperation collectionExpressionOperation ||
-                collectionExpressionOperation.Elements.First() is not IPropertyReferenceOperation
-                    propertyReferenceOperation)
-                return;
+            if (argumentOperation.Value is not ICollectionExpressionOperation collectionExpressionOperation)
+                continue;
 
-            // Check that propertyReferenceOperation is a property with the [ParamDefinition] attribute
-            if (!propertyReferenceOperation
-                    .Property
-                    .GetAttributes()
-                    .Any(attr => attr.AttributeClass?.Name == "ParamDefinitionAttribute"))
-                return;
-
-            var properties = new Dictionary<string, string?>
+            foreach (var element in collectionExpressionOperation.Elements)
             {
-                { "paramName", propertyReferenceOperation.Property.Name },
-            }.ToImmutableDictionary();
+                // Check that the element is a property with the [ParamDefinition] or [SecretDefinition] attribute
+                if (element is not IPropertyReferenceOperation propertyReferenceOperation ||
+                    !propertyReferenceOperation
+                        .Property
+                        .GetAttributes()
+                        .Any(attr => attr.AttributeClass?.Name is "ParamDefinitionAttribute"
+                            or "SecretDefinitionAttribute"))
+                    continue;
 
-            var diagnostic = Diagnostic.Create(Rule,
-                propertyReferenceOperation.Syntax.GetLocation(),
-                properties,
-                propertyReferenceOperation.Property.Name);
+                var properties = new Dictionary<string, string?>
+                {
+                    { "paramName", propertyReferenceOperation.Property.Name },
+                }.ToImmutableDictionary();
 
-            context.ReportDiagnostic(diagnostic);
+                var diagnostic = Diagnostic.Create(Rule,
+                    propertyReferenceOperation.Syntax.GetLocation(),
+                    properties,
+                    propertyReferenceOperation.Property.Name);
+
+                context.ReportDiagnostic(diagnostic);
+            }
         }
     }
 }
