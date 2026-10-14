@@ -33,5 +33,5 @@ public sealed record AddNugetFeedsStep : IAdditionalStepOption
     /// <param name="feedName">The name of the NuGet feed.</param>
     /// <returns>The conventional environment variable name for the feed's token (e.g., "NUGET_TOKEN_MY_FEED").</returns>
     public static string GetEnvVarNameForFeed(string feedName) =>
-        $"NUGET_TOKEN_{feedName.Replace(" ", "_").ToUpper()}";
+        $"NUGET_TOKEN_{feedName.Replace(" ", "_").ToUpperInvariant()}";
 }

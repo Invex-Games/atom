@@ -37,26 +37,56 @@ public interface IValidateBuild : IReportsHelper
     /// atom ValidateBuild
     /// </code>
     /// </example>
-    /// <exception cref="StepFailedException">
-    ///     Thrown if the validation process encounters critical errors that prevent the build from proceeding.
-    ///     (Currently, this condition is not met as the 'errors' list is not populated).
-    /// </exception>
+    /// <remarks>
+    ///     Errors: a target consumes an artifact or variable that the named target does not produce, or two parameters
+    ///     share the same argument name. Warnings: a target has no description, or has neither tasks nor dependencies.
+    /// </remarks>
+    /// <exception cref="StepFailedException">Thrown if any validation error is found.</exception>
     Target ValidateBuild =>
         t => t
             .DescribedAs("Checks the atom build for common issues.")
             .Executes(() =>
             {
-                // ReSharper disable once CollectionNeverUpdated.Local - TODO
                 var errors = new List<string>();
                 var warnings = new List<string>();
 
                 var build = GetService<BuildModel>();
 
                 var targets = build.Targets;
+                var targetsByName = targets.ToDictionary(x => x.Name);
 
                 warnings.AddRange(targets
                     .Where(x => x.Description is not { Length: > 0 })
                     .Select(x => $"Target '{x.Name}' has no description."));
+
+                warnings.AddRange(targets
+                    .Where(x => x.Tasks.Count is 0 && x.Dependencies.Count is 0)
+                    .Select(x => $"Target '{x.Name}' has no tasks and no dependencies."));
+
+                foreach (var target in targets)
+                {
+                    errors.AddRange(target
+                        .ConsumedArtifacts
+                        .Where(x => targetsByName.TryGetValue(x.TargetName, out var producer) &&
+                                    producer.ProducedArtifacts.All(p => p.ArtifactName != x.ArtifactName))
+                        .Select(x =>
+                            $"Target '{target.Name}' consumes artifact '{x.ArtifactName}' which target '{x.TargetName}' does not produce."));
+
+                    errors.AddRange(target
+                        .ConsumedVariables
+                        .Where(x => targetsByName.TryGetValue(x.TargetName, out var producer) &&
+                                    !producer.ProducedVariables.Contains(x.VariableName))
+                        .Select(x =>
+                            $"Target '{target.Name}' consumes variable '{x.VariableName}' which target '{x.TargetName}' does not produce."));
+                }
+
+                errors.AddRange(GetService<IBuildDefinition>()
+                    .ParamDefinitions
+                    .Values
+                    .GroupBy(x => x.ArgName, StringComparer.OrdinalIgnoreCase)
+                    .Where(x => x.Count() > 1)
+                    .Select(x =>
+                        $"Parameters {string.Join(", ", x.Select(p => $"'{p.Name}'"))} share the argument name '{x.Key}'."));
 
                 if (warnings.Count > 0)
                     AddReportData(new ListReportData(warnings)

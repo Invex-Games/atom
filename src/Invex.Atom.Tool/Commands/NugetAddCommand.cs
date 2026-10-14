@@ -7,7 +7,7 @@
 ///     This command checks for existing NuGet sources and adds a new one if it doesn't already exist.
 ///     It attempts to retrieve an API key from environment variables for authentication.
 /// </remarks>
-internal static class NugetAddCommand
+internal static partial class NugetAddCommand
 {
     /// <summary>
     ///     Executes the logic to add a NuGet package source.
@@ -29,9 +29,12 @@ internal static class NugetAddCommand
             CreateNoWindow = true,
         })!;
 
+        // Read both streams before waiting for exit, so a full pipe buffer cannot deadlock the child process
+        var listSourceOutputTask = listSourceProcess.StandardOutput.ReadToEndAsync(cancellationToken);
+        var listSourceErrorTask = listSourceProcess.StandardError.ReadToEndAsync(cancellationToken);
         await listSourceProcess.WaitForExitAsync(cancellationToken);
-        var listSourceOutput = await listSourceProcess.StandardOutput.ReadToEndAsync(cancellationToken);
-        var listSourceError = await listSourceProcess.StandardError.ReadToEndAsync(cancellationToken);
+        var listSourceOutput = await listSourceOutputTask;
+        var listSourceError = await listSourceErrorTask;
 
         if (listSourceProcess.ExitCode is not 0)
         {
@@ -42,8 +45,7 @@ internal static class NugetAddCommand
             return 1;
         }
 
-        if (listSourceOutput.Contains(name, StringComparison.OrdinalIgnoreCase) ||
-            listSourceOutput.Contains(url, StringComparison.OrdinalIgnoreCase))
+        if (IsSourcePresent(listSourceOutput, name, url))
         {
             Console.WriteLine($"NuGet feed '{name}' with URL '{url}' is already present, skipping addition.");
 
@@ -82,19 +84,13 @@ internal static class NugetAddCommand
                 "source",
                 "--name",
                 feedName,
-                "--username",
-                "USERNAME", // Username is often a placeholder when using API keys
-                "--password",
-                secret,
-                "--store-password-in-clear-text", // Required for some feeds, or when API key is treated as password
-                feedUrl,
             },
             RedirectStandardError = true,
-        })!;
+        }.WithCredentials(secret, feedUrl))!;
 
+        var addSourceErrorTask = addSourceProcess.StandardError.ReadToEndAsync(cancellationToken);
         await addSourceProcess.WaitForExitAsync(cancellationToken);
-
-        var addSourceError = await addSourceProcess.StandardError.ReadToEndAsync(cancellationToken);
+        var addSourceError = await addSourceErrorTask;
 
         if (addSourceProcess.ExitCode is 0)
         {
@@ -108,4 +104,57 @@ internal static class NugetAddCommand
 
         return 1;
     }
+
+    /// <summary>
+    ///     Determines whether <c>dotnet nuget list source</c> output already contains a source with the given name or URL.
+    /// </summary>
+    /// <param name="listSourceOutput">The output of <c>dotnet nuget list source</c>.</param>
+    /// <param name="name">The source name to look for.</param>
+    /// <param name="url">The source URL to look for.</param>
+    /// <returns><c>true</c> if a source with exactly that name or URL is registered.</returns>
+    internal static bool IsSourcePresent(string listSourceOutput, string name, string url)
+    {
+        foreach (var line in listSourceOutput.Split('\n'))
+        {
+            var trimmed = line.Trim();
+
+            if (trimmed.Equals(url.Trim(), StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            var match = SourceNameRegex()
+                .Match(trimmed);
+
+            if (match.Success &&
+                match
+                    .Groups["name"]
+                    .Value
+                    .Equals(name.Trim(), StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static ProcessStartInfo WithCredentials(this ProcessStartInfo startInfo, string secret, string feedUrl)
+    {
+        if (secret is { Length: > 0 })
+        {
+            startInfo.ArgumentList.Add("--username");
+            startInfo.ArgumentList.Add("USERNAME"); // Username is often a placeholder when using API keys
+            startInfo.ArgumentList.Add("--password");
+            startInfo.ArgumentList.Add(secret);
+
+            // Encrypted passwords are only supported on Windows
+            if (!OperatingSystem.IsWindows())
+                startInfo.ArgumentList.Add("--store-password-in-clear-text");
+        }
+
+        startInfo.ArgumentList.Add(feedUrl);
+
+        return startInfo;
+    }
+
+    // Matches lines like "  1.  nuget.org [Enabled]"
+    [GeneratedRegex(@"^\d+\.\s+(?<name>.+?)\s+\[[^\]]+\]$")]
+    private static partial Regex SourceNameRegex();
 }
