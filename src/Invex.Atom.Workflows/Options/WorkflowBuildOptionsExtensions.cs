@@ -106,16 +106,16 @@ public static class WorkflowBuildOptionsExtensions
         ///     Injects a secret whose value is sourced from the workflow's environment.
         /// </summary>
         /// <param name="secretName">The name of the secret to inject.</param>
-        /// <returns>A <see cref="WorkflowSecretsInjectionFromEnvironment" /> option.</returns>
-        public WorkflowSecretsInjectionFromEnvironment SecretFromWorkflowEnvironment(string secretName) =>
+        /// <returns>A <see cref="WorkflowSecretInjectionFromEnvironment" /> option.</returns>
+        public WorkflowSecretInjectionFromEnvironment SecretFromWorkflowEnvironment(string secretName) =>
             new(secretName);
 
         /// <summary>
         ///     Injects a secret whose value is sourced from the workflow's environment.
         /// </summary>
         /// <param name="secretDefinition">The definition of the secret parameter to inject.</param>
-        /// <returns>A <see cref="WorkflowSecretsInjectionFromEnvironment" /> option.</returns>
-        public WorkflowSecretsInjectionFromEnvironment SecretFromWorkflowEnvironment(
+        /// <returns>A <see cref="WorkflowSecretInjectionFromEnvironment" /> option.</returns>
+        public WorkflowSecretInjectionFromEnvironment SecretFromWorkflowEnvironment(
             ParamDefinition secretDefinition) =>
             new(secretDefinition);
     }
