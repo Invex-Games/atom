@@ -37,7 +37,10 @@ Store and retrieve build artifacts in a custom location:
 ```csharp
 public class MyArtifactProvider : IArtifactProvider
 {
-    public IReadOnlyList<string> RequiredParams => ["my-storage-url"];
+    // Param names the artifact targets require, and ones they may use (e.g. alternative credentials)
+    public IReadOnlyList<string> RequiredParams => [nameof(IMyStorage.MyStorageUrl)];
+
+    public IReadOnlyList<string> OptionalParams => [nameof(IMyStorage.MyStorageToken)];
 
     public Task StoreArtifacts(IEnumerable<string> artifactNames, string? buildId, string? buildSlice, CancellationToken ct)
     {
@@ -61,7 +64,9 @@ public class MyArtifactProvider : IArtifactProvider
 }
 ```
 
-Register as a singleton — only one `IArtifactProvider` is active at a time.
+Register as a singleton — only one `IArtifactProvider` is active at a time. `RequiredParams` are validated before the
+artifact targets run; `OptionalParams` are declared as used parameters so that secrets among them are prefetched and can
+be injected into generated workflows, but the provider validates them itself.
 
 ## `IVariableProvider`
 

@@ -290,6 +290,9 @@
         Name: GetStoredRunIdentifiers
       },
       {
+        Name: OptionalParams
+      },
+      {
         Name: RequiredParams
       },
       {

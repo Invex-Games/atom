@@ -10,6 +10,7 @@
 /// </remarks>
 [PublicAPI]
 public sealed class AzureBlobArtifactProvider(
+    CommandLineArgs args,
     IBuildInfo buildInfo,
     IParamService paramService,
     IReportService reportService,
@@ -18,13 +19,28 @@ public sealed class AzureBlobArtifactProvider(
     ILogger<AzureBlobArtifactProvider> logger
 ) : IArtifactProvider
 {
+    private BlobServiceClient? _serviceClient;
+
     /// <summary>
     ///     Gets a list of required parameters for this artifact provider to function correctly.
     /// </summary>
     public IReadOnlyList<string> RequiredParams =>
     [
         nameof(IAzureArtifactStorage.AzureArtifactStorageContainer),
+    ];
+
+    /// <summary>
+    ///     Gets the connection parameters, of which either the connection string or the account URL (with optional
+    ///     credential parameters) must be provided.
+    /// </summary>
+    public IReadOnlyList<string> OptionalParams =>
+    [
         nameof(IAzureArtifactStorage.AzureArtifactStorageConnectionString),
+        nameof(IAzureArtifactStorage.AzureArtifactStorageAccountUrl),
+        nameof(IAzureArtifactStorage.AzureArtifactStorageTenantId),
+        nameof(IAzureArtifactStorage.AzureArtifactStorageClientId),
+        nameof(IAzureArtifactStorage.AzureArtifactStorageClientSecret),
+        nameof(IAzureArtifactStorage.AzureArtifactStorageServiceConnectionId),
     ];
 
     /// <summary>
@@ -61,22 +77,9 @@ public sealed class AzureBlobArtifactProvider(
         var buildIdPathPrefix = buildIdProvider.GetBuildIdGroup(buildId);
         var buildIdPath = $"{buildIdPathPrefix}/{buildId}";
 
-        var connectionString =
-            paramService.GetParam(nameof(IAzureArtifactStorage.AzureArtifactStorageConnectionString));
-
         var container = paramService.GetParam(nameof(IAzureArtifactStorage.AzureArtifactStorageContainer));
         var buildName = buildInfo.BuildName;
-
-        var serviceClient = new BlobServiceClient(connectionString,
-            new()
-            {
-                Retry =
-                {
-                    NetworkTimeout = TimeSpan.FromMinutes(3),
-                },
-            });
-
-        var containerClient = serviceClient.GetBlobContainerClient(container);
+        var containerClient = GetServiceClient().GetBlobContainerClient(container);
 
         var invalidPathChars = fileSystem.Path.GetInvalidPathChars();
         var pathSafeRegex = new Regex($"[{Regex.Escape(new(invalidPathChars))}]");
@@ -161,22 +164,9 @@ public sealed class AzureBlobArtifactProvider(
         var buildIdPathPrefix = buildIdProvider.GetBuildIdGroup(buildId);
         var buildIdPath = $"{buildIdPathPrefix}/{buildId}";
 
-        var connectionString =
-            paramService.GetParam(nameof(IAzureArtifactStorage.AzureArtifactStorageConnectionString));
-
         var container = paramService.GetParam(nameof(IAzureArtifactStorage.AzureArtifactStorageContainer));
         var buildName = buildInfo.BuildName;
-
-        var serviceClient = new BlobServiceClient(connectionString,
-            new()
-            {
-                Retry =
-                {
-                    NetworkTimeout = TimeSpan.FromMinutes(3),
-                },
-            });
-
-        var containerClient = serviceClient.GetBlobContainerClient(container);
+        var containerClient = GetServiceClient().GetBlobContainerClient(container);
 
         var invalidPathChars = fileSystem.Path.GetInvalidPathChars();
         var pathSafeRegex = new Regex($"[{Regex.Escape(new(invalidPathChars))}]");
@@ -256,12 +246,9 @@ public sealed class AzureBlobArtifactProvider(
     /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
     public async Task Cleanup(IEnumerable<string> runIdentifiers, CancellationToken cancellationToken = default)
     {
-        var connectionString =
-            paramService.GetParam(nameof(IAzureArtifactStorage.AzureArtifactStorageConnectionString));
-
         var container = paramService.GetParam(nameof(IAzureArtifactStorage.AzureArtifactStorageContainer));
         var buildName = buildInfo.BuildName;
-        var containerClient = new BlobContainerClient(connectionString, container);
+        var containerClient = GetServiceClient().GetBlobContainerClient(container);
 
         foreach (var buildId in runIdentifiers)
         {
@@ -300,12 +287,9 @@ public sealed class AzureBlobArtifactProvider(
         string? buildSlice = null,
         CancellationToken cancellationToken = default)
     {
-        var connectionString =
-            paramService.GetParam(nameof(IAzureArtifactStorage.AzureArtifactStorageConnectionString));
-
         var container = paramService.GetParam(nameof(IAzureArtifactStorage.AzureArtifactStorageContainer));
         var buildName = buildInfo.BuildName;
-        var containerClient = new BlobContainerClient(connectionString, container);
+        var containerClient = GetServiceClient().GetBlobContainerClient(container);
 
         if (artifactName is { Length: > 0 })
         {
@@ -351,5 +335,67 @@ public sealed class AzureBlobArtifactProvider(
         }
 
         return buildIds;
+    }
+
+    /// <summary>
+    ///     Gets the cached <see cref="BlobServiceClient" />, creating it from the storage parameters on first use.
+    /// </summary>
+    private BlobServiceClient GetServiceClient() =>
+        _serviceClient ??= CreateServiceClient(
+            paramService.GetParam(nameof(IAzureArtifactStorage.AzureArtifactStorageConnectionString)),
+            paramService.GetParam(nameof(IAzureArtifactStorage.AzureArtifactStorageAccountUrl)),
+            () => new()
+            {
+                TenantId = paramService.GetParam(nameof(IAzureArtifactStorage.AzureArtifactStorageTenantId)),
+                ClientId = paramService.GetParam(nameof(IAzureArtifactStorage.AzureArtifactStorageClientId)),
+                ClientSecret = paramService.GetParam(nameof(IAzureArtifactStorage.AzureArtifactStorageClientSecret)),
+                ServiceConnectionId =
+                    paramService.GetParam(nameof(IAzureArtifactStorage.AzureArtifactStorageServiceConnectionId)),
+                AllowInteractive = !args.HasHeadless,
+            },
+            logger);
+
+    /// <summary>
+    ///     Creates a <see cref="BlobServiceClient" /> from a connection string or, failing that, an account URL and a
+    ///     token credential.
+    /// </summary>
+    /// <param name="connectionString">The storage connection string; takes precedence when set.</param>
+    /// <param name="accountUrl">The Blob service URL, used with a token credential when there is no connection string.</param>
+    /// <param name="getCredentialSettings">Reads the credential settings; only called when the account URL is used.</param>
+    /// <param name="logger">The logger for diagnostics.</param>
+    /// <returns>The configured <see cref="BlobServiceClient" />.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if neither a connection string nor an account URL is set.</exception>
+    internal static BlobServiceClient CreateServiceClient(
+        string? connectionString,
+        string? accountUrl,
+        Func<AzureCredentialSettings> getCredentialSettings,
+        ILogger logger)
+    {
+        var options = new BlobClientOptions
+        {
+            Retry =
+            {
+                NetworkTimeout = TimeSpan.FromMinutes(3),
+            },
+        };
+
+        if (AzureCredentialFactory.Normalize(connectionString) is { } normalizedConnectionString)
+        {
+            logger.LogDebug("Connecting to Azure Storage with a connection string");
+
+            return new(normalizedConnectionString, options);
+        }
+
+        if (AzureCredentialFactory.Normalize(accountUrl) is not { } normalizedAccountUrl)
+            throw new InvalidOperationException(
+                "Azure artifact storage requires either 'azurestorage-artifact-connectionstring' or 'azurestorage-artifact-account-url' to be set.");
+
+        var (kind, credential) = AzureCredentialFactory.Create(getCredentialSettings());
+
+        logger.LogDebug("Connecting to Azure Storage at {AccountUrl} with {CredentialKind} credential",
+            normalizedAccountUrl,
+            kind);
+
+        return new(new Uri(normalizedAccountUrl), credential, options);
     }
 }

@@ -37,6 +37,7 @@ public interface IRetrieveArtifact : IAtomArtifactsParam, ISetupBuildInfo
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildId))
             .RequiresParam(nameof(AtomArtifacts))
             .RequiresParam(ArtifactProvider.RequiredParams.ToArray())
+            .UsesParam(ArtifactProvider.OptionalParams.ToArray())
             .Executes(async cancellationToken =>
             {
                 Logger.LogInformation("Using artifact provider: {Provider}",
