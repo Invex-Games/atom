@@ -80,13 +80,13 @@ public static class DevopsBuildOptionsExtensions
         public DevopsPool FromName(TextExpression name) =>
             new()
             {
-                HostedImage = name,
+                Name = name,
             };
 
         public DevopsPool FromName(string name) =>
             new()
             {
-                HostedImage = name,
+                Name = name,
             };
 
         public DevopsPool FromHostedImage(TextExpression hostedImageName) =>

@@ -34,8 +34,6 @@ public static class WorkflowLabelsExtensions
         public string Windows_11_Arm => "windows-11-arm";
 
         // MacOS x64 4x
-        public string MacOs_13 => "macos-14";
-
         public string MacOs_15_Intel => "macos-15-intel";
 
         // MacOS ARM 3x
@@ -54,8 +52,6 @@ public static class WorkflowLabelsExtensions
 
         public string MacOs_14_Large => "macos-14-large";
 
-        public string MacOs_13_Large => "macos-13-large";
-
         // MacOS ARM 5x
         public string MacOs_Latest_XLarge => "macos-latest-xlarge";
 
@@ -64,8 +60,6 @@ public static class WorkflowLabelsExtensions
         public string MacOs_15_XLarge => "macos-15-xlarge";
 
         public string MacOs_14_XLarge => "macos-14-xlarge";
-
-        public string MacOs_13_XLarge => "macos-13-xlarge";
     }
 
     [PublicAPI]
