@@ -7,7 +7,7 @@ namespace Invex.Atom.Module.Dotnet.Cli;
 public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> Nuget(
-        NugetOptions? options = null,
+        DotnetNugetOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -16,7 +16,7 @@ public partial interface IDotnetCli
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Nuget(
-        NugetOptions? options = null,
+        DotnetNugetOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     ) =>
@@ -26,7 +26,7 @@ internal partial class DotnetCli
 
 }
 [PublicAPI]
-public sealed record NugetOptions
+public sealed record DotnetNugetOptions
 {
     public System.String? Verbosity
     {

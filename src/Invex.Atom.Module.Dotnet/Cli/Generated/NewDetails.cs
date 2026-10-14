@@ -25,7 +25,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> NewDetails(
         System.String packageIdentifier,
-        NewDetailsOptions? options = null,
+        DotnetNewDetailsOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -36,7 +36,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NewDetails(
         System.String packageIdentifier,
-        NewDetailsOptions? options = null,
+        DotnetNewDetailsOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -55,7 +55,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NewDetailsOptions
+public sealed record DotnetNewDetailsOptions
 {
     /// <summary>
     ///     Specifies a NuGet source to use.

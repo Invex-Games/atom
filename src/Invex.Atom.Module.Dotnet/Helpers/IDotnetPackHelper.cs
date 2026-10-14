@@ -64,7 +64,7 @@ public interface IDotnetPackHelper : IDotnetCliHelper, IBuildInfo
     ///             <item>
     ///                 <description>
     ///                     Executes the `dotnet pack` command using
-    ///                     <see cref="IDotnetCli.Pack(RootedPath, PackOptions?, ProcessRunOptions?, CancellationToken)" />.
+    ///                     <see cref="IDotnetCli.Pack(RootedPath, DotnetPackOptions?, ProcessRunOptions?, CancellationToken)" />.
     ///                 </description>
     ///             </item>
     ///             <item>
@@ -182,7 +182,7 @@ public sealed record DotnetPackAndStageOptions
     /// <summary>
     ///     Gets or sets the specific options to pass to the `dotnet pack` command.
     /// </summary>
-    public PackOptions? PackOptions { get; init; }
+    public DotnetPackOptions? PackOptions { get; init; }
 
     /// <summary>
     ///     Gets or sets a value indicating whether to automatically set project versions

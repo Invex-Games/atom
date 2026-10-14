@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Clean(
         System.String[] projectOrSolutionOrFile,
-        CleanOptions? options = null,
+        DotnetCleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -45,7 +45,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Clean(
         System.String projectOrSolutionOrFile,
-        CleanOptions? options = null,
+        DotnetCleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -67,7 +67,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Clean(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        CleanOptions? options = null,
+        DotnetCleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -78,7 +78,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Clean(
         System.String[] projectOrSolutionOrFile,
-        CleanOptions? options = null,
+        DotnetCleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -96,7 +96,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> Clean(
         System.String projectOrSolutionOrFile,
-        CleanOptions? options = null,
+        DotnetCleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -114,7 +114,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> Clean(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        CleanOptions? options = null,
+        DotnetCleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -133,7 +133,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record CleanOptions
+public sealed record DotnetCleanOptions
 {
     /// <summary>
     ///     The artifacts path. All output from the project, including build, publish, and pack output, will go in subfolders under the specified path.
@@ -207,7 +207,7 @@ public sealed record CleanOptions
     /// <summary>
     ///     Do not display the startup banner or the copyright message.
     /// </summary>
-    public System.Boolean? Nologo
+    public System.Boolean? NoLogo
     {
         get;
         init;
@@ -281,7 +281,7 @@ public sealed record CleanOptions
             Interactive is true
                 ? "--interactive"
                 : null,
-            Nologo is true
+            NoLogo is true
                 ? "--nologo"
                 : null,
             Output is not null

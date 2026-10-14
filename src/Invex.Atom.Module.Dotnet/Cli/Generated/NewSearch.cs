@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> NewSearch(
         System.String templateName,
-        NewSearchOptions? options = null,
+        DotnetNewSearchOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -34,7 +34,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NewSearch(
         System.String templateName,
-        NewSearchOptions? options = null,
+        DotnetNewSearchOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -53,7 +53,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NewSearchOptions
+public sealed record DotnetNewSearchOptions
 {
     /// <summary>
     ///     Filters the templates based on the template author.

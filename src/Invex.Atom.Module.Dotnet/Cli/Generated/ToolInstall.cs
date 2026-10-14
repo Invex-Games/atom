@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> ToolInstall(
         System.String packageId,
-        ToolInstallOptions? options = null,
+        DotnetToolInstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -34,7 +34,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> ToolInstall(
         System.String packageId,
-        ToolInstallOptions? options = null,
+        DotnetToolInstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -53,7 +53,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record ToolInstallOptions
+public sealed record DotnetToolInstallOptions
 {
     /// <summary>
     ///     Add an additional NuGet package source to use during installation.
@@ -94,7 +94,7 @@ public sealed record ToolInstallOptions
     /// <summary>
     ///     The NuGet configuration file to use.
     /// </summary>
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -243,8 +243,8 @@ public sealed record ToolInstallOptions
             Arch is not null
                 ? $"--arch {Arch}"
                 : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             CreateManifestIfNeeded is true
                 ? "--create-manifest-if-needed"

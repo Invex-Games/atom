@@ -9,7 +9,7 @@ public partial interface IDotnetCli
     public Task<ProcessRunResult> NugetTrustAuthor(
         System.String name,
         System.String package,
-        NugetTrustAuthorOptions? options = null,
+        DotnetNugetTrustAuthorOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -21,7 +21,7 @@ internal partial class DotnetCli
     public Task<ProcessRunResult> NugetTrustAuthor(
         System.String name,
         System.String package,
-        NugetTrustAuthorOptions? options = null,
+        DotnetNugetTrustAuthorOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -41,7 +41,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NugetTrustAuthorOptions
+public sealed record DotnetNugetTrustAuthorOptions
 {
     public System.Boolean? AllowUntrustedRoot
     {
@@ -49,7 +49,7 @@ public sealed record NugetTrustAuthorOptions
         init;
     }
 
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -72,8 +72,8 @@ public sealed record NugetTrustAuthorOptions
             AllowUntrustedRoot is true
                 ? "--allow-untrusted-root"
                 : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             Verbosity is not null
                 ? $"--verbosity {Verbosity}"

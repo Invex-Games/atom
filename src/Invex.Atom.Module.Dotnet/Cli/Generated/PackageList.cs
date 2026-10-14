@@ -19,7 +19,7 @@ public partial interface IDotnetCli
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> PackageList(
-        PackageListOptions? options = null,
+        DotnetPackageListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -28,7 +28,7 @@ public partial interface IDotnetCli
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> PackageList(
-        PackageListOptions? options = null,
+        DotnetPackageListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     ) =>
@@ -38,7 +38,7 @@ internal partial class DotnetCli
 
 }
 [PublicAPI]
-public sealed record PackageListOptions
+public sealed record DotnetPackageListOptions
 {
     /// <summary>
     ///     The path to the NuGet config file to use. Requires the '--outdated', '--deprecated' or '--vulnerable' option.

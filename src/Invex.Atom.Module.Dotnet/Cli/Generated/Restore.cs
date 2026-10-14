@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Restore(
         System.String[] projectOrSolutionOrFile,
-        RestoreOptions? options = null,
+        DotnetRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -45,7 +45,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Restore(
         System.String projectOrSolutionOrFile,
-        RestoreOptions? options = null,
+        DotnetRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -67,7 +67,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Restore(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        RestoreOptions? options = null,
+        DotnetRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -78,7 +78,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Restore(
         System.String[] projectOrSolutionOrFile,
-        RestoreOptions? options = null,
+        DotnetRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -96,7 +96,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> Restore(
         System.String projectOrSolutionOrFile,
-        RestoreOptions? options = null,
+        DotnetRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -114,7 +114,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> Restore(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        RestoreOptions? options = null,
+        DotnetRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -133,7 +133,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record RestoreOptions
+public sealed record DotnetRestoreOptions
 {
     /// <summary>
     ///     The target architecture.
@@ -156,7 +156,7 @@ public sealed record RestoreOptions
     /// <summary>
     ///     The NuGet configuration file to use.
     /// </summary>
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -372,8 +372,8 @@ public sealed record RestoreOptions
             ArtifactsPath is not null
                 ? $"--artifacts-path {ArtifactsPath}"
                 : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             DisableBuildServers is true
                 ? "--disable-build-servers"

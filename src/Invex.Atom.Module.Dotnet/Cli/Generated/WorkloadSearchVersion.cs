@@ -51,7 +51,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> WorkloadSearchVersion(
         System.Collections.Generic.IEnumerable<System.String> workloadVersion,
-        WorkloadSearchVersionOptions? options = null,
+        DotnetWorkloadSearchVersionOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -62,7 +62,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> WorkloadSearchVersion(
         System.Collections.Generic.IEnumerable<System.String> workloadVersion,
-        WorkloadSearchVersionOptions? options = null,
+        DotnetWorkloadSearchVersionOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -81,7 +81,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record WorkloadSearchVersionOptions
+public sealed record DotnetWorkloadSearchVersionOptions
 {
     /// <summary>
     ///     Changes the format of outputted workload versions. Can take 'json' or 'list'

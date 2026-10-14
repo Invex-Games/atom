@@ -8,7 +8,7 @@ public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> NugetPush(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetPushOptions? options = null,
+        DotnetNugetPushOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -19,7 +19,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NugetPush(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetPushOptions? options = null,
+        DotnetNugetPushOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -38,7 +38,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NugetPushOptions
+public sealed record DotnetNugetPushOptions
 {
     public System.String? ApiKey
     {
@@ -46,7 +46,7 @@ public sealed record NugetPushOptions
         init;
     }
 
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -123,8 +123,8 @@ public sealed record NugetPushOptions
             ApiKey is not null
                 ? $"--api-key {ApiKey}"
                 : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             DisableBuffering is true
                 ? "--disable-buffering"

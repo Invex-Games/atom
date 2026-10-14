@@ -8,7 +8,7 @@ public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> NugetTrustRemove(
         System.String name,
-        NugetTrustRemoveOptions? options = null,
+        DotnetNugetTrustRemoveOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -19,7 +19,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NugetTrustRemove(
         System.String name,
-        NugetTrustRemoveOptions? options = null,
+        DotnetNugetTrustRemoveOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -38,9 +38,9 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NugetTrustRemoveOptions
+public sealed record DotnetNugetTrustRemoveOptions
 {
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -60,8 +60,8 @@ public sealed record NugetTrustRemoveOptions
         return string.Join(' ',
         new[]
         {
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             Verbosity is not null
                 ? $"--verbosity {Verbosity}"

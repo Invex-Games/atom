@@ -27,7 +27,7 @@ public partial interface IDotnetCli
     public Task<ProcessRunResult> ToolExecute(
         System.String packageId,
         System.Collections.Generic.IEnumerable<System.String> commandArguments,
-        ToolExecuteOptions? options = null,
+        DotnetToolExecuteOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -39,7 +39,7 @@ internal partial class DotnetCli
     public Task<ProcessRunResult> ToolExecute(
         System.String packageId,
         System.Collections.Generic.IEnumerable<System.String> commandArguments,
-        ToolExecuteOptions? options = null,
+        DotnetToolExecuteOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -59,7 +59,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record ToolExecuteOptions
+public sealed record DotnetToolExecuteOptions
 {
     /// <summary>
     ///     Add an additional NuGet package source to use during installation.
@@ -82,7 +82,7 @@ public sealed record ToolExecuteOptions
     /// <summary>
     ///     The NuGet configuration file to use.
     /// </summary>
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -180,8 +180,8 @@ public sealed record ToolExecuteOptions
             AllowRollForward is true
                 ? "--allow-roll-forward"
                 : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             DisableParallel is true
                 ? "--disable-parallel"

@@ -19,7 +19,7 @@ public partial interface IDotnetCli
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> Reference(
-        ReferenceOptions? options = null,
+        DotnetReferenceOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -28,7 +28,7 @@ public partial interface IDotnetCli
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Reference(
-        ReferenceOptions? options = null,
+        DotnetReferenceOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     ) =>
@@ -38,7 +38,7 @@ internal partial class DotnetCli
 
 }
 [PublicAPI]
-public sealed record ReferenceOptions
+public sealed record DotnetReferenceOptions
 {
     /// <summary>
     ///     The project file to operate on. If a file is not specified, the command will search the current directory for one.

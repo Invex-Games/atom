@@ -27,7 +27,7 @@ public partial interface IDotnetCli
     public Task<ProcessRunResult> Run(
         System.String[] projectOrSolutionOrFile,
         System.String[] applicationArguments,
-        RunOptions? options = null,
+        DotnetRunOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -49,7 +49,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Run(
         System.String projectOrSolutionOrFile,
-        RunOptions? options = null,
+        DotnetRunOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -71,7 +71,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Run(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        RunOptions? options = null,
+        DotnetRunOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -83,7 +83,7 @@ internal partial class DotnetCli
     public Task<ProcessRunResult> Run(
         System.String[] projectOrSolutionOrFile,
         System.String[] applicationArguments,
-        RunOptions? options = null,
+        DotnetRunOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -102,7 +102,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> Run(
         System.String projectOrSolutionOrFile,
-        RunOptions? options = null,
+        DotnetRunOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -120,7 +120,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> Run(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        RunOptions? options = null,
+        DotnetRunOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -139,7 +139,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record RunOptions
+public sealed record DotnetRunOptions
 {
     /// <summary>
     ///     The target architecture.

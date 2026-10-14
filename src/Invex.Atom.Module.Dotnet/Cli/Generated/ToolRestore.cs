@@ -19,7 +19,7 @@ public partial interface IDotnetCli
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> ToolRestore(
-        ToolRestoreOptions? options = null,
+        DotnetToolRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -28,7 +28,7 @@ public partial interface IDotnetCli
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> ToolRestore(
-        ToolRestoreOptions? options = null,
+        DotnetToolRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     ) =>
@@ -38,7 +38,7 @@ internal partial class DotnetCli
 
 }
 [PublicAPI]
-public sealed record ToolRestoreOptions
+public sealed record DotnetToolRestoreOptions
 {
     /// <summary>
     ///     Add an additional NuGet package source to use during installation.
@@ -52,7 +52,7 @@ public sealed record ToolRestoreOptions
     /// <summary>
     ///     The NuGet configuration file to use.
     /// </summary>
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -120,8 +120,8 @@ public sealed record ToolRestoreOptions
             AddSource is not null
                 ? $"--add-source {string.Join(" --add-source ", AddSource)}"
                 : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             DisableParallel is true
                 ? "--disable-parallel"

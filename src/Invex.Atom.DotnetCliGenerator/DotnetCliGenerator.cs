@@ -187,12 +187,24 @@ public static class DotnetCliGenerator
     }
 
     /// <summary>
+    ///     Gets the name of the generated options record for a command.
+    /// </summary>
+    /// <param name="command">The flattened command.</param>
+    /// <returns>
+    ///     The command name in PascalCase, prefixed with <c>Dotnet</c> and suffixed with <c>Options</c>
+    ///     (e.g. <c>DotnetBuildOptions</c>), so it does not collide with other types such as
+    ///     <c>Invex.Atom.Build.BuildOptions</c>.
+    /// </returns>
+    public static string GetOptionsTypeName(Command command) =>
+        $"Dotnet{CsharpWriter.ToPascalCase(command.Name)}Options";
+
+    /// <summary>
     ///     Generates the C# options record for a given .NET CLI command.
     /// </summary>
     /// <param name="writer">The <see cref="CsharpWriter" /> to write the code to.</param>
     /// <param name="command">The <see cref="Command" /> object representing the .NET CLI command.</param>
     /// <remarks>
-    ///     This method creates a `sealed record` named after the command (e.g., `BuildOptions`)
+    ///     This method creates a `sealed record` named after the command prefixed with `Dotnet` (e.g., `DotnetBuildOptions`)
     ///     that contains properties for each of the command's options. It also includes an
     ///     overridden `ToString()` method to correctly format these options into command-line arguments.
     /// </remarks>
@@ -203,7 +215,7 @@ public static class DotnetCliGenerator
 
         writer.WriteLine("[PublicAPI]");
 
-        using (writer.Block($"public sealed record {CsharpWriter.ToPascalCase(command.Name)}Options"))
+        using (writer.Block($"public sealed record {GetOptionsTypeName(command)}"))
         {
             foreach (var option in command.Options.Where(x => x.ValueType is not (null or "System.Void")))
                 writer.WriteProperty("public",
@@ -267,7 +279,7 @@ public static class DotnetCliGenerator
                     CsharpWriter.ToPascalCase(arg.Name, true),
                     XmlDescription: arg.Description))
                 .Append(command.Options.Count > 0
-                    ? new MethodParam($"{CsharpWriter.ToPascalCase(command.Name)}Options?",
+                    ? new MethodParam($"{GetOptionsTypeName(command)}?",
                         "options",
                         "null",
                         "Options")

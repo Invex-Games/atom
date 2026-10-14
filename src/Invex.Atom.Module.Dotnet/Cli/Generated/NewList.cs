@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> NewList(
         System.String templateName,
-        NewListOptions? options = null,
+        DotnetNewListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -34,7 +34,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NewList(
         System.String templateName,
-        NewListOptions? options = null,
+        DotnetNewListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -53,7 +53,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NewListOptions
+public sealed record DotnetNewListOptions
 {
     /// <summary>
     ///     Filters the templates based on the template author.

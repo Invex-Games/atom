@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> ToolUninstall(
         System.String packageId,
-        ToolUninstallOptions? options = null,
+        DotnetToolUninstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -34,7 +34,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> ToolUninstall(
         System.String packageId,
-        ToolUninstallOptions? options = null,
+        DotnetToolUninstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -53,7 +53,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record ToolUninstallOptions
+public sealed record DotnetToolUninstallOptions
 {
     /// <summary>
     ///     Uninstall the tool from the current user's tools directory.

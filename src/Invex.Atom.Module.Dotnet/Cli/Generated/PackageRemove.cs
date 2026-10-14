@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> PackageRemove(
         System.String[] packageName,
-        PackageRemoveOptions? options = null,
+        DotnetPackageRemoveOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -45,7 +45,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> PackageRemove(
         System.String packageName,
-        PackageRemoveOptions? options = null,
+        DotnetPackageRemoveOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -56,7 +56,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> PackageRemove(
         System.String[] packageName,
-        PackageRemoveOptions? options = null,
+        DotnetPackageRemoveOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -74,7 +74,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> PackageRemove(
         System.String packageName,
-        PackageRemoveOptions? options = null,
+        DotnetPackageRemoveOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -93,7 +93,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record PackageRemoveOptions
+public sealed record DotnetPackageRemoveOptions
 {
     /// <summary>
     ///     The file-based app to operate on.

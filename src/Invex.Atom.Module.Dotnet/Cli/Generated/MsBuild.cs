@@ -18,9 +18,9 @@ public partial interface IDotnetCli
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
-    public Task<ProcessRunResult> Msbuild(
+    public Task<ProcessRunResult> MsBuild(
         System.String[] arguments,
-        MsbuildOptions? options = null,
+        DotnetMsBuildOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -37,9 +37,9 @@ public partial interface IDotnetCli
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
-    public Task<ProcessRunResult> Msbuild(
+    public Task<ProcessRunResult> MsBuild(
         System.String arguments,
-        MsbuildOptions? options = null,
+        DotnetMsBuildOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -48,9 +48,9 @@ public partial interface IDotnetCli
 
 internal partial class DotnetCli
 {
-    public Task<ProcessRunResult> Msbuild(
+    public Task<ProcessRunResult> MsBuild(
         System.String[] arguments,
-        MsbuildOptions? options = null,
+        DotnetMsBuildOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -66,9 +66,9 @@ internal partial class DotnetCli
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
 
-    public Task<ProcessRunResult> Msbuild(
+    public Task<ProcessRunResult> MsBuild(
         System.String arguments,
-        MsbuildOptions? options = null,
+        DotnetMsBuildOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -87,7 +87,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record MsbuildOptions
+public sealed record DotnetMsBuildOptions
 {
     /// <summary>
     ///     Force the command to ignore any persistent build servers.

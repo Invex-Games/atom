@@ -27,7 +27,7 @@ public partial interface IDotnetCli
     public Task<ProcessRunResult> ToolRun(
         System.String commandName,
         System.Collections.Generic.IEnumerable<System.String> toolArguments,
-        ToolRunOptions? options = null,
+        DotnetToolRunOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -39,7 +39,7 @@ internal partial class DotnetCli
     public Task<ProcessRunResult> ToolRun(
         System.String commandName,
         System.Collections.Generic.IEnumerable<System.String> toolArguments,
-        ToolRunOptions? options = null,
+        DotnetToolRunOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -59,7 +59,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record ToolRunOptions
+public sealed record DotnetToolRunOptions
 {
     /// <summary>
     ///     Allow a .NET tool to roll forward to newer versions of the .NET runtime if the runtime it targets isn't installed.

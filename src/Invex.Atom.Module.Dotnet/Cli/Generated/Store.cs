@@ -20,7 +20,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Store(
         System.Collections.Generic.IEnumerable<System.String> argument,
-        StoreOptions? options = null,
+        DotnetStoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -31,7 +31,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Store(
         System.Collections.Generic.IEnumerable<System.String> argument,
-        StoreOptions? options = null,
+        DotnetStoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -50,7 +50,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record StoreOptions
+public sealed record DotnetStoreOptions
 {
     /// <summary>
     ///     Force the command to ignore any persistent build servers.

@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> ToolList(
         System.String packageId,
-        ToolListOptions? options = null,
+        DotnetToolListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -34,7 +34,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> ToolList(
         System.String packageId,
-        ToolListOptions? options = null,
+        DotnetToolListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -53,7 +53,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record ToolListOptions
+public sealed record DotnetToolListOptions
 {
     /// <summary>
     ///     The output format for the list of tools.

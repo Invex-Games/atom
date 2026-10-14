@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Build(
         System.String[] projectOrSolutionOrFile,
-        BuildOptions? options = null,
+        DotnetBuildOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -45,7 +45,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Build(
         System.String projectOrSolutionOrFile,
-        BuildOptions? options = null,
+        DotnetBuildOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -67,7 +67,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Build(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        BuildOptions? options = null,
+        DotnetBuildOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -78,7 +78,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Build(
         System.String[] projectOrSolutionOrFile,
-        BuildOptions? options = null,
+        DotnetBuildOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -96,7 +96,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> Build(
         System.String projectOrSolutionOrFile,
-        BuildOptions? options = null,
+        DotnetBuildOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -114,7 +114,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> Build(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        BuildOptions? options = null,
+        DotnetBuildOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -133,7 +133,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record BuildOptions
+public sealed record DotnetBuildOptions
 {
     /// <summary>
     ///     The target architecture.
@@ -156,7 +156,7 @@ public sealed record BuildOptions
     /// <summary>
     ///
     /// </summary>
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -304,7 +304,7 @@ public sealed record BuildOptions
     /// <summary>
     ///     Do not display the startup banner or the copyright message.
     /// </summary>
-    public System.Boolean? Nologo
+    public System.Boolean? NoLogo
     {
         get;
         init;
@@ -424,8 +424,8 @@ public sealed record BuildOptions
             ArtifactsPath is not null
                 ? $"--artifacts-path {ArtifactsPath}"
                 : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             Configuration is not null
                 ? $"--configuration {Configuration}"
@@ -478,7 +478,7 @@ public sealed record BuildOptions
             NoSelfContained is true
                 ? "--no-self-contained"
                 : null,
-            Nologo is true
+            NoLogo is true
                 ? "--nologo"
                 : null,
             Os is not null

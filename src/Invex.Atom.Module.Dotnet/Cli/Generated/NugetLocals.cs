@@ -8,7 +8,7 @@ public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> NugetLocals(
         System.String folders,
-        NugetLocalsOptions? options = null,
+        DotnetNugetLocalsOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -19,7 +19,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NugetLocals(
         System.String folders,
-        NugetLocalsOptions? options = null,
+        DotnetNugetLocalsOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -38,7 +38,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NugetLocalsOptions
+public sealed record DotnetNugetLocalsOptions
 {
     public System.Boolean? Clear
     {

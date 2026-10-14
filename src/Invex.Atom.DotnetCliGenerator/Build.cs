@@ -94,23 +94,14 @@ internal sealed partial class Build : BuildDefinition
             if (!FileSystem.Directory.Exists(generatedDirectory))
                 FileSystem.Directory.CreateDirectory(generatedDirectory);
 
-            // Generate and write code for each command
-            var writtenFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var files = commands.ToDictionary(static command => $"{CsharpWriter.ToPascalCase(command.Name)}.cs",
+                StringComparer.Ordinal);
 
-            foreach (var command in commands)
-            {
-                var fileName = $"{CsharpWriter.ToPascalCase(command.Name)}.cs";
-
-                await FileSystem.File.WriteAllTextAsync(generatedDirectory / fileName,
-                    DotnetCliGenerator.GenerateFile(command));
-
-                writtenFiles.Add(fileName);
-            }
-
-            // Delete stale generated files (e.g. commands that were removed or are now hidden)
+            // Delete stale generated files first (commands that were removed, are now hidden, or were renamed - including
+            // case-only renames, which must be deleted before writing on case-insensitive file systems)
             foreach (var file in FileSystem.Directory.GetFiles(generatedDirectory, "*.cs"))
             {
-                if (writtenFiles.Contains(FileSystem.Path.GetFileName(file)))
+                if (files.ContainsKey(FileSystem.Path.GetFileName(file)))
                     continue;
 
                 var content = await FileSystem.File.ReadAllTextAsync(file);
@@ -121,6 +112,11 @@ internal sealed partial class Build : BuildDefinition
                 Logger.LogInformation("Deleting stale generated file {File}", file);
                 FileSystem.File.Delete(file);
             }
+
+            // Generate and write code for each command
+            foreach (var (fileName, command) in files)
+                await FileSystem.File.WriteAllTextAsync(generatedDirectory / fileName,
+                    DotnetCliGenerator.GenerateFile(command));
 
             Logger.LogInformation("Successfully generated .NET CLI wrapper code for {CommandCount} commands.",
                 commands.Count);
