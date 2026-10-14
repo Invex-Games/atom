@@ -31,7 +31,7 @@ public interface IStoreArtifact : IAtomArtifactsParam, ISetupBuildInfo
     /// </remarks>
     Target StoreArtifact =>
         t => t
-            .IsHidden()
+            .AsHidden()
             .DescribedAs("Stores artifacts.")
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildName))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildId))

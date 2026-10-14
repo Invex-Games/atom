@@ -35,5 +35,6 @@ public partial interface IWorkflowBuildDefinition : IBuildDefinition, IGen
             .AddSingleton<IWorkflowContext, WorkflowContext.WorkflowContext>()
             .AddSingleton<WorkflowGenerator>()
             .AddSingleton<WorkflowResolver>()
-            .AddSingleton<IAtomLifecycleHook, WorkflowLifecycleHook>();
+            .AddSingleton<IAtomLifecycleHook, WorkflowLifecycleHook>()
+            .AddSingleton<IWorkflowWriter, DebugWorkflowWriter>();
 }

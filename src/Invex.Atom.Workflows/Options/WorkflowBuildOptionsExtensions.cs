@@ -217,7 +217,7 @@ public static class WorkflowBuildOptionsExtensions
         ///     Provides factories for creating <see cref="SetupDotnetStep" /> options for common .NET SDK versions.
         /// </summary>
         [PublicAPI]
-        public class SetupDotnetOptions
+        public sealed class SetupDotnetOptions
         {
             /// <summary>
             ///     Creates a step that installs the latest .NET 8.0 SDK.

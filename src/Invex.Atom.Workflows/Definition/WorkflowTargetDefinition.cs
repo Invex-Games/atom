@@ -25,7 +25,7 @@ public sealed record WorkflowTargetDefinition(string Name)
     ///     Target-level options take precedence over workflow-level options of the same type.
     /// </param>
     /// <returns>A new <see cref="WorkflowStepModel" /> instance.</returns>
-    public WorkflowStepModel CreateModel(IEnumerable<IBuildOption> workflowOptions) =>
+    internal WorkflowStepModel CreateModel(IEnumerable<IBuildOption> workflowOptions) =>
         new()
         {
             Name = Name,

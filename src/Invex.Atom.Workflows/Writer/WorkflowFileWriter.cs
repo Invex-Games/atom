@@ -47,7 +47,9 @@ public abstract class WorkflowFileWriter<T>(IRootedFileSystem fileSystem, ILogge
             ? await fileSystem.File.ReadAllTextAsync(filePath, cancellationToken)
             : string.Empty;
 
-        if (existingText == newText)
+        if (existingText
+            .ReplaceLineEndings()
+            .Equals(newText, StringComparison.Ordinal))
             return;
 
         switch (existingText.Length)
@@ -74,7 +76,7 @@ public abstract class WorkflowFileWriter<T>(IRootedFileSystem fileSystem, ILogge
     /// <param name="workflow">The workflow model to compare against the existing file.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns><c>true</c> if the workflow file is missing or outdated; otherwise, <c>false</c>.</returns>
-    public async Task<bool> CheckForOutdatedWorkflow(
+    public virtual async Task<bool> CheckForOutdatedWorkflow(
         WorkflowModel workflow,
         CancellationToken cancellationToken = default)
     {
@@ -89,7 +91,7 @@ public abstract class WorkflowFileWriter<T>(IRootedFileSystem fileSystem, ILogge
 
         if (existingText
             .ReplaceLineEndings()
-            .Equals(newText.ReplaceLineEndings(), StringComparison.CurrentCulture))
+            .Equals(newText, StringComparison.Ordinal))
             return false;
 
         logger.LogInformation(

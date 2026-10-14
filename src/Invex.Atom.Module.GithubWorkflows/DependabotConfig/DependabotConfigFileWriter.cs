@@ -3,8 +3,7 @@ namespace Invex.Atom.Module.GithubWorkflows.DependabotConfig;
 /// <summary>
 ///     Writes Dependabot configuration files in YAML format.
 /// </summary>
-[PublicAPI]
-public sealed class DependabotConfigFileWriter(IRootedFileSystem fileSystem, ILogger<DependabotConfigFileWriter> logger)
+internal sealed class DependabotConfigFileWriter(IRootedFileSystem fileSystem, ILogger<DependabotConfigFileWriter> logger)
     : WorkflowFileWriter<DependabotWorkflowType>(fileSystem, logger)
 {
     private readonly IRootedFileSystem _fileSystem = fileSystem;

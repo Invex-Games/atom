@@ -558,6 +558,9 @@
     Name: Invex.Atom.Build.Definition.TargetDefinition,
     Members: [
       {
+        Name: AsHidden
+      },
+      {
         Name: ConsumedArtifacts
       },
       {
@@ -607,9 +610,6 @@
       },
       {
         Name: Extends
-      },
-      {
-        Name: Hidden
       },
       {
         Name: IsHidden
@@ -1603,12 +1603,6 @@
       },
       {
         Name: WithRetry
-      },
-      {
-        Name: WithRetry
-      },
-      {
-        Name: WithRetry
       }
     ]
   },
@@ -1619,9 +1613,6 @@
         Name: Convert
       }
     ]
-  },
-  {
-    Name: Invex.Atom.Build.Util.UnstableAPIAttribute
   },
   {
     Name: Invex.Atom.Build.Variables.IVariableProvider,
