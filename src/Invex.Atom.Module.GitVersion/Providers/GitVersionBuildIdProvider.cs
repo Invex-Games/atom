@@ -21,7 +21,7 @@ internal sealed class GitVersionBuildIdProvider(
     ///     Gets the build ID, derived from GitVersion's FullSemVer.
     /// </summary>
     /// <exception cref="InvalidOperationException">
-    ///     Thrown if GitVersion is not enabled via <see cref="GitVersionProvideBuildIdFlag" />
+    ///     Thrown if GitVersion is not enabled via <see cref="GitVersionProvideBuildIdOption" />
     ///     or if the build ID cannot be determined from GitVersion's output.
     /// </exception>
     [field: AllowNull]
@@ -30,9 +30,9 @@ internal sealed class GitVersionBuildIdProvider(
     {
         get
         {
-            if (!GitVersionProvideBuildIdFlag.IsEnabled(buildOptionService.Options))
+            if (!GitVersionProvideBuildIdOption.IsEnabled(buildOptionService.Options))
                 throw new InvalidOperationException(
-                    "GitVersion is not enabled for build ID generation. Ensure GitVersionProvideBuildIdFlag is enabled.");
+                    "GitVersion is not enabled for build ID generation. Ensure GitVersionProvideBuildIdOption is enabled.");
 
             if (field is { Length: > 0 })
                 return field;

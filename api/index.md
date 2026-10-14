@@ -82,8 +82,8 @@ the main entry points per package, and the sidebar lists everything else.
 | [`IDevOpsWorkflows`](xref:Invex.Atom.Module.DevOpsWorkflows.IDevOpsWorkflows)                                | Interface | Integrates Azure DevOps Pipelines into a build.                   |
 | [`DevOps`](xref:Invex.Atom.Module.DevOpsWorkflows.DevOps)                                                    | Class     | Detects Azure Pipelines and exposes its environment variables.    |
 | [`ProvideDevOpsRunIdAsWorkflowId`](xref:Invex.Atom.Module.DevOpsWorkflows.ProvideDevOpsRunIdAsWorkflowId)    | Record    | Uses the Azure DevOps run ID as the workflow ID.                  |
-| [`DevOpsConcurrencyOption`](xref:Invex.Atom.Module.DevOpsWorkflows.Workflows.Options.DevOpsConcurrencyOption) | Record   | Configures how runs waiting on an exclusive lock are handled.     |
-| [`DevOpsPullRequestOption`](xref:Invex.Atom.Module.DevOpsWorkflows.Workflows.Options.DevOpsPullRequestOption) | Record   | Configures pull request auto-cancellation.                        |
+| [`DevOpsConcurrencyOption`](xref:Invex.Atom.Module.DevOpsWorkflows.Options.DevOpsConcurrencyOption) | Record   | Configures how runs waiting on an exclusive lock are handled.     |
+| [`DevOpsPullRequestOption`](xref:Invex.Atom.Module.DevOpsWorkflows.Options.DevOpsPullRequestOption) | Record   | Configures pull request auto-cancellation.                        |
 
 ## Invex.Atom.Module.AzureKeyVault
 

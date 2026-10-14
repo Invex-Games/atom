@@ -113,7 +113,7 @@ GitHub Actions workflow.
 3. Run the [`Gen`](../built-in-targets/generate-workflow-files.md) target with `atom gen`:
 
    ```text
-   26-06-06 +10:00  Invex.Atom.Module.GitHubWorkflows.GitHubActions.GitHubWorkflowFileWriter:
+   26-06-06 +10:00  Invex.Atom.Module.GitHubWorkflows.GitHubWorkflowFileWriter:
    01:38:57.388 INF Writing new workflow file:
                     L:\Repos\Invex-Games\atom\.github\workflows\Hello.yml
 

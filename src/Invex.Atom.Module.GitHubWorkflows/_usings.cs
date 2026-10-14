@@ -30,7 +30,7 @@ global using Invex.Atom.Build.FileSystem;
 global using Invex.Atom.Build.Hosting;
 global using Invex.Atom.Module.GitHubWorkflows.DependabotConfig;
 global using Invex.Atom.Module.GitHubWorkflows.Extensions;
-global using Invex.Atom.Module.GitHubWorkflows.GitHubActions;
+global using Invex.Atom.Module.GitHubWorkflows;
 global using Invex.Atom.Module.GitHubWorkflows.Helpers;
 global using Invex.Atom.Module.GitHubWorkflows.Options;
 global using Invex.Atom.Module.GitHubWorkflows.Steps;

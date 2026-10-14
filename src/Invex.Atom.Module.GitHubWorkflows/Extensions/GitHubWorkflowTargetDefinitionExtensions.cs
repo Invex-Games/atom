@@ -5,7 +5,7 @@
 ///     configuration.
 /// </summary>
 [PublicAPI]
-public static class WorkflowTargetDefinitionExtensions
+public static class GitHubWorkflowTargetDefinitionExtensions
 {
     /// <summary>
     ///     Extension methods for <see cref="WorkflowTargetDefinition" />.
@@ -20,7 +20,7 @@ public static class WorkflowTargetDefinitionExtensions
         /// <remarks>
         ///     This method sets up a matrix dimension for the `JobRunsOn` parameter, allowing the job
         ///     to execute on multiple runner environments. It also adds the
-        ///     <see cref="Invex.Atom.Module.GitHubWorkflows.Extensions.WorkflowOptionsExtensions.GitHubRunsOnOptions.SetByMatrix" />
+        ///     <see cref="Invex.Atom.Module.GitHubWorkflows.Extensions.GitHubBuildOptionsExtensions.GitHubRunsOnOptions.SetByMatrix" />
         ///     option to indicate that the matrix determines the runner.
         /// </remarks>
         [PublicAPI]
@@ -40,7 +40,7 @@ public static class WorkflowTargetDefinitionExtensions
         /// <remarks>
         ///     This method sets up a matrix dimension for the `JobRunsOn` parameter, allowing the job
         ///     to execute on multiple runner environments. It also adds the
-        ///     <see cref="Invex.Atom.Module.GitHubWorkflows.Extensions.WorkflowOptionsExtensions.GitHubRunsOnOptions.SetByMatrix" />
+        ///     <see cref="Invex.Atom.Module.GitHubWorkflows.Extensions.GitHubBuildOptionsExtensions.GitHubRunsOnOptions.SetByMatrix" />
         ///     option to indicate that the matrix determines the runner.
         /// </remarks>
         [PublicAPI]

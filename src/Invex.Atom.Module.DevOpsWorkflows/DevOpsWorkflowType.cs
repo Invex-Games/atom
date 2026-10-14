@@ -1,4 +1,4 @@
-﻿namespace Invex.Atom.Module.DevOpsWorkflows.Workflows.DevOps;
+﻿namespace Invex.Atom.Module.DevOpsWorkflows;
 
 [PublicAPI]
 public sealed record DevOpsWorkflowType : IWorkflowType;

@@ -1,4 +1,4 @@
-namespace Invex.Atom.Module.DevOpsWorkflows.Workflows.Options;
+namespace Invex.Atom.Module.DevOpsWorkflows.Options;
 
 /// <summary>
 ///     Configures how Azure Pipelines handles runs waiting on an exclusive lock.
