@@ -25,7 +25,7 @@ public static class HostExtensions
     ///         <item>Registers the <see cref="AtomService" /> as a hosted service.</item>
     ///         <item>Registers the build definition (<typeparamref name="TBuild" />) and related interfaces.</item>
     ///         <item>
-    ///             Adds core Atom services like <see cref="IParamService" />, <see cref="ReportService" />, and
+    ///             Adds core Atom services like <see cref="IParamService" />, <see cref="IReportService" />, and
     ///             <see cref="IAnsiConsole" />.
     ///         </item>
     ///         <item>
@@ -65,7 +65,7 @@ public static class HostExtensions
             builder.Services.AddSingleton<IConfigureHost>(x => (IConfigureHost)x.GetRequiredService<BuildDefinition>());
 
         builder.Services.AddSingleton<IParamService, ParamService>();
-        builder.Services.AddSingleton<ReportService>();
+        builder.Services.AddSingleton<IReportService, ReportService>();
 
         builder.Services.AddSingleton<IAnsiConsole>(services =>
         {

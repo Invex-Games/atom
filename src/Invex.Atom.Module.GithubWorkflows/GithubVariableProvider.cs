@@ -53,18 +53,20 @@ internal sealed class GithubVariableProvider(IRootedFileSystem fileSystem, ILogg
     }
 
     /// <summary>
-    ///     Indicates whether a variable can be read from a previous job in GitHub Actions.
+    ///     Reads a variable written by a previous job in GitHub Actions.
     /// </summary>
     /// <param name="jobName">The name of the job from which to read the variable.</param>
     /// <param name="variableName">The name of the variable to read.</param>
     /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>
-    ///     A <see cref="Task{TResult}" /> that returns <c>true</c> if running in GitHub Actions,
-    ///     indicating that variables from previous jobs can potentially be read.
+    ///     The variable's value, which the generated workflow injects as an environment variable from the job's
+    ///     outputs, or <c>null</c> if not running in GitHub Actions or the variable is not set.
     /// </returns>
-    public Task<bool> ReadVariable(
+    public Task<string?> ReadVariable(
         string jobName,
         string variableName,
         CancellationToken cancellationToken = default) =>
-        Task.FromResult(Github.IsGithubActions);
+        Task.FromResult(Github.IsGithubActions
+            ? Environment.GetEnvironmentVariable(variableName)
+            : null);
 }

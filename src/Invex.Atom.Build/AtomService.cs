@@ -67,7 +67,7 @@ internal sealed class AtomService(
     BuildExecutor executor,
     IHelpService helpService,
     IHostApplicationLifetime lifetime,
-    ReportService reportService,
+    IReportService reportService,
     IEnumerable<IAtomLifecycleHook> lifecycleHooks,
     IAnsiConsole console,
     ILogger<AtomService> logger

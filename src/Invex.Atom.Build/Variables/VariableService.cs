@@ -26,17 +26,21 @@ public interface IVariableService
     Task WriteVariable(string variableName, string variableValue, CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     Reads a variable from a specific job's context, making it available in the current execution context.
+    ///     Reads a variable written by a specific job.
     /// </summary>
     /// <param name="jobName">The name of the job context from which to read the variable.</param>
     /// <param name="variableName">The name of the variable as defined in the build parameters.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A <see cref="Task" /> representing the asynchronous read operation.</returns>
+    /// <returns>The variable's value, or <c>null</c> if no provider could supply it.</returns>
+    /// <remarks>
+    ///     A value that is found is also exposed as an environment variable named after the parameter's argument name,
+    ///     so that it resolves through <see cref="IParamService" /> like any other parameter.
+    /// </remarks>
     /// <remarks>
     ///     This method enables cross-job variable sharing. It resolves the variable's argument name and attempts to read it
     ///     using custom providers before falling back to the base Atom provider.
     /// </remarks>
-    Task ReadVariable(string jobName, string variableName, CancellationToken cancellationToken = default);
+    Task<string?> ReadVariable(string jobName, string variableName, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -81,14 +85,24 @@ internal sealed class VariableService(
     }
 
     /// <inheritdoc />
-    public async Task ReadVariable(string jobName, string variableName, CancellationToken cancellationToken = default)
+    public async Task<string?> ReadVariable(
+        string jobName,
+        string variableName,
+        CancellationToken cancellationToken = default)
     {
         var variableArgName = buildDefinition.ParamDefinitions[variableName].ArgName;
 
-        foreach (var provider in _customProviders)
-            if (await provider.ReadVariable(jobName, variableArgName, cancellationToken))
-                return;
+        string? value = null;
 
-        await _baseProvider.ReadVariable(jobName, variableArgName, cancellationToken);
+        foreach (var provider in _customProviders)
+            if ((value = await provider.ReadVariable(jobName, variableArgName, cancellationToken)) is not null)
+                break;
+
+        value ??= await _baseProvider.ReadVariable(jobName, variableArgName, cancellationToken);
+
+        if (value is not null)
+            Environment.SetEnvironmentVariable(variableArgName, value);
+
+        return value;
     }
 }

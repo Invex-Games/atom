@@ -39,7 +39,7 @@ internal sealed class DevopsVariableProvider(ILogger<DevopsVariableProvider> log
     }
 
     /// <summary>
-    ///     Indicates whether a variable can be read from a previous job in Azure DevOps Pipelines.
+    ///     Reads a variable written by a previous job in Azure DevOps Pipelines.
     /// </summary>
     /// <param name="jobName">
     ///     The name of the job from which to read the variable (not directly used for reading in Azure
@@ -48,28 +48,39 @@ internal sealed class DevopsVariableProvider(ILogger<DevopsVariableProvider> log
     /// <param name="variableName">The name of the variable to read.</param>
     /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>
-    ///     A <see cref="Task{TResult}" /> that returns <c>true</c> if running in Azure DevOps and the variable exists,
-    ///     otherwise <c>false</c>.
+    ///     The variable's value, which the pipeline exposes as an environment variable, or <c>null</c> if not running in
+    ///     Azure DevOps or the variable is not set.
     /// </returns>
-    public Task<bool> ReadVariable(string jobName, string variableName, CancellationToken cancellationToken = default)
+    /// <remarks>
+    ///     Azure DevOps exposes a variable named <c>my-var</c> as the environment variable <c>MY_VAR</c>, so both forms are
+    ///     checked.
+    /// </remarks>
+    public Task<string?> ReadVariable(
+        string jobName,
+        string variableName,
+        CancellationToken cancellationToken = default)
     {
         if (!Devops.IsDevopsPipelines)
-            return Task.FromResult(false);
+            return Task.FromResult<string?>(null);
 
-        var value = Environment.GetEnvironmentVariable(variableName);
+        var value = Environment.GetEnvironmentVariable(variableName) ??
+                    Environment.GetEnvironmentVariable(variableName
+                        .ToUpperInvariant()
+                        .Replace('-', '_')
+                        .Replace('.', '_'));
 
         if (value == null)
         {
             logger.LogWarning("Variable '{VariableName}' not found in Azure DevOps pipeline environment variables.",
                 variableName);
 
-            return Task.FromResult(false);
+            return Task.FromResult<string?>(null);
         }
 
         logger.LogInformation("Read variable '{VariableName}' with value '{VariableValue}' from Azure DevOps pipeline.",
             variableName,
             value.SanitizeForLogging());
 
-        return Task.FromResult(true);
+        return Task.FromResult<string?>(value);
     }
 }

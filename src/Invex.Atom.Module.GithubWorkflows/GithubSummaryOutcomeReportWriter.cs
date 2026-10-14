@@ -10,7 +10,7 @@
 /// </remarks>
 internal sealed class GithubSummaryOutcomeReportWriter(
     IRootedFileSystem fileSystem,
-    ReportService reportService,
+    IReportService reportService,
     IParamService paramService
 ) : IOutcomeReportWriter
 {

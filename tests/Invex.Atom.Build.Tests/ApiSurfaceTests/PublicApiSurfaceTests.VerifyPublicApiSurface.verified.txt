@@ -1332,6 +1332,20 @@
     Name: Invex.Atom.Build.Reports.IReportData
   },
   {
+    Name: Invex.Atom.Build.Reports.IReportService,
+    Members: [
+      {
+        Name: AddReportData
+      },
+      {
+        Name: GetReportData
+      },
+      {
+        Name: GetReportData
+      }
+    ]
+  },
+  {
     Name: Invex.Atom.Build.Reports.IReportsHelper,
     Members: [
       {
@@ -1414,17 +1428,6 @@
     Members: [
       {
         Name: Write
-      }
-    ]
-  },
-  {
-    Name: Invex.Atom.Build.Reports.ReportService,
-    Members: [
-      {
-        Name: AddReportData
-      },
-      {
-        Name: GetReportData
       }
     ]
   },

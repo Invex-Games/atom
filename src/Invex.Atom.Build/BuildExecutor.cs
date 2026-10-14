@@ -18,7 +18,7 @@ internal sealed class BuildExecutor(
     IVariableService variableService,
     IEnumerable<IOutcomeReportWriter> outcomeReporters,
     IAnsiConsole console,
-    ReportService reportService,
+    IReportService reportService,
     ILogger<BuildExecutor> logger
 )
 {

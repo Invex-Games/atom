@@ -8,7 +8,7 @@ internal sealed class ReportLoggerTests
     {
         _scopeProvider = new();
         _paramService = A.Fake<IParamService>();
-        _reportService = new();
+        _reportService = new ReportService();
 
         _serviceProvider = new ServiceCollection()
             .AddSingleton(_paramService)
@@ -24,7 +24,7 @@ internal sealed class ReportLoggerTests
 
     private ReportLogger _logger;
     private IParamService _paramService;
-    private ReportService _reportService;
+    private IReportService _reportService;
     private TestScopeProvider _scopeProvider;
     private ServiceProvider _serviceProvider;
 
