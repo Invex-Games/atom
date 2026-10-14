@@ -10,14 +10,16 @@
 ///     marked with <see cref="SecretDefinitionAttribute" /> from the local user secrets store, which is ideal
 ///     for development-time secrets that should not be committed to source control.
 ///     <para>
-///         This interface is automatically included in the default <see cref="BuildDefinition" />.
+///         This interface is not included in <see cref="BuildDefinition" /> by default; implement it explicitly on
+///         your build definition to enable the user secrets store. The build project also needs a
+///         <c>UserSecretsId</c>.
 ///     </para>
 /// </remarks>
 /// <example>
 ///     <code>
 /// // 1. Implement the interface in your build definition
 /// [BuildDefinition]
-/// partial class Build : IDotnetUserSecrets, IMyTarget;
+/// partial class Build : BuildDefinition, IDotnetUserSecrets, IMyTarget;
 /// // 2. Define a secret parameter
 /// [SecretDefinition("my-secret", "A secret from user secrets.")]
 /// string MySecret => GetParam(() => MySecret);
