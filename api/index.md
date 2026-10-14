@@ -89,8 +89,8 @@ the main entry points per package, and the sidebar lists everything else.
 | Type                                                                                                | Kind      | Description                                                 |
 |-----------------------------------------------------------------------------------------------------|-----------|-------------------------------------------------------------|
 | [`IAzureKeyVault`](xref:Invex.Atom.Module.AzureKeyVault.IAzureKeyVault)                             | Interface | Integrates Azure Key Vault for secrets.                     |
-| [`AzureKeySecretsProvider`](xref:Invex.Atom.Module.AzureKeyVault.AzureKeySecretsProvider)           | Class     | `ISecretsProvider` that reads secrets from Azure Key Vault. |
 | [`AzureKeyVaultValueInjections`](xref:Invex.Atom.Module.AzureKeyVault.AzureKeyVaultValueInjections) | Record    | How each vault parameter is injected into workflows.        |
+| [`AzureKeyVaultValueInjectionType`](xref:Invex.Atom.Module.AzureKeyVault.AzureKeyVaultValueInjectionType) | Enum | Source for an injected vault parameter.               |
 | [`UseAzureKeyVault`](xref:Invex.Atom.Module.AzureKeyVault.Options.UseAzureKeyVault)                 | Record    | Build option that enables Azure Key Vault.                  |
 
 ## Invex.Atom.Module.AzureStorage
@@ -98,7 +98,6 @@ the main entry points per package, and the sidebar lists everything else.
 | Type                                                                                          | Kind      | Description                                                       |
 |-----------------------------------------------------------------------------------------------|-----------|-------------------------------------------------------------------|
 | [`IAzureArtifactStorage`](xref:Invex.Atom.Module.AzureStorage.IAzureArtifactStorage)          | Interface | Configures Azure Blob Storage as the artifact store.              |
-| [`AzureBlobArtifactProvider`](xref:Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider)  | Class     | `IArtifactProvider` that stores artifacts in Azure Blob Storage.  |
 
 ## Invex.Atom.Module.GitVersion
 

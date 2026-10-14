@@ -1,4 +1,4 @@
-namespace Invex.Atom.Module.AzureKeyVault;
+﻿namespace Invex.Atom.Module.AzureKeyVault;
 
 /// <summary>
 ///     Provides an implementation of <see cref="IBuildOptionProvider" /> that injects the Azure Key Vault connection
@@ -9,8 +9,7 @@ namespace Invex.Atom.Module.AzureKeyVault;
 ///     according to <see cref="IAzureKeyVault.AzureKeyVaultValueInjections" />, and is only resolved by secret
 ///     providers, never looked up in the vault itself.
 /// </remarks>
-[PublicAPI]
-public sealed class AzureKeyVaultOptionsProvider(IAzureKeyVault keyVault) : IBuildOptionProvider
+internal sealed class AzureKeyVaultOptionsProvider(IAzureKeyVault keyVault) : IBuildOptionProvider
 {
     /// <summary>
     ///     Gets additional build options based on the Azure Key Vault injection configuration.

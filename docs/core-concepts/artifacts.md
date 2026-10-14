@@ -66,9 +66,9 @@ register an `IArtifactProvider` and enable it with the `UseCustomArtifactProvide
 (`BuildOptions.Artifacts.UseCustomProvider`), which routes artifacts through the hidden `StoreArtifact` /
 `RetrieveArtifact` targets instead:
 
-| Provider                    | Package                          | Storage            |
-|-----------------------------|----------------------------------|--------------------|
-| `AzureBlobArtifactProvider` | `Invex.Atom.Module.AzureStorage` | Azure Blob Storage |
+| Interface               | Package                          | Storage            |
+|-------------------------|----------------------------------|--------------------|
+| `IAzureArtifactStorage` | `Invex.Atom.Module.AzureStorage` | Azure Blob Storage |
 
 Locally, artifacts are simply directories under the Atom publish/artifacts paths — no provider is required.
 

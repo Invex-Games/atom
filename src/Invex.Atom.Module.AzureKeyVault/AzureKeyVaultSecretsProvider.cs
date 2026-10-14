@@ -13,8 +13,7 @@
 ///         <c>null</c> for the remaining secrets of the run instead of retrying, so other providers can be used.
 ///     </para>
 /// </remarks>
-[PublicAPI]
-public sealed class AzureKeyVaultSecretsProvider(
+internal sealed class AzureKeyVaultSecretsProvider(
     IBuildDefinition buildDefinition,
     CommandLineArgs args,
     IAzureKeyVault keyVault,

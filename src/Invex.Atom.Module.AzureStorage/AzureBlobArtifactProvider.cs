@@ -8,8 +8,7 @@
 ///     This provider uses the Azure Storage SDK to interact with blob containers,
 ///     allowing for robust artifact management within Invex.Atom build processes.
 /// </remarks>
-[PublicAPI]
-public sealed class AzureBlobArtifactProvider(
+internal sealed class AzureBlobArtifactProvider(
     CommandLineArgs args,
     IBuildInfo buildInfo,
     IParamService paramService,
