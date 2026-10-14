@@ -16,14 +16,14 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> Clean(
         System.String[] projectOrSolutionOrFile,
-        CleanOptions? options = null,
+        DotnetCleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -38,14 +38,14 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> Clean(
         System.String projectOrSolutionOrFile,
-        CleanOptions? options = null,
+        DotnetCleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -60,14 +60,14 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> Clean(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        CleanOptions? options = null,
+        DotnetCleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -78,59 +78,50 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Clean(
         System.String[] projectOrSolutionOrFile,
-        CleanOptions? options = null,
+        DotnetCleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "clean",
-            $"{string.Join(" ", projectOrSolutionOrFile)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+    )
+    {
+        var args = new List<string> { "clean" };
+        DotnetCliArgs.AddPositional(args, projectOrSolutionOrFile);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
     public Task<ProcessRunResult> Clean(
         System.String projectOrSolutionOrFile,
-        CleanOptions? options = null,
+        DotnetCleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "clean",
-            projectOrSolutionOrFile,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+    )
+    {
+        var args = new List<string> { "clean" };
+        DotnetCliArgs.AddPositional(args, projectOrSolutionOrFile);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
     public Task<ProcessRunResult> Clean(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        CleanOptions? options = null,
+        DotnetCleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "clean",
-            projectOrSolutionOrFile,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+    )
+    {
+        var args = new List<string> { "clean" };
+        DotnetCliArgs.AddPositional(args, projectOrSolutionOrFile);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }
 
 [PublicAPI]
-public sealed record CleanOptions
+public sealed record DotnetCleanOptions
 {
     /// <summary>
     ///     The artifacts path. All output from the project, including build, publish, and pack output, will go in subfolders under the specified path.
@@ -204,7 +195,7 @@ public sealed record CleanOptions
     /// <summary>
     ///     Do not display the startup banner or the copyright message.
     /// </summary>
-    public System.Boolean? Nologo
+    public System.Boolean? NoLogo
     {
         get;
         init;
@@ -246,54 +237,31 @@ public sealed record CleanOptions
         init;
     }
 
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            ArtifactsPath is not null
-                ? $"--artifacts-path {ArtifactsPath}"
-                : null,
-            Configuration is not null
-                ? $"--configuration {Configuration}"
-                : null,
-            DisableBuildServers is true
-                ? "--disable-build-servers"
-                : null,
-            Framework is not null
-                ? $"--framework {Framework}"
-                : null,
-            GetItem is not null
-                ? $"--getItem {string.Join(" --getItem ", GetItem)}"
-                : null,
-            GetProperty is not null
-                ? $"--getProperty {string.Join(" --getProperty ", GetProperty)}"
-                : null,
-            GetResultOutputFile is not null
-                ? $"--getResultOutputFile {string.Join(" --getResultOutputFile ", GetResultOutputFile)}"
-                : null,
-            GetTargetResult is not null
-                ? $"--getTargetResult {string.Join(" --getTargetResult ", GetTargetResult)}"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            Nologo is true
-                ? "--nologo"
-                : null,
-            Output is not null
-                ? $"--output {Output}"
-                : null,
-            Runtime is not null
-                ? $"--runtime {Runtime}"
-                : null,
-            Target is not null
-                ? $"--target {string.Join(" --target ", Target)}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--artifacts-path", ArtifactsPath);
+        DotnetCliArgs.AddOption(args, "--configuration", Configuration);
+        DotnetCliArgs.AddFlag(args, "--disable-build-servers", DisableBuildServers);
+        DotnetCliArgs.AddOption(args, "--framework", Framework);
+        DotnetCliArgs.AddOption(args, "--getItem", GetItem);
+        DotnetCliArgs.AddOption(args, "--getProperty", GetProperty);
+        DotnetCliArgs.AddOption(args, "--getResultOutputFile", GetResultOutputFile);
+        DotnetCliArgs.AddOption(args, "--getTargetResult", GetTargetResult);
+        DotnetCliArgs.AddBool(args, "--interactive", Interactive);
+        DotnetCliArgs.AddFlag(args, "--nologo", NoLogo);
+        DotnetCliArgs.AddOption(args, "--output", Output);
+        DotnetCliArgs.AddOption(args, "--runtime", Runtime);
+        DotnetCliArgs.AddOption(args, "--target", Target);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+
+        return args;
     }
 
 }

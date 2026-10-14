@@ -13,32 +13,35 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> ToolRestore(
-        ToolRestoreOptions? options = null,
+        DotnetToolRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> ToolRestore(
-        ToolRestoreOptions? options = null,
+        DotnetToolRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    ) =>
-        processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", (options ?? new()).ToString())
-            : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
-    
+    )
+    {
+        var args = new List<string> { "tool", "restore" };
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
+    }
+
 }
 [PublicAPI]
-public sealed record ToolRestoreOptions
+public sealed record DotnetToolRestoreOptions
 {
     /// <summary>
     ///     Add an additional NuGet package source to use during installation.
@@ -48,16 +51,16 @@ public sealed record ToolRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The NuGet configuration file to use.
     /// </summary>
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Prevent restoring multiple projects in parallel.
     /// </summary>
@@ -66,7 +69,7 @@ public sealed record ToolRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Treat package source failures as warnings.
     /// </summary>
@@ -75,7 +78,7 @@ public sealed record ToolRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -84,16 +87,7 @@ public sealed record ToolRestoreOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Do not cache packages and http requests.
-    /// </summary>
-    public System.Boolean? NoCache
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     Do not cache packages and http requests.
     /// </summary>
@@ -102,7 +96,7 @@ public sealed record ToolRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Path to the manifest file.
     /// </summary>
@@ -111,7 +105,7 @@ public sealed record ToolRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -120,41 +114,27 @@ public sealed record ToolRestoreOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            AddSource is not null
-                ? $"--add-source {string.Join(" --add-source ", AddSource)}"
-                : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
-                : null,
-            DisableParallel is true
-                ? "--disable-parallel"
-                : null,
-            IgnoreFailedSources is true
-                ? "--ignore-failed-sources"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            NoCache is true
-                ? "--no-cache"
-                : null,
-            NoHttpCache is true
-                ? "--no-http-cache"
-                : null,
-            ToolManifest is not null
-                ? $"--tool-manifest {ToolManifest}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--add-source", AddSource);
+        DotnetCliArgs.AddOption(args, "--configfile", ConfigFile);
+        DotnetCliArgs.AddFlag(args, "--disable-parallel", DisableParallel);
+        DotnetCliArgs.AddFlag(args, "--ignore-failed-sources", IgnoreFailedSources);
+        DotnetCliArgs.AddFlag(args, "--interactive", Interactive);
+        DotnetCliArgs.AddFlag(args, "--no-http-cache", NoHttpCache);
+        DotnetCliArgs.AddOption(args, "--tool-manifest", ToolManifest);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+
+        return args;
     }
-    
+
 }
 

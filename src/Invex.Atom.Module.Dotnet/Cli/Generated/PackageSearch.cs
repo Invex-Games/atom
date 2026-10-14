@@ -16,53 +16,50 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> PackageSearch(
         System.String searchTerm,
-        PackageSearchOptions? options = null,
+        DotnetPackageSearchOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> PackageSearch(
         System.String searchTerm,
-        PackageSearchOptions? options = null,
+        DotnetPackageSearchOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "package search",
-            searchTerm,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "package", "search" };
+        DotnetCliArgs.AddPositional(args, searchTerm);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record PackageSearchOptions
+public sealed record DotnetPackageSearchOptions
 {
     /// <summary>
     ///     The NuGet configuration file. If specified, only the settings from this file will be used. If not specified, the hierarchy of configuration files from the current directory will be used. For more information, see https://docs.microsoft.com/nuget/consume-packages/configuring-nuget-behavior
     /// </summary>
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Require that the search term exactly match the name of the package. Causes `--take` and `--skip` options to be ignored.
     /// </summary>
@@ -71,7 +68,7 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Format the output accordingly. Either `table`, or `json`. The default value is `table`.
     /// </summary>
@@ -80,7 +77,7 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -89,7 +86,7 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Include prerelease packages.
     /// </summary>
@@ -98,7 +95,7 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Number of results to skip, to allow pagination. Default 0.
     /// </summary>
@@ -107,7 +104,7 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The package source to search. You can pass multiple `--source` options to search multiple package sources. Example: `--source https://api.nuget.org/v3/index.json`.
     /// </summary>
@@ -116,7 +113,7 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Number of results to return. Default 20.
     /// </summary>
@@ -125,7 +122,7 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Display this amount of details in the output: `normal`, `minimal`, `detailed`. The default is `normal`
     /// </summary>
@@ -134,41 +131,28 @@ public sealed record PackageSearchOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            Configfile is not null
-                ? $"--configfile {Configfile}"
-                : null,
-            ExactMatch is true
-                ? "--exact-match"
-                : null,
-            Format is not null
-                ? $"--format {Format}"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            Prerelease is true
-                ? "--prerelease"
-                : null,
-            Skip is not null
-                ? $"--skip {Skip}"
-                : null,
-            Source is not null
-                ? $"--source {string.Join(" --source ", Source)}"
-                : null,
-            Take is not null
-                ? $"--take {Take}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--configfile", ConfigFile);
+        DotnetCliArgs.AddFlag(args, "--exact-match", ExactMatch);
+        DotnetCliArgs.AddOption(args, "--format", Format);
+        DotnetCliArgs.AddFlag(args, "--interactive", Interactive);
+        DotnetCliArgs.AddFlag(args, "--prerelease", Prerelease);
+        DotnetCliArgs.AddOption(args, "--skip", Skip);
+        DotnetCliArgs.AddOption(args, "--source", Source);
+        DotnetCliArgs.AddOption(args, "--take", Take);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+
+        return args;
     }
-    
+
 }
 

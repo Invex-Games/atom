@@ -1,29 +1,26 @@
 ﻿namespace Invex.Atom.Build.Hosting;
 
 /// <summary>
-///     Marks an interface as a source for host configuration, triggering source generation to apply its logic.
+///     Marks an interface as a source of configuration for the built host of any build definition that implements it.
 /// </summary>
 /// <remarks>
-///     When an interface is decorated with this attribute, any methods it contains named <c>Configure</c>
-///     with a single <see cref="IHost" /> parameter will be automatically discovered. The source generator
-///     then implements <see cref="IConfigureHost.ConfigureBuildHost" /> on the build definition, calling these
-///     methods to apply the specified configurations to the host after it is built.
+///     The interface must be <see langword="partial" />. The source generator declares
+///     <c>protected static partial void ConfigureHostFrom{InterfaceName}(IHost host)</c> on the interface, which the
+///     interface must implement (analyzer AT0002 reports a missing implementation). The generated
+///     <see cref="IConfigureHost.ConfigureHost" /> of every build definition that implements the interface calls this
+///     method from <see cref="HostExtensions.UseAtom" />, after the host is built.
 /// </remarks>
 /// <example>
 ///     <code>
-/// // 1. Define an interface with the attribute
 /// [ConfigureHost]
-/// public interface IMyHostConfigurator
+/// public partial interface IMyModule
 /// {
-///     void Configure(IHost host)
-///     {
-///         // Configuration logic here
-///     }
+///     protected static partial void ConfigureHostFromIMyModule(IHost host) =>
+///         host.Services.GetRequiredService&lt;IMyService&gt;().Initialize();
 /// }
-/// // 2. Implement the interface in your build definition
+///
 /// [BuildDefinition]
-/// partial class Build : IMyHostConfigurator;
-/// // The source generator will now apply the Configure method during host setup.
+/// internal partial class Build : BuildDefinition, IMyModule;
 ///     </code>
 /// </example>
 [PublicAPI]

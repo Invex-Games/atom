@@ -19,7 +19,7 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -27,11 +27,11 @@ public partial interface IDotnetCli
     public Task<ProcessRunResult> NewCreate(
         System.String templateShortName,
         System.String[] templateArgs,
-        NewCreateOptions? options = null,
+        DotnetNewCreateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -39,26 +39,23 @@ internal partial class DotnetCli
     public Task<ProcessRunResult> NewCreate(
         System.String templateShortName,
         System.String[] templateArgs,
-        NewCreateOptions? options = null,
+        DotnetNewCreateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "new create",
-            templateShortName,
-            $"{string.Join(" ", templateArgs)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "new", "create" };
+        DotnetCliArgs.AddPositional(args, templateShortName);
+        DotnetCliArgs.AddPositional(args, templateArgs);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record NewCreateOptions
+public sealed record DotnetNewCreateOptions
 {
     /// <summary>
     ///     Displays a summary of what would happen if the given command line were run if it would result in a template creation.
@@ -68,7 +65,7 @@ public sealed record NewCreateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Forces content to be generated even if it would change existing files.
     /// </summary>
@@ -77,7 +74,7 @@ public sealed record NewCreateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The name for the output being created. If no name is specified, the name of the output directory is used.
     /// </summary>
@@ -86,7 +83,7 @@ public sealed record NewCreateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Disables checking for the template package updates when instantiating a template.
     /// </summary>
@@ -95,7 +92,7 @@ public sealed record NewCreateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Location to place the generated output.
     /// </summary>
@@ -104,7 +101,7 @@ public sealed record NewCreateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The project that should be used for context evaluation.
     /// </summary>
@@ -113,32 +110,25 @@ public sealed record NewCreateOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            DryRun is true
-                ? "--dry-run"
-                : null,
-            Force is true
-                ? "--force"
-                : null,
-            Name is not null
-                ? $"--name {Name}"
-                : null,
-            NoUpdateCheck is true
-                ? "--no-update-check"
-                : null,
-            Output is not null
-                ? $"--output {Output}"
-                : null,
-            Project is not null
-                ? $"--project {Project}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddBool(args, "--dry-run", DryRun);
+        DotnetCliArgs.AddBool(args, "--force", Force);
+        DotnetCliArgs.AddOption(args, "--name", Name);
+        DotnetCliArgs.AddBool(args, "--no-update-check", NoUpdateCheck);
+        DotnetCliArgs.AddOption(args, "--output", Output);
+        DotnetCliArgs.AddOption(args, "--project", Project);
+
+        return args;
     }
-    
+
 }
 

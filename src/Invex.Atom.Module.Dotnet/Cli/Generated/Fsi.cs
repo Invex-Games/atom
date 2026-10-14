@@ -11,13 +11,13 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
     public Task<ProcessRunResult> Fsi(
         System.String arguments,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -26,31 +26,25 @@ internal partial class DotnetCli
         System.String[] arguments,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "fsi",
-            $"{string.Join(" ", arguments)}",
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "fsi" };
+        DotnetCliArgs.AddPositional(args, arguments);
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
     public Task<ProcessRunResult> Fsi(
         System.String arguments,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "fsi",
-            arguments,
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "fsi" };
+        DotnetCliArgs.AddPositional(args, arguments);
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 

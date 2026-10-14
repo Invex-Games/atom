@@ -7,33 +7,36 @@ namespace Invex.Atom.Module.Dotnet.Cli;
 public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> NugetTrust(
-        NugetTrustOptions? options = null,
+        DotnetNugetTrustOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NugetTrust(
-        NugetTrustOptions? options = null,
+        DotnetNugetTrustOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    ) =>
-        processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", (options ?? new()).ToString())
-            : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
-    
+    )
+    {
+        var args = new List<string> { "nuget", "trust" };
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
+    }
+
 }
 [PublicAPI]
-public sealed record NugetTrustOptions
+public sealed record DotnetNugetTrustOptions
 {
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -42,20 +45,21 @@ public sealed record NugetTrustOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            Configfile is not null
-                ? $"--configfile {Configfile}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--configfile", ConfigFile);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+
+        return args;
     }
-    
+
 }
 

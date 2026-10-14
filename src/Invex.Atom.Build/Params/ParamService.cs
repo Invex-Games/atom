@@ -77,6 +77,26 @@ public interface IParamService
         GetParam<string>(paramName, defaultValue);
 
     /// <summary>
+    ///     Asynchronously resolves the given secret parameters from the registered <see cref="ISecretsProvider" />
+    ///     instances and caches the results, so that later synchronous <c>GetParam</c> calls do not block on
+    ///     provider network calls.
+    /// </summary>
+    /// <param name="paramNames">
+    ///     The names of the parameters to prefetch. Parameters that are not secrets, that do not allow
+    ///     <see cref="ParamSource.Secrets" />, that were already prefetched, or that can be resolved from the cache,
+    ///     command-line arguments, environment variables or configuration are skipped.
+    /// </param>
+    /// <param name="cancellationToken">A token passed to each <see cref="ISecretsProvider.GetSecretAsync" /> call.</param>
+    /// <returns>A task that completes when all requested secrets have been queried.</returns>
+    /// <remarks>
+    ///     The build executor calls this for the secret parameters of every target that will run, using the build's
+    ///     cancellation token. A secret that is not prefetched is still resolved on demand by blocking on the providers.
+    ///     The default implementation does nothing.
+    /// </remarks>
+    Task PrefetchSecretsAsync(IEnumerable<string> paramNames, CancellationToken cancellationToken) =>
+        Task.CompletedTask;
+
+    /// <summary>
     ///     Replaces known secret values in the provided text with a mask (e.g. "*****").
     /// </summary>
     /// <param name="text">The text to scan and mask.</param>
@@ -132,6 +152,12 @@ internal sealed class ParamService(
     private readonly ConcurrentBag<string> _knownSecrets = [];
 
     /// <summary>
+    ///     Secret values (or <c>null</c> when no provider has the secret) prefetched by
+    ///     <see cref="PrefetchSecretsAsync" />, keyed by parameter argument name.
+    /// </summary>
+    private readonly ConcurrentDictionary<string, string?> _prefetchedSecrets = new();
+
+    /// <summary>
     ///     Gets or sets a value indicating whether parameter caching is disabled.
     /// </summary>
     private readonly AsyncLocal<bool> _noCache = new();
@@ -156,6 +182,29 @@ internal sealed class ParamService(
     /// <inheritdoc />
     public IDisposable CreateOverrideSourcesScope(ParamSource sources) =>
         new OverrideSourcesScope(this, sources);
+
+    /// <inheritdoc />
+    public async Task PrefetchSecretsAsync(IEnumerable<string> paramNames, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(paramNames);
+
+        if (_secretsProviders.Length == 0)
+            return;
+
+        foreach (var paramName in paramNames.Distinct())
+        {
+            if (buildDefinition.ParamDefinitions.GetValueOrDefault(paramName) is not { IsSecret: true } paramDefinition ||
+                !paramDefinition.Sources.HasFlag(ParamSource.Secrets) ||
+                _prefetchedSecrets.ContainsKey(paramDefinition.ArgName) ||
+                IsResolvableWithoutSecrets(paramDefinition))
+                continue;
+
+            logger.LogDebug("Prefetching secret param {ParamName}", paramDefinition.Name);
+
+            _prefetchedSecrets[paramDefinition.ArgName] =
+                await GetSecretFromProvidersAsync(paramDefinition.ArgName, cancellationToken);
+        }
+    }
 
     /// <inheritdoc />
     public string MaskMatchingSecrets(string text) =>
@@ -234,7 +283,7 @@ internal sealed class ParamService(
         }
         else if (source.HasFlag(ParamSource.Secrets) &&
                  paramDefinition.IsSecret &&
-                 TryGetParamFromSecrets(paramDefinition, _secretsProviders, converter) is (true, { } secretValue))
+                 TryGetParamFromSecrets(paramDefinition, converter) is (true, { } secretValue))
         {
             result = secretValue;
             logger.LogDebug("Resolved param {ParamName} from secrets", paramDefinition.Name);
@@ -366,27 +415,58 @@ internal sealed class ParamService(
     }
 
     /// <summary>
-    ///     Attempts to resolve a parameter from registered secret providers.
+    ///     Determines whether a parameter can be resolved from a source that takes precedence over secret providers.
     /// </summary>
-    private static (bool HasValue, T? Value)
-        TryGetParamFromSecrets<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
-            ParamDefinition paramDefinition,
-            ISecretsProvider[] vaultProviders,
-            Func<string?, T?>? converter)
+    private bool IsResolvableWithoutSecrets(ParamDefinition paramDefinition)
     {
-        foreach (var vaultProvider in vaultProviders)
+        var sources = paramDefinition.Sources;
+
+        return (sources.HasFlag(ParamSource.Cache) && _cache.TryGetValue(paramDefinition.Name, out var cached) &&
+                cached is not null) ||
+               (sources.HasFlag(ParamSource.CommandLineArgs) &&
+                TryGetParamFromArgs<string>(paramDefinition, args, null).HasValue) ||
+               (sources.HasFlag(ParamSource.EnvironmentVariables) &&
+                TryGetParamFromEnvironmentVariables<string>(paramDefinition, null).HasValue) ||
+               (sources.HasFlag(ParamSource.Configuration) &&
+                TryGetParamFromConfig<string>(paramDefinition, config, null).HasValue);
+    }
+
+    /// <summary>
+    ///     Queries the registered secret providers in priority order and returns the first non-null value.
+    /// </summary>
+    private async Task<string?> GetSecretFromProvidersAsync(string key, CancellationToken cancellationToken)
+    {
+        foreach (var secretsProvider in _secretsProviders)
         {
-            var vaultValue = vaultProvider.GetSecret(paramDefinition.ArgName);
+            var value = await secretsProvider.GetSecretAsync(key, cancellationToken);
 
-            if (vaultValue is null)
-                continue;
-
-            var convertedVaultValue = TypeUtil.Convert(vaultValue, converter);
-
-            return (true, convertedVaultValue);
+            if (value is not null)
+                return value;
         }
 
-        return (false, default);
+        return null;
+    }
+
+    /// <summary>
+    ///     Attempts to resolve a parameter from prefetched secrets or, failing that, the registered secret providers.
+    /// </summary>
+    /// <remarks>
+    ///     Secrets that were not prefetched are resolved by blocking on the asynchronous providers. Atom runs as a
+    ///     console application without a synchronization context, so blocking cannot deadlock.
+    /// </remarks>
+    private (bool HasValue, T? Value)
+        TryGetParamFromSecrets<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            ParamDefinition paramDefinition,
+            Func<string?, T?>? converter)
+    {
+        if (!_prefetchedSecrets.TryGetValue(paramDefinition.ArgName, out var secretValue))
+            secretValue = GetSecretFromProvidersAsync(paramDefinition.ArgName, CancellationToken.None)
+                .GetAwaiter()
+                .GetResult();
+
+        return secretValue is null
+            ? (false, default)
+            : (true, TypeUtil.Convert(secretValue, converter));
     }
 
     /// <summary>

@@ -48,8 +48,12 @@ public static class VerbosityOptionsExtensions
         /// </summary>
         /// <returns>The string representation of the verbosity option (e.g., "quiet", "minimal").</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the verbosity option is not a valid value.</exception>
+        /// <remarks>
+        ///     Use this instead of <see cref="Enum.ToString()" />, which returns the PascalCase member name (e.g.
+        ///     <c>Quiet</c>) rather than the lowercase value the CLI expects.
+        /// </remarks>
         [PublicAPI]
-        public string ToString() =>
+        public string ToCliArg() =>
             verbosityOptions switch
             {
                 VerbosityOptions.Quiet => "quiet",

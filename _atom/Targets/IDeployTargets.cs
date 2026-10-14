@@ -1,6 +1,6 @@
 ﻿namespace Atom.Targets;
 
-internal interface IDeployTargets : INugetHelper, IGithubReleaseHelper, ISetupBuildInfo
+internal interface IDeployTargets : INugetHelper, IGitHubReleaseHelper, ISetupBuildInfo
 {
     [ParamDefinition("nuget-push-feed", "The Nuget feed to push to.")]
     string NugetFeed => GetParam(() => NugetFeed, "https://api.nuget.org/v3/index.json");
@@ -42,14 +42,14 @@ internal interface IDeployTargets : INugetHelper, IGithubReleaseHelper, ISetupBu
             .RequiresParam(nameof(NugetApiKey))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildId))
             .ConsumesArtifacts(nameof(IBuildTargets.PackProjects), IBuildTargets.ProjectsToPack)
-            .ConsumesArtifact(nameof(IBuildTargets.PackTool), Projects.Invex_Atom_Tool.Name, DevopsPlatformNames)
+            .ConsumesArtifact(nameof(IBuildTargets.PackTool), Projects.Invex_Atom_Tool.Name, DevOpsPlatformNames)
             .DependsOn(nameof(ITestTargets.TestProjects))
             .Executes(() => Logger.LogInformation("Simulating push to Nuget feed"));
 
     Target PushToRelease =>
         d => d
             .DescribedAs("Pushes the packages to the release feed.")
-            .RequiresParam(nameof(GithubToken))
+            .RequiresParam(nameof(GitHubToken))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildVersion))
             .ConsumesArtifacts(nameof(IBuildTargets.PackProjects), IBuildTargets.ProjectsToPack)
             .ConsumesArtifact(nameof(IBuildTargets.PackTool), Projects.Invex_Atom_Tool.Name, PlatformNames)

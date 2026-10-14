@@ -4,9 +4,9 @@ Atom includes a `DebugWorkflowType` that lets you simulate workflow generation l
 
 ## `DebugWorkflowType`
 
-`DebugWorkflowType` is an `IWorkflowType` where `IsRunning` is always `true`. When added to your workflow's `Types`, it
-triggers the `DebugWorkflowWriter` which writes the resolved workflow model as JSON to a `.debug-workflows` directory —
-useful for inspecting exactly what Atom generates.
+When `DebugWorkflowType` is added to your workflow's `Types`, Atom writes the resolved workflow model as JSON to
+`.debug-workflows/<workflow>.json`, which is useful for inspecting exactly what Atom generates. Debug output is never
+reported as outdated, so leaving it in place does not fail headless builds.
 
 ## Running Locally
 
@@ -35,5 +35,4 @@ changed targets or workflows but forgotten to regenerate.
 - [Modules Overview](../modules/overview.md): add platform and tool integrations.
 - [Gen](../built-in-targets/generate-workflow-files.md): automatic generation and outdated-file detection.
 - <xref:Invex.Atom.Workflows.DebugWorkflowType>
-- <xref:Invex.Atom.Workflows.DebugWorkflowWriter>
 - <xref:Invex.Atom.Workflows.WorkflowOutdatedException>

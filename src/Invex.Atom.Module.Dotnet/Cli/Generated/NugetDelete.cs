@@ -8,49 +8,46 @@ public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> NugetDelete(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetDeleteOptions? options = null,
+        DotnetNugetDeleteOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NugetDelete(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetDeleteOptions? options = null,
+        DotnetNugetDeleteOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "nuget delete",
-            $"{string.Join(" ", packagePaths)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "nuget", "delete" };
+        DotnetCliArgs.AddPositional(args, packagePaths);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record NugetDeleteOptions
+public sealed record DotnetNugetDeleteOptions
 {
     public System.String? ApiKey
     {
         get;
         init;
     }
-    
+
     public System.Boolean? ForceEnglishOutput
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -59,50 +56,43 @@ public sealed record NugetDeleteOptions
         get;
         init;
     }
-    
+
     public System.Boolean? NoServiceEndpoint
     {
         get;
         init;
     }
-    
+
     public System.Boolean? NonInteractive
     {
         get;
         init;
     }
-    
+
     public System.String? Source
     {
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            ApiKey is not null
-                ? $"--api-key {ApiKey}"
-                : null,
-            ForceEnglishOutput is true
-                ? "--force-english-output"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            NoServiceEndpoint is true
-                ? "--no-service-endpoint"
-                : null,
-            NonInteractive is true
-                ? "--non-interactive"
-                : null,
-            Source is not null
-                ? $"--source {Source}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--api-key", ApiKey);
+        DotnetCliArgs.AddFlag(args, "--force-english-output", ForceEnglishOutput);
+        DotnetCliArgs.AddFlag(args, "--interactive", Interactive);
+        DotnetCliArgs.AddFlag(args, "--no-service-endpoint", NoServiceEndpoint);
+        DotnetCliArgs.AddFlag(args, "--non-interactive", NonInteractive);
+        DotnetCliArgs.AddOption(args, "--source", Source);
+
+        return args;
     }
-    
+
 }
 

@@ -9,11 +9,11 @@ public partial interface IDotnetCli
     public Task<ProcessRunResult> NugetTrustRepository(
         System.String name,
         System.String package,
-        NugetTrustRepositoryOptions? options = null,
+        DotnetNugetTrustRepositoryOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -21,45 +21,42 @@ internal partial class DotnetCli
     public Task<ProcessRunResult> NugetTrustRepository(
         System.String name,
         System.String package,
-        NugetTrustRepositoryOptions? options = null,
+        DotnetNugetTrustRepositoryOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "nuget trust repository",
-            name,
-            package,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "nuget", "trust", "repository" };
+        DotnetCliArgs.AddPositional(args, name);
+        DotnetCliArgs.AddPositional(args, package);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record NugetTrustRepositoryOptions
+public sealed record DotnetNugetTrustRepositoryOptions
 {
     public System.Boolean? AllowUntrustedRoot
     {
         get;
         init;
     }
-    
-    public System.String? Configfile
+
+    public System.String? ConfigFile
     {
         get;
         init;
     }
-    
+
     public System.String? Owners
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -68,26 +65,23 @@ public sealed record NugetTrustRepositoryOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            AllowUntrustedRoot is true
-                ? "--allow-untrusted-root"
-                : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
-                : null,
-            Owners is not null
-                ? $"--owners {Owners}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddFlag(args, "--allow-untrusted-root", AllowUntrustedRoot);
+        DotnetCliArgs.AddOption(args, "--configfile", ConfigFile);
+        DotnetCliArgs.AddOption(args, "--owners", Owners);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+
+        return args;
     }
-    
+
 }
 

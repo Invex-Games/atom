@@ -29,6 +29,7 @@ the main entry points per package, and the sidebar lists everything else.
 | [`BuildOptions`](xref:Invex.Atom.Build.BuildOptions.BuildOptions)                    | Class     | Extension anchor for fluent build option factories.                                             |
 | [`AtomHost`](xref:Invex.Atom.Build.Hosting.AtomHost)                                 | Class     | Creates and runs an Atom host application.                                                      |
 | [`ConfigureHostBuilderAttribute`](xref:Invex.Atom.Build.Hosting.ConfigureHostBuilderAttribute) | Attribute | Marks a module interface as a source of host builder configuration.                 |
+| [`IConfigureHost`](xref:Invex.Atom.Build.Hosting.IConfigureHost)                     | Interface | Static host configuration hooks implemented by every generated build definition.                |
 | [`IAtomLifecycleHook`](xref:Invex.Atom.Build.IAtomLifecycleHook)                     | Interface | Runs code before and after target execution.                                                    |
 | [`IReportsHelper`](xref:Invex.Atom.Build.Reports.IReportsHelper)                     | Interface | Adds data to the build report.                                                                  |
 | [`IOutcomeReportWriter`](xref:Invex.Atom.Build.Reports.IOutcomeReportWriter)         | Interface | Writes the build outcome report to a destination.                                               |
@@ -63,34 +64,34 @@ the main entry points per package, and the sidebar lists everything else.
 | [`INugetHelper`](xref:Invex.Atom.Module.Dotnet.Helpers.INugetHelper)                         | Interface | NuGet feed management and push operations.                        |
 | [`TransformProjectVersionScope`](xref:Invex.Atom.Module.Dotnet.Util.TransformProjectVersionScope) | Class | Creates scopes that temporarily set a project file's version.  |
 
-## Invex.Atom.Module.GithubWorkflows
+## Invex.Atom.Module.GitHubWorkflows
 
 | Type                                                                                                   | Kind      | Description                                                   |
 |--------------------------------------------------------------------------------------------------------|-----------|---------------------------------------------------------------|
-| [`IGithubWorkflows`](xref:Invex.Atom.Module.GithubWorkflows.Helpers.IGithubWorkflows)                  | Interface | Integrates GitHub Actions workflows into a build.             |
-| [`IGithubHelper`](xref:Invex.Atom.Module.GithubWorkflows.Helpers.IGithubHelper)                        | Interface | Common GitHub parameters such as the GitHub token.            |
-| [`Github`](xref:Invex.Atom.Module.GithubWorkflows.Github)                                              | Class     | Detects GitHub Actions and exposes its environment variables. |
-| [`GithubTrigger`](xref:Invex.Atom.Module.GithubWorkflows.Options.GithubTrigger)                        | Record    | A GitHub-specific workflow trigger, such as `release`.        |
-| [`GithubTokenPermissionsOption`](xref:Invex.Atom.Module.GithubWorkflows.Options.GithubTokenPermissionsOption) | Record | Sets fine-grained `GITHUB_TOKEN` permissions.          |
-| [`GithubConcurrencyOption`](xref:Invex.Atom.Module.GithubWorkflows.Options.GithubConcurrencyOption)    | Record    | Configures concurrency for a GitHub Actions workflow.         |
+| [`IGitHubWorkflows`](xref:Invex.Atom.Module.GitHubWorkflows.Helpers.IGitHubWorkflows)                  | Interface | Integrates GitHub Actions workflows into a build.             |
+| [`IGitHubHelper`](xref:Invex.Atom.Module.GitHubWorkflows.Helpers.IGitHubHelper)                        | Interface | Common GitHub parameters such as the GitHub token.            |
+| [`GitHub`](xref:Invex.Atom.Module.GitHubWorkflows.GitHub)                                              | Class     | Detects GitHub Actions and exposes its environment variables. |
+| [`GitHubTrigger`](xref:Invex.Atom.Module.GitHubWorkflows.Options.GitHubTrigger)                        | Record    | A GitHub-specific workflow trigger, such as `release`.        |
+| [`GitHubTokenPermissionsOption`](xref:Invex.Atom.Module.GitHubWorkflows.Options.GitHubTokenPermissionsOption) | Record | Sets fine-grained `GITHUB_TOKEN` permissions.          |
+| [`GitHubConcurrencyOption`](xref:Invex.Atom.Module.GitHubWorkflows.Options.GitHubConcurrencyOption)    | Record    | Configures concurrency for a GitHub Actions workflow.         |
 
-## Invex.Atom.Module.DevopsWorkflows
+## Invex.Atom.Module.DevOpsWorkflows
 
 | Type                                                                                                         | Kind      | Description                                                       |
 |--------------------------------------------------------------------------------------------------------------|-----------|-------------------------------------------------------------------|
-| [`IDevopsWorkflows`](xref:Invex.Atom.Module.DevopsWorkflows.IDevopsWorkflows)                                | Interface | Integrates Azure DevOps Pipelines into a build.                   |
-| [`Devops`](xref:Invex.Atom.Module.DevopsWorkflows.Devops)                                                    | Class     | Detects Azure Pipelines and exposes its environment variables.    |
-| [`ProvideDevopsRunIdAsWorkflowId`](xref:Invex.Atom.Module.DevopsWorkflows.ProvideDevopsRunIdAsWorkflowId)    | Record    | Uses the Azure DevOps run ID as the workflow ID.                  |
-| [`DevopsConcurrencyOption`](xref:Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsConcurrencyOption) | Record   | Configures how runs waiting on an exclusive lock are handled.     |
-| [`DevopsPullRequestOption`](xref:Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPullRequestOption) | Record   | Configures pull request auto-cancellation.                        |
+| [`IDevOpsWorkflows`](xref:Invex.Atom.Module.DevOpsWorkflows.IDevOpsWorkflows)                                | Interface | Integrates Azure DevOps Pipelines into a build.                   |
+| [`DevOps`](xref:Invex.Atom.Module.DevOpsWorkflows.DevOps)                                                    | Class     | Detects Azure Pipelines and exposes its environment variables.    |
+| [`ProvideDevOpsRunIdAsWorkflowId`](xref:Invex.Atom.Module.DevOpsWorkflows.ProvideDevOpsRunIdAsWorkflowId)    | Record    | Uses the Azure DevOps run ID as the workflow ID.                  |
+| [`DevOpsConcurrencyOption`](xref:Invex.Atom.Module.DevOpsWorkflows.Options.DevOpsConcurrencyOption) | Record   | Configures how runs waiting on an exclusive lock are handled.     |
+| [`DevOpsPullRequestOption`](xref:Invex.Atom.Module.DevOpsWorkflows.Options.DevOpsPullRequestOption) | Record   | Configures pull request auto-cancellation.                        |
 
 ## Invex.Atom.Module.AzureKeyVault
 
 | Type                                                                                                | Kind      | Description                                                 |
 |-----------------------------------------------------------------------------------------------------|-----------|-------------------------------------------------------------|
 | [`IAzureKeyVault`](xref:Invex.Atom.Module.AzureKeyVault.IAzureKeyVault)                             | Interface | Integrates Azure Key Vault for secrets.                     |
-| [`AzureKeySecretsProvider`](xref:Invex.Atom.Module.AzureKeyVault.AzureKeySecretsProvider)           | Class     | `ISecretsProvider` that reads secrets from Azure Key Vault. |
 | [`AzureKeyVaultValueInjections`](xref:Invex.Atom.Module.AzureKeyVault.AzureKeyVaultValueInjections) | Record    | How each vault parameter is injected into workflows.        |
+| [`AzureKeyVaultValueInjectionType`](xref:Invex.Atom.Module.AzureKeyVault.AzureKeyVaultValueInjectionType) | Enum | Source for an injected vault parameter.               |
 | [`UseAzureKeyVault`](xref:Invex.Atom.Module.AzureKeyVault.Options.UseAzureKeyVault)                 | Record    | Build option that enables Azure Key Vault.                  |
 
 ## Invex.Atom.Module.AzureStorage
@@ -98,7 +99,6 @@ the main entry points per package, and the sidebar lists everything else.
 | Type                                                                                          | Kind      | Description                                                       |
 |-----------------------------------------------------------------------------------------------|-----------|-------------------------------------------------------------------|
 | [`IAzureArtifactStorage`](xref:Invex.Atom.Module.AzureStorage.IAzureArtifactStorage)          | Interface | Configures Azure Blob Storage as the artifact store.              |
-| [`AzureBlobArtifactProvider`](xref:Invex.Atom.Module.AzureStorage.AzureBlobArtifactProvider)  | Class     | `IArtifactProvider` that stores artifacts in Azure Blob Storage.  |
 
 ## Invex.Atom.Module.GitVersion
 
@@ -111,7 +111,7 @@ the main entry points per package, and the sidebar lists everything else.
 ```csharp
 [BuildDefinition]
 [GenerateEntryPoint]
-internal interface IBuild : IWorkflowBuildDefinition, IGithubWorkflows
+internal interface IBuild : IWorkflowBuildDefinition, IGitHubWorkflows
 {
     [ParamDefinition("my-name", "My name")]
     string? MyName => GetParam(() => MyName);
@@ -126,7 +126,7 @@ internal interface IBuild : IWorkflowBuildDefinition, IGithubWorkflows
         {
             Triggers = [WorkflowTriggers.PushToMain],
             Targets = [new(nameof(HelloWorld))],
-            Types = [WorkflowTypes.Github.Action],
+            Types = [WorkflowTypes.GitHub.Action],
         },
     ];
 }

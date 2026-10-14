@@ -13,12 +13,16 @@ public static class AtomHost
     /// <summary>
     ///     Creates and configures a <see cref="HostApplicationBuilder" /> for an Atom application.
     /// </summary>
-    /// <typeparam name="T">The <see cref="BuildDefinition" /> type to configure the host with.</typeparam>
+    /// <typeparam name="T">
+    ///     The <see cref="BuildDefinition" /> type to configure the host with. Its static <see cref="IConfigureHost" />
+    ///     hooks are called without constructing it; classes generated for <see cref="BuildDefinitionAttribute" />
+    ///     implement them.
+    /// </typeparam>
     /// <param name="args">The command-line arguments for the application.</param>
     /// <returns>A configured <see cref="HostApplicationBuilder" /> ready for further customization or building.</returns>
     public static HostApplicationBuilder CreateAtomBuilder<
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T>(string[] args)
-        where T : BuildDefinition
+        where T : BuildDefinition, IConfigureHost
     {
         var builder = Host.CreateEmptyApplicationBuilder(new()
         {
@@ -44,14 +48,17 @@ public static class AtomHost
     /// <summary>
     ///     Builds and runs an Atom application using the specified build definition.
     /// </summary>
-    /// <typeparam name="T">The <see cref="BuildDefinition" /> type to configure and run the application with.</typeparam>
+    /// <typeparam name="T">
+    ///     The <see cref="BuildDefinition" /> type to configure and run the application with, which must implement
+    ///     <see cref="IConfigureHost" />.
+    /// </typeparam>
     /// <param name="args">The command-line arguments for the application.</param>
     /// <remarks>
     ///     This method handles the complete setup, build, and execution lifecycle of the host.
     /// </remarks>
     public static void Run<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T>(
         string[] args)
-        where T : BuildDefinition =>
+        where T : BuildDefinition, IConfigureHost =>
         CreateAtomBuilder<T>(args)
             .Build()
             .UseAtom()

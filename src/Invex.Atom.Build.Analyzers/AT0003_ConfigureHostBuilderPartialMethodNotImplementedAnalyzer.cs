@@ -3,7 +3,7 @@ namespace Invex.Atom.Build.Analyzers;
 // ReSharper disable once InconsistentNaming
 /// <summary>
 ///     Analyzer that reports when an interface decorated with [ConfigureHostBuilder] is missing
-///     the required partial method implementation ConfigureBuilderFrom{InterfaceName}.
+///     the required partial method implementation ConfigureHostBuilderFrom{InterfaceName}.
 /// </summary>
 #pragma warning disable RS1038
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -70,7 +70,7 @@ public class AT0003_ConfigureHostBuilderPartialMethodNotImplementedAnalyzer : Di
         if (!hasAttribute)
             return;
 
-        var expectedMethodName = $"ConfigureBuilderFrom{interfaceSymbol.Name}";
+        var expectedMethodName = $"ConfigureHostBuilderFrom{interfaceSymbol.Name}";
 
         if (AT0002_ConfigureHostPartialMethodNotImplementedAnalyzer.HasMethodWithBody(interfaceSymbol,
                 expectedMethodName,

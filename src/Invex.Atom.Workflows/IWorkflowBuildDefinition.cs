@@ -27,7 +27,7 @@ public partial interface IWorkflowBuildDefinition : IBuildDefinition, IGen
     ///     context, and lifecycle hooks).
     /// </summary>
     /// <param name="builder">The host application builder.</param>
-    protected static partial void ConfigureBuilderFromIWorkflowBuildDefinition(IHostApplicationBuilder builder) =>
+    protected static partial void ConfigureHostBuilderFromIWorkflowBuildDefinition(IHostApplicationBuilder builder) =>
         builder
             .Services
             .AddSingleton<IWorkflowBuildDefinition>(services =>
@@ -35,5 +35,6 @@ public partial interface IWorkflowBuildDefinition : IBuildDefinition, IGen
             .AddSingleton<IWorkflowContext, WorkflowContext.WorkflowContext>()
             .AddSingleton<WorkflowGenerator>()
             .AddSingleton<WorkflowResolver>()
-            .AddSingleton<IAtomLifecycleHook, WorkflowLifecycleHook>();
+            .AddSingleton<IAtomLifecycleHook, WorkflowLifecycleHook>()
+            .AddSingleton<IWorkflowWriter, DebugWorkflowWriter>();
 }

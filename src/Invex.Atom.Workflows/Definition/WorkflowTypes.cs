@@ -5,7 +5,7 @@ namespace Invex.Atom.Workflows.Definition;
 /// </summary>
 /// <remarks>
 ///     Modules attach extension members to this class to expose their <see cref="IWorkflowType" />
-///     instances under a single discoverable entry point, such as <c>WorkflowTypes.Github.Action</c>.
+///     instances under a single discoverable entry point, such as <c>WorkflowTypes.GitHub.Action</c>.
 /// </remarks>
 [PublicAPI]
 public static class WorkflowTypes;

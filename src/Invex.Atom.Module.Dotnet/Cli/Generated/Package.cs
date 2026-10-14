@@ -10,16 +10,18 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Package(
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    ) =>
-        processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", string.Empty)
-            : processRunOptions with { Name = "dotnet" }), cancellationToken);
-    
+    )
+    {
+        var args = new List<string> { "package" };
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
+    }
+
 }

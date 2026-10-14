@@ -11,9 +11,9 @@ internal interface IDocTargets : IDocFxHelper
                     Projects.Invex_Atom_Workflows.Path(RootedFileSystem),
                     Projects.Invex_Atom_Module_AzureKeyVault.Path(RootedFileSystem),
                     Projects.Invex_Atom_Module_AzureStorage.Path(RootedFileSystem),
-                    Projects.Invex_Atom_Module_DevopsWorkflows.Path(RootedFileSystem),
+                    Projects.Invex_Atom_Module_DevOpsWorkflows.Path(RootedFileSystem),
                     Projects.Invex_Atom_Module_Dotnet.Path(RootedFileSystem),
-                    Projects.Invex_Atom_Module_GithubWorkflows.Path(RootedFileSystem),
+                    Projects.Invex_Atom_Module_GitHubWorkflows.Path(RootedFileSystem),
                     Projects.Invex_Atom_Module_GitVersion.Path(RootedFileSystem),
                 ],
                 cancellationToken));
@@ -26,10 +26,10 @@ internal interface IDocTargets : IDocFxHelper
 
     Target PublishDocs =>
         t => t
-            .DescribedAs("Publishes the DocFX documentation to Github Pages.")
-            .RequiresParam(nameof(GithubToken))
+            .DescribedAs("Publishes the DocFX documentation to GitHub Pages.")
+            .RequiresParam(nameof(GitHubToken))
             .ConsumesArtifact(nameof(BuildDocs), GeneratedDocsArtifactName)
             .DependsOn(nameof(SetupBuildInfo))
             .Executes(cancellationToken =>
-                PublishDocFxDocsToGithub(GithubToken, GeneratedDocsArtifactName, cancellationToken));
+                PublishDocFxDocsToGithub(GitHubToken, GeneratedDocsArtifactName, cancellationToken));
 }

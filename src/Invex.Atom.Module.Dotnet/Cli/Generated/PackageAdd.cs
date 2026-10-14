@@ -16,43 +16,40 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> PackageAdd(
         System.String packageId,
-        PackageAddOptions? options = null,
+        DotnetPackageAddOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> PackageAdd(
         System.String packageId,
-        PackageAddOptions? options = null,
+        DotnetPackageAddOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "package add",
-            packageId,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "package", "add" };
+        DotnetCliArgs.AddPositional(args, packageId);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record PackageAddOptions
+public sealed record DotnetPackageAddOptions
 {
     /// <summary>
     ///     The file-based app to operate on.
@@ -62,7 +59,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Add the reference only when targeting a specific framework.
     /// </summary>
@@ -71,7 +68,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -80,7 +77,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Add the reference without performing restore preview and compatibility check.
     /// </summary>
@@ -89,7 +86,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The directory to restore packages to.
     /// </summary>
@@ -98,7 +95,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows prerelease packages to be installed.
     /// </summary>
@@ -107,7 +104,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The project file to operate on. If a file is not specified, the command will search the current directory for one.
     /// </summary>
@@ -116,7 +113,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The NuGet package source to use during the restore.
     /// </summary>
@@ -125,7 +122,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The version of the package to add.
     /// </summary>
@@ -134,41 +131,28 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            File is not null
-                ? $"--file {File}"
-                : null,
-            Framework is not null
-                ? $"--framework {Framework}"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            NoRestore is true
-                ? "--no-restore"
-                : null,
-            PackageDirectory is not null
-                ? $"--package-directory {PackageDirectory}"
-                : null,
-            Prerelease is true
-                ? "--prerelease"
-                : null,
-            Project is not null
-                ? $"--project {Project}"
-                : null,
-            Source is not null
-                ? $"--source {Source}"
-                : null,
-            Version is not null
-                ? $"--version {Version}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--file", File);
+        DotnetCliArgs.AddOption(args, "--framework", Framework);
+        DotnetCliArgs.AddFlag(args, "--interactive", Interactive);
+        DotnetCliArgs.AddFlag(args, "--no-restore", NoRestore);
+        DotnetCliArgs.AddOption(args, "--package-directory", PackageDirectory);
+        DotnetCliArgs.AddFlag(args, "--prerelease", Prerelease);
+        DotnetCliArgs.AddOption(args, "--project", Project);
+        DotnetCliArgs.AddOption(args, "--source", Source);
+        DotnetCliArgs.AddOption(args, "--version", Version);
+
+        return args;
     }
-    
+
 }
 

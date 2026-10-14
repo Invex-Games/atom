@@ -16,14 +16,14 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> Publish(
         System.String[] projectOrSolutionOrFile,
-        PublishOptions? options = null,
+        DotnetPublishOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -38,14 +38,14 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> Publish(
         System.String projectOrSolutionOrFile,
-        PublishOptions? options = null,
+        DotnetPublishOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -60,14 +60,14 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> Publish(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        PublishOptions? options = null,
+        DotnetPublishOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -78,59 +78,50 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Publish(
         System.String[] projectOrSolutionOrFile,
-        PublishOptions? options = null,
+        DotnetPublishOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "publish",
-            $"{string.Join(" ", projectOrSolutionOrFile)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+    )
+    {
+        var args = new List<string> { "publish" };
+        DotnetCliArgs.AddPositional(args, projectOrSolutionOrFile);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
     public Task<ProcessRunResult> Publish(
         System.String projectOrSolutionOrFile,
-        PublishOptions? options = null,
+        DotnetPublishOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "publish",
-            projectOrSolutionOrFile,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+    )
+    {
+        var args = new List<string> { "publish" };
+        DotnetCliArgs.AddPositional(args, projectOrSolutionOrFile);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
     public Task<ProcessRunResult> Publish(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        PublishOptions? options = null,
+        DotnetPublishOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "publish",
-            projectOrSolutionOrFile,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+    )
+    {
+        var args = new List<string> { "publish" };
+        DotnetCliArgs.AddPositional(args, projectOrSolutionOrFile);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }
 
 [PublicAPI]
-public sealed record PublishOptions
+public sealed record DotnetPublishOptions
 {
     /// <summary>
     ///     The target architecture.
@@ -153,7 +144,7 @@ public sealed record PublishOptions
     /// <summary>
     ///
     /// </summary>
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -266,15 +257,6 @@ public sealed record PublishOptions
     }
 
     /// <summary>
-    ///
-    /// </summary>
-    public System.Boolean? NoCache
-    {
-        get;
-        init;
-    }
-
-    /// <summary>
     ///     Do not restore project-to-project references and only restore the specified project.
     /// </summary>
     public System.Boolean? NoDependencies
@@ -313,7 +295,7 @@ public sealed record PublishOptions
     /// <summary>
     ///     Do not display the startup banner or the copyright message.
     /// </summary>
-    public System.Boolean? Nologo
+    public System.Boolean? NoLogo
     {
         get;
         init;
@@ -423,114 +405,50 @@ public sealed record PublishOptions
         init;
     }
 
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            Arch is not null
-                ? $"--arch {Arch}"
-                : null,
-            ArtifactsPath is not null
-                ? $"--artifacts-path {ArtifactsPath}"
-                : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
-                : null,
-            Configuration is not null
-                ? $"--configuration {Configuration}"
-                : null,
-            DisableBuildServers is true
-                ? "--disable-build-servers"
-                : null,
-            DisableParallel is true
-                ? "--disable-parallel"
-                : null,
-            Force is true
-                ? "--force"
-                : null,
-            Framework is not null
-                ? $"--framework {Framework}"
-                : null,
-            GetItem is not null
-                ? $"--getItem {string.Join(" --getItem ", GetItem)}"
-                : null,
-            GetProperty is not null
-                ? $"--getProperty {string.Join(" --getProperty ", GetProperty)}"
-                : null,
-            GetResultOutputFile is not null
-                ? $"--getResultOutputFile {string.Join(" --getResultOutputFile ", GetResultOutputFile)}"
-                : null,
-            GetTargetResult is not null
-                ? $"--getTargetResult {string.Join(" --getTargetResult ", GetTargetResult)}"
-                : null,
-            IgnoreFailedSources is true
-                ? "--ignore-failed-sources"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            Manifest is not null
-                ? $"--manifest {string.Join(" --manifest ", Manifest)}"
-                : null,
-            NoBuild is true
-                ? "--no-build"
-                : null,
-            NoCache is true
-                ? "--no-cache"
-                : null,
-            NoDependencies is true
-                ? "--no-dependencies"
-                : null,
-            NoHttpCache is true
-                ? "--no-http-cache"
-                : null,
-            NoRestore is true
-                ? "--no-restore"
-                : null,
-            NoSelfContained is true
-                ? "--no-self-contained"
-                : null,
-            Nologo is true
-                ? "--nologo"
-                : null,
-            Os is not null
-                ? $"--os {Os}"
-                : null,
-            Output is not null
-                ? $"--output {Output}"
-                : null,
-            Packages is not null
-                ? $"--packages {Packages}"
-                : null,
-            Property is not null
-                ? $"--property {string.Join(" --property ", Property.Select(kv => $"{kv.Key}=\"{kv.Value}\""))}"
-                : null,
-            RestoreProperty is not null
-                ? $"--restoreProperty {string.Join(" --restoreProperty ", RestoreProperty.Select(kv => $"{kv.Key}=\"{kv.Value}\""))}"
-                : null,
-            Runtime is not null
-                ? $"--runtime {Runtime}"
-                : null,
-            SelfContained is true
-                ? "--self-contained"
-                : null,
-            Source is not null
-                ? $"--source {string.Join(" --source ", Source)}"
-                : null,
-            Target is not null
-                ? $"--target {string.Join(" --target ", Target)}"
-                : null,
-            UseCurrentRuntime is true
-                ? "--use-current-runtime"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-            VersionSuffix is not null
-                ? $"--version-suffix {VersionSuffix}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--arch", Arch);
+        DotnetCliArgs.AddOption(args, "--artifacts-path", ArtifactsPath);
+        DotnetCliArgs.AddOption(args, "--configfile", ConfigFile);
+        DotnetCliArgs.AddOption(args, "--configuration", Configuration);
+        DotnetCliArgs.AddFlag(args, "--disable-build-servers", DisableBuildServers);
+        DotnetCliArgs.AddFlag(args, "--disable-parallel", DisableParallel);
+        DotnetCliArgs.AddFlag(args, "--force", Force);
+        DotnetCliArgs.AddOption(args, "--framework", Framework);
+        DotnetCliArgs.AddOption(args, "--getItem", GetItem);
+        DotnetCliArgs.AddOption(args, "--getProperty", GetProperty);
+        DotnetCliArgs.AddOption(args, "--getResultOutputFile", GetResultOutputFile);
+        DotnetCliArgs.AddOption(args, "--getTargetResult", GetTargetResult);
+        DotnetCliArgs.AddFlag(args, "--ignore-failed-sources", IgnoreFailedSources);
+        DotnetCliArgs.AddBool(args, "--interactive", Interactive);
+        DotnetCliArgs.AddOption(args, "--manifest", Manifest);
+        DotnetCliArgs.AddFlag(args, "--no-build", NoBuild);
+        DotnetCliArgs.AddFlag(args, "--no-dependencies", NoDependencies);
+        DotnetCliArgs.AddFlag(args, "--no-http-cache", NoHttpCache);
+        DotnetCliArgs.AddFlag(args, "--no-restore", NoRestore);
+        DotnetCliArgs.AddFlag(args, "--no-self-contained", NoSelfContained);
+        DotnetCliArgs.AddFlag(args, "--nologo", NoLogo);
+        DotnetCliArgs.AddOption(args, "--os", Os);
+        DotnetCliArgs.AddOption(args, "--output", Output);
+        DotnetCliArgs.AddOption(args, "--packages", Packages);
+        DotnetCliArgs.AddOption(args, "--property", Property);
+        DotnetCliArgs.AddOption(args, "--restoreProperty", RestoreProperty);
+        DotnetCliArgs.AddOption(args, "--runtime", Runtime);
+        DotnetCliArgs.AddBool(args, "--self-contained", SelfContained);
+        DotnetCliArgs.AddOption(args, "--source", Source);
+        DotnetCliArgs.AddOption(args, "--target", Target);
+        DotnetCliArgs.AddFlag(args, "--use-current-runtime", UseCurrentRuntime);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+        DotnetCliArgs.AddOption(args, "--version-suffix", VersionSuffix);
+
+        return args;
     }
 
 }

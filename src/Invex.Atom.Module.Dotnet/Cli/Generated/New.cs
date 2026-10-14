@@ -19,7 +19,7 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -27,11 +27,11 @@ public partial interface IDotnetCli
     public Task<ProcessRunResult> New(
         System.String templateShortName,
         System.String[] templateArgs,
-        NewOptions? options = null,
+        DotnetNewOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -39,144 +39,24 @@ internal partial class DotnetCli
     public Task<ProcessRunResult> New(
         System.String templateShortName,
         System.String[] templateArgs,
-        NewOptions? options = null,
+        DotnetNewOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "new",
-            templateShortName,
-            $"{string.Join(" ", templateArgs)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "new" };
+        DotnetCliArgs.AddPositional(args, templateShortName);
+        DotnetCliArgs.AddPositional(args, templateArgs);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record NewOptions
+public sealed record DotnetNewOptions
 {
-    /// <summary>
-    ///     Specifies a NuGet source to use.
-    /// </summary>
-    public System.String[]? AddSource
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Filters the templates based on the template author.
-    /// </summary>
-    public System.String? Author
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Filters the templates based on baseline defined in the template.
-    /// </summary>
-    public System.String? Baseline
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Specifies the columns to display in the output. 
-    /// </summary>
-    public System.String[]? Columns
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Displays all columns in the output.
-    /// </summary>
-    public System.Boolean? ColumnsAll
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Allows to pause execution in order to attach to the process for debug purposes.
-    /// </summary>
-    public System.Boolean? DebugAttach
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Sets custom settings location.
-    /// </summary>
-    public System.String? DebugCustomHive
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Disables evaluating project context using MSBuild.
-    /// </summary>
-    public System.Boolean? DebugDisableProjectContext
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     If present, prevents templates bundled in the SDK from being presented.
-    /// </summary>
-    public System.Boolean? DebugDisableSdkTemplates
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     If specified, the settings will be not preserved on file system.
-    /// </summary>
-    public System.Boolean? DebugEphemeralHive
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     If specified, removes the template cache prior to command execution.
-    /// </summary>
-    public System.Boolean? DebugRebuildCache
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     If specified, resets the settings prior to command execution.
-    /// </summary>
-    public System.Boolean? DebugReinit
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     If specified, shows the template engine config prior to command execution.
-    /// </summary>
-    public System.Boolean? DebugShowConfig
-    {
-        get;
-        init;
-    }
-    
     /// <summary>
     ///     Enables diagnostic output.
     /// </summary>
@@ -185,7 +65,7 @@ public sealed record NewOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Displays a summary of what would happen if the given command line were run if it would result in a template creation.
     /// </summary>
@@ -194,7 +74,7 @@ public sealed record NewOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Forces content to be generated even if it would change existing files.
     /// </summary>
@@ -203,25 +83,7 @@ public sealed record NewOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
-    /// </summary>
-    public System.Boolean? Interactive
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Filters templates based on language.
-    /// </summary>
-    public System.String? Language
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     The name for the output being created. If no name is specified, the name of the output directory is used.
     /// </summary>
@@ -230,7 +92,7 @@ public sealed record NewOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Disables checking for the template package updates when instantiating a template.
     /// </summary>
@@ -239,7 +101,7 @@ public sealed record NewOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Location to place the generated output.
     /// </summary>
@@ -248,16 +110,7 @@ public sealed record NewOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Filters the templates based on NuGet package ID.
-    /// </summary>
-    public System.String? Package
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     The project that should be used for context evaluation.
     /// </summary>
@@ -266,25 +119,7 @@ public sealed record NewOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Filters the templates based on the tag.
-    /// </summary>
-    public System.String? Tag
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Filters templates based on available types. Predefined values are "project" and "item".
-    /// </summary>
-    public System.String? Type
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     Sets the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], and diag[nostic].
     /// </summary>
@@ -293,92 +128,27 @@ public sealed record NewOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            AddSource is not null
-                ? $"--add-source {string.Join(" --add-source ", AddSource)}"
-                : null,
-            Author is not null
-                ? $"--author {Author}"
-                : null,
-            Baseline is not null
-                ? $"--baseline {Baseline}"
-                : null,
-            Columns is not null
-                ? $"--columns {string.Join(" --columns ", Columns)}"
-                : null,
-            ColumnsAll is true
-                ? "--columns-all"
-                : null,
-            DebugAttach is true
-                ? "--debug:attach"
-                : null,
-            DebugCustomHive is not null
-                ? $"--debug:custom-hive {DebugCustomHive}"
-                : null,
-            DebugDisableProjectContext is true
-                ? "--debug:disable-project-context"
-                : null,
-            DebugDisableSdkTemplates is true
-                ? "--debug:disable-sdk-templates"
-                : null,
-            DebugEphemeralHive is true
-                ? "--debug:ephemeral-hive"
-                : null,
-            DebugRebuildCache is true
-                ? "--debug:rebuild-cache"
-                : null,
-            DebugReinit is true
-                ? "--debug:reinit"
-                : null,
-            DebugShowConfig is true
-                ? "--debug:show-config"
-                : null,
-            Diagnostics is true
-                ? "--diagnostics"
-                : null,
-            DryRun is true
-                ? "--dry-run"
-                : null,
-            Force is true
-                ? "--force"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            Language is not null
-                ? $"--language {Language}"
-                : null,
-            Name is not null
-                ? $"--name {Name}"
-                : null,
-            NoUpdateCheck is true
-                ? "--no-update-check"
-                : null,
-            Output is not null
-                ? $"--output {Output}"
-                : null,
-            Package is not null
-                ? $"--package {Package}"
-                : null,
-            Project is not null
-                ? $"--project {Project}"
-                : null,
-            Tag is not null
-                ? $"--tag {Tag}"
-                : null,
-            Type is not null
-                ? $"--type {Type}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddFlag(args, "--diagnostics", Diagnostics);
+        DotnetCliArgs.AddBool(args, "--dry-run", DryRun);
+        DotnetCliArgs.AddBool(args, "--force", Force);
+        DotnetCliArgs.AddOption(args, "--name", Name);
+        DotnetCliArgs.AddBool(args, "--no-update-check", NoUpdateCheck);
+        DotnetCliArgs.AddOption(args, "--output", Output);
+        DotnetCliArgs.AddOption(args, "--project", Project);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+
+        return args;
     }
-    
+
 }
 

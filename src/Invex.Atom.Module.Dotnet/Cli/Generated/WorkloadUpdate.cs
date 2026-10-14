@@ -13,32 +13,35 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> WorkloadUpdate(
-        WorkloadUpdateOptions? options = null,
+        DotnetWorkloadUpdateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> WorkloadUpdate(
-        WorkloadUpdateOptions? options = null,
+        DotnetWorkloadUpdateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    ) =>
-        processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", (options ?? new()).ToString())
-            : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
-    
+    )
+    {
+        var args = new List<string> { "workload", "update" };
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
+    }
+
 }
 [PublicAPI]
-public sealed record WorkloadUpdateOptions
+public sealed record DotnetWorkloadUpdateOptions
 {
     /// <summary>
     ///     Only update advertising manifests.
@@ -48,16 +51,16 @@ public sealed record WorkloadUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The NuGet configuration file to use.
     /// </summary>
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Prevent restoring multiple projects in parallel.
     /// </summary>
@@ -66,25 +69,7 @@ public sealed record WorkloadUpdateOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Download packages needed to install a workload to a folder that can be used for offline installation.
-    /// </summary>
-    public System.String? DownloadToCache
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Complete the operation from cache (offline).
-    /// </summary>
-    public System.String? FromCache
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     Update workloads to a previous version specified by the argument. Use the 'dotnet workload history' to see available workload history records.
     /// </summary>
@@ -93,7 +78,7 @@ public sealed record WorkloadUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Include workloads installed with earlier SDK versions in update.
     /// </summary>
@@ -102,16 +87,7 @@ public sealed record WorkloadUpdateOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Update workloads based on specified rollback definition file.
-    /// </summary>
-    public System.String? FromRollbackFile
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     Treat package source failures as warnings.
     /// </summary>
@@ -120,7 +96,7 @@ public sealed record WorkloadUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allow prerelease workload manifests.
     /// </summary>
@@ -129,7 +105,7 @@ public sealed record WorkloadUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -138,7 +114,7 @@ public sealed record WorkloadUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Update to the workload versions specified in the history without changing which workloads are installed. Currently installed workloads will be updated to match the specified history version.
     /// </summary>
@@ -147,16 +123,7 @@ public sealed record WorkloadUpdateOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Do not cache packages and http requests.
-    /// </summary>
-    public System.Boolean? NoCache
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     Do not cache packages and http requests.
     /// </summary>
@@ -165,40 +132,7 @@ public sealed record WorkloadUpdateOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Only print the list of links to download without downloading.
-    /// </summary>
-    public System.Boolean? PrintDownloadLinkOnly
-    {
-        get;
-        init;
-    }
-    
-    public System.Boolean? PrintRollback
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     The version of the SDK.
-    /// </summary>
-    public System.String? SdkVersion
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Skip signature verification of workload packages and installers.
-    /// </summary>
-    public System.Boolean? SkipSignCheck
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     The NuGet package source to use during the restore. To specify multiple sources, repeat the option.
     /// </summary>
@@ -207,7 +141,7 @@ public sealed record WorkloadUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Specify a temporary directory for this command to download and extract NuGet packages (must be secure).
     /// </summary>
@@ -216,7 +150,7 @@ public sealed record WorkloadUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -225,7 +159,7 @@ public sealed record WorkloadUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     A workload version to display or one or more workloads and their versions joined by the '@' character.
     /// </summary>
@@ -234,80 +168,33 @@ public sealed record WorkloadUpdateOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            AdvertisingManifestsOnly is true
-                ? "--advertising-manifests-only"
-                : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
-                : null,
-            DisableParallel is true
-                ? "--disable-parallel"
-                : null,
-            DownloadToCache is not null
-                ? $"--download-to-cache {DownloadToCache}"
-                : null,
-            FromCache is not null
-                ? $"--from-cache {FromCache}"
-                : null,
-            FromHistory is not null
-                ? $"--from-history {FromHistory}"
-                : null,
-            FromPreviousSdk is true
-                ? "--from-previous-sdk"
-                : null,
-            FromRollbackFile is not null
-                ? $"--from-rollback-file {FromRollbackFile}"
-                : null,
-            IgnoreFailedSources is true
-                ? "--ignore-failed-sources"
-                : null,
-            IncludePreviews is true
-                ? "--include-previews"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            ManifestsOnly is not null
-                ? $"--manifests-only {ManifestsOnly}"
-                : null,
-            NoCache is true
-                ? "--no-cache"
-                : null,
-            NoHttpCache is true
-                ? "--no-http-cache"
-                : null,
-            PrintDownloadLinkOnly is true
-                ? "--print-download-link-only"
-                : null,
-            PrintRollback is true
-                ? "--print-rollback"
-                : null,
-            SdkVersion is not null
-                ? $"--sdk-version {SdkVersion}"
-                : null,
-            SkipSignCheck is true
-                ? "--skip-sign-check"
-                : null,
-            Source is not null
-                ? $"--source {string.Join(" --source ", Source)}"
-                : null,
-            TempDir is not null
-                ? $"--temp-dir {TempDir}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-            Version is not null
-                ? $"--version {string.Join(" --version ", Version)}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddFlag(args, "--advertising-manifests-only", AdvertisingManifestsOnly);
+        DotnetCliArgs.AddOption(args, "--configfile", ConfigFile);
+        DotnetCliArgs.AddFlag(args, "--disable-parallel", DisableParallel);
+        DotnetCliArgs.AddOption(args, "--from-history", FromHistory);
+        DotnetCliArgs.AddBool(args, "--from-previous-sdk", FromPreviousSdk);
+        DotnetCliArgs.AddFlag(args, "--ignore-failed-sources", IgnoreFailedSources);
+        DotnetCliArgs.AddBool(args, "--include-previews", IncludePreviews);
+        DotnetCliArgs.AddFlag(args, "--interactive", Interactive);
+        DotnetCliArgs.AddOption(args, "--manifests-only", ManifestsOnly);
+        DotnetCliArgs.AddFlag(args, "--no-http-cache", NoHttpCache);
+        DotnetCliArgs.AddOption(args, "--source", Source);
+        DotnetCliArgs.AddOption(args, "--temp-dir", TempDir);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+        DotnetCliArgs.AddOption(args, "--version", Version);
+
+        return args;
     }
-    
+
 }
 

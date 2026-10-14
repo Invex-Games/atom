@@ -13,32 +13,35 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> NewUpdate(
-        NewUpdateOptions? options = null,
+        DotnetNewUpdateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NewUpdate(
-        NewUpdateOptions? options = null,
+        DotnetNewUpdateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    ) =>
-        processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", (options ?? new()).ToString())
-            : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
-    
+    )
+    {
+        var args = new List<string> { "new", "update" };
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
+    }
+
 }
 [PublicAPI]
-public sealed record NewUpdateOptions
+public sealed record DotnetNewUpdateOptions
 {
     /// <summary>
     ///     Specifies a NuGet source to use.
@@ -48,7 +51,7 @@ public sealed record NewUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Only checks for updates and display the template packages to be updated without applying update.
     /// </summary>
@@ -57,7 +60,7 @@ public sealed record NewUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -66,23 +69,22 @@ public sealed record NewUpdateOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            AddSource is not null
-                ? $"--add-source {string.Join(" --add-source ", AddSource)}"
-                : null,
-            CheckOnly is true
-                ? "--check-only"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--add-source", AddSource);
+        DotnetCliArgs.AddFlag(args, "--check-only", CheckOnly);
+        DotnetCliArgs.AddBool(args, "--interactive", Interactive);
+
+        return args;
     }
-    
+
 }
 

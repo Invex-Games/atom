@@ -15,7 +15,10 @@ public static class HostExtensions
     ///     logging, and default settings.
     /// </summary>
     /// <typeparam name="TBuilder">The type of the host application builder.</typeparam>
-    /// <typeparam name="TBuild">The type of the build definition, which must implement <see cref="BuildDefinition" />.</typeparam>
+    /// <typeparam name="TBuild">
+    ///     The type of the build definition, which must derive from <see cref="BuildDefinition" /> and implement
+    ///     <see cref="IConfigureHost" />. Classes generated for <see cref="BuildDefinitionAttribute" /> do both.
+    /// </typeparam>
     /// <param name="builder">The host application builder instance to configure.</param>
     /// <param name="args">The command-line arguments provided to the application.</param>
     /// <returns>The configured host application builder instance.</returns>
@@ -25,7 +28,7 @@ public static class HostExtensions
     ///         <item>Registers the <see cref="AtomService" /> as a hosted service.</item>
     ///         <item>Registers the build definition (<typeparamref name="TBuild" />) and related interfaces.</item>
     ///         <item>
-    ///             Adds core Atom services like <see cref="IParamService" />, <see cref="ReportService" />, and
+    ///             Adds core Atom services like <see cref="IParamService" />, <see cref="IReportService" />, and
     ///             <see cref="IAnsiConsole" />.
     ///         </item>
     ///         <item>
@@ -37,7 +40,11 @@ public static class HostExtensions
     ///         <item>Sets up logging with Spectre.Console and report providers, filtering out verbose Microsoft host logs.</item>
     ///         <item>Parses command-line arguments and makes them available as <see cref="CommandLineArgs" />.</item>
     ///         <item>Resolves and registers the <see cref="BuildModel" />.</item>
-    ///         <item>Invokes <see cref="IConfigureHost.ConfigureBuildHostBuilder" /> if implemented by the build definition.</item>
+    ///         <item>
+    ///             Invokes the static <see cref="IConfigureHost.ConfigureHostBuilder" /> of
+    ///             <typeparamref name="TBuild" />, without constructing the build definition, and records
+    ///             <see cref="IConfigureHost.ConfigureHost" /> for <see cref="UseAtom" /> to call.
+    ///         </item>
     ///     </list>
     /// </remarks>
     public static TBuilder AddAtom<TBuilder,
@@ -45,7 +52,7 @@ public static class HostExtensions
         this TBuilder builder,
         string[] args)
         where TBuilder : IHostApplicationBuilder
-        where TBuild : BuildDefinition
+        where TBuild : BuildDefinition, IConfigureHost
     {
         builder
             .Services
@@ -60,12 +67,8 @@ public static class HostExtensions
         builder.Services.AddSingleton<BuildDefinition, TBuild>();
         builder.Services.AddSingleton<IBuildDefinition>(x => x.GetRequiredService<BuildDefinition>());
 
-        // ReSharper disable once SuspiciousTypeConversion.Global - Checked before casting
-        if (typeof(TBuild).IsAssignableTo(typeof(IConfigureHost)))
-            builder.Services.AddSingleton<IConfigureHost>(x => (IConfigureHost)x.GetRequiredService<BuildDefinition>());
-
         builder.Services.AddSingleton<IParamService, ParamService>();
-        builder.Services.AddSingleton<ReportService>();
+        builder.Services.AddSingleton<IReportService, ReportService>();
 
         builder.Services.AddSingleton<IAnsiConsole>(services =>
         {
@@ -165,15 +168,10 @@ public static class HostExtensions
             _ => true,
         });
 
-        using var tempBuild = builder.Services.BuildServiceProvider();
+        // Captured statically so UseAtom can run the build's host hooks without resolving the build definition
+        builder.Services.AddSingleton(new AtomHostConfigurator(TBuild.ConfigureHost));
 
-        tempBuild
-            .GetRequiredService<IBuildDefinition>()
-            .ConfigureDefinitionHost(builder);
-
-        tempBuild
-            .GetService<IConfigureHost>()
-            ?.ConfigureBuildHostBuilder(builder);
+        TBuild.ConfigureHostBuilder(builder);
 
         return builder;
     }
@@ -184,15 +182,17 @@ public static class HostExtensions
     /// <param name="host">The <see cref="IHost" /> instance to configure.</param>
     /// <returns>The configured <see cref="IHost" /> instance.</returns>
     /// <remarks>
-    ///     This method invokes <see cref="IConfigureHost.ConfigureBuildHost" /> if implemented by the build definition,
-    ///     allowing for post-build host configuration.
+    ///     This method invokes <see cref="IConfigureHost.ConfigureHost" /> of the build definition type passed to
+    ///     <see cref="AddAtom{TBuilder, TBuild}" />, allowing for post-build host configuration. It does nothing when the
+    ///     host was not configured with <see cref="AddAtom{TBuilder, TBuild}" />. The build definition itself is not
+    ///     resolved.
     /// </remarks>
     public static IHost UseAtom(this IHost host)
     {
         host
             .Services
-            .GetService<IConfigureHost>()
-            ?.ConfigureBuildHost(host);
+            .GetService<AtomHostConfigurator>()
+            ?.ConfigureHost(host);
 
         return host;
     }

@@ -13,32 +13,35 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> WorkloadList(
-        WorkloadListOptions? options = null,
+        DotnetWorkloadListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> WorkloadList(
-        WorkloadListOptions? options = null,
+        DotnetWorkloadListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    ) =>
-        processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", (options ?? new()).ToString())
-            : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
-    
+    )
+    {
+        var args = new List<string> { "workload", "list" };
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
+    }
+
 }
 [PublicAPI]
-public sealed record WorkloadListOptions
+public sealed record DotnetWorkloadListOptions
 {
     /// <summary>
     ///     Prevent restoring multiple projects in parallel.
@@ -48,7 +51,7 @@ public sealed record WorkloadListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Treat package source failures as warnings.
     /// </summary>
@@ -57,40 +60,7 @@ public sealed record WorkloadListOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Allow prerelease workload manifests.
-    /// </summary>
-    public System.Boolean? IncludePreviews
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
-    /// </summary>
-    public System.Boolean? Interactive
-    {
-        get;
-        init;
-    }
-    
-    public System.Boolean? MachineReadable
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Do not cache packages and http requests.
-    /// </summary>
-    public System.Boolean? NoCache
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     Do not cache packages and http requests.
     /// </summary>
@@ -99,71 +69,22 @@ public sealed record WorkloadListOptions
         get;
         init;
     }
-    
+
     /// <summary>
-    ///     The version of the SDK.
+    ///     Converts these options to individual command-line arguments, in schema order.
     /// </summary>
-    public System.String? SdkVersion
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
     {
-        get;
-        init;
+        var args = new List<string>();
+        DotnetCliArgs.AddFlag(args, "--disable-parallel", DisableParallel);
+        DotnetCliArgs.AddFlag(args, "--ignore-failed-sources", IgnoreFailedSources);
+        DotnetCliArgs.AddFlag(args, "--no-http-cache", NoHttpCache);
+
+        return args;
     }
-    
-    /// <summary>
-    ///     Specify a temporary directory for this command to download and extract NuGet packages (must be secure).
-    /// </summary>
-    public System.String? TempDir
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
-    /// </summary>
-    public VerbosityOptions? Verbosity
-    {
-        get;
-        init;
-    }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            DisableParallel is true
-                ? "--disable-parallel"
-                : null,
-            IgnoreFailedSources is true
-                ? "--ignore-failed-sources"
-                : null,
-            IncludePreviews is true
-                ? "--include-previews"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            MachineReadable is true
-                ? "--machine-readable"
-                : null,
-            NoCache is true
-                ? "--no-cache"
-                : null,
-            NoHttpCache is true
-                ? "--no-http-cache"
-                : null,
-            SdkVersion is not null
-                ? $"--sdk-version {SdkVersion}"
-                : null,
-            TempDir is not null
-                ? $"--temp-dir {TempDir}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
-    }
-    
+
 }
 

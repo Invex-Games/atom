@@ -13,32 +13,35 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> Workload(
-        WorkloadOptions? options = null,
+        DotnetWorkloadOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Workload(
-        WorkloadOptions? options = null,
+        DotnetWorkloadOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    ) =>
-        processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", (options ?? new()).ToString())
-            : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
-    
+    )
+    {
+        var args = new List<string> { "workload" };
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
+    }
+
 }
 [PublicAPI]
-public sealed record WorkloadOptions
+public sealed record DotnetWorkloadOptions
 {
     /// <summary>
     ///     Display information about installed workloads.
@@ -48,7 +51,7 @@ public sealed record WorkloadOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Display the currently installed workload version.
     /// </summary>
@@ -57,20 +60,21 @@ public sealed record WorkloadOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            Info is true
-                ? "--info"
-                : null,
-            Version is true
-                ? "--version"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddFlag(args, "--info", Info);
+        DotnetCliArgs.AddFlag(args, "--version", Version);
+
+        return args;
     }
-    
+
 }
 

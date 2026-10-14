@@ -12,7 +12,7 @@ internal partial class ConsoleOutcomeReportWriter(
     CommandLineArgs args,
     IAnsiConsole console,
     BuildModel buildModel,
-    ReportService reportService,
+    IReportService reportService,
     IParamService paramService
 ) : IOutcomeReportWriter
 {

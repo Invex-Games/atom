@@ -50,7 +50,7 @@ public sealed class AT0003_ConfigureHostBuilderPartialMethodNotImplementedCodeFi
                                  [ConfigureHostBuilder]
                                  public partial interface IMyBuilderConfigurator
                                  {
-                                     protected static partial void ConfigureBuilderFromIMyBuilderConfigurator(IHostApplicationBuilder builder)
+                                     protected static partial void ConfigureHostBuilderFromIMyBuilderConfigurator(IHostApplicationBuilder builder)
                                      {
                                      }
                                  }
@@ -59,7 +59,7 @@ public sealed class AT0003_ConfigureHostBuilderPartialMethodNotImplementedCodeFi
         var expected = Verifier
             .Diagnostic()
             .WithSpan(4, 26, 4, 48)
-            .WithArguments("IMyBuilderConfigurator", "ConfigureBuilderFromIMyBuilderConfigurator");
+            .WithArguments("IMyBuilderConfigurator", "ConfigureHostBuilderFromIMyBuilderConfigurator");
 
         await Verifier.VerifyCodeFixAsync(text, expected, fixedText, Configure);
     }
@@ -81,7 +81,7 @@ public sealed class AT0003_ConfigureHostBuilderPartialMethodNotImplementedCodeFi
                                  [ConfigureHostBuilder]
                                  public partial interface IMyBuilderConfigurator
                                  {
-                                     protected static partial void ConfigureBuilderFromIMyBuilderConfigurator(IHostApplicationBuilder builder)
+                                     protected static partial void ConfigureHostBuilderFromIMyBuilderConfigurator(IHostApplicationBuilder builder)
                                      {
                                      }
                                  }
@@ -90,7 +90,7 @@ public sealed class AT0003_ConfigureHostBuilderPartialMethodNotImplementedCodeFi
         var expected = Verifier
             .Diagnostic()
             .WithSpan(4, 26, 4, 48)
-            .WithArguments("IMyBuilderConfigurator", "ConfigureBuilderFromIMyBuilderConfigurator");
+            .WithArguments("IMyBuilderConfigurator", "ConfigureHostBuilderFromIMyBuilderConfigurator");
 
         await Verifier.VerifyCodeFixAsync(text, expected, fixedText, Configure);
     }

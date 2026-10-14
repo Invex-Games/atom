@@ -10,7 +10,7 @@ public partial interface IDotnetCli
     ///     .NET SDK Command
     /// </summary>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -19,16 +19,18 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Sdk(
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    ) =>
-        processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", string.Empty)
-            : processRunOptions with { Name = "dotnet" }), cancellationToken);
-    
+    )
+    {
+        var args = new List<string> { "sdk" };
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
+    }
+
 }

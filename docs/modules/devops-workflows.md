@@ -3,12 +3,12 @@
 Adds Azure DevOps Pipelines support to Atom — pipeline YAML generation, DevOps-specific options, and access to Azure
 DevOps environment variables. Add it when you want Atom to generate Azure Pipelines YAML.
 
-**Package:** `Invex.Atom.Module.DevopsWorkflows`
+**Package:** `Invex.Atom.Module.DevOpsWorkflows`
 
 ## Installation
 
 ```shell
-dotnet add package Invex.Atom.Module.DevopsWorkflows
+dotnet add package Invex.Atom.Module.DevOpsWorkflows
 ```
 
 ## Usage
@@ -16,7 +16,7 @@ dotnet add package Invex.Atom.Module.DevopsWorkflows
 ```csharp
 [BuildDefinition]
 [GenerateEntryPoint]
-internal partial class Build : WorkflowBuildDefinition, IDevopsWorkflows
+internal partial class Build : WorkflowBuildDefinition, IDevOpsWorkflows
 {
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [
@@ -24,7 +24,7 @@ internal partial class Build : WorkflowBuildDefinition, IDevopsWorkflows
         {
             Triggers = [WorkflowTriggers.PushToMain],
             Targets = [new(nameof(Compile))],
-            Types = [WorkflowTypes.Devops.Pipeline],
+            Types = [WorkflowTypes.DevOps.Pipeline],
         },
     ];
 }
@@ -36,50 +36,50 @@ internal partial class Build : WorkflowBuildDefinition, IDevopsWorkflows
 
 Generates Azure DevOps Pipeline YAML files.
 
-### `Devops` Static Class
+### `DevOps` Static Class
 
 Access Azure DevOps environment variables:
 
 ```csharp
-if (Devops.IsDevopsPipelines)
+if (DevOps.IsDevOpsPipelines)
 {
-    var buildId = Devops.Variables.BuildBuildId;
-    var branch = Devops.Variables.BuildSourceBranch;
+    var buildId = DevOps.Variables.BuildBuildId;
+    var branch = DevOps.Variables.BuildSourceBranch;
 }
 ```
 
 ### Variable Provider
 
-`DevopsVariableProvider` maps Atom variables to Azure DevOps pipeline variables.
+`DevOpsVariableProvider` maps Atom variables to Azure DevOps pipeline variables.
 
 ### Report Writer
 
-`DevopsSummaryOutcomeReportWriter` writes build report data to the Azure DevOps build summary.
+`DevOpsSummaryOutcomeReportWriter` writes build report data to the Azure DevOps build summary.
 
 ### Pool Labels
 
 ```csharp
-WorkflowLabels.Devops.Pool.Ubuntu_Latest
-WorkflowLabels.Devops.Pool.Windows_Latest
-WorkflowLabels.Devops.Pool.MacOs_Latest
+WorkflowLabels.DevOps.Pool.Ubuntu_Latest
+WorkflowLabels.DevOps.Pool.Windows_Latest
+WorkflowLabels.DevOps.Pool.MacOS_Latest
 ```
 
 ### DevOps-Specific Options
 
-- `BuildOptions.Devops.DevopsPool.SetByMatrix` — set the agent pool from a matrix dimension
-- `BuildOptions.Devops.VariableGroup.*` — reference Azure DevOps variable groups
-- `BuildOptions.Devops.Concurrency.RunLatest` — run only the latest pipeline waiting on an exclusive lock
-- `BuildOptions.Devops.Concurrency.Sequential` — run every pipeline waiting on an exclusive lock in sequence
-- `BuildOptions.Devops.PullRequest.AutoCancel` — cancel an in-progress PR run when a new commit is pushed
-- `BuildOptions.Devops.PullRequest.KeepRunning` — allow in-progress PR runs to finish after new commits
-- `ProvideDevopsRunIdAsWorkflowId` — use the DevOps run ID as the Atom build ID
+- `BuildOptions.DevOps.DevOpsPool.SetByMatrix` — set the agent pool from a matrix dimension
+- `BuildOptions.DevOps.VariableGroup.*` — reference Azure DevOps variable groups
+- `BuildOptions.DevOps.Concurrency.RunLatest` — run only the latest pipeline waiting on an exclusive lock
+- `BuildOptions.DevOps.Concurrency.Sequential` — run every pipeline waiting on an exclusive lock in sequence
+- `BuildOptions.DevOps.PullRequest.AutoCancel` — cancel an in-progress PR run when a new commit is pushed
+- `BuildOptions.DevOps.PullRequest.KeepRunning` — allow in-progress PR runs to finish after new commits
+- `ProvideDevOpsRunIdAsWorkflowId` — use the DevOps run ID as the Atom build ID
 
 Configure the lock behavior on a `WorkflowDefinition`:
 
 ```csharp
 Options =
 [
-    BuildOptions.Devops.Concurrency.Sequential,
+    BuildOptions.DevOps.Concurrency.Sequential,
 ];
 ```
 
@@ -92,7 +92,7 @@ Configure pull request auto-cancellation alongside a pull request trigger:
 new("Validate")
 {
     Triggers = [WorkflowTriggers.PullInto("main", "develop")],
-    Options = [BuildOptions.Devops.PullRequest.AutoCancel],
+    Options = [BuildOptions.DevOps.PullRequest.AutoCancel],
 }
 ```
 
@@ -100,7 +100,7 @@ new("Validate")
 
 - [Workflow Definitions](../workflows/workflow-definitions.md): declaring workflows.
 - [GitHub Workflows](github-workflows.md): the GitHub Actions counterpart.
-- <xref:Invex.Atom.Module.DevopsWorkflows.IDevopsWorkflows>
-- <xref:Invex.Atom.Module.DevopsWorkflows.Devops>
-- <xref:Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsConcurrencyOption>
-- <xref:Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPullRequestOption>
+- <xref:Invex.Atom.Module.DevOpsWorkflows.IDevOpsWorkflows>
+- <xref:Invex.Atom.Module.DevOpsWorkflows.DevOps>
+- <xref:Invex.Atom.Module.DevOpsWorkflows.Options.DevOpsConcurrencyOption>
+- <xref:Invex.Atom.Module.DevOpsWorkflows.Options.DevOpsPullRequestOption>

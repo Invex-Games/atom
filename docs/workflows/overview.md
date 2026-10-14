@@ -27,7 +27,7 @@ your YAML by hand, stick with `IBuildDefinition`.
 2. Define the `Workflows` property to declare your pipelines. Interface builds explicitly
    implement `IWorkflowBuildDefinition.Workflows`; partial classes override it.
 
-3. Add a platform module (`Invex.Atom.Module.GithubWorkflows` or `Invex.Atom.Module.DevopsWorkflows`) so Atom knows
+3. Add a platform module (`Invex.Atom.Module.GitHubWorkflows` or `Invex.Atom.Module.DevOpsWorkflows`) so Atom knows
    which YAML format to emit.
 
 4. Run `dotnet run -- Gen` to write the files.

@@ -74,7 +74,7 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
     ///             <item>
     ///                 <description>
     ///                     Executes the `dotnet test` command using
-    ///                     <see cref="IDotnetCli.Test(RootedPath, TestOptions?, ProcessRunOptions?, CancellationToken)" />.
+    ///                     <see cref="IDotnetCli.Test(RootedPath, DotnetTestOptions?, ProcessRunOptions?, CancellationToken)" />.
     ///                 </description>
     ///             </item>
     ///             <item>
@@ -119,11 +119,11 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
                 : RootedFileSystem.AtomRootDirectory / projectName / "TestResults",
             Logger = testOptions.Logger ??
             [
-                $"\"trx;LogFileName={projectName}.trx\"", $"\"html;LogFileName={projectName}.html\"",
+                $"trx;LogFileName={projectName}.trx", $"html;LogFileName={projectName}.html",
             ],
             Collect = testOptions.Collect ??
                       (options.IncludeCoverage
-                          ? ["\"XPlat Code Coverage\""]
+                          ? ["XPlat Code Coverage"]
                           : null),
         };
 
@@ -374,7 +374,7 @@ public sealed record DotnetTestAndStageOptions
     /// <summary>
     ///     Gets or sets the specific options to pass to the `dotnet test` command.
     /// </summary>
-    public TestOptions? TestOptions { get; init; }
+    public DotnetTestOptions? TestOptions { get; init; }
 
     /// <summary>
     ///     Gets or sets a value indicating whether to automatically set project versions

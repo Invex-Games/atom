@@ -61,7 +61,7 @@ public interface ISetupBuildInfo : IBuildInfo, IVariablesHelper, IReportsHelper
     ///         </list>
     ///     </para>
     ///     <para>
-    ///         This target is marked as hidden (<c>IsHidden()</c>), meaning it's not typically intended for direct invocation
+    ///         This target is marked as hidden (<c>AsHidden()</c>), meaning it's not typically intended for direct invocation
     ///         by users but is
     ///         expected to run as a dependency for other targets or as part of an initial setup sequence.
     ///     </para>
@@ -134,7 +134,7 @@ public interface ISetupBuildInfo : IBuildInfo, IVariablesHelper, IReportsHelper
     Target SetupBuildInfo =>
         t => t
             .DescribedAs("Sets up the build ID, version, and timestamp")
-            .IsHidden()
+            .AsHidden()
             .ProducesVariable(nameof(BuildName))
             .ProducesVariable(nameof(BuildId))
             .ProducesVariable(nameof(BuildVersion))

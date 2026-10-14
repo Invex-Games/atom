@@ -16,18 +16,18 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> PackageRemove(
         System.String[] packageName,
-        PackageRemoveOptions? options = null,
+        DotnetPackageRemoveOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
     /// <summary>
     ///     Remove a NuGet package reference from the project.
     /// </summary>
@@ -38,60 +38,54 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> PackageRemove(
         System.String packageName,
-        PackageRemoveOptions? options = null,
+        DotnetPackageRemoveOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> PackageRemove(
         System.String[] packageName,
-        PackageRemoveOptions? options = null,
+        DotnetPackageRemoveOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "package remove",
-            $"{string.Join(" ", packageName)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "package", "remove" };
+        DotnetCliArgs.AddPositional(args, packageName);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
     public Task<ProcessRunResult> PackageRemove(
         System.String packageName,
-        PackageRemoveOptions? options = null,
+        DotnetPackageRemoveOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "package remove",
-            packageName,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "package", "remove" };
+        DotnetCliArgs.AddPositional(args, packageName);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record PackageRemoveOptions
+public sealed record DotnetPackageRemoveOptions
 {
     /// <summary>
     ///     The file-based app to operate on.
@@ -101,7 +95,7 @@ public sealed record PackageRemoveOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -110,7 +104,7 @@ public sealed record PackageRemoveOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The project file to operate on. If a file is not specified, the command will search the current directory for one.
     /// </summary>
@@ -119,23 +113,22 @@ public sealed record PackageRemoveOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            File is not null
-                ? $"--file {File}"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            Project is not null
-                ? $"--project {Project}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--file", File);
+        DotnetCliArgs.AddFlag(args, "--interactive", Interactive);
+        DotnetCliArgs.AddOption(args, "--project", Project);
+
+        return args;
     }
-    
+
 }
 

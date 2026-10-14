@@ -7,7 +7,7 @@ namespace Invex.Atom.Module.Dotnet.Cli;
 public partial interface IDotnetCli
 {
     /// <summary>
-    ///     Run a local tool. Note that this command cannot be used to run a global tool. 
+    ///     Run a local tool. Note that this command cannot be used to run a global tool.
     /// </summary>
     /// <param name="commandName">
     ///     The command name of the tool to run.
@@ -19,7 +19,7 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -27,11 +27,11 @@ public partial interface IDotnetCli
     public Task<ProcessRunResult> ToolRun(
         System.String commandName,
         System.Collections.Generic.IEnumerable<System.String> toolArguments,
-        ToolRunOptions? options = null,
+        DotnetToolRunOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -39,26 +39,23 @@ internal partial class DotnetCli
     public Task<ProcessRunResult> ToolRun(
         System.String commandName,
         System.Collections.Generic.IEnumerable<System.String> toolArguments,
-        ToolRunOptions? options = null,
+        DotnetToolRunOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "tool run",
-            commandName,
-            $"{string.Join(" ", toolArguments)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "tool", "run" };
+        DotnetCliArgs.AddPositional(args, commandName);
+        DotnetCliArgs.AddPositional(args, toolArguments);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record ToolRunOptions
+public sealed record DotnetToolRunOptions
 {
     /// <summary>
     ///     Allow a .NET tool to roll forward to newer versions of the .NET runtime if the runtime it targets isn't installed.
@@ -68,17 +65,20 @@ public sealed record ToolRunOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            AllowRollForward is true
-                ? "--allow-roll-forward"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddFlag(args, "--allow-roll-forward", AllowRollForward);
+
+        return args;
     }
-    
+
 }
 

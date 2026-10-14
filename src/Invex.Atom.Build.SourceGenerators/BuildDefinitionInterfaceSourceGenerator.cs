@@ -39,20 +39,8 @@ public sealed class BuildDefinitionInterfaceSourceGenerator : IIncrementalGenera
         var allInterfaces = classSymbol.AllInterfaces;
         var (allTargets, allParams) = GetTargetsAndParams(classSymbol, allInterfaces);
 
-        var configureHostMethod = GetConfigureHostMethod(allInterfaces);
-        var configureHostBuilderMethod = GetConfigureBuilderMethod(allInterfaces);
-
-        var inheritConfigureHostLine = configureHostMethod.Any || configureHostBuilderMethod.Any
-            ? ", Invex.Atom.Build.Hosting.IConfigureHost"
-            : string.Empty;
-
-        var configureHostText = configureHostMethod.Any || configureHostBuilderMethod.Any
-            ? configureHostMethod.Text
-            : string.Empty;
-
-        var configureHostBuilderText = configureHostMethod.Any || configureHostBuilderMethod.Any
-            ? configureHostBuilderMethod.Text
-            : string.Empty;
+        // The build interface itself can carry [ConfigureHost] / [ConfigureHostBuilder], so it is scanned for hooks too
+        var hostMembers = HostHooks.GetMembers(allInterfaces.Prepend(classSymbol), allInterfaces);
 
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -63,7 +51,6 @@ public sealed class BuildDefinitionInterfaceSourceGenerator : IIncrementalGenera
                 ? string.Empty
                 : $"namespace {namespaceName};",
             classSymbol.Name,
-            inheritConfigureHostLine,
             [
                 // new("Options", [GetOptionsOverride(classSymbol)]),
                 new("Targets", [GetTargetDefinitionsField(allTargets), GetTargetDefinitionsProperty(allTargets)]),
@@ -75,7 +62,7 @@ public sealed class BuildDefinitionInterfaceSourceGenerator : IIncrementalGenera
                     GetParamsField(),
                     GetAccessParamMethod(allParams),
                 ]),
-                new("Host", [configureHostText, configureHostBuilderText]),
+                new("Host", hostMembers),
             ]);
 
         return new(classSymbol.Name, sourceCode);
@@ -85,7 +72,6 @@ public sealed class BuildDefinitionInterfaceSourceGenerator : IIncrementalGenera
         string globalUsingStaticLine,
         string namespaceLine,
         string classNameSimple,
-        string configureHostInherit,
         CodeRegion[] codeRegions)
     {
         var sb = new StringBuilder();
@@ -114,7 +100,7 @@ public sealed class BuildDefinitionInterfaceSourceGenerator : IIncrementalGenera
         sb.AppendLine($$"""
                         [JetBrains.Annotations.PublicAPI]
                         [System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "PossibleInterfaceMemberAmbiguity")]
-                        internal sealed class {{GetClassNameForInterface(classNameSimple)}} : {{BuildDefinition}}, {{classNameSimple}}{{configureHostInherit}}
+                        internal sealed partial class {{GetClassNameForInterface(classNameSimple)}} : {{BuildDefinition}}, {{classNameSimple}}, {{HostHooks.ConfigureHostInterface}}
                         {
                         """);
 
@@ -388,95 +374,6 @@ public sealed class BuildDefinitionInterfaceSourceGenerator : IIncrementalGenera
         sb.AppendLine("        };");
 
         return sb.ToString();
-    }
-
-    private static TextResult GetConfigureHostMethod(ImmutableArray<INamedTypeSymbol> allInterfaces)
-    {
-        var configureHostInterfaces = new List<INamedTypeSymbol>(64);
-
-        foreach (var interfaceSymbol in allInterfaces)
-        foreach (var attributeData in interfaceSymbol.GetAttributes())
-        {
-            if (attributeData.AttributeClass?.ToDisplayString() is not ConfigureHostAttribute)
-                continue;
-
-            configureHostInterfaces.Add(interfaceSymbol);
-
-            break;
-        }
-
-        if (configureHostInterfaces.Count is 0)
-            return new("    public void ConfigureBuildHost(Microsoft.Extensions.Hosting.IHost builder) { }", false);
-
-        var sb = new StringBuilder();
-
-        sb.AppendLine("    public void ConfigureBuildHost(Microsoft.Extensions.Hosting.IHost builder)");
-        sb.AppendLine("    {");
-
-        foreach (var interfaceSymbol in configureHostInterfaces)
-            sb.AppendLine(
-                $"        {interfaceSymbol.ToDisplayString()}.ConfigureHostFrom{interfaceSymbol.Name}(builder);");
-
-        sb.AppendLine("    }");
-
-        return new(sb.ToString(), true);
-    }
-
-    private static TextResult GetConfigureBuilderMethod(ImmutableArray<INamedTypeSymbol> allInterfaces)
-    {
-        var configureHostInterfaces = new List<INamedTypeSymbol>(64);
-        var registerHostInterfaces = new List<INamedTypeSymbol>(64);
-
-        foreach (var interfaceSymbol in allInterfaces)
-        {
-            foreach (var subInterfaceSymbol in interfaceSymbol.AllInterfaces)
-            {
-                if (subInterfaceSymbol.ToDisplayString() is not IBuildDefinition and not IBuildAccessor)
-                    continue;
-
-                registerHostInterfaces.Add(interfaceSymbol);
-
-                break;
-            }
-
-            foreach (var attributeData in interfaceSymbol.GetAttributes())
-            {
-                if (attributeData.AttributeClass?.ToDisplayString() is not ConfigureHostBuilderAttribute)
-                    continue;
-
-                configureHostInterfaces.Add(interfaceSymbol);
-
-                break;
-            }
-        }
-
-        if (configureHostInterfaces.Count + registerHostInterfaces.Count is 0)
-            return new(
-                "    public void ConfigureBuildHostBuilder(Microsoft.Extensions.Hosting.IHostApplicationBuilder builder) { }",
-                false);
-
-        var sb = new StringBuilder();
-
-        sb.AppendLine(
-            "    public void ConfigureBuildHostBuilder(Microsoft.Extensions.Hosting.IHostApplicationBuilder builder)");
-
-        sb.AppendLine("    {");
-
-        foreach (var interfaceSymbol in registerHostInterfaces)
-        {
-            var interfaceFullName = interfaceSymbol.ToDisplayString();
-
-            sb.AppendLine(
-                $"        Microsoft.Extensions.DependencyInjection.Extensions.ServiceCollectionDescriptorExtensions.TryAddSingleton<{interfaceFullName}>(builder.Services, static p => ({interfaceFullName})p.GetRequiredService<{IBuildDefinition}>());");
-        }
-
-        foreach (var interfaceSymbol in configureHostInterfaces)
-            sb.AppendLine(
-                $"        {interfaceSymbol.ToDisplayString()}.ConfigureBuilderFrom{interfaceSymbol.Name}(builder);");
-
-        sb.AppendLine("    }");
-
-        return new(sb.ToString(), true);
     }
 
     private static string GetClassNameForInterface(string interfaceName) =>

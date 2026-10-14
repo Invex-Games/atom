@@ -3,6 +3,7 @@ global using Invex.Atom.Build.Args;
 global using Invex.Atom.Build.BuildOptions;
 global using Invex.Atom.Build.Definition;
 global using Invex.Atom.Build.Exceptions;
+global using Invex.Atom.Build.Hosting;
 global using Invex.Atom.Build.Params;
 global using Invex.Atom.TestUtils;
 global using Invex.Atom.Workflows.Definition;

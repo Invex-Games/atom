@@ -12,79 +12,33 @@ public partial interface IDotnetCli
     /// <param name="searchString">
     ///     The text to search for in the IDs and descriptions of available workloads.
     /// </param>
-    /// <param name="options">
-    ///     Options
-    /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> WorkloadSearch(
         System.String searchString,
-        WorkloadSearchOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> WorkloadSearch(
         System.String searchString,
-        WorkloadSearchOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "workload search",
-            searchString,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
-    }
-    
-}
+    )
+    {
+        var args = new List<string> { "workload", "search" };
+        DotnetCliArgs.AddPositional(args, searchString);
 
-[PublicAPI]
-public sealed record WorkloadSearchOptions
-{
-    /// <summary>
-    ///     The version of the SDK.
-    /// </summary>
-    public System.String? SdkVersion
-    {
-        get;
-        init;
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
-    /// <summary>
-    ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
-    /// </summary>
-    public VerbosityOptions? Verbosity
-    {
-        get;
-        init;
-    }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            SdkVersion is not null
-                ? $"--sdk-version {SdkVersion}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
-    }
-    
+
 }
 

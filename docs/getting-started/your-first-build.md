@@ -64,8 +64,8 @@ Most repositories keep their build in a dedicated project, conventionally named 
    ```
 
    The `using` lines are optional: `Invex.Atom.Build` adds its namespaces as global usings when referenced from NuGet.
-   If the build needs to override class members such as `ConfigureDefinitionHost`, use an
-   `internal partial class Build : BuildDefinition` instead (see [Build Definitions](../core-concepts/build-definitions.md)).
+   If you prefer to write the build as a class, for example to keep host hooks such as `OnConfigureHostBuilder` in the
+   same type, use an `internal partial class Build : BuildDefinition` instead (see [Build Definitions](../core-concepts/build-definitions.md)).
 
 4. Run the build:
 

@@ -8,61 +8,58 @@ public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> NugetPush(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetPushOptions? options = null,
+        DotnetNugetPushOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NugetPush(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetPushOptions? options = null,
+        DotnetNugetPushOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "nuget push",
-            $"{string.Join(" ", packagePaths)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "nuget", "push" };
+        DotnetCliArgs.AddPositional(args, packagePaths);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record NugetPushOptions
+public sealed record DotnetNugetPushOptions
 {
     public System.String? ApiKey
     {
         get;
         init;
     }
-    
-    public System.String? Configfile
+
+    public System.String? ConfigFile
     {
         get;
         init;
     }
-    
+
     public System.Boolean? DisableBuffering
     {
         get;
         init;
     }
-    
+
     public System.Boolean? ForceEnglishOutput
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -71,92 +68,73 @@ public sealed record NugetPushOptions
         get;
         init;
     }
-    
+
     public System.Boolean? NoServiceEndpoint
     {
         get;
         init;
     }
-    
+
     public System.Boolean? NoSymbols
     {
         get;
         init;
     }
-    
+
     public System.Boolean? SkipDuplicate
     {
         get;
         init;
     }
-    
+
     public System.String? Source
     {
         get;
         init;
     }
-    
+
     public System.String? SymbolApiKey
     {
         get;
         init;
     }
-    
+
     public System.String? SymbolSource
     {
         get;
         init;
     }
-    
+
     public System.String? Timeout
     {
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            ApiKey is not null
-                ? $"--api-key {ApiKey}"
-                : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
-                : null,
-            DisableBuffering is true
-                ? "--disable-buffering"
-                : null,
-            ForceEnglishOutput is true
-                ? "--force-english-output"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            NoServiceEndpoint is true
-                ? "--no-service-endpoint"
-                : null,
-            NoSymbols is true
-                ? "--no-symbols"
-                : null,
-            SkipDuplicate is true
-                ? "--skip-duplicate"
-                : null,
-            Source is not null
-                ? $"--source {Source}"
-                : null,
-            SymbolApiKey is not null
-                ? $"--symbol-api-key {SymbolApiKey}"
-                : null,
-            SymbolSource is not null
-                ? $"--symbol-source {SymbolSource}"
-                : null,
-            Timeout is not null
-                ? $"--timeout {Timeout}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--api-key", ApiKey);
+        DotnetCliArgs.AddOption(args, "--configfile", ConfigFile);
+        DotnetCliArgs.AddFlag(args, "--disable-buffering", DisableBuffering);
+        DotnetCliArgs.AddFlag(args, "--force-english-output", ForceEnglishOutput);
+        DotnetCliArgs.AddFlag(args, "--interactive", Interactive);
+        DotnetCliArgs.AddFlag(args, "--no-service-endpoint", NoServiceEndpoint);
+        DotnetCliArgs.AddFlag(args, "--no-symbols", NoSymbols);
+        DotnetCliArgs.AddFlag(args, "--skip-duplicate", SkipDuplicate);
+        DotnetCliArgs.AddOption(args, "--source", Source);
+        DotnetCliArgs.AddOption(args, "--symbol-api-key", SymbolApiKey);
+        DotnetCliArgs.AddOption(args, "--symbol-source", SymbolSource);
+        DotnetCliArgs.AddOption(args, "--timeout", Timeout);
+
+        return args;
     }
-    
+
 }
 

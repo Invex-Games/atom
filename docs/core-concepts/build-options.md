@@ -34,7 +34,7 @@ Options are accessed via the static `BuildOptions` class, which is extended by m
 |--------------------------------------------------|---------------------------------------------|
 | `BuildOptions.Target.SuppressArtifactPublishing` | Prevents artifact upload for a target       |
 | `BuildOptions.Steps.SetupDotnet.Dotnet80X()`     | Adds a setup step to install .NET 8         |
-| `BuildOptions.Github.RunsOn.SetByMatrix`         | Sets the runner from the matrix dimension   |
+| `BuildOptions.GitHub.RunsOn.SetByMatrix`         | Sets the runner from the matrix dimension   |
 | `BuildOptions.Inject.Param(name, value)`         | Injects a parameter value at workflow level |
 | `BuildOptions.Inject.Secret(name)`               | Injects a secret from the CI platform       |
 

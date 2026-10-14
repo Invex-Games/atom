@@ -10,9 +10,9 @@
   <Folder Name="/Modules/">
     <Project Path="src/Invex.Atom.Module.AzureKeyVault/Invex.Atom.Module.AzureKeyVault.csproj" />
     <Project Path="src/Invex.Atom.Module.AzureStorage/Invex.Atom.Module.AzureStorage.csproj" />
-    <Project Path="src/Invex.Atom.Module.DevopsWorkflows/Invex.Atom.Module.DevopsWorkflows.csproj" />
+    <Project Path="src/Invex.Atom.Module.DevOpsWorkflows/Invex.Atom.Module.DevOpsWorkflows.csproj" />
     <Project Path="src/Invex.Atom.Module.Dotnet/Invex.Atom.Module.Dotnet.csproj" />
-    <Project Path="src/Invex.Atom.Module.GithubWorkflows/Invex.Atom.Module.GithubWorkflows.csproj" />
+    <Project Path="src/Invex.Atom.Module.GitHubWorkflows/Invex.Atom.Module.GitHubWorkflows.csproj" />
     <Project Path="src/Invex.Atom.Module.GitVersion/Invex.Atom.Module.GitVersion.csproj" />
   </Folder>
   <Folder Name="/Samples/">
@@ -32,8 +32,11 @@
     <Project Path="tests/Invex.Atom.Workflows.Tests/Invex.Atom.Workflows.Tests.csproj" />
   </Folder>
   <Folder Name="/Tests/Modules/">
-    <Project Path="tests/Invex.Atom.Module.DevopsWorkflows.Tests/Invex.Atom.Module.DevopsWorkflows.Tests.csproj" />
-    <Project Path="tests/Invex.Atom.Module.GithubWorkflows.Tests/Invex.Atom.Module.GithubWorkflows.Tests.csproj" />
+    <Project Path="tests/Invex.Atom.Module.AzureKeyVault.Tests/Invex.Atom.Module.AzureKeyVault.Tests.csproj" />
+    <Project Path="tests/Invex.Atom.Module.AzureStorage.Tests/Invex.Atom.Module.AzureStorage.Tests.csproj" />
+    <Project Path="tests/Invex.Atom.Module.DevOpsWorkflows.Tests/Invex.Atom.Module.DevOpsWorkflows.Tests.csproj" />
+    <Project Path="tests/Invex.Atom.Module.Dotnet.Tests/Invex.Atom.Module.Dotnet.Tests.csproj" />
+    <Project Path="tests/Invex.Atom.Module.GitHubWorkflows.Tests/Invex.Atom.Module.GitHubWorkflows.Tests.csproj" />
   </Folder>
   <Folder Name="/Tests/Tools/">
     <Project Path="tests/Invex.Atom.Tool.Tests/Invex.Atom.Tool.Tests.csproj" />

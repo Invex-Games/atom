@@ -28,7 +28,7 @@ The property name becomes the target name on the command line: `dotnet run -- Co
 ```csharp
 t => t
     .DescribedAs("Human-readable description for help output")
-    .IsHidden()          // hide from default help; still executable
+    .AsHidden()          // hide from default help; still executable
 ```
 
 ### Execution
