@@ -27,7 +27,7 @@ public partial interface IDotnetCli
     public Task<ProcessRunResult> NugetWhy(
         System.String projectorsolution,
         System.String package,
-        NugetWhyOptions? options = null,
+        DotnetNugetWhyOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -49,7 +49,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> NugetWhy(
         Invex.FileSystem.RootedPath projectorsolution,
-        NugetWhyOptions? options = null,
+        DotnetNugetWhyOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -61,7 +61,7 @@ internal partial class DotnetCli
     public Task<ProcessRunResult> NugetWhy(
         System.String projectorsolution,
         System.String package,
-        NugetWhyOptions? options = null,
+        DotnetNugetWhyOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -80,7 +80,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> NugetWhy(
         Invex.FileSystem.RootedPath projectorsolution,
-        NugetWhyOptions? options = null,
+        DotnetNugetWhyOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -99,7 +99,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NugetWhyOptions
+public sealed record DotnetNugetWhyOptions
 {
     /// <summary>
     ///     The target framework(s) for which dependency graphs are shown.

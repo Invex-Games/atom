@@ -8,7 +8,7 @@ public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> NugetTrustSource(
         System.String name,
-        NugetTrustSourceOptions? options = null,
+        DotnetNugetTrustSourceOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -19,7 +19,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NugetTrustSource(
         System.String name,
-        NugetTrustSourceOptions? options = null,
+        DotnetNugetTrustSourceOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -38,9 +38,9 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NugetTrustSourceOptions
+public sealed record DotnetNugetTrustSourceOptions
 {
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -72,8 +72,8 @@ public sealed record NugetTrustSourceOptions
         return string.Join(' ',
         new[]
         {
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             Owners is not null
                 ? $"--owners {Owners}"

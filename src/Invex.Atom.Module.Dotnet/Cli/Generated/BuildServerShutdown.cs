@@ -19,7 +19,7 @@ public partial interface IDotnetCli
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> BuildServerShutdown(
-        BuildServerShutdownOptions? options = null,
+        DotnetBuildServerShutdownOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -28,7 +28,7 @@ public partial interface IDotnetCli
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> BuildServerShutdown(
-        BuildServerShutdownOptions? options = null,
+        DotnetBuildServerShutdownOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     ) =>
@@ -38,12 +38,12 @@ internal partial class DotnetCli
 
 }
 [PublicAPI]
-public sealed record BuildServerShutdownOptions
+public sealed record DotnetBuildServerShutdownOptions
 {
     /// <summary>
     ///     Shut down the MSBuild build server.
     /// </summary>
-    public System.Boolean? Msbuild
+    public System.Boolean? MsBuild
     {
         get;
         init;
@@ -61,7 +61,7 @@ public sealed record BuildServerShutdownOptions
     /// <summary>
     ///     Shut down the VB/C# compiler build server.
     /// </summary>
-    public System.Boolean? Vbcscompiler
+    public System.Boolean? VbcsCompiler
     {
         get;
         init;
@@ -72,13 +72,13 @@ public sealed record BuildServerShutdownOptions
         return string.Join(' ',
         new[]
         {
-            Msbuild is true
+            MsBuild is true
                 ? "--msbuild"
                 : null,
             Razor is true
                 ? "--razor"
                 : null,
-            Vbcscompiler is true
+            VbcsCompiler is true
                 ? "--vbcscompiler"
                 : null,
         }

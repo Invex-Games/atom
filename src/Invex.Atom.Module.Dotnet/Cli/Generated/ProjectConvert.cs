@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> ProjectConvert(
         System.String file,
-        ProjectConvertOptions? options = null,
+        DotnetProjectConvertOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -45,7 +45,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> ProjectConvert(
         Invex.FileSystem.RootedPath file,
-        ProjectConvertOptions? options = null,
+        DotnetProjectConvertOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -56,7 +56,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> ProjectConvert(
         System.String file,
-        ProjectConvertOptions? options = null,
+        DotnetProjectConvertOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -74,7 +74,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> ProjectConvert(
         Invex.FileSystem.RootedPath file,
-        ProjectConvertOptions? options = null,
+        DotnetProjectConvertOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -93,7 +93,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record ProjectConvertOptions
+public sealed record DotnetProjectConvertOptions
 {
     /// <summary>
     ///     Determines changes without actually modifying the file system

@@ -8,7 +8,7 @@ public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> NugetSign(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetSignOptions? options = null,
+        DotnetNugetSignOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -19,7 +19,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NugetSign(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetSignOptions? options = null,
+        DotnetNugetSignOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -38,7 +38,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NugetSignOptions
+public sealed record DotnetNugetSignOptions
 {
     public System.String? CertificateFingerprint
     {

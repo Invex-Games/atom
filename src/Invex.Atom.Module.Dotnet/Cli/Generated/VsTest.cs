@@ -6,8 +6,8 @@ namespace Invex.Atom.Module.Dotnet.Cli;
 
 public partial interface IDotnetCli
 {
-    public Task<ProcessRunResult> Vstest(
-        VstestOptions? options = null,
+    public Task<ProcessRunResult> VsTest(
+        DotnetVsTestOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -15,8 +15,8 @@ public partial interface IDotnetCli
 }
 internal partial class DotnetCli
 {
-    public Task<ProcessRunResult> Vstest(
-        VstestOptions? options = null,
+    public Task<ProcessRunResult> VsTest(
+        DotnetVsTestOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     ) =>
@@ -26,7 +26,7 @@ internal partial class DotnetCli
 
 }
 [PublicAPI]
-public sealed record VstestOptions
+public sealed record DotnetVsTestOptions
 {
     public System.String? Framework
     {

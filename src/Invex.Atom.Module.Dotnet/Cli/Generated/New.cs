@@ -27,7 +27,7 @@ public partial interface IDotnetCli
     public Task<ProcessRunResult> New(
         System.String templateShortName,
         System.String[] templateArgs,
-        NewOptions? options = null,
+        DotnetNewOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -39,7 +39,7 @@ internal partial class DotnetCli
     public Task<ProcessRunResult> New(
         System.String templateShortName,
         System.String[] templateArgs,
-        NewOptions? options = null,
+        DotnetNewOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -59,7 +59,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NewOptions
+public sealed record DotnetNewOptions
 {
     /// <summary>
     ///     Enables diagnostic output.

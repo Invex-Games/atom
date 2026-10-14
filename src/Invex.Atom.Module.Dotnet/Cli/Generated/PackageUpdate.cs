@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> PackageUpdate(
         System.Collections.Generic.IReadOnlyList<string> packages,
-        PackageUpdateOptions? options = null,
+        DotnetPackageUpdateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -34,7 +34,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> PackageUpdate(
         System.Collections.Generic.IReadOnlyList<string> packages,
-        PackageUpdateOptions? options = null,
+        DotnetPackageUpdateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -53,7 +53,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record PackageUpdateOptions
+public sealed record DotnetPackageUpdateOptions
 {
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).

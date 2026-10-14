@@ -19,7 +19,7 @@ public partial interface IDotnetCli
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> WorkloadRepair(
-        WorkloadRepairOptions? options = null,
+        DotnetWorkloadRepairOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -28,7 +28,7 @@ public partial interface IDotnetCli
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> WorkloadRepair(
-        WorkloadRepairOptions? options = null,
+        DotnetWorkloadRepairOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     ) =>
@@ -38,12 +38,12 @@ internal partial class DotnetCli
 
 }
 [PublicAPI]
-public sealed record WorkloadRepairOptions
+public sealed record DotnetWorkloadRepairOptions
 {
     /// <summary>
     ///     The NuGet configuration file to use.
     /// </summary>
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -108,8 +108,8 @@ public sealed record WorkloadRepairOptions
         return string.Join(' ',
         new[]
         {
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             DisableParallel is true
                 ? "--disable-parallel"

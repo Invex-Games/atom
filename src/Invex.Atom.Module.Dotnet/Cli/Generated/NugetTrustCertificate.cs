@@ -9,7 +9,7 @@ public partial interface IDotnetCli
     public Task<ProcessRunResult> NugetTrustCertificate(
         System.String name,
         System.String fingerprint,
-        NugetTrustCertificateOptions? options = null,
+        DotnetNugetTrustCertificateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -21,7 +21,7 @@ internal partial class DotnetCli
     public Task<ProcessRunResult> NugetTrustCertificate(
         System.String name,
         System.String fingerprint,
-        NugetTrustCertificateOptions? options = null,
+        DotnetNugetTrustCertificateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -41,7 +41,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NugetTrustCertificateOptions
+public sealed record DotnetNugetTrustCertificateOptions
 {
     public System.String? Algorithm
     {
@@ -55,7 +55,7 @@ public sealed record NugetTrustCertificateOptions
         init;
     }
 
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -81,8 +81,8 @@ public sealed record NugetTrustCertificateOptions
             AllowUntrustedRoot is true
                 ? "--allow-untrusted-root"
                 : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             Verbosity is not null
                 ? $"--verbosity {Verbosity}"

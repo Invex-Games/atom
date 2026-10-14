@@ -19,7 +19,7 @@ public partial interface IDotnetCli
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> WorkloadUpdate(
-        WorkloadUpdateOptions? options = null,
+        DotnetWorkloadUpdateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -28,7 +28,7 @@ public partial interface IDotnetCli
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> WorkloadUpdate(
-        WorkloadUpdateOptions? options = null,
+        DotnetWorkloadUpdateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     ) =>
@@ -38,7 +38,7 @@ internal partial class DotnetCli
 
 }
 [PublicAPI]
-public sealed record WorkloadUpdateOptions
+public sealed record DotnetWorkloadUpdateOptions
 {
     /// <summary>
     ///     Only update advertising manifests.
@@ -52,7 +52,7 @@ public sealed record WorkloadUpdateOptions
     /// <summary>
     ///     The NuGet configuration file to use.
     /// </summary>
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -174,8 +174,8 @@ public sealed record WorkloadUpdateOptions
             AdvertisingManifestsOnly is true
                 ? "--advertising-manifests-only"
                 : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             DisableParallel is true
                 ? "--disable-parallel"

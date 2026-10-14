@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> PackageAdd(
         System.String packageId,
-        PackageAddOptions? options = null,
+        DotnetPackageAddOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -34,7 +34,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> PackageAdd(
         System.String packageId,
-        PackageAddOptions? options = null,
+        DotnetPackageAddOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -53,7 +53,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record PackageAddOptions
+public sealed record DotnetPackageAddOptions
 {
     /// <summary>
     ///     The file-based app to operate on.

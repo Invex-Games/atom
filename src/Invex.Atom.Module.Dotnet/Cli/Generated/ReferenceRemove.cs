@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> ReferenceRemove(
         System.Collections.Generic.IEnumerable<System.String> projectPath,
-        ReferenceRemoveOptions? options = null,
+        DotnetReferenceRemoveOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -34,7 +34,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> ReferenceRemove(
         System.Collections.Generic.IEnumerable<System.String> projectPath,
-        ReferenceRemoveOptions? options = null,
+        DotnetReferenceRemoveOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -53,7 +53,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record ReferenceRemoveOptions
+public sealed record DotnetReferenceRemoveOptions
 {
     /// <summary>
     ///     Remove the reference only when targeting a specific framework.

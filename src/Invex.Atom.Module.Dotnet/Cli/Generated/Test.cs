@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Test(
         System.String[] projectOrSolutionOrFile,
-        TestOptions? options = null,
+        DotnetTestOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -45,7 +45,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Test(
         System.String projectOrSolutionOrFile,
-        TestOptions? options = null,
+        DotnetTestOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -67,7 +67,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Test(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        TestOptions? options = null,
+        DotnetTestOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -78,7 +78,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Test(
         System.String[] projectOrSolutionOrFile,
-        TestOptions? options = null,
+        DotnetTestOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -96,7 +96,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> Test(
         System.String projectOrSolutionOrFile,
-        TestOptions? options = null,
+        DotnetTestOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -114,7 +114,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> Test(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        TestOptions? options = null,
+        DotnetTestOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -133,7 +133,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record TestOptions
+public sealed record DotnetTestOptions
 {
     /// <summary>
     ///     The target architecture.
@@ -374,7 +374,7 @@ public sealed record TestOptions
     /// <summary>
     ///     Run test(s), without displaying Microsoft Testplatform banner
     /// </summary>
-    public System.Boolean? Nologo
+    public System.Boolean? NoLogo
     {
         get;
         init;
@@ -527,7 +527,7 @@ public sealed record TestOptions
             NoRestore is true
                 ? "--no-restore"
                 : null,
-            Nologo is true
+            NoLogo is true
                 ? "--nologo"
                 : null,
             Os is not null

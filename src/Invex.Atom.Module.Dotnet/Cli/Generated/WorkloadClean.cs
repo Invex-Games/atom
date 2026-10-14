@@ -19,7 +19,7 @@ public partial interface IDotnetCli
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> WorkloadClean(
-        WorkloadCleanOptions? options = null,
+        DotnetWorkloadCleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -28,7 +28,7 @@ public partial interface IDotnetCli
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> WorkloadClean(
-        WorkloadCleanOptions? options = null,
+        DotnetWorkloadCleanOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     ) =>
@@ -38,7 +38,7 @@ internal partial class DotnetCli
 
 }
 [PublicAPI]
-public sealed record WorkloadCleanOptions
+public sealed record DotnetWorkloadCleanOptions
 {
     /// <summary>
     ///     Causes clean to remove and uninstall all workload components from all SDK versions.

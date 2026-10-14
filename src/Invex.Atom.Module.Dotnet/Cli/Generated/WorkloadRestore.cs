@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> WorkloadRestore(
         System.Collections.Generic.IEnumerable<System.String> projectOrSolution,
-        WorkloadRestoreOptions? options = null,
+        DotnetWorkloadRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -34,7 +34,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> WorkloadRestore(
         System.Collections.Generic.IEnumerable<System.String> projectOrSolution,
-        WorkloadRestoreOptions? options = null,
+        DotnetWorkloadRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -53,12 +53,12 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record WorkloadRestoreOptions
+public sealed record DotnetWorkloadRestoreOptions
 {
     /// <summary>
     ///     The NuGet configuration file to use.
     /// </summary>
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -159,8 +159,8 @@ public sealed record WorkloadRestoreOptions
         return string.Join(' ',
         new[]
         {
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             DisableParallel is true
                 ? "--disable-parallel"

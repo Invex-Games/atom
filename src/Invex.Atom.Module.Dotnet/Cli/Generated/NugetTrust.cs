@@ -7,7 +7,7 @@ namespace Invex.Atom.Module.Dotnet.Cli;
 public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> NugetTrust(
-        NugetTrustOptions? options = null,
+        DotnetNugetTrustOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -16,7 +16,7 @@ public partial interface IDotnetCli
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NugetTrust(
-        NugetTrustOptions? options = null,
+        DotnetNugetTrustOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     ) =>
@@ -26,9 +26,9 @@ internal partial class DotnetCli
 
 }
 [PublicAPI]
-public sealed record NugetTrustOptions
+public sealed record DotnetNugetTrustOptions
 {
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -48,8 +48,8 @@ public sealed record NugetTrustOptions
         return string.Join(' ',
         new[]
         {
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             Verbosity is not null
                 ? $"--verbosity {Verbosity}"

@@ -25,7 +25,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> NewInstall(
         System.String[] package,
-        NewInstallOptions? options = null,
+        DotnetNewInstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -49,7 +49,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> NewInstall(
         System.String package,
-        NewInstallOptions? options = null,
+        DotnetNewInstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -73,7 +73,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> NewInstall(
         Invex.FileSystem.RootedPath package,
-        NewInstallOptions? options = null,
+        DotnetNewInstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -84,7 +84,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NewInstall(
         System.String[] package,
-        NewInstallOptions? options = null,
+        DotnetNewInstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -102,7 +102,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> NewInstall(
         System.String package,
-        NewInstallOptions? options = null,
+        DotnetNewInstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -120,7 +120,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> NewInstall(
         Invex.FileSystem.RootedPath package,
-        NewInstallOptions? options = null,
+        DotnetNewInstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -139,7 +139,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NewInstallOptions
+public sealed record DotnetNewInstallOptions
 {
     /// <summary>
     ///     Specifies a NuGet source to use.

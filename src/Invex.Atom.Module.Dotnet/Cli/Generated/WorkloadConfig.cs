@@ -20,7 +20,7 @@ public partial interface IDotnetCli
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> WorkloadConfig(
-        WorkloadConfigOptions? options = null,
+        DotnetWorkloadConfigOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -29,7 +29,7 @@ public partial interface IDotnetCli
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> WorkloadConfig(
-        WorkloadConfigOptions? options = null,
+        DotnetWorkloadConfigOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     ) =>
@@ -39,7 +39,7 @@ internal partial class DotnetCli
 
 }
 [PublicAPI]
-public sealed record WorkloadConfigOptions
+public sealed record DotnetWorkloadConfigOptions
 {
     /// <summary>
     ///     Controls whether updates should look for workload sets or the latest version of each individual manifest.

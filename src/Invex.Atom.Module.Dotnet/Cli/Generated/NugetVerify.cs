@@ -8,7 +8,7 @@ public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> NugetVerify(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetVerifyOptions? options = null,
+        DotnetNugetVerifyOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -19,7 +19,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NugetVerify(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetVerifyOptions? options = null,
+        DotnetNugetVerifyOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -38,7 +38,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NugetVerifyOptions
+public sealed record DotnetNugetVerifyOptions
 {
     public System.Boolean? All
     {

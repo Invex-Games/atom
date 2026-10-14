@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> ToolSearch(
         System.String searchTerm,
-        ToolSearchOptions? options = null,
+        DotnetToolSearchOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -34,7 +34,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> ToolSearch(
         System.String searchTerm,
-        ToolSearchOptions? options = null,
+        DotnetToolSearchOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -53,7 +53,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record ToolSearchOptions
+public sealed record DotnetToolSearchOptions
 {
     /// <summary>
     ///     Show detail result of the query.

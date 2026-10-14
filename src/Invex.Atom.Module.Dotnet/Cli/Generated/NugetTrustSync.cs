@@ -8,7 +8,7 @@ public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> NugetTrustSync(
         System.String name,
-        NugetTrustSyncOptions? options = null,
+        DotnetNugetTrustSyncOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -19,7 +19,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NugetTrustSync(
         System.String name,
-        NugetTrustSyncOptions? options = null,
+        DotnetNugetTrustSyncOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -38,9 +38,9 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NugetTrustSyncOptions
+public sealed record DotnetNugetTrustSyncOptions
 {
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -60,8 +60,8 @@ public sealed record NugetTrustSyncOptions
         return string.Join(' ',
         new[]
         {
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             Verbosity is not null
                 ? $"--verbosity {Verbosity}"

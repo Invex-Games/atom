@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> SolutionAdd(
         System.Collections.Generic.IEnumerable<System.String> projectPath,
-        SolutionAddOptions? options = null,
+        DotnetSolutionAddOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -34,7 +34,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> SolutionAdd(
         System.Collections.Generic.IEnumerable<System.String> projectPath,
-        SolutionAddOptions? options = null,
+        DotnetSolutionAddOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -53,7 +53,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record SolutionAddOptions
+public sealed record DotnetSolutionAddOptions
 {
     /// <summary>
     ///     Place project in root of the solution, rather than creating a solution folder.

@@ -9,7 +9,7 @@ public partial interface IDotnetCli
     public Task<ProcessRunResult> NugetTrustRepository(
         System.String name,
         System.String package,
-        NugetTrustRepositoryOptions? options = null,
+        DotnetNugetTrustRepositoryOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -21,7 +21,7 @@ internal partial class DotnetCli
     public Task<ProcessRunResult> NugetTrustRepository(
         System.String name,
         System.String package,
-        NugetTrustRepositoryOptions? options = null,
+        DotnetNugetTrustRepositoryOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -41,7 +41,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NugetTrustRepositoryOptions
+public sealed record DotnetNugetTrustRepositoryOptions
 {
     public System.Boolean? AllowUntrustedRoot
     {
@@ -49,7 +49,7 @@ public sealed record NugetTrustRepositoryOptions
         init;
     }
 
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -78,8 +78,8 @@ public sealed record NugetTrustRepositoryOptions
             AllowUntrustedRoot is true
                 ? "--allow-untrusted-root"
                 : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             Owners is not null
                 ? $"--owners {Owners}"

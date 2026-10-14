@@ -8,7 +8,7 @@ public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> NugetDelete(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetDeleteOptions? options = null,
+        DotnetNugetDeleteOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -19,7 +19,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NugetDelete(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetDeleteOptions? options = null,
+        DotnetNugetDeleteOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -38,7 +38,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NugetDeleteOptions
+public sealed record DotnetNugetDeleteOptions
 {
     public System.String? ApiKey
     {

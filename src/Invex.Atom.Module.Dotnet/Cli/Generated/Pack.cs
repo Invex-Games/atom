@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Pack(
         System.String[] projectOrSolutionOrFile,
-        PackOptions? options = null,
+        DotnetPackOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -45,7 +45,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Pack(
         System.String projectOrSolutionOrFile,
-        PackOptions? options = null,
+        DotnetPackOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -67,7 +67,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Pack(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        PackOptions? options = null,
+        DotnetPackOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -78,7 +78,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Pack(
         System.String[] projectOrSolutionOrFile,
-        PackOptions? options = null,
+        DotnetPackOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -96,7 +96,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> Pack(
         System.String projectOrSolutionOrFile,
-        PackOptions? options = null,
+        DotnetPackOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -114,7 +114,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> Pack(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        PackOptions? options = null,
+        DotnetPackOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -133,7 +133,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record PackOptions
+public sealed record DotnetPackOptions
 {
     /// <summary>
     ///     The artifacts path. All output from the project, including build, publish, and pack output, will go in subfolders under the specified path.
@@ -147,7 +147,7 @@ public sealed record PackOptions
     /// <summary>
     ///
     /// </summary>
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -289,7 +289,7 @@ public sealed record PackOptions
     /// <summary>
     ///     Do not display the startup banner or the copyright message.
     /// </summary>
-    public System.Boolean? Nologo
+    public System.Boolean? NoLogo
     {
         get;
         init;
@@ -405,8 +405,8 @@ public sealed record PackOptions
             ArtifactsPath is not null
                 ? $"--artifacts-path {ArtifactsPath}"
                 : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             Configuration is not null
                 ? $"--configuration {Configuration}"
@@ -456,7 +456,7 @@ public sealed record PackOptions
             NoRestore is true
                 ? "--no-restore"
                 : null,
-            Nologo is true
+            NoLogo is true
                 ? "--nologo"
                 : null,
             Output is not null

@@ -27,7 +27,7 @@ public partial interface IDotnetCli
     public Task<ProcessRunResult> NewCreate(
         System.String templateShortName,
         System.String[] templateArgs,
-        NewCreateOptions? options = null,
+        DotnetNewCreateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -39,7 +39,7 @@ internal partial class DotnetCli
     public Task<ProcessRunResult> NewCreate(
         System.String templateShortName,
         System.String[] templateArgs,
-        NewCreateOptions? options = null,
+        DotnetNewCreateOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -59,7 +59,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record NewCreateOptions
+public sealed record DotnetNewCreateOptions
 {
     /// <summary>
     ///     Displays a summary of what would happen if the given command line were run if it would result in a template creation.

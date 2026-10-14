@@ -19,7 +19,7 @@ public partial interface IDotnetCli
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> SolutionList(
-        SolutionListOptions? options = null,
+        DotnetSolutionListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -28,7 +28,7 @@ public partial interface IDotnetCli
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> SolutionList(
-        SolutionListOptions? options = null,
+        DotnetSolutionListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     ) =>
@@ -38,7 +38,7 @@ internal partial class DotnetCli
 
 }
 [PublicAPI]
-public sealed record SolutionListOptions
+public sealed record DotnetSolutionListOptions
 {
     /// <summary>
     ///     Display solution folder paths.

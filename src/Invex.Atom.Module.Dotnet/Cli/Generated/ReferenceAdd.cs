@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> ReferenceAdd(
         System.Collections.Generic.IEnumerable<System.String> projectPath,
-        ReferenceAddOptions? options = null,
+        DotnetReferenceAddOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -34,7 +34,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> ReferenceAdd(
         System.Collections.Generic.IEnumerable<System.String> projectPath,
-        ReferenceAddOptions? options = null,
+        DotnetReferenceAddOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -53,7 +53,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record ReferenceAddOptions
+public sealed record DotnetReferenceAddOptions
 {
     /// <summary>
     ///     Add the reference only when targeting a specific framework.

@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Publish(
         System.String[] projectOrSolutionOrFile,
-        PublishOptions? options = null,
+        DotnetPublishOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -45,7 +45,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Publish(
         System.String projectOrSolutionOrFile,
-        PublishOptions? options = null,
+        DotnetPublishOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -67,7 +67,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> Publish(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        PublishOptions? options = null,
+        DotnetPublishOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -78,7 +78,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Publish(
         System.String[] projectOrSolutionOrFile,
-        PublishOptions? options = null,
+        DotnetPublishOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -96,7 +96,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> Publish(
         System.String projectOrSolutionOrFile,
-        PublishOptions? options = null,
+        DotnetPublishOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -114,7 +114,7 @@ internal partial class DotnetCli
 
     public Task<ProcessRunResult> Publish(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        PublishOptions? options = null,
+        DotnetPublishOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -133,7 +133,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record PublishOptions
+public sealed record DotnetPublishOptions
 {
     /// <summary>
     ///     The target architecture.
@@ -156,7 +156,7 @@ public sealed record PublishOptions
     /// <summary>
     ///
     /// </summary>
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -307,7 +307,7 @@ public sealed record PublishOptions
     /// <summary>
     ///     Do not display the startup banner or the copyright message.
     /// </summary>
-    public System.Boolean? Nologo
+    public System.Boolean? NoLogo
     {
         get;
         init;
@@ -428,8 +428,8 @@ public sealed record PublishOptions
             ArtifactsPath is not null
                 ? $"--artifacts-path {ArtifactsPath}"
                 : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
+            ConfigFile is not null
+                ? $"--configfile {ConfigFile}"
                 : null,
             Configuration is not null
                 ? $"--configuration {Configuration}"
@@ -482,7 +482,7 @@ public sealed record PublishOptions
             NoSelfContained is true
                 ? "--no-self-contained"
                 : null,
-            Nologo is true
+            NoLogo is true
                 ? "--nologo"
                 : null,
             Os is not null

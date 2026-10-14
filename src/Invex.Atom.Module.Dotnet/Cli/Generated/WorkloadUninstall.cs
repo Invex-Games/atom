@@ -23,7 +23,7 @@ public partial interface IDotnetCli
     /// </param>
     public Task<ProcessRunResult> WorkloadUninstall(
         System.Collections.Generic.IEnumerable<System.String> workloadId,
-        WorkloadUninstallOptions? options = null,
+        DotnetWorkloadUninstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -34,7 +34,7 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> WorkloadUninstall(
         System.Collections.Generic.IEnumerable<System.String> workloadId,
-        WorkloadUninstallOptions? options = null,
+        DotnetWorkloadUninstallOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     )
@@ -53,7 +53,7 @@ internal partial class DotnetCli
 }
 
 [PublicAPI]
-public sealed record WorkloadUninstallOptions
+public sealed record DotnetWorkloadUninstallOptions
 {
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
