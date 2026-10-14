@@ -48,12 +48,12 @@ internal sealed partial class AtomVariableProvider(IRootedFileSystem fileSystem,
     }
 
     /// <summary>
-    ///     Reads a variable from the local `variables` JSON file for a specific job and sets it as an environment variable.
+    ///     Reads a variable from the local `variables` JSON file for a specific job.
     /// </summary>
     /// <param name="jobName">The name of the job context from which to read.</param>
     /// <param name="variableName">The name of the variable to read.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns><c>true</c> if the variable was found and set; otherwise, <c>false</c>.</returns>
+    /// <returns>The variable's value, or <c>null</c> if it was not found.</returns>
     public async Task<string?> ReadVariable(
         string jobName,
         string variableName,
