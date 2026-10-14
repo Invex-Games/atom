@@ -74,12 +74,6 @@ public static class WorkflowOptionsExtensions
             };
 
         // MacOS x64 4x
-        public GithubRunsOn MacOs_13 =>
-            field ??= new()
-            {
-                Labels = [WorkflowLabels.Github.RunsOn.MacOs_13],
-            };
-
         public GithubRunsOn MacOs_15_Intel =>
             field ??= new()
             {
@@ -130,12 +124,6 @@ public static class WorkflowOptionsExtensions
                 Labels = [WorkflowLabels.Github.RunsOn.MacOs_14_Large],
             };
 
-        public GithubRunsOn MacOs_13_Large =>
-            field ??= new()
-            {
-                Labels = [WorkflowLabels.Github.RunsOn.MacOs_13_Large],
-            };
-
         // MacOS ARM 5x
         public GithubRunsOn MacOs_Latest_XLarge =>
             field ??= new()
@@ -159,12 +147,6 @@ public static class WorkflowOptionsExtensions
             field ??= new()
             {
                 Labels = [WorkflowLabels.Github.RunsOn.MacOs_14_XLarge],
-            };
-
-        public GithubRunsOn MacOs_13_XLarge =>
-            field ??= new()
-            {
-                Labels = [WorkflowLabels.Github.RunsOn.MacOs_13_XLarge],
             };
 
         public GithubRunsOn SetByMatrix { get; } = new()

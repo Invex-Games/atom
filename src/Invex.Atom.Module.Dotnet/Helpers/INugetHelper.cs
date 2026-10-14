@@ -102,6 +102,8 @@ public interface INugetHelper : IBuildInfo
     /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
     /// <remarks>
     ///     If <see cref="NugetDryRun" /> is <c>true</c>, the push operation will be simulated.
+    ///     The API key is never written to the log. If <c>dotnet nuget push</c> exits with a non-zero exit code, the
+    ///     process runner throws and the target fails.
     /// </remarks>
     [PublicAPI]
     async Task PushPackageToNuget(
@@ -126,12 +128,19 @@ public interface INugetHelper : IBuildInfo
             ? $" --configfile \"{configFile}\""
             : string.Empty;
 
-        var processRunResult = await ProcessRunner.RunAsync(new("dotnet",
-                $"nuget push \"{packagePath}\"{configFileFlag} --source {feed} --api-key {apiKey}"),
-            cancellationToken);
+        // The invocation line contains the API key, so it is not logged.
+        Logger.LogInformation("Run: dotnet nuget push \"{PackagePath}\"{ConfigFileFlag} --source {Feed} --api-key ***",
+            packagePath,
+            configFileFlag,
+            feed);
 
-        if (processRunResult.ExitCode is not 0)
-            Logger.LogError("Failed to push package to Nuget: {ProcessRunResult}", processRunResult.Error);
+        // A non-zero exit code throws a ProcessException, failing the target.
+        await ProcessRunner.RunAsync(new("dotnet",
+                $"nuget push \"{packagePath}\"{configFileFlag} --source {feed} --api-key {apiKey}")
+            {
+                InvocationLogLevel = LogLevel.None,
+            },
+            cancellationToken);
 
         Logger.LogInformation("Package pushed");
     }
@@ -232,12 +241,12 @@ public interface INugetHelper : IBuildInfo
     /// <param name="feeds">An array of <see cref="NugetFeed" /> objects to include in the configuration.</param>
     /// <param name="skipIfExists">
     ///     If <c>true</c>, and all specified feeds are already present in the existing NuGet.Config,
-    ///     no overwrite will occur, and an empty scope will be returned.
+    ///     no overwrite will occur, and <c>null</c> will be returned.
     /// </param>
     /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>
-    ///     A <see cref="Task{TResult}" /> that returns a <see cref="TransformFileScope" /> instance.
-    ///     Disposing this scope will restore the original NuGet.Config file.
+    ///     A <see cref="Task{TResult}" /> that returns a <see cref="TransformFileScope" /> instance, or <c>null</c> if the
+    ///     overwrite was skipped. Disposing the scope restores the original NuGet.Config file.
     /// </returns>
     /// <remarks>
     ///     This method generates a `NuGet.Config` XML structure including `&lt;packageSources&gt;` and `&lt;
@@ -245,12 +254,12 @@ public interface INugetHelper : IBuildInfo
     ///     specified via <see cref="NugetFeed.PlainTextPassword" />.
     /// </remarks>
     [PublicAPI]
-    async Task CreateNugetConfigOverwriteScope(
+    async Task<TransformFileScope?> CreateNugetConfigOverwriteScope(
         NugetFeed[] feeds,
         bool skipIfExists = false,
         CancellationToken cancellationToken = default)
     {
-        if (skipIfExists)
+        if (skipIfExists && RootedFileSystem.File.Exists(NugetConfigPath))
         {
             var nugetContents = await RootedFileSystem.File.ReadAllTextAsync(NugetConfigPath, cancellationToken);
 
@@ -258,36 +267,36 @@ public interface INugetHelper : IBuildInfo
             {
                 Logger.LogInformation("Nuget config already contains package sources, skipping");
 
-                return;
+                return null;
             }
         }
 
         var sources = string.Join(Environment.NewLine,
-            feeds.Select((x, i) => $"<add key=\"{x.Name ?? $"Feed{i}"}\" value=\"{x.Url}\" />"));
+            feeds.Select((x, i) => $"<add key=\"{Escape(x.Name ?? $"Feed{i}")}\" value=\"{Escape(x.Url)}\" />"));
 
         var credentials = string.Join(Environment.NewLine,
             feeds.Select((x, i) =>
             {
                 var result = new StringBuilder();
 
-                result.AppendLine($"    <{x.Name ?? $"Feed{i}"}>");
+                result.AppendLine($"    <{XmlConvert.EncodeLocalName(x.Name ?? $"Feed{i}")}>");
 
-                var username = x.Username();
+                var username = x.Username?.Invoke();
 
                 if (username is not null)
-                    result.AppendLine($"      <add key=\"Username\" value=\"{username}\" />");
+                    result.AppendLine($"      <add key=\"Username\" value=\"{Escape(username)}\" />");
 
-                var password = x.Password();
+                var password = x.Password?.Invoke();
 
                 if (password is not null)
-                    result.AppendLine($"      <add key=\"Password\" value=\"{password}\" />");
+                    result.AppendLine($"      <add key=\"Password\" value=\"{Escape(password)}\" />");
 
-                var plainTextPassword = x.PlainTextPassword();
+                var plainTextPassword = x.PlainTextPassword?.Invoke();
 
                 if (plainTextPassword is not null)
-                    result.AppendLine($"      <add key=\"ClearTextPassword\" value=\"{plainTextPassword}\" />");
+                    result.AppendLine($"      <add key=\"ClearTextPassword\" value=\"{Escape(plainTextPassword)}\" />");
 
-                result.AppendLine($"    </{x.Name ?? $"Feed{i}"}>");
+                result.AppendLine($"    </{XmlConvert.EncodeLocalName(x.Name ?? $"Feed{i}")}>");
 
                 return result.ToString();
             }));
@@ -304,6 +313,9 @@ public interface INugetHelper : IBuildInfo
                           </configuration>
                           """;
 
-        await CreateNugetConfigOverwriteScope(configText, cancellationToken);
+        return await CreateNugetConfigOverwriteScope(configText, cancellationToken);
+
+        static string Escape(string value) =>
+            SecurityElement.Escape(value);
     }
 }
