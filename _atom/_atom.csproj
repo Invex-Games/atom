@@ -30,11 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Invex.Atom.Module.DevopsWorkflows\Invex.Atom.Module.DevopsWorkflows.csproj" />
+    <ProjectReference Include="..\src\Invex.Atom.Module.DevOpsWorkflows\Invex.Atom.Module.DevOpsWorkflows.csproj" />
     <ProjectReference Include="..\src\Invex.Atom.Module.Dotnet\Invex.Atom.Module.Dotnet.csproj" />
     <ProjectReference Include="..\src\Invex.Atom.Module.GitVersion\Invex.Atom.Module.GitVersion.csproj" />
     <ProjectReference Include="..\src\Invex.Atom.Workflows\Invex.Atom.Workflows.csproj" />
-    <ProjectReference Include="..\src\Invex.Atom.Module.GithubWorkflows\Invex.Atom.Module.GithubWorkflows.csproj" />
+    <ProjectReference Include="..\src\Invex.Atom.Module.GitHubWorkflows\Invex.Atom.Module.GitHubWorkflows.csproj" />
     <ProjectReference Include="..\src\Invex.Atom.Build.SourceGenerators\Invex.Atom.Build.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\src\Invex.Atom.Build.Analyzers\Invex.Atom.Build.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>

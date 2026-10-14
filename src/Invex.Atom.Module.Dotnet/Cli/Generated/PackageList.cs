@@ -13,32 +13,35 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> PackageList(
-        PackageListOptions? options = null,
+        DotnetPackageListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> PackageList(
-        PackageListOptions? options = null,
+        DotnetPackageListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    ) =>
-        processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", (options ?? new()).ToString())
-            : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
-    
+    )
+    {
+        var args = new List<string> { "package", "list" };
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
+    }
+
 }
 [PublicAPI]
-public sealed record PackageListOptions
+public sealed record DotnetPackageListOptions
 {
     /// <summary>
     ///     The path to the NuGet config file to use. Requires the '--outdated', '--deprecated' or '--vulnerable' option.
@@ -48,7 +51,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Lists packages that have been deprecated. Cannot be combined with '--vulnerable' or '--outdated' options.
     /// </summary>
@@ -57,7 +60,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Specifies the output format type for the list packages command.
     /// </summary>
@@ -66,7 +69,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Chooses a framework to show its packages. Use the option multiple times for multiple frameworks.
     /// </summary>
@@ -75,7 +78,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Consider only the packages with a matching major version number when searching for newer packages. Requires the '--outdated' option.
     /// </summary>
@@ -84,7 +87,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Consider only the packages with a matching major and minor version numbers when searching for newer packages. Requires the '--outdated' option.
     /// </summary>
@@ -93,7 +96,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Consider packages with prerelease versions when searching for newer packages. Requires the '--outdated' option.
     /// </summary>
@@ -102,7 +105,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Lists transitive and top-level packages.
     /// </summary>
@@ -111,7 +114,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -120,7 +123,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Do not restore before running the command.
     /// </summary>
@@ -129,7 +132,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Lists packages that have newer versions. Cannot be combined with '--deprecated' or '--vulnerable' options.
     /// </summary>
@@ -138,7 +141,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Specifies the version of machine-readable output. Requires the '--format json' option.
     /// </summary>
@@ -147,7 +150,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The project file to operate on. If a file is not specified, the command will search the current directory for one.
     /// </summary>
@@ -156,7 +159,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The NuGet sources to use when searching for newer packages. Requires the '--outdated', '--deprecated' or '--vulnerable' option.
     /// </summary>
@@ -165,7 +168,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -174,7 +177,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Lists packages that have known vulnerabilities. Cannot be combined with '--deprecated' or '--outdated' options.
     /// </summary>
@@ -183,62 +186,35 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            Config is not null
-                ? $"--config {Config}"
-                : null,
-            Deprecated is true
-                ? "--deprecated"
-                : null,
-            Format is not null
-                ? $"--format {Format}"
-                : null,
-            Framework is not null
-                ? $"--framework {string.Join(" --framework ", Framework)}"
-                : null,
-            HighestMinor is true
-                ? "--highest-minor"
-                : null,
-            HighestPatch is true
-                ? "--highest-patch"
-                : null,
-            IncludePrerelease is true
-                ? "--include-prerelease"
-                : null,
-            IncludeTransitive is true
-                ? "--include-transitive"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            NoRestore is true
-                ? "--no-restore"
-                : null,
-            Outdated is true
-                ? "--outdated"
-                : null,
-            OutputVersion is not null
-                ? $"--output-version {OutputVersion}"
-                : null,
-            Project is not null
-                ? $"--project {Project}"
-                : null,
-            Source is not null
-                ? $"--source {string.Join(" --source ", Source)}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-            Vulnerable is true
-                ? "--vulnerable"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--config", Config);
+        DotnetCliArgs.AddFlag(args, "--deprecated", Deprecated);
+        DotnetCliArgs.AddOption(args, "--format", Format);
+        DotnetCliArgs.AddOption(args, "--framework", Framework);
+        DotnetCliArgs.AddFlag(args, "--highest-minor", HighestMinor);
+        DotnetCliArgs.AddFlag(args, "--highest-patch", HighestPatch);
+        DotnetCliArgs.AddFlag(args, "--include-prerelease", IncludePrerelease);
+        DotnetCliArgs.AddFlag(args, "--include-transitive", IncludeTransitive);
+        DotnetCliArgs.AddFlag(args, "--interactive", Interactive);
+        DotnetCliArgs.AddFlag(args, "--no-restore", NoRestore);
+        DotnetCliArgs.AddFlag(args, "--outdated", Outdated);
+        DotnetCliArgs.AddOption(args, "--output-version", OutputVersion);
+        DotnetCliArgs.AddOption(args, "--project", Project);
+        DotnetCliArgs.AddOption(args, "--source", Source);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+        DotnetCliArgs.AddFlag(args, "--vulnerable", Vulnerable);
+
+        return args;
     }
-    
+
 }
 

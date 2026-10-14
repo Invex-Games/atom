@@ -3,12 +3,12 @@
 Adds GitHub Actions support to Atom — workflow YAML generation, GitHub-specific build options, variable handling, and
 access to GitHub environment variables. Add it when you want Atom to generate GitHub Actions workflows.
 
-**Package:** `Invex.Atom.Module.GithubWorkflows`
+**Package:** `Invex.Atom.Module.GitHubWorkflows`
 
 ## Installation
 
 ```shell
-dotnet add package Invex.Atom.Module.GithubWorkflows
+dotnet add package Invex.Atom.Module.GitHubWorkflows
 ```
 
 ## Usage
@@ -16,7 +16,7 @@ dotnet add package Invex.Atom.Module.GithubWorkflows
 ```csharp
 [BuildDefinition]
 [GenerateEntryPoint]
-internal partial class Build : WorkflowBuildDefinition, IGithubWorkflows
+internal partial class Build : WorkflowBuildDefinition, IGitHubWorkflows
 {
     public override IReadOnlyList<WorkflowDefinition> Workflows =>
     [
@@ -24,7 +24,7 @@ internal partial class Build : WorkflowBuildDefinition, IGithubWorkflows
         {
             Triggers = [WorkflowTriggers.PushToMain],
             Targets = [new(nameof(Compile))],
-            Types = [WorkflowTypes.Github.Action],
+            Types = [WorkflowTypes.GitHub.Action],
         },
     ];
 }
@@ -38,42 +38,42 @@ Running `dotnet run -- Gen` generates `.github/workflows/CI.yml`.
 
 The module provides a `WorkflowFileWriter` that generates GitHub Actions YAML files in `.github/workflows/`.
 
-### `Github` Static Class
+### `GitHub` Static Class
 
 Access all GitHub Actions environment variables in a typed way:
 
 ```csharp
-if (Github.IsGithubActions)
+if (GitHub.IsGitHubActions)
 {
-    var sha = Github.Variables.Sha;
-    var ref = Github.Variables.Ref;
+    var sha = GitHub.Variables.Sha;
+    var ref = GitHub.Variables.Ref;
 }
 ```
 
 ### Variable Provider
 
-`GithubVariableProvider` writes variables to `$GITHUB_OUTPUT` and reads them from job outputs, enabling cross-job data
+`GitHubVariableProvider` writes variables to `$GITHUB_OUTPUT` and reads them from job outputs, enabling cross-job data
 sharing.
 
 ### Report Writer
 
-`GithubSummaryOutcomeReportWriter` writes build report data to the GitHub Actions job summary (`$GITHUB_STEP_SUMMARY`).
+`GitHubSummaryOutcomeReportWriter` writes build report data to the GitHub Actions job summary (`$GITHUB_STEP_SUMMARY`).
 
 ### Runner Labels
 
-Use `WorkflowLabels.Github.RunsOn.*` constants for runner selection:
+Use `WorkflowLabels.GitHub.RunsOn.*` constants for runner selection:
 
 ```csharp
-WorkflowLabels.Github.RunsOn.Ubuntu_Latest
-WorkflowLabels.Github.RunsOn.Windows_Latest
-WorkflowLabels.Github.RunsOn.MacOs_Latest
+WorkflowLabels.GitHub.RunsOn.Ubuntu_Latest
+WorkflowLabels.GitHub.RunsOn.Windows_Latest
+WorkflowLabels.GitHub.RunsOn.MacOS_Latest
 ```
 
 ### GitHub-Specific Options
 
-- `BuildOptions.Github.RunsOn.SetByMatrix` — set the runner from a matrix dimension
-- `GithubTokenPermissionsOption` — fine-grained `GITHUB_TOKEN` permissions
-- `BuildOptions.Github.Concurrency.Set(...)` — limit concurrent workflow runs sharing a group
+- `BuildOptions.GitHub.RunsOn.SetByMatrix` — set the runner from a matrix dimension
+- `GitHubTokenPermissionsOption` — fine-grained `GITHUB_TOKEN` permissions
+- `BuildOptions.GitHub.Concurrency.Set(...)` — limit concurrent workflow runs sharing a group
 - GitHub-specific triggers (e.g. `release` events)
 
 Configure concurrency on a `WorkflowDefinition` with a literal group or a text expression:
@@ -81,12 +81,12 @@ Configure concurrency on a `WorkflowDefinition` with a literal group or a text e
 ```csharp
 Options =
 [
-    BuildOptions.Github.Concurrency.Set(
+    BuildOptions.GitHub.Concurrency.Set(
         TextExpressions.Concat(
         [
-            TextExpressions.Github.GithubWorkflow.Evaluate(),
+            TextExpressions.GitHub.GitHubWorkflow.Evaluate(),
             "-",
-            TextExpressions.Github.GithubRef.Evaluate(),
+            TextExpressions.GitHub.GitHubRef.Evaluate(),
         ]),
         true),
 ];
@@ -97,14 +97,14 @@ Options =
 Generate Dependabot configuration alongside your workflow files:
 
 ```csharp
-WorkflowPresets.Github.Dependabot(new()
+WorkflowPresets.GitHub.Dependabot(new()
 {
     Updates =
     [
         new()
         {
             Directory = "/",
-            PackageEcosystem = WorkflowLabels.Github.Dependabot.NugetEcosystem,
+            PackageEcosystem = WorkflowLabels.GitHub.Dependabot.NugetEcosystem,
             Schedule = new() { Interval = ScheduleInterval.Daily },
         },
     ],
@@ -116,6 +116,6 @@ WorkflowPresets.Github.Dependabot(new()
 - [Workflow Definitions](../workflows/workflow-definitions.md): a full GitHub Actions example.
 - [Workflow Options](../workflows/workflow-options.md): runner, token, and condition options.
 - [DevOps Workflows](devops-workflows.md): the Azure DevOps counterpart.
-- <xref:Invex.Atom.Module.GithubWorkflows.Helpers.IGithubWorkflows>
-- <xref:Invex.Atom.Module.GithubWorkflows.Github>
-- <xref:Invex.Atom.Module.GithubWorkflows.Options.GithubTrigger>
+- <xref:Invex.Atom.Module.GitHubWorkflows.Helpers.IGitHubWorkflows>
+- <xref:Invex.Atom.Module.GitHubWorkflows.GitHub>
+- <xref:Invex.Atom.Module.GitHubWorkflows.Options.GitHubTrigger>

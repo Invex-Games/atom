@@ -25,8 +25,9 @@ entry point discovers the interface members and runs the build.
 
 ## Alternative: partial class builds
 
-Use a partial class when the build itself needs to override virtual members such as
-`ConfigureDefinitionHost`:
+Use a partial class when the build itself needs class members, such as the optional
+`OnConfigureHostBuilder` host hook (an interface-based build can add them to its generated `partial class Build`
+instead):
 
 ```csharp
 [BuildDefinition]
@@ -100,17 +101,18 @@ The source generator discovers `SayGreeting` and `Greeting` from `IMyTargets` an
 When applied alongside `[BuildDefinition]`, this attribute generates a typed model of your solution's projects, giving
 you compile-time access to project paths.
 
-## `ConfigureDefinitionHost`
+## `OnConfigureHostBuilder` / `OnConfigureHost`
 
-Override `ConfigureDefinitionHost` on your build class to register additional services before the build runs:
+Implement the optional static partial method `OnConfigureHostBuilder` on your build class to register additional
+services before the build runs, and `OnConfigureHost` to configure the built host:
 
 ```csharp
-public override void ConfigureDefinitionHost(IHostApplicationBuilder builder)
-{
-    base.ConfigureDefinitionHost(builder);
+static partial void OnConfigureHostBuilder(IHostApplicationBuilder builder) =>
     builder.Services.AddSingleton<IMyService, MyService>();
-}
 ```
+
+They run after the hooks of the module interfaces the build implements, without constructing the build definition.
+See [Hosting](hosting.md#onconfigurehostbuilder--onconfigurehost) for details, including interface-based builds.
 
 ## Next steps
 

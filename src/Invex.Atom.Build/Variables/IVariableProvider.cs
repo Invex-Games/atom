@@ -9,25 +9,23 @@
 ///         and the <see cref="IVariableService" /> will delegate operations to them in a chain of responsibility.
 ///     </para>
 ///     <para>
-///         Implementations should return <c>true</c> if they successfully handle an operation, or <c>false</c> to allow
-///         the next provider in the chain to attempt it.
+///         <see cref="WriteVariable" /> returns <c>true</c> if the provider handled the write, or <c>false</c> to allow
+///         the next provider in the chain to attempt it. <see cref="ReadVariable" /> returns the variable's value, or
+///         <c>null</c> to allow the next provider to attempt it.
 ///     </para>
 /// </remarks>
 /// <example>
 ///     <code>
-/// public class CustomVariableProvider : IWorkflowVariableProvider
+/// public class CustomVariableProvider : IVariableProvider
 /// {
 ///     public async Task&lt;bool&gt; WriteVariable(string variableName, string variableValue, CancellationToken cancellationToken)
 ///     {
 ///         // Custom logic to write to an external system
 ///         return await WriteToExternalSystemAsync(variableName, variableValue);
 ///     }
-///     public async Task&lt;bool&gt; ReadVariable(string jobName, string variableName, CancellationToken cancellationToken)
-///     {
-///         // Custom logic to read from an external system
-///         var value = await ReadFromExternalSystemAsync(jobName, variableName);
-///         return value != null;
-///     }
+///     public async Task&lt;string?&gt; ReadVariable(string jobName, string variableName, CancellationToken cancellationToken) =>
+///         // Custom logic to read from an external system; null if this provider does not have it
+///         await ReadFromExternalSystemAsync(jobName, variableName);
 /// }
 ///     </code>
 /// </example>
@@ -54,8 +52,7 @@ public interface IVariableProvider
     /// <param name="variableName">The name of the variable to read.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>
-    ///     A task that resolves to <c>true</c> if the provider successfully found and retrieved the variable;
-    ///     otherwise, <c>false</c>.
+    ///     A task that resolves to the variable's value, or <c>null</c> if this provider cannot supply it.
     /// </returns>
-    Task<bool> ReadVariable(string jobName, string variableName, CancellationToken cancellationToken = default);
+    Task<string?> ReadVariable(string jobName, string variableName, CancellationToken cancellationToken = default);
 }

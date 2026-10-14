@@ -62,7 +62,7 @@ public class AT0003_ConfigureHostBuilderPartialMethodNotImplementedCodeFixProvid
             return document;
 
         // Create the method declaration:
-        // protected static partial void ConfigureBuilderFrom{InterfaceName}(IHostApplicationBuilder builder)
+        // protected static partial void ConfigureHostBuilderFrom{InterfaceName}(IHostApplicationBuilder builder)
         // {
         // }
         var method = SyntaxFactory

@@ -16,43 +16,40 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> NewSearch(
         System.String templateName,
-        NewSearchOptions? options = null,
+        DotnetNewSearchOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NewSearch(
         System.String templateName,
-        NewSearchOptions? options = null,
+        DotnetNewSearchOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "new search",
-            templateName,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "new", "search" };
+        DotnetCliArgs.AddPositional(args, templateName);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record NewSearchOptions
+public sealed record DotnetNewSearchOptions
 {
     /// <summary>
     ///     Filters the templates based on the template author.
@@ -62,25 +59,16 @@ public sealed record NewSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
-    ///     Filters the templates based on baseline defined in the template.
-    /// </summary>
-    public System.String? Baseline
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Specifies the columns to display in the output. 
+    ///     Specifies the columns to display in the output.
     /// </summary>
     public System.String[]? Columns
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Displays all columns in the output.
     /// </summary>
@@ -89,7 +77,7 @@ public sealed record NewSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Filters templates based on language.
     /// </summary>
@@ -98,7 +86,7 @@ public sealed record NewSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Filters the templates based on NuGet package ID.
     /// </summary>
@@ -107,7 +95,7 @@ public sealed record NewSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Filters the templates based on the tag.
     /// </summary>
@@ -116,7 +104,7 @@ public sealed record NewSearchOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Filters templates based on available types. Predefined values are "project" and "item".
     /// </summary>
@@ -125,38 +113,26 @@ public sealed record NewSearchOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            Author is not null
-                ? $"--author {Author}"
-                : null,
-            Baseline is not null
-                ? $"--baseline {Baseline}"
-                : null,
-            Columns is not null
-                ? $"--columns {string.Join(" --columns ", Columns)}"
-                : null,
-            ColumnsAll is true
-                ? "--columns-all"
-                : null,
-            Language is not null
-                ? $"--language {Language}"
-                : null,
-            Package is not null
-                ? $"--package {Package}"
-                : null,
-            Tag is not null
-                ? $"--tag {Tag}"
-                : null,
-            Type is not null
-                ? $"--type {Type}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--author", Author);
+        DotnetCliArgs.AddOption(args, "--columns", Columns);
+        DotnetCliArgs.AddFlag(args, "--columns-all", ColumnsAll);
+        DotnetCliArgs.AddOption(args, "--language", Language);
+        DotnetCliArgs.AddOption(args, "--package", Package);
+        DotnetCliArgs.AddOption(args, "--tag", Tag);
+        DotnetCliArgs.AddOption(args, "--type", Type);
+
+        return args;
     }
-    
+
 }
 

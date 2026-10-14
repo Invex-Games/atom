@@ -219,7 +219,7 @@ internal sealed class TargetDefinitionTests
             Name = "name",
         };
 
-        targetDefinition.Hidden.ShouldBeFalse();
+        targetDefinition.IsHidden.ShouldBeFalse();
     }
 
     [Test]
@@ -230,8 +230,8 @@ internal sealed class TargetDefinitionTests
             Name = "name",
         };
 
-        targetDefinition.IsHidden();
-        targetDefinition.Hidden.ShouldBeTrue();
+        targetDefinition.AsHidden();
+        targetDefinition.IsHidden.ShouldBeTrue();
     }
 
     [Test]
@@ -242,8 +242,8 @@ internal sealed class TargetDefinitionTests
             Name = "name",
         };
 
-        targetDefinition.IsHidden(false);
-        targetDefinition.Hidden.ShouldBeFalse();
+        targetDefinition.AsHidden(false);
+        targetDefinition.IsHidden.ShouldBeFalse();
     }
 
     [Test]

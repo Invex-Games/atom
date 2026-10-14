@@ -40,8 +40,8 @@ internal partial class Build : WorkflowBuildDefinition, IGitVersion, IAzureKeyVa
 | Package                             | Interface               | Description                                        |
 |-------------------------------------|-------------------------|----------------------------------------------------|
 | `Invex.Atom.Module.Dotnet`          | *(various)*             | .NET CLI helpers (build, test, pack, publish)      |
-| `Invex.Atom.Module.GithubWorkflows` | `IGithubWorkflows`      | GitHub Actions workflow writer and helpers         |
-| `Invex.Atom.Module.DevopsWorkflows` | `IDevopsWorkflows`      | Azure DevOps Pipelines workflow writer and helpers |
+| `Invex.Atom.Module.GitHubWorkflows` | `IGitHubWorkflows`      | GitHub Actions workflow writer and helpers         |
+| `Invex.Atom.Module.DevOpsWorkflows` | `IDevOpsWorkflows`      | Azure DevOps Pipelines workflow writer and helpers |
 | `Invex.Atom.Module.AzureKeyVault`   | `IAzureKeyVault`        | Azure Key Vault secrets provider                   |
 | `Invex.Atom.Module.AzureStorage`    | `IAzureArtifactStorage` | Azure Blob Storage artifact provider               |
 | `Invex.Atom.Module.GitVersion`      | `IGitVersion`           | GitVersion-based build ID and version providers    |
@@ -52,7 +52,7 @@ internal partial class Build : WorkflowBuildDefinition, IGitVersion, IAzureKeyVa
 - Targets are defined as `Target` properties on the interface with default implementations.
 - Parameters are declared with `[ParamDefinition]` or `[SecretDefinition]`.
 - Service registration uses the `[ConfigureHostBuilder]` attribute with a static partial
-  `ConfigureBuilderFrom{InterfaceName}` method.
+  `ConfigureHostBuilderFrom{InterfaceName}` method.
 - Build options are extended via the static `BuildOptions` class using extension-like patterns.
 
 ## Next steps

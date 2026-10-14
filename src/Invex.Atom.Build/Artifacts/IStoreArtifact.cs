@@ -31,12 +31,13 @@ public interface IStoreArtifact : IAtomArtifactsParam, ISetupBuildInfo
     /// </remarks>
     Target StoreArtifact =>
         t => t
-            .IsHidden()
+            .AsHidden()
             .DescribedAs("Stores artifacts.")
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildName))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildId))
             .RequiresParam(nameof(AtomArtifacts))
             .RequiresParam(ArtifactProvider.RequiredParams.ToArray())
+            .UsesParam(ArtifactProvider.OptionalParams.ToArray())
             .Executes(async cancellationToken =>
             {
                 Logger.LogInformation("Using artifact provider: {Provider}",

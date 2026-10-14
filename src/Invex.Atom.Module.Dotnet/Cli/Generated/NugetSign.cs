@@ -8,103 +8,100 @@ public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> NugetSign(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetSignOptions? options = null,
+        DotnetNugetSignOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NugetSign(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetSignOptions? options = null,
+        DotnetNugetSignOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "nuget sign",
-            $"{string.Join(" ", packagePaths)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "nuget", "sign" };
+        DotnetCliArgs.AddPositional(args, packagePaths);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record NugetSignOptions
+public sealed record DotnetNugetSignOptions
 {
     public System.String? CertificateFingerprint
     {
         get;
         init;
     }
-    
+
     public System.String? CertificatePassword
     {
         get;
         init;
     }
-    
+
     public System.String? CertificatePath
     {
         get;
         init;
     }
-    
+
     public System.String? CertificateStoreLocation
     {
         get;
         init;
     }
-    
+
     public System.String? CertificateStoreName
     {
         get;
         init;
     }
-    
+
     public System.String? CertificateSubjectName
     {
         get;
         init;
     }
-    
+
     public System.String? HashAlgorithm
     {
         get;
         init;
     }
-    
+
     public System.String? Output
     {
         get;
         init;
     }
-    
+
     public System.Boolean? Overwrite
     {
         get;
         init;
     }
-    
+
     public System.String? TimestampHashAlgorithm
     {
         get;
         init;
     }
-    
+
     public System.String? Timestamper
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -113,50 +110,31 @@ public sealed record NugetSignOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            CertificateFingerprint is not null
-                ? $"--certificate-fingerprint {CertificateFingerprint}"
-                : null,
-            CertificatePassword is not null
-                ? $"--certificate-password {CertificatePassword}"
-                : null,
-            CertificatePath is not null
-                ? $"--certificate-path {CertificatePath}"
-                : null,
-            CertificateStoreLocation is not null
-                ? $"--certificate-store-location {CertificateStoreLocation}"
-                : null,
-            CertificateStoreName is not null
-                ? $"--certificate-store-name {CertificateStoreName}"
-                : null,
-            CertificateSubjectName is not null
-                ? $"--certificate-subject-name {CertificateSubjectName}"
-                : null,
-            HashAlgorithm is not null
-                ? $"--hash-algorithm {HashAlgorithm}"
-                : null,
-            Output is not null
-                ? $"--output {Output}"
-                : null,
-            Overwrite is true
-                ? "--overwrite"
-                : null,
-            TimestampHashAlgorithm is not null
-                ? $"--timestamp-hash-algorithm {TimestampHashAlgorithm}"
-                : null,
-            Timestamper is not null
-                ? $"--timestamper {Timestamper}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--certificate-fingerprint", CertificateFingerprint);
+        DotnetCliArgs.AddOption(args, "--certificate-password", CertificatePassword);
+        DotnetCliArgs.AddOption(args, "--certificate-path", CertificatePath);
+        DotnetCliArgs.AddOption(args, "--certificate-store-location", CertificateStoreLocation);
+        DotnetCliArgs.AddOption(args, "--certificate-store-name", CertificateStoreName);
+        DotnetCliArgs.AddOption(args, "--certificate-subject-name", CertificateSubjectName);
+        DotnetCliArgs.AddOption(args, "--hash-algorithm", HashAlgorithm);
+        DotnetCliArgs.AddOption(args, "--output", Output);
+        DotnetCliArgs.AddFlag(args, "--overwrite", Overwrite);
+        DotnetCliArgs.AddOption(args, "--timestamp-hash-algorithm", TimestampHashAlgorithm);
+        DotnetCliArgs.AddOption(args, "--timestamper", Timestamper);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+
+        return args;
     }
-    
+
 }
 

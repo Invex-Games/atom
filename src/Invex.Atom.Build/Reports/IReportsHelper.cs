@@ -15,6 +15,6 @@ public interface IReportsHelper : IBuildAccessor
     /// </remarks>
     /// <param name="reportData">The report data to add.</param>
     void AddReportData(IReportData reportData) =>
-        GetService<ReportService>()
+        GetService<IReportService>()
             .AddReportData(reportData);
 }

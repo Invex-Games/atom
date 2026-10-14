@@ -290,6 +290,9 @@
         Name: GetStoredRunIdentifiers
       },
       {
+        Name: OptionalParams
+      },
+      {
         Name: RequiredParams
       },
       {
@@ -404,19 +407,10 @@
         Name: Get
       },
       {
-        Name: Get
-      },
-      {
-        Name: GetOptions
-      },
-      {
         Name: GetOptions
       },
       {
         Name: GetOptionsGrouped
-      },
-      {
-        Name: IsEnabled
       },
       {
         Name: IsEnabled
@@ -473,9 +467,6 @@
     Members: [
       {
         Name: AccessParam
-      },
-      {
-        Name: ConfigureDefinitionHost
       },
       {
         Name: ParamDefinitions
@@ -536,9 +527,6 @@
         Name: AccessParam
       },
       {
-        Name: ConfigureDefinitionHost
-      },
-      {
         Name: Options
       },
       {
@@ -566,6 +554,9 @@
   {
     Name: Invex.Atom.Build.Definition.TargetDefinition,
     Members: [
+      {
+        Name: AsHidden
+      },
       {
         Name: ConsumedArtifacts
       },
@@ -616,9 +607,6 @@
       },
       {
         Name: Extends
-      },
-      {
-        Name: Hidden
       },
       {
         Name: IsHidden
@@ -779,10 +767,10 @@
     Name: Invex.Atom.Build.Hosting.IConfigureHost,
     Members: [
       {
-        Name: ConfigureBuildHost
+        Name: ConfigureHost
       },
       {
-        Name: ConfigureBuildHostBuilder
+        Name: ConfigureHostBuilder
       }
     ]
   },
@@ -1126,6 +1114,9 @@
       },
       {
         Name: MaskMatchingSecrets
+      },
+      {
+        Name: PrefetchSecretsAsync
       }
     ]
   },
@@ -1174,7 +1165,10 @@
     ]
   },
   {
-    Name: Invex.Atom.Build.Params.ParamDefinitionAttribute,
+    Name: Invex.Atom.Build.Params.ParamDefinitionAttribute
+  },
+  {
+    Name: Invex.Atom.Build.Params.ParamDefinitionAttributeBase,
     Members: [
       {
         Name: ArgName
@@ -1338,6 +1332,20 @@
     Name: Invex.Atom.Build.Reports.IReportData
   },
   {
+    Name: Invex.Atom.Build.Reports.IReportService,
+    Members: [
+      {
+        Name: AddReportData
+      },
+      {
+        Name: GetReportData
+      },
+      {
+        Name: GetReportData
+      }
+    ]
+  },
+  {
     Name: Invex.Atom.Build.Reports.IReportsHelper,
     Members: [
       {
@@ -1424,17 +1432,6 @@
     ]
   },
   {
-    Name: Invex.Atom.Build.Reports.ReportService,
-    Members: [
-      {
-        Name: AddReportData
-      },
-      {
-        Name: GetReportData
-      }
-    ]
-  },
-  {
     Name: Invex.Atom.Build.Reports.TableReportData,
     Members: [
       {
@@ -1511,7 +1508,7 @@
     Name: Invex.Atom.Build.Secrets.ISecretsProvider,
     Members: [
       {
-        Name: GetSecret
+        Name: GetSecretAsync
       },
       {
         Name: Priority
@@ -1609,12 +1606,6 @@
       },
       {
         Name: WithRetry
-      },
-      {
-        Name: WithRetry
-      },
-      {
-        Name: WithRetry
       }
     ]
   },
@@ -1625,9 +1616,6 @@
         Name: Convert
       }
     ]
-  },
-  {
-    Name: Invex.Atom.Build.Util.UnstableAPIAttribute
   },
   {
     Name: Invex.Atom.Build.Variables.IVariableProvider,

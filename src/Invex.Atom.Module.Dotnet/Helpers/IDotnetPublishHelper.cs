@@ -63,7 +63,7 @@ public interface IDotnetPublishHelper : IDotnetCliHelper, IBuildInfo
     ///             <item>
     ///                 <description>
     ///                     Executes the `dotnet publish` command using
-    ///                     <see cref="IDotnetCli.Publish(RootedPath, PublishOptions?, ProcessRunOptions?, CancellationToken)" />
+    ///                     <see cref="IDotnetCli.Publish(RootedPath, DotnetPublishOptions?, ProcessRunOptions?, CancellationToken)" />
     ///                     .
     ///                 </description>
     ///             </item>
@@ -175,7 +175,7 @@ public sealed record DotnetPublishAndStageOptions
     /// <summary>
     ///     Gets or sets the specific options to pass to the `dotnet publish` command.
     /// </summary>
-    public PublishOptions? PublishOptions { get; init; }
+    public DotnetPublishOptions? PublishOptions { get; init; }
 
     /// <summary>
     ///     Gets or sets a value indicating whether to automatically set project versions

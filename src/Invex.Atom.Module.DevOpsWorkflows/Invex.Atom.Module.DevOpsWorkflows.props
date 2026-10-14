@@ -1,0 +1,8 @@
+<Project>
+    <ItemGroup>
+        <Using Include="Invex.Atom.Module.DevOpsWorkflows" Global="true"/>
+        <Using Include="Invex.Atom.Module.DevOpsWorkflows.Extensions" Global="true"/>
+        <Using Include="Invex.Atom.Module.DevOpsWorkflows.Options" Global="true"/>
+        <Using Include="Invex.Atom.Module.DevOpsWorkflows.Steps" Global="true"/>
+    </ItemGroup>
+</Project>

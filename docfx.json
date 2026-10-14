@@ -9,9 +9,9 @@
             "src/Invex.Atom.Workflows/bin/Release/net10.0/Invex.Atom.Workflows.dll",
             "src/Invex.Atom.Module.AzureKeyVault/bin/Release/net10.0/Invex.Atom.Module.AzureKeyVault.dll",
             "src/Invex.Atom.Module.AzureStorage/bin/Release/net10.0/Invex.Atom.Module.AzureStorage.dll",
-            "src/Invex.Atom.Module.DevopsWorkflows/bin/Release/net10.0/Invex.Atom.Module.DevopsWorkflows.dll",
+            "src/Invex.Atom.Module.DevOpsWorkflows/bin/Release/net10.0/Invex.Atom.Module.DevOpsWorkflows.dll",
             "src/Invex.Atom.Module.Dotnet/bin/Release/net10.0/Invex.Atom.Module.Dotnet.dll",
-            "src/Invex.Atom.Module.GithubWorkflows/bin/Release/net10.0/Invex.Atom.Module.GithubWorkflows.dll",
+            "src/Invex.Atom.Module.GitHubWorkflows/bin/Release/net10.0/Invex.Atom.Module.GitHubWorkflows.dll",
             "src/Invex.Atom.Module.GitVersion/bin/Release/net10.0/Invex.Atom.Module.GitVersion.dll"
           ]
         }

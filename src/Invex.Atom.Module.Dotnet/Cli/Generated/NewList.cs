@@ -16,43 +16,40 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> NewList(
         System.String templateName,
-        NewListOptions? options = null,
+        DotnetNewListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NewList(
         System.String templateName,
-        NewListOptions? options = null,
+        DotnetNewListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "new list",
-            templateName,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "new", "list" };
+        DotnetCliArgs.AddPositional(args, templateName);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record NewListOptions
+public sealed record DotnetNewListOptions
 {
     /// <summary>
     ///     Filters the templates based on the template author.
@@ -62,25 +59,16 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
+
     /// <summary>
-    ///     Filters the templates based on baseline defined in the template.
-    /// </summary>
-    public System.String? Baseline
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Specifies the columns to display in the output. 
+    ///     Specifies the columns to display in the output.
     /// </summary>
     public System.String[]? Columns
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Displays all columns in the output.
     /// </summary>
@@ -89,7 +77,7 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Disables checking if the template meets the constraints to be run.
     /// </summary>
@@ -98,7 +86,7 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Filters templates based on language.
     /// </summary>
@@ -107,7 +95,7 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Location to place the generated output.
     /// </summary>
@@ -116,7 +104,7 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The project that should be used for context evaluation.
     /// </summary>
@@ -125,7 +113,7 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Filters the templates based on the tag.
     /// </summary>
@@ -134,7 +122,7 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Filters templates based on available types. Predefined values are "project" and "item".
     /// </summary>
@@ -143,44 +131,28 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            Author is not null
-                ? $"--author {Author}"
-                : null,
-            Baseline is not null
-                ? $"--baseline {Baseline}"
-                : null,
-            Columns is not null
-                ? $"--columns {string.Join(" --columns ", Columns)}"
-                : null,
-            ColumnsAll is true
-                ? "--columns-all"
-                : null,
-            IgnoreConstraints is true
-                ? "--ignore-constraints"
-                : null,
-            Language is not null
-                ? $"--language {Language}"
-                : null,
-            Output is not null
-                ? $"--output {Output}"
-                : null,
-            Project is not null
-                ? $"--project {Project}"
-                : null,
-            Tag is not null
-                ? $"--tag {Tag}"
-                : null,
-            Type is not null
-                ? $"--type {Type}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--author", Author);
+        DotnetCliArgs.AddOption(args, "--columns", Columns);
+        DotnetCliArgs.AddFlag(args, "--columns-all", ColumnsAll);
+        DotnetCliArgs.AddFlag(args, "--ignore-constraints", IgnoreConstraints);
+        DotnetCliArgs.AddOption(args, "--language", Language);
+        DotnetCliArgs.AddOption(args, "--output", Output);
+        DotnetCliArgs.AddOption(args, "--project", Project);
+        DotnetCliArgs.AddOption(args, "--tag", Tag);
+        DotnetCliArgs.AddOption(args, "--type", Type);
+
+        return args;
     }
-    
+
 }
 

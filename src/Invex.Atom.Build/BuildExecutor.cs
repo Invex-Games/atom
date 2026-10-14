@@ -18,7 +18,7 @@ internal sealed class BuildExecutor(
     IVariableService variableService,
     IEnumerable<IOutcomeReportWriter> outcomeReporters,
     IAnsiConsole console,
-    ReportService reportService,
+    IReportService reportService,
     ILogger<BuildExecutor> logger
 )
 {
@@ -40,6 +40,8 @@ internal sealed class BuildExecutor(
 
         console.WriteLine();
         logger.LogInformation("Executing build");
+
+        await PrefetchSecrets(cancellationToken);
 
         foreach (var command in commands)
             ValidateTargetParameters(buildModel.GetTarget(command.Name));
@@ -63,6 +65,31 @@ internal sealed class BuildExecutor(
 
             throw new StepFailedException("Build failed");
         }
+    }
+
+    /// <summary>
+    ///     Asynchronously resolves the secret parameters used by every target that will run, so that synchronous
+    ///     parameter access during validation and execution does not block on secret provider network calls.
+    /// </summary>
+    /// <param name="cancellationToken">The build's cancellation token, signalled when the host is stopping.</param>
+    private async Task PrefetchSecrets(CancellationToken cancellationToken)
+    {
+        var secretParamNames = buildModel
+            .Targets
+            .Where(target => buildModel.TargetStates.TryGetValue(target, out var state) &&
+                             state.Status is TargetRunState.PendingRun)
+            .SelectMany(target => target.Params)
+            .Where(usedParam => usedParam.Param.IsSecret)
+            .Select(usedParam => usedParam.Param.Name)
+            .Distinct()
+            .ToArray();
+
+        if (secretParamNames.Length == 0)
+            return;
+
+        logger.LogDebug("Prefetching {Count} secret parameter(s)", secretParamNames.Length);
+
+        await paramService.PrefetchSecretsAsync(secretParamNames, cancellationToken);
     }
 
     /// <summary>

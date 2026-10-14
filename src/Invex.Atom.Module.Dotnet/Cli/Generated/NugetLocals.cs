@@ -8,71 +8,67 @@ public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> NugetLocals(
         System.String folders,
-        NugetLocalsOptions? options = null,
+        DotnetNugetLocalsOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NugetLocals(
         System.String folders,
-        NugetLocalsOptions? options = null,
+        DotnetNugetLocalsOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "nuget locals",
-            folders,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "nuget", "locals" };
+        DotnetCliArgs.AddPositional(args, folders);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record NugetLocalsOptions
+public sealed record DotnetNugetLocalsOptions
 {
     public System.Boolean? Clear
     {
         get;
         init;
     }
-    
+
     public System.Boolean? ForceEnglishOutput
     {
         get;
         init;
     }
-    
+
     public System.Boolean? List
     {
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            Clear is true
-                ? "--clear"
-                : null,
-            ForceEnglishOutput is true
-                ? "--force-english-output"
-                : null,
-            List is true
-                ? "--list"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddFlag(args, "--clear", Clear);
+        DotnetCliArgs.AddFlag(args, "--force-english-output", ForceEnglishOutput);
+        DotnetCliArgs.AddFlag(args, "--list", List);
+
+        return args;
     }
-    
+
 }
 

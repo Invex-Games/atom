@@ -24,7 +24,7 @@ BuildOptions.Inject.Param(nameof(NugetDryRun), true)
 Inject a secret from the CI platform's secret store:
 
 ```csharp
-BuildOptions.Inject.Secret(nameof(IGithubHelper.GithubToken))
+BuildOptions.Inject.Secret(nameof(IGitHubHelper.GitHubToken))
 ```
 
 ### Runner Selection
@@ -32,8 +32,8 @@ BuildOptions.Inject.Secret(nameof(IGithubHelper.GithubToken))
 Set the runner from a matrix dimension:
 
 ```csharp
-BuildOptions.Github.RunsOn.SetByMatrix
-BuildOptions.Devops.DevopsPool.SetByMatrix
+BuildOptions.GitHub.RunsOn.SetByMatrix
+BuildOptions.DevOps.DevOpsPool.SetByMatrix
 ```
 
 ### Setup Steps
@@ -64,7 +64,7 @@ Run a target only when a condition is met:
 
 ```csharp
 BuildOptions.Target.RunIfWorkflowCondition(
-    TextExpressions.Github.GithubActor.EqualToString("dependabot[bot]"))
+    TextExpressions.GitHub.GitHubActor.EqualToString("dependabot[bot]"))
 ```
 
 ### GitHub Token Permissions
@@ -72,7 +72,7 @@ BuildOptions.Target.RunIfWorkflowCondition(
 Set fine-grained permissions for the `GITHUB_TOKEN`:
 
 ```csharp
-new GithubTokenPermissionsOption(new Permissions.Exact(new()
+new GitHubTokenPermissionsOption(new Permissions.Exact(new()
 {
     Contents = PermissionsLevel.Write,
     PullRequests = PermissionsLevel.Write,
@@ -102,7 +102,7 @@ new(nameof(PackTool))
     Options =
     [
         BuildOptions.Target.SuppressArtifactPublishing,
-        BuildOptions.Github.RunsOn.SetByMatrix,
+        BuildOptions.GitHub.RunsOn.SetByMatrix,
     ],
 }
 ```
@@ -124,4 +124,4 @@ Platform modules can then inspect the options during YAML generation.
 - <xref:Invex.Atom.Workflows.Options.WorkflowBuildOptionsExtensions>
 - <xref:Invex.Atom.Workflows.Options.DeployToEnvironment>
 - <xref:Invex.Atom.Workflows.Options.TargetCondition>
-- <xref:Invex.Atom.Module.GithubWorkflows.Options.GithubTokenPermissionsOption>
+- <xref:Invex.Atom.Module.GitHubWorkflows.Options.GitHubTokenPermissionsOption>

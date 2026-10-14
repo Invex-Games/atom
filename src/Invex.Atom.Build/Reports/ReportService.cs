@@ -1,39 +1,46 @@
 ﻿namespace Invex.Atom.Build.Reports;
 
 /// <summary>
-///     A service for collecting and managing data to be included in build reports.
+///     The default thread-safe <see cref="IReportService" />.
 /// </summary>
-/// <remarks>
-///     This service acts as a central repository for all reportable information generated during a build.
-///     Data is collected and can be retrieved for rendering by a report writer.
-/// </remarks>
-[PublicAPI]
-public sealed class ReportService
+internal sealed class ReportService : IReportService
 {
+    private readonly Lock _lock = new();
+    private readonly List<string> _targetOrder = [];
     private readonly Dictionary<string, List<IReportData>> _reportData = [];
 
-    /// <summary>
-    ///     Adds a report data item, optionally associating it with a specific target.
-    /// </summary>
-    /// <param name="reportData">The report data to add.</param>
-    /// <param name="targetName">The name of the target to associate the data with. If null, the data is stored globally.</param>
+    /// <inheritdoc />
     public void AddReportData(IReportData reportData, string? targetName = null)
     {
         targetName ??= string.Empty;
 
-        if (!_reportData.ContainsKey(targetName))
-            _reportData[targetName] = [];
+        lock (_lock)
+        {
+            if (!_reportData.TryGetValue(targetName, out var targetData))
+            {
+                _reportData[targetName] = targetData = [];
+                _targetOrder.Add(targetName);
+            }
 
-        _reportData[targetName]
-            .Add(reportData);
+            targetData.Add(reportData);
+        }
     }
 
-    /// <summary>
-    ///     Retrieves all report data items collected during the build.
-    /// </summary>
-    /// <returns>A flattened list of all <see cref="IReportData" /> items from all targets.</returns>
-    public List<IReportData> GetReportData() =>
-        _reportData
-            .SelectMany(x => x.Value)
-            .ToList();
+    /// <inheritdoc />
+    public IReadOnlyList<IReportData> GetReportData()
+    {
+        lock (_lock)
+            return _targetOrder
+                .SelectMany(x => _reportData[x])
+                .ToArray();
+    }
+
+    /// <inheritdoc />
+    public IReadOnlyList<IReportData> GetReportData(string? targetName)
+    {
+        lock (_lock)
+            return _reportData.TryGetValue(targetName ?? string.Empty, out var targetData)
+                ? targetData.ToArray()
+                : [];
+    }
 }

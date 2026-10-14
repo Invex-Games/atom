@@ -6,7 +6,8 @@ namespace Invex.Atom.Build.Tests.ClassTests.Hosting;
 internal sealed class HostExtensionsTests
 {
     [UsedImplicitly]
-    private class TestBuildDefinition(IServiceProvider services) : BuildDefinition(services), IBuildDefinition
+    private class TestBuildDefinition(IServiceProvider services)
+        : BuildDefinition(services), IBuildDefinition, IConfigureHost
     {
         public IReadOnlyList<IBuildOption> Options => [];
 
@@ -17,6 +18,92 @@ internal sealed class HostExtensionsTests
 
         public override Func<object?> AccessParam(string paramName) =>
             throw new NotImplementedException();
+
+        public static void ConfigureHostBuilder(IHostApplicationBuilder builder) { }
+
+        public static void ConfigureHost(IHost host) { }
+    }
+
+    [UsedImplicitly]
+    private sealed class HookTestBuildDefinition : BuildDefinition, IConfigureHost
+    {
+        public HookTestBuildDefinition(IServiceProvider services) : base(services) =>
+            ConstructedCount++;
+
+        public static int ConstructedCount { get; set; }
+
+        public static IHostApplicationBuilder? ConfiguredBuilder { get; set; }
+
+        public static IHost? ConfiguredHost { get; set; }
+
+        public override IReadOnlyDictionary<string, Target> TargetDefinitions => new Dictionary<string, Target>();
+
+        public override IReadOnlyDictionary<string, ParamDefinition> ParamDefinitions =>
+            new Dictionary<string, ParamDefinition>();
+
+        public override object AccessParam(string paramName) =>
+            throw new NotImplementedException();
+
+        public static void ConfigureHostBuilder(IHostApplicationBuilder builder) =>
+            ConfiguredBuilder = builder;
+
+        public static void ConfigureHost(IHost host) =>
+            ConfiguredHost = host;
+
+        public static void Reset()
+        {
+            ConstructedCount = 0;
+            ConfiguredBuilder = null;
+            ConfiguredHost = null;
+        }
+    }
+
+    [Test]
+    public void AddAtom_CallsConfigureHostBuilder_WithoutConstructingBuildDefinition()
+    {
+        // Arrange
+        HookTestBuildDefinition.Reset();
+        var builder = new HostApplicationBuilder();
+
+        // Act
+        builder.AddAtom<HostApplicationBuilder, HookTestBuildDefinition>([]);
+
+        // Assert
+        using var _ = Assert.EnterMultipleScope();
+        HookTestBuildDefinition.ConfiguredBuilder.ShouldBeSameAs(builder);
+        HookTestBuildDefinition.ConfiguredHost.ShouldBeNull();
+        HookTestBuildDefinition.ConstructedCount.ShouldBe(0);
+    }
+
+    [Test]
+    public void UseAtom_CallsConfigureHost_WithoutConstructingBuildDefinition()
+    {
+        // Arrange
+        HookTestBuildDefinition.Reset();
+        var builder = new HostApplicationBuilder();
+        builder.AddAtom<HostApplicationBuilder, HookTestBuildDefinition>([]);
+        using var host = builder.Build();
+
+        // Act
+        var result = host.UseAtom();
+
+        // Assert
+        using var _ = Assert.EnterMultipleScope();
+        result.ShouldBeSameAs(host);
+        HookTestBuildDefinition.ConfiguredHost.ShouldBeSameAs(host);
+        HookTestBuildDefinition.ConstructedCount.ShouldBe(0);
+    }
+
+    [Test]
+    public void UseAtom_WithoutAddAtom_DoesNothing()
+    {
+        // Arrange
+        using var host = new HostApplicationBuilder().Build();
+
+        // Act / Assert
+        host
+            .UseAtom()
+            .ShouldBeSameAs(host);
     }
 
     [Test]
@@ -46,7 +133,7 @@ internal sealed class HostExtensionsTests
             .ShouldNotBeNull();
 
         serviceProvider
-            .GetService<ReportService>()
+            .GetService<IReportService>()
             .ShouldNotBeNull();
 
         serviceProvider

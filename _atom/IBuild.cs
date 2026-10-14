@@ -5,8 +5,8 @@ namespace Atom;
 [GenerateSolutionModel]
 internal interface IBuild : IWorkflowBuildDefinition,
     IDotnetUserSecrets,
-    IDevopsWorkflows,
-    IGithubWorkflows,
+    IDevOpsWorkflows,
+    IGitHubWorkflows,
     IGitVersion,
     IBuildTargets,
     ITestTargets,
@@ -18,19 +18,19 @@ internal interface IBuild : IWorkflowBuildDefinition,
 {
     static readonly string[] PlatformNames =
     [
-        WorkflowLabels.Github.RunsOn.Windows_Latest,
-        WorkflowLabels.Github.RunsOn.Windows_11_Arm,
-        WorkflowLabels.Github.RunsOn.Ubuntu_Latest,
-        WorkflowLabels.Github.RunsOn.Ubuntu_24_04_Arm,
-        WorkflowLabels.Github.RunsOn.MacOs_15_Intel,
-        WorkflowLabels.Github.RunsOn.MacOs_Latest,
+        WorkflowLabels.GitHub.RunsOn.Windows_Latest,
+        WorkflowLabels.GitHub.RunsOn.Windows_11_Arm,
+        WorkflowLabels.GitHub.RunsOn.Ubuntu_Latest,
+        WorkflowLabels.GitHub.RunsOn.Ubuntu_24_04_Arm,
+        WorkflowLabels.GitHub.RunsOn.MacOS_15_Intel,
+        WorkflowLabels.GitHub.RunsOn.MacOS_Latest,
     ];
 
-    static readonly string[] DevopsPlatformNames =
+    static readonly string[] DevOpsPlatformNames =
     [
-        WorkflowLabels.Devops.Pool.Windows_Latest,
-        WorkflowLabels.Devops.Pool.Ubuntu_Latest,
-        WorkflowLabels.Devops.Pool.MacOs_Latest,
+        WorkflowLabels.DevOps.Pool.Windows_Latest,
+        WorkflowLabels.DevOps.Pool.Ubuntu_Latest,
+        WorkflowLabels.DevOps.Pool.MacOS_Latest,
     ];
 
     static readonly string[] FrameworkNames =
@@ -38,9 +38,9 @@ internal interface IBuild : IWorkflowBuildDefinition,
         WorkflowLabels.Dotnet.Framework.Net_10_0,
     ];
 
-    static readonly IBuildOption CancelSupersededWorkflowRuns = BuildOptions.Github.Concurrency.Set(
+    static readonly IBuildOption CancelSupersededWorkflowRuns = BuildOptions.GitHub.Concurrency.Set(
         TextExpressions.Concat([
-            TextExpressions.Github.GithubWorkflow.Evaluate(), "-", TextExpressions.Github.GithubRef.Evaluate(),
+            TextExpressions.GitHub.GitHubWorkflow.Evaluate(), "-", TextExpressions.GitHub.GitHubRef.Evaluate(),
         ]),
         true);
 
@@ -73,7 +73,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                             Values = PlatformNames,
                         },
                     ],
-                    Options = [BuildOptions.Target.SuppressArtifactPublishing, BuildOptions.Github.RunsOn.SetByMatrix],
+                    Options = [BuildOptions.Target.SuppressArtifactPublishing, BuildOptions.GitHub.RunsOn.SetByMatrix],
                 },
                 new(nameof(TestProjects))
                 {
@@ -91,7 +91,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     Options =
                     [
                         BuildOptions.Target.SuppressArtifactPublishing,
-                        BuildOptions.Github.RunsOn.SetByMatrix,
+                        BuildOptions.GitHub.RunsOn.SetByMatrix,
                     ],
                 },
                 new(nameof(BuildDocs))
@@ -103,8 +103,8 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     Options =
                     [
                         BuildOptions.Target.SuppressArtifactPublishing,
-                        BuildOptions.Inject.Secret(nameof(GithubToken)),
-                        BuildOptions.Github.TokenPermissions.Set(new Permissions.Exact(new()
+                        BuildOptions.Inject.Secret(nameof(GitHubToken)),
+                        BuildOptions.GitHub.TokenPermissions.Set(new Permissions.Exact(new()
                         {
                             IdTokens = PermissionsLevel.Write,
                             Contents = PermissionsLevel.Write,
@@ -112,22 +112,22 @@ internal interface IBuild : IWorkflowBuildDefinition,
                             Checks = PermissionsLevel.Write,
                         })),
                         BuildOptions.Inject.Param(nameof(PullRequestNumber),
-                            TextExpressions.Github.GithubEvent["number"]),
+                            TextExpressions.GitHub.GitHubEvent["number"]),
                         BuildOptions.Target.RunIfWorkflowCondition(
-                            TextExpressions.Github.GithubEventName.EqualToString("pull_request")),
+                            TextExpressions.GitHub.GitHubEventName.EqualToString("pull_request")),
                     ],
                 },
                 new(nameof(WaitForCopilotReview))
                 {
                     Options =
                     [
-                        BuildOptions.Inject.Secret(nameof(GithubToken)),
+                        BuildOptions.Inject.Secret(nameof(GitHubToken)),
                         BuildOptions.Inject.Param(nameof(PullRequestNumber),
-                            TextExpressions.Github.GithubEvent["number"]),
+                            TextExpressions.GitHub.GitHubEvent["number"]),
                     ],
                 },
             ],
-            Types = [WorkflowTypes.Github.Action],
+            Types = [WorkflowTypes.GitHub.Action],
             Options = [CancelSupersededWorkflowRuns],
         },
         new("Build")
@@ -139,7 +139,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                 {
                     IncludedBranches = ["main", "feature/**", "patch/**"],
                 },
-                new GithubTrigger(new On.Release([On.Release.ReleaseType.released])),
+                new GitHubTrigger(new On.Release([On.Release.ReleaseType.released])),
             ],
             Targets =
             [
@@ -154,7 +154,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                             Values = PlatformNames.ToList(),
                         },
                     ],
-                    Options = [BuildOptions.Github.RunsOn.SetByMatrix],
+                    Options = [BuildOptions.GitHub.RunsOn.SetByMatrix],
                 },
                 new(nameof(TestProjects))
                 {
@@ -171,7 +171,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     ],
                     Options =
                     [
-                        BuildOptions.Github.RunsOn.SetByMatrix,
+                        BuildOptions.GitHub.RunsOn.SetByMatrix,
                     ],
                 },
                 new(nameof(BuildDocs)),
@@ -179,8 +179,8 @@ internal interface IBuild : IWorkflowBuildDefinition,
                 {
                     Options =
                     [
-                        BuildOptions.Inject.Secret(nameof(GithubToken)),
-                        new GithubTokenPermissionsOption(new Permissions.Exact(new()
+                        BuildOptions.Inject.Secret(nameof(GitHubToken)),
+                        new GitHubTokenPermissionsOption(new Permissions.Exact(new()
                         {
                             Contents = PermissionsLevel.Write,
                         })),
@@ -199,8 +199,8 @@ internal interface IBuild : IWorkflowBuildDefinition,
                 {
                     Options =
                     [
-                        BuildOptions.Inject.Secret(nameof(GithubToken)),
-                        new GithubTokenPermissionsOption(new Permissions.Exact(new()
+                        BuildOptions.Inject.Secret(nameof(GitHubToken)),
+                        new GitHubTokenPermissionsOption(new Permissions.Exact(new()
                         {
                             Contents = PermissionsLevel.Write,
                         })),
@@ -212,7 +212,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     ],
                 },
             ],
-            Types = [WorkflowTypes.Github.Action],
+            Types = [WorkflowTypes.GitHub.Action],
             Options = [CancelSupersededWorkflowRuns],
         },
 
@@ -230,10 +230,10 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     [
                         new(nameof(JobRunsOn))
                         {
-                            Values = DevopsPlatformNames,
+                            Values = DevOpsPlatformNames,
                         },
                     ],
-                    Options = [BuildOptions.Devops.DevopsPool.SetByMatrix],
+                    Options = [BuildOptions.DevOps.DevOpsPool.SetByMatrix],
                 },
                 new(nameof(TestProjects))
                 {
@@ -241,7 +241,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     [
                         new(nameof(JobRunsOn))
                         {
-                            Values = DevopsPlatformNames,
+                            Values = DevOpsPlatformNames,
                         },
                         new(nameof(TestFramework))
                         {
@@ -250,7 +250,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     ],
                     Options =
                     [
-                        BuildOptions.Devops.DevopsPool.SetByMatrix,
+                        BuildOptions.DevOps.DevOpsPool.SetByMatrix,
                     ],
                 },
                 new(nameof(PushToNugetDevops))
@@ -258,24 +258,24 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     Options = [BuildOptions.Inject.Secret(nameof(NugetApiKey))],
                 },
             ],
-            Types = [WorkflowTypes.Devops.Pipeline],
+            Types = [WorkflowTypes.DevOps.Pipeline],
             Options =
             [
                 BuildOptions.Inject.Param(nameof(NugetDryRun), true),
-                BuildOptions.Devops.VariableGroup.Atom,
-                BuildOptions.Devops.PullRequest.AutoCancel,
+                BuildOptions.DevOps.VariableGroup.Atom,
+                BuildOptions.DevOps.PullRequest.AutoCancel,
             ],
         },
 
         // Dependabot
-        WorkflowPresets.Github.Dependabot(new()
+        WorkflowPresets.GitHub.Dependabot(new()
         {
             Registries = new Dictionary<string, DependabotRegistry>
             {
                 ["nuget"] = new()
                 {
                     Type = RegistryType.NugetFeed,
-                    Url = WorkflowLabels.Github.Dependabot.NugetUrl,
+                    Url = WorkflowLabels.GitHub.Dependabot.NugetUrl,
                 },
             },
             Updates =
@@ -283,7 +283,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                 new()
                 {
                     Directory = "/",
-                    PackageEcosystem = WorkflowLabels.Github.Dependabot.NugetEcosystem,
+                    PackageEcosystem = WorkflowLabels.GitHub.Dependabot.NugetEcosystem,
                     Registries = new DependabotRegistries.Named("nuget"),
                     Groups = new Dictionary<string, DependabotGroup>
                     {
@@ -323,13 +323,13 @@ internal interface IBuild : IWorkflowBuildDefinition,
                 {
                     Options =
                     [
-                        BuildOptions.Inject.Secret(nameof(GithubToken)),
+                        BuildOptions.Inject.Secret(nameof(GitHubToken)),
                         BuildOptions.Inject.Secret(nameof(DependabotEnableAutoMergePat)),
                         BuildOptions.Inject.Param(nameof(PullRequestNumber),
-                            TextExpressions.Github.GithubEvent["number"]),
+                            TextExpressions.GitHub.GitHubEvent["number"]),
                         BuildOptions.Target.RunIfWorkflowCondition(
-                            TextExpressions.Github.GithubActor.EqualToString("dependabot[bot]")),
-                        new GithubTokenPermissionsOption(new Permissions.Exact(new()
+                            TextExpressions.GitHub.GitHubActor.EqualToString("dependabot[bot]")),
+                        new GitHubTokenPermissionsOption(new Permissions.Exact(new()
                         {
                             IdTokens = PermissionsLevel.Write,
                             Contents = PermissionsLevel.Write,
@@ -338,7 +338,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     ],
                 },
             ],
-            Types = [WorkflowTypes.Github.Action],
+            Types = [WorkflowTypes.GitHub.Action],
             Options = [CancelSupersededWorkflowRuns],
         },
     ];

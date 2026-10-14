@@ -7,9 +7,10 @@
 /// <remarks>
 ///     A <c>MatrixDimension</c> is used to run the same job or step across different configurations.
 ///     For example, a dimension named "os" could have values like "windows-latest" and "ubuntu-latest".
+///     Dimensions with the same name on one target are merged, keeping each distinct value once.
 /// </remarks>
 [PublicAPI]
-public record MatrixDimension(string Name)
+public sealed record MatrixDimension(string Name)
 {
     /// <summary>
     ///     Gets a read-only list of string values for this dimension.

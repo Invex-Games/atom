@@ -43,12 +43,12 @@ Both forms provide:
 ## Workflow builds
 
 Use `IWorkflowBuildDefinition` when the build also defines CI/CD workflows. Add a platform module
-interface such as `IGithubWorkflows` or `IDevopsWorkflows` to register the corresponding writer:
+interface such as `IGitHubWorkflows` or `IDevOpsWorkflows` to register the corresponding writer:
 
 ```csharp
 [BuildDefinition]
 [GenerateEntryPoint]
-internal interface IBuild : IWorkflowBuildDefinition, IGithubWorkflows
+internal interface IBuild : IWorkflowBuildDefinition, IGitHubWorkflows
 {
     Target Compile => t => t
         .DescribedAs("Compiles the solution")
@@ -69,17 +69,17 @@ internal interface IBuild : IWorkflowBuildDefinition, IGithubWorkflows
                 new(nameof(Compile)),
                 new(nameof(Test)),
             ],
-            Types = [WorkflowTypes.Github.Action],
+            Types = [WorkflowTypes.GitHub.Action],
         },
     ];
 }
 ```
 
 The partial-class equivalent derives from `WorkflowBuildDefinition` instead:
-`internal partial class Build : WorkflowBuildDefinition, IGithubWorkflows`.
+`internal partial class Build : WorkflowBuildDefinition, IGitHubWorkflows`.
 
 Running `dotnet run -- Gen` writes a GitHub Actions YAML file that calls the build with the correct targets.
-`IGithubWorkflows` comes from `Invex.Atom.Module.GithubWorkflows`.
+`IGitHubWorkflows` comes from `Invex.Atom.Module.GitHubWorkflows`.
 
 ### What workflow builds add
 
@@ -90,7 +90,7 @@ Running `dotnet run -- Gen` writes a GitHub Actions YAML file that calls the bui
 | Workflow triggers    | Push, pull request, manual (with inputs).                                                                 |
 | Matrix dimensions    | Run a target across multiple OS or framework combinations.                                                |
 | Workflow options     | Checkout steps, deployment environments, run conditions, etc.                                             |
-| Platform modules     | `Invex.Atom.Module.GithubWorkflows` / `Invex.Atom.Module.DevopsWorkflows` add platform-specific features. |
+| Platform modules     | `Invex.Atom.Module.GitHubWorkflows` / `Invex.Atom.Module.DevOpsWorkflows` add platform-specific features. |
 
 ### When to upgrade
 

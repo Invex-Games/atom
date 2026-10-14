@@ -43,10 +43,10 @@ internal interface ICopilotReviewHelper : IBuildAccessor
         TimeSpan pollInterval,
         CancellationToken cancellationToken)
     {
-        var owner = Github.Variables.RepositoryOwner;
+        var owner = GitHub.Variables.RepositoryOwner;
 
         // The repository variable is in "owner/name" form; we only need the repository name here.
-        var repository = Github.Variables
+        var repository = GitHub.Variables
             .Repository
             .Split('/')
             .Last();

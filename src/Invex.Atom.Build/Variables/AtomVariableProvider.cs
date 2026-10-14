@@ -48,13 +48,13 @@ internal sealed partial class AtomVariableProvider(IRootedFileSystem fileSystem,
     }
 
     /// <summary>
-    ///     Reads a variable from the local `variables` JSON file for a specific job and sets it as an environment variable.
+    ///     Reads a variable from the local `variables` JSON file for a specific job.
     /// </summary>
     /// <param name="jobName">The name of the job context from which to read.</param>
     /// <param name="variableName">The name of the variable to read.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns><c>true</c> if the variable was found and set; otherwise, <c>false</c>.</returns>
-    public async Task<bool> ReadVariable(
+    /// <returns>The variable's value, or <c>null</c> if it was not found.</returns>
+    public async Task<string?> ReadVariable(
         string jobName,
         string variableName,
         CancellationToken cancellationToken = default)
@@ -62,7 +62,7 @@ internal sealed partial class AtomVariableProvider(IRootedFileSystem fileSystem,
         var variablesPath = fileSystem.AtomTempDirectory / "variables";
 
         if (!variablesPath.FileExists)
-            return false;
+            return null;
 
         var text = await fileSystem.File.ReadAllTextAsync(variablesPath, cancellationToken);
 
@@ -70,12 +70,7 @@ internal sealed partial class AtomVariableProvider(IRootedFileSystem fileSystem,
 
         var jobScopedVariableName = $"{jobName}:{variableName}";
 
-        if (!variables.TryGetValue(jobScopedVariableName, out var variable))
-            return true;
-
-        Environment.SetEnvironmentVariable(variableName, variable);
-
-        return true;
+        return variables.GetValueOrDefault(jobScopedVariableName);
     }
 
     /// <summary>

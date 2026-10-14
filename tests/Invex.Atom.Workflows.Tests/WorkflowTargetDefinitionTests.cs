@@ -144,4 +144,26 @@ internal sealed class WorkflowTargetDefinitionTests
         var updated = target.WithOptions(new TestWorkflowOption("x"));
         updated.ShouldNotBeSameAs(target);
     }
+
+    [Test]
+    public void CreateModel_MergesMatrixDimensionsWithTheSameName()
+    {
+        var target = new WorkflowTargetDefinition("T").WithMatrixDimensions(new MatrixDimension("os")
+            {
+                Values = ["linux", "windows"],
+            },
+            new MatrixDimension("framework")
+            {
+                Values = ["net10.0"],
+            },
+            new MatrixDimension("os")
+            {
+                Values = ["windows", "macos"],
+            });
+
+        var model = target.CreateModel([]);
+
+        model.MatrixDimensions.Select(x => x.Name).ShouldBe(["os", "framework"]);
+        model.MatrixDimensions[0].Values.Count.ShouldBe(3);
+    }
 }

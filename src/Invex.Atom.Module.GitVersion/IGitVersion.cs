@@ -18,7 +18,7 @@ public partial interface IGitVersion
     ///     Configures the host builder to register the GitVersion-based build ID and version providers.
     /// </summary>
     /// <param name="builder">The host application builder.</param>
-    protected static partial void ConfigureBuilderFromIGitVersion(IHostApplicationBuilder builder) =>
+    protected static partial void ConfigureHostBuilderFromIGitVersion(IHostApplicationBuilder builder) =>
         builder
             .Services
             .AddSingleton<IBuildIdProvider, GitVersionBuildIdProvider>()

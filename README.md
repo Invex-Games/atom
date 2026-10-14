@@ -15,8 +15,8 @@ debug it like standard code, and automatically generate CI/CD configuration file
 | [Invex.Atom.Build](https://www.nuget.org/packages/Invex.Atom.Build)                                     | Core framework: build definitions, targets, parameters, hosting.     |
 | [Invex.Atom.Workflows](https://www.nuget.org/packages/Invex.Atom.Workflows)                             | Workflow definitions, triggers, options, and the `Gen` target.        |
 | [Invex.Atom.Module.Dotnet](https://www.nuget.org/packages/Invex.Atom.Module.Dotnet)                     | .NET CLI wrappers and build, test, pack, publish, and NuGet helpers.  |
-| [Invex.Atom.Module.GithubWorkflows](https://www.nuget.org/packages/Invex.Atom.Module.GithubWorkflows)   | GitHub Actions workflow and Dependabot generation.                    |
-| [Invex.Atom.Module.DevopsWorkflows](https://www.nuget.org/packages/Invex.Atom.Module.DevopsWorkflows)   | Azure DevOps Pipelines workflow generation.                           |
+| [Invex.Atom.Module.GitHubWorkflows](https://www.nuget.org/packages/Invex.Atom.Module.GitHubWorkflows)   | GitHub Actions workflow and Dependabot generation.                    |
+| [Invex.Atom.Module.DevOpsWorkflows](https://www.nuget.org/packages/Invex.Atom.Module.DevOpsWorkflows)   | Azure DevOps Pipelines workflow generation.                           |
 | [Invex.Atom.Module.AzureKeyVault](https://www.nuget.org/packages/Invex.Atom.Module.AzureKeyVault)       | Azure Key Vault secrets provider.                                     |
 | [Invex.Atom.Module.AzureStorage](https://www.nuget.org/packages/Invex.Atom.Module.AzureStorage)         | Azure Blob Storage artifact provider.                                 |
 | [Invex.Atom.Module.GitVersion](https://www.nuget.org/packages/Invex.Atom.Module.GitVersion)             | GitVersion-based build ID and version.                                |
@@ -150,14 +150,14 @@ Target Goodbye =>
 
 ### Workflow generation
 
-Reference `Invex.Atom.Module.GithubWorkflows`, extend `IWorkflowBuildDefinition`, and declare a workflow:
+Reference `Invex.Atom.Module.GitHubWorkflows`, extend `IWorkflowBuildDefinition`, and declare a workflow:
 
 ```csharp
 using Invex.StructuredText.Expressions;
 
 [BuildDefinition]
 [GenerateEntryPoint]
-internal interface IBuild : IWorkflowBuildDefinition, IGithubWorkflows
+internal interface IBuild : IWorkflowBuildDefinition, IGitHubWorkflows
 {
     // targets and parameters as above
 
@@ -172,13 +172,13 @@ internal interface IBuild : IWorkflowBuildDefinition, IGithubWorkflows
                 {
                     Options =
                     [
-                        BuildOptions.Inject.Param(nameof(MyName), TextExpressions.Github.GithubRepositoryOwner),
+                        BuildOptions.Inject.Param(nameof(MyName), TextExpressions.GitHub.GitHubRepositoryOwner),
                         BuildOptions.Inject.Secret(nameof(MySecret)),
                     ],
                 },
                 new(nameof(Goodbye)),
             ],
-            Types = [WorkflowTypes.Github.Action],
+            Types = [WorkflowTypes.GitHub.Action],
         },
     ];
 }

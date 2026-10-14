@@ -16,14 +16,14 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> Restore(
         System.String[] projectOrSolutionOrFile,
-        RestoreOptions? options = null,
+        DotnetRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -38,14 +38,14 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> Restore(
         System.String projectOrSolutionOrFile,
-        RestoreOptions? options = null,
+        DotnetRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -60,14 +60,14 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> Restore(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        RestoreOptions? options = null,
+        DotnetRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -78,59 +78,50 @@ internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Restore(
         System.String[] projectOrSolutionOrFile,
-        RestoreOptions? options = null,
+        DotnetRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "restore",
-            $"{string.Join(" ", projectOrSolutionOrFile)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+    )
+    {
+        var args = new List<string> { "restore" };
+        DotnetCliArgs.AddPositional(args, projectOrSolutionOrFile);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
     public Task<ProcessRunResult> Restore(
         System.String projectOrSolutionOrFile,
-        RestoreOptions? options = null,
+        DotnetRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "restore",
-            projectOrSolutionOrFile,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+    )
+    {
+        var args = new List<string> { "restore" };
+        DotnetCliArgs.AddPositional(args, projectOrSolutionOrFile);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
     public Task<ProcessRunResult> Restore(
         Invex.FileSystem.RootedPath projectOrSolutionOrFile,
-        RestoreOptions? options = null,
+        DotnetRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "restore",
-            projectOrSolutionOrFile,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+    )
+    {
+        var args = new List<string> { "restore" };
+        DotnetCliArgs.AddPositional(args, projectOrSolutionOrFile);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }
 
 [PublicAPI]
-public sealed record RestoreOptions
+public sealed record DotnetRestoreOptions
 {
     /// <summary>
     ///     The target architecture.
@@ -153,7 +144,7 @@ public sealed record RestoreOptions
     /// <summary>
     ///     The NuGet configuration file to use.
     /// </summary>
-    public System.String? Configfile
+    public System.String? ConfigFile
     {
         get;
         init;
@@ -251,15 +242,6 @@ public sealed record RestoreOptions
     ///     Don't allow updating project lock file.
     /// </summary>
     public System.Boolean? LockedMode
-    {
-        get;
-        init;
-    }
-
-    /// <summary>
-    ///
-    /// </summary>
-    public System.Boolean? NoCache
     {
         get;
         init;
@@ -367,96 +349,44 @@ public sealed record RestoreOptions
         init;
     }
 
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            Arch is not null
-                ? $"--arch {Arch}"
-                : null,
-            ArtifactsPath is not null
-                ? $"--artifacts-path {ArtifactsPath}"
-                : null,
-            Configfile is not null
-                ? $"--configfile {Configfile}"
-                : null,
-            DisableBuildServers is true
-                ? "--disable-build-servers"
-                : null,
-            DisableParallel is true
-                ? "--disable-parallel"
-                : null,
-            Force is true
-                ? "--force"
-                : null,
-            ForceEvaluate is true
-                ? "--force-evaluate"
-                : null,
-            GetItem is not null
-                ? $"--getItem {string.Join(" --getItem ", GetItem)}"
-                : null,
-            GetProperty is not null
-                ? $"--getProperty {string.Join(" --getProperty ", GetProperty)}"
-                : null,
-            GetResultOutputFile is not null
-                ? $"--getResultOutputFile {string.Join(" --getResultOutputFile ", GetResultOutputFile)}"
-                : null,
-            GetTargetResult is not null
-                ? $"--getTargetResult {string.Join(" --getTargetResult ", GetTargetResult)}"
-                : null,
-            IgnoreFailedSources is true
-                ? "--ignore-failed-sources"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            LockFilePath is not null
-                ? $"--lock-file-path {LockFilePath}"
-                : null,
-            LockedMode is true
-                ? "--locked-mode"
-                : null,
-            NoCache is true
-                ? "--no-cache"
-                : null,
-            NoDependencies is true
-                ? "--no-dependencies"
-                : null,
-            NoHttpCache is true
-                ? "--no-http-cache"
-                : null,
-            Os is not null
-                ? $"--os {Os}"
-                : null,
-            Packages is not null
-                ? $"--packages {Packages}"
-                : null,
-            Property is not null
-                ? $"--property {string.Join(" --property ", Property.Select(kv => $"{kv.Key}=\"{kv.Value}\""))}"
-                : null,
-            RestoreProperty is not null
-                ? $"--restoreProperty {string.Join(" --restoreProperty ", RestoreProperty.Select(kv => $"{kv.Key}=\"{kv.Value}\""))}"
-                : null,
-            Runtime is not null
-                ? $"--runtime {string.Join(" --runtime ", Runtime)}"
-                : null,
-            Source is not null
-                ? $"--source {string.Join(" --source ", Source)}"
-                : null,
-            Target is not null
-                ? $"--target {string.Join(" --target ", Target)}"
-                : null,
-            UseCurrentRuntime is true
-                ? "--use-current-runtime"
-                : null,
-            UseLockFile is true
-                ? "--use-lock-file"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--arch", Arch);
+        DotnetCliArgs.AddOption(args, "--artifacts-path", ArtifactsPath);
+        DotnetCliArgs.AddOption(args, "--configfile", ConfigFile);
+        DotnetCliArgs.AddFlag(args, "--disable-build-servers", DisableBuildServers);
+        DotnetCliArgs.AddFlag(args, "--disable-parallel", DisableParallel);
+        DotnetCliArgs.AddFlag(args, "--force", Force);
+        DotnetCliArgs.AddFlag(args, "--force-evaluate", ForceEvaluate);
+        DotnetCliArgs.AddOption(args, "--getItem", GetItem);
+        DotnetCliArgs.AddOption(args, "--getProperty", GetProperty);
+        DotnetCliArgs.AddOption(args, "--getResultOutputFile", GetResultOutputFile);
+        DotnetCliArgs.AddOption(args, "--getTargetResult", GetTargetResult);
+        DotnetCliArgs.AddFlag(args, "--ignore-failed-sources", IgnoreFailedSources);
+        DotnetCliArgs.AddBool(args, "--interactive", Interactive);
+        DotnetCliArgs.AddOption(args, "--lock-file-path", LockFilePath);
+        DotnetCliArgs.AddFlag(args, "--locked-mode", LockedMode);
+        DotnetCliArgs.AddFlag(args, "--no-dependencies", NoDependencies);
+        DotnetCliArgs.AddFlag(args, "--no-http-cache", NoHttpCache);
+        DotnetCliArgs.AddOption(args, "--os", Os);
+        DotnetCliArgs.AddOption(args, "--packages", Packages);
+        DotnetCliArgs.AddOption(args, "--property", Property);
+        DotnetCliArgs.AddOption(args, "--restoreProperty", RestoreProperty);
+        DotnetCliArgs.AddOption(args, "--runtime", Runtime);
+        DotnetCliArgs.AddOption(args, "--source", Source);
+        DotnetCliArgs.AddOption(args, "--target", Target);
+        DotnetCliArgs.AddFlag(args, "--use-current-runtime", UseCurrentRuntime);
+        DotnetCliArgs.AddFlag(args, "--use-lock-file", UseLockFile);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+
+        return args;
     }
 
 }

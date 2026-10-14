@@ -48,7 +48,7 @@ public sealed class AT0003_ConfigureHostBuilderPartialMethodNotImplementedAnalyz
             Verifier
                 .Diagnostic()
                 .WithSpan(4, 26, 4, 48)
-                .WithArguments("IMyBuilderConfigurator", "ConfigureBuilderFromIMyBuilderConfigurator"),
+                .WithArguments("IMyBuilderConfigurator", "ConfigureHostBuilderFromIMyBuilderConfigurator"),
         ];
 
         await Verifier.VerifyAnalyzerAsync(text, Configure, expected);
@@ -64,12 +64,12 @@ public sealed class AT0003_ConfigureHostBuilderPartialMethodNotImplementedAnalyz
                             [ConfigureHostBuilder]
                             public partial interface IMyBuilderConfigurator
                             {
-                                protected static partial void ConfigureBuilderFromIMyBuilderConfigurator(IHostApplicationBuilder builder);
+                                protected static partial void ConfigureHostBuilderFromIMyBuilderConfigurator(IHostApplicationBuilder builder);
                             }
 
                             public partial interface IMyBuilderConfigurator
                             {
-                                protected static partial void ConfigureBuilderFromIMyBuilderConfigurator(IHostApplicationBuilder builder)
+                                protected static partial void ConfigureHostBuilderFromIMyBuilderConfigurator(IHostApplicationBuilder builder)
                                 {
                                 }
                             }

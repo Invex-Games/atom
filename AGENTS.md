@@ -64,7 +64,7 @@ BuildTools installation. Cleanup honors `.editorconfig` and `Invex.Atom.sln.DotS
   style and accurately describing nullability, return values, retries, and caching.
 - Add `[PublicAPI]` to new public types where the public API analyzer applies.
 - `CS1591` is enforced repository-wide. Only tests, samples, `_atom/`, and the generated-code module projects
-  (`Invex.Atom.Module.Dotnet`, `.DevopsWorkflows`, `.GithubWorkflows`) suppress it in their own `.csproj`; do not
+  (`Invex.Atom.Module.Dotnet`, `.DevOpsWorkflows`, `.GitHubWorkflows`) suppress it in their own `.csproj`; do not
   broaden those suppressions to hide missing documentation.
 - Keep cross-member implementation helpers `internal`; expose only the intended consumer API.
 - The IDE can report false errors for `[GeneratedRegex]` partial members; `dotnet build` is the
@@ -133,7 +133,7 @@ Docs follow the shared Invex documentation standard used by every Invex library:
 - **`api/index.md`** is the only hand-written file under `api/`; everything else there is generated. Put per-type
   detail in XML docs, not in hand-written API pages.
 - **XML docs are enforced.** `CS1591` is not suppressed for shipped projects, except the mostly generated
-  `Invex.Atom.Module.Dotnet`, `Invex.Atom.Module.DevopsWorkflows` and `Invex.Atom.Module.GithubWorkflows`, which
+  `Invex.Atom.Module.Dotnet`, `Invex.Atom.Module.DevOpsWorkflows` and `Invex.Atom.Module.GitHubWorkflows`, which
   suppress it in their own csproj. Everywhere else, every public type and member needs
   `<summary>`, plus `<param>`, `<typeparam>`, `<returns>` and `<exception>` where they apply, `<remarks>` for
   non-obvious behaviour, and `<see cref>`/`<paramref>`/`<see langword>` for references.

@@ -1,4 +1,4 @@
-namespace Invex.Atom.Build.Tests.ClassTests.Params;
+﻿namespace Invex.Atom.Build.Tests.ClassTests.Params;
 
 [TestFixture]
 [NonParallelizable]
@@ -170,8 +170,8 @@ internal sealed class ParamServiceTests
             });
 
         A
-            .CallTo(() => vaultProvider.GetSecret("test-param"))
-            .Returns("VaultValue");
+            .CallTo(() => vaultProvider.GetSecretAsync("test-param", A<CancellationToken>._))
+            .Returns(new ValueTask<string?>("VaultValue"));
 
         // Act
         var result = _paramService.GetParam("TestParam", "DefaultValue");
@@ -205,8 +205,8 @@ internal sealed class ParamServiceTests
             });
 
         A
-            .CallTo(() => vaultProvider.GetSecret("test-param"))
-            .Returns("VaultValue");
+            .CallTo(() => vaultProvider.GetSecretAsync("test-param", A<CancellationToken>._))
+            .Returns(new ValueTask<string?>("VaultValue"));
 
         // Act
         var result = _paramService.GetParam("TestParam", "DefaultValue");
@@ -241,8 +241,8 @@ internal sealed class ParamServiceTests
         A
             .CallTo(() => _vaultProviders
                 .First()
-                .GetSecret("test-param"))
-            .Returns("SecretValue");
+                .GetSecretAsync("test-param", A<CancellationToken>._))
+            .Returns(new ValueTask<string?>("SecretValue"));
 
         _paramService.GetParam("TestParam", "DefaultValue");
 
@@ -279,8 +279,8 @@ internal sealed class ParamServiceTests
         A
             .CallTo(() => _vaultProviders
                 .First()
-                .GetSecret("test-param"))
-            .Returns("NotSecretValue");
+                .GetSecretAsync("test-param", A<CancellationToken>._))
+            .Returns(new ValueTask<string?>("NotSecretValue"));
 
         _paramService.GetParam("TestParam", "DefaultValue");
 
@@ -705,8 +705,170 @@ internal sealed class ParamServiceTests
 
     private class TestSecretsProvider : ISecretsProvider
     {
-        public string GetSecret(string secretName) =>
-            "VaultValue";
+        public ValueTask<string?> GetSecretAsync(string key, CancellationToken cancellationToken) =>
+            ValueTask.FromResult<string?>("VaultValue");
+    }
+
+    [Test]
+    public async Task PrefetchSecretsAsync_WithSecretParam_QueriesProviderOnceWithToken()
+    {
+        // Arrange
+        var paramDefinition = new ParamDefinition("TestParam")
+        {
+            ArgName = "test-param",
+            Description = "Test parameter",
+            Sources = ParamSource.All,
+            IsSecret = true,
+            ChainedParams = [],
+        };
+
+        var vaultProvider = A.Fake<ISecretsProvider>();
+        _config = new ConfigurationBuilder().Build();
+        _paramService = new(_buildDefinition, _args, _console, _config, _logger, [vaultProvider]);
+
+        A
+            .CallTo(() => _buildDefinition.ParamDefinitions)
+            .Returns(new Dictionary<string, ParamDefinition>
+            {
+                { "TestParam", paramDefinition },
+            });
+
+        using var cts = new CancellationTokenSource();
+
+        A
+            .CallTo(() => vaultProvider.GetSecretAsync("test-param", cts.Token))
+            .Returns(new ValueTask<string?>("VaultValue"));
+
+        // Act
+        await _paramService.PrefetchSecretsAsync(["TestParam", "TestParam"], cts.Token);
+
+        using (_paramService.CreateNoCacheScope())
+        {
+            _paramService
+                .GetParam("TestParam", "DefaultValue")
+                .ShouldBe("VaultValue");
+        }
+
+        // Assert
+        A
+            .CallTo(() => vaultProvider.GetSecretAsync(A<string>._, A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Test]
+    public async Task PrefetchSecretsAsync_WhenResolvableFromHigherPrecedenceSource_DoesNotQueryProvider()
+    {
+        // Arrange
+        var paramDefinition = new ParamDefinition("TestParam")
+        {
+            ArgName = "test-param",
+            Description = "Test parameter",
+            Sources = ParamSource.All,
+            IsSecret = true,
+            ChainedParams = [],
+        };
+
+        var vaultProvider = A.Fake<ISecretsProvider>();
+        _config = new ConfigurationBuilder().Build();
+        _paramService = new(_buildDefinition, _args, _console, _config, _logger, [vaultProvider]);
+
+        A
+            .CallTo(() => _buildDefinition.ParamDefinitions)
+            .Returns(new Dictionary<string, ParamDefinition>
+            {
+                { "TestParam", paramDefinition },
+            });
+
+        Environment.SetEnvironmentVariable("test-param", "EnvValue");
+
+        // Act
+        await _paramService.PrefetchSecretsAsync(["TestParam"], CancellationToken.None);
+
+        // Assert
+        A
+            .CallTo(() => vaultProvider.GetSecretAsync(A<string>._, A<CancellationToken>._))
+            .MustNotHaveHappened();
+
+        _paramService
+            .GetParam("TestParam", "DefaultValue")
+            .ShouldBe("EnvValue");
+    }
+
+    [Test]
+    public async Task PrefetchSecretsAsync_WithNonSecretParam_DoesNotQueryProvider()
+    {
+        // Arrange
+        var paramDefinition = new ParamDefinition("TestParam")
+        {
+            ArgName = "test-param",
+            Description = "Test parameter",
+            Sources = ParamSource.All,
+            IsSecret = false,
+            ChainedParams = [],
+        };
+
+        var vaultProvider = A.Fake<ISecretsProvider>();
+        _config = new ConfigurationBuilder().Build();
+        _paramService = new(_buildDefinition, _args, _console, _config, _logger, [vaultProvider]);
+
+        A
+            .CallTo(() => _buildDefinition.ParamDefinitions)
+            .Returns(new Dictionary<string, ParamDefinition>
+            {
+                { "TestParam", paramDefinition },
+            });
+
+        // Act
+        await _paramService.PrefetchSecretsAsync(["TestParam"], CancellationToken.None);
+
+        // Assert
+        A
+            .CallTo(() => vaultProvider.GetSecretAsync(A<string>._, A<CancellationToken>._))
+            .MustNotHaveHappened();
+    }
+
+    [Test]
+    public async Task PrefetchSecretsAsync_WhenProvidersReturnNull_FallsBackToDefaultWithoutRequerying()
+    {
+        // Arrange
+        var paramDefinition = new ParamDefinition("TestParam")
+        {
+            ArgName = "test-param",
+            Description = "Test parameter",
+            Sources = ParamSource.All,
+            IsSecret = true,
+            ChainedParams = [],
+        };
+
+        var vaultProvider = A.Fake<ISecretsProvider>();
+        _config = new ConfigurationBuilder().Build();
+        _paramService = new(_buildDefinition, _args, _console, _config, _logger, [vaultProvider]);
+
+        A
+            .CallTo(() => _buildDefinition.ParamDefinitions)
+            .Returns(new Dictionary<string, ParamDefinition>
+            {
+                { "TestParam", paramDefinition },
+            });
+
+        A
+            .CallTo(() => vaultProvider.GetSecretAsync("test-param", A<CancellationToken>._))
+            .Returns(new ValueTask<string?>((string?)null));
+
+        // Act
+        await _paramService.PrefetchSecretsAsync(["TestParam"], CancellationToken.None);
+
+        string? result;
+
+        using (_paramService.CreateNoCacheScope())
+            result = _paramService.GetParam("TestParam", "DefaultValue");
+
+        // Assert
+        result.ShouldBe("DefaultValue");
+
+        A
+            .CallTo(() => vaultProvider.GetSecretAsync(A<string>._, A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
     }
 
     [Test]

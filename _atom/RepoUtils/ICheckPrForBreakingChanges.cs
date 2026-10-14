@@ -2,7 +2,7 @@ namespace Atom.RepoUtils;
 
 internal sealed record ReleaseInfo(string CommitHash, SemVer Version);
 
-internal interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelper, ISetupBuildInfo, IApiSurfaceHelper
+internal interface ICheckPrForBreakingChanges : IGitHubHelper, IPullRequestHelper, ISetupBuildInfo, IApiSurfaceHelper
 {
     private RootedPath[] FilesToCheck =>
         RootedFileSystem
@@ -13,11 +13,11 @@ internal interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelpe
 
     Target CheckPrForBreakingChanges =>
         t => t
-            .RequiresParam(nameof(GithubToken), nameof(PullRequestNumber))
+            .RequiresParam(nameof(GitHubToken), nameof(PullRequestNumber))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildVersion))
             .Executes(async cancellationToken =>
             {
-                var owner = Github.Variables.RepositoryOwner;
+                var owner = GitHub.Variables.RepositoryOwner;
                 Logger.LogDebug("Target repository owner: {Owner}", owner);
 
                 var currentCommitResult = await ProcessRunner.RunAsync(new("git", "rev-parse HEAD")
@@ -193,7 +193,7 @@ internal interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelpe
         string description,
         CancellationToken cancellationToken)
     {
-        var repository = Github.Variables
+        var repository = GitHub.Variables
             .Repository
             .Split('/')
             .Last();
@@ -201,7 +201,7 @@ internal interface ICheckPrForBreakingChanges : IGithubHelper, IPullRequestHelpe
         Logger.LogDebug("Target repository: {Repository}", repository);
 
         var productHeader = new ProductHeaderValue("Atom");
-        var connection = new Connection(productHeader, new InMemoryCredentialStore(GithubToken));
+        var connection = new Connection(productHeader, new InMemoryCredentialStore(GitHubToken));
 
         var repoQuery = new Query()
             .Repository(repository, owner)

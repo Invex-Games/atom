@@ -7,7 +7,7 @@ namespace Invex.Atom.Module.Dotnet.Cli;
 public partial interface IDotnetCli
 {
     /// <summary>
-    ///     
+    ///
     ///           Provides the details for specified template package.
     ///           The command checks if the package is installed locally, if it was not found, it searches the configured NuGet feeds.
     /// </summary>
@@ -18,43 +18,40 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> NewDetails(
         System.String packageIdentifier,
-        NewDetailsOptions? options = null,
+        DotnetNewDetailsOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NewDetails(
         System.String packageIdentifier,
-        NewDetailsOptions? options = null,
+        DotnetNewDetailsOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "new details",
-            packageIdentifier,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "new", "details" };
+        DotnetCliArgs.AddPositional(args, packageIdentifier);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record NewDetailsOptions
+public sealed record DotnetNewDetailsOptions
 {
     /// <summary>
     ///     Specifies a NuGet source to use.
@@ -64,7 +61,7 @@ public sealed record NewDetailsOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -73,20 +70,21 @@ public sealed record NewDetailsOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            AddSource is not null
-                ? $"--add-source {string.Join(" --add-source ", AddSource)}"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--add-source", AddSource);
+        DotnetCliArgs.AddBool(args, "--interactive", Interactive);
+
+        return args;
     }
-    
+
 }
 

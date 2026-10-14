@@ -1,21 +1,21 @@
 ﻿namespace Invex.Atom.Workflows.Options.Injections;
 
 /// <summary>
-///     Represents a workflow option that injects a parameter value into the workflow execution context.
+///     A workflow option that injects a parameter value, produced by a workflow expression, into a target's step.
 /// </summary>
-/// <param name="Name">The name of the parameter to inject.</param>
-/// <param name="InjectionExpression">The value to inject for the specified parameter.</param>
+/// <param name="ParamName">The name of the parameter to inject.</param>
+/// <param name="Value">The expression that produces the parameter value in the workflow.</param>
 /// <remarks>
-///     This allows workflows to set specific parameter values that take precedence over other sources
-///     like command-line arguments or environment variables.
+///     Typically created via <c>BuildOptions.Inject.Param(paramName, value)</c>. The injected value takes precedence
+///     over a value injected from the workflow environment for the same parameter.
 /// </remarks>
 /// <example>
 ///     <code>
-/// // Inject a dry-run parameter
-/// var dryRunInjection = new WorkflowParamInjection("NugetDryRun", "true");
-/// // Add to workflow configuration
-/// var workflowDefinition = new WorkflowDefinition().WithAddedOptions(dryRunInjection);
+/// new WorkflowTargetDefinition(nameof(PushToNuget))
+/// {
+///     Options = [BuildOptions.Inject.Param(nameof(NugetDryRun), "true")],
+/// };
 ///     </code>
 /// </example>
 [PublicAPI]
-public sealed record WorkflowParamInjection(string Name, TextExpression InjectionExpression) : IBuildOption;
+public sealed record WorkflowParamInjection(string ParamName, TextExpression Value) : IBuildOption;

@@ -13,7 +13,7 @@ public partial interface IDotnetCli
     ///     The solution file to operate on. If not specified, the command will search the current directory for one.
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -31,7 +31,7 @@ public partial interface IDotnetCli
     ///     The solution file to operate on. If not specified, the command will search the current directory for one.
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -50,30 +50,24 @@ internal partial class DotnetCli
         System.String slnFile,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "solution migrate",
-            slnFile,
-        }.Where(x => x is { Length: > 0 }));
+    )
+    {
+        var args = new List<string> { "solution", "migrate" };
+        DotnetCliArgs.AddPositional(args, slnFile);
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
     public Task<ProcessRunResult> SolutionMigrate(
         Invex.FileSystem.RootedPath slnFile,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "solution migrate",
-            slnFile,
-        }.Where(x => x is { Length: > 0 }));
+    )
+    {
+        var args = new List<string> { "solution", "migrate" };
+        DotnetCliArgs.AddPositional(args, slnFile);
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }

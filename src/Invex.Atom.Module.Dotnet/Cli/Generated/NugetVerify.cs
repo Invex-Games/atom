@@ -8,49 +8,46 @@ public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> NugetVerify(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetVerifyOptions? options = null,
+        DotnetNugetVerifyOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> NugetVerify(
         System.Collections.Generic.IEnumerable<System.String> packagePaths,
-        NugetVerifyOptions? options = null,
+        DotnetNugetVerifyOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "nuget verify",
-            $"{string.Join(" ", packagePaths)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "nuget", "verify" };
+        DotnetCliArgs.AddPositional(args, packagePaths);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record NugetVerifyOptions
+public sealed record DotnetNugetVerifyOptions
 {
     public System.Boolean? All
     {
         get;
         init;
     }
-    
+
     public System.Collections.Generic.IEnumerable<System.String>? CertificateFingerprint
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -59,23 +56,22 @@ public sealed record NugetVerifyOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            All is true
-                ? "--all"
-                : null,
-            CertificateFingerprint is not null
-                ? $"--certificate-fingerprint {string.Join(" --certificate-fingerprint ", CertificateFingerprint)}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddFlag(args, "--all", All);
+        DotnetCliArgs.AddOption(args, "--certificate-fingerprint", CertificateFingerprint);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+
+        return args;
     }
-    
+
 }
 

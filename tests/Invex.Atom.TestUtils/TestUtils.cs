@@ -10,7 +10,7 @@ public static class TestUtils
         TestBuildIdProvider? buildIdProvider = null,
         TestBuildVersionProvider? buildVersionProvider = null,
         Action<HostApplicationBuilder>? configure = null)
-        where T : BuildDefinition
+        where T : BuildDefinition, IConfigureHost
     {
         var builder = AtomHost.CreateAtomBuilder<T>([]);
 

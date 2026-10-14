@@ -6,13 +6,9 @@
 /// <remarks>
 ///     This interface is implemented by classes representing different workflow platforms (e.g., GitHub Actions, Azure
 ///     DevOps).
-///     It allows the Atom framework to determine if a particular workflow type is currently active.
+///     Each workflow type is matched with an <see cref="Writer.IWorkflowWriter{T}" /> that writes its workflow files.
+///     Use <see cref="IWorkflowContextProvider" /> to detect which platform the build is currently running on.
 /// </remarks>
 [PublicAPI]
-public interface IWorkflowType
-{
-    /// <summary>
-    ///     Gets a value indicating whether this workflow type is currently running.
-    /// </summary>
-    bool IsRunning { get; }
-}
+[SuppressMessage("Design", "CA1040:Avoid empty interfaces")]
+public interface IWorkflowType;

@@ -32,6 +32,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Invex.Atom.Module.Dotnet.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Invex.Atom.Module.Dotnet.props" Pack="true" PackagePath="buildTransitive/" />
   </ItemGroup>
 

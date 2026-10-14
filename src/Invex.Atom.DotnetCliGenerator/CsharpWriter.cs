@@ -61,6 +61,24 @@ public sealed partial class CsharpWriter
         }
     }
 
+    /// <summary>
+    ///     Compound words used by the .NET CLI as a single lowercase token, mapped to their PascalCase form.
+    /// </summary>
+    /// <remarks>
+    ///     Used by <see cref="ToPascalCase" /> so that, for example, <c>--configfile</c> becomes <c>ConfigFile</c>
+    ///     rather than <c>Configfile</c>. Keys are matched case-insensitively against each word of the input.
+    /// </remarks>
+    public static IReadOnlyDictionary<string, string> KnownCompoundWords { get; } =
+        new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["configfile"] = "ConfigFile",
+            ["msbuild"] = "MsBuild",
+            ["nologo"] = "NoLogo",
+            ["reportinstallsuccess"] = "ReportInstallSuccess",
+            ["vbcscompiler"] = "VbcsCompiler",
+            ["vstest"] = "VsTest",
+        };
+
     [GeneratedRegex("(?<!^)(?=[A-Z])")]
     private static partial Regex UppercaseRegex { get; }
 
@@ -102,7 +120,7 @@ public sealed partial class CsharpWriter
     /// <param name="line">The text line to write.</param>
     /// <param name="noIndent">If <c>true</c>, the text is written without the current indentation.</param>
     public void WriteLine(string line, bool noIndent = false) =>
-        _sb.AppendLine(noIndent
+        _sb.AppendLine(noIndent || line.Length is 0
             ? line
             : $"{new(' ', _indent * 4)}{line}");
 
@@ -141,7 +159,7 @@ public sealed partial class CsharpWriter
                          .Replace(">", "&gt;")
                          .Replace("\r", "")
                          .Split('\n'))
-                WriteLine($"///     {line}");
+                WriteLine($"///     {line}".TrimEnd());
 
             WriteLine("/// </summary>");
         }
@@ -215,7 +233,7 @@ public sealed partial class CsharpWriter
                          .Replace(">", "&gt;")
                          .Replace("\r", "")
                          .Split('\n'))
-                WriteLine($"///     {line}");
+                WriteLine($"///     {line}".TrimEnd());
 
             WriteLine("/// </summary>");
 
@@ -230,7 +248,7 @@ public sealed partial class CsharpWriter
                              .Replace(">", "&gt;")
                              .Replace("\r", "")
                              .Split('\n'))
-                    WriteLine($"///     {line}");
+                    WriteLine($"///     {line}".TrimEnd());
 
                 WriteLine("/// </param>");
             }
@@ -306,6 +324,8 @@ public sealed partial class CsharpWriter
         }
         else
         {
+            WriteLine(string.Empty, true);
+
             using (Block())
                 body(this);
         }
@@ -341,9 +361,10 @@ public sealed partial class CsharpWriter
         // Split by non-letter characters
         var parts = text.Split(['-', '_', ' ', ':'], StringSplitOptions.RemoveEmptyEntries);
 
-        var pascalCase = string.Concat(parts.Select(part => char.ToUpperInvariant(part[0]) +
-                                                            part[1..]
-                                                                .ToLowerInvariant()));
+        var pascalCase = string.Concat(parts.Select(part =>
+            KnownCompoundWords.TryGetValue(part, out var knownWord)
+                ? knownWord
+                : char.ToUpperInvariant(part[0]) + part[1..].ToLowerInvariant()));
 
         return lowerFirstWord
             ? char.ToLowerInvariant(pascalCase[0]) + pascalCase[1..]

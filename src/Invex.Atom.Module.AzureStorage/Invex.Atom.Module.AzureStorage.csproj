@@ -38,6 +38,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\Shared\Azure\AzureCredentialFactory.cs" Link="Shared\AzureCredentialFactory.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Invex.Atom.Module.AzureStorage.props" Pack="true" PackagePath="buildTransitive/" />
   </ItemGroup>
 

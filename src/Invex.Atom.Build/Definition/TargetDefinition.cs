@@ -19,42 +19,56 @@ public sealed class TargetDefinition
     /// <summary>
     ///     Gets a value indicating whether the target should be hidden from help output unless verbose mode is enabled.
     /// </summary>
-    public bool Hidden { get; private set; }
+    public bool IsHidden { get; private set; }
 
     /// <summary>
     ///     Gets the list of asynchronous tasks that will be executed when the target runs.
     /// </summary>
-    public List<Func<CancellationToken, Task>> Tasks { get; private set; } = [];
+    public IReadOnlyList<Func<CancellationToken, Task>> Tasks => _tasks;
 
     /// <summary>
     ///     Gets the list of target names that must be executed before this target.
     /// </summary>
-    public List<string> Dependencies { get; private set; } = [];
+    public IReadOnlyList<string> Dependencies => _dependencies;
 
     /// <summary>
     ///     Gets the list of parameters that are used or required by this target.
     /// </summary>
-    public List<DefinedParam> Params { get; private set; } = [];
+    public IReadOnlyList<DefinedParam> Params => _params;
 
     /// <summary>
     ///     Gets the list of artifacts that must be produced by other targets before this target can run.
     /// </summary>
-    public List<ConsumedArtifact> ConsumedArtifacts { get; private set; } = [];
+    public IReadOnlyList<ConsumedArtifact> ConsumedArtifacts => _consumedArtifacts;
 
     /// <summary>
     ///     Gets the list of artifacts that will be produced by this target.
     /// </summary>
-    public List<ProducedArtifact> ProducedArtifacts { get; private set; } = [];
+    public IReadOnlyList<ProducedArtifact> ProducedArtifacts => _producedArtifacts;
 
     /// <summary>
     ///     Gets the list of variables that must be produced by other targets before this target can run.
     /// </summary>
-    public List<ConsumedVariable> ConsumedVariables { get; private set; } = [];
+    public IReadOnlyList<ConsumedVariable> ConsumedVariables => _consumedVariables;
 
     /// <summary>
     ///     Gets the list of variables that will be produced by this target.
     /// </summary>
-    public List<string> ProducedVariables { get; private set; } = [];
+    public IReadOnlyList<string> ProducedVariables => _producedVariables;
+
+    private List<Func<CancellationToken, Task>> _tasks = [];
+
+    private List<string> _dependencies = [];
+
+    private List<DefinedParam> _params = [];
+
+    private List<ConsumedArtifact> _consumedArtifacts = [];
+
+    private List<ProducedArtifact> _producedArtifacts = [];
+
+    private List<ConsumedVariable> _consumedVariables = [];
+
+    private List<string> _producedVariables = [];
 
     private List<(Func<IBuildDefinition, Target> GetExtension, bool RunExtensionAfter)> Extensions { get; } = [];
 
@@ -90,80 +104,80 @@ public sealed class TargetDefinition
 
             if (extension.RunExtensionAfter)
             {
-                Tasks.AddRange(targetToExtend.Tasks);
+                _tasks.AddRange(targetToExtend.Tasks);
 
-                Dependencies = Dependencies
+                _dependencies = _dependencies
                     .Concat(targetToExtend.Dependencies)
                     .Distinct()
                     .ToList();
 
-                Params = Params
+                _params = _params
                     .Concat(targetToExtend.Params)
                     .GroupBy(p => p.Param)
                     .Select(g => new DefinedParam(g.Key, g.Any(p => p.Required)))
                     .ToList();
 
-                ConsumedArtifacts = ConsumedArtifacts
+                _consumedArtifacts = _consumedArtifacts
                     .Concat(targetToExtend.ConsumedArtifacts)
                     .Distinct()
                     .ToList();
 
-                ProducedArtifacts = ProducedArtifacts
+                _producedArtifacts = _producedArtifacts
                     .Concat(targetToExtend.ProducedArtifacts)
                     .Distinct()
                     .ToList();
 
-                ConsumedVariables = ConsumedVariables
+                _consumedVariables = _consumedVariables
                     .Concat(targetToExtend.ConsumedVariables)
                     .Distinct()
                     .ToList();
 
-                ProducedVariables = ProducedVariables
+                _producedVariables = _producedVariables
                     .Concat(targetToExtend.ProducedVariables)
                     .Distinct()
                     .ToList();
             }
             else
             {
-                Tasks = targetToExtend
+                _tasks = targetToExtend
                     .Tasks
-                    .Concat(Tasks)
+                    .Concat(_tasks)
                     .ToList();
 
-                Dependencies = targetToExtend
+                _dependencies = targetToExtend
                     .Dependencies
-                    .Concat(Dependencies)
+                    .Concat(_dependencies)
                     .Distinct()
                     .ToList();
 
-                Params = targetToExtend
+                _params = targetToExtend
                     .Params
-                    .Concat(Params)
+                    .Concat(_params)
                     .GroupBy(p => p.Param)
                     .Select(g => new DefinedParam(g.Key, g.Any(p => p.Required)))
                     .ToList();
 
-                ConsumedArtifacts = targetToExtend
+                _consumedArtifacts = targetToExtend
                     .ConsumedArtifacts
-                    .Concat(ConsumedArtifacts)
+                    .Concat(_consumedArtifacts)
                     .Distinct()
                     .ToList();
 
-                ProducedArtifacts = targetToExtend
+                _producedArtifacts = targetToExtend
                     .ProducedArtifacts
-                    .Concat(ProducedArtifacts)
+                    .Concat(_producedArtifacts)
                     .Distinct()
                     .ToList();
 
-                ConsumedVariables = targetToExtend
+                _consumedVariables = targetToExtend
                     .ConsumedVariables
-                    .Concat(ConsumedVariables)
+                    .Concat(_consumedVariables)
                     .Distinct()
                     .ToList();
 
-                ProducedVariables = targetToExtend
+                _producedVariables = targetToExtend
                     .ProducedVariables
-                    .Concat(ProducedVariables)
+                    .Concat(_producedVariables)
                     .Distinct()
                     .ToList();
             }
@@ -189,9 +203,9 @@ public sealed class TargetDefinition
     /// </summary>
     /// <param name="hidden">If true, the target will be hidden.</param>
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
-    public TargetDefinition IsHidden(bool hidden = true)
+    public TargetDefinition AsHidden(bool hidden = true)
     {
-        Hidden = hidden;
+        IsHidden = hidden;
 
         return this;
     }
@@ -203,7 +217,7 @@ public sealed class TargetDefinition
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
     public TargetDefinition Executes(Func<CancellationToken, Task> task)
     {
-        Tasks.Add(task);
+        _tasks.Add(task);
 
         return this;
     }
@@ -215,7 +229,7 @@ public sealed class TargetDefinition
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
     public TargetDefinition Executes(Func<Task> task)
     {
-        Tasks.Add(_ => task());
+        _tasks.Add(_ => task());
 
         return this;
     }
@@ -227,7 +241,7 @@ public sealed class TargetDefinition
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
     public TargetDefinition Executes(Action action)
     {
-        Tasks.Add(_ =>
+        _tasks.Add(_ =>
         {
             action();
 
@@ -245,7 +259,7 @@ public sealed class TargetDefinition
     public TargetDefinition DependsOn(string targetName)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(targetName);
-        Dependencies.Add(targetName);
+        _dependencies.Add(targetName);
 
         return this;
     }
@@ -267,7 +281,7 @@ public sealed class TargetDefinition
                                         """,
                 nameof(target));
 
-        Dependencies.Add(targetName);
+        _dependencies.Add(targetName);
 
         return this;
     }
@@ -279,7 +293,7 @@ public sealed class TargetDefinition
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
     public TargetDefinition DependsOn(TargetDefinition target)
     {
-        Dependencies.Add(target.Name);
+        _dependencies.Add(target.Name);
 
         return this;
     }
@@ -292,7 +306,7 @@ public sealed class TargetDefinition
     public TargetDefinition UsesParam(params IEnumerable<string> paramNames)
     {
         ArgumentNullException.ThrowIfNull(paramNames);
-        Params.AddRange(paramNames.Select(x => new DefinedParam(x, false)));
+        _params.AddRange(paramNames.Select(x => new DefinedParam(x, false)));
 
         return this;
     }
@@ -305,7 +319,7 @@ public sealed class TargetDefinition
     public TargetDefinition RequiresParam(params IEnumerable<string> paramNames)
     {
         ArgumentNullException.ThrowIfNull(paramNames);
-        Params.AddRange(paramNames.Select(x => new DefinedParam(x, true)));
+        _params.AddRange(paramNames.Select(x => new DefinedParam(x, true)));
 
         return this;
     }
@@ -318,7 +332,7 @@ public sealed class TargetDefinition
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
     public TargetDefinition ProducesArtifact(string artifactName, string? buildSlice = null)
     {
-        ProducedArtifacts.Add(new(artifactName, buildSlice));
+        _producedArtifacts.Add(new(artifactName, buildSlice));
 
         return this;
     }
@@ -331,7 +345,7 @@ public sealed class TargetDefinition
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
     public TargetDefinition ProducesArtifacts(IEnumerable<string> artifactNames, string? buildSlice = null)
     {
-        ProducedArtifacts.AddRange(artifactNames.Select(x => new ProducedArtifact(x, buildSlice)));
+        _producedArtifacts.AddRange(artifactNames.Select(x => new ProducedArtifact(x, buildSlice)));
 
         return this;
     }
@@ -345,7 +359,7 @@ public sealed class TargetDefinition
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
     public TargetDefinition ConsumesArtifact(string targetName, string artifactName, string? buildSlice = null)
     {
-        ConsumedArtifacts.Add(new(targetName, artifactName, buildSlice));
+        _consumedArtifacts.Add(new(targetName, artifactName, buildSlice));
 
         return this;
     }
@@ -362,7 +376,7 @@ public sealed class TargetDefinition
         IEnumerable<string> artifactNames,
         string? buildSlice = null)
     {
-        ConsumedArtifacts.AddRange(artifactNames.Select(artifactName =>
+        _consumedArtifacts.AddRange(artifactNames.Select(artifactName =>
             new ConsumedArtifact(targetName, artifactName, buildSlice)));
 
         return this;
@@ -378,7 +392,7 @@ public sealed class TargetDefinition
     public TargetDefinition ConsumesArtifact(string targetName, string artifactName, IEnumerable<string> buildSlices)
     {
         foreach (var buildSlice in buildSlices)
-            ConsumedArtifacts.Add(new(targetName, artifactName, buildSlice));
+            _consumedArtifacts.Add(new(targetName, artifactName, buildSlice));
 
         return this;
     }
@@ -399,7 +413,7 @@ public sealed class TargetDefinition
 
         foreach (var artifactName in artifactNames)
         foreach (var buildSlice in buildSlicesArray)
-            ConsumedArtifacts.Add(new(targetName, artifactName, buildSlice));
+            _consumedArtifacts.Add(new(targetName, artifactName, buildSlice));
 
         return this;
     }
@@ -414,7 +428,7 @@ public sealed class TargetDefinition
     /// </remarks>
     public TargetDefinition ProducesVariable(string variableName)
     {
-        ProducedVariables.Add(variableName);
+        _producedVariables.Add(variableName);
 
         return this;
     }
@@ -427,7 +441,7 @@ public sealed class TargetDefinition
     /// <returns>The current <see cref="TargetDefinition" /> for fluent chaining.</returns>
     public TargetDefinition ConsumesVariable(string targetName, string outputName)
     {
-        ConsumedVariables.Add(new(targetName, outputName));
+        _consumedVariables.Add(new(targetName, outputName));
 
         return this;
     }

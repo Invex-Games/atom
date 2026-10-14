@@ -16,43 +16,40 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> ToolList(
         System.String packageId,
-        ToolListOptions? options = null,
+        DotnetToolListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> ToolList(
         System.String packageId,
-        ToolListOptions? options = null,
+        DotnetToolListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "tool list",
-            packageId,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "tool", "list" };
+        DotnetCliArgs.AddPositional(args, packageId);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record ToolListOptions
+public sealed record DotnetToolListOptions
 {
     /// <summary>
     ///     The output format for the list of tools.
@@ -62,7 +59,7 @@ public sealed record ToolListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     List tools installed for the current user.
     /// </summary>
@@ -71,7 +68,7 @@ public sealed record ToolListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     List the tools installed in the local tool manifest.
     /// </summary>
@@ -80,7 +77,7 @@ public sealed record ToolListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The directory containing the tools to list.
     /// </summary>
@@ -89,26 +86,23 @@ public sealed record ToolListOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            Format is not null
-                ? $"--format {Format}"
-                : null,
-            Global is true
-                ? "--global"
-                : null,
-            Local is true
-                ? "--local"
-                : null,
-            ToolPath is not null
-                ? $"--tool-path {ToolPath}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--format", Format);
+        DotnetCliArgs.AddFlag(args, "--global", Global);
+        DotnetCliArgs.AddFlag(args, "--local", Local);
+        DotnetCliArgs.AddOption(args, "--tool-path", ToolPath);
+
+        return args;
     }
-    
+
 }
 

@@ -20,6 +20,16 @@ public interface IArtifactProvider
     IReadOnlyList<string> RequiredParams => [];
 
     /// <summary>
+    ///     Gets a list of parameter names the artifact provider may use but does not always require.
+    /// </summary>
+    /// <remarks>
+    ///     These are declared as used (not required) parameters of the artifact targets, so that secrets among them are
+    ///     prefetched and injected into generated workflows. Use this for alternatives, such as a connection string or
+    ///     an account URL with a credential, where the provider validates the combination itself.
+    /// </remarks>
+    IReadOnlyList<string> OptionalParams => [];
+
+    /// <summary>
     ///     Uploads one or more build artifacts to the configured storage.
     /// </summary>
     /// <param name="artifactNames">A list of artifact names to upload. Each name typically corresponds to a file or directory.</param>

@@ -58,7 +58,7 @@
         <comment>The title of the code fix.</comment>
     </data>
     <data name="AT0003Description" xml:space="preserve">
-        <value>Interfaces decorated with [ConfigureHostBuilder] must implement the generated partial method ConfigureBuilderFrom{InterfaceName}.</value>
+        <value>Interfaces decorated with [ConfigureHostBuilder] must implement the generated partial method ConfigureHostBuilderFrom{InterfaceName}.</value>
         <comment>An optional longer localizable description of the diagnostic.</comment>
     </data>
     <data name="AT0003MessageFormat" xml:space="preserve">

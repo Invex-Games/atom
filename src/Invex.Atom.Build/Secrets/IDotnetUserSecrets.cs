@@ -35,7 +35,7 @@ public partial interface IDotnetUserSecrets
     /// <summary>
     ///     Configures the host builder to register the <see cref="DotnetUserSecretsProvider" />.
     /// </summary>
-    protected static partial void ConfigureBuilderFromIDotnetUserSecrets(IHostApplicationBuilder builder) =>
+    protected static partial void ConfigureHostBuilderFromIDotnetUserSecrets(IHostApplicationBuilder builder) =>
         builder
             .Services
             .AddSingleton<DotnetUserSecretsProvider>()

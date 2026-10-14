@@ -43,11 +43,4 @@ public interface IBuildDefinition : IBuildAccessor
     /// <param name="paramName">The name of the parameter to access.</param>
     /// <returns>The value of the specified parameter, or <c>null</c> if not defined or has no value.</returns>
     object? AccessParam(string paramName);
-
-    /// <summary>
-    ///     Allows the build definition to configure the host application builder before the host is started.
-    ///     Override to register additional services or configuration.
-    /// </summary>
-    /// <param name="builder">The host application builder to configure.</param>
-    void ConfigureDefinitionHost(IHostApplicationBuilder builder);
 }

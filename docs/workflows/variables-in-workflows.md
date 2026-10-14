@@ -20,8 +20,8 @@ Each platform module registers an `IVariableProvider`:
 
 | Module                              | Provider                 | Mechanism                                          |
 |-------------------------------------|--------------------------|----------------------------------------------------|
-| `Invex.Atom.Module.GithubWorkflows` | `GithubVariableProvider` | Writes to `$GITHUB_OUTPUT`, reads from job outputs |
-| `Invex.Atom.Module.DevopsWorkflows` | `DevopsVariableProvider` | Uses Azure DevOps pipeline variables               |
+| `Invex.Atom.Module.GitHubWorkflows` | `GitHubVariableProvider` | Writes to `$GITHUB_OUTPUT`, reads from job outputs |
+| `Invex.Atom.Module.DevOpsWorkflows` | `DevOpsVariableProvider` | Uses Azure DevOps pipeline variables               |
 
 The built-in `AtomVariableProvider` handles local execution.
 

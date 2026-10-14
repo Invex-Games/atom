@@ -16,43 +16,40 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
     /// </param>
     public Task<ProcessRunResult> SolutionAdd(
         System.Collections.Generic.IEnumerable<System.String> projectPath,
-        SolutionAddOptions? options = null,
+        DotnetSolutionAddOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> SolutionAdd(
         System.Collections.Generic.IEnumerable<System.String> projectPath,
-        SolutionAddOptions? options = null,
+        DotnetSolutionAddOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
-        var argsString = string.Join(' ', new string[] {
-            "solution add",
-            $"{string.Join(" ", projectPath)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
-        
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "solution", "add" };
+        DotnetCliArgs.AddPositional(args, projectPath);
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
-public sealed record SolutionAddOptions
+public sealed record DotnetSolutionAddOptions
 {
     /// <summary>
     ///     Place project in root of the solution, rather than creating a solution folder.
@@ -62,7 +59,7 @@ public sealed record SolutionAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Recursively add projects' ReferencedProjects to solution
     /// </summary>
@@ -71,7 +68,7 @@ public sealed record SolutionAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The destination solution folder path to add the projects to.
     /// </summary>
@@ -80,23 +77,22 @@ public sealed record SolutionAddOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            InRoot is true
-                ? "--in-root"
-                : null,
-            IncludeReferences is true
-                ? "--include-references"
-                : null,
-            SolutionFolder is not null
-                ? $"--solution-folder {SolutionFolder}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddBool(args, "--in-root", InRoot);
+        DotnetCliArgs.AddBool(args, "--include-references", IncludeReferences);
+        DotnetCliArgs.AddOption(args, "--solution-folder", SolutionFolder);
+
+        return args;
     }
-    
+
 }
 

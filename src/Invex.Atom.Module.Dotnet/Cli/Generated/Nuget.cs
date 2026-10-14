@@ -7,52 +7,56 @@ namespace Invex.Atom.Module.Dotnet.Cli;
 public partial interface IDotnetCli
 {
     public Task<ProcessRunResult> Nuget(
-        NugetOptions? options = null,
+        DotnetNugetOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
     public Task<ProcessRunResult> Nuget(
-        NugetOptions? options = null,
+        DotnetNugetOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    ) =>
-        processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", (options ?? new()).ToString())
-            : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
-    
+    )
+    {
+        var args = new List<string> { "nuget" };
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
+    }
+
 }
 [PublicAPI]
-public sealed record NugetOptions
+public sealed record DotnetNugetOptions
 {
     public System.String? Verbosity
     {
         get;
         init;
     }
-    
+
     public System.Boolean? Version
     {
         get;
         init;
     }
-    
-    public override string ToString()    {
-        return string.Join(' ',
-        new[]
-        {
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-            Version is true
-                ? "--version"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
+    {
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+        DotnetCliArgs.AddFlag(args, "--version", Version);
+
+        return args;
     }
-    
+
 }
 

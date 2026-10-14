@@ -31,12 +31,13 @@ public interface IRetrieveArtifact : IAtomArtifactsParam, ISetupBuildInfo
     /// </remarks>
     Target RetrieveArtifact =>
         t => t
-            .IsHidden()
+            .AsHidden()
             .DescribedAs("Retrieves artifacts.")
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildName))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildId))
             .RequiresParam(nameof(AtomArtifacts))
             .RequiresParam(ArtifactProvider.RequiredParams.ToArray())
+            .UsesParam(ArtifactProvider.OptionalParams.ToArray())
             .Executes(async cancellationToken =>
             {
                 Logger.LogInformation("Using artifact provider: {Provider}",

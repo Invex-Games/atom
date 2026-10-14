@@ -24,19 +24,23 @@ internal sealed class DotnetUserSecretsProvider : ISecretsProvider
     ///     Retrieves a secret value by its key from the .NET user secrets store.
     /// </summary>
     /// <param name="key">The key of the secret to retrieve.</param>
+    /// <param name="cancellationToken">A token to observe; checked before the local store is read.</param>
     /// <returns>The secret value, or <c>null</c> if the key is not found.</returns>
     /// <remarks>
     ///     This method builds a configuration using the user secrets provider and searches for the specified key,
-    ///     loading secrets based on the <see cref="SecretsAssembly" /> or the entry assembly.
+    ///     loading secrets based on the <see cref="SecretsAssembly" /> or the entry assembly. The user secrets store is
+    ///     a local file, so the lookup completes synchronously.
     /// </remarks>
-    public string? GetSecret(string key)
+    public ValueTask<string?> GetSecretAsync(string key, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var userSecrets = new ConfigurationBuilder()
             .AddUserSecrets(SecretsAssembly ?? Assembly.GetEntryAssembly()!)
             .Build()
             .AsEnumerable()
             .ToDictionary(x => x.Key, x => x.Value);
 
-        return userSecrets.GetValueOrDefault(key);
+        return ValueTask.FromResult(userSecrets.GetValueOrDefault(key));
     }
 }

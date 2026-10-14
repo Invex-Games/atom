@@ -8,10 +8,10 @@ internal interface IBuildTargets : IDotnetPackHelper, IDotnetPublishHelper
         Projects.Invex_Atom_Workflows.Name,
         Projects.Invex_Atom_Module_AzureKeyVault.Name,
         Projects.Invex_Atom_Module_AzureStorage.Name,
-        Projects.Invex_Atom_Module_DevopsWorkflows.Name,
+        Projects.Invex_Atom_Module_DevOpsWorkflows.Name,
         Projects.Invex_Atom_Module_Dotnet.Name,
         Projects.Invex_Atom_Module_GitVersion.Name,
-        Projects.Invex_Atom_Module_GithubWorkflows.Name,
+        Projects.Invex_Atom_Module_GitHubWorkflows.Name,
     ];
 
     Target PackProjects =>
