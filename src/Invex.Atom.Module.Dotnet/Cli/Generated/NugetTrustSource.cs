@@ -82,7 +82,7 @@ public sealed record DotnetNugetTrustSourceOptions
                 ? $"--source-url {SourceUrl}"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
         }
         .Where(x => x is { Length: > 0 }));

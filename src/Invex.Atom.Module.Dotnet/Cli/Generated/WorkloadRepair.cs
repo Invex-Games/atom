@@ -127,7 +127,7 @@ public sealed record DotnetWorkloadRepairOptions
                 ? $"--source {string.Join(" --source ", Source)}"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
         }
         .Where(x => x is { Length: > 0 }));

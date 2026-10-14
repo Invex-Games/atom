@@ -70,7 +70,7 @@ public sealed record DotnetWorkloadUninstallOptions
         new[]
         {
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
         }
         .Where(x => x is { Length: > 0 }));

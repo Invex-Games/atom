@@ -516,7 +516,7 @@ public sealed record DotnetPublishOptions
                 ? "--use-current-runtime"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
             VersionSuffix is not null
                 ? $"--version-suffix {VersionSuffix}"

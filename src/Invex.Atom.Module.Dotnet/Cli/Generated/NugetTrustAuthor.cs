@@ -76,7 +76,7 @@ public sealed record DotnetNugetTrustAuthorOptions
                 ? $"--configfile {ConfigFile}"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
         }
         .Where(x => x is { Length: > 0 }));

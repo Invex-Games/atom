@@ -139,7 +139,7 @@ public sealed record DotnetToolRestoreOptions
                 ? $"--tool-manifest {ToolManifest}"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
         }
         .Where(x => x is { Length: > 0 }));

@@ -184,7 +184,7 @@ public sealed record DotnetStoreOptions
                 ? "--use-current-runtime"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
             WorkingDir is not null
                 ? $"--working-dir {WorkingDir}"

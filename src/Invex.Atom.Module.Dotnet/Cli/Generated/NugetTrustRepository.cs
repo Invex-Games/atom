@@ -85,7 +85,7 @@ public sealed record DotnetNugetTrustRepositoryOptions
                 ? $"--owners {Owners}"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
         }
         .Where(x => x is { Length: > 0 }));
