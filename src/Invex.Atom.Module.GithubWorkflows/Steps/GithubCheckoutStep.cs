@@ -12,9 +12,9 @@ public sealed record GithubCheckoutStep : CheckoutStep, IGithubAdditionalStepOpt
     /// <summary>
     ///     The branch, tag or SHA to checkout. When checking out the repository that
     ///     triggered a workflow, this defaults to the reference or SHA for that event.
-    ///     Otherwise, uses the default branch.
+    ///     Otherwise, uses the default branch. Written as the <c>ref</c> input of <c>actions/checkout</c>.
     /// </summary>
-    public TextExpression? Branch { get; init; }
+    public TextExpression? Ref { get; init; }
 
     /// <summary>
     ///     Personal access token (PAT) used to fetch the repository. The PAT is configured
@@ -172,8 +172,8 @@ public sealed record GithubCheckoutStep : CheckoutStep, IGithubAdditionalStepOpt
         if (Repository is not null)
             with["repository"] = [Repository];
 
-        if (Branch is not null)
-            with["ref"] = [Branch];
+        if (Ref is not null)
+            with["ref"] = [Ref];
 
         if (Token is not null)
             with["token"] = [Token];

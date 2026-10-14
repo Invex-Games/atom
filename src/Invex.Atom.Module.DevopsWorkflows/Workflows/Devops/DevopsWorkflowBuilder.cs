@@ -536,7 +536,7 @@ internal sealed partial class DevopsWorkflowBuilder(
         if (!additionalSteps.Any(x => x is CheckoutStep))
             additionalSteps.Add(new DevopsCheckoutStep
             {
-                EnableRun = true,
+                TaskEnabled = true,
                 Repository = TextExpressions.Raw("self"),
                 FetchDepth = TextExpressions.From(0),
             });

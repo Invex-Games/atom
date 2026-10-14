@@ -22,20 +22,22 @@ public interface IGithubReleaseHelper : IGithubHelper
     ///     If <c>true</c> (default), the upload operation will be simulated (logged but not executed)
     ///     when the build is not running in a GitHub Actions environment.
     /// </param>
+    /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if no release exists with the given tag.</exception>
     /// <remarks>
     ///     The artifact will be zipped before uploading if it's a directory.
-    ///     The method will attempt to find an existing release with the given tag.
     /// </remarks>
     [PublicAPI]
     async Task UploadArtifactToRelease(
         string artifactName,
         string releaseTag,
-        bool dryRunWhenNotRunningInGithubActions = true)
+        bool dryRunWhenNotRunningInGithubActions = true,
+        CancellationToken cancellationToken = default)
     {
         var artifactPath = RootedFileSystem.AtomArtifactsDirectory / artifactName;
 
-        await UploadAssetToRelease(releaseTag, artifactPath, dryRunWhenNotRunningInGithubActions);
+        await UploadAssetToRelease(releaseTag, artifactPath, dryRunWhenNotRunningInGithubActions, cancellationToken);
     }
 
     /// <summary>
@@ -47,18 +49,20 @@ public interface IGithubReleaseHelper : IGithubHelper
     ///     If <c>true</c> (default), the upload operation will be simulated (logged but not executed)
     ///     when the build is not running in a GitHub Actions environment.
     /// </param>
+    /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-    /// <exception cref="InvalidOperationException">Thrown if the GitHub repository ID cannot be parsed.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if no release exists with the given tag.</exception>
     /// <remarks>
     ///     If <paramref name="assetPath" /> points to a directory, it will be zipped into a `.zip` file
     ///     with the same name before uploading. If it points to a file that is not a `.zip` file,
-    ///     it will also be zipped.
+    ///     a `.zip` file containing only that file is uploaded.
     /// </remarks>
     [PublicAPI]
     async Task UploadAssetToRelease(
         string releaseTag,
         RootedPath assetPath,
-        bool dryRunWhenNotRunningInGithubActions = true)
+        bool dryRunWhenNotRunningInGithubActions = true,
+        CancellationToken cancellationToken = default)
     {
         if (!Github.IsGithubActions && dryRunWhenNotRunningInGithubActions)
         {
@@ -82,42 +86,34 @@ public interface IGithubReleaseHelper : IGithubHelper
 
         var releases = await client.Repository.Release.GetAll(long.Parse(Github.Variables.RepositoryId));
 
-        var release = releases.FirstOrDefault(x => x.TagName == releaseTag);
+        var release = releases.FirstOrDefault(x => x.TagName == releaseTag) ??
+                      throw new InvalidOperationException(
+                          $"No GitHub release with tag '{releaseTag}' exists in repository {Github.Variables.RepositoryId}.");
 
         if (assetPath.DirectoryExists)
         {
             var zipPath = RootedFileSystem.CreateRootedPath($"{assetPath}.zip");
 
-            #if NET10_0_OR_GREATER
-            await ZipFile.CreateFromDirectoryAsync(assetPath, zipPath);
-            #else
-            ZipFile.CreateFromDirectory(assetPath, zipPath);
-            #endif
+            await ZipFile.CreateFromDirectoryAsync(assetPath, zipPath, cancellationToken);
+
+            assetPath = zipPath;
+        }
+        else if (assetPath.FileName?.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) is not true)
+        {
+            // Zip only this file, not its whole parent directory
+            var zipPath = RootedFileSystem.CreateRootedPath($"{assetPath}.zip");
+
+            using (var archive = ZipFile.Open(zipPath, ZipArchiveMode.Create))
+                archive.CreateEntryFromFile(assetPath, assetPath.FileName ?? "asset");
 
             assetPath = zipPath;
         }
 
         var assetFile = RootedFileSystem.FileInfo.New(assetPath);
 
-        if (!assetFile.FullName.EndsWith(".zip"))
-        {
-            // zip the file
-            var zipPath = RootedFileSystem.CreateRootedPath($"{assetPath}.zip");
-
-            #if NET10_0_OR_GREATER
-            await ZipFile.CreateFromDirectoryAsync(assetPath.Parent!, zipPath);
-            #else
-            ZipFile.CreateFromDirectory(assetPath.Parent!, zipPath);
-            #endif
-
-            assetPath = zipPath;
-        }
-
-        assetFile = RootedFileSystem.FileInfo.New(assetPath);
-
         await using var stream = assetFile.OpenRead();
 
         var asset = new ReleaseAssetUpload(assetPath.FileName, "application/zip", stream, TimeSpan.FromMinutes(5));
-        await client.Repository.Release.UploadAsset(release, asset);
+        await client.Repository.Release.UploadAsset(release, asset, cancellationToken);
     }
 }
