@@ -19,7 +19,7 @@ internal sealed class BuildExecutorTests
         _variableService = A.Fake<IVariableService>();
         _outcomeReporters = [];
         _console = new();
-        _reportService = new();
+        _reportService = new ReportService();
         _logger = A.Fake<ILogger<BuildExecutor>>();
     }
 
@@ -37,7 +37,7 @@ internal sealed class BuildExecutorTests
     private IReadOnlyList<IOutcomeReportWriter> _outcomeReporters;
     private TestConsole _console;
 
-    private ReportService _reportService;
+    private IReportService _reportService;
 
     private ILogger<BuildExecutor> _logger;
 

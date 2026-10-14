@@ -46,7 +46,7 @@ internal sealed class HostExtensionsTests
             .ShouldNotBeNull();
 
         serviceProvider
-            .GetService<ReportService>()
+            .GetService<IReportService>()
             .ShouldNotBeNull();
 
         serviceProvider

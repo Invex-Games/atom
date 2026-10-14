@@ -10,7 +10,7 @@
 /// </remarks>
 internal sealed class DevopsSummaryOutcomeReportWriter(
     IRootedFileSystem fileSystem,
-    ReportService reportService,
+    IReportService reportService,
     IParamService paramService
 ) : IOutcomeReportWriter
 {

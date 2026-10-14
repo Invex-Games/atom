@@ -12,7 +12,7 @@
 public sealed class AzureBlobArtifactProvider(
     IBuildInfo buildInfo,
     IParamService paramService,
-    ReportService reportService,
+    IReportService reportService,
     IRootedFileSystem fileSystem,
     IBuildIdProvider buildIdProvider,
     ILogger<AzureBlobArtifactProvider> logger

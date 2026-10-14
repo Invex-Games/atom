@@ -5,7 +5,7 @@
 /// </summary>
 /// <remarks>
 ///     This logger filters for significant events (Warning, Error, Critical) and sends them to the
-///     <see cref="ReportService" />. It also masks any secrets found in the log messages.
+///     <see cref="IReportService" />. It also masks any secrets found in the log messages.
 /// </remarks>
 /// <param name="serviceProvider">The service provider for resolving services.</param>
 /// <param name="scopeProvider">The external scope provider for accessing scope data.</param>
@@ -13,7 +13,7 @@ internal sealed class ReportLogger(IServiceProvider serviceProvider, IExternalSc
 {
     private IParamService ParamService => field ??= serviceProvider.GetRequiredService<IParamService>();
 
-    private ReportService ReportService => field ??= serviceProvider.GetRequiredService<ReportService>();
+    private IReportService ReportService => field ??= serviceProvider.GetRequiredService<IReportService>();
 
     /// <summary>
     ///     Checks if the given <paramref name="logLevel" /> is enabled.
@@ -38,7 +38,7 @@ internal sealed class ReportLogger(IServiceProvider serviceProvider, IExternalSc
     /// </summary>
     /// <remarks>
     ///     This method filters out log levels below Warning. For qualifying entries, it masks secrets,
-    ///     extracts the command context from the scope, and adds the log data to the <see cref="ReportService" />.
+    ///     extracts the command context from the scope, and adds the log data to the <see cref="IReportService" />.
     /// </remarks>
     public void Log<TState>(
         LogLevel logLevel,

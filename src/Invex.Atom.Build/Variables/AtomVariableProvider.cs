@@ -54,7 +54,7 @@ internal sealed partial class AtomVariableProvider(IRootedFileSystem fileSystem,
     /// <param name="variableName">The name of the variable to read.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns><c>true</c> if the variable was found and set; otherwise, <c>false</c>.</returns>
-    public async Task<bool> ReadVariable(
+    public async Task<string?> ReadVariable(
         string jobName,
         string variableName,
         CancellationToken cancellationToken = default)
@@ -62,7 +62,7 @@ internal sealed partial class AtomVariableProvider(IRootedFileSystem fileSystem,
         var variablesPath = fileSystem.AtomTempDirectory / "variables";
 
         if (!variablesPath.FileExists)
-            return false;
+            return null;
 
         var text = await fileSystem.File.ReadAllTextAsync(variablesPath, cancellationToken);
 
@@ -70,12 +70,7 @@ internal sealed partial class AtomVariableProvider(IRootedFileSystem fileSystem,
 
         var jobScopedVariableName = $"{jobName}:{variableName}";
 
-        if (!variables.TryGetValue(jobScopedVariableName, out var variable))
-            return true;
-
-        Environment.SetEnvironmentVariable(variableName, variable);
-
-        return true;
+        return variables.GetValueOrDefault(jobScopedVariableName);
     }
 
     /// <summary>
