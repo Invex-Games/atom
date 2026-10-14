@@ -71,7 +71,8 @@ internal partial class DotnetCli
         System.String[] package,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "new uninstall",
             $"{string.Join(" ", package)}",
@@ -86,7 +87,8 @@ internal partial class DotnetCli
         System.String package,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "new uninstall",
             package,
@@ -101,7 +103,8 @@ internal partial class DotnetCli
         Invex.FileSystem.RootedPath package,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "new uninstall",
             package,

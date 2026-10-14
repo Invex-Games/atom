@@ -24,7 +24,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -34,18 +34,19 @@ internal partial class DotnetCli
         StoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "store",
             $"{string.Join(" ", argument)}",
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -59,7 +60,7 @@ public sealed record StoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The target framework to store packages for. The target framework has to be specified in the project file.
     /// </summary>
@@ -68,7 +69,7 @@ public sealed record StoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The Microsoft.NETCore.App package version that will be used to run the assemblies.
     /// </summary>
@@ -77,7 +78,7 @@ public sealed record StoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The XML file that contains the list of packages to be stored.
     /// </summary>
@@ -86,7 +87,7 @@ public sealed record StoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The output directory to store the given assemblies in.
     /// </summary>
@@ -95,7 +96,7 @@ public sealed record StoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The target runtime to store packages for.
     /// </summary>
@@ -104,7 +105,7 @@ public sealed record StoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Skip the optimization phase.
     /// </summary>
@@ -113,7 +114,7 @@ public sealed record StoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Skip creating symbol files which can be used for profiling the optimized assemblies.
     /// </summary>
@@ -122,7 +123,7 @@ public sealed record StoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Use current runtime as the target runtime.
     /// </summary>
@@ -131,7 +132,7 @@ public sealed record StoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -140,7 +141,7 @@ public sealed record StoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The working directory used by the command to execute.
     /// </summary>
@@ -149,8 +150,9 @@ public sealed record StoreOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -190,6 +192,6 @@ public sealed record StoreOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

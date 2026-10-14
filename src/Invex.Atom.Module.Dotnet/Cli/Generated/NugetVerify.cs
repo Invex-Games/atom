@@ -12,7 +12,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -22,18 +22,19 @@ internal partial class DotnetCli
         NugetVerifyOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "nuget verify",
             $"{string.Join(" ", packagePaths)}",
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -44,13 +45,13 @@ public sealed record NugetVerifyOptions
         get;
         init;
     }
-    
+
     public System.Collections.Generic.IEnumerable<System.String>? CertificateFingerprint
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -59,8 +60,9 @@ public sealed record NugetVerifyOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -76,6 +78,6 @@ public sealed record NugetVerifyOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

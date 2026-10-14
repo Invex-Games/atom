@@ -27,7 +27,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
     /// <summary>
     ///     Remove a NuGet package reference from the project.
     /// </summary>
@@ -49,7 +49,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -59,35 +59,37 @@ internal partial class DotnetCli
         PackageRemoveOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "package remove",
             $"{string.Join(" ", packageName)}",
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
     public Task<ProcessRunResult> PackageRemove(
         System.String packageName,
         PackageRemoveOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "package remove",
             packageName,
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -101,7 +103,7 @@ public sealed record PackageRemoveOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -110,7 +112,7 @@ public sealed record PackageRemoveOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The project file to operate on. If a file is not specified, the command will search the current directory for one.
     /// </summary>
@@ -119,8 +121,9 @@ public sealed record PackageRemoveOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -136,6 +139,6 @@ public sealed record PackageRemoveOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

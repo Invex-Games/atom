@@ -27,7 +27,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -37,18 +37,19 @@ internal partial class DotnetCli
         ReferenceRemoveOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "reference remove",
             $"{string.Join(" ", projectPath)}",
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -62,8 +63,9 @@ public sealed record ReferenceRemoveOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -73,6 +75,6 @@ public sealed record ReferenceRemoveOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

@@ -27,7 +27,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -37,18 +37,19 @@ internal partial class DotnetCli
         WorkloadRestoreOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "workload restore",
             $"{string.Join(" ", projectOrSolution)}",
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -62,7 +63,7 @@ public sealed record WorkloadRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Prevent restoring multiple projects in parallel.
     /// </summary>
@@ -71,34 +72,7 @@ public sealed record WorkloadRestoreOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Download packages needed to install a workload to a folder that can be used for offline installation.
-    /// </summary>
-    public System.String? DownloadToCache
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Complete the operation from cache (offline).
-    /// </summary>
-    public System.String? FromCache
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Update workloads based on specified rollback definition file.
-    /// </summary>
-    public System.String? FromRollbackFile
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     Treat package source failures as warnings.
     /// </summary>
@@ -107,7 +81,7 @@ public sealed record WorkloadRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allow prerelease workload manifests.
     /// </summary>
@@ -116,7 +90,7 @@ public sealed record WorkloadRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -125,16 +99,7 @@ public sealed record WorkloadRestoreOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Do not cache packages and http requests.
-    /// </summary>
-    public System.Boolean? NoCache
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     Do not cache packages and http requests.
     /// </summary>
@@ -143,25 +108,7 @@ public sealed record WorkloadRestoreOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Only print the list of links to download without downloading.
-    /// </summary>
-    public System.Boolean? PrintDownloadLinkOnly
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     The version of the SDK.
-    /// </summary>
-    public System.String? SdkVersion
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     Skip updating the workload manifests.
     /// </summary>
@@ -170,16 +117,7 @@ public sealed record WorkloadRestoreOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Skip signature verification of workload packages and installers.
-    /// </summary>
-    public System.Boolean? SkipSignCheck
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     The NuGet package source to use during the restore. To specify multiple sources, repeat the option.
     /// </summary>
@@ -188,7 +126,7 @@ public sealed record WorkloadRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Specify a temporary directory for this command to download and extract NuGet packages (must be secure).
     /// </summary>
@@ -197,7 +135,7 @@ public sealed record WorkloadRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -206,7 +144,7 @@ public sealed record WorkloadRestoreOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     A workload version to display or one or more workloads and their versions joined by the '@' character.
     /// </summary>
@@ -215,8 +153,9 @@ public sealed record WorkloadRestoreOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -225,15 +164,6 @@ public sealed record WorkloadRestoreOptions
                 : null,
             DisableParallel is true
                 ? "--disable-parallel"
-                : null,
-            DownloadToCache is not null
-                ? $"--download-to-cache {DownloadToCache}"
-                : null,
-            FromCache is not null
-                ? $"--from-cache {FromCache}"
-                : null,
-            FromRollbackFile is not null
-                ? $"--from-rollback-file {FromRollbackFile}"
                 : null,
             IgnoreFailedSources is true
                 ? "--ignore-failed-sources"
@@ -244,23 +174,11 @@ public sealed record WorkloadRestoreOptions
             Interactive is true
                 ? "--interactive"
                 : null,
-            NoCache is true
-                ? "--no-cache"
-                : null,
             NoHttpCache is true
                 ? "--no-http-cache"
                 : null,
-            PrintDownloadLinkOnly is true
-                ? "--print-download-link-only"
-                : null,
-            SdkVersion is not null
-                ? $"--sdk-version {SdkVersion}"
-                : null,
             SkipManifestUpdate is true
                 ? "--skip-manifest-update"
-                : null,
-            SkipSignCheck is true
-                ? "--skip-sign-check"
                 : null,
             Source is not null
                 ? $"--source {string.Join(" --source ", Source)}"
@@ -277,6 +195,6 @@ public sealed record WorkloadRestoreOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

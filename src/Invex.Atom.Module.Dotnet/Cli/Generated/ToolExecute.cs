@@ -31,7 +31,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -42,19 +42,20 @@ internal partial class DotnetCli
         ToolExecuteOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "tool execute",
             packageId,
             $"{string.Join(" ", commandArguments)}",
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -68,7 +69,7 @@ public sealed record ToolExecuteOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allow a .NET tool to roll forward to newer versions of the .NET runtime if the runtime it targets isn't installed.
     /// </summary>
@@ -77,7 +78,7 @@ public sealed record ToolExecuteOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The NuGet configuration file to use.
     /// </summary>
@@ -86,7 +87,7 @@ public sealed record ToolExecuteOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Prevent restoring multiple projects in parallel.
     /// </summary>
@@ -95,7 +96,7 @@ public sealed record ToolExecuteOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Treat package source failures as warnings.
     /// </summary>
@@ -104,7 +105,7 @@ public sealed record ToolExecuteOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -113,16 +114,7 @@ public sealed record ToolExecuteOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Do not cache packages and http requests.
-    /// </summary>
-    public System.Boolean? NoCache
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     Do not cache packages and http requests.
     /// </summary>
@@ -131,7 +123,7 @@ public sealed record ToolExecuteOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Include pre-release packages.
     /// </summary>
@@ -140,7 +132,7 @@ public sealed record ToolExecuteOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Replace all NuGet package sources to use during installation with these.
     /// </summary>
@@ -149,7 +141,7 @@ public sealed record ToolExecuteOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -158,7 +150,7 @@ public sealed record ToolExecuteOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The version of the tool package to install.
     /// </summary>
@@ -167,7 +159,7 @@ public sealed record ToolExecuteOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Accept all confirmation prompts using "yes."
     /// </summary>
@@ -176,8 +168,9 @@ public sealed record ToolExecuteOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -198,9 +191,6 @@ public sealed record ToolExecuteOptions
                 : null,
             Interactive is true
                 ? "--interactive"
-                : null,
-            NoCache is true
-                ? "--no-cache"
                 : null,
             NoHttpCache is true
                 ? "--no-http-cache"
@@ -223,6 +213,6 @@ public sealed record ToolExecuteOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

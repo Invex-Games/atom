@@ -27,7 +27,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -37,18 +37,19 @@ internal partial class DotnetCli
         PackageAddOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "package add",
             packageId,
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -62,7 +63,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Add the reference only when targeting a specific framework.
     /// </summary>
@@ -71,7 +72,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -80,7 +81,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Add the reference without performing restore preview and compatibility check.
     /// </summary>
@@ -89,7 +90,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The directory to restore packages to.
     /// </summary>
@@ -98,7 +99,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows prerelease packages to be installed.
     /// </summary>
@@ -107,7 +108,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The project file to operate on. If a file is not specified, the command will search the current directory for one.
     /// </summary>
@@ -116,7 +117,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The NuGet package source to use during the restore.
     /// </summary>
@@ -125,7 +126,7 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The version of the package to add.
     /// </summary>
@@ -134,8 +135,9 @@ public sealed record PackageAddOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -169,6 +171,6 @@ public sealed record PackageAddOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

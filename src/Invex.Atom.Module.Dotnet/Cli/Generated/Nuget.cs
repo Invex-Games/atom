@@ -11,7 +11,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
@@ -23,7 +23,7 @@ internal partial class DotnetCli
         processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", (options ?? new()).ToString())
             : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
-    
+
 }
 [PublicAPI]
 public sealed record NugetOptions
@@ -33,14 +33,15 @@ public sealed record NugetOptions
         get;
         init;
     }
-    
+
     public System.Boolean? Version
     {
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -53,6 +54,6 @@ public sealed record NugetOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

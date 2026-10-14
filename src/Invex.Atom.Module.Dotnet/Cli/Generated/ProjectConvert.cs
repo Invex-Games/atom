@@ -59,7 +59,8 @@ internal partial class DotnetCli
         ProjectConvertOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "project convert",
             file,
@@ -76,7 +77,8 @@ internal partial class DotnetCli
         ProjectConvertOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "project convert",
             file,
@@ -129,7 +131,8 @@ public sealed record ProjectConvertOptions
         init;
     }
 
-    public override string ToString()    {
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {

@@ -23,7 +23,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
@@ -35,7 +35,7 @@ internal partial class DotnetCli
         processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", (options ?? new()).ToString())
             : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
-    
+
 }
 [PublicAPI]
 public sealed record WorkloadRepairOptions
@@ -48,7 +48,7 @@ public sealed record WorkloadRepairOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Prevent restoring multiple projects in parallel.
     /// </summary>
@@ -57,7 +57,7 @@ public sealed record WorkloadRepairOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Treat package source failures as warnings.
     /// </summary>
@@ -66,7 +66,7 @@ public sealed record WorkloadRepairOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -75,16 +75,7 @@ public sealed record WorkloadRepairOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Do not cache packages and http requests.
-    /// </summary>
-    public System.Boolean? NoCache
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     Do not cache packages and http requests.
     /// </summary>
@@ -93,25 +84,7 @@ public sealed record WorkloadRepairOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     The version of the SDK.
-    /// </summary>
-    public System.String? SdkVersion
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Skip signature verification of workload packages and installers.
-    /// </summary>
-    public System.Boolean? SkipSignCheck
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     The NuGet package source to use during the restore. To specify multiple sources, repeat the option.
     /// </summary>
@@ -120,7 +93,7 @@ public sealed record WorkloadRepairOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -129,8 +102,9 @@ public sealed record WorkloadRepairOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -146,17 +120,8 @@ public sealed record WorkloadRepairOptions
             Interactive is true
                 ? "--interactive"
                 : null,
-            NoCache is true
-                ? "--no-cache"
-                : null,
             NoHttpCache is true
                 ? "--no-http-cache"
-                : null,
-            SdkVersion is not null
-                ? $"--sdk-version {SdkVersion}"
-                : null,
-            SkipSignCheck is true
-                ? "--skip-sign-check"
                 : null,
             Source is not null
                 ? $"--source {string.Join(" --source ", Source)}"
@@ -167,6 +132,6 @@ public sealed record WorkloadRepairOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

@@ -24,7 +24,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
     /// <summary>
     ///     .NET Builder
     /// </summary>
@@ -43,7 +43,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -53,35 +53,37 @@ internal partial class DotnetCli
         MsbuildOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "msbuild",
             $"{string.Join(" ", arguments)}",
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
     public Task<ProcessRunResult> Msbuild(
         System.String arguments,
         MsbuildOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "msbuild",
             arguments,
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -95,7 +97,7 @@ public sealed record MsbuildOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Build these targets in this project. Use a semicolon or a comma to separate multiple targets, or specify each target separately.
     /// </summary>
@@ -104,8 +106,9 @@ public sealed record MsbuildOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -118,6 +121,6 @@ public sealed record MsbuildOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

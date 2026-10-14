@@ -23,7 +23,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
@@ -35,7 +35,7 @@ internal partial class DotnetCli
         processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", (options ?? new()).ToString())
             : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
-    
+
 }
 [PublicAPI]
 public sealed record WorkloadListOptions
@@ -48,7 +48,7 @@ public sealed record WorkloadListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Treat package source failures as warnings.
     /// </summary>
@@ -57,40 +57,7 @@ public sealed record WorkloadListOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     Allow prerelease workload manifests.
-    /// </summary>
-    public System.Boolean? IncludePreviews
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
-    /// </summary>
-    public System.Boolean? Interactive
-    {
-        get;
-        init;
-    }
-    
-    public System.Boolean? MachineReadable
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Do not cache packages and http requests.
-    /// </summary>
-    public System.Boolean? NoCache
-    {
-        get;
-        init;
-    }
-    
+
     /// <summary>
     ///     Do not cache packages and http requests.
     /// </summary>
@@ -99,35 +66,9 @@ public sealed record WorkloadListOptions
         get;
         init;
     }
-    
-    /// <summary>
-    ///     The version of the SDK.
-    /// </summary>
-    public System.String? SdkVersion
+
+    public override string ToString()
     {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Specify a temporary directory for this command to download and extract NuGet packages (must be secure).
-    /// </summary>
-    public System.String? TempDir
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
-    /// </summary>
-    public VerbosityOptions? Verbosity
-    {
-        get;
-        init;
-    }
-    
-    public override string ToString()    {
         return string.Join(' ',
         new[]
         {
@@ -137,33 +78,12 @@ public sealed record WorkloadListOptions
             IgnoreFailedSources is true
                 ? "--ignore-failed-sources"
                 : null,
-            IncludePreviews is true
-                ? "--include-previews"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            MachineReadable is true
-                ? "--machine-readable"
-                : null,
-            NoCache is true
-                ? "--no-cache"
-                : null,
             NoHttpCache is true
                 ? "--no-http-cache"
-                : null,
-            SdkVersion is not null
-                ? $"--sdk-version {SdkVersion}"
-                : null,
-            TempDir is not null
-                ? $"--temp-dir {TempDir}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
                 : null,
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

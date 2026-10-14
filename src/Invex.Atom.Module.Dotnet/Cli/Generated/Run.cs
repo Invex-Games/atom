@@ -86,7 +86,8 @@ internal partial class DotnetCli
         RunOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "run",
             $"{string.Join(" ", projectOrSolutionOrFile)}",
@@ -104,7 +105,8 @@ internal partial class DotnetCli
         RunOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "run",
             projectOrSolutionOrFile,
@@ -121,7 +123,8 @@ internal partial class DotnetCli
         RunOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "run",
             projectOrSolutionOrFile,
@@ -325,7 +328,8 @@ public sealed record RunOptions
         init;
     }
 
-    public override string ToString()    {
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {

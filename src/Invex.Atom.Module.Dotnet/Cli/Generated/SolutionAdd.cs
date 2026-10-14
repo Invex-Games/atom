@@ -27,7 +27,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -37,18 +37,19 @@ internal partial class DotnetCli
         SolutionAddOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "solution add",
             $"{string.Join(" ", projectPath)}",
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -62,7 +63,7 @@ public sealed record SolutionAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Recursively add projects' ReferencedProjects to solution
     /// </summary>
@@ -71,7 +72,7 @@ public sealed record SolutionAddOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The destination solution folder path to add the projects to.
     /// </summary>
@@ -80,8 +81,9 @@ public sealed record SolutionAddOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -97,6 +99,6 @@ public sealed record SolutionAddOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

@@ -35,6 +35,7 @@
     <Project Path="tests/Invex.Atom.Module.AzureKeyVault.Tests/Invex.Atom.Module.AzureKeyVault.Tests.csproj" />
     <Project Path="tests/Invex.Atom.Module.AzureStorage.Tests/Invex.Atom.Module.AzureStorage.Tests.csproj" />
     <Project Path="tests/Invex.Atom.Module.DevopsWorkflows.Tests/Invex.Atom.Module.DevopsWorkflows.Tests.csproj" />
+    <Project Path="tests/Invex.Atom.Module.Dotnet.Tests/Invex.Atom.Module.Dotnet.Tests.csproj" />
     <Project Path="tests/Invex.Atom.Module.GithubWorkflows.Tests/Invex.Atom.Module.GithubWorkflows.Tests.csproj" />
   </Folder>
   <Folder Name="/Tests/Tools/">

@@ -27,7 +27,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -37,18 +37,19 @@ internal partial class DotnetCli
         NewListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "new list",
             templateName,
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -62,25 +63,16 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
+
     /// <summary>
-    ///     Filters the templates based on baseline defined in the template.
-    /// </summary>
-    public System.String? Baseline
-    {
-        get;
-        init;
-    }
-    
-    /// <summary>
-    ///     Specifies the columns to display in the output. 
+    ///     Specifies the columns to display in the output.
     /// </summary>
     public System.String[]? Columns
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Displays all columns in the output.
     /// </summary>
@@ -89,7 +81,7 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Disables checking if the template meets the constraints to be run.
     /// </summary>
@@ -98,7 +90,7 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Filters templates based on language.
     /// </summary>
@@ -107,7 +99,7 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Location to place the generated output.
     /// </summary>
@@ -116,7 +108,7 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The project that should be used for context evaluation.
     /// </summary>
@@ -125,7 +117,7 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Filters the templates based on the tag.
     /// </summary>
@@ -134,7 +126,7 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Filters templates based on available types. Predefined values are "project" and "item".
     /// </summary>
@@ -143,16 +135,14 @@ public sealed record NewListOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
             Author is not null
                 ? $"--author {Author}"
-                : null,
-            Baseline is not null
-                ? $"--baseline {Baseline}"
                 : null,
             Columns is not null
                 ? $"--columns {string.Join(" --columns ", Columns)}"
@@ -181,6 +171,6 @@ public sealed record NewListOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

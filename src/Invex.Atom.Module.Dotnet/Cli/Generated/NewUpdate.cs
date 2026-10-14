@@ -23,7 +23,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
@@ -35,7 +35,7 @@ internal partial class DotnetCli
         processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", (options ?? new()).ToString())
             : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
-    
+
 }
 [PublicAPI]
 public sealed record NewUpdateOptions
@@ -48,7 +48,7 @@ public sealed record NewUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Only checks for updates and display the template packages to be updated without applying update.
     /// </summary>
@@ -57,7 +57,7 @@ public sealed record NewUpdateOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -66,8 +66,9 @@ public sealed record NewUpdateOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -83,6 +84,6 @@ public sealed record NewUpdateOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

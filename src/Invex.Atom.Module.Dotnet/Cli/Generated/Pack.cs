@@ -81,7 +81,8 @@ internal partial class DotnetCli
         PackOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "pack",
             $"{string.Join(" ", projectOrSolutionOrFile)}",
@@ -98,7 +99,8 @@ internal partial class DotnetCli
         PackOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "pack",
             projectOrSolutionOrFile,
@@ -115,7 +117,8 @@ internal partial class DotnetCli
         PackOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "pack",
             projectOrSolutionOrFile,
@@ -251,15 +254,6 @@ public sealed record PackOptions
     ///     Do not build the project before packing. Implies --no-restore.
     /// </summary>
     public System.Boolean? NoBuild
-    {
-        get;
-        init;
-    }
-
-    /// <summary>
-    ///
-    /// </summary>
-    public System.Boolean? NoCache
     {
         get;
         init;
@@ -403,7 +397,8 @@ public sealed record PackOptions
         init;
     }
 
-    public override string ToString()    {
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -451,9 +446,6 @@ public sealed record PackOptions
                 : null,
             NoBuild is true
                 ? "--no-build"
-                : null,
-            NoCache is true
-                ? "--no-cache"
                 : null,
             NoDependencies is true
                 ? "--no-dependencies"

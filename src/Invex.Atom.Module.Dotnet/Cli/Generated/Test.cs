@@ -81,7 +81,8 @@ internal partial class DotnetCli
         TestOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "test",
             $"{string.Join(" ", projectOrSolutionOrFile)}",
@@ -98,7 +99,8 @@ internal partial class DotnetCli
         TestOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "test",
             projectOrSolutionOrFile,
@@ -115,7 +117,8 @@ internal partial class DotnetCli
         TestOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "test",
             projectOrSolutionOrFile,
@@ -456,7 +459,8 @@ public sealed record TestOptions
         init;
     }
 
-    public override string ToString()    {
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {

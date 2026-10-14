@@ -13,7 +13,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -24,19 +24,20 @@ internal partial class DotnetCli
         NugetTrustAuthorOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "nuget trust author",
             name,
             package,
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -47,13 +48,13 @@ public sealed record NugetTrustAuthorOptions
         get;
         init;
     }
-    
+
     public System.String? Configfile
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -62,8 +63,9 @@ public sealed record NugetTrustAuthorOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -79,6 +81,6 @@ public sealed record NugetTrustAuthorOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

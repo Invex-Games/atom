@@ -23,7 +23,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 internal partial class DotnetCli
 {
@@ -35,7 +35,7 @@ internal partial class DotnetCli
         processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", (options ?? new()).ToString())
             : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
-    
+
 }
 [PublicAPI]
 public sealed record PackageListOptions
@@ -48,7 +48,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Lists packages that have been deprecated. Cannot be combined with '--vulnerable' or '--outdated' options.
     /// </summary>
@@ -57,7 +57,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Specifies the output format type for the list packages command.
     /// </summary>
@@ -66,7 +66,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Chooses a framework to show its packages. Use the option multiple times for multiple frameworks.
     /// </summary>
@@ -75,7 +75,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Consider only the packages with a matching major version number when searching for newer packages. Requires the '--outdated' option.
     /// </summary>
@@ -84,7 +84,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Consider only the packages with a matching major and minor version numbers when searching for newer packages. Requires the '--outdated' option.
     /// </summary>
@@ -93,7 +93,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Consider packages with prerelease versions when searching for newer packages. Requires the '--outdated' option.
     /// </summary>
@@ -102,7 +102,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Lists transitive and top-level packages.
     /// </summary>
@@ -111,7 +111,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -120,7 +120,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Do not restore before running the command.
     /// </summary>
@@ -129,7 +129,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Lists packages that have newer versions. Cannot be combined with '--deprecated' or '--vulnerable' options.
     /// </summary>
@@ -138,7 +138,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Specifies the version of machine-readable output. Requires the '--format json' option.
     /// </summary>
@@ -147,7 +147,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The project file to operate on. If a file is not specified, the command will search the current directory for one.
     /// </summary>
@@ -156,7 +156,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     The NuGet sources to use when searching for newer packages. Requires the '--outdated', '--deprecated' or '--vulnerable' option.
     /// </summary>
@@ -165,7 +165,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
     /// </summary>
@@ -174,7 +174,7 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Lists packages that have known vulnerabilities. Cannot be combined with '--deprecated' or '--outdated' options.
     /// </summary>
@@ -183,8 +183,9 @@ public sealed record PackageListOptions
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -239,6 +240,6 @@ public sealed record PackageListOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 

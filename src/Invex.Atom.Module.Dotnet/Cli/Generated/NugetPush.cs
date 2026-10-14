@@ -12,7 +12,7 @@ public partial interface IDotnetCli
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
     );
-    
+
 }
 
 internal partial class DotnetCli
@@ -22,18 +22,19 @@ internal partial class DotnetCli
         NugetPushOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    )    {
+    )
+    {
         var argsString = string.Join(' ', new string[] {
             "nuget push",
             $"{string.Join(" ", packagePaths)}",
             (options ?? new()).ToString(),
         }.Where(x => x is { Length: > 0 }));
-        
+
         return processRunner.RunAsync((processRunOptions is null
             ? new("dotnet", argsString)
             : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
     }
-    
+
 }
 
 [PublicAPI]
@@ -44,25 +45,25 @@ public sealed record NugetPushOptions
         get;
         init;
     }
-    
+
     public System.String? Configfile
     {
         get;
         init;
     }
-    
+
     public System.Boolean? DisableBuffering
     {
         get;
         init;
     }
-    
+
     public System.Boolean? ForceEnglishOutput
     {
         get;
         init;
     }
-    
+
     /// <summary>
     ///     Allows the command to stop and wait for user input or action (for example to complete authentication).
     /// </summary>
@@ -71,50 +72,51 @@ public sealed record NugetPushOptions
         get;
         init;
     }
-    
+
     public System.Boolean? NoServiceEndpoint
     {
         get;
         init;
     }
-    
+
     public System.Boolean? NoSymbols
     {
         get;
         init;
     }
-    
+
     public System.Boolean? SkipDuplicate
     {
         get;
         init;
     }
-    
+
     public System.String? Source
     {
         get;
         init;
     }
-    
+
     public System.String? SymbolApiKey
     {
         get;
         init;
     }
-    
+
     public System.String? SymbolSource
     {
         get;
         init;
     }
-    
+
     public System.String? Timeout
     {
         get;
         init;
     }
-    
-    public override string ToString()    {
+
+    public override string ToString()
+    {
         return string.Join(' ',
         new[]
         {
@@ -157,6 +159,6 @@ public sealed record NugetPushOptions
         }
         .Where(x => x is { Length: > 0 }));
     }
-    
+
 }
 
