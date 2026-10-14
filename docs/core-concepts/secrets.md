@@ -119,12 +119,13 @@ Implement one of these interfaces on your build definition to register its provi
 ### Registering a Custom Provider
 
 ```csharp
-public override void ConfigureDefinitionHost(IHostApplicationBuilder builder)
-{
-    base.ConfigureDefinitionHost(builder);
+// In your partial build class
+static partial void OnConfigureHostBuilder(IHostApplicationBuilder builder) =>
     builder.Services.AddSingleton<ISecretsProvider, MySecretsProvider>();
-}
 ```
+
+A module interface can register a provider the same way from a `[ConfigureHostBuilder]` hook; see
+[Hosting](hosting.md).
 
 ## .NET User Secrets
 

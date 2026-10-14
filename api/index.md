@@ -29,6 +29,7 @@ the main entry points per package, and the sidebar lists everything else.
 | [`BuildOptions`](xref:Invex.Atom.Build.BuildOptions.BuildOptions)                    | Class     | Extension anchor for fluent build option factories.                                             |
 | [`AtomHost`](xref:Invex.Atom.Build.Hosting.AtomHost)                                 | Class     | Creates and runs an Atom host application.                                                      |
 | [`ConfigureHostBuilderAttribute`](xref:Invex.Atom.Build.Hosting.ConfigureHostBuilderAttribute) | Attribute | Marks a module interface as a source of host builder configuration.                 |
+| [`IConfigureHost`](xref:Invex.Atom.Build.Hosting.IConfigureHost)                     | Interface | Static host configuration hooks implemented by every generated build definition.                |
 | [`IAtomLifecycleHook`](xref:Invex.Atom.Build.IAtomLifecycleHook)                     | Interface | Runs code before and after target execution.                                                    |
 | [`IReportsHelper`](xref:Invex.Atom.Build.Reports.IReportsHelper)                     | Interface | Adds data to the build report.                                                                  |
 | [`IOutcomeReportWriter`](xref:Invex.Atom.Build.Reports.IOutcomeReportWriter)         | Interface | Writes the build outcome report to a destination.                                               |

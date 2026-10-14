@@ -141,7 +141,7 @@ namespace Invex.Atom.Build.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interfaces decorated with [ConfigureHostBuilder] must implement the generated partial method ConfigureBuilderFrom{InterfaceName}..
+        ///   Looks up a localized string similar to Interfaces decorated with [ConfigureHostBuilder] must implement the generated partial method ConfigureHostBuilderFrom{InterfaceName}..
         /// </summary>
         internal static string AT0003Description {
             get {

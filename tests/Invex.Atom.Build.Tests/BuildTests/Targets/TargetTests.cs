@@ -196,6 +196,12 @@ internal sealed class TargetTests
 
         configuration["SetupExecuted3"]
             .ShouldBe("true");
+
+        configuration["OnConfigureHostBuilderExecuted"]
+            .ShouldBe("true");
+
+        configuration["OnConfigureHostBuilderSawModuleHook"]
+            .ShouldBe("true");
     }
 
     [Test]
@@ -213,6 +219,34 @@ internal sealed class TargetTests
 
         target.IsSetupExecuted2.ShouldBeTrue();
         target.IsSetupExecuted3.ShouldBeTrue();
+        ((ConfigureBuilderAndHostBuild)target).IsOnConfigureHostExecuted.ShouldBeTrue();
+    }
+
+    [Test]
+    public void InterfaceBuild_WithHostHooks_ExecutesSetupMethods()
+    {
+        // Arrange
+        var host = CreateTestHost<InterfaceHostHooksBuild>();
+
+        // Act
+        host.UseAtom();
+
+        // Assert
+        var configuration = host.Services.GetRequiredService<IConfiguration>();
+
+        using var _ = Assert.EnterMultipleScope();
+
+        configuration["SetupExecuted1"]
+            .ShouldBe("true");
+
+        configuration["InterfaceBuildHookExecuted"]
+            .ShouldBe("true");
+
+        host
+            .Services
+            .GetRequiredService<InterfaceHostHooksRecorder>()
+            .Calls
+            .ShouldBe(["ConfigureHostFromIInterfaceHostHooksBuild", "OnConfigureHost"]);
     }
 
     [Test]

@@ -52,7 +52,7 @@ internal partial class Build : WorkflowBuildDefinition, IGitVersion, IAzureKeyVa
 - Targets are defined as `Target` properties on the interface with default implementations.
 - Parameters are declared with `[ParamDefinition]` or `[SecretDefinition]`.
 - Service registration uses the `[ConfigureHostBuilder]` attribute with a static partial
-  `ConfigureBuilderFrom{InterfaceName}` method.
+  `ConfigureHostBuilderFrom{InterfaceName}` method.
 - Build options are extended via the static `BuildOptions` class using extension-like patterns.
 
 ## Next steps
