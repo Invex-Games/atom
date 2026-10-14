@@ -265,8 +265,6 @@ internal sealed class GithubWorkflowFileWriter(
                         Map = job
                             .TargetStep
                             .MatrixDimensions
-                            // TODO: Proper duplicate detection
-                            .Distinct()
                             .ToDictionary(x => buildDefinition.ParamDefinitions[x.Name].ArgName, x => x.Values),
                     },
                 }

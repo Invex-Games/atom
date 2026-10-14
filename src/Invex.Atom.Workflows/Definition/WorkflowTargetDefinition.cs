@@ -29,7 +29,7 @@ public sealed record WorkflowTargetDefinition(string Name)
         new()
         {
             Name = Name,
-            MatrixDimensions = MatrixDimensions,
+            MatrixDimensions = MergeMatrixDimensions(MatrixDimensions),
             Options = workflowOptions
                 .Concat(Options)
                 .ToList(),
@@ -40,7 +40,7 @@ public sealed record WorkflowTargetDefinition(string Name)
     /// </summary>
     /// <param name="dimensions">The matrix dimensions to add.</param>
     /// <returns>A new <see cref="WorkflowTargetDefinition" /> instance.</returns>
-    public WorkflowTargetDefinition WithMatrixDimensions(params MatrixDimension[] dimensions) =>
+    public WorkflowTargetDefinition WithMatrixDimensions(params IEnumerable<MatrixDimension> dimensions) =>
         this with
         {
             MatrixDimensions = MatrixDimensions
@@ -60,4 +60,18 @@ public sealed record WorkflowTargetDefinition(string Name)
                 .Concat(options)
                 .ToList(),
         };
+
+    private static List<MatrixDimension> MergeMatrixDimensions(IEnumerable<MatrixDimension> dimensions) =>
+        dimensions
+            .GroupBy(x => x.Name)
+            .Select(group => group.Count() is 1
+                ? group.First()
+                : group.First() with
+                {
+                    Values = group
+                        .SelectMany(x => x.Values)
+                        .Distinct()
+                        .ToArray(),
+                })
+            .ToList();
 }

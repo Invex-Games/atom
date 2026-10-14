@@ -62,9 +62,10 @@ public sealed record DevopsCheckoutStep : CheckoutStep, IDevopsAdditionalStepOpt
     public StepTarget? Target { get; init; }
 
     /// <summary>
-    ///     Run this task when the job runs?
+    ///     Run this task when the job runs? Written as the task's <c>enabled</c> property. Not to be confused with
+    ///     <see cref="CheckoutStep.Enabled" />, which controls whether a checkout step is added at all.
     /// </summary>
-    public TextExpression? EnableRun { get; init; }
+    public TextExpression? TaskEnabled { get; init; }
 
     /// <summary>
     ///     Variables to map into the process's environment.
@@ -100,7 +101,7 @@ public sealed record DevopsCheckoutStep : CheckoutStep, IDevopsAdditionalStepOpt
             ContinueOnError = ContinueOnError,
             DisplayName = DisplayName,
             Target = Target,
-            Enabled = EnableRun,
+            Enabled = TaskEnabled,
             Env = Env,
             Name = Name,
             TimeoutInMinutes = TimeoutInMinutes,
