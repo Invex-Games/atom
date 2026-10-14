@@ -2,7 +2,7 @@ namespace Invex.Atom.Module.GitHubWorkflows.Extensions;
 
 [PublicAPI]
 [SuppressMessage("Performance", "CA1822:Mark members as static")]
-public static class WorkflowTriggersExtensions
+public static class GitHubWorkflowTriggersExtensions
 {
     [PublicAPI]
     public sealed class Triggers

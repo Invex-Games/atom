@@ -17,7 +17,7 @@ global using Invex.Atom.Module.GitVersion;
 global using Invex.Atom.Module.DevOpsWorkflows;
 global using Invex.Atom.Module.DevOpsWorkflows.Extensions;
 global using Invex.Atom.Module.GitHubWorkflows.Options;
-global using Invex.Atom.Module.GitVersion.Flags;
+global using Invex.Atom.Module.GitVersion.Options;
 global using Invex.Atom.Workflows;
 global using Invex.Atom.Workflows.Definition;
 global using Invex.Atom.Workflows.Definition.Triggers;

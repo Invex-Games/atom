@@ -29,9 +29,9 @@ internal sealed class GitVersionBuildVersionProvider(
     {
         get
         {
-            if (!GitVersionProvideBuildVersionFlag.IsEnabled(buildOptionService.Options))
+            if (!GitVersionProvideBuildVersionOption.IsEnabled(buildOptionService.Options))
                 throw new InvalidOperationException(
-                    "GitVersion is not enabled for build version generation. Ensure GitVersionProvideBuildVersionFlag is enabled.");
+                    "GitVersion is not enabled for build version generation. Ensure GitVersionProvideBuildVersionOption is enabled.");
 
             if (field is not null)
                 return field;

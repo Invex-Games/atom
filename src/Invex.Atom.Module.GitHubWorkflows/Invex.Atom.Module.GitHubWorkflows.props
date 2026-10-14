@@ -3,7 +3,7 @@
         <Using Include="Invex.Atom.Module.GitHubWorkflows" Global="true" />
         <Using Include="Invex.Atom.Module.GitHubWorkflows.DependabotConfig" Global="true" />
         <Using Include="Invex.Atom.Module.GitHubWorkflows.Extensions" Global="true" />
-        <Using Include="Invex.Atom.Module.GitHubWorkflows.GitHubActions" Global="true" />
+        <Using Include="Invex.Atom.Module.GitHubWorkflows" Global="true" />
         <Using Include="Invex.Atom.Module.GitHubWorkflows.Helpers" Global="true" />
         <Using Include="Invex.Atom.Module.GitHubWorkflows.Options" Global="true" />
         <Using Include="Invex.Atom.Module.GitHubWorkflows.Steps" Global="true" />

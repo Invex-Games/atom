@@ -1,39 +1,39 @@
-namespace Invex.Atom.Module.GitVersion.Flags;
+namespace Invex.Atom.Module.GitVersion.Options;
 
 /// <summary>
 ///     Extends the <see cref="BuildOptions" /> anchor class with fluent factories for GitVersion options.
 /// </summary>
 [PublicAPI]
 [SuppressMessage("Performance", "CA1822:Mark members as static")]
-public static class BuildFlagsExtensions
+public static class GitVersionBuildOptionsExtensions
 {
     /// <summary>
     ///     Provides factories for configuring which build information GitVersion supplies.
     /// </summary>
     [PublicAPI]
-    public sealed class GitVersionFlags
+    public sealed class GitVersionOptions
     {
         /// <summary>
         ///     Gets the singleton instance of the flags factory.
         /// </summary>
-        public static GitVersionFlags Instance => field ??= new();
+        public static GitVersionOptions Instance => field ??= new();
 
         /// <summary>
         ///     Gets an option that enables GitVersion as the provider of the build ID.
         /// </summary>
-        public GitVersionProvideBuildIdFlag ProvideBuildId => field ??= new();
+        public GitVersionProvideBuildIdOption ProvideBuildId => field ??= new();
 
         /// <summary>
         ///     Gets an option that enables GitVersion as the provider of the build version.
         /// </summary>
-        public GitVersionProvideBuildVersionFlag ProvideBuildVersion => field ??= new();
+        public GitVersionProvideBuildVersionOption ProvideBuildVersion => field ??= new();
 
         /// <summary>
         ///     Creates an option that enables or disables GitVersion as the provider of the build ID.
         /// </summary>
         /// <param name="value"><c>true</c> to provide the build ID from GitVersion; otherwise, <c>false</c>.</param>
-        /// <returns>A <see cref="GitVersionProvideBuildIdFlag" /> option.</returns>
-        public GitVersionProvideBuildIdFlag SetProvideBuildId(bool value) =>
+        /// <returns>A <see cref="GitVersionProvideBuildIdOption" /> option.</returns>
+        public GitVersionProvideBuildIdOption SetProvideBuildId(bool value) =>
             new()
             {
                 Enabled = value,
@@ -43,8 +43,8 @@ public static class BuildFlagsExtensions
         ///     Creates an option that enables or disables GitVersion as the provider of the build version.
         /// </summary>
         /// <param name="value"><c>true</c> to provide the build version from GitVersion; otherwise, <c>false</c>.</param>
-        /// <returns>A <see cref="GitVersionProvideBuildVersionFlag" /> option.</returns>
-        public GitVersionProvideBuildVersionFlag SetProvideBuildVersion(bool value) =>
+        /// <returns>A <see cref="GitVersionProvideBuildVersionOption" /> option.</returns>
+        public GitVersionProvideBuildVersionOption SetProvideBuildVersion(bool value) =>
             new()
             {
                 Enabled = value,
@@ -56,6 +56,6 @@ public static class BuildFlagsExtensions
         /// <summary>
         ///     Gets factories for configuring GitVersion build options.
         /// </summary>
-        public static GitVersionFlags GitVersion => GitVersionFlags.Instance;
+        public static GitVersionOptions GitVersion => GitVersionOptions.Instance;
     }
 }

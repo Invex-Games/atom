@@ -1,4 +1,4 @@
-namespace Invex.Atom.Module.DevOpsWorkflows.Workflows.Options;
+namespace Invex.Atom.Module.DevOpsWorkflows.Options;
 
 /// <summary>
 ///     Configures Azure Pipelines pull request behavior.

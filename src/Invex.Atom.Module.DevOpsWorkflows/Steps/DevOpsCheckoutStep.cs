@@ -1,4 +1,4 @@
-﻿namespace Invex.Atom.Module.DevOpsWorkflows.Workflows.Steps;
+﻿namespace Invex.Atom.Module.DevOpsWorkflows.Steps;
 
 /// <summary>
 ///     Represents a workflow option for configuring the checkout step in Azure DevOps Pipelines.

@@ -1,4 +1,4 @@
-namespace Invex.Atom.Module.DevOpsWorkflows.Workflows.Steps;
+namespace Invex.Atom.Module.DevOpsWorkflows.Steps;
 
 [PublicAPI]
 public interface IDevOpsAdditionalStepOption : IAdditionalStepOption

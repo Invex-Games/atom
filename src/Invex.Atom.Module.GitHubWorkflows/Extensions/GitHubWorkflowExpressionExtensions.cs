@@ -2,7 +2,7 @@ namespace Invex.Atom.Module.GitHubWorkflows.Extensions;
 
 [PublicAPI]
 [SuppressMessage("Performance", "CA1822:Mark members as static")]
-public static class WorkflowExpressionExtensions
+public static class GitHubWorkflowExpressionExtensions
 {
     [PublicAPI]
     public sealed class Expressions

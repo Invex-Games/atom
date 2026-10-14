@@ -1,4 +1,4 @@
-namespace Invex.Atom.Module.GitHubWorkflows.GitHubActions;
+namespace Invex.Atom.Module.GitHubWorkflows;
 
 internal sealed class GitHubWorkflowFileWriter(
     IBuildDefinition buildDefinition,

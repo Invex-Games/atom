@@ -102,5 +102,5 @@ new("Validate")
 - [GitHub Workflows](github-workflows.md): the GitHub Actions counterpart.
 - <xref:Invex.Atom.Module.DevOpsWorkflows.IDevOpsWorkflows>
 - <xref:Invex.Atom.Module.DevOpsWorkflows.DevOps>
-- <xref:Invex.Atom.Module.DevOpsWorkflows.Workflows.Options.DevOpsConcurrencyOption>
-- <xref:Invex.Atom.Module.DevOpsWorkflows.Workflows.Options.DevOpsPullRequestOption>
+- <xref:Invex.Atom.Module.DevOpsWorkflows.Options.DevOpsConcurrencyOption>
+- <xref:Invex.Atom.Module.DevOpsWorkflows.Options.DevOpsPullRequestOption>
