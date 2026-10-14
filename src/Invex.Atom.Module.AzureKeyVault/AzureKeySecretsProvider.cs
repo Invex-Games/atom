@@ -21,14 +21,13 @@ public sealed class AzureKeySecretsProvider(
     ///     Retrieves a secret value from Azure Key Vault based on the provided key.
     /// </summary>
     /// <param name="key">The name of the secret to retrieve.</param>
+    /// <param name="cancellationToken">A token to observe; combined with <see cref="IAzureKeyVault.AzureVaultTimeout" />.</param>
     /// <returns>The secret value if found, otherwise <c>null</c>.</returns>
     /// <exception cref="InvalidOperationException">Thrown if the Azure Vault address is not set.</exception>
-    public string? GetSecret(string key)
+    public async ValueTask<string?> GetSecretAsync(string key, CancellationToken cancellationToken)
     {
         // We don't want to lookup any secrets that we need to use for authentication, or we'll end up in a loop
-        if (key is nameof(IAzureKeyVault.AzureVaultAddress)
-            or nameof(IAzureKeyVault.AzureVaultTenantId)
-            or nameof(IAzureKeyVault.AzureVaultAppId))
+        if (IsAuthenticationParam(key))
             return null;
 
         logger.LogDebug("Attempting to get secret {Key} from Azure Key Vault", key);
@@ -45,9 +44,9 @@ public sealed class AzureKeySecretsProvider(
         {
             var client = _secretClient ??= new(new(keyVault.AzureVaultAddress), GetCredential(keyVault));
 
-            return GetSecret(client, key);
+            return await GetSecretAsync(client, key, cancellationToken);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
         {
             logger.LogWarning(ex,
                 "Failed to get '{Key}' from Azure Key Vault. Secrets will not be available from Azure Key Vault.",
@@ -56,6 +55,24 @@ public sealed class AzureKeySecretsProvider(
             return null;
         }
     }
+
+    /// <summary>
+    ///     Determines whether the given key is the argument name of one of the parameters used to authenticate with the
+    ///     vault, which must never be looked up in the vault itself.
+    /// </summary>
+    private bool IsAuthenticationParam(string key) =>
+        AuthenticationParamNames.Any(name => buildDefinition.ParamDefinitions.TryGetValue(name, out var definition) &&
+                                             definition.ArgName == key);
+
+    private static readonly string[] AuthenticationParamNames =
+    [
+        nameof(IAzureKeyVault.AzureVaultAddress),
+        nameof(IAzureKeyVault.AzureVaultTenantId),
+        nameof(IAzureKeyVault.AzureVaultAppId),
+        nameof(IAzureKeyVault.AzureVaultAppSecret),
+        nameof(IAzureKeyVault.AzureVaultAuthPort),
+        nameof(IAzureKeyVault.AzureVaultTimeout),
+    ];
 
     /// <summary>
     ///     Obtains the appropriate <see cref="TokenCredential" /> for authenticating with Azure Key Vault.
@@ -109,18 +126,23 @@ public sealed class AzureKeySecretsProvider(
     /// </summary>
     /// <param name="client">The <see cref="SecretClient" /> to use for secret retrieval.</param>
     /// <param name="key">The name of the secret to retrieve.</param>
+    /// <param name="cancellationToken">The caller's cancellation token.</param>
     /// <returns>The secret value if found, otherwise <c>null</c>.</returns>
-    private string? GetSecret(SecretClient client, string key)
+    private async Task<string?> GetSecretAsync(SecretClient client, string key, CancellationToken cancellationToken)
     {
         logger.LogInformation(
             "Getting Azure Key Vault secret '{Key}'. If a login prompt appears, please authenticate with an Azure account that has access to the Vault.",
             key);
 
-        var cts = new CancellationTokenSource(TimeSpan.FromSeconds(120));
+        var timeout = keyVault.AzureVaultTimeout;
+        using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+
+        if (timeout > 0)
+            timeoutCts.CancelAfter(TimeSpan.FromSeconds(timeout));
 
         try
         {
-            var response = client.GetSecret(key, cancellationToken: cts.Token);
+            var response = await client.GetSecretAsync(key, cancellationToken: timeoutCts.Token);
 
             if (response.HasValue)
             {
@@ -133,9 +155,15 @@ public sealed class AzureKeySecretsProvider(
 
             return null;
         }
-        catch (TaskCanceledException)
+        catch (RequestFailedException requestFailed) when (requestFailed.Status == 404)
         {
-            logger.LogWarning("Azure Key Vault secret retrieval for '{Key}' timed out.", key);
+            logger.LogDebug("Secret '{Key}' not found in Azure Key Vault.", key);
+        }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            logger.LogWarning("Azure Key Vault secret retrieval for '{Key}' timed out after {Timeout} seconds.",
+                key,
+                timeout);
         }
         catch (AuthenticationFailedException authenticationFailed)
         {
@@ -144,7 +172,7 @@ public sealed class AzureKeySecretsProvider(
                 key,
                 authenticationFailed.Message);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not OperationCanceledException)
         {
             logger.LogError(ex,
                 "An unexpected error occurred while trying to retrieve secret '{Key}' from Azure Key Vault. Secrets will not be available from Azure Key Vault.",

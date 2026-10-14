@@ -1,4 +1,5 @@
 ﻿global using System.Diagnostics.CodeAnalysis;
+global using Azure;
 global using Azure.Core;
 global using Azure.Identity;
 global using Azure.Security.KeyVault.Secrets;

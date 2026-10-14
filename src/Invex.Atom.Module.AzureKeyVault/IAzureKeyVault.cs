@@ -62,6 +62,18 @@ public partial interface IAzureKeyVault : IBuildAccessor
     int AzureVaultAuthPort => GetParam(() => AzureVaultAuthPort, 3421);
 
     /// <summary>
+    ///     Gets the timeout, in seconds, for retrieving a single secret from Azure Key Vault, including any
+    ///     authentication that the request triggers.
+    /// </summary>
+    /// <remarks>
+    ///     The default is 120 seconds, which leaves time to complete an interactive login. Set to 0 to disable the
+    ///     timeout and rely only on the build's cancellation token.
+    /// </remarks>
+    [ParamDefinition("azure-vault-timeout",
+        "Timeout in seconds for retrieving a secret from Azure Key Vault (default 120). Set to 0 to disable.")]
+    int AzureVaultTimeout => GetParam(() => AzureVaultTimeout, 120);
+
+    /// <summary>
     ///     Configures how Azure Key Vault parameter values are injected into the build process.
     /// </summary>
     /// <remarks>

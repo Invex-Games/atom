@@ -84,7 +84,7 @@ secret store:
 ```csharp
 public interface ISecretsProvider
 {
-    string? GetSecret(string key);
+    ValueTask<string?> GetSecretAsync(string key, CancellationToken cancellationToken);
 
     int Priority => 0;
 }
@@ -92,6 +92,20 @@ public interface ISecretsProvider
 
 Register your provider in the DI container. Multiple providers are queried in descending `Priority` order (ties
 preserve registration order) — return `null` to delegate to the next provider.
+
+### Prefetching and synchronous access
+
+Parameter properties such as `GetParam(() => MySecret)` are synchronous, but secret stores are usually remote. Before
+any target runs, Atom collects the secret parameters used by every target that will run and resolves them
+asynchronously with the build's cancellation token (cancelled when the host stops). Secrets that are already available
+from the command line, environment variables or configuration are not looked up in providers. Later reads use the
+prefetched values, so they do not block on the network.
+
+A secret that was not prefetched (for example, one read by name inside another provider, or one used by a target that
+is not part of the run) is still resolved on demand: Atom blocks on `GetSecretAsync` with `CancellationToken.None`.
+Atom is a console application without a `SynchronizationContext`, so this cannot deadlock, but providers should apply
+their own timeouts to network calls. Code that reads secrets dynamically can call
+`IParamService.PrefetchSecretsAsync` first to avoid blocking.
 
 ### Built-in Providers
 

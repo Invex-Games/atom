@@ -1117,6 +1117,9 @@
       },
       {
         Name: MaskMatchingSecrets
+      },
+      {
+        Name: PrefetchSecretsAsync
       }
     ]
   },
@@ -1508,7 +1511,7 @@
     Name: Invex.Atom.Build.Secrets.ISecretsProvider,
     Members: [
       {
-        Name: GetSecret
+        Name: GetSecretAsync
       },
       {
         Name: Priority

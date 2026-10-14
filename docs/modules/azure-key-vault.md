@@ -31,6 +31,7 @@ internal partial class Build : BuildDefinition, IAzureKeyVault
 | `AzureVaultAppId`     | `--azure-vault-app-id`     | App Registration Client ID               |
 | `AzureVaultAppSecret` | `--azure-vault-app-secret` | App Registration Client Secret           |
 | `AzureVaultAuthPort`  | `--azure-vault-auth-port`  | Local auth redirect port (default: 3421) |
+| `AzureVaultTimeout`   | `--azure-vault-timeout`    | Per-secret timeout in seconds (default: 120, 0 disables) |
 
 These parameters can be provided via environment variables, `appsettings.json`, or the command line.
 
@@ -38,7 +39,9 @@ These parameters can be provided via environment variables, `appsettings.json`, 
 
 When `IAzureKeyVault` is implemented, the module registers:
 
-- `AzureKeySecretsProvider` as an `ISecretsProvider` — queries the vault for secret values.
+- `AzureKeySecretsProvider` as an `ISecretsProvider` — queries the vault for secret values asynchronously. Secrets
+  used by the targets being run are prefetched before execution with the build's cancellation token; each request is
+  also bounded by `AzureVaultTimeout`.
 - `AzureKeyOptionsProvider` as an `IBuildOptionProvider` — contributes workflow options for injecting vault credentials
   in CI.
 
