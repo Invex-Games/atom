@@ -19,7 +19,8 @@ for .NET. Keep changes focused; `README.md` and `docs/` describe consumer-facing
 
 The solution is `Invex.Atom.slnx`. The repository currently requires the .NET 10 SDK; libraries,
 tests, and the build project all target `net10.0`.
-`global.json` pins SDK `10.0.0` with `rollForward: latestMajor`, so any installed .NET 10 or later SDK is used.
+`global.json` pins SDK `10.0.0` with `rollForward: latestMajor` and `allowPrerelease: false`, so any installed stable
+.NET 10 or later SDK is used; preview SDKs are not.
 
 ## Build, test, and cleanup
 
@@ -131,7 +132,9 @@ Docs follow the shared Invex documentation standard used by every Invex library:
   and ends with a "See also" or "Next steps" list. Link API types with `<xref:Namespace.Type>`, not file paths.
 - **`api/index.md`** is the only hand-written file under `api/`; everything else there is generated. Put per-type
   detail in XML docs, not in hand-written API pages.
-- **XML docs are enforced.** `CS1591` is not suppressed for shipped projects, so every public type and member needs
+- **XML docs are enforced.** `CS1591` is not suppressed for shipped projects, except the mostly generated
+  `Invex.Atom.Module.Dotnet`, `Invex.Atom.Module.DevopsWorkflows` and `Invex.Atom.Module.GithubWorkflows`, which
+  suppress it in their own csproj. Everywhere else, every public type and member needs
   `<summary>`, plus `<param>`, `<typeparam>`, `<returns>` and `<exception>` where they apply, `<remarks>` for
   non-obvious behaviour, and `<see cref>`/`<paramref>`/`<see langword>` for references.
 
