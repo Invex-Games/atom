@@ -64,26 +64,26 @@ the main entry points per package, and the sidebar lists everything else.
 | [`INugetHelper`](xref:Invex.Atom.Module.Dotnet.Helpers.INugetHelper)                         | Interface | NuGet feed management and push operations.                        |
 | [`TransformProjectVersionScope`](xref:Invex.Atom.Module.Dotnet.Util.TransformProjectVersionScope) | Class | Creates scopes that temporarily set a project file's version.  |
 
-## Invex.Atom.Module.GithubWorkflows
+## Invex.Atom.Module.GitHubWorkflows
 
 | Type                                                                                                   | Kind      | Description                                                   |
 |--------------------------------------------------------------------------------------------------------|-----------|---------------------------------------------------------------|
-| [`IGithubWorkflows`](xref:Invex.Atom.Module.GithubWorkflows.Helpers.IGithubWorkflows)                  | Interface | Integrates GitHub Actions workflows into a build.             |
-| [`IGithubHelper`](xref:Invex.Atom.Module.GithubWorkflows.Helpers.IGithubHelper)                        | Interface | Common GitHub parameters such as the GitHub token.            |
-| [`Github`](xref:Invex.Atom.Module.GithubWorkflows.Github)                                              | Class     | Detects GitHub Actions and exposes its environment variables. |
-| [`GithubTrigger`](xref:Invex.Atom.Module.GithubWorkflows.Options.GithubTrigger)                        | Record    | A GitHub-specific workflow trigger, such as `release`.        |
-| [`GithubTokenPermissionsOption`](xref:Invex.Atom.Module.GithubWorkflows.Options.GithubTokenPermissionsOption) | Record | Sets fine-grained `GITHUB_TOKEN` permissions.          |
-| [`GithubConcurrencyOption`](xref:Invex.Atom.Module.GithubWorkflows.Options.GithubConcurrencyOption)    | Record    | Configures concurrency for a GitHub Actions workflow.         |
+| [`IGitHubWorkflows`](xref:Invex.Atom.Module.GitHubWorkflows.Helpers.IGitHubWorkflows)                  | Interface | Integrates GitHub Actions workflows into a build.             |
+| [`IGitHubHelper`](xref:Invex.Atom.Module.GitHubWorkflows.Helpers.IGitHubHelper)                        | Interface | Common GitHub parameters such as the GitHub token.            |
+| [`GitHub`](xref:Invex.Atom.Module.GitHubWorkflows.GitHub)                                              | Class     | Detects GitHub Actions and exposes its environment variables. |
+| [`GitHubTrigger`](xref:Invex.Atom.Module.GitHubWorkflows.Options.GitHubTrigger)                        | Record    | A GitHub-specific workflow trigger, such as `release`.        |
+| [`GitHubTokenPermissionsOption`](xref:Invex.Atom.Module.GitHubWorkflows.Options.GitHubTokenPermissionsOption) | Record | Sets fine-grained `GITHUB_TOKEN` permissions.          |
+| [`GitHubConcurrencyOption`](xref:Invex.Atom.Module.GitHubWorkflows.Options.GitHubConcurrencyOption)    | Record    | Configures concurrency for a GitHub Actions workflow.         |
 
-## Invex.Atom.Module.DevopsWorkflows
+## Invex.Atom.Module.DevOpsWorkflows
 
 | Type                                                                                                         | Kind      | Description                                                       |
 |--------------------------------------------------------------------------------------------------------------|-----------|-------------------------------------------------------------------|
-| [`IDevopsWorkflows`](xref:Invex.Atom.Module.DevopsWorkflows.IDevopsWorkflows)                                | Interface | Integrates Azure DevOps Pipelines into a build.                   |
-| [`Devops`](xref:Invex.Atom.Module.DevopsWorkflows.Devops)                                                    | Class     | Detects Azure Pipelines and exposes its environment variables.    |
-| [`ProvideDevopsRunIdAsWorkflowId`](xref:Invex.Atom.Module.DevopsWorkflows.ProvideDevopsRunIdAsWorkflowId)    | Record    | Uses the Azure DevOps run ID as the workflow ID.                  |
-| [`DevopsConcurrencyOption`](xref:Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsConcurrencyOption) | Record   | Configures how runs waiting on an exclusive lock are handled.     |
-| [`DevopsPullRequestOption`](xref:Invex.Atom.Module.DevopsWorkflows.Workflows.Options.DevopsPullRequestOption) | Record   | Configures pull request auto-cancellation.                        |
+| [`IDevOpsWorkflows`](xref:Invex.Atom.Module.DevOpsWorkflows.IDevOpsWorkflows)                                | Interface | Integrates Azure DevOps Pipelines into a build.                   |
+| [`DevOps`](xref:Invex.Atom.Module.DevOpsWorkflows.DevOps)                                                    | Class     | Detects Azure Pipelines and exposes its environment variables.    |
+| [`ProvideDevOpsRunIdAsWorkflowId`](xref:Invex.Atom.Module.DevOpsWorkflows.ProvideDevOpsRunIdAsWorkflowId)    | Record    | Uses the Azure DevOps run ID as the workflow ID.                  |
+| [`DevOpsConcurrencyOption`](xref:Invex.Atom.Module.DevOpsWorkflows.Workflows.Options.DevOpsConcurrencyOption) | Record   | Configures how runs waiting on an exclusive lock are handled.     |
+| [`DevOpsPullRequestOption`](xref:Invex.Atom.Module.DevOpsWorkflows.Workflows.Options.DevOpsPullRequestOption) | Record   | Configures pull request auto-cancellation.                        |
 
 ## Invex.Atom.Module.AzureKeyVault
 
@@ -111,7 +111,7 @@ the main entry points per package, and the sidebar lists everything else.
 ```csharp
 [BuildDefinition]
 [GenerateEntryPoint]
-internal interface IBuild : IWorkflowBuildDefinition, IGithubWorkflows
+internal interface IBuild : IWorkflowBuildDefinition, IGitHubWorkflows
 {
     [ParamDefinition("my-name", "My name")]
     string? MyName => GetParam(() => MyName);
@@ -126,7 +126,7 @@ internal interface IBuild : IWorkflowBuildDefinition, IGithubWorkflows
         {
             Triggers = [WorkflowTriggers.PushToMain],
             Targets = [new(nameof(HelloWorld))],
-            Types = [WorkflowTypes.Github.Action],
+            Types = [WorkflowTypes.GitHub.Action],
         },
     ];
 }

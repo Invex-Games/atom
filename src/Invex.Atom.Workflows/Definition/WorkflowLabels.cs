@@ -6,7 +6,7 @@ namespace Invex.Atom.Workflows.Definition;
 /// <remarks>
 ///     Modules attach extension members to this class to expose common labels (e.g., runner images or
 ///     target frameworks) under a single discoverable entry point, such as
-///     <c>WorkflowLabels.Github.RunsOn</c> or <c>WorkflowLabels.Dotnet.Framework</c>.
+///     <c>WorkflowLabels.GitHub.RunsOn</c> or <c>WorkflowLabels.Dotnet.Framework</c>.
 /// </remarks>
 [PublicAPI]
 public static class WorkflowLabels;

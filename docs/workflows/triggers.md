@@ -79,11 +79,11 @@ WorkflowTriggers.ManualWithInputs(
 
 ## Platform-Specific Triggers
 
-Platform modules can provide additional trigger types. For example, `Invex.Atom.Module.GithubWorkflows` adds
-`GithubTrigger` for events like `release`:
+Platform modules can provide additional trigger types. For example, `Invex.Atom.Module.GitHubWorkflows` adds
+`GitHubTrigger` for events like `release`:
 
 ```csharp
-new GithubTrigger(new On.Release([On.Release.ReleaseType.released]))
+new GitHubTrigger(new On.Release([On.Release.ReleaseType.released]))
 ```
 
 ## Combining Triggers

@@ -33,7 +33,7 @@ Your build must:
 1. Implement `IWorkflowBuildDefinition` (or derive from `WorkflowBuildDefinition`).
 2. Define `IWorkflowBuildDefinition.Workflows` with at least one definition. Interface builds
    explicitly implement the property; partial classes override it.
-3. Inherit a platform module interface (`IGithubWorkflows`, `IDevopsWorkflows`, or both) so the corresponding
+3. Inherit a platform module interface (`IGitHubWorkflows`, `IDevOpsWorkflows`, or both) so the corresponding
    workflow writer is registered.
 
 ## Automatic Generation & Outdated File Detection

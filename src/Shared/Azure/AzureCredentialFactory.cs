@@ -52,7 +52,7 @@ internal enum AzureCredentialKind
     /// <summary>
     ///     A GitHub Actions OIDC token exchanged through workload identity federation.
     /// </summary>
-    GithubActionsOidc,
+    GitHubActionsOidc,
 
     /// <summary>
     ///     An Azure Pipelines OIDC token exchanged through a workload identity federation service connection.
@@ -108,8 +108,8 @@ internal static class AzureCredentialFactory
     /// </summary>
     internal const string FederatedTokenAudience = "api://AzureADTokenExchange";
 
-    internal const string GithubTokenRequestUrlVariable = "ACTIONS_ID_TOKEN_REQUEST_URL";
-    internal const string GithubTokenRequestTokenVariable = "ACTIONS_ID_TOKEN_REQUEST_TOKEN";
+    internal const string GitHubTokenRequestUrlVariable = "ACTIONS_ID_TOKEN_REQUEST_URL";
+    internal const string GitHubTokenRequestTokenVariable = "ACTIONS_ID_TOKEN_REQUEST_TOKEN";
     internal const string AzurePipelinesOidcRequestUriVariable = "SYSTEM_OIDCREQUESTURI";
     internal const string AzurePipelinesAccessTokenVariable = "SYSTEM_ACCESSTOKEN";
 
@@ -134,9 +134,9 @@ internal static class AzureCredentialFactory
         if (Normalize(settings.ClientSecret) is not null)
             return AzureCredentialKind.ClientSecret;
 
-        if (Normalize(getEnvironmentVariable(GithubTokenRequestUrlVariable)) is not null &&
-            Normalize(getEnvironmentVariable(GithubTokenRequestTokenVariable)) is not null)
-            return AzureCredentialKind.GithubActionsOidc;
+        if (Normalize(getEnvironmentVariable(GitHubTokenRequestUrlVariable)) is not null &&
+            Normalize(getEnvironmentVariable(GitHubTokenRequestTokenVariable)) is not null)
+            return AzureCredentialKind.GitHubActionsOidc;
 
         if (Normalize(settings.ServiceConnectionId) is not null &&
             Normalize(getEnvironmentVariable(AzurePipelinesOidcRequestUriVariable)) is not null &&
@@ -170,11 +170,11 @@ internal static class AzureCredentialFactory
                 clientId,
                 Normalize(settings.ClientSecret)),
 
-            AzureCredentialKind.GithubActionsOidc => new ClientAssertionCredential(tenantId,
+            AzureCredentialKind.GitHubActionsOidc => new ClientAssertionCredential(tenantId,
                 clientId,
-                cancellationToken => GetGithubActionsOidcTokenAsync(SharedHttpClient,
-                    getEnvironmentVariable(GithubTokenRequestUrlVariable)!,
-                    getEnvironmentVariable(GithubTokenRequestTokenVariable)!,
+                cancellationToken => GetGitHubActionsOidcTokenAsync(SharedHttpClient,
+                    getEnvironmentVariable(GitHubTokenRequestUrlVariable)!,
+                    getEnvironmentVariable(GitHubTokenRequestTokenVariable)!,
                     cancellationToken)),
 
             AzureCredentialKind.AzurePipelinesOidc => new AzurePipelinesCredential(tenantId,
@@ -213,7 +213,7 @@ internal static class AzureCredentialFactory
     /// <param name="cancellationToken">A token to observe.</param>
     /// <returns>The OIDC token (JWT).</returns>
     /// <exception cref="InvalidOperationException">Thrown if the response does not contain a token.</exception>
-    internal static async Task<string> GetGithubActionsOidcTokenAsync(
+    internal static async Task<string> GetGitHubActionsOidcTokenAsync(
         HttpClient httpClient,
         string requestUrl,
         string requestToken,

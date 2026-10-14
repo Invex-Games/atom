@@ -12,7 +12,7 @@
 ///     <code>
 /// new WorkflowTargetDefinition(nameof(PushToRelease))
 /// {
-///     Options = [BuildOptions.Inject.Secret(nameof(GithubToken))],
+///     Options = [BuildOptions.Inject.Secret(nameof(GitHubToken))],
 /// };
 ///     </code>
 /// </example>
