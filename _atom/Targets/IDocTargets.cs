@@ -7,8 +7,14 @@ internal interface IDocTargets : IDocFxHelper
             .DescribedAs("Builds the DocFX documentation.")
             .ProducesArtifact(GeneratedDocsArtifactName)
             .Executes(cancellationToken => BuildDocFxDocs([
-                    Projects.Invex_Atom_Build_Analyzers.Path(RootedFileSystem),
-                    Projects.Invex_Atom_Build_SourceGenerators.Path(RootedFileSystem),
+                    Projects.Invex_Atom_Build.Path(RootedFileSystem),
+                    Projects.Invex_Atom_Workflows.Path(RootedFileSystem),
+                    Projects.Invex_Atom_Module_AzureKeyVault.Path(RootedFileSystem),
+                    Projects.Invex_Atom_Module_AzureStorage.Path(RootedFileSystem),
+                    Projects.Invex_Atom_Module_DevopsWorkflows.Path(RootedFileSystem),
+                    Projects.Invex_Atom_Module_Dotnet.Path(RootedFileSystem),
+                    Projects.Invex_Atom_Module_GithubWorkflows.Path(RootedFileSystem),
+                    Projects.Invex_Atom_Module_GitVersion.Path(RootedFileSystem),
                 ],
                 cancellationToken));
 
