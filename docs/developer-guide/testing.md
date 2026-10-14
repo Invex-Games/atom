@@ -1,14 +1,20 @@
 # Testing
 
-Atom provides test utilities for verifying your build definitions, targets, and modules in unit/integration tests. Use them when you want to verify build definitions or modules without running a real build.
+Atom's own test suite uses a set of internal test helpers for verifying build definitions, targets, and modules in unit/integration tests without running a real build. This page describes those helpers and the patterns they support, so you can follow the same approach in your own tests.
 
-**Package:** `Invex.Atom.TestUtils`
+**Project:** `tests/Invex.Atom.TestUtils` (internal to this repository)
 
-## Installation
+## Availability
 
-```shell
-dotnet add package Invex.Atom.TestUtils
+`Invex.Atom.TestUtils` is not published as a NuGet package. Projects in this repository reference it with a
+`ProjectReference`:
+
+```xml
+<ProjectReference Include="..\Invex.Atom.TestUtils\Invex.Atom.TestUtils.csproj" />
 ```
+
+Outside this repository, use its source as a reference for building your own test helpers; its API is not
+documented or supported as a public contract and may change without notice.
 
 ## Usage
 

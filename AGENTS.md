@@ -12,7 +12,7 @@ for .NET. Keep changes focused; `README.md` and `docs/` describe consumer-facing
 | `src/Invex.Atom.Module.*` | Built-in modules for .NET, GitHub Actions, Azure DevOps, GitVersion, and Azure services |
 | `src/Invex.Atom.Build.Analyzers` / `SourceGenerators` | Roslyn analyzers and generated build entry points |
 | `src/Invex.Atom.Tool` | The `Invex.Atom.Tool` global tool |
-| `tests/` | NUnit tests, snapshots, and the published `Invex.Atom.TestUtils` helpers |
+| `tests/` | NUnit tests, snapshots, and the internal (unpublished) `Invex.Atom.TestUtils` helpers |
 | `_atom/` | This repository's own Atom build definition |
 | `samples/` | Small consumer examples |
 | `docs/`, `api/` | DocFX documentation source and generated API content |
