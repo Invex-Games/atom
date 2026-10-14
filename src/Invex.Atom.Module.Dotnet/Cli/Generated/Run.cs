@@ -19,7 +19,7 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -42,7 +42,7 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -64,7 +64,7 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -88,16 +88,12 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "run",
-            $"{string.Join(" ", projectOrSolutionOrFile)}",
-            $"{string.Join(" ", applicationArguments)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "run" };
+        DotnetCliArgs.AddPositional(args, projectOrSolutionOrFile);
+        DotnetCliArgs.AddPositional(args, applicationArguments);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
     public Task<ProcessRunResult> Run(
@@ -107,15 +103,11 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "run",
-            projectOrSolutionOrFile,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "run" };
+        DotnetCliArgs.AddPositional(args, projectOrSolutionOrFile);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
     public Task<ProcessRunResult> Run(
@@ -125,15 +117,11 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "run",
-            projectOrSolutionOrFile,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "run" };
+        DotnetCliArgs.AddPositional(args, projectOrSolutionOrFile);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }
@@ -328,73 +316,37 @@ public sealed record DotnetRunOptions
         init;
     }
 
-    public override string ToString()
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
     {
-        return string.Join(' ',
-        new[]
-        {
-            Arch is not null
-                ? $"--arch {Arch}"
-                : null,
-            ArtifactsPath is not null
-                ? $"--artifacts-path {ArtifactsPath}"
-                : null,
-            Configuration is not null
-                ? $"--configuration {Configuration}"
-                : null,
-            DisableBuildServers is true
-                ? "--disable-build-servers"
-                : null,
-            Environment is not null
-                ? $"--environment {string.Join(" --environment ", Environment.Select(kv => $"{kv.Key}=\"{kv.Value}\""))}"
-                : null,
-            File is not null
-                ? $"--file {File}"
-                : null,
-            Framework is not null
-                ? $"--framework {Framework}"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            LaunchProfile is not null
-                ? $"--launch-profile {LaunchProfile}"
-                : null,
-            NoBuild is true
-                ? "--no-build"
-                : null,
-            NoCache is true
-                ? "--no-cache"
-                : null,
-            NoLaunchProfile is true
-                ? "--no-launch-profile"
-                : null,
-            NoRestore is true
-                ? "--no-restore"
-                : null,
-            NoSelfContained is true
-                ? "--no-self-contained"
-                : null,
-            Os is not null
-                ? $"--os {Os}"
-                : null,
-            Project is not null
-                ? $"--project {Project}"
-                : null,
-            Property is not null
-                ? $"--property {string.Join(" --property ", Property.Select(kv => $"{kv.Key}=\"{kv.Value}\""))}"
-                : null,
-            Runtime is not null
-                ? $"--runtime {Runtime}"
-                : null,
-            SelfContained is true
-                ? "--self-contained"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--arch", Arch);
+        DotnetCliArgs.AddOption(args, "--artifacts-path", ArtifactsPath);
+        DotnetCliArgs.AddOption(args, "--configuration", Configuration);
+        DotnetCliArgs.AddFlag(args, "--disable-build-servers", DisableBuildServers);
+        DotnetCliArgs.AddOption(args, "--environment", Environment);
+        DotnetCliArgs.AddOption(args, "--file", File);
+        DotnetCliArgs.AddOption(args, "--framework", Framework);
+        DotnetCliArgs.AddBool(args, "--interactive", Interactive);
+        DotnetCliArgs.AddOption(args, "--launch-profile", LaunchProfile);
+        DotnetCliArgs.AddFlag(args, "--no-build", NoBuild);
+        DotnetCliArgs.AddFlag(args, "--no-cache", NoCache);
+        DotnetCliArgs.AddFlag(args, "--no-launch-profile", NoLaunchProfile);
+        DotnetCliArgs.AddFlag(args, "--no-restore", NoRestore);
+        DotnetCliArgs.AddFlag(args, "--no-self-contained", NoSelfContained);
+        DotnetCliArgs.AddOption(args, "--os", Os);
+        DotnetCliArgs.AddOption(args, "--project", Project);
+        DotnetCliArgs.AddOption(args, "--property", Property);
+        DotnetCliArgs.AddOption(args, "--runtime", Runtime);
+        DotnetCliArgs.AddBool(args, "--self-contained", SelfContained);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+
+        return args;
     }
 
 }

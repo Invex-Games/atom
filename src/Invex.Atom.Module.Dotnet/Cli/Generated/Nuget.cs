@@ -19,10 +19,13 @@ internal partial class DotnetCli
         DotnetNugetOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    ) =>
-        processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", (options ?? new()).ToString())
-            : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "nuget" };
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
+    }
 
 }
 [PublicAPI]
@@ -40,19 +43,19 @@ public sealed record DotnetNugetOptions
         init;
     }
 
-    public override string ToString()
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
     {
-        return string.Join(' ',
-        new[]
-        {
-            Verbosity is not null
-                ? $"--verbosity {Verbosity}"
-                : null,
-            Version is true
-                ? "--version"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+        DotnetCliArgs.AddFlag(args, "--version", Version);
+
+        return args;
     }
 
 }

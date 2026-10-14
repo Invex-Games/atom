@@ -13,7 +13,7 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -31,10 +31,13 @@ internal partial class DotnetCli
         DotnetPackageListOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    ) =>
-        processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", (options ?? new()).ToString())
-            : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "package", "list" };
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
+    }
 
 }
 [PublicAPI]
@@ -184,61 +187,33 @@ public sealed record DotnetPackageListOptions
         init;
     }
 
-    public override string ToString()
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
     {
-        return string.Join(' ',
-        new[]
-        {
-            Config is not null
-                ? $"--config {Config}"
-                : null,
-            Deprecated is true
-                ? "--deprecated"
-                : null,
-            Format is not null
-                ? $"--format {Format}"
-                : null,
-            Framework is not null
-                ? $"--framework {string.Join(" --framework ", Framework)}"
-                : null,
-            HighestMinor is true
-                ? "--highest-minor"
-                : null,
-            HighestPatch is true
-                ? "--highest-patch"
-                : null,
-            IncludePrerelease is true
-                ? "--include-prerelease"
-                : null,
-            IncludeTransitive is true
-                ? "--include-transitive"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            NoRestore is true
-                ? "--no-restore"
-                : null,
-            Outdated is true
-                ? "--outdated"
-                : null,
-            OutputVersion is not null
-                ? $"--output-version {OutputVersion}"
-                : null,
-            Project is not null
-                ? $"--project {Project}"
-                : null,
-            Source is not null
-                ? $"--source {string.Join(" --source ", Source)}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
-                : null,
-            Vulnerable is true
-                ? "--vulnerable"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--config", Config);
+        DotnetCliArgs.AddFlag(args, "--deprecated", Deprecated);
+        DotnetCliArgs.AddOption(args, "--format", Format);
+        DotnetCliArgs.AddOption(args, "--framework", Framework);
+        DotnetCliArgs.AddFlag(args, "--highest-minor", HighestMinor);
+        DotnetCliArgs.AddFlag(args, "--highest-patch", HighestPatch);
+        DotnetCliArgs.AddFlag(args, "--include-prerelease", IncludePrerelease);
+        DotnetCliArgs.AddFlag(args, "--include-transitive", IncludeTransitive);
+        DotnetCliArgs.AddFlag(args, "--interactive", Interactive);
+        DotnetCliArgs.AddFlag(args, "--no-restore", NoRestore);
+        DotnetCliArgs.AddFlag(args, "--outdated", Outdated);
+        DotnetCliArgs.AddOption(args, "--output-version", OutputVersion);
+        DotnetCliArgs.AddOption(args, "--project", Project);
+        DotnetCliArgs.AddOption(args, "--source", Source);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+        DotnetCliArgs.AddFlag(args, "--vulnerable", Vulnerable);
+
+        return args;
     }
 
 }

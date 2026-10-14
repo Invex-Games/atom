@@ -19,7 +19,7 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -44,16 +44,12 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "new",
-            templateShortName,
-            $"{string.Join(" ", templateArgs)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "new" };
+        DotnetCliArgs.AddPositional(args, templateShortName);
+        DotnetCliArgs.AddPositional(args, templateArgs);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }
@@ -133,37 +129,25 @@ public sealed record DotnetNewOptions
         init;
     }
 
-    public override string ToString()
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
     {
-        return string.Join(' ',
-        new[]
-        {
-            Diagnostics is true
-                ? "--diagnostics"
-                : null,
-            DryRun is true
-                ? "--dry-run"
-                : null,
-            Force is true
-                ? "--force"
-                : null,
-            Name is not null
-                ? $"--name {Name}"
-                : null,
-            NoUpdateCheck is true
-                ? "--no-update-check"
-                : null,
-            Output is not null
-                ? $"--output {Output}"
-                : null,
-            Project is not null
-                ? $"--project {Project}"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+        var args = new List<string>();
+        DotnetCliArgs.AddFlag(args, "--diagnostics", Diagnostics);
+        DotnetCliArgs.AddBool(args, "--dry-run", DryRun);
+        DotnetCliArgs.AddBool(args, "--force", Force);
+        DotnetCliArgs.AddOption(args, "--name", Name);
+        DotnetCliArgs.AddBool(args, "--no-update-check", NoUpdateCheck);
+        DotnetCliArgs.AddOption(args, "--output", Output);
+        DotnetCliArgs.AddOption(args, "--project", Project);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+
+        return args;
     }
 
 }

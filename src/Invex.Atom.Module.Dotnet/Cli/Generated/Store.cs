@@ -13,7 +13,7 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -36,15 +36,11 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "store",
-            $"{string.Join(" ", argument)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "store" };
+        DotnetCliArgs.AddPositional(args, argument);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }
@@ -151,46 +147,28 @@ public sealed record DotnetStoreOptions
         init;
     }
 
-    public override string ToString()
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
     {
-        return string.Join(' ',
-        new[]
-        {
-            DisableBuildServers is true
-                ? "--disable-build-servers"
-                : null,
-            Framework is not null
-                ? $"--framework {Framework}"
-                : null,
-            FrameworkVersion is not null
-                ? $"--framework-version {FrameworkVersion}"
-                : null,
-            Manifest is not null
-                ? $"--manifest {string.Join(" --manifest ", Manifest)}"
-                : null,
-            Output is not null
-                ? $"--output {Output}"
-                : null,
-            Runtime is not null
-                ? $"--runtime {Runtime}"
-                : null,
-            SkipOptimization is true
-                ? "--skip-optimization"
-                : null,
-            SkipSymbols is true
-                ? "--skip-symbols"
-                : null,
-            UseCurrentRuntime is true
-                ? "--use-current-runtime"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
-                : null,
-            WorkingDir is not null
-                ? $"--working-dir {WorkingDir}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+        var args = new List<string>();
+        DotnetCliArgs.AddFlag(args, "--disable-build-servers", DisableBuildServers);
+        DotnetCliArgs.AddOption(args, "--framework", Framework);
+        DotnetCliArgs.AddOption(args, "--framework-version", FrameworkVersion);
+        DotnetCliArgs.AddOption(args, "--manifest", Manifest);
+        DotnetCliArgs.AddOption(args, "--output", Output);
+        DotnetCliArgs.AddOption(args, "--runtime", Runtime);
+        DotnetCliArgs.AddFlag(args, "--skip-optimization", SkipOptimization);
+        DotnetCliArgs.AddFlag(args, "--skip-symbols", SkipSymbols);
+        DotnetCliArgs.AddFlag(args, "--use-current-runtime", UseCurrentRuntime);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+        DotnetCliArgs.AddOption(args, "--working-dir", WorkingDir);
+
+        return args;
     }
 
 }

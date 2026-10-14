@@ -16,7 +16,7 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -38,7 +38,7 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -60,7 +60,7 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -83,15 +83,11 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "pack",
-            $"{string.Join(" ", projectOrSolutionOrFile)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "pack" };
+        DotnetCliArgs.AddPositional(args, projectOrSolutionOrFile);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
     public Task<ProcessRunResult> Pack(
@@ -101,15 +97,11 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "pack",
-            projectOrSolutionOrFile,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "pack" };
+        DotnetCliArgs.AddPositional(args, projectOrSolutionOrFile);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
     public Task<ProcessRunResult> Pack(
@@ -119,15 +111,11 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "pack",
-            projectOrSolutionOrFile,
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "pack" };
+        DotnetCliArgs.AddPositional(args, projectOrSolutionOrFile);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }
@@ -397,106 +385,48 @@ public sealed record DotnetPackOptions
         init;
     }
 
-    public override string ToString()
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
     {
-        return string.Join(' ',
-        new[]
-        {
-            ArtifactsPath is not null
-                ? $"--artifacts-path {ArtifactsPath}"
-                : null,
-            ConfigFile is not null
-                ? $"--configfile {ConfigFile}"
-                : null,
-            Configuration is not null
-                ? $"--configuration {Configuration}"
-                : null,
-            DisableBuildServers is true
-                ? "--disable-build-servers"
-                : null,
-            DisableParallel is true
-                ? "--disable-parallel"
-                : null,
-            Force is true
-                ? "--force"
-                : null,
-            GetItem is not null
-                ? $"--getItem {string.Join(" --getItem ", GetItem)}"
-                : null,
-            GetProperty is not null
-                ? $"--getProperty {string.Join(" --getProperty ", GetProperty)}"
-                : null,
-            GetResultOutputFile is not null
-                ? $"--getResultOutputFile {string.Join(" --getResultOutputFile ", GetResultOutputFile)}"
-                : null,
-            GetTargetResult is not null
-                ? $"--getTargetResult {string.Join(" --getTargetResult ", GetTargetResult)}"
-                : null,
-            IgnoreFailedSources is true
-                ? "--ignore-failed-sources"
-                : null,
-            IncludeSource is true
-                ? "--include-source"
-                : null,
-            IncludeSymbols is true
-                ? "--include-symbols"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            NoBuild is true
-                ? "--no-build"
-                : null,
-            NoDependencies is true
-                ? "--no-dependencies"
-                : null,
-            NoHttpCache is true
-                ? "--no-http-cache"
-                : null,
-            NoRestore is true
-                ? "--no-restore"
-                : null,
-            NoLogo is true
-                ? "--nologo"
-                : null,
-            Output is not null
-                ? $"--output {Output}"
-                : null,
-            Packages is not null
-                ? $"--packages {Packages}"
-                : null,
-            Property is not null
-                ? $"--property {string.Join(" --property ", Property.Select(kv => $"{kv.Key}=\"{kv.Value}\""))}"
-                : null,
-            RestoreProperty is not null
-                ? $"--restoreProperty {string.Join(" --restoreProperty ", RestoreProperty.Select(kv => $"{kv.Key}=\"{kv.Value}\""))}"
-                : null,
-            Runtime is not null
-                ? $"--runtime {Runtime}"
-                : null,
-            Serviceable is true
-                ? "--serviceable"
-                : null,
-            Source is not null
-                ? $"--source {string.Join(" --source ", Source)}"
-                : null,
-            Target is not null
-                ? $"--target {string.Join(" --target ", Target)}"
-                : null,
-            UseCurrentRuntime is true
-                ? "--use-current-runtime"
-                : null,
-            Verbosity is not null
-                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
-                : null,
-            Version is not null
-                ? $"--version {Version}"
-                : null,
-            VersionSuffix is not null
-                ? $"--version-suffix {VersionSuffix}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--artifacts-path", ArtifactsPath);
+        DotnetCliArgs.AddOption(args, "--configfile", ConfigFile);
+        DotnetCliArgs.AddOption(args, "--configuration", Configuration);
+        DotnetCliArgs.AddFlag(args, "--disable-build-servers", DisableBuildServers);
+        DotnetCliArgs.AddFlag(args, "--disable-parallel", DisableParallel);
+        DotnetCliArgs.AddFlag(args, "--force", Force);
+        DotnetCliArgs.AddOption(args, "--getItem", GetItem);
+        DotnetCliArgs.AddOption(args, "--getProperty", GetProperty);
+        DotnetCliArgs.AddOption(args, "--getResultOutputFile", GetResultOutputFile);
+        DotnetCliArgs.AddOption(args, "--getTargetResult", GetTargetResult);
+        DotnetCliArgs.AddFlag(args, "--ignore-failed-sources", IgnoreFailedSources);
+        DotnetCliArgs.AddFlag(args, "--include-source", IncludeSource);
+        DotnetCliArgs.AddFlag(args, "--include-symbols", IncludeSymbols);
+        DotnetCliArgs.AddBool(args, "--interactive", Interactive);
+        DotnetCliArgs.AddFlag(args, "--no-build", NoBuild);
+        DotnetCliArgs.AddFlag(args, "--no-dependencies", NoDependencies);
+        DotnetCliArgs.AddFlag(args, "--no-http-cache", NoHttpCache);
+        DotnetCliArgs.AddFlag(args, "--no-restore", NoRestore);
+        DotnetCliArgs.AddFlag(args, "--nologo", NoLogo);
+        DotnetCliArgs.AddOption(args, "--output", Output);
+        DotnetCliArgs.AddOption(args, "--packages", Packages);
+        DotnetCliArgs.AddOption(args, "--property", Property);
+        DotnetCliArgs.AddOption(args, "--restoreProperty", RestoreProperty);
+        DotnetCliArgs.AddOption(args, "--runtime", Runtime);
+        DotnetCliArgs.AddFlag(args, "--serviceable", Serviceable);
+        DotnetCliArgs.AddOption(args, "--source", Source);
+        DotnetCliArgs.AddOption(args, "--target", Target);
+        DotnetCliArgs.AddFlag(args, "--use-current-runtime", UseCurrentRuntime);
+        DotnetCliArgs.AddOption(args, "--verbosity", Verbosity);
+        DotnetCliArgs.AddOption(args, "--version", Version);
+        DotnetCliArgs.AddOption(args, "--version-suffix", VersionSuffix);
+
+        return args;
     }
 
 }

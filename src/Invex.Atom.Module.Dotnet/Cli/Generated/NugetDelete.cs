@@ -24,15 +24,11 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "nuget delete",
-            $"{string.Join(" ", packagePaths)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "nuget", "delete" };
+        DotnetCliArgs.AddPositional(args, packagePaths);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }
@@ -79,31 +75,23 @@ public sealed record DotnetNugetDeleteOptions
         init;
     }
 
-    public override string ToString()
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
     {
-        return string.Join(' ',
-        new[]
-        {
-            ApiKey is not null
-                ? $"--api-key {ApiKey}"
-                : null,
-            ForceEnglishOutput is true
-                ? "--force-english-output"
-                : null,
-            Interactive is true
-                ? "--interactive"
-                : null,
-            NoServiceEndpoint is true
-                ? "--no-service-endpoint"
-                : null,
-            NonInteractive is true
-                ? "--non-interactive"
-                : null,
-            Source is not null
-                ? $"--source {Source}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--api-key", ApiKey);
+        DotnetCliArgs.AddFlag(args, "--force-english-output", ForceEnglishOutput);
+        DotnetCliArgs.AddFlag(args, "--interactive", Interactive);
+        DotnetCliArgs.AddFlag(args, "--no-service-endpoint", NoServiceEndpoint);
+        DotnetCliArgs.AddFlag(args, "--non-interactive", NonInteractive);
+        DotnetCliArgs.AddOption(args, "--source", Source);
+
+        return args;
     }
 
 }

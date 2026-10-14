@@ -14,7 +14,7 @@ public partial interface IDotnetCli
     ///     If command is specified without the argument, it lists all the template packages installed.
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -33,7 +33,7 @@ public partial interface IDotnetCli
     ///     If command is specified without the argument, it lists all the template packages installed.
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -52,7 +52,7 @@ public partial interface IDotnetCli
     ///     If command is specified without the argument, it lists all the template packages installed.
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -73,14 +73,10 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "new uninstall",
-            $"{string.Join(" ", package)}",
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "new", "uninstall" };
+        DotnetCliArgs.AddPositional(args, package);
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
     public Task<ProcessRunResult> NewUninstall(
@@ -89,14 +85,10 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "new uninstall",
-            package,
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "new", "uninstall" };
+        DotnetCliArgs.AddPositional(args, package);
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
     public Task<ProcessRunResult> NewUninstall(
@@ -105,14 +97,10 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "new uninstall",
-            package,
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "new", "uninstall" };
+        DotnetCliArgs.AddPositional(args, package);
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }

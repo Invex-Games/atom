@@ -119,11 +119,11 @@ public partial interface IDotnetTestHelper : IDotnetCliHelper, IBuildInfo, IDotn
                 : RootedFileSystem.AtomRootDirectory / projectName / "TestResults",
             Logger = testOptions.Logger ??
             [
-                $"\"trx;LogFileName={projectName}.trx\"", $"\"html;LogFileName={projectName}.html\"",
+                $"trx;LogFileName={projectName}.trx", $"html;LogFileName={projectName}.html",
             ],
             Collect = testOptions.Collect ??
                       (options.IncludeCoverage
-                          ? ["\"XPlat Code Coverage\""]
+                          ? ["XPlat Code Coverage"]
                           : null),
         };
 

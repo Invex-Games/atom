@@ -16,7 +16,7 @@ public partial interface IDotnetCli
     ///     Options
     /// </param>
     /// <param name="processRunOptions">
-    ///     Process run options. NOTE: The command name will be overridden by the appropriate dotnet command
+    ///     Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command
     /// </param>
     /// <param name="cancellationToken">
     ///     Cancellation token
@@ -39,15 +39,11 @@ internal partial class DotnetCli
         CancellationToken cancellationToken = default
     )
     {
-        var argsString = string.Join(' ', new string[] {
-            "solution add",
-            $"{string.Join(" ", projectPath)}",
-            (options ?? new()).ToString(),
-        }.Where(x => x is { Length: > 0 }));
+        var args = new List<string> { "solution", "add" };
+        DotnetCliArgs.AddPositional(args, projectPath);
+        args.AddRange((options ?? new()).ToArguments());
 
-        return processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", argsString)
-            : processRunOptions with { Name = "dotnet", Args = argsString }), cancellationToken);
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
     }
 
 }
@@ -82,22 +78,20 @@ public sealed record DotnetSolutionAddOptions
         init;
     }
 
-    public override string ToString()
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
     {
-        return string.Join(' ',
-        new[]
-        {
-            InRoot is true
-                ? "--in-root"
-                : null,
-            IncludeReferences is true
-                ? "--include-references"
-                : null,
-            SolutionFolder is not null
-                ? $"--solution-folder {SolutionFolder}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+        var args = new List<string>();
+        DotnetCliArgs.AddBool(args, "--in-root", InRoot);
+        DotnetCliArgs.AddBool(args, "--include-references", IncludeReferences);
+        DotnetCliArgs.AddOption(args, "--solution-folder", SolutionFolder);
+
+        return args;
     }
 
 }

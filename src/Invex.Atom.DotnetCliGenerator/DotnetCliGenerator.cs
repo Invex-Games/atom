@@ -205,59 +205,84 @@ public static class DotnetCliGenerator
     /// <param name="command">The <see cref="Command" /> object representing the .NET CLI command.</param>
     /// <remarks>
     ///     This method creates a `sealed record` named after the command prefixed with `Dotnet` (e.g., `DotnetBuildOptions`)
-    ///     that contains properties for each of the command's options. It also includes an
-    ///     overridden `ToString()` method to correctly format these options into command-line arguments.
+    ///     that contains properties for each of the command's options. It also includes a `ToArguments()` method that
+    ///     converts these options into a list of individual command-line arguments.
     /// </remarks>
     public static void GenerateOptionsCode(CsharpWriter writer, Command command)
     {
         if (command.Options.Count is 0)
             return;
 
+        var options = command
+            .Options
+            .Where(static x => x.ValueType is not (null or "System.Void"))
+            .ToList();
+
         writer.WriteLine("[PublicAPI]");
 
         using (writer.Block($"public sealed record {GetOptionsTypeName(command)}"))
         {
-            foreach (var option in command.Options.Where(x => x.ValueType is not (null or "System.Void")))
+            foreach (var option in options)
                 writer.WriteProperty("public",
-                    IsKnownAotFriendlyType(option.ValueType)
-                        ? $"{FormatType(option.ValueType)}?"
-                        : "string?",
+                    GetOptionPropertyType(option),
                     CsharpWriter.ToPascalCase(option.Name),
                     new(null),
                     new(null, true),
                     null,
                     option.Description);
 
-            writer.WriteMethod("public override",
-                "string",
-                "ToString",
+            writer.WriteLine("/// <summary>");
+            writer.WriteLine("///     Converts these options to individual command-line arguments, in schema order.");
+            writer.WriteLine("/// </summary>");
+            writer.WriteLine("/// <returns>");
+            writer.WriteLine("///     The arguments. Each option name and each value is a separate element, so values need no quoting.");
+            writer.WriteLine("/// </returns>");
+
+            writer.WriteMethod("public",
+                "IReadOnlyList<string>",
+                "ToArguments",
                 Array.Empty<MethodParam>(),
                 bodyWriter =>
                 {
-                    bodyWriter.WriteLine("return string.Join(' ',");
+                    bodyWriter.WriteLine("var args = new List<string>();");
 
-                    using (bodyWriter.Block("new[]"))
-                        foreach (var option in command.Options.Where(x => x.ValueType is not (null or "System.Void")))
-                        {
-                            bodyWriter.WriteLine(option.ValueType is "System.Boolean"
-                                ? $"{CsharpWriter.ToPascalCase(option.Name)} is true"
-                                : $"{CsharpWriter.ToPascalCase(option.Name)} is not null");
+                    foreach (var option in options)
+                        bodyWriter.WriteLine(
+                            $"DotnetCliArgs.{GetOptionAddMethod(option)}(args, \"{option.Name}\", {CsharpWriter.ToPascalCase(option.Name)});");
 
-                            using (bodyWriter.Indent)
-                            {
-                                bodyWriter.WriteLine(
-                                    $"? {FormatToPrint(option.ValueType, option.Name, CsharpWriter.ToPascalCase(option.Name))}");
-
-                                bodyWriter.WriteLine(": null,");
-                            }
-                        }
-
-                    bodyWriter.WriteLine(".Where(x => x is { Length: > 0 }));");
+                    bodyWriter.WriteLine(string.Empty);
+                    bodyWriter.WriteLine("return args;");
                 });
         }
 
         writer.WriteLine(string.Empty);
     }
+
+    /// <summary>
+    ///     Gets the C# property type used for an option in the generated options record.
+    /// </summary>
+    /// <param name="option">The option.</param>
+    /// <returns>The nullable C# type name.</returns>
+    private static string GetOptionPropertyType(Option option) =>
+        IsKnownAotFriendlyType(option.ValueType)
+            ? $"{FormatType(option.ValueType)}?"
+            : "string?";
+
+    /// <summary>
+    ///     Gets the <c>DotnetCliArgs</c> method that adds an option to the argument list.
+    /// </summary>
+    /// <param name="option">The option.</param>
+    /// <returns>
+    ///     <c>AddFlag</c> for a boolean option that takes no value (emitted only when <c>true</c>), <c>AddBool</c> for a
+    ///     boolean option that takes a value (emitted as <c>--name true|false</c> when not <c>null</c>), and
+    ///     <c>AddOption</c> for everything else.
+    /// </returns>
+    private static string GetOptionAddMethod(Option option) =>
+        FormatType(option.ValueType) is "System.Boolean"
+            ? option.AcceptsValue
+                ? "AddBool"
+                : "AddFlag"
+            : "AddOption";
 
     /// <summary>
     ///     Generates a C# method for a given .NET CLI command, either as an interface stub or an implementation.
@@ -287,82 +312,32 @@ public static class DotnetCliGenerator
                 .Append(new("ProcessRunOptions?",
                     "processRunOptions",
                     "null",
-                    "Process run options. NOTE: The command name will be overridden by the appropriate dotnet command"))
+                    "Process run options. NOTE: The name and arguments will be overridden by the appropriate dotnet command"))
                 .Append(new("CancellationToken", "cancellationToken", "default", "Cancellation token"))
                 .ToArray(),
             isStub
                 ? null
                 : bodyWriter =>
                 {
-                    switch (command)
-                    {
-                        case { Arguments.Count: 0, Options.Count: 0 }:
-                        {
-                            bodyWriter.WriteLine("processRunner.RunAsync((processRunOptions is null");
+                    var commandWords = command
+                        .Name
+                        .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(static word => $"\"{word}\"");
 
-                            using (bodyWriter.Indent)
-                            {
-                                bodyWriter.WriteLine("? new(\"dotnet\", string.Empty)");
+                    bodyWriter.WriteLine($"var args = new List<string> {{ {string.Join(", ", commandWords)} }};");
 
-                                bodyWriter.WriteLine(
-                                    ": processRunOptions with { Name = \"dotnet\" }), cancellationToken);");
-                            }
+                    foreach (var arg in command.Arguments)
+                        bodyWriter.WriteLine($"DotnetCliArgs.AddPositional(args, {CsharpWriter.ToPascalCase(arg.Name, true)});");
 
-                            return;
-                        }
+                    if (command.Options.Count > 0)
+                        bodyWriter.WriteLine("args.AddRange((options ?? new()).ToArguments());");
 
-                        case { Arguments.Count: 0, Options.Count: > 0 }:
-                        {
-                            bodyWriter.WriteLine("processRunner.RunAsync((processRunOptions is null");
+                    bodyWriter.WriteLine(string.Empty);
 
-                            using (bodyWriter.Indent)
-                            {
-                                bodyWriter.WriteLine("? new(\"dotnet\", (options ?? new()).ToString())");
-
-                                bodyWriter.WriteLine(
-                                    ": processRunOptions with { Name = \"dotnet\", Args = (options ?? new()).ToString() }), cancellationToken);");
-                            }
-
-                            return;
-                        }
-
-                        default:
-                        {
-                            bodyWriter.WriteLine("var argsString = string.Join(' ', new string[] {");
-
-                            using (bodyWriter.Indent)
-                            {
-                                bodyWriter.WriteLine($"\"{command.Name}\",");
-
-                                foreach (var arg in command.Arguments)
-                                    bodyWriter.WriteLine($"{FormatToPrint(
-                                        arg.ValueType,
-                                        command.Name,
-                                        CsharpWriter.ToPascalCase(arg.Name, true), false)},");
-
-                                if (command.Options.Count > 0)
-                                    bodyWriter.WriteLine("(options ?? new()).ToString(),");
-                            }
-
-                            bodyWriter.WriteLine("}.Where(x => x is { Length: > 0 }));");
-
-                            bodyWriter.WriteLine(string.Empty);
-
-                            bodyWriter.WriteLine("return processRunner.RunAsync((processRunOptions is null");
-
-                            using (bodyWriter.Indent)
-                            {
-                                bodyWriter.WriteLine("? new(\"dotnet\", argsString)");
-
-                                bodyWriter.WriteLine(
-                                    ": processRunOptions with { Name = \"dotnet\", Args = argsString }), cancellationToken);");
-                            }
-
-                            return;
-                        }
-                    }
+                    bodyWriter.WriteLine(
+                        "return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);");
                 },
-            command is { Arguments.Count: 0 },
+            false,
             isStub
                 ? command.Description
                 : null);
@@ -389,59 +364,6 @@ public static class DotnetCliGenerator
             .Replace("Microsoft.DotNet.Cli.Utils.VerbosityOptions", "VerbosityOptions")
             .Replace("NuGet.CommandLine.XPlat.Commands.VerbosityEnum", "VerbosityOptions")
             .Replace("NuGet.CommandLine.XPlat.Commands.Package.Update.Package", "string");
-    }
-
-    /// <summary>
-    ///     Formats a command-line argument or option value for printing in the generated `ToString()` method of options
-    ///     records.
-    /// </summary>
-    /// <param name="type">The .NET type of the argument/option value.</param>
-    /// <param name="argName">The original command-line argument name (e.g., "--configuration").</param>
-    /// <param name="propertyName">The C# property name corresponding to the argument/option.</param>
-    /// <param name="includeArgName">
-    ///     If <c>true</c>, the argument name is included in the formatted string (e.g., "--arg
-    ///     value").
-    /// </param>
-    /// <returns>A string representing the formatted argument/option for command-line usage.</returns>
-    private static string FormatToPrint(string type, string argName, string propertyName, bool includeArgName = true)
-    {
-        if (type.StartsWith("System.Nullable<", StringComparison.Ordinal))
-        {
-            var closingBracketIndex = type.LastIndexOf('>');
-            var innerType = type["System.Nullable<".Length..closingBracketIndex];
-            type = innerType;
-        }
-
-        if (type is "System.Boolean")
-            return $"\"{argName}\"";
-
-        if (FormatType(type) is "VerbosityOptions")
-            return $$"""
-                     $"{{argName}} {{{propertyName}}.Value.ToCliArg()}"
-                     """;
-
-        if (type.StartsWith("System.Collections.ObjectModel.ReadOnlyDictionary<") ||
-            type.StartsWith("System.Collections.Generic.IReadOnlyDictionary<"))
-            return $$"""
-                     $"{{argName}} {string.Join(" {{argName}} ", {{propertyName}}.Select(kv => $"{kv.Key}=\"{kv.Value}\""))}"
-                     """;
-
-        if (type.EndsWith("[]", StringComparison.Ordinal) ||
-            type.StartsWith("System.Collections.Generic.IEnumerable<") ||
-            type.StartsWith("System.Collections.Generic.IReadOnlyList<"))
-            return includeArgName
-                ? $$"""
-                    $"{{argName}} {string.Join(" {{argName}} ", {{propertyName}})}"
-                    """
-                : $$"""
-                    $"{string.Join(" ", {{propertyName}})}"
-                    """;
-
-        return includeArgName
-            ? $$"""
-                $"{{argName}} {{{propertyName}}}"
-                """
-            : propertyName;
     }
 
     /// <summary>

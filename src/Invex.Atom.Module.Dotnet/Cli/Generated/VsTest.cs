@@ -19,10 +19,13 @@ internal partial class DotnetCli
         DotnetVsTestOptions? options = null,
         ProcessRunOptions? processRunOptions = null,
         CancellationToken cancellationToken = default
-    ) =>
-        processRunner.RunAsync((processRunOptions is null
-            ? new("dotnet", (options ?? new()).ToString())
-            : processRunOptions with { Name = "dotnet", Args = (options ?? new()).ToString() }), cancellationToken);
+    )
+    {
+        var args = new List<string> { "vstest" };
+        args.AddRange((options ?? new()).ToArguments());
+
+        return processRunner.RunAsync(DotnetCliArgs.CreateRunOptions(args, processRunOptions), cancellationToken);
+    }
 
 }
 [PublicAPI]
@@ -46,22 +49,20 @@ public sealed record DotnetVsTestOptions
         init;
     }
 
-    public override string ToString()
+    /// <summary>
+    ///     Converts these options to individual command-line arguments, in schema order.
+    /// </summary>
+    /// <returns>
+    ///     The arguments. Each option name and each value is a separate element, so values need no quoting.
+    /// </returns>
+    public IReadOnlyList<string> ToArguments()
     {
-        return string.Join(' ',
-        new[]
-        {
-            Framework is not null
-                ? $"--Framework {Framework}"
-                : null,
-            Logger is not null
-                ? $"--logger {string.Join(" --logger ", Logger)}"
-                : null,
-            Platform is not null
-                ? $"--Platform {Platform}"
-                : null,
-        }
-        .Where(x => x is { Length: > 0 }));
+        var args = new List<string>();
+        DotnetCliArgs.AddOption(args, "--Framework", Framework);
+        DotnetCliArgs.AddOption(args, "--logger", Logger);
+        DotnetCliArgs.AddOption(args, "--Platform", Platform);
+
+        return args;
     }
 
 }
