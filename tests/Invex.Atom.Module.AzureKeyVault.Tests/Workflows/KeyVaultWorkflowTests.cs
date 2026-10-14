@@ -48,4 +48,22 @@ internal sealed class KeyVaultWorkflowTests
 
         await Verify(workflow);
     }
+
+    [Test]
+    public void KeyVaultBuild_RegistersInternalProviders()
+    {
+        // Arrange
+        using var host = CreateTestHost<GithubKeyVaultBuild>();
+
+        // Act & Assert
+        host
+            .Services
+            .GetServices<ISecretsProvider>()
+            .ShouldContain(provider => provider is AzureKeyVaultSecretsProvider);
+
+        host
+            .Services
+            .GetServices<IBuildOptionProvider>()
+            .ShouldContain(provider => provider is AzureKeyVaultOptionsProvider);
+    }
 }

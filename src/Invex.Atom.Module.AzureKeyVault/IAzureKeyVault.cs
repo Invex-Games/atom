@@ -140,8 +140,9 @@ public partial interface IAzureKeyVault : IBuildAccessor
     /// </summary>
     /// <param name="builder">The host application builder.</param>
     /// <remarks>
-    ///     This method registers <see cref="AzureKeyVaultSecretsProvider" /> as an <see cref="ISecretsProvider" /> and
-    ///     <see cref="AzureKeyVaultOptionsProvider" /> as an <see cref="IBuildOptionProvider" />.
+    ///     This method registers the Azure Key Vault <see cref="ISecretsProvider" /> and an
+    ///     <see cref="IBuildOptionProvider" /> that injects the vault connection parameters into generated workflows.
+    ///     Both implementations are internal to this module.
     /// </remarks>
     protected static partial void ConfigureBuilderFromIAzureKeyVault(IHostApplicationBuilder builder) =>
         builder
