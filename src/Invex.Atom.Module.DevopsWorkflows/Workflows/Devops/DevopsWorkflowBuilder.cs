@@ -886,7 +886,7 @@ internal sealed partial class DevopsWorkflowBuilder(
                     targetStepEnv[paramDefinition.ArgName] =
                         new DevopsMacroExpression(TextExpressions.Raw(paramDefinition.EnvVarName));
 
-            foreach (var injectedEnvVar in workflow.Options.OfType<WorkflowSecretsInjectionFromEnvironment>())
+            foreach (var injectedEnvVar in workflow.Options.OfType<WorkflowSecretInjectionFromEnvironment>())
                 if (buildDefinition.ParamDefinitions.GetValueOrDefault(injectedEnvVar.SecretName) is
                     { } paramDefinition)
                     targetStepEnv[paramDefinition.ArgName] =
@@ -896,7 +896,7 @@ internal sealed partial class DevopsWorkflowBuilder(
         foreach (var requiredSecret in requiredSecrets)
             if (WorkflowSecretInjection
                 .GetOptions(job.TargetStep.Options)
-                .Any(x => x.Value == requiredSecret.Param.Name))
+                .Any(x => x.SecretName == requiredSecret.Param.Name))
                 targetStepEnv[requiredSecret.Param.ArgName] =
                     new DevopsMacroExpression(TextExpressions.Raw(requiredSecret.Param.EnvVarName));
 
@@ -905,18 +905,18 @@ internal sealed partial class DevopsWorkflowBuilder(
         var environmentVariableInjections = WorkflowEnvironmentVariableInjection.GetOptions(job.TargetStep.Options);
 
         environmentInjections = environmentInjections
-            .Where(e => paramInjections.All(p => p.Name != e.Value))
+            .Where(e => paramInjections.All(p => p.ParamName != e.ParamName))
             .ToList();
 
         foreach (var environmentInjection in environmentInjections)
         {
-            if (!buildDefinition.ParamDefinitions.TryGetValue(environmentInjection.Value, out var paramDefinition))
+            if (!buildDefinition.ParamDefinitions.TryGetValue(environmentInjection.ParamName, out var paramDefinition))
             {
                 logger.LogWarning(
                     "Workflow {WorkflowName} command {CommandName} has an injection for parameter {ParamName} that does not exist",
                     workflow.Name,
                     job.TargetStep.Name,
-                    environmentInjection.Value);
+                    environmentInjection.ParamName);
 
                 continue;
             }
@@ -927,18 +927,18 @@ internal sealed partial class DevopsWorkflowBuilder(
 
         foreach (var paramInjection in paramInjections)
         {
-            if (!buildDefinition.ParamDefinitions.TryGetValue(paramInjection.Name, out var paramDefinition))
+            if (!buildDefinition.ParamDefinitions.TryGetValue(paramInjection.ParamName, out var paramDefinition))
             {
                 logger.LogWarning(
                     "Workflow {WorkflowName} command {CommandName} has an injection for parameter {ParamName} that is not consumed by the command",
                     workflow.Name,
                     job.TargetStep.Name,
-                    paramInjection.Name);
+                    paramInjection.ParamName);
 
                 continue;
             }
 
-            targetStepEnv[paramDefinition.ArgName] = paramInjection.InjectionExpression;
+            targetStepEnv[paramDefinition.ArgName] = paramInjection.Value;
         }
 
         foreach (var environmentVariableInjection in environmentVariableInjections)

@@ -1,19 +1,20 @@
 ﻿namespace Invex.Atom.Workflows.Options.Injections;
 
 /// <summary>
-///     Represents a workflow option that injects a secret value into the workflow execution context.
+///     A workflow option that injects a secret from the workflow platform's secret store into a target's step.
 /// </summary>
+/// <param name="SecretName">The name of the secret parameter to inject.</param>
 /// <remarks>
-///     This provides a secure mechanism for injecting sensitive data like API keys or passwords into workflows.
-///     Workflow platforms handle these secrets securely, masking them in logs and outputs.
+///     Typically created via <c>BuildOptions.Inject.Secret(name)</c>. Workflow platforms mask these secrets in logs
+///     and outputs.
 /// </remarks>
 /// <example>
 ///     <code>
-/// // Inject a GitHub token secret
-/// var githubTokenSecret = WorkflowSecretInjection.Create(nameof(IGithubHelper.GithubToken));
-/// // Add to workflow configuration
-/// var workflowDefinition = new WorkflowDefinition().WithAddedOptions(githubTokenSecret);
+/// new WorkflowTargetDefinition(nameof(PushToRelease))
+/// {
+///     Options = [BuildOptions.Inject.Secret(nameof(GithubToken))],
+/// };
 ///     </code>
 /// </example>
 [PublicAPI]
-public sealed record WorkflowSecretInjection(string Value) : IBuildOption;
+public sealed record WorkflowSecretInjection(string SecretName) : IBuildOption;

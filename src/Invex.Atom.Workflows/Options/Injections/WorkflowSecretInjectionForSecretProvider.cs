@@ -1,21 +1,20 @@
 ﻿namespace Invex.Atom.Workflows.Options.Injections;
 
 /// <summary>
-///     Represents a workflow option for injecting a secret value that is specifically intended for
-///     <see cref="ISecretsProvider" /> implementations.
+///     A workflow option that injects a secret needed by an <see cref="ISecretsProvider" /> itself.
 /// </summary>
+/// <param name="SecretName">The name of the secret parameter to inject.</param>
 /// <remarks>
-///     This option is similar to <see cref="WorkflowSecretInjection" /> but prevents <see cref="ISecretsProvider" />
-///     instances from attempting to look up the secret value themselves. This is crucial for scenarios where
-///     the secrets provider itself requires a secret (e.g., a vault access token) to function,
-///     avoiding circular dependencies or infinite loops during secret resolution.
+///     Typically created via <c>BuildOptions.Inject.SecretForSecretProvider(name)</c> and added to the workflow's
+///     options. It is injected into every step that requires secrets, so that a secrets provider that needs a
+///     secret to function (for example, a vault client secret) does not have to look it up itself.
 /// </remarks>
 /// <example>
 ///     <code>
-/// // Inject a secret for an Azure Key Vault provider
-/// var vaultClientSecret = WorkflowSecretsSecretInjection.Create("AZURE_CLIENT_SECRET");
-/// // Add to workflow configuration
-/// var workflowDefinition = new WorkflowDefinition().WithAddedOptions(vaultClientSecret);
+/// new WorkflowDefinition("Build")
+/// {
+///     Options = [BuildOptions.Inject.SecretForSecretProvider(nameof(AzureKeyVaultAppSecret))],
+/// };
 ///     </code>
 /// </example>
 [PublicAPI]
