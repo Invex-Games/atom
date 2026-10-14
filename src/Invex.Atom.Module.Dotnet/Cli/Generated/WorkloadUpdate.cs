@@ -208,7 +208,7 @@ public sealed record DotnetWorkloadUpdateOptions
                 ? $"--temp-dir {TempDir}"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
             Version is not null
                 ? $"--version {string.Join(" --version ", Version)}"

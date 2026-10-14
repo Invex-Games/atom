@@ -415,6 +415,11 @@ public static class DotnetCliGenerator
         if (type is "System.Boolean")
             return $"\"{argName}\"";
 
+        if (FormatType(type) is "VerbosityOptions")
+            return $$"""
+                     $"{{argName}} {{{propertyName}}.Value.ToCliArg()}"
+                     """;
+
         if (type.StartsWith("System.Collections.ObjectModel.ReadOnlyDictionary<") ||
             type.StartsWith("System.Collections.Generic.IReadOnlyDictionary<"))
             return $$"""

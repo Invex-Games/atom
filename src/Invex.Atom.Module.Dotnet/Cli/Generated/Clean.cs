@@ -294,7 +294,7 @@ public sealed record DotnetCleanOptions
                 ? $"--target {string.Join(" --target ", Target)}"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
         }
         .Where(x => x is { Length: > 0 }));

@@ -283,7 +283,7 @@ public sealed record DotnetToolInstallOptions
                 ? $"--tool-path {ToolPath}"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
             Version is not null
                 ? $"--version {Version}"

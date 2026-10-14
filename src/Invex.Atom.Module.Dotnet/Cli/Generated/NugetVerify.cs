@@ -73,7 +73,7 @@ public sealed record DotnetNugetVerifyOptions
                 ? $"--certificate-fingerprint {string.Join(" --certificate-fingerprint ", CertificateFingerprint)}"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
         }
         .Where(x => x is { Length: > 0 }));

@@ -445,7 +445,7 @@ public sealed record DotnetRestoreOptions
                 ? "--use-lock-file"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
         }
         .Where(x => x is { Length: > 0 }));

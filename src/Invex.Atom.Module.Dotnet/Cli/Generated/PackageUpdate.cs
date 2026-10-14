@@ -103,7 +103,7 @@ public sealed record DotnetPackageUpdateOptions
                 ? $"--project {Project}"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
             Vulnerable is true
                 ? "--vulnerable"

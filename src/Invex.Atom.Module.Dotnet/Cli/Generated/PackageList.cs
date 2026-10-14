@@ -232,7 +232,7 @@ public sealed record DotnetPackageListOptions
                 ? $"--source {string.Join(" --source ", Source)}"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
             Vulnerable is true
                 ? "--vulnerable"

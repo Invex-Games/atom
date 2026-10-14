@@ -202,7 +202,7 @@ public sealed record DotnetToolExecuteOptions
                 ? $"--source {string.Join(" --source ", Source)}"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
             Version is not null
                 ? $"--version {Version}"

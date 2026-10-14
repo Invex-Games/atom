@@ -555,7 +555,7 @@ public sealed record DotnetTestOptions
                 ? $"--test-adapter-path {string.Join(" --test-adapter-path ", TestAdapterPath)}"
                 : null,
             Verbosity is not null
-                ? $"--verbosity {Verbosity}"
+                ? $"--verbosity {Verbosity.Value.ToCliArg()}"
                 : null,
         }
         .Where(x => x is { Length: > 0 }));
