@@ -586,7 +586,7 @@ internal sealed class GitHubWorkflowFileWriter(
             with.Add("dotnet-version", step.DotnetVersion);
 
             if (step.Quality is not null)
-                with.Add("quality", step.Quality.ToString()!.ToLowerInvariant());
+                with.Add("dotnet-quality", step.Quality.ToString()!.ToLowerInvariant());
         }
 
         return new()
