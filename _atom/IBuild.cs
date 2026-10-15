@@ -49,6 +49,8 @@ internal interface IBuild : IWorkflowBuildDefinition,
         BuildOptions.GitVersion.ProvideBuildId,
         BuildOptions.GitVersion.ProvideBuildVersion,
         BuildOptions.Steps.SetupDotnet.Dotnet100X(),
+        // .NET 11 SDK (RC2 until GA). The .NET 10 step above still provides the runtime for net10.0 tests.
+        new SetupDotnetStep("11.0.100-rc.2.26504.105"),
     ];
 
     IReadOnlyList<WorkflowDefinition> IWorkflowBuildDefinition.Workflows =>

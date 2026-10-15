@@ -32,6 +32,11 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Setup .NET 11.0.100-rc.2.26504.105
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 11.0.100-rc.2.26504.105
+
       - name: SetupBuildInfo
         id: SetupBuildInfo
         run: dotnet run --project _atom/_atom.csproj -- SetupBuildInfo --skip --headless
@@ -49,6 +54,11 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
+
+      - name: Setup .NET 11.0.100-rc.2.26504.105
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 11.0.100-rc.2.26504.105
 
       - name: PackProjects
         id: PackProjects
@@ -76,6 +86,11 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
+
+      - name: Setup .NET 11.0.100-rc.2.26504.105
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 11.0.100-rc.2.26504.105
 
       - name: PackTool
         id: PackTool
@@ -108,6 +123,11 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Setup .NET 11.0.100-rc.2.26504.105
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 11.0.100-rc.2.26504.105
+
       - name: TestProjects
         id: TestProjects
         run: dotnet run --project _atom/_atom.csproj -- TestProjects --skip --headless
@@ -129,6 +149,11 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
+
+      - name: Setup .NET 11.0.100-rc.2.26504.105
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 11.0.100-rc.2.26504.105
 
       - name: BuildDocs
         id: BuildDocs
@@ -155,6 +180,11 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Setup .NET 11.0.100-rc.2.26504.105
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 11.0.100-rc.2.26504.105
+
       - name: CheckPrForBreakingChanges
         id: CheckPrForBreakingChanges
         run: dotnet run --project _atom/_atom.csproj -- CheckPrForBreakingChanges --skip --headless
@@ -176,6 +206,11 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
+
+      - name: Setup .NET 11.0.100-rc.2.26504.105
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 11.0.100-rc.2.26504.105
 
       - name: WaitForCopilotReview
         id: WaitForCopilotReview

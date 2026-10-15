@@ -17,10 +17,10 @@ for .NET. Keep changes focused; `README.md` and `docs/` describe consumer-facing
 | `samples/` | Small consumer examples |
 | `docs/`, `api/` | DocFX documentation source and generated API content |
 
-The solution is `Invex.Atom.slnx`. The repository currently requires the .NET 10 SDK; libraries,
+The solution is `Invex.Atom.slnx`. The repository currently requires the .NET 11 SDK; libraries,
 tests, and the build project all target `net10.0`.
-`global.json` pins SDK `10.0.0` with `rollForward: latestMajor` and `allowPrerelease: false`, so any installed stable
-.NET 10 or later SDK is used; preview SDKs are not.
+`global.json` pins SDK `11.0.100-rc.2.26504.105` with `rollForward: latestFeature` and `allowPrerelease: true`, so the
+.NET 11 release candidate or any later .NET 11 SDK is used. CI installs the .NET 10 SDK as well, for the `net10.0` runtime.
 
 ## Build, test, and cleanup
 

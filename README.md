@@ -224,7 +224,7 @@ Full documentation: [https://invex-games.github.io/atom/](https://invex-games.gi
 
 ## Development
 
-The solution is `Invex.Atom.slnx` and requires the .NET 10 SDK:
+The solution is `Invex.Atom.slnx` and requires the .NET 11 SDK:
 
 ```shell
 dotnet build Invex.Atom.slnx
