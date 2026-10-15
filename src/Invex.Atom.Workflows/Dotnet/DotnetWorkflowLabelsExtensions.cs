@@ -16,6 +16,9 @@ public static class DotnetWorkflowLabelsExtensions
         /// <summary>The <c>net10.0</c> target framework.</summary>
         public readonly string Net_10_0 = "net10.0";
 
+        /// <summary>The <c>net11.0</c> target framework.</summary>
+        public readonly string Net_11_0 = "net11.0";
+
         /// <summary>The <c>net471</c> target framework.</summary>
         public readonly string Net_4_7_1 = "net471";
 
