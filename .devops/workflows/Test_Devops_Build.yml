@@ -27,6 +27,11 @@ jobs:
         inputs:
           version: 10.0.x
 
+      - task: UseDotNet@2
+        displayName: Setup .NET 11.0.100-rc.2.26504.105
+        inputs:
+          version: 11.0.100-rc.2.26504.105
+
       - script: dotnet run --project _atom/_atom.csproj SetupBuildInfo --skip --headless
         displayName: SetupBuildInfo
         name: SetupBuildInfo
@@ -47,6 +52,11 @@ jobs:
         displayName: Setup .NET 10.0.x
         inputs:
           version: 10.0.x
+
+      - task: UseDotNet@2
+        displayName: Setup .NET 11.0.100-rc.2.26504.105
+        inputs:
+          version: 11.0.100-rc.2.26504.105
 
       - script: dotnet run --project _atom/_atom.csproj PackProjects --skip --headless
         displayName: PackProjects
@@ -125,6 +135,11 @@ jobs:
         inputs:
           version: 10.0.x
 
+      - task: UseDotNet@2
+        displayName: Setup .NET 11.0.100-rc.2.26504.105
+        inputs:
+          version: 11.0.100-rc.2.26504.105
+
       - script: dotnet run --project _atom/_atom.csproj PackTool --skip --headless
         displayName: PackTool
         name: PackTool
@@ -164,6 +179,11 @@ jobs:
         displayName: Setup .NET 10.0.x
         inputs:
           version: 10.0.x
+
+      - task: UseDotNet@2
+        displayName: Setup .NET 11.0.100-rc.2.26504.105
+        inputs:
+          version: 11.0.100-rc.2.26504.105
 
       - script: dotnet run --project _atom/_atom.csproj TestProjects --skip --headless
         displayName: TestProjects
@@ -252,6 +272,11 @@ jobs:
         displayName: Setup .NET 10.0.x
         inputs:
           version: 10.0.x
+
+      - task: UseDotNet@2
+        displayName: Setup .NET 11.0.100-rc.2.26504.105
+        inputs:
+          version: 11.0.100-rc.2.26504.105
 
       - task: DownloadPipelineArtifact@2
         displayName: Invex.Atom.Build
