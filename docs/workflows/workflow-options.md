@@ -44,7 +44,18 @@ Add pre-job steps like installing a specific .NET SDK:
 BuildOptions.Steps.SetupDotnet.Dotnet80X()
 BuildOptions.Steps.SetupDotnet.Dotnet90X()
 BuildOptions.Steps.SetupDotnet.Dotnet100X()
+BuildOptions.Steps.SetupDotnet.Dotnet110X()
 ```
+
+For a preview or release-candidate SDK, pass an exact version, or a version pattern with a quality:
+
+```csharp
+BuildOptions.Steps.SetupDotnet.From("11.0.100-rc.2.26504.105")
+BuildOptions.Steps.SetupDotnet.From("11.0.x", SetupDotnetStep.DotnetQuality.Preview)
+```
+
+Each setup step installs one SDK, so add one per SDK the job needs. For example, a .NET 11 SDK step alone doesn't
+provide the .NET 10 runtime that `net10.0` tests run on.
 
 ### Checkout Configuration
 
