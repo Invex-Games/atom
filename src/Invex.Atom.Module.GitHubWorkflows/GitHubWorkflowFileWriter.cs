@@ -551,7 +551,7 @@ internal sealed class GitHubWorkflowFileWriter(
         return new()
         {
             Name = step.DotnetVersion is not null
-                ? $"Setup .NET {step.DotnetVersion}"
+                ? (Template)$"Setup .NET {step.DotnetVersion}"
                 : "Setup .NET",
             Uses = "actions/setup-dotnet@v5",
             With = with.Count > 0

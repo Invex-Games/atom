@@ -64,7 +64,7 @@ Run a target only when a condition is met:
 
 ```csharp
 BuildOptions.Target.RunIfWorkflowCondition(
-    TextExpressions.GitHub.GitHubActor.EqualToString("dependabot[bot]"))
+    Tex.GitHub.Actor.Eq("dependabot[bot]"))
 ```
 
 ### GitHub Token Permissions

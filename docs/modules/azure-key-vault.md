@@ -63,7 +63,7 @@ The vault is accessed with a Microsoft Entra token credential, chosen in this or
        Options =
        [
            BuildOptions.Inject.EnvironmentVariable("SYSTEM_ACCESSTOKEN",
-               new DevopsMacroExpression(TextExpressions.Raw("System.AccessToken"))),
+               Tex.Variable("System.AccessToken")),
        ],
    }
    ```

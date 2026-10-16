@@ -736,8 +736,8 @@ internal sealed partial class DevOpsWorkflowBuilder(
         {
             TaskName = "UseDotNet@2",
             DisplayName = step.DotnetVersion is not null
-                ? ($"Setup .NET {step.DotnetVersion}")
-                : ("Setup .NET"),
+                ? (Template)$"Setup .NET {step.DotnetVersion}"
+                : "Setup .NET",
             Inputs = inputs.Count > 0
                 ? inputs
                 : null,
