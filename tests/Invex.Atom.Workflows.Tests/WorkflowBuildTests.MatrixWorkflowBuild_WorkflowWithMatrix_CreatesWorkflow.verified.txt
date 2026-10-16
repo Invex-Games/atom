@@ -17,10 +17,22 @@
                 Name: os,
                 Values: [
                   {
-                    Value: ubuntu-latest
+                    Parts: [
+                      {
+                        Text: ubuntu-latest
+                      }
+                    ],
+                    Expressions: [],
+                    IsSingleExpression: false
                   },
                   {
-                    Value: windows-latest
+                    Parts: [
+                      {
+                        Text: windows-latest
+                      }
+                    ],
+                    Expressions: [],
+                    IsSingleExpression: false
                   }
                 ]
               }

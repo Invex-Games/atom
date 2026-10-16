@@ -7,4 +7,4 @@ namespace Invex.Atom.Module.DevOpsWorkflows.Options;
 ///     The Azure Pipelines lock behavior. Supported values are <c>runLatest</c> and <c>sequential</c>.
 /// </param>
 [PublicAPI]
-public sealed record DevOpsConcurrencyOption(TextExpression LockBehavior) : IBuildOption;
+public sealed record DevOpsConcurrencyOption(Template LockBehavior) : IBuildOption;
