@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class DevOps | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class DevOps | Atom ">
+      
+      <meta name="description" content="Provides utility methods and properties for interacting with Azure DevOps Pipelines.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps">
+
+
+
+  <h1 id="Invex_Atom_Module_DevOpsWorkflows_DevOps" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps" class="text-break">
+Class DevOps  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Invex</span>.<span class="xref">Atom</span>.<span class="xref">Module</span>.<a class="xref" href="Invex.Atom.Module.DevOpsWorkflows.html">DevOpsWorkflows</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Module.DevOpsWorkflows.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Provides utility methods and properties for interacting with Azure DevOps Pipelines.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class DevOps</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">DevOps</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+  <h2 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>This static class offers convenient access to Azure DevOps environment variables,
+and defines standard pipeline directories for artifact staging and binary output.</p>
+</div>
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_IsDevOpsPipelines_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.IsDevOpsPipelines*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_IsDevOpsPipelines" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.IsDevOpsPipelines">
+  IsDevOpsPipelines
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether the current execution environment is Azure DevOps Pipelines.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool IsDevOpsPipelines { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_PipelineArtifactDirectory_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.PipelineArtifactDirectory*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_PipelineArtifactDirectory" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.PipelineArtifactDirectory">
+  PipelineArtifactDirectory
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the default pipeline artifact directory path for Azure DevOps Pipelines.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string PipelineArtifactDirectory { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_DevOpsWorkflows_DevOps_PipelineArtifactDirectory_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This path typically corresponds to <code>$(Build.ArtifactStagingDirectory)</code> in Azure DevOps,
+used for staging artifacts before publishing them.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_PipelinePublishDirectory_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.PipelinePublishDirectory*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_PipelinePublishDirectory" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.PipelinePublishDirectory">
+  PipelinePublishDirectory
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the default pipeline publish directory path for Azure DevOps Pipelines.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string PipelinePublishDirectory { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_DevOpsWorkflows_DevOps_PipelinePublishDirectory_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This path typically corresponds to <code>$(Build.BinariesDirectory)</code> in Azure DevOps,
+where compiled binaries and other build outputs are placed.</p>
+</div>
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_WorkflowType_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.WorkflowType*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_WorkflowType" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.WorkflowType">
+  WorkflowType
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets an instance of <a class="xref" href="Invex.Atom.Module.DevOpsWorkflows.DevOpsWorkflowType.html">DevOpsWorkflowType</a> for defining Azure DevOps-specific workflow types.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static DevOpsWorkflowType WorkflowType { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Invex.Atom.Module.DevOpsWorkflows.DevOpsWorkflowType.html">DevOpsWorkflowType</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom · MIT License · Invex Games
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

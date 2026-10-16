@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Workflow Definitions | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Workflow Definitions | Atom ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/docs/workflows/workflow-definitions.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="workflow-definitions">Workflow Definitions</h1>
+
+<p>A <code>WorkflowDefinition</code> describes a single CI/CD pipeline — its name, triggers, targets, options, and which platforms it
+applies to. You need one for every pipeline you want Atom to generate from a workflow build.</p>
+<h2 id="basic-structure">Basic Structure</h2>
+<pre><code class="lang-csharp">public override IReadOnlyList&lt;WorkflowDefinition&gt; Workflows =&gt;
+[
+    new(&quot;CI&quot;)
+    {
+        Triggers = [WorkflowTriggers.PushToMain, WorkflowTriggers.PullIntoMain],
+        Targets =
+        [
+            new(nameof(SetupBuildInfo)),
+            new(nameof(Compile)),
+            new(nameof(Test)),
+        ],
+        Types = [WorkflowTypes.GitHub.Action],
+    },
+];
+</code></pre>
+<h2 id="example-generating-a-github-actions-workflow">Example: Generating a GitHub Actions Workflow</h2>
+<p>This walkthrough turns the <code>HelloWorld</code> / <code>Goodbye</code> build from <a href="../core-concepts/targets.html#example">Targets</a> into a
+GitHub Actions workflow.</p>
+<ol>
+<li><p>Reference the GitHub Workflows module in <code>_atom.csproj</code> (it brings in <code>Invex.Atom.Build</code> and <code>Invex.Atom.Workflows</code>
+transitively):</p>
+<pre><code class="lang-xml">&lt;Project Sdk=&quot;Microsoft.NET.Sdk.Worker&quot;&gt;
+
+  &lt;PropertyGroup&gt;
+    &lt;TargetFramework&gt;net10.0&lt;/TargetFramework&gt;
+    &lt;RootNamespace&gt;Atom&lt;/RootNamespace&gt;
+  &lt;/PropertyGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;PackageReference Include=&quot;Invex.Atom.Module.GitHubWorkflows&quot; Version=&quot;3.*&quot; /&gt;
+  &lt;/ItemGroup&gt;
+
+&lt;/Project&gt;
+</code></pre>
+</li>
+<li><p>Extend <code>IWorkflowBuildDefinition</code> and <code>IGitHubWorkflows</code>, and declare the workflow. The parameter is injected from a
+GitHub expression and the secret from the repository's secrets:</p>
+<pre><code class="lang-csharp">using Invex.Atom.Build.BuildOptions;
+using Invex.Atom.Build.Definition;
+using Invex.Atom.Build.Hosting;
+using Invex.Atom.Build.Params;
+using Invex.Atom.Module.GitHubWorkflows.Extensions;
+using Invex.Atom.Module.GitHubWorkflows.Helpers;
+using Invex.Atom.Workflows;
+using Invex.Atom.Workflows.Definition;
+using Invex.Atom.Workflows.Definition.Triggers;
+using Invex.Atom.Workflows.Options;
+using Invex.StructuredText.Expressions;
+
+namespace Atom;
+
+[BuildDefinition]
+[GenerateEntryPoint]
+internal interface IBuild : IWorkflowBuildDefinition, IGitHubWorkflows
+{
+    [ParamDefinition(&quot;my-name&quot;, &quot;My name&quot;)]
+    string? MyName =&gt; GetParam(() =&gt; MyName);
+
+    [SecretDefinition(&quot;my-secret&quot;, &quot;My secret&quot;)]
+    string? MySecret =&gt; GetParam(() =&gt; MySecret);
+
+    Target HelloWorld =&gt;
+        t =&gt; t
+            .DescribedAs(&quot;Prints a hello world message to the console&quot;)
+            .RequiresParam(nameof(MyName))
+            .RequiresParam(nameof(MySecret))
+            .Executes(() =&gt;
+                Logger.LogInformation(&quot;Hello, World! I am {MyName} and my secret is {MySecret}.&quot;, MyName, MySecret));
+
+    Target Goodbye =&gt;
+        t =&gt; t
+            .DescribedAs(&quot;Prints a goodbye message to the console&quot;)
+            .DependsOn(nameof(HelloWorld))
+            .Executes(() =&gt; Logger.LogInformation(&quot;Goodbye!&quot;));
+
+    IReadOnlyList&lt;WorkflowDefinition&gt; IWorkflowBuildDefinition.Workflows =&gt;
+    [
+        new(&quot;Hello&quot;)
+        {
+            Triggers = [WorkflowTriggers.PushToMain],
+            Targets =
+            [
+                new(nameof(HelloWorld))
+                {
+                    Options =
+                    [
+                        BuildOptions.Inject.Param(nameof(MyName), TextExpressions.GitHub.GitHubRepositoryOwner),
+                        BuildOptions.Inject.Secret(nameof(MySecret)),
+                    ],
+                },
+                new(nameof(Goodbye)),
+            ],
+            Types = [WorkflowTypes.GitHub.Action],
+        },
+    ];
+}
+</code></pre>
+</li>
+<li><p>Run the <a href="../built-in-targets/generate-workflow-files.html"><code>Gen</code></a> target with <code>atom gen</code>:</p>
+<pre><code class="lang-text">26-06-06 +10:00  Invex.Atom.Module.GitHubWorkflows.GitHubWorkflowFileWriter:
+01:38:57.388 INF Writing new workflow file:
+                 L:\Repos\Invex-Games\atom\.github\workflows\Hello.yml
+
+26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
+01:38:57.472 INF Executing build
+
+Gen
+
+Generates workflow files
+
+
+Build Summary
+
+  Gen    │ Succeeded │ &lt;0.01s
+</code></pre>
+<p>The generated <code>.github/workflows/Hello.yml</code> runs each target as its own job, in dependency order:</p>
+<pre><code class="lang-yaml">name: Hello
+
+on:
+  push:
+    branches: [ main ]
+
+permissions: { }
+
+jobs:
+
+  HelloWorld:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: HelloWorld
+        id: HelloWorld
+        run: dotnet run --project _atom/_atom.csproj -- HelloWorld --skip --headless
+        env:
+          my-secret: ${{ secrets.MY_SECRET }}
+          my-name: ${{ github.repository_owner }}
+
+  Goodbye:
+    needs: [ HelloWorld ]
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Goodbye
+        id: Goodbye
+        run: dotnet run --project _atom/_atom.csproj -- Goodbye --skip --headless
+</code></pre>
+</li>
+</ol>
+<h2 id="workflowdefinition-properties"><code>WorkflowDefinition</code> Properties</h2>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Name</code></td>
+<td><code>string</code></td>
+<td>The workflow name (used as the file name).</td>
+</tr>
+<tr>
+<td><code>Triggers</code></td>
+<td><code>IReadOnlyList&lt;IWorkflowTrigger&gt;</code></td>
+<td>Events that start the workflow.</td>
+</tr>
+<tr>
+<td><code>Targets</code></td>
+<td><code>IReadOnlyList&lt;WorkflowTargetDefinition&gt;</code></td>
+<td>The targets to include in the workflow.</td>
+</tr>
+<tr>
+<td><code>Options</code></td>
+<td><code>IReadOnlyList&lt;IBuildOption&gt;</code></td>
+<td>Workflow-level options applied to all targets.</td>
+</tr>
+<tr>
+<td><code>Types</code></td>
+<td><code>IReadOnlyList&lt;IWorkflowType&gt;</code></td>
+<td>Which platforms to generate for.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="workflowtargetdefinition"><code>WorkflowTargetDefinition</code></h2>
+<p>Each entry in <code>Targets</code> is a <code>WorkflowTargetDefinition</code>:</p>
+<pre><code class="lang-csharp">new(nameof(Test))
+{
+    MatrixDimensions =
+    [
+        new(nameof(IJobRunsOn.JobRunsOn))
+        {
+            Values = [&quot;ubuntu-latest&quot;, &quot;windows-latest&quot;],
+        },
+    ],
+    Options = [BuildOptions.GitHub.RunsOn.SetByMatrix],
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Name</code></td>
+<td>The target name (must match a target in the build definition).</td>
+</tr>
+<tr>
+<td><code>MatrixDimensions</code></td>
+<td>Run the target across multiple configurations (OS, framework, etc).</td>
+</tr>
+<tr>
+<td><code>Options</code></td>
+<td>Per-target options (suppress artifacts, inject params, etc).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="matrix-dimensions">Matrix Dimensions</h3>
+<p>A <code>MatrixDimension</code> defines a named axis with multiple values. The CI platform runs the target once per combination:</p>
+<pre><code class="lang-csharp">new MatrixDimension(nameof(IJobRunsOn.JobRunsOn))
+{
+    Values = [&quot;ubuntu-latest&quot;, &quot;windows-latest&quot;, &quot;macos-latest&quot;],
+}
+</code></pre>
+<p>Multiple dimensions create a full cross product.</p>
+<h2 id="workflow-types">Workflow Types</h2>
+<p>The <code>Types</code> list determines which platforms receive generated files:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Platform</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WorkflowTypes.GitHub.Action</code></td>
+<td>GitHub Actions (<code>.github/workflows/</code>)</td>
+</tr>
+<tr>
+<td><code>WorkflowTypes.DevOps.Pipeline</code></td>
+<td>Azure DevOps Pipelines</td>
+</tr>
+</tbody>
+</table>
+<p>You can target multiple platforms from the same workflow definition.</p>
+<h2 id="workflow-level-options">Workflow-Level Options</h2>
+<p>Options applied at the workflow level affect all targets in the workflow:</p>
+<pre><code class="lang-csharp">new(&quot;Build&quot;)
+{
+    Options =
+    [
+        BuildOptions.Inject.Param(nameof(NugetDryRun), true),
+        BuildOptions.DevOps.VariableGroup.Atom,
+    ],
+    // ...
+}
+</code></pre>
+<h2 id="real-world-example">Real-World Example</h2>
+<p>From the Atom project's own build:</p>
+<pre><code class="lang-csharp">new(&quot;Validate&quot;)
+{
+    Triggers = [WorkflowTriggers.Manual, WorkflowTriggers.PullIntoMain],
+    Targets =
+    [
+        new(nameof(ISetupBuildInfo.SetupBuildInfo)),
+        new(nameof(IBuildTargets.PackProjects))
+        {
+            Options = [BuildOptions.Target.SuppressArtifactPublishing],
+        },
+        new(nameof(ITestTargets.TestProjects))
+        {
+            MatrixDimensions =
+            [
+                new(nameof(IJobRunsOn.JobRunsOn))
+                {
+                    Values = [&quot;windows-latest&quot;, &quot;ubuntu-latest&quot;, &quot;macos-latest&quot;],
+                },
+                new(nameof(ITestTargets.TestFramework))
+                {
+                    Values = [&quot;net8.0&quot;, &quot;net9.0&quot;, &quot;net10.0&quot;],
+                },
+            ],
+            Options =
+            [
+                BuildOptions.Target.SuppressArtifactPublishing,
+                BuildOptions.GitHub.RunsOn.SetByMatrix,
+            ],
+        },
+    ],
+    Types = [WorkflowTypes.GitHub.Action],
+}
+</code></pre>
+<h2 id="next-steps">Next steps</h2>
+<ul>
+<li><a href="triggers.html">Triggers</a>: when a workflow starts.</li>
+<li><a href="workflow-options.html">Workflow Options</a>: per-workflow and per-target options.</li>
+<li><a href="../built-in-targets/generate-workflow-files.html">Gen</a>: the target that writes the files.</li>
+<li><a class="xref" href="../../api/Invex.Atom.Workflows.Definition.WorkflowDefinition.html">WorkflowDefinition</a></li>
+<li><a class="xref" href="../../api/Invex.Atom.Workflows.Definition.WorkflowTargetDefinition.html">WorkflowTargetDefinition</a></li>
+<li><a class="xref" href="../../api/Invex.Atom.Workflows.Definition.MatrixDimension.html">MatrixDimension</a></li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/docs/workflows/workflow-definitions.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom · MIT License · Invex Games
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
