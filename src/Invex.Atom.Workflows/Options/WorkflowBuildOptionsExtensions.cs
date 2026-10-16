@@ -1,4 +1,4 @@
-namespace Invex.Atom.Workflows.Options;
+﻿namespace Invex.Atom.Workflows.Options;
 
 /// <summary>
 ///     Extends the <see cref="BuildOptions" /> anchor class with fluent factories for workflow build options.
@@ -39,7 +39,7 @@ public static class WorkflowBuildOptionsExtensions
         /// <param name="paramName">The name of the parameter to inject.</param>
         /// <param name="injectionExpression">The expression that produces the parameter value in the workflow.</param>
         /// <returns>A <see cref="WorkflowParamInjection" /> option.</returns>
-        public WorkflowParamInjection Param(string paramName, TextExpression injectionExpression) =>
+        public WorkflowParamInjection Param(string paramName, Template injectionExpression) =>
             new(paramName, injectionExpression);
 
         /// <summary>
@@ -48,7 +48,7 @@ public static class WorkflowBuildOptionsExtensions
         /// <param name="paramDefinition">The definition of the parameter to inject.</param>
         /// <param name="injectionExpression">The expression that produces the parameter value in the workflow.</param>
         /// <returns>A <see cref="WorkflowParamInjection" /> option.</returns>
-        public WorkflowParamInjection Param(ParamDefinition paramDefinition, TextExpression injectionExpression) =>
+        public WorkflowParamInjection Param(ParamDefinition paramDefinition, Template injectionExpression) =>
             new(paramDefinition, injectionExpression);
 
         /// <summary>
@@ -65,7 +65,7 @@ public static class WorkflowBuildOptionsExtensions
         /// <param name="name">The name of the environment variable.</param>
         /// <param name="value">The expression that produces the variable value in the workflow.</param>
         /// <returns>A <see cref="WorkflowEnvironmentVariableInjection" /> option.</returns>
-        public WorkflowEnvironmentVariableInjection EnvironmentVariable(string name, TextExpression value) =>
+        public WorkflowEnvironmentVariableInjection EnvironmentVariable(string name, Template value) =>
             new(name, value);
 
         /// <summary>
@@ -152,7 +152,7 @@ public static class WorkflowBuildOptionsExtensions
         /// </summary>
         /// <param name="environmentName">The expression that resolves to the environment name.</param>
         /// <returns>A <see cref="DeployToEnvironment" /> option.</returns>
-        public DeployToEnvironment ToEnvironment(TextExpression environmentName) =>
+        public DeployToEnvironment ToEnvironment(Template environmentName) =>
             new(environmentName);
     }
 
@@ -189,7 +189,7 @@ public static class WorkflowBuildOptionsExtensions
         /// </summary>
         /// <param name="condition">The condition expression to evaluate in the workflow.</param>
         /// <returns>A <see cref="TargetCondition" /> option.</returns>
-        public TargetCondition RunIfWorkflowCondition(TextExpression condition) =>
+        public TargetCondition RunIfWorkflowCondition(BoolExpr condition) =>
             new(condition);
     }
 
@@ -267,7 +267,7 @@ public static class WorkflowBuildOptionsExtensions
             /// <param name="lockFile">An optional path to a lock file used as the cache key.</param>
             /// <returns>A <see cref="SetupDotnetStep" /> option.</returns>
             public SetupDotnetStep From(
-                TextExpression? dotnetVersion = null,
+                Template? dotnetVersion = null,
                 SetupDotnetStep.DotnetQuality? quality = null,
                 bool cache = false,
                 string? lockFile = null) =>

@@ -18,5 +18,5 @@ public sealed record MatrixDimension(string Name)
     /// <remarks>
     ///     These values represent the different options for this dimension (e.g., "windows-latest", "ubuntu-latest").
     /// </remarks>
-    public TextExpressionCollection Values { get; init; } = [];
+    public IReadOnlyList<Template> Values { get; init; } = [];
 }

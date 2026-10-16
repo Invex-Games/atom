@@ -62,7 +62,7 @@ public partial class DevOpsKeyVaultBuild : WorkflowBuildDefinition, IDevOpsWorkf
                     Options =
                     [
                         BuildOptions.Inject.EnvironmentVariable("SYSTEM_ACCESSTOKEN",
-                            new DevopsMacroExpression(TextExpressions.Raw("System.AccessToken"))),
+                            Tex.Variable("System.AccessToken")),
                     ],
                 },
             ],

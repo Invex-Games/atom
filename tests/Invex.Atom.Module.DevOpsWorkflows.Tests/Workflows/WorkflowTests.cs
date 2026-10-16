@@ -220,6 +220,25 @@ internal sealed class WorkflowTests
     }
 
     [Test]
+    public async Task SetupDotnetBuild_WithVariableVersion_GeneratesWorkflow()
+    {
+        // Arrange
+        var fileSystem = FileSystemUtils.DefaultMockFileSystem;
+
+        var build = CreateTestHost<SetupDotnetBuild>(fileSystem: fileSystem,
+            commandLineArgs: new(true, [new CommandArg(nameof(IGen.Gen))]));
+
+        // Act
+        await build.RunAsync();
+
+        // Assert
+        var workflow = await fileSystem.File.ReadAllTextAsync($"{WorkflowDir}setup-dotnet-variable.yml");
+
+        await Verify(workflow);
+        await TestContext.Out.WriteAsync(workflow);
+    }
+
+    [Test]
     public async Task EnvironmentBuild_GeneratesWorkflow()
     {
         // Arrange
