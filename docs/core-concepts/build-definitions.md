@@ -114,6 +114,20 @@ static partial void OnConfigureHostBuilder(IHostApplicationBuilder builder) =>
 They run after the hooks of the module interfaces the build implements, without constructing the build definition.
 See [Hosting](hosting.md#onconfigurehostbuilder--onconfigurehost) for details, including interface-based builds.
 
+## Caching per-build values
+
+<xref:Invex.Atom.Workflows.BuildCache`1> is a thread-safe cache keyed by an <xref:Invex.Atom.Build.IBuildAccessor>
+(typically the build definition), for values that are expensive to compute and should be computed once per build:
+
+```csharp
+private static readonly BuildCache<string> ChangelogCache = new();
+
+string Changelog => ChangelogCache.GetOrAdd(this, _ => File.ReadAllText("CHANGELOG.md"));
+```
+
+Keys use reference equality, and entries live as long as the cache instance. Use `Set`, `TryGetValue`, `Remove` and
+`Clear` for explicit control.
+
 ## Next steps
 
 - [Targets](targets.md): define the units of work in a build.
