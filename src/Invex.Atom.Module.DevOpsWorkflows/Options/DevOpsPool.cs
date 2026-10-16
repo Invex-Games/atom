@@ -3,9 +3,9 @@
 [PublicAPI]
 public sealed record DevOpsPool : IBuildOption
 {
-    public TextExpressionCollection Demands { get; init; } = [];
+    public IReadOnlyList<Template> Demands { get; init; } = [];
 
-    public TextExpression? Name { get; init; }
+    public Template? Name { get; init; }
 
-    public TextExpression? HostedImage { get; init; }
+    public Template? HostedImage { get; init; }
 }

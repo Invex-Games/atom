@@ -1,4 +1,4 @@
-namespace Invex.Atom.Module.DevOpsWorkflows.Extensions;
+﻿namespace Invex.Atom.Module.DevOpsWorkflows.Extensions;
 
 [PublicAPI]
 [SuppressMessage("Performance", "CA1822:Mark members as static")]
@@ -77,7 +77,7 @@ public static class DevOpsBuildOptionsExtensions
                 HostedImage = "$(job-runs-on)",
             };
 
-        public DevOpsPool FromName(TextExpression name) =>
+        public DevOpsPool FromName(Template name) =>
             new()
             {
                 Name = name,
@@ -89,7 +89,7 @@ public static class DevOpsBuildOptionsExtensions
                 Name = name,
             };
 
-        public DevOpsPool FromHostedImage(TextExpression hostedImageName) =>
+        public DevOpsPool FromHostedImage(Template hostedImageName) =>
             new()
             {
                 HostedImage = hostedImageName,
@@ -101,7 +101,7 @@ public static class DevOpsBuildOptionsExtensions
                 HostedImage = hostedImageName,
             };
 
-        public DevOpsPool FromDemands(params TextExpression[] demands) =>
+        public DevOpsPool FromDemands(params Template[] demands) =>
             new()
             {
                 Demands = demands,
@@ -111,14 +111,14 @@ public static class DevOpsBuildOptionsExtensions
             new()
             {
                 Demands = demands
-                    .Select(TextExpressions.Raw)
+                    .Select(x => (Template)x)
                     .ToArray(),
             };
 
         public DevOpsPool From(
-            TextExpression? name = null,
-            TextExpression? hostedImageName = null,
-            IEnumerable<TextExpression>? demands = null) =>
+            Template? name = null,
+            Template? hostedImageName = null,
+            IEnumerable<Template>? demands = null) =>
             new()
             {
                 Name = name,
@@ -134,12 +134,12 @@ public static class DevOpsBuildOptionsExtensions
             {
                 Name = name is null
                     ? null
-                    : TextExpressions.Raw(name),
+                    : (Template)name,
                 HostedImage = hostedImageName is null
                     ? null
-                    : TextExpressions.Raw(hostedImageName),
+                    : (Template)hostedImageName,
                 Demands = demands
-                    ?.Select(TextExpressions.Raw)
+                    ?.Select(x => (Template)x)
                     .ToArray() ?? [],
             };
     }
@@ -166,12 +166,12 @@ public static class DevOpsBuildOptionsExtensions
         /// <summary>
         ///     Runs only the latest pipeline waiting on an exclusive lock, cancelling earlier waiting runs.
         /// </summary>
-        public DevOpsConcurrencyOption RunLatest => field ??= new(TextExpressions.Raw("runLatest"));
+        public DevOpsConcurrencyOption RunLatest => field ??= new(("runLatest"));
 
         /// <summary>
         ///     Runs every pipeline waiting on an exclusive lock in sequence.
         /// </summary>
-        public DevOpsConcurrencyOption Sequential => field ??= new(TextExpressions.Raw("sequential"));
+        public DevOpsConcurrencyOption Sequential => field ??= new(("sequential"));
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-namespace Invex.Atom.Module.GitHubWorkflows.Extensions;
+﻿namespace Invex.Atom.Module.GitHubWorkflows.Extensions;
 
 [PublicAPI]
 [SuppressMessage("Performance", "CA1822:Mark members as static")]
@@ -153,14 +153,11 @@ public static class GitHubBuildOptionsExtensions
         {
             Labels =
             [
-                TextExpressions
-                    .GitHub
-                    .MatrixProperty("job-runs-on")
-                    .Evaluate(),
+                Tex.Matrix("job-runs-on"),
             ],
         };
 
-        public GitHubRunsOn FromLabel(params TextExpression[] labels) =>
+        public GitHubRunsOn FromLabel(params Template[] labels) =>
             new()
             {
                 Labels = labels,
@@ -170,11 +167,11 @@ public static class GitHubBuildOptionsExtensions
             new()
             {
                 Labels = labels
-                    .Select(TextExpressions.Raw)
+                    .Select(x => (Template)x)
                     .ToArray(),
             };
 
-        public GitHubRunsOn FromGroup(TextExpression group) =>
+        public GitHubRunsOn FromGroup(Template group) =>
             new()
             {
                 Group = group,
@@ -186,7 +183,7 @@ public static class GitHubBuildOptionsExtensions
                 Group = group,
             };
 
-        public GitHubRunsOn From(TextExpression? group, TextExpression[] labels) =>
+        public GitHubRunsOn From(Template? group, Template[] labels) =>
             new()
             {
                 Labels = labels,
@@ -197,7 +194,7 @@ public static class GitHubBuildOptionsExtensions
             new()
             {
                 Labels = labels
-                    .Select(TextExpressions.Raw)
+                    .Select(x => (Template)x)
                     .ToArray(),
                 Group = group,
             };
@@ -228,7 +225,7 @@ public static class GitHubBuildOptionsExtensions
         /// <param name="group">The concurrency group key.</param>
         /// <param name="cancelInProgress">Whether to cancel an in-progress workflow in the same group.</param>
         /// <returns>The workflow concurrency option.</returns>
-        public GitHubConcurrencyOption Set(TextExpression group, TextExpression? cancelInProgress = null) =>
+        public GitHubConcurrencyOption Set(Template group, Template cancelInProgress) =>
             new(group, cancelInProgress);
 
         /// <summary>
@@ -237,20 +234,9 @@ public static class GitHubBuildOptionsExtensions
         /// <param name="group">The concurrency group key.</param>
         /// <param name="cancelInProgress">Whether to cancel an in-progress workflow in the same group.</param>
         /// <returns>The workflow concurrency option.</returns>
-        public GitHubConcurrencyOption Set(TextExpression group, bool cancelInProgress) =>
-            new(group, TextExpressions.From(cancelInProgress));
+        public GitHubConcurrencyOption Set(Template group, bool? cancelInProgress = null) =>
+            new(group, cancelInProgress is { } value ? value : null);
 
-        /// <summary>
-        ///     Configures a workflow concurrency group.
-        /// </summary>
-        /// <param name="group">The concurrency group key.</param>
-        /// <param name="cancelInProgress">Whether to cancel an in-progress workflow in the same group.</param>
-        /// <returns>The workflow concurrency option.</returns>
-        public GitHubConcurrencyOption Set(string group, bool? cancelInProgress = null) =>
-            new(TextExpressions.Raw(group),
-                cancelInProgress.HasValue
-                    ? TextExpressions.From(cancelInProgress.Value)
-                    : null);
     }
 
     [PublicAPI]

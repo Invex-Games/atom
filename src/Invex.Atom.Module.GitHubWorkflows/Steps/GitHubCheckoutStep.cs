@@ -1,4 +1,4 @@
-namespace Invex.Atom.Module.GitHubWorkflows.Steps;
+﻿namespace Invex.Atom.Module.GitHubWorkflows.Steps;
 
 [PublicAPI]
 public sealed record GitHubCheckoutStep : CheckoutStep, IGitHubAdditionalStepOption
@@ -7,14 +7,14 @@ public sealed record GitHubCheckoutStep : CheckoutStep, IGitHubAdditionalStepOpt
     ///     Repository name with owner. For example, actions/checkout.
     /// </summary>
     /// <remarks>Default: ${{ github.repository }}</remarks>
-    public TextExpression? Repository { get; init; }
+    public Template? Repository { get; init; }
 
     /// <summary>
     ///     The branch, tag or SHA to checkout. When checking out the repository that
     ///     triggered a workflow, this defaults to the reference or SHA for that event.
     ///     Otherwise, uses the default branch. Written as the <c>ref</c> input of <c>actions/checkout</c>.
     /// </summary>
-    public TextExpression? Ref { get; init; }
+    public Template? Ref { get; init; }
 
     /// <summary>
     ///     Personal access token (PAT) used to fetch the repository. The PAT is configured
@@ -35,7 +35,7 @@ public sealed record GitHubCheckoutStep : CheckoutStep, IGitHubAdditionalStepOpt
     ///     </para>
     ///     <para>Default: ${{ github.token }}</para>
     /// </remarks>
-    public TextExpression? Token { get; init; }
+    public Template? Token { get; init; }
 
     /// <summary>
     ///     SSH key used to fetch the repository. The SSH key is configured with the local
@@ -54,7 +54,7 @@ public sealed record GitHubCheckoutStep : CheckoutStep, IGitHubAdditionalStepOpt
     ///         </see>
     ///     </para>
     /// </remarks>
-    public TextExpression? SshKey { get; init; }
+    public Template? SshKey { get; init; }
 
     /// <summary>
     ///     Known hosts in addition to the user and global host key database. The public SSH
@@ -62,7 +62,7 @@ public sealed record GitHubCheckoutStep : CheckoutStep, IGitHubAdditionalStepOpt
     ///     <c>ssh-keyscan github.com</c>. The public key for github.com is always implicitly
     ///     added.
     /// </summary>
-    public TextExpression? SshKnownHosts { get; init; }
+    public Template? SshKnownHosts { get; init; }
 
     /// <summary>
     ///     Whether to perform strict host key checking. When true, adds the options
@@ -70,72 +70,72 @@ public sealed record GitHubCheckoutStep : CheckoutStep, IGitHubAdditionalStepOpt
     ///     the input <c>ssh-known-hosts</c> to configure additional hosts.
     /// </summary>
     /// <remarks>Default: true</remarks>
-    public TextExpression? SshStrict { get; init; }
+    public Template? SshStrict { get; init; }
 
     /// <summary>
     ///     The user to use when connecting to the remote SSH host. By default 'git' is used.
     /// </summary>
     /// <remarks>Default: git</remarks>
-    public TextExpression? SshUser { get; init; }
+    public Template? SshUser { get; init; }
 
     /// <summary>
     ///     Whether to configure the token or SSH key with the local git config.
     /// </summary>
     /// <remarks>Default: true</remarks>
-    public TextExpression? PersistCredentials { get; init; }
+    public Template? PersistCredentials { get; init; }
 
     /// <summary>
     ///     Relative path under $GITHUB_WORKSPACE to place the repository.
     /// </summary>
-    public TextExpression? Path { get; init; }
+    public Template? Path { get; init; }
 
     /// <summary>
     ///     Whether to execute <c>git clean -ffdx &amp;&amp; git reset --hard HEAD</c> before fetching.
     /// </summary>
     /// <remarks>Default: true</remarks>
-    public TextExpression? Clean { get; init; }
+    public Template? Clean { get; init; }
 
     /// <summary>
     ///     Partially clone against a given filter. Overrides sparse-checkout if set.
     /// </summary>
     /// <remarks>Default: null</remarks>
-    public TextExpression? Filter { get; init; }
+    public Template? Filter { get; init; }
 
     /// <summary>
     ///     Do a sparse checkout on given patterns. Each pattern should be separated with new lines.
     /// </summary>
     /// <remarks>Default: null</remarks>
-    public TextExpression? SparseCheckout { get; init; }
+    public Template? SparseCheckout { get; init; }
 
     /// <summary>
     ///     Specifies whether to use cone-mode when doing a sparse checkout.
     /// </summary>
     /// <remarks>Default: true</remarks>
-    public TextExpression? SparseCheckoutConeMode { get; init; }
+    public Template? SparseCheckoutConeMode { get; init; }
 
     /// <summary>
     ///     Number of commits to fetch. 0 indicates all history for all branches and tags.
     /// </summary>
     /// <remarks>Default: 1</remarks>
-    public TextExpression? FetchDepth { get; init; }
+    public Template? FetchDepth { get; init; }
 
     /// <summary>
     ///     Whether to fetch tags, even if fetch-depth > 0.
     /// </summary>
     /// <remarks>Default: false</remarks>
-    public TextExpression? FetchTags { get; init; }
+    public Template? FetchTags { get; init; }
 
     /// <summary>
     ///     Whether to show progress status output when fetching.
     /// </summary>
     /// <remarks>Default: true</remarks>
-    public TextExpression? ShowProgress { get; init; }
+    public Template? ShowProgress { get; init; }
 
     /// <summary>
     ///     Whether to download Git-LFS files.
     /// </summary>
     /// <remarks>Default: false</remarks>
-    public TextExpression? Lfs { get; init; }
+    public Template? Lfs { get; init; }
 
     /// <summary>
     ///     Whether to checkout submodules: <c>true</c> to checkout submodules or <c>recursive</c> to
@@ -148,14 +148,14 @@ public sealed record GitHubCheckoutStep : CheckoutStep, IGitHubAdditionalStepOpt
     ///     </para>
     ///     <para>Default: false</para>
     /// </remarks>
-    public TextExpression? Submodules { get; init; }
+    public Template? Submodules { get; init; }
 
     /// <summary>
     ///     Add repository path as safe.directory for Git global config by running
     ///     <c>git config --global --add safe.directory &lt;path&gt;</c>.
     /// </summary>
     /// <remarks>Default: true</remarks>
-    public TextExpression? SetSafeDirectory { get; init; }
+    public Template? SetSafeDirectory { get; init; }
 
     /// <summary>
     ///     The base URL for the GitHub instance that you are trying to clone from, will use
@@ -163,71 +163,71 @@ public sealed record GitHubCheckoutStep : CheckoutStep, IGitHubAdditionalStepOpt
     ///     running from unless specified. Example URLs are https://github.com or
     ///     https://my-ghes-server.example.com.
     /// </summary>
-    public TextExpression? GitHubServerUrl { get; init; }
+    public Template? GitHubServerUrl { get; init; }
 
     public Step Build()
     {
-        var with = new Dictionary<string, TextExpressionCollection>();
+        var with = new Dictionary<string, Template>();
 
         if (Repository is not null)
-            with["repository"] = [Repository];
+            with["repository"] = Repository;
 
         if (Ref is not null)
-            with["ref"] = [Ref];
+            with["ref"] = Ref;
 
         if (Token is not null)
-            with["token"] = [Token];
+            with["token"] = Token;
 
         if (SshKey is not null)
-            with["ssh-key"] = [SshKey];
+            with["ssh-key"] = SshKey;
 
         if (SshKnownHosts is not null)
-            with["ssh-known-hosts"] = [SshKnownHosts];
+            with["ssh-known-hosts"] = SshKnownHosts;
 
         if (SshStrict is not null)
-            with["ssh-strict"] = [SshStrict];
+            with["ssh-strict"] = SshStrict;
 
         if (SshUser is not null)
-            with["ssh-user"] = [SshUser];
+            with["ssh-user"] = SshUser;
 
         if (PersistCredentials is not null)
-            with["persist-credentials"] = [PersistCredentials];
+            with["persist-credentials"] = PersistCredentials;
 
         if (Path is not null)
-            with["path"] = [Path];
+            with["path"] = Path;
 
         if (Clean is not null)
-            with["clean"] = [Clean];
+            with["clean"] = Clean;
 
         if (Filter is not null)
-            with["filter"] = [Filter];
+            with["filter"] = Filter;
 
         if (SparseCheckout is not null)
-            with["sparse-checkout"] = [SparseCheckout];
+            with["sparse-checkout"] = SparseCheckout;
 
         if (SparseCheckoutConeMode is not null)
-            with["sparse-checkout-cone-mode"] = [SparseCheckoutConeMode];
+            with["sparse-checkout-cone-mode"] = SparseCheckoutConeMode;
 
         if (FetchDepth is not null)
-            with["fetch-depth"] = [FetchDepth];
+            with["fetch-depth"] = FetchDepth;
 
         if (FetchTags is not null)
-            with["fetch-tags"] = [FetchTags];
+            with["fetch-tags"] = FetchTags;
 
         if (ShowProgress is not null)
-            with["show-progress"] = [ShowProgress];
+            with["show-progress"] = ShowProgress;
 
         if (Lfs is not null)
-            with["lfs"] = [Lfs];
+            with["lfs"] = Lfs;
 
         if (Submodules is not null)
-            with["submodules"] = [Submodules];
+            with["submodules"] = Submodules;
 
         if (SetSafeDirectory is not null)
-            with["set-safe-directory"] = [SetSafeDirectory];
+            with["set-safe-directory"] = SetSafeDirectory;
 
         if (GitHubServerUrl is not null)
-            with["github-server-url"] = [GitHubServerUrl];
+            with["github-server-url"] = GitHubServerUrl;
 
         return new Step.UsesStep
         {
