@@ -154,6 +154,7 @@ Reference `Invex.Atom.Module.GitHubWorkflows`, extend `IWorkflowBuildDefinition`
 
 ```csharp
 using Invex.StructuredText.Expressions;
+using Invex.StructuredText.GithubActions;
 
 [BuildDefinition]
 [GenerateEntryPoint]
@@ -172,7 +173,7 @@ internal interface IBuild : IWorkflowBuildDefinition, IGitHubWorkflows
                 {
                     Options =
                     [
-                        BuildOptions.Inject.Param(nameof(MyName), TextExpressions.GitHub.GitHubRepositoryOwner),
+                        BuildOptions.Inject.Param(nameof(MyName), Tex.GitHub.RepositoryOwner),
                         BuildOptions.Inject.Secret(nameof(MySecret)),
                     ],
                 },

@@ -76,19 +76,12 @@ WorkflowLabels.GitHub.RunsOn.MacOS_Latest
 - `BuildOptions.GitHub.Concurrency.Set(...)` — limit concurrent workflow runs sharing a group
 - GitHub-specific triggers (e.g. `release` events)
 
-Configure concurrency on a `WorkflowDefinition` with a literal group or a text expression:
+Configure concurrency on a `WorkflowDefinition` with a literal group or an interpolated template:
 
 ```csharp
 Options =
 [
-    BuildOptions.GitHub.Concurrency.Set(
-        TextExpressions.Concat(
-        [
-            TextExpressions.GitHub.GitHubWorkflow.Evaluate(),
-            "-",
-            TextExpressions.GitHub.GitHubRef.Evaluate(),
-        ]),
-        true),
+    BuildOptions.GitHub.Concurrency.Set($"{Tex.GitHub.Workflow}-{Tex.GitHub.Ref}", true),
 ];
 ```
 

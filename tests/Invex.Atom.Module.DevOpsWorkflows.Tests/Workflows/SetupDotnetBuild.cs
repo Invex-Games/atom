@@ -17,6 +17,18 @@ public partial class SetupDotnetBuild : WorkflowBuildDefinition, IDevOpsWorkflow
             ],
             Types = [WorkflowTypes.DevOps.Pipeline],
         },
+        new("setup-dotnet-variable")
+        {
+            Triggers = [WorkflowTriggers.PushToMain],
+            Targets =
+            [
+                new(nameof(ISetupDotnetTarget.SetupDotnetTarget))
+                {
+                    Options = [BuildOptions.Steps.SetupDotnet.From(Tex.Variable("DOTNET_VERSION"))],
+                },
+            ],
+            Types = [WorkflowTypes.DevOps.Pipeline],
+        },
     ];
 }
 
