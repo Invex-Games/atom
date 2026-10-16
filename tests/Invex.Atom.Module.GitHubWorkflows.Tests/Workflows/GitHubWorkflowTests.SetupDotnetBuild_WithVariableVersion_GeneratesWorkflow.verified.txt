@@ -1,0 +1,28 @@
+﻿name: setup-dotnet-variable
+
+on:
+  push:
+    branches: [ main ]
+
+permissions: { }
+
+jobs:
+
+  SetupDotnetTarget:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: 'Setup .NET ${{ vars.DOTNET_VERSION }}'
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ vars.DOTNET_VERSION }}
+
+      - name: SetupDotnetTarget
+        id: SetupDotnetTarget
+        run: dotnet run --project AtomTest/AtomTest.csproj -- SetupDotnetTarget --skip --headless
+

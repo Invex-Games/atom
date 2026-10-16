@@ -9,8 +9,9 @@ public static class AtomTexExtensions
     extension(Tex)
     {
         /// <summary>
-        ///     References a parameter produced as an output by another target. Using it in a condition
-        ///     implicitly makes the current target depend on <paramref name="targetName" />.
+        ///     References a parameter produced as an output by another target. The producing target is not added as a
+        ///     dependency automatically: declare <paramref name="targetName" /> as a dependency of the consuming target,
+        ///     or the output is unavailable (Atom logs a warning when a condition references an undeclared dependency).
         /// </summary>
         /// <typeparam name="T">The type of the build definition.</typeparam>
         /// <param name="buildDefinition">The build definition used to resolve the parameter's argument name.</param>
