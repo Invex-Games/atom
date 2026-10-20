@@ -60,6 +60,7 @@ GitHub Actions workflow.
    using Invex.Atom.Workflows.Definition.Triggers;
    using Invex.Atom.Workflows.Options;
    using Invex.StructuredText.Expressions;
+   using Invex.StructuredText.GithubActions;
 
    namespace Atom;
 
@@ -98,7 +99,7 @@ GitHub Actions workflow.
                    {
                        Options =
                        [
-                           BuildOptions.Inject.Param(nameof(MyName), TextExpressions.GitHub.GitHubRepositoryOwner),
+                           BuildOptions.Inject.Param(nameof(MyName), Tex.GitHub.RepositoryOwner),
                            BuildOptions.Inject.Secret(nameof(MySecret)),
                        ],
                    },
