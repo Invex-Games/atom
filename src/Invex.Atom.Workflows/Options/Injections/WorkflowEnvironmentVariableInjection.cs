@@ -10,4 +10,4 @@
 ///     Typically created via <c>BuildOptions.Inject.EnvironmentVariable(name, value)</c>.
 /// </remarks>
 [PublicAPI]
-public sealed record WorkflowEnvironmentVariableInjection(string Name, TextExpression Value) : IBuildOption;
+public sealed record WorkflowEnvironmentVariableInjection(string Name, Template Value) : IBuildOption;

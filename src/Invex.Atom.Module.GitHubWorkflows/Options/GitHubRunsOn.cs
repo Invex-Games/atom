@@ -3,7 +3,7 @@
 [PublicAPI]
 public sealed record GitHubRunsOn : IBuildOption
 {
-    public TextExpressionCollection Labels { get; init; } = [];
+    public IReadOnlyList<Template> Labels { get; init; } = [];
 
-    public TextExpression? Group { get; init; }
+    public Template? Group { get; init; }
 }

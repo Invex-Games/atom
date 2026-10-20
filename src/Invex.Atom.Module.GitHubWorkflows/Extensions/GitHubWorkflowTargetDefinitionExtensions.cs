@@ -24,7 +24,7 @@ public static class GitHubWorkflowTargetDefinitionExtensions
         ///     option to indicate that the matrix determines the runner.
         /// </remarks>
         [PublicAPI]
-        public WorkflowTargetDefinition WithGitHubRunsOnMatrix(IEnumerable<TextExpression> labels) =>
+        public WorkflowTargetDefinition WithGitHubRunsOnMatrix(IEnumerable<Template> labels) =>
             workflowTargetDefinition
                 .WithMatrixDimensions(new MatrixDimension(nameof(IJobRunsOn.JobRunsOn))
                 {
@@ -46,7 +46,7 @@ public static class GitHubWorkflowTargetDefinitionExtensions
         [PublicAPI]
         public WorkflowTargetDefinition WithGitHubRunsOnMatrix(IEnumerable<string> labels) =>
             workflowTargetDefinition.WithGitHubRunsOnMatrix(
-                labels.Select(StructuredText.Expressions.WorkflowExpressionExtensions.Raw));
+                labels.Select(x => (Template)x));
 
         /// <summary>
         ///     Configures the workflow target to inject the GitHub token as a secret.

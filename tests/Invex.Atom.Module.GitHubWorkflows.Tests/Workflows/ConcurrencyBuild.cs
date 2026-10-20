@@ -12,11 +12,7 @@ public partial class ConcurrencyBuild : WorkflowBuildDefinition, IGitHubWorkflow
             Types = [WorkflowTypes.GitHub.Action],
             Options =
             [
-                BuildOptions.GitHub.Concurrency.Set(TextExpressions.Concat([
-                        TextExpressions.GitHub.GitHubWorkflow.Evaluate(),
-                        "-",
-                        TextExpressions.GitHub.GitHubRef.Evaluate(),
-                    ]),
+                BuildOptions.GitHub.Concurrency.Set($"{Tex.GitHub.Workflow}-{Tex.GitHub.Ref}",
                     true),
             ],
         },
