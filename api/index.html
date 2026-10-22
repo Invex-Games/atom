@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>API Reference | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="API Reference | Atom ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/api/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="api-reference">API Reference</h1>
+
+<p>This reference is generated from the XML documentation of every public type in the Atom packages; the tables below list
+the main entry points per package, and the sidebar lists everything else.</p>
+<h2 id="invexatombuild">Invex.Atom.Build</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Kind</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Definition.IBuildDefinition.html"><code>IBuildDefinition</code></a></td>
+<td>Interface</td>
+<td>The core structure of an Atom build; extend it with an interface build definition.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Definition.BuildDefinition.html"><code>BuildDefinition</code></a></td>
+<td>Class</td>
+<td>Abstract base class for partial-class build definitions.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Definition.BuildDefinitionAttribute.html"><code>BuildDefinitionAttribute</code></a></td>
+<td>Attribute</td>
+<td>Marks a build definition and triggers source generation of its targets and parameters.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Hosting.GenerateEntryPointAttribute.html"><code>GenerateEntryPointAttribute</code></a></td>
+<td>Attribute</td>
+<td>Generates the application's <code>Main</code> method.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Definition.Target.html"><code>Target</code></a></td>
+<td>Delegate</td>
+<td>Applies configuration to a <code>TargetDefinition</code>; the type of every target property.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Definition.TargetDefinition.html"><code>TargetDefinition</code></a></td>
+<td>Class</td>
+<td>Fluent definition of a target's tasks, dependencies, parameters, artifacts, and variables.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.IBuildAccessor.html"><code>IBuildAccessor</code></a></td>
+<td>Interface</td>
+<td>Access to the logger, file system, process runner, services, and parameters inside targets.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Params.ParamDefinitionAttribute.html"><code>ParamDefinitionAttribute</code></a></td>
+<td>Attribute</td>
+<td>Declares a parameter with its command-line name, description, and resolution sources.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Params.SecretDefinitionAttribute.html"><code>SecretDefinitionAttribute</code></a></td>
+<td>Attribute</td>
+<td>Declares a secret parameter that is masked in logs and can be resolved from secret stores.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Params.ParamSource.html"><code>ParamSource</code></a></td>
+<td>Enum</td>
+<td>The sources a parameter value can be resolved from.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Secrets.ISecretsProvider.html"><code>ISecretsProvider</code></a></td>
+<td>Interface</td>
+<td>Retrieves secrets from a secure store.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Secrets.IDotnetUserSecrets.html"><code>IDotnetUserSecrets</code></a></td>
+<td>Interface</td>
+<td>Enables sourcing secrets from the .NET user secrets store.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Artifacts.IArtifactProvider.html"><code>IArtifactProvider</code></a></td>
+<td>Interface</td>
+<td>Stores and retrieves build artifacts.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Variables.IVariablesHelper.html"><code>IVariablesHelper</code></a></td>
+<td>Interface</td>
+<td>Helper methods for writing workflow variables from targets.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Variables.IVariableProvider.html"><code>IVariableProvider</code></a></td>
+<td>Interface</td>
+<td>Reads and writes workflow variables to a specific storage backend.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.BuildInfo.IBuildInfo.html"><code>IBuildInfo</code></a></td>
+<td>Interface</td>
+<td>Build name, ID, version, timestamp, and slice.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.ISetupBuildInfo.html"><code>ISetupBuildInfo</code></a></td>
+<td>Interface</td>
+<td>Provides the <code>SetupBuildInfo</code> target.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.IValidateBuild.html"><code>IValidateBuild</code></a></td>
+<td>Interface</td>
+<td>Provides the <code>ValidateBuild</code> target.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.BuildOptions.IBuildOption.html"><code>IBuildOption</code></a></td>
+<td>Interface</td>
+<td>Marker interface for build options.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.BuildOptions.BuildOptions.html"><code>BuildOptions</code></a></td>
+<td>Class</td>
+<td>Extension anchor for fluent build option factories.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Hosting.AtomHost.html"><code>AtomHost</code></a></td>
+<td>Class</td>
+<td>Creates and runs an Atom host application.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Hosting.ConfigureHostBuilderAttribute.html"><code>ConfigureHostBuilderAttribute</code></a></td>
+<td>Attribute</td>
+<td>Marks a module interface as a source of host builder configuration.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Hosting.IConfigureHost.html"><code>IConfigureHost</code></a></td>
+<td>Interface</td>
+<td>Static host configuration hooks implemented by every generated build definition.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.IAtomLifecycleHook.html"><code>IAtomLifecycleHook</code></a></td>
+<td>Interface</td>
+<td>Runs code before and after target execution.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Reports.IReportsHelper.html"><code>IReportsHelper</code></a></td>
+<td>Interface</td>
+<td>Adds data to the build report.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Reports.IOutcomeReportWriter.html"><code>IOutcomeReportWriter</code></a></td>
+<td>Interface</td>
+<td>Writes the build outcome report to a destination.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Build.Exceptions.StepFailedException.html"><code>StepFailedException</code></a></td>
+<td>Class</td>
+<td>Thrown when a step within a target fails.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="invexatomworkflows">Invex.Atom.Workflows</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Kind</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="xref" href="Invex.Atom.Workflows.IWorkflowBuildDefinition.html"><code>IWorkflowBuildDefinition</code></a></td>
+<td>Interface</td>
+<td>Extends <code>IBuildDefinition</code> with workflow definitions and the <code>Gen</code> target.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Workflows.WorkflowBuildDefinition.html"><code>WorkflowBuildDefinition</code></a></td>
+<td>Class</td>
+<td>Abstract base class for partial-class workflow build definitions.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Workflows.Definition.WorkflowDefinition.html"><code>WorkflowDefinition</code></a></td>
+<td>Record</td>
+<td>A workflow's name, triggers, options, targets, and types.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Workflows.Definition.WorkflowTargetDefinition.html"><code>WorkflowTargetDefinition</code></a></td>
+<td>Record</td>
+<td>A target within a workflow, with matrix dimensions and options.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Workflows.Definition.MatrixDimension.html"><code>MatrixDimension</code></a></td>
+<td>Record</td>
+<td>A named build-matrix axis and its values.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Workflows.Definition.Triggers.WorkflowTriggers.html"><code>WorkflowTriggers</code></a></td>
+<td>Class</td>
+<td>Factories and presets for push, pull request, and manual triggers.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Workflows.IGen.html"><code>IGen</code></a></td>
+<td>Interface</td>
+<td>Provides the <code>Gen</code> target that writes workflow files.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Workflows.IJobRunsOn.html"><code>IJobRunsOn</code></a></td>
+<td>Interface</td>
+<td>The runner or agent a workflow job executes on.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Workflows.Options.WorkflowBuildOptionsExtensions.html"><code>WorkflowBuildOptionsExtensions</code></a></td>
+<td>Class</td>
+<td>Adds <code>BuildOptions.Inject</code>, <code>Artifacts</code>, <code>Deploy</code>, <code>Target</code>, and <code>Steps</code>.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Workflows.DebugWorkflowType.html"><code>DebugWorkflowType</code></a></td>
+<td>Record</td>
+<td>Writes the resolved workflow model as JSON for inspection.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Workflows.WorkflowOutdatedException.html"><code>WorkflowOutdatedException</code></a></td>
+<td>Class</td>
+<td>Thrown in headless mode when workflow files are out of date.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="invexatommoduledotnet">Invex.Atom.Module.Dotnet</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Kind</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.Dotnet.Cli.IDotnetCli.html"><code>IDotnetCli</code></a></td>
+<td>Interface</td>
+<td>Strongly-typed methods for <code>dotnet</code> CLI commands.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.IDotnetCliHelper.html"><code>IDotnetCliHelper</code></a></td>
+<td>Interface</td>
+<td>Makes the <code>IDotnetCli</code> service available to a build.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.IDotnetPackHelper.html"><code>IDotnetPackHelper</code></a></td>
+<td>Interface</td>
+<td>Packs projects and stages the <code>.nupkg</code> output.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.IDotnetPublishHelper.html"><code>IDotnetPublishHelper</code></a></td>
+<td>Interface</td>
+<td>Publishes projects and stages the output.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.IDotnetTestHelper.html"><code>IDotnetTestHelper</code></a></td>
+<td>Interface</td>
+<td>Runs test projects and reports results and coverage.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.IDotnetToolInstallHelper.html"><code>IDotnetToolInstallHelper</code></a></td>
+<td>Interface</td>
+<td>Installs .NET tools.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.Dotnet.Helpers.INugetHelper.html"><code>INugetHelper</code></a></td>
+<td>Interface</td>
+<td>NuGet feed management and push operations.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.Dotnet.Util.TransformProjectVersionScope.html"><code>TransformProjectVersionScope</code></a></td>
+<td>Class</td>
+<td>Creates scopes that temporarily set a project file's version.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="invexatommodulegithubworkflows">Invex.Atom.Module.GitHubWorkflows</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Kind</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.GitHubWorkflows.Helpers.IGitHubWorkflows.html"><code>IGitHubWorkflows</code></a></td>
+<td>Interface</td>
+<td>Integrates GitHub Actions workflows into a build.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.GitHubWorkflows.Helpers.IGitHubHelper.html"><code>IGitHubHelper</code></a></td>
+<td>Interface</td>
+<td>Common GitHub parameters such as the GitHub token.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.GitHubWorkflows.GitHub.html"><code>GitHub</code></a></td>
+<td>Class</td>
+<td>Detects GitHub Actions and exposes its environment variables.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.GitHubWorkflows.Options.GitHubTrigger.html"><code>GitHubTrigger</code></a></td>
+<td>Record</td>
+<td>A GitHub-specific workflow trigger, such as <code>release</code>.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.GitHubWorkflows.Options.GitHubTokenPermissionsOption.html"><code>GitHubTokenPermissionsOption</code></a></td>
+<td>Record</td>
+<td>Sets fine-grained <code>GITHUB_TOKEN</code> permissions.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.GitHubWorkflows.Options.GitHubConcurrencyOption.html"><code>GitHubConcurrencyOption</code></a></td>
+<td>Record</td>
+<td>Configures concurrency for a GitHub Actions workflow.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="invexatommoduledevopsworkflows">Invex.Atom.Module.DevOpsWorkflows</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Kind</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.DevOpsWorkflows.IDevOpsWorkflows.html"><code>IDevOpsWorkflows</code></a></td>
+<td>Interface</td>
+<td>Integrates Azure DevOps Pipelines into a build.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.DevOpsWorkflows.DevOps.html"><code>DevOps</code></a></td>
+<td>Class</td>
+<td>Detects Azure Pipelines and exposes its environment variables.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.DevOpsWorkflows.ProvideDevOpsRunIdAsWorkflowId.html"><code>ProvideDevOpsRunIdAsWorkflowId</code></a></td>
+<td>Record</td>
+<td>Uses the Azure DevOps run ID as the workflow ID.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.DevOpsWorkflows.Options.DevOpsConcurrencyOption.html"><code>DevOpsConcurrencyOption</code></a></td>
+<td>Record</td>
+<td>Configures how runs waiting on an exclusive lock are handled.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.DevOpsWorkflows.Options.DevOpsPullRequestOption.html"><code>DevOpsPullRequestOption</code></a></td>
+<td>Record</td>
+<td>Configures pull request auto-cancellation.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="invexatommoduleazurekeyvault">Invex.Atom.Module.AzureKeyVault</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Kind</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.AzureKeyVault.IAzureKeyVault.html"><code>IAzureKeyVault</code></a></td>
+<td>Interface</td>
+<td>Integrates Azure Key Vault for secrets.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.AzureKeyVault.AzureKeyVaultValueInjections.html"><code>AzureKeyVaultValueInjections</code></a></td>
+<td>Record</td>
+<td>How each vault parameter is injected into workflows.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.AzureKeyVault.AzureKeyVaultValueInjectionType.html"><code>AzureKeyVaultValueInjectionType</code></a></td>
+<td>Enum</td>
+<td>Source for an injected vault parameter.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.AzureKeyVault.Options.UseAzureKeyVault.html"><code>UseAzureKeyVault</code></a></td>
+<td>Record</td>
+<td>Build option that enables Azure Key Vault.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="invexatommoduleazurestorage">Invex.Atom.Module.AzureStorage</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Kind</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.AzureStorage.IAzureArtifactStorage.html"><code>IAzureArtifactStorage</code></a></td>
+<td>Interface</td>
+<td>Configures Azure Blob Storage as the artifact store.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="invexatommodulegitversion">Invex.Atom.Module.GitVersion</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Kind</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="xref" href="Invex.Atom.Module.GitVersion.IGitVersion.html"><code>IGitVersion</code></a></td>
+<td>Interface</td>
+<td>Enables GitVersion-based build identification and versioning.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="typical-flow">Typical flow</h2>
+<pre><code class="lang-csharp">[BuildDefinition]
+[GenerateEntryPoint]
+internal interface IBuild : IWorkflowBuildDefinition, IGitHubWorkflows
+{
+    [ParamDefinition(&quot;my-name&quot;, &quot;My name&quot;)]
+    string? MyName =&gt; GetParam(() =&gt; MyName);
+
+    Target HelloWorld =&gt; t =&gt; t
+        .RequiresParam(nameof(MyName))
+        .Executes(() =&gt; Logger.LogInformation(&quot;Hello, {MyName}!&quot;, MyName));
+
+    IReadOnlyList&lt;WorkflowDefinition&gt; IWorkflowBuildDefinition.Workflows =&gt;
+    [
+        new(&quot;CI&quot;)
+        {
+            Triggers = [WorkflowTriggers.PushToMain],
+            Targets = [new(nameof(HelloWorld))],
+            Types = [WorkflowTypes.GitHub.Action],
+        },
+    ];
+}
+</code></pre>
+<p>For concepts and walkthroughs, start with the <a href="../docs/getting-started/introduction.html">Introduction</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/api/index.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom · MIT License · Invex Games
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

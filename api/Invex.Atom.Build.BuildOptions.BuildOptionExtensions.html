@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class BuildOptionExtensions | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class BuildOptionExtensions | Atom ">
+      
+      <meta name="description" content="Provides extension members for querying  instances from option collections and build definitions.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Build.BuildOptions.BuildOptionExtensions">
+
+
+
+  <h1 id="Invex_Atom_Build_BuildOptions_BuildOptionExtensions" data-uid="Invex.Atom.Build.BuildOptions.BuildOptionExtensions" class="text-break">
+Class BuildOptionExtensions  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Invex</span>.<span class="xref">Atom</span>.<a class="xref" href="Invex.Atom.Build.html">Build</a>.<a class="xref" href="Invex.Atom.Build.BuildOptions.html">BuildOptions</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Build.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Provides extension members for querying <a class="xref" href="Invex.Atom.Build.BuildOptions.IBuildOption.html">IBuildOption</a> instances from option
+collections and build definitions.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class BuildOptionExtensions</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">BuildOptionExtensions</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+  <h2 id="Invex_Atom_Build_BuildOptions_BuildOptionExtensions_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>Members are exposed as static extensions on the option type itself, e.g.
+<code>MyOption.Get(options)</code> or <code>MyToggleOption.IsEnabled(definition)</code>.
+When multiple options of the same type are present, the last occurrence wins.</p>
+</div>
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Invex_Atom_Build_BuildOptions_BuildOptionExtensions_GetOptionsGrouped_" data-uid="Invex.Atom.Build.BuildOptions.BuildOptionExtensions.GetOptionsGrouped*"></a>
+
+  <h3 id="Invex_Atom_Build_BuildOptions_BuildOptionExtensions_GetOptionsGrouped__2_System_Collections_Generic_IEnumerable_Invex_Atom_Build_BuildOptions_IBuildOption__System_Func___0___1__" data-uid="Invex.Atom.Build.BuildOptions.BuildOptionExtensions.GetOptionsGrouped``2(System.Collections.Generic.IEnumerable{Invex.Atom.Build.BuildOptions.IBuildOption},System.Func{``0,``1})">
+  GetOptionsGrouped&lt;T, TKey&gt;(IEnumerable&lt;IBuildOption&gt;, Func&lt;T, TKey&gt;)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets options of type <code class="typeparamref">T</code>, keeping only the last occurrence per group key.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IReadOnlyList&lt;T&gt; GetOptionsGrouped&lt;T, TKey&gt;(IEnumerable&lt;IBuildOption&gt; options, Func&lt;T, TKey&gt; groupBy) where T : notnull, IBuildOption where TKey : notnull</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <span class="xref">IEnumerable</span>&lt;<a class="xref" href="Invex.Atom.Build.BuildOptions.IBuildOption.html">IBuildOption</a>&gt;</dt>
+    <dd><p>The options to search.</p>
+</dd>
+    <dt><code>groupBy</code> <span class="xref">Func</span>&lt;T, TKey&gt;</dt>
+    <dd><p>A function that selects the grouping key for each option.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;T&gt;</dt>
+    <dd><p>The last matching option for each distinct key.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd></dd>
+    <dt><code>TKey</code></dt>
+    <dd><p>The type of the grouping key.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Build_BuildOptions_BuildOptionExtensions_GetOptions_" data-uid="Invex.Atom.Build.BuildOptions.BuildOptionExtensions.GetOptions*"></a>
+
+  <h3 id="Invex_Atom_Build_BuildOptions_BuildOptionExtensions_GetOptions__1_System_Collections_Generic_IEnumerable_Invex_Atom_Build_BuildOptions_IBuildOption__" data-uid="Invex.Atom.Build.BuildOptions.BuildOptionExtensions.GetOptions``1(System.Collections.Generic.IEnumerable{Invex.Atom.Build.BuildOptions.IBuildOption})">
+  GetOptions&lt;T&gt;(IEnumerable&lt;IBuildOption&gt;)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets all options of type <code class="typeparamref">T</code> from the provided options.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IReadOnlyList&lt;T&gt; GetOptions&lt;T&gt;(IEnumerable&lt;IBuildOption&gt; options) where T : notnull, IBuildOption</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <span class="xref">IEnumerable</span>&lt;<a class="xref" href="Invex.Atom.Build.BuildOptions.IBuildOption.html">IBuildOption</a>&gt;</dt>
+    <dd><p>The options to search.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;T&gt;</dt>
+    <dd><p>All matching options, in order of appearance.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Build_BuildOptions_BuildOptionExtensions_Get_" data-uid="Invex.Atom.Build.BuildOptions.BuildOptionExtensions.Get*"></a>
+
+  <h3 id="Invex_Atom_Build_BuildOptions_BuildOptionExtensions_Get__1_System_Collections_Generic_IEnumerable_Invex_Atom_Build_BuildOptions_IBuildOption__" data-uid="Invex.Atom.Build.BuildOptions.BuildOptionExtensions.Get``1(System.Collections.Generic.IEnumerable{Invex.Atom.Build.BuildOptions.IBuildOption})">
+  Get&lt;T&gt;(IEnumerable&lt;IBuildOption&gt;)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the last option of type <code class="typeparamref">T</code> from the provided options.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static T? Get&lt;T&gt;(IEnumerable&lt;IBuildOption&gt; options) where T : notnull, IBuildOption</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <span class="xref">IEnumerable</span>&lt;<a class="xref" href="Invex.Atom.Build.BuildOptions.IBuildOption.html">IBuildOption</a>&gt;</dt>
+    <dd><p>The options to search.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">T</span></dt>
+    <dd><p>The last matching option, or <code>null</code> if none is present.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Build_BuildOptions_BuildOptionExtensions_IsEnabled_" data-uid="Invex.Atom.Build.BuildOptions.BuildOptionExtensions.IsEnabled*"></a>
+
+  <h3 id="Invex_Atom_Build_BuildOptions_BuildOptionExtensions_IsEnabled__1_System_Collections_Generic_IEnumerable_Invex_Atom_Build_BuildOptions_IBuildOption__" data-uid="Invex.Atom.Build.BuildOptions.BuildOptionExtensions.IsEnabled``1(System.Collections.Generic.IEnumerable{Invex.Atom.Build.BuildOptions.IBuildOption})">
+  IsEnabled&lt;T&gt;(IEnumerable&lt;IBuildOption&gt;)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Determines whether the last option of type <code class="typeparamref">T</code> in the provided options
+is present and enabled.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool IsEnabled&lt;T&gt;(IEnumerable&lt;IBuildOption&gt; options) where T : notnull, ToggleBuildOption</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <span class="xref">IEnumerable</span>&lt;<a class="xref" href="Invex.Atom.Build.BuildOptions.IBuildOption.html">IBuildOption</a>&gt;</dt>
+    <dd><p>The options to search.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd><p><code>true</code> if the option is present and enabled; otherwise, <code>false</code>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom · MIT License · Invex Games
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

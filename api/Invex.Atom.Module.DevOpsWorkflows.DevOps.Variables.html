@@ -1,0 +1,2879 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class DevOps.Variables | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class DevOps.Variables | Atom ">
+      
+      <meta name="description" content="Provides access to Azure DevOps environment variables as strongly-typed properties.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables">
+
+
+
+  <h1 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables" class="text-break">
+Class DevOps.Variables  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Invex</span>.<span class="xref">Atom</span>.<span class="xref">Module</span>.<a class="xref" href="Invex.Atom.Module.DevOpsWorkflows.html">DevOpsWorkflows</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Module.DevOpsWorkflows.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Provides access to Azure DevOps environment variables as strongly-typed properties.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class DevOps.Variables</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">DevOps.Variables</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+  <h2 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>Each property corresponds to an Azure DevOps environment variable,
+returning its value or an empty string if the variable is not set.</p>
+</div>
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentBuildDirectory_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentBuildDirectory*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentBuildDirectory" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentBuildDirectory">
+  AgentBuildDirectory
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>AGENT_BUILDDIRECTORY</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string AgentBuildDirectory { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentHomeDirectory_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentHomeDirectory*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentHomeDirectory" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentHomeDirectory">
+  AgentHomeDirectory
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>AGENT_HOMEDIRECTORY</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string AgentHomeDirectory { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentId">
+  AgentId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>AGENT_ID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string AgentId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentJobName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentJobName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentJobName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentJobName">
+  AgentJobName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>AGENT_JOBNAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string AgentJobName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentMachineName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentMachineName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentMachineName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentMachineName">
+  AgentMachineName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>AGENT_MACHINENAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string AgentMachineName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentName">
+  AgentName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>AGENT_NAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string AgentName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentOs_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentOs*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentOs" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentOs">
+  AgentOs
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>AGENT_OS</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string AgentOs { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentOsArchitecture_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentOsArchitecture*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentOsArchitecture" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentOsArchitecture">
+  AgentOsArchitecture
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>AGENT_OSARCHITECTURE</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string AgentOsArchitecture { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentTempDirectory_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentTempDirectory*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentTempDirectory" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentTempDirectory">
+  AgentTempDirectory
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>AGENT_TEMPDIRECTORY</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string AgentTempDirectory { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentToolsDirectory_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentToolsDirectory*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentToolsDirectory" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentToolsDirectory">
+  AgentToolsDirectory
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>AGENT_TOOLSDIRECTORY</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string AgentToolsDirectory { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentWorkFolder_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentWorkFolder*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_AgentWorkFolder" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.AgentWorkFolder">
+  AgentWorkFolder
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>AGENT_WORKFOLDER</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string AgentWorkFolder { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildArtifactStagingDirectory_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildArtifactStagingDirectory*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildArtifactStagingDirectory" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildArtifactStagingDirectory">
+  BuildArtifactStagingDirectory
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_ARTIFACTSTAGINGDIRECTORY</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildArtifactStagingDirectory { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildBinariesDirectory_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildBinariesDirectory*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildBinariesDirectory" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildBinariesDirectory">
+  BuildBinariesDirectory
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_BINARIESDIRECTORY</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildBinariesDirectory { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildBuildId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildBuildId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildBuildId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildBuildId">
+  BuildBuildId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_BUILDID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildBuildId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildBuildNumber_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildBuildNumber*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildBuildNumber" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildBuildNumber">
+  BuildBuildNumber
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_BUILDNUMBER</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildBuildNumber { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildBuildUri_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildBuildUri*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildBuildUri" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildBuildUri">
+  BuildBuildUri
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_BUILDURI</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildBuildUri { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildContainerId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildContainerId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildContainerId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildContainerId">
+  BuildContainerId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_CONTAINERID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildContainerId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildCronScheduleDisplayName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildCronScheduleDisplayName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildCronScheduleDisplayName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildCronScheduleDisplayName">
+  BuildCronScheduleDisplayName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_CRONSCHEDULE_DISPLAYNAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildCronScheduleDisplayName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildDefinitionName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildDefinitionName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildDefinitionName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildDefinitionName">
+  BuildDefinitionName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_DEFINITIONNAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildDefinitionName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildQueuedBy_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildQueuedBy*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildQueuedBy" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildQueuedBy">
+  BuildQueuedBy
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_QUEUEDBY</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildQueuedBy { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildQueuedById_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildQueuedById*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildQueuedById" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildQueuedById">
+  BuildQueuedById
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_QUEUEDBYID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildQueuedById { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildReason_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildReason*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildReason" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildReason">
+  BuildReason
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_REASON</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildReason { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryClean_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryClean*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryClean" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryClean">
+  BuildRepositoryClean
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_REPOSITORY_CLEAN</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildRepositoryClean { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryGitSubmoduleCheckout_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryGitSubmoduleCheckout*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryGitSubmoduleCheckout" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryGitSubmoduleCheckout">
+  BuildRepositoryGitSubmoduleCheckout
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_REPOSITORY_GIT_SUBMODULECHECKOUT</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildRepositoryGitSubmoduleCheckout { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryId">
+  BuildRepositoryId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_REPOSITORY_ID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildRepositoryId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryLocalPath_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryLocalPath*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryLocalPath" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryLocalPath">
+  BuildRepositoryLocalPath
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_REPOSITORY_LOCALPATH</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildRepositoryLocalPath { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryName">
+  BuildRepositoryName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_REPOSITORY_NAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildRepositoryName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryProvider_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryProvider*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryProvider" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryProvider">
+  BuildRepositoryProvider
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_REPOSITORY_PROVIDER</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildRepositoryProvider { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryTfvcWorkspace_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryTfvcWorkspace*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryTfvcWorkspace" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryTfvcWorkspace">
+  BuildRepositoryTfvcWorkspace
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_REPOSITORY_TFVC_WORKSPACE</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildRepositoryTfvcWorkspace { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryUri_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryUri*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRepositoryUri" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRepositoryUri">
+  BuildRepositoryUri
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_REPOSITORY_URI</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildRepositoryUri { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRequestedFor_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRequestedFor*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRequestedFor" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRequestedFor">
+  BuildRequestedFor
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_REQUESTEDFOR</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildRequestedFor { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRequestedForEmail_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRequestedForEmail*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRequestedForEmail" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRequestedForEmail">
+  BuildRequestedForEmail
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_REQUESTEDFOREMAIL</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildRequestedForEmail { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRequestedForId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRequestedForId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildRequestedForId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildRequestedForId">
+  BuildRequestedForId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_REQUESTEDFORID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildRequestedForId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildSourceBranch_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildSourceBranch*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildSourceBranch" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildSourceBranch">
+  BuildSourceBranch
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_SOURCEBRANCH</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildSourceBranch { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildSourceBranchName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildSourceBranchName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildSourceBranchName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildSourceBranchName">
+  BuildSourceBranchName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_SOURCEBRANCHNAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildSourceBranchName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildSourceTfvcShelveset_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildSourceTfvcShelveset*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildSourceTfvcShelveset" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildSourceTfvcShelveset">
+  BuildSourceTfvcShelveset
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_SOURCETFVC_SHELVESET</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildSourceTfvcShelveset { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildSourceVersion_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildSourceVersion*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildSourceVersion" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildSourceVersion">
+  BuildSourceVersion
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_SOURCEVERSION</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildSourceVersion { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildSourceVersionMessage_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildSourceVersionMessage*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildSourceVersionMessage" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildSourceVersionMessage">
+  BuildSourceVersionMessage
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_SOURCEVERSIONMESSAGE</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildSourceVersionMessage { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildSourcesDirectory_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildSourcesDirectory*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildSourcesDirectory" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildSourcesDirectory">
+  BuildSourcesDirectory
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_SOURCESDIRECTORY</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildSourcesDirectory { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildStagingDirectory_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildStagingDirectory*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildStagingDirectory" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildStagingDirectory">
+  BuildStagingDirectory
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_STAGINGDIRECTORY</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildStagingDirectory { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildTriggeredByBuildId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildTriggeredByBuildId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildTriggeredByBuildId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildTriggeredByBuildId">
+  BuildTriggeredByBuildId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_TRIGGEREDBY_BUILDID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildTriggeredByBuildId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildTriggeredByBuildNumber_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildTriggeredByBuildNumber*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildTriggeredByBuildNumber" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildTriggeredByBuildNumber">
+  BuildTriggeredByBuildNumber
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_TRIGGEREDBY_BUILDNUMBER</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildTriggeredByBuildNumber { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildTriggeredByDefinitionId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildTriggeredByDefinitionId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildTriggeredByDefinitionId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildTriggeredByDefinitionId">
+  BuildTriggeredByDefinitionId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_TRIGGEREDBY_DEFINITIONID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildTriggeredByDefinitionId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildTriggeredByDefinitionName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildTriggeredByDefinitionName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildTriggeredByDefinitionName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildTriggeredByDefinitionName">
+  BuildTriggeredByDefinitionName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_TRIGGEREDBY_DEFINITIONNAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildTriggeredByDefinitionName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildTriggeredByProjectId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildTriggeredByProjectId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_BuildTriggeredByProjectId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.BuildTriggeredByProjectId">
+  BuildTriggeredByProjectId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>BUILD_TRIGGEREDBY_PROJECTID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string BuildTriggeredByProjectId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_ChecksStageAttempt_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.ChecksStageAttempt*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_ChecksStageAttempt" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.ChecksStageAttempt">
+  ChecksStageAttempt
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>CHECKS_STAGEATTEMPT</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string ChecksStageAttempt { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_CommonTestResultsDirectory_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.CommonTestResultsDirectory*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_CommonTestResultsDirectory" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.CommonTestResultsDirectory">
+  CommonTestResultsDirectory
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>COMMON_TESTRESULTSDIRECTORY</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string CommonTestResultsDirectory { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_EnvironmentId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.EnvironmentId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_EnvironmentId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.EnvironmentId">
+  EnvironmentId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>ENVIRONMENT_ID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string EnvironmentId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_EnvironmentName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.EnvironmentName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_EnvironmentName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.EnvironmentName">
+  EnvironmentName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>ENVIRONMENT_NAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string EnvironmentName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_EnvironmentResourceId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.EnvironmentResourceId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_EnvironmentResourceId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.EnvironmentResourceId">
+  EnvironmentResourceId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>ENVIRONMENT_RESOURCEID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string EnvironmentResourceId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_EnvironmentResourceName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.EnvironmentResourceName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_EnvironmentResourceName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.EnvironmentResourceName">
+  EnvironmentResourceName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>ENVIRONMENT_RESOURCENAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string EnvironmentResourceName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_StrategyCycleName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.StrategyCycleName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_StrategyCycleName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.StrategyCycleName">
+  StrategyCycleName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>STRATEGY_CYCLENAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string StrategyCycleName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_StrategyName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.StrategyName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_StrategyName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.StrategyName">
+  StrategyName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>STRATEGY_NAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string StrategyName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemAccessToken_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemAccessToken*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemAccessToken" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemAccessToken">
+  SystemAccessToken
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_ACCESSTOKEN</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemAccessToken { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemCollectionId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemCollectionId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemCollectionId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemCollectionId">
+  SystemCollectionId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_COLLECTIONID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemCollectionId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemCollectionUri_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemCollectionUri*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemCollectionUri" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemCollectionUri">
+  SystemCollectionUri
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_COLLECTIONURI</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemCollectionUri { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemDebug_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemDebug*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemDebug" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemDebug">
+  SystemDebug
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_DEBUG</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemDebug { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemDefaultWorkingDirectory_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemDefaultWorkingDirectory*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemDefaultWorkingDirectory" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemDefaultWorkingDirectory">
+  SystemDefaultWorkingDirectory
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_DEFAULTWORKINGDIRECTORY</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemDefaultWorkingDirectory { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemDefinitionId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemDefinitionId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemDefinitionId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemDefinitionId">
+  SystemDefinitionId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_DEFINITIONID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemDefinitionId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemHostType_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemHostType*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemHostType" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemHostType">
+  SystemHostType
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_HOSTTYPE</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemHostType { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemJobAttempt_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemJobAttempt*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemJobAttempt" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemJobAttempt">
+  SystemJobAttempt
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_JOBATTEMPT</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemJobAttempt { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemJobDisplayName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemJobDisplayName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemJobDisplayName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemJobDisplayName">
+  SystemJobDisplayName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_JOBDISPLAYNAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemJobDisplayName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemJobId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemJobId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemJobId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemJobId">
+  SystemJobId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_JOBID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemJobId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemJobName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemJobName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemJobName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemJobName">
+  SystemJobName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_JOBNAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemJobName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemOidcRequestUri_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemOidcRequestUri*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemOidcRequestUri" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemOidcRequestUri">
+  SystemOidcRequestUri
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_OIDCREQUESTURI</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemOidcRequestUri { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPhaseAttempt_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPhaseAttempt*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPhaseAttempt" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPhaseAttempt">
+  SystemPhaseAttempt
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_PHASEATTEMPT</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemPhaseAttempt { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPhaseDisplayName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPhaseDisplayName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPhaseDisplayName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPhaseDisplayName">
+  SystemPhaseDisplayName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_PHASEDISPLAYNAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemPhaseDisplayName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPhaseName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPhaseName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPhaseName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPhaseName">
+  SystemPhaseName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_PHASENAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemPhaseName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPlanId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPlanId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPlanId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPlanId">
+  SystemPlanId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_PLANID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemPlanId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestIsFork_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestIsFork*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestIsFork" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestIsFork">
+  SystemPullRequestIsFork
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_PULLREQUEST_ISFORK</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemPullRequestIsFork { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestPullRequestId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestPullRequestId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestPullRequestId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestPullRequestId">
+  SystemPullRequestPullRequestId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_PULLREQUEST_PULLREQUESTID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemPullRequestPullRequestId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestPullRequestNumber_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestPullRequestNumber*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestPullRequestNumber" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestPullRequestNumber">
+  SystemPullRequestPullRequestNumber
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_PULLREQUEST_PULLREQUESTNUMBER</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemPullRequestPullRequestNumber { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestSourceBranch_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestSourceBranch*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestSourceBranch" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestSourceBranch">
+  SystemPullRequestSourceBranch
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_PULLREQUEST_SOURCEBRANCH</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemPullRequestSourceBranch { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestSourceCommitId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestSourceCommitId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestSourceCommitId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestSourceCommitId">
+  SystemPullRequestSourceCommitId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_PULLREQUEST_SOURCECOMMITID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemPullRequestSourceCommitId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestSourceRepositoryUri_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestSourceRepositoryUri*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestSourceRepositoryUri" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestSourceRepositoryUri">
+  SystemPullRequestSourceRepositoryUri
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_PULLREQUEST_SOURCEREPOSITORYURI</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemPullRequestSourceRepositoryUri { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestStageAttempt_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestStageAttempt*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestStageAttempt" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestStageAttempt">
+  SystemPullRequestStageAttempt
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_PULLREQUEST_STAGEATTEMPT</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemPullRequestStageAttempt { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestStageDisplayName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestStageDisplayName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestStageDisplayName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestStageDisplayName">
+  SystemPullRequestStageDisplayName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_PULLREQUEST_STAGEDISPLAYNAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemPullRequestStageDisplayName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestStageName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestStageName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestStageName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestStageName">
+  SystemPullRequestStageName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_PULLREQUEST_STAGENAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemPullRequestStageName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestTargetBranch_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestTargetBranch*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestTargetBranch" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestTargetBranch">
+  SystemPullRequestTargetBranch
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_PULLREQUEST_TARGETBRANCH</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemPullRequestTargetBranch { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestTargetBranchName_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestTargetBranchName*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemPullRequestTargetBranchName" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemPullRequestTargetBranchName">
+  SystemPullRequestTargetBranchName
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_PULLREQUEST_TARGETBRANCHNAME</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemPullRequestTargetBranchName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemTeamFoundationCollectionUri_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemTeamFoundationCollectionUri*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemTeamFoundationCollectionUri" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemTeamFoundationCollectionUri">
+  SystemTeamFoundationCollectionUri
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_TEAMFOUNDATIONCOLLECTIONURI</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemTeamFoundationCollectionUri { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemTeamProject_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemTeamProject*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemTeamProject" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemTeamProject">
+  SystemTeamProject
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_TEAMPROJECT</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemTeamProject { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemTeamProjectId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemTeamProjectId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemTeamProjectId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemTeamProjectId">
+  SystemTeamProjectId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_TEAMPROJECTID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemTeamProjectId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemTeamTimelineId_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemTeamTimelineId*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_SystemTeamTimelineId" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.SystemTeamTimelineId">
+  SystemTeamTimelineId
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>SYSTEM_TIMELINEID</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string SystemTeamTimelineId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_TfBuild_" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.TfBuild*"></a>
+
+  <h3 id="Invex_Atom_Module_DevOpsWorkflows_DevOps_Variables_TfBuild" data-uid="Invex.Atom.Module.DevOpsWorkflows.DevOps.Variables.TfBuild">
+  TfBuild
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the value of the <code>TF_BUILD</code> environment variable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string TfBuild { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom · MIT License · Invex Games
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
