@@ -26,10 +26,14 @@
 ///         6.8.0 is installed. A version pinned in a local tool manifest is used instead, and must be a 6.x release of
 ///         at least 6.8.0.
 ///     </para>
+///     <para>
+///         This interface extends <see cref="IDotnetToolInstallHelper" />, which the GitVersion runner uses to install
+///         and check <c>GitVersion.Tool</c>, so a build definition only needs to implement <see cref="IGitVersion" />.
+///     </para>
 /// </remarks>
 [PublicAPI]
 [ConfigureHostBuilder]
-public partial interface IGitVersion : IBuildAccessor
+public partial interface IGitVersion : IDotnetToolInstallHelper
 {
     /// <summary>
     ///     Gets the path of the GitVersion configuration file to use, relative to the repository root
