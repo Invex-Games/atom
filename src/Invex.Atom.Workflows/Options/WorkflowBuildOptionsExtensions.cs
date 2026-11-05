@@ -191,6 +191,79 @@ public static class WorkflowBuildOptionsExtensions
         /// <returns>A <see cref="TargetCondition" /> option.</returns>
         public TargetCondition RunIfWorkflowCondition(BoolExpr condition) =>
             new(condition);
+
+        /// <summary>
+        ///     Gets an option that runs the target's job only when a job it depends on, directly or transitively, failed
+        ///     or was cancelled.
+        /// </summary>
+        /// <value>
+        ///     A <see cref="TargetCondition" /> rendered as <c>failure() || cancelled()</c> on GitHub Actions and
+        ///     <c>or(failed(), canceled())</c> on Azure DevOps.
+        /// </value>
+        /// <remarks>
+        ///     <para>
+        ///         Use it for a gate target: a single required check that stands for a set of jobs, some of which may be
+        ///         skipped by their own conditions (for example, product jobs in a monorepo that only run when their
+        ///         product is affected). Give the gate a <c>DependsOn</c> on every job it stands for, make it always
+        ///         throw, and condition it with this option:
+        ///     </para>
+        ///     <list type="bullet">
+        ///         <item>
+        ///             When every dependency succeeds or is skipped, the gate is skipped. GitHub treats a skipped required
+        ///             check as passed.
+        ///         </item>
+        ///         <item>When any dependency fails or is cancelled, the gate runs, throws and fails the check.</item>
+        ///     </list>
+        ///     <para>
+        ///         Branch protection then only needs to require the gate. Like any <see cref="TargetCondition" />, the
+        ///         gate's dependencies must be declared with <c>DependsOn</c> and listed in the workflow; the condition
+        ///         does not add them.
+        ///     </para>
+        ///     <para>
+        ///         On Azure DevOps, a custom condition replaces the default <c>succeeded()</c> condition, so this
+        ///         option makes the job run only on failure or cancellation, as intended. For the same reason, other
+        ///         custom conditions there (such as the product jobs' own) usually need <c>Tex.Success()</c> added
+        ///         to keep skipping after an earlier failure.
+        ///     </para>
+        /// </remarks>
+        /// <example>
+        ///     <code>
+        /// Target ValidateGate => t => t
+        ///     .DependsOn(nameof(PackAppA))
+        ///     .DependsOn(nameof(PackAppB))
+        ///     .Executes(() => throw new InvalidOperationException("A product job failed or was cancelled."));
+        ///
+        /// new WorkflowDefinition("Validate")
+        /// {
+        ///     Targets =
+        ///     [
+        ///         new(nameof(PackAppA)),
+        ///         new(nameof(PackAppB)),
+        ///         new(nameof(ValidateGate)) { Options = [BuildOptions.Target.RunIfAnyDependencyFailed] },
+        ///     ],
+        /// };
+        ///     </code>
+        /// </example>
+        /// <seealso cref="RunIfWorkflowCondition" />
+        /// <seealso cref="RunAlways" />
+        public TargetCondition RunIfAnyDependencyFailed =>
+            new(Tex.Failure() || Tex.Cancelled());
+
+        /// <summary>
+        ///     Gets an option that runs the target's job regardless of the result of the jobs it depends on, including
+        ///     after a failure or cancellation.
+        /// </summary>
+        /// <value>
+        ///     A <see cref="TargetCondition" /> rendered as <c>always()</c> on both GitHub Actions and Azure DevOps.
+        /// </value>
+        /// <remarks>
+        ///     Use it for jobs that must run once their dependencies have finished, such as reporting or clean-up. On
+        ///     Azure DevOps, the condition replaces the default <c>succeeded()</c> condition.
+        /// </remarks>
+        /// <seealso cref="RunIfWorkflowCondition" />
+        /// <seealso cref="RunIfAnyDependencyFailed" />
+        public TargetCondition RunAlways =>
+            new(Tex.Always());
     }
 
     /// <summary>
