@@ -223,6 +223,12 @@ jobs:
           targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.GitHubWorkflows.Tests
 
       - task: PublishPipelineArtifact@1
+        displayName: Invex.Atom.Module.GitVersion.Tests
+        inputs:
+          artifactName: Invex.Atom.Module.GitVersion.Tests-$(job-runs-on)-$(test-framework)
+          targetPath: $(Build.BinariesDirectory)/Invex.Atom.Module.GitVersion.Tests
+
+      - task: PublishPipelineArtifact@1
         displayName: Invex.Atom.Workflows.Tests
         inputs:
           artifactName: Invex.Atom.Workflows.Tests-$(job-runs-on)-$(test-framework)
