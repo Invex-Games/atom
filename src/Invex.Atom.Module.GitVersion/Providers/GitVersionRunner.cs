@@ -115,10 +115,11 @@ internal sealed class GitVersionRunner(
                     InvocationLogLevel = LogLevel.Debug,
                 });
 
-                jsonOutput = JsonSerializer.Deserialize(gitVersionResult.Output,
+                var runOutput = JsonSerializer.Deserialize(gitVersionResult.Output,
                     JsonElementContext.Default.JsonElement);
 
-                GitVersionCache.Write(fileSystem, cacheFileName, cacheKey, jsonOutput.Value);
+                GitVersionCache.Write(fileSystem, cacheFileName, cacheKey, runOutput);
+                jsonOutput = runOutput;
             }
 
             _outputs[outputKey] = jsonOutput.Value;
@@ -181,10 +182,8 @@ internal sealed class GitVersionRunner(
     /// </returns>
     private string? GetDefaultConfigContentHash()
     {
-        foreach (var fileName in DefaultConfigFileNames)
+        foreach (var path in DefaultConfigFileNames.Select(fileName => fileSystem.AtomRootDirectory / fileName))
         {
-            var path = fileSystem.AtomRootDirectory / fileName;
-
             if (fileSystem.File.Exists(path))
                 return Convert.ToHexStringLower(SHA256.HashData(fileSystem.File.ReadAllBytes(path)));
         }
