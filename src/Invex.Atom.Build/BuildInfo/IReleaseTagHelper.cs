@@ -125,9 +125,10 @@ public interface IReleaseTagHelper : IBuildAccessor
                     "Fetch the full history (for example, fetch-depth: 0 for actions/checkout).");
         }
 
+        // --no-show-signature keeps the output to the hash alone when the user's Git config sets log.showSignature
         string[] args = pathList.Count > 0
-            ? ["log", "-1", "--format=%H", "--", ..pathList]
-            : ["log", "-1", "--format=%H"];
+            ? ["log", "-1", "--no-show-signature", "--format=%H", "--", ..pathList]
+            : ["log", "-1", "--no-show-signature", "--format=%H"];
 
         var logResult = await ProcessRunner.RunAsync(new("git", ProcessArguments.Join(args))
             {
