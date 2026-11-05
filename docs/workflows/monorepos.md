@@ -76,7 +76,8 @@ internal interface IProductTargets : IBuildInfo, IVariablesHelper, IReleaseTagHe
                 }
 
                 // --no-renames lists both sides of a move (a file moved out of AppA still affects AppA), and -z
-                // writes raw, NUL-separated names, so Git doesn't quote unusual file names
+                // writes raw, NUL-separated names, so Git doesn't quote unusual file names. The process runner
+                // reads output line by line, so also split on the line break it appends.
                 var diff = await ProcessRunner.RunAsync(
                     new("git", $"diff --name-only --no-renames -z origin/{baseRef}...HEAD")
                     {
@@ -85,7 +86,7 @@ internal interface IProductTargets : IBuildInfo, IVariablesHelper, IReleaseTagHe
                     },
                     cancellationToken);
 
-                var changedFiles = diff.Output.Split('\0', StringSplitOptions.RemoveEmptyEntries);
+                var changedFiles = diff.Output.Split(['\0', '\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
 
                 bool Touches(string[] paths) =>
                     changedFiles.Any(file => paths
