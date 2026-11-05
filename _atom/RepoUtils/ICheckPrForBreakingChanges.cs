@@ -145,7 +145,7 @@ internal interface ICheckPrForBreakingChanges : IGitHubHelper, IPullRequestHelpe
         SemVer currentVersion,
         CancellationToken cancellationToken)
     {
-        var tagsResult = await ProcessRunner.RunAsync(new("git", ["tag", "--list", "v*"])
+        var tagsResult = await ProcessRunner.RunAsync(new("git", ["tag", "--list", ReleaseTag.Glob()])
             {
                 WorkingDirectory = RootedFileSystem.AtomRootDirectory,
                 OutputLogLevel = LogLevel.Debug,
@@ -157,9 +157,9 @@ internal interface ICheckPrForBreakingChanges : IGitHubHelper, IPullRequestHelpe
             .Select(tag => new
             {
                 Tag = tag,
-                Version = !SemVer.TryParse(tag[1..], out var version)
-                        ? null
-                        : version,
+                Version = ReleaseTag.TryParse(tag, out var version)
+                    ? version
+                    : null,
             })
             .Where(x => x.Version is not null && x.Version < currentVersion)
             .Select(x => new

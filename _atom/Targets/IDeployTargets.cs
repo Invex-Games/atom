@@ -59,6 +59,6 @@ internal interface IDeployTargets : INugetHelper, IGitHubReleaseHelper, ISetupBu
             .Executes(async () =>
             {
                 foreach (var artifact in IBuildTargets.ProjectsToPack.Concat(ITestTargets.ProjectsToTest))
-                    await UploadArtifactToRelease(artifact, $"v{BuildVersion}");
+                    await UploadArtifactToRelease(artifact, ReleaseTag.For(BuildVersion));
             });
 }
