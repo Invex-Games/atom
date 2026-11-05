@@ -41,6 +41,39 @@ internal sealed class ReleaseTagHelperTests
             ? @"C:\Atom\"
             : "/Atom/";
 
+    [TestCase("1.2.0", "v1.2.0")]
+    [TestCase("1.2.0-rc.1+build.5", "v1.2.0-rc.1+build.5")]
+    public void ReleaseTagFor_UsesDefaultPrefix(string version, string expected) =>
+        CreateSut()
+            .Helper
+            .ReleaseTagFor(SemVer.Parse(version))
+            .ShouldBe(expected);
+
+    [TestCase("v1.2.0", true)]
+    [TestCase("v1.2.0-rc.1", true)]
+    [TestCase("appa/v1.2.0", false)]
+    [TestCase("vnext", false)]
+    [TestCase(null, false)]
+    public void TryParseReleaseTag_UsesDefaultPrefix(string? tag, bool expected)
+    {
+        var helper = CreateSut().Helper;
+
+        helper
+            .TryParseReleaseTag(tag, out var version)
+            .ShouldBe(expected);
+
+        version.ShouldBe(expected
+            ? SemVer.Parse(tag![1..])
+            : null);
+    }
+
+    [Test]
+    public void ReleaseTagGlob_UsesDefaultPrefix() =>
+        CreateSut()
+            .Helper
+            .ReleaseTagGlob
+            .ShouldBe("v*");
+
     [Test]
     public async Task GetReleaseTagCommit_WithNoPaths_ReturnsHeadCommit()
     {

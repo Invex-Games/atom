@@ -5,8 +5,8 @@
 /// </summary>
 /// <remarks>
 ///     <para>
-///         The configuration file is read from the <see cref="IGitVersion.GitVersionConfig" /> parameter when the
-///         output is first requested. All work happens behind a single lock, so the build ID and build version
+///         The configuration file is read from the <see cref="IGitVersion.GitVersionConfig" /> parameter each time
+///         the output is requested. All work happens behind a single lock, so the build ID and build version
 ///         providers never start GitVersion twice for the same configuration. Results are kept in memory for the
 ///         lifetime of the process and persisted with <see cref="GitVersionCache" />.
 ///     </para>
@@ -44,6 +44,14 @@ internal sealed class GitVersionRunner(
     /// </summary>
     internal static readonly SemVer MinimumToolVersion = SemVer.Parse("6.8.0");
 
+    /// <summary>
+    ///     The file names GitVersion looks for, in order, when no configuration file is given.
+    /// </summary>
+    internal static readonly string[] DefaultConfigFileNames =
+    [
+        "GitVersion.yml", "GitVersion.yaml", ".GitVersion.yml", ".GitVersion.yaml",
+    ];
+
     private readonly Lock _lock = new();
     private readonly Dictionary<string, JsonElement> _outputs = new(StringComparer.Ordinal);
     private bool _toolVerified;
@@ -53,11 +61,20 @@ internal sealed class GitVersionRunner(
     /// </summary>
     /// <returns>The root JSON element of GitVersion's <c>/output json</c> result.</returns>
     /// <exception cref="InvalidOperationException">
-    ///     Thrown if <see cref="IGitVersion.GitVersionConfig" /> is set to a file that does not exist.
+    ///     Thrown if <see cref="IGitVersion.GitVersionConfig" /> is set to a file that does not exist, or if no
+    ///     supported GitVersion version is available (see <see cref="IsSupportedToolVersion" />).
     /// </exception>
     /// <remarks>
-    ///     Returns the in-memory result when GitVersion already ran for the same configuration in this process, then
-    ///     a matching on-disk cache entry, and only otherwise installs the tool (if needed) and runs GitVersion.
+    ///     <para>
+    ///         Returns the in-memory result when GitVersion already ran for the same configuration in this process,
+    ///         then a matching on-disk cache entry, and only otherwise installs the tool (if needed) and runs
+    ///         GitVersion.
+    ///     </para>
+    ///     <para>
+    ///         The configuration parameter is read on every call, so a value requested before the parameter is
+    ///         visible (for example while the build model is resolved, when only default values are returned) does
+    ///         not hide the configured file later.
+    ///     </para>
     /// </remarks>
     internal JsonElement GetOutput()
     {
@@ -78,7 +95,11 @@ internal sealed class GitVersionRunner(
                 .Trim();
 
             var cacheFileName = GitVersionCache.GetCacheFileName(config?.RelativePath);
-            var cacheKey = GitVersionCache.CreateKey(currentGitHash, config?.RelativePath, config?.ContentHash);
+
+            var cacheKey = GitVersionCache.CreateKey(currentGitHash,
+                config?.RelativePath,
+                config?.ContentHash ?? GetDefaultConfigContentHash());
+
             var jsonOutput = GitVersionCache.TryRead(fileSystem, cacheFileName, cacheKey, logger);
 
             if (jsonOutput is null)
@@ -126,7 +147,7 @@ internal sealed class GitVersionRunner(
     /// <exception cref="InvalidOperationException">Thrown if the resolved file does not exist.</exception>
     internal ResolvedConfig? ResolveConfig()
     {
-        // A default value lets an interactive run skip the prompt for this optional parameter.
+        // A non-null default lets an interactive run accept an empty answer at the prompt for this optional parameter.
         var value = paramService.GetParam(nameof(IGitVersion.GitVersionConfig), string.Empty);
 
         if (string.IsNullOrWhiteSpace(value))
@@ -151,10 +172,46 @@ internal sealed class GitVersionRunner(
         return new(relativePath, fullPath, contentHash);
     }
 
+    /// <summary>
+    ///     Gets the content hash of the configuration file GitVersion finds by default in the Atom root directory.
+    /// </summary>
+    /// <returns>
+    ///     The lowercase hex SHA-256 hash of the first of <see cref="DefaultConfigFileNames" /> that exists in the
+    ///     Atom root directory, or <c>null</c> if none exists.
+    /// </returns>
+    private string? GetDefaultConfigContentHash()
+    {
+        foreach (var fileName in DefaultConfigFileNames)
+        {
+            var path = fileSystem.AtomRootDirectory / fileName;
+
+            if (fileSystem.File.Exists(path))
+                return Convert.ToHexStringLower(SHA256.HashData(fileSystem.File.ReadAllBytes(path)));
+        }
+
+        return null;
+    }
+
     private void EnsureToolInstalled()
     {
         if (_toolVerified)
             return;
+
+        // 'dotnet gitversion' runs a version pinned in a local tool manifest before a global one.
+        var localVersion = dotnetToolInstallHelper.GetInstalledToolVersion(ToolName, global: false);
+
+        if (localVersion is not null)
+        {
+            if (!IsSupportedToolVersion(localVersion))
+                throw new InvalidOperationException(
+                    $"{ToolName} {localVersion} is pinned in the local tool manifest, but {MinimumToolVersion} or a " +
+                    $"later {MinimumToolVersion.Major}.x version is required. Update the manifest, for example with " +
+                    $"'dotnet tool update {ToolName} --version {ToolVersion}'.");
+
+            _toolVerified = true;
+
+            return;
+        }
 
         var installedVersion = dotnetToolInstallHelper.GetInstalledToolVersion(ToolName);
 
@@ -172,11 +229,10 @@ internal sealed class GitVersionRunner(
             installedVersion = dotnetToolInstallHelper.GetInstalledToolVersion(ToolName);
 
             if (!IsSupportedToolVersion(installedVersion))
-                logger.LogWarning(
-                    "{ToolName} {InstalledVersion} is installed, but {MinimumVersion} or a later 6.x version is required",
-                    ToolName,
-                    installedVersion ?? "(unknown)",
-                    MinimumToolVersion);
+                throw new InvalidOperationException(
+                    $"{ToolName} {installedVersion ?? "(unknown)"} is installed globally after installing " +
+                    $"{ToolVersion}, but {MinimumToolVersion} or a later {MinimumToolVersion.Major}.x version is " +
+                    "required. Check that the configured NuGet feeds provide a supported version.");
         }
 
         _toolVerified = true;

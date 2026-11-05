@@ -70,12 +70,17 @@ resolved path.
 
 The build ID and version share one GitVersion run per configuration file. The output is cached in the build project's
 `obj` directory (`.gitversioncache` for the default configuration, `.gitversioncache-<hash>` for each custom one) until
-the commit or the configuration file's contents change.
+the commit or the configuration file's contents change. For the default configuration, Atom hashes the first of
+`GitVersion.yml`, `GitVersion.yaml`, `.GitVersion.yml` and `.GitVersion.yaml` in the repository root.
 
 ## Prerequisites
 
 Atom installs `GitVersion.Tool` as a global .NET tool when needed. It requires a 6.x release of at least 6.8.0, and
 otherwise installs the latest 6.x release (`--version 6.*`), downgrading a newer major version if one is installed.
+The build fails if no supported version can be installed.
+
+If a local tool manifest (`dotnet-tools.json`) lists `GitVersion.Tool`, `dotnet gitversion` runs that version instead,
+so Atom checks it and fails if it is not a 6.x release of at least 6.8.0. Atom does not change the manifest.
 To install it yourself:
 
 ```shell

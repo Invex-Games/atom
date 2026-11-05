@@ -6,10 +6,16 @@
 /// </summary>
 /// <remarks>
 ///     <para>
-///         A release tag is a prefix followed by a <see cref="SemVer" />. The prefix defaults to
-///         <see cref="DefaultPrefix" /> (<c>v</c>). A monorepo product typically uses its own prefix, such as
+///         A release tag is a prefix followed by a <see cref="SemVer" />. Every method takes the prefix explicitly:
+///         usually <see cref="DefaultPrefix" /> (<c>v</c>), or a monorepo product's own prefix, such as
 ///         <c>appa/v</c>, so that each product's tags can be found and versioned independently. The prefix may be
 ///         empty, for tags like <c>1.2.0</c>.
+///     </para>
+///     <para>
+///         In a build, prefer the <see cref="IReleaseTagHelper" /> members
+///         (<see cref="IReleaseTagHelper.ReleaseTagFor" />, <see cref="IReleaseTagHelper.TryParseReleaseTag" /> and
+///         <see cref="IReleaseTagHelper.ReleaseTagGlob" />), which use the build's release tag prefix. Use this class
+///         when you need a specific prefix.
 ///     </para>
 ///     <para>
 ///         Prefix matching is ordinal and case-sensitive.
@@ -17,10 +23,10 @@
 /// </remarks>
 /// <example>
 ///     <code>
-/// ReleaseTag.For(SemVer.Parse("1.2.0")); // "v1.2.0"
+/// ReleaseTag.For(SemVer.Parse("1.2.0"), ReleaseTag.DefaultPrefix); // "v1.2.0"
 /// ReleaseTag.For(SemVer.Parse("1.2.0-rc.1"), "appa/v"); // "appa/v1.2.0-rc.1"
-/// ReleaseTag.TryParse("appa/v1.2.0", out var version, "appa/v"); // true, version is 1.2.0
-/// ReleaseTag.TryParse("appa/v1.2.0", out _); // false, the default prefix is "v"
+/// ReleaseTag.TryParse("appa/v1.2.0", "appa/v", out var version); // true, version is 1.2.0
+/// ReleaseTag.TryParse("appa/v1.2.0", "v", out _); // false, the prefix does not match
 /// ReleaseTag.Glob("appa/v"); // "appa/v*"
 ///     </code>
 /// </example>
@@ -37,8 +43,8 @@ public static class ReleaseTag
     /// </summary>
     /// <param name="version">The version to tag.</param>
     /// <param name="prefix">
-    ///     The tag prefix, such as <c>v</c> or <c>appa/v</c>. Defaults to <see cref="DefaultPrefix" />. May be empty, but
-    ///     not <see langword="null" />.
+    ///     The tag prefix, such as <see cref="DefaultPrefix" /> (<c>v</c>) or <c>appa/v</c>. May be empty, but not
+    ///     <see langword="null" />.
     /// </param>
     /// <returns>
     ///     <paramref name="prefix" /> followed by the full version string, including any pre-release and build metadata
@@ -47,7 +53,7 @@ public static class ReleaseTag
     /// <exception cref="ArgumentNullException">
     ///     Thrown if <paramref name="version" /> or <paramref name="prefix" /> is <see langword="null" />.
     /// </exception>
-    public static string For(SemVer version, string prefix = DefaultPrefix)
+    public static string For(SemVer version, string prefix)
     {
         ArgumentNullException.ThrowIfNull(version);
         ArgumentNullException.ThrowIfNull(prefix);
@@ -59,25 +65,25 @@ public static class ReleaseTag
     ///     Tries to parse a release tag with the given prefix.
     /// </summary>
     /// <param name="tag">The tag to parse, such as <c>v1.2.0</c>. May be <see langword="null" />.</param>
+    /// <param name="prefix">
+    ///     The tag prefix, such as <see cref="DefaultPrefix" /> (<c>v</c>) or <c>appa/v</c>. May be empty, but not
+    ///     <see langword="null" />.
+    /// </param>
     /// <param name="version">
     ///     When this method returns <see langword="true" />, the version that follows the prefix; otherwise,
     ///     <see langword="null" />.
     /// </param>
-    /// <param name="prefix">
-    ///     The tag prefix, such as <c>v</c> or <c>appa/v</c>. Defaults to <see cref="DefaultPrefix" />. May be empty, but
-    ///     not <see langword="null" />.
-    /// </param>
     /// <returns>
     ///     <see langword="true" /> if <paramref name="tag" /> starts with <paramref name="prefix" /> (ordinal,
     ///     case-sensitive) and the rest of the tag is a valid semantic version; otherwise, <see langword="false" />.
-    ///     For example, <c>appa/v1.2.0</c> does not parse with the default <c>v</c> prefix, and <c>vnext</c> does not
-    ///     parse with any prefix.
+    ///     For example, <c>appa/v1.2.0</c> does not parse with the <c>v</c> prefix, and <c>vnext</c> does not parse
+    ///     with any prefix.
     /// </returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="prefix" /> is <see langword="null" />.</exception>
     public static bool TryParse(
         [NotNullWhen(true)] string? tag,
-        [NotNullWhen(true)] out SemVer? version,
-        string prefix = DefaultPrefix)
+        string prefix,
+        [NotNullWhen(true)] out SemVer? version)
     {
         ArgumentNullException.ThrowIfNull(prefix);
 
@@ -93,8 +99,8 @@ public static class ReleaseTag
     ///     <c>git tag --list &lt;pattern&gt;</c>.
     /// </summary>
     /// <param name="prefix">
-    ///     The tag prefix, such as <c>v</c> or <c>appa/v</c>. Defaults to <see cref="DefaultPrefix" />. May be empty, but
-    ///     not <see langword="null" />.
+    ///     The tag prefix, such as <see cref="DefaultPrefix" /> (<c>v</c>) or <c>appa/v</c>. May be empty, but not
+    ///     <see langword="null" />.
     /// </param>
     /// <returns><paramref name="prefix" /> followed by <c>*</c>, for example <c>v*</c> or <c>appa/v*</c>.</returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="prefix" /> is <see langword="null" />.</exception>
@@ -104,7 +110,7 @@ public static class ReleaseTag
     ///     listed tags with <see cref="TryParse" /> using the same prefix. The prefix is not escaped, so glob characters
     ///     in it (<c>*</c>, <c>?</c>, <c>[</c>) keep their glob meaning.
     /// </remarks>
-    public static string Glob(string prefix = DefaultPrefix)
+    public static string Glob(string prefix)
     {
         ArgumentNullException.ThrowIfNull(prefix);
 

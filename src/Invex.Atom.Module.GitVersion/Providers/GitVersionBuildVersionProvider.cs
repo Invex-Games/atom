@@ -21,6 +21,11 @@ internal sealed class GitVersionBuildVersionProvider(
     /// <exception cref="InvalidOperationException">
     ///     Thrown if the version information cannot be determined from GitVersion's output.
     /// </exception>
+    /// <remarks>
+    ///     The value is not cached here: <see cref="GitVersionRunner" /> caches GitVersion's output per configuration
+    ///     file, so a value first read while the configuration parameter is not yet visible (for example while the
+    ///     build model is resolved) does not hide the configured one.
+    /// </remarks>
     public SemVer Version
     {
         get
@@ -28,9 +33,6 @@ internal sealed class GitVersionBuildVersionProvider(
             if (!GitVersionProvideBuildVersionOption.IsEnabled(buildOptionService.Options))
                 throw new InvalidOperationException(
                     "GitVersion is not enabled for build version generation. Ensure GitVersionProvideBuildVersionOption is enabled.");
-
-            if (field is not null)
-                return field;
 
             var jsonOutput = gitVersionRunner.GetOutput();
 
@@ -50,7 +52,7 @@ internal sealed class GitVersionBuildVersionProvider(
                 .GetProperty("PreReleaseTag")
                 .GetString()!;
 
-            return field = preReleaseTagProp is { Length: > 0 }
+            return preReleaseTagProp is { Length: > 0 }
                 ? SemVer.Parse($"{majorProp}.{minorProp}.{patchProp}-{preReleaseTagProp}")
                 : SemVer.Parse($"{majorProp}.{minorProp}.{patchProp}");
         }

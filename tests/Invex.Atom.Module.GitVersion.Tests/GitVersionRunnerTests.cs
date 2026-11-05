@@ -45,6 +45,44 @@ public sealed class GitVersionRunnerTests
     }
 
     [Test]
+    public void BuildInfo_WithConfig_AfterBuildResolution_UsesConfig()
+    {
+        // Arrange: resolving the build model reads every param's default (including BuildId and BuildVersion) in
+        // a default-values-only scope, where the config param is not visible.
+        var host = CreateHost(AppAConfig);
+        host.Services.GetRequiredService<BuildModel>();
+
+        var buildInfo = (IBuildInfo)host.Services.GetRequiredService<IBuildDefinition>();
+
+        // Act
+        var buildId = buildInfo.BuildId;
+        var buildVersion = buildInfo.BuildVersion;
+
+        // Assert
+        buildId.ShouldBe("1.2.3-beta.4");
+        buildVersion.ToString()
+            .ShouldBe("1.2.3-beta.4");
+
+        _processRunner.GitVersionCalls.ShouldContain($"dotnet gitversion /config \"{RootPath(AppAConfig)}\" /output json");
+    }
+
+    [Test]
+    public void BuildInfo_WithMissingConfig_AfterBuildResolution_Throws()
+    {
+        // Arrange
+        var host = CreateHost("src/Missing/GitVersion.yml");
+        host.Services.GetRequiredService<BuildModel>();
+
+        var buildInfo = (IBuildInfo)host.Services.GetRequiredService<IBuildDefinition>();
+
+        // Act & Assert
+        Should
+            .Throw<InvalidOperationException>(() => buildInfo.BuildId)
+            .Message
+            .ShouldContain("gitversion-config");
+    }
+
+    [Test]
     public void GetOutput_CalledConcurrently_RunsGitVersionOnce()
     {
         // Arrange
@@ -205,6 +243,58 @@ public sealed class GitVersionRunnerTests
             .ShouldBe(2);
     }
 
+    [TestCase("GitVersion.yml")]
+    [TestCase("GitVersion.yaml")]
+    [TestCase(".GitVersion.yml")]
+    public void GetOutput_WithoutConfig_AfterDefaultConfigEdit_RunsGitVersionAgain(string fileName)
+    {
+        // Arrange
+        _fileSystem.AddFile(RootPath(fileName), new("next-version: 1.0.0\n"));
+
+        CreateHost()
+            .Services
+            .GetRequiredService<GitVersionRunner>()
+            .GetOutput();
+
+        _fileSystem.File.WriteAllText(RootPath(fileName), "next-version: 2.0.0\n");
+
+        var runner = CreateHost()
+            .Services
+            .GetRequiredService<GitVersionRunner>();
+
+        // Act
+        runner.GetOutput();
+
+        // Assert
+        _processRunner
+            .GitVersionCalls
+            .Count()
+            .ShouldBe(2);
+    }
+
+    [Test]
+    public void GetOutput_WithoutConfig_KeysCacheOnDefaultConfigContents()
+    {
+        // Arrange
+        _fileSystem.AddFile(RootPath("GitVersion.yml"), new("mode: ContinuousDelivery\n"));
+        var host = CreateHost();
+
+        // Act
+        host
+            .Services
+            .GetRequiredService<GitVersionRunner>()
+            .GetOutput();
+
+        // Assert
+        var cacheFile = GitVersionCache.GetCacheFile(host.Services.GetRequiredService<IRootedFileSystem>(),
+            GitVersionCache.DefaultCacheFileName);
+
+        _fileSystem
+            .File
+            .ReadAllText(cacheFile)
+            .ShouldStartWith($"0123456789abcdef||{Sha256("mode: ContinuousDelivery\n")}\n");
+    }
+
     [Test]
     public void GetOutput_AfterNewCommit_RunsGitVersionAgain()
     {
@@ -352,6 +442,71 @@ public sealed class GitVersionRunnerTests
     }
 
     [Test]
+    public void GetOutput_WithUnsupportedToolAfterUpdate_Throws()
+    {
+        // Arrange: for example, a mirrored feed that only has 6.7.x.
+        _processRunner.InstalledToolVersion = null;
+        _processRunner.UpdatedToolVersion = "6.7.0";
+
+        var runner = CreateHost()
+            .Services
+            .GetRequiredService<GitVersionRunner>();
+
+        // Act
+        var exception = Should.Throw<InvalidOperationException>(() => runner.GetOutput());
+
+        // Assert
+        exception.Message.ShouldContain("6.7.0");
+        exception.Message.ShouldContain("6.8.0");
+        _processRunner.GitVersionCalls.ShouldBeEmpty();
+    }
+
+    [TestCase("6.8.2")]
+    [TestCase("6.9.0")]
+    public void GetOutput_WithSupportedLocalTool_UsesItWithoutCheckingGlobalTool(string localVersion)
+    {
+        // Arrange
+        _processRunner.LocalToolVersion = localVersion;
+        _processRunner.InstalledToolVersion = null;
+
+        var runner = CreateHost()
+            .Services
+            .GetRequiredService<GitVersionRunner>();
+
+        // Act
+        runner.GetOutput();
+
+        // Assert
+        _processRunner
+            .Calls
+            .Where(x => x.StartsWith("dotnet tool", StringComparison.Ordinal))
+            .ShouldBe(["dotnet tool list GitVersion.Tool"]);
+
+        _processRunner.GitVersionCalls.ShouldHaveSingleItem();
+    }
+
+    [TestCase("6.4.0")]
+    [TestCase("7.0.0")]
+    public void GetOutput_WithUnsupportedLocalTool_ThrowsEvenIfGlobalToolIsSupported(string localVersion)
+    {
+        // Arrange: 'dotnet gitversion' would run the local manifest's version, not the global 6.8.2.
+        _processRunner.LocalToolVersion = localVersion;
+
+        var runner = CreateHost()
+            .Services
+            .GetRequiredService<GitVersionRunner>();
+
+        // Act
+        var exception = Should.Throw<InvalidOperationException>(() => runner.GetOutput());
+
+        // Assert
+        exception.Message.ShouldContain(localVersion);
+        exception.Message.ShouldContain("local tool manifest");
+        _processRunner.GitVersionCalls.ShouldBeEmpty();
+        _processRunner.Calls.ShouldNotContain(x => x.StartsWith("dotnet tool update", StringComparison.Ordinal));
+    }
+
+    [Test]
     public void GetOutput_ForTwoConfigsInOneRunner_RunsGitVersionOncePerConfigAndChecksToolOnce()
     {
         // Arrange
@@ -384,7 +539,7 @@ public sealed class GitVersionRunnerTests
         _processRunner
             .Calls
             .Count(x => x.StartsWith("dotnet tool list", StringComparison.Ordinal))
-            .ShouldBe(1);
+            .ShouldBe(2);
     }
 
     [TestCase(null, false)]

@@ -2,7 +2,11 @@ namespace Atom.RepoUtils;
 
 internal sealed record ReleaseInfo(string CommitHash, SemVer Version);
 
-internal interface ICheckPrForBreakingChanges : IGitHubHelper, IPullRequestHelper, ISetupBuildInfo, IApiSurfaceHelper
+internal interface ICheckPrForBreakingChanges : IGitHubHelper,
+    IPullRequestHelper,
+    ISetupBuildInfo,
+    IApiSurfaceHelper,
+    IReleaseTagHelper
 {
     private RootedPath[] FilesToCheck =>
         RootedFileSystem
@@ -145,7 +149,7 @@ internal interface ICheckPrForBreakingChanges : IGitHubHelper, IPullRequestHelpe
         SemVer currentVersion,
         CancellationToken cancellationToken)
     {
-        var tagsResult = await ProcessRunner.RunAsync(new("git", ["tag", "--list", ReleaseTag.Glob()])
+        var tagsResult = await ProcessRunner.RunAsync(new("git", ["tag", "--list", ReleaseTagGlob])
             {
                 WorkingDirectory = RootedFileSystem.AtomRootDirectory,
                 OutputLogLevel = LogLevel.Debug,
@@ -157,7 +161,7 @@ internal interface ICheckPrForBreakingChanges : IGitHubHelper, IPullRequestHelpe
             .Select(tag => new
             {
                 Tag = tag,
-                Version = ReleaseTag.TryParse(tag, out var version)
+                Version = TryParseReleaseTag(tag, out var version)
                     ? version
                     : null,
             })
