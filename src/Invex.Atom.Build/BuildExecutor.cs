@@ -117,14 +117,16 @@ internal sealed class BuildExecutor(
             else
             {
                 using var _ = paramService.CreateNoCacheScope();
-                value = paramService.GetParam(requiredParam.Param.Name, defaultValue);
-            }
 
-            // The stored default was computed in a default-values-only scope, so a default that depends on other
-            // parameters (such as a build version that depends on the GitVersion config) may have been unavailable.
-            // Read the parameter through the build definition, with normal resolution, before reporting it missing.
-            if (value is not { Length: > 0 } && defaultValue is null)
-                value = GetValueFromBuildDefinition(requiredParam.Param);
+                // The stored default was computed in a default-values-only scope, so a default that depends on other
+                // parameters (such as a build version that depends on the GitVersion config) may have been
+                // unavailable there. Without one, read the parameter through the build definition, which resolves it
+                // normally and computes its default with the other parameters visible (an interactive prompt then
+                // offers that default). If that fails, fall back to resolving it without a default.
+                value = defaultValue is null && TryGetValueFromBuildDefinition(requiredParam.Param, out var definitionValue)
+                    ? definitionValue
+                    : paramService.GetParam(requiredParam.Param.Name, defaultValue);
+            }
 
             if (value is { Length: > 0 })
                 continue;
@@ -155,26 +157,28 @@ internal sealed class BuildExecutor(
     }
 
     /// <summary>
-    ///     Reads a parameter through the build definition with normal parameter resolution, so that its default is
+    ///     Reads a parameter through the build definition, with normal parameter resolution, so that its default is
     ///     computed in full.
     /// </summary>
     /// <param name="param">The parameter to read.</param>
-    /// <returns>The parameter's value as a string, or <c>null</c> if it has none or could not be computed.</returns>
-    private string? GetValueFromBuildDefinition(ParamModel param)
+    /// <param name="value">The parameter's value as a string, or <c>null</c> if it has none.</param>
+    /// <returns><c>true</c> if the parameter was read; <c>false</c> if reading it threw.</returns>
+    private bool TryGetValueFromBuildDefinition(ParamModel param, out string? value)
     {
         try
         {
-            using var _ = paramService.CreateNoCacheScope();
-
-            return buildDefinition
+            value = buildDefinition
                 .AccessParam(param.Name)
                 ?.ToString();
+
+            return true;
         }
         catch (Exception ex)
         {
             logger.LogWarning(ex, "Could not determine the value of parameter '{ParamName}'", param.ArgName);
+            value = null;
 
-            return null;
+            return false;
         }
     }
 

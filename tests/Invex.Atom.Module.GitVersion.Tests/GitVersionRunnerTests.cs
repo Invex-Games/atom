@@ -107,6 +107,37 @@ public sealed class GitVersionRunnerTests
     }
 
     [Test]
+    public void Target_RequiringBuildVersion_Interactive_WithConfigAndFailingDefaultConfig_OffersComputedVersion()
+    {
+        // Arrange: in interactive mode, the prompt must offer the version computed with the selected configuration,
+        // so accepting it (an empty answer) runs the target with that version
+        _processRunner.FailDefaultConfigRun = true;
+
+        var console = new TestConsole().Interactive();
+
+        for (var i = 0; i < 4; i++)
+            console.Input.PushTextWithEnter(string.Empty);
+
+        var host = CreateTestHost<GitVersionTargetTestBuild>(console,
+            _fileSystem,
+            new(true,
+            [
+                new CommandArg(nameof(IVersionTarget.ReportVersion)),
+                new ParamArg("gitversion-config", nameof(IGitVersion.GitVersionConfig), AppAConfig),
+                new InteractiveArg(),
+            ]),
+            configure: builder => builder.Services.AddSingleton<IProcessRunner>(_processRunner));
+
+        var build = (GitVersionTargetTestBuild)host.Services.GetRequiredService<IBuildDefinition>();
+
+        // Act
+        host.Run();
+
+        // Assert
+        build.ExecutedVersion.ShouldBe("1.2.3-beta.4");
+    }
+
+    [Test]
     public void GetOutput_WithConfigPathContainingSpace_QuotesPath()
     {
         // Arrange
