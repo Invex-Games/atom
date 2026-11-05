@@ -37,5 +37,6 @@ global using IHelpService = Invex.Atom.Build.Help.IHelpService;
 global using HelpService = Invex.Atom.Build.Help.HelpService;
 
 [assembly: InternalsVisibleTo("Invex.Atom.Build.Tests")]
+[assembly: InternalsVisibleTo("Invex.Atom.Module.GitVersion")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: SuppressMessage("ReSharper", "LocalizableElement")]

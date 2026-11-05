@@ -106,9 +106,11 @@ internal sealed class GitVersionRunner(
             {
                 EnsureToolInstalled();
 
-                string[] args = config is null
+                // Quote and escape each argument, so a config path containing spaces or quotes reaches GitVersion
+                // intact
+                var args = ProcessArguments.Join(config is null
                     ? ["gitversion", "/output", "json"]
-                    : ["gitversion", "/config", $"\"{config.FullPath}\"", "/output", "json"];
+                    : ["gitversion", "/config", config.FullPath, "/output", "json"]);
 
                 var gitVersionResult = processRunner.Run(new("dotnet", args)
                 {

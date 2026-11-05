@@ -5,6 +5,7 @@
 /// </summary>
 /// <param name="args">The parsed command-line arguments.</param>
 /// <param name="buildModel">The model representing the build structure and state.</param>
+/// <param name="buildDefinition">The build definition, used to read parameters whose defaults are computed.</param>
 /// <param name="paramService">The service for resolving parameters.</param>
 /// <param name="variableService">The service for managing workflow variables.</param>
 /// <param name="outcomeReporters">The collection of report writers to invoke after execution.</param>
@@ -14,6 +15,7 @@
 internal sealed class BuildExecutor(
     CommandLineArgs args,
     BuildModel buildModel,
+    IBuildDefinition buildDefinition,
     IParamService paramService,
     IVariableService variableService,
     IEnumerable<IOutcomeReportWriter> outcomeReporters,
@@ -118,6 +120,12 @@ internal sealed class BuildExecutor(
                 value = paramService.GetParam(requiredParam.Param.Name, defaultValue);
             }
 
+            // The stored default was computed in a default-values-only scope, so a default that depends on other
+            // parameters (such as a build version that depends on the GitVersion config) may have been unavailable.
+            // Read the parameter through the build definition, with normal resolution, before reporting it missing.
+            if (value is not { Length: > 0 } && defaultValue is null)
+                value = GetValueFromBuildDefinition(requiredParam.Param);
+
             if (value is { Length: > 0 })
                 continue;
 
@@ -144,6 +152,30 @@ internal sealed class BuildExecutor(
 
         buildModel.GetTargetState(target)
             .Status = TargetRunState.Failed;
+    }
+
+    /// <summary>
+    ///     Reads a parameter through the build definition with normal parameter resolution, so that its default is
+    ///     computed in full.
+    /// </summary>
+    /// <param name="param">The parameter to read.</param>
+    /// <returns>The parameter's value as a string, or <c>null</c> if it has none or could not be computed.</returns>
+    private string? GetValueFromBuildDefinition(ParamModel param)
+    {
+        try
+        {
+            using var _ = paramService.CreateNoCacheScope();
+
+            return buildDefinition
+                .AccessParam(param.Name)
+                ?.ToString();
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Could not determine the value of parameter '{ParamName}'", param.ArgName);
+
+            return null;
+        }
     }
 
     /// <summary>

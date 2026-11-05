@@ -63,7 +63,7 @@ public sealed class GitVersionRunnerTests
         buildVersion.ToString()
             .ShouldBe("1.2.3-beta.4");
 
-        _processRunner.GitVersionCalls.ShouldContain($"dotnet gitversion /config \"{RootPath(AppAConfig)}\" /output json");
+        _processRunner.GitVersionCalls.ShouldContain($"dotnet gitversion /config {RootPath(AppAConfig)} /output json");
     }
 
     [Test]
@@ -79,7 +79,52 @@ public sealed class GitVersionRunnerTests
 
         // Assert
         buildId.ShouldBe("1.2.3-beta.4");
-        _processRunner.GitVersionCalls.ShouldContain($"dotnet gitversion /config \"{RootPath(AppAConfig)}\" /output json");
+        _processRunner.GitVersionCalls.ShouldContain($"dotnet gitversion /config {RootPath(AppAConfig)} /output json");
+    }
+
+    [Test]
+    public void Target_RequiringBuildVersion_WithConfigAndFailingDefaultConfig_Executes()
+    {
+        // Arrange: the build version's default can't be computed during build resolution (the root configuration
+        // fails there), so required-parameter validation must compute it with the selected configuration
+        _processRunner.FailDefaultConfigRun = true;
+
+        var host = CreateTestHost<GitVersionTargetTestBuild>(fileSystem: _fileSystem,
+            commandLineArgs: new(true,
+            [
+                new CommandArg(nameof(IVersionTarget.ReportVersion)),
+                new ParamArg("gitversion-config", nameof(IGitVersion.GitVersionConfig), AppAConfig),
+            ]),
+            configure: builder => builder.Services.AddSingleton<IProcessRunner>(_processRunner));
+
+        var build = (GitVersionTargetTestBuild)host.Services.GetRequiredService<IBuildDefinition>();
+
+        // Act
+        host.Run();
+
+        // Assert
+        build.ExecutedVersion.ShouldBe("1.2.3-beta.4");
+    }
+
+    [Test]
+    public void GetOutput_WithConfigPathContainingSpace_QuotesPath()
+    {
+        // Arrange
+        const string config = "src/My App/GitVersion.yml";
+        _fileSystem.AddFile(RootPath(config), new("tag-prefix: 'myapp/v'\n"));
+        var host = CreateHost(config);
+
+        // Act
+        _ = host
+            .Services
+            .GetRequiredService<IBuildIdProvider>()
+            .BuildId;
+
+        // Assert
+        _processRunner
+            .GitVersionCalls
+            .ShouldHaveSingleItem()
+            .ShouldBe($"dotnet gitversion /config \"{RootPath(config)}\" /output json");
     }
 
     [Test]
@@ -99,7 +144,7 @@ public sealed class GitVersionRunnerTests
         _processRunner
             .GitVersionCalls
             .ShouldHaveSingleItem()
-            .ShouldBe($"dotnet gitversion /config \"{RootPath(AppAConfig)}\" /output json");
+            .ShouldBe($"dotnet gitversion /config {RootPath(AppAConfig)} /output json");
     }
 
     [Test]
@@ -166,7 +211,7 @@ public sealed class GitVersionRunnerTests
         // Assert
         _processRunner
             .GitVersionCalls
-            .ShouldBe([$"dotnet gitversion /config \"{RootPath(AppAConfig)}\" /output json"]);
+            .ShouldBe([$"dotnet gitversion /config {RootPath(AppAConfig)} /output json"]);
     }
 
     [Test]
@@ -192,7 +237,7 @@ public sealed class GitVersionRunnerTests
         // Assert
         _processRunner
             .GitVersionCalls
-            .ShouldBe([$"dotnet gitversion /config \"{RootPath(AppAConfig)}\" /output json"]);
+            .ShouldBe([$"dotnet gitversion /config {RootPath(AppAConfig)} /output json"]);
     }
 
     [Test]
@@ -568,8 +613,8 @@ public sealed class GitVersionRunnerTests
         _processRunner
             .GitVersionCalls
             .ShouldBe([
-                $"dotnet gitversion /config \"{RootPath(AppAConfig)}\" /output json",
-                $"dotnet gitversion /config \"{RootPath(AppBConfig)}\" /output json",
+                $"dotnet gitversion /config {RootPath(AppAConfig)} /output json",
+                $"dotnet gitversion /config {RootPath(AppBConfig)} /output json",
             ]);
 
         _processRunner
