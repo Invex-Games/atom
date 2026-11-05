@@ -6,6 +6,9 @@
 /// <remarks>
 ///     This trigger supports filtering by branches, file paths, and tags to control workflow execution.
 ///     When filter lists are empty, no filtering is applied for that category.
+///     GitHub Actions does not allow a filter and its <c>-ignore</c> counterpart on the same event, so when both an
+///     included and an excluded list are set, the GitHub workflow writes the exclusions as negated (<c>!</c>) patterns
+///     after the inclusions.
 /// </remarks>
 /// <example>
 ///     <code>
