@@ -6,7 +6,9 @@
 /// </summary>
 /// <param name="Condition">
 ///     The condition expression to evaluate. May reference outputs of other targets via
-///     <see cref="JobOutputRef" />, which implicitly adds those targets as dependencies.
+///     <see cref="JobOutputRef" />. Those targets are not added as dependencies: declare them with
+///     <c>DependsOn</c>, or workflow resolution logs a warning (the platform can only read outputs of jobs the
+///     conditioned job needs).
 /// </param>
 /// <seealso cref="TargetCondition" />
 [PublicAPI]
@@ -14,7 +16,8 @@ public sealed record TargetStepCondition(BoolExpr Condition) : IBuildOption, IIm
 {
     /// <summary>
     ///     Gets the names of targets whose outputs are referenced by <see cref="Condition" />.
-    ///     These targets are implicitly added as dependencies of the conditioned target.
+    ///     Workflow resolution checks that each is a declared dependency of the conditioned target and logs a
+    ///     warning if not.
     /// </summary>
     public IEnumerable<string> TargetNames =>
         Condition
