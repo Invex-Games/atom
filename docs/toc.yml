@@ -53,6 +53,8 @@
             href: workflows/variables-in-workflows.md
         -   name: Debugging Workflows
             href: workflows/debugging-workflows.md
+        -   name: Monorepos
+            href: workflows/monorepos.md
 -   name: Modules
     href: modules/overview.md
     items:

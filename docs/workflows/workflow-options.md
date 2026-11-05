@@ -67,6 +67,19 @@ BuildOptions.Target.RunIfWorkflowCondition(
     Tex.GitHub.Actor.Eq("dependabot[bot]"))
 ```
 
+Two presets cover common cases. `RunIfAnyDependencyFailed` runs the job only when a job it depends on failed or was
+cancelled (`failure() || cancelled()` on GitHub, `or(failed(), canceled())` on Azure DevOps), which makes a single gate
+job for branch protection. `RunAlways` runs the job whatever its dependencies did (`always()`), for example for
+reporting:
+
+```csharp
+BuildOptions.Target.RunIfAnyDependencyFailed
+BuildOptions.Target.RunAlways
+```
+
+A condition does not add a dependency: the target must still `DependsOn` every target the condition refers to. On Azure
+DevOps a custom condition replaces the default `succeeded()`. See [Monorepos](monorepos.md) for the gate pattern.
+
 ### GitHub Token Permissions
 
 Set fine-grained permissions for the `GITHUB_TOKEN`:
@@ -120,6 +133,7 @@ Platform modules can then inspect the options during YAML generation.
 ## Next steps
 
 - [Variables in Workflows](variables-in-workflows.md): pass values between jobs.
+- [Monorepos](monorepos.md): per-product jobs behind a single gate check.
 - [Build Options](../core-concepts/build-options.md): how options are applied and merged.
 - <xref:Invex.Atom.Workflows.Options.WorkflowBuildOptionsExtensions>
 - <xref:Invex.Atom.Workflows.Options.DeployToEnvironment>
