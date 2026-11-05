@@ -10,6 +10,7 @@ global using Invex.Atom.Build.Definition;
 global using Invex.Atom.Build.FileSystem;
 global using Invex.Atom.Build.Hosting;
 global using Invex.Atom.Build.Params;
+global using Invex.Atom.Build.Util;
 global using Invex.Atom.Module.Dotnet.Helpers;
 global using Invex.Atom.Module.GitVersion.Options;
 global using Invex.Atom.Module.GitVersion.Providers;
