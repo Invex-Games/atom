@@ -1,0 +1,28 @@
+﻿name: combined-filter-workflow
+
+on:
+  pull_request:
+    branches: [ main, '!main-old' ]
+    paths: [ src/AppA/**, '!src/AppA/docs/**' ]
+  push:
+    branches: [ main, release/**, '!release/old-*' ]
+    tags: [ appa/v*, '!appa/v*-rc*' ]
+    paths: [ src/AppA/**, src/Shared/**, '!src/AppA/docs/**' ]
+
+permissions: { }
+
+jobs:
+
+  TriggerFilterTarget:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: TriggerFilterTarget
+        id: TriggerFilterTarget
+        run: dotnet run --project AtomTest/AtomTest.csproj -- TriggerFilterTarget --skip --headless
+

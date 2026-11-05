@@ -59,22 +59,23 @@ internal sealed class GitHubWorkflowFileWriter(
                         : throw new ArgumentOutOfRangeException(nameof(type)))
                     .ToList())
                 {
-                    Branches = gitPullRequestTrigger.IncludedBranches,
-                    BranchesIgnore = gitPullRequestTrigger.ExcludedBranches,
+                    Branches = Filter(gitPullRequestTrigger.IncludedBranches, gitPullRequestTrigger.ExcludedBranches),
+                    BranchesIgnore = IgnoreFilter(gitPullRequestTrigger.IncludedBranches,
+                        gitPullRequestTrigger.ExcludedBranches),
                     Tags = null,
                     TagsIgnore = null,
-                    Paths = gitPullRequestTrigger.IncludedPaths,
-                    PathsIgnore = gitPullRequestTrigger.ExcludedPaths,
+                    Paths = Filter(gitPullRequestTrigger.IncludedPaths, gitPullRequestTrigger.ExcludedPaths),
+                    PathsIgnore = IgnoreFilter(gitPullRequestTrigger.IncludedPaths, gitPullRequestTrigger.ExcludedPaths),
                 },
 
                 GitPushTrigger gitPushTrigger => new On.Push
                 {
-                    Branches = gitPushTrigger.IncludedBranches,
-                    BranchesIgnore = gitPushTrigger.ExcludedBranches,
-                    Tags = gitPushTrigger.IncludedTags,
-                    TagsIgnore = gitPushTrigger.ExcludedTags,
-                    Paths = gitPushTrigger.IncludedPaths,
-                    PathsIgnore = gitPushTrigger.ExcludedPaths,
+                    Branches = Filter(gitPushTrigger.IncludedBranches, gitPushTrigger.ExcludedBranches),
+                    BranchesIgnore = IgnoreFilter(gitPushTrigger.IncludedBranches, gitPushTrigger.ExcludedBranches),
+                    Tags = Filter(gitPushTrigger.IncludedTags, gitPushTrigger.ExcludedTags),
+                    TagsIgnore = IgnoreFilter(gitPushTrigger.IncludedTags, gitPushTrigger.ExcludedTags),
+                    Paths = Filter(gitPushTrigger.IncludedPaths, gitPushTrigger.ExcludedPaths),
+                    PathsIgnore = IgnoreFilter(gitPushTrigger.IncludedPaths, gitPushTrigger.ExcludedPaths),
                 },
 
                 ManualTrigger manualTrigger => new On.WorkflowDispatch(manualTrigger
@@ -241,6 +242,19 @@ internal sealed class GitHubWorkflowFileWriter(
             Services = null,
             Steps = BuildSteps(workflow, job),
         };
+
+    // GitHub rejects an event that sets both a filter and its -ignore counterpart (e.g. paths and paths-ignore). When
+    // both lists are given, the exclusions are written into the filter itself as negated patterns after the
+    // inclusions; GitHub applies patterns in order, so the exclusions still take precedence.
+    private static IReadOnlyList<string> Filter(IReadOnlyList<string> included, IReadOnlyList<string> excluded) =>
+        included.Count > 0 && excluded.Count > 0
+            ? [..included, ..excluded.Select(pattern => $"!{pattern}")]
+            : included;
+
+    private static IReadOnlyList<string> IgnoreFilter(IReadOnlyList<string> included, IReadOnlyList<string> excluded) =>
+        included.Count > 0
+            ? []
+            : excluded;
 
     private static Permissions? BuildPermissions(GitHubTokenPermissionsOption? permissionOption) =>
         permissionOption?.Permissions switch

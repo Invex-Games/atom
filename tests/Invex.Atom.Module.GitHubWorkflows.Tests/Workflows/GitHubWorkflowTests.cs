@@ -442,4 +442,26 @@ internal sealed class GitHubWorkflowTests
         await Verify(workflow);
         await TestContext.Out.WriteAsync(workflow);
     }
+
+    [TestCase("single-filter-workflow")]
+    [TestCase("combined-filter-workflow")]
+    public async Task TriggerFilterBuild_GeneratesWorkflow(string workflowName)
+    {
+        // Arrange
+        var fileSystem = FileSystemUtils.DefaultMockFileSystem;
+
+        var build = CreateTestHost<TriggerFilterBuild>(fileSystem: fileSystem,
+            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]));
+
+        // Act
+        await build.RunAsync();
+
+        // Assert
+        var workflow = await fileSystem.File.ReadAllTextAsync($"{WorkflowDir}{workflowName}.yml");
+
+        await Verify(workflow)
+            .UseParameters(workflowName);
+
+        await TestContext.Out.WriteAsync(workflow);
+    }
 }
