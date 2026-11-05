@@ -21,4 +21,5 @@ global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Logging.Abstractions;
 global using NUnit.Framework;
 global using Shouldly;
+global using Spectre.Console.Testing;
 global using static Invex.Atom.TestUtils.TestUtils;
