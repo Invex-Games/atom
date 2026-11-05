@@ -19,7 +19,7 @@
 internal sealed class GitVersionRunner(
     IDotnetToolInstallHelper dotnetToolInstallHelper,
     IProcessRunner processRunner,
-    IParamService paramService,
+    IBuildDefinition buildDefinition,
     IRootedFileSystem fileSystem,
     ILogger<GitVersionRunner> logger
 )
@@ -148,8 +148,10 @@ internal sealed class GitVersionRunner(
     /// <exception cref="InvalidOperationException">Thrown if the resolved file does not exist.</exception>
     internal ResolvedConfig? ResolveConfig()
     {
-        // A non-null default lets an interactive run accept an empty answer at the prompt for this optional parameter.
-        var value = paramService.GetParam(nameof(IGitVersion.GitVersionConfig), string.Empty);
+        // Read through the build definition so that a build overriding IGitVersion.GitVersionConfig is honoured.
+        var value = buildDefinition is IGitVersion gitVersion
+            ? gitVersion.GitVersionConfig
+            : null;
 
         if (string.IsNullOrWhiteSpace(value))
             return null;
