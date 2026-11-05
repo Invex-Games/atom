@@ -111,7 +111,7 @@ the defaults. Set `ClientSecret` to `None` when you only use federated credentia
 Enable vault integration at the build level:
 
 ```csharp
-public override IReadOnlyList<IBuildOption> Options =>
+public IReadOnlyList<IBuildOption> Options =>
 [
     BuildOptions.AzureKeyVault.UseAzureKeyVault,
 ];
