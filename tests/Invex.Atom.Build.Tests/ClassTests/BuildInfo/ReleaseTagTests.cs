@@ -13,7 +13,7 @@ internal sealed class ReleaseTagTests
     [TestCase("1.2.0-rc.1+build.5", "v1.2.0-rc.1+build.5")]
     public void For_WithDefaultPrefix_PrefixesV(string version, string expected) =>
         ReleaseTag
-            .For(SemVer.Parse(version))
+            .For(SemVer.Parse(version), ReleaseTag.DefaultPrefix)
             .ShouldBe(expected);
 
     [TestCase("appa/v", "1.2.0", "appa/v1.2.0")]
@@ -28,7 +28,7 @@ internal sealed class ReleaseTagTests
     [Test]
     public void For_WithNullArguments_Throws()
     {
-        Should.Throw<ArgumentNullException>(() => ReleaseTag.For(null!));
+        Should.Throw<ArgumentNullException>(() => ReleaseTag.For(null!, ReleaseTag.DefaultPrefix));
         Should.Throw<ArgumentNullException>(() => ReleaseTag.For(SemVer.Parse("1.0.0"), null!));
     }
 
@@ -42,20 +42,10 @@ internal sealed class ReleaseTagTests
     public void TryParse_WithMatchingPrefix_ReturnsVersion(string tag, string prefix, string expected)
     {
         ReleaseTag
-            .TryParse(tag, out var version, prefix)
+            .TryParse(tag, prefix, out var version)
             .ShouldBeTrue();
 
         version.ShouldBe(SemVer.Parse(expected));
-    }
-
-    [Test]
-    public void TryParse_WithDefaultPrefix_ReturnsVersion()
-    {
-        ReleaseTag
-            .TryParse("v1.2.0", out var version)
-            .ShouldBeTrue();
-
-        version.ShouldBe(SemVer.Parse("1.2.0"));
     }
 
     [TestCase("appa/v1.2.0", "v")]
@@ -78,7 +68,7 @@ internal sealed class ReleaseTagTests
     public void TryParse_WithMismatchedPrefixOrInvalidVersion_ReturnsFalse(string tag, string prefix)
     {
         ReleaseTag
-            .TryParse(tag, out var version, prefix)
+            .TryParse(tag, prefix, out var version)
             .ShouldBeFalse();
 
         version.ShouldBeNull();
@@ -88,7 +78,7 @@ internal sealed class ReleaseTagTests
     public void TryParse_WithNullTag_ReturnsFalse()
     {
         ReleaseTag
-            .TryParse(null, out var version)
+            .TryParse(null, ReleaseTag.DefaultPrefix, out var version)
             .ShouldBeFalse();
 
         version.ShouldBeNull();
@@ -96,7 +86,7 @@ internal sealed class ReleaseTagTests
 
     [Test]
     public void TryParse_WithNullPrefix_Throws() =>
-        Should.Throw<ArgumentNullException>(() => ReleaseTag.TryParse("v1.2.0", out _, null!));
+        Should.Throw<ArgumentNullException>(() => ReleaseTag.TryParse("v1.2.0", null!, out _));
 
     [TestCase("1.2.0", "v")]
     [TestCase("1.2.0-rc.1+build.5", "v")]
@@ -107,18 +97,13 @@ internal sealed class ReleaseTagTests
         var semVer = SemVer.Parse(version);
 
         ReleaseTag
-            .TryParse(ReleaseTag.For(semVer, prefix), out var parsed, prefix)
+            .TryParse(ReleaseTag.For(semVer, prefix), prefix, out var parsed)
             .ShouldBeTrue();
 
         parsed.ShouldBe(semVer);
     }
 
-    [Test]
-    public void Glob_WithDefaultPrefix_IsVStar() =>
-        ReleaseTag
-            .Glob()
-            .ShouldBe("v*");
-
+    [TestCase("v", "v*")]
     [TestCase("appa/v", "appa/v*")]
     [TestCase("", "*")]
     public void Glob_WithPrefix_AppendsStar(string prefix, string expected) =>

@@ -19,6 +19,12 @@ internal sealed class FakeGitVersionProcessRunner : IProcessRunner
 
     public string UpdatedToolVersion { get; set; } = "6.8.2";
 
+    /// <summary>
+    ///     The GitVersion.Tool version pinned in the local tool manifest (reported by <c>dotnet tool list</c> without
+    ///     <c>-g</c>), or <c>null</c> when the manifest does not list it.
+    /// </summary>
+    public string? LocalToolVersion { get; set; }
+
     public List<string> Calls { get; } = [];
 
     public IEnumerable<string> GitVersionCalls =>
@@ -32,9 +38,10 @@ internal sealed class FakeGitVersionProcessRunner : IProcessRunner
         {
             ("git", "rev-parse HEAD") => new(options, 0, $"{GitHash}\n", string.Empty),
             ("dotnet", var args) when args.StartsWith("tool list", StringComparison.Ordinal) =>
-                InstalledToolVersion is null
-                    ? new(options, 1, "Package Id      Version      Commands\n", string.Empty)
-                    : new(options, 0, ToolListOutput(InstalledToolVersion), string.Empty),
+                ToolList(options,
+                    args.EndsWith(" -g", StringComparison.Ordinal)
+                        ? InstalledToolVersion
+                        : LocalToolVersion),
             ("dotnet", var args) when args.StartsWith("tool update", StringComparison.Ordinal) => Update(options),
             ("dotnet", var args) when args.StartsWith("gitversion", StringComparison.Ordinal) =>
                 new(options, 0, GitVersionJson, string.Empty),
@@ -52,6 +59,11 @@ internal sealed class FakeGitVersionProcessRunner : IProcessRunner
          gitversion.tool      {version}        dotnet-gitversion
 
          """;
+
+    private static ProcessRunResult ToolList(ProcessRunOptions options, string? version) =>
+        version is null
+            ? new(options, 1, "Package Id      Version      Commands\n", string.Empty)
+            : new(options, 0, ToolListOutput(version), string.Empty);
 
     private ProcessRunResult Update(ProcessRunOptions options)
     {

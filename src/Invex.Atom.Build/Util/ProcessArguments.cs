@@ -5,11 +5,13 @@
 ///     back into exactly the same arguments.
 /// </summary>
 /// <remarks>
-///     <see cref="ProcessRunOptions" /> only accepts a pre-joined argument string, which
-///     <see cref="System.Diagnostics.ProcessStartInfo.Arguments" /> splits using the Windows
-///     <c>CommandLineToArgvW</c> rules on every platform. This class quotes and escapes each argument according to
-///     those rules (the same algorithm .NET uses for <see cref="System.Diagnostics.ProcessStartInfo.ArgumentList" />),
-///     so values containing spaces, quotes or backslashes survive intact.
+///     <see cref="ProcessRunOptions" /> passes a single argument string to
+///     <see cref="System.Diagnostics.ProcessStartInfo.Arguments" />, which splits it using the Windows
+///     <c>CommandLineToArgvW</c> rules on every platform. Its string-array constructor only joins the arguments with
+///     single spaces (dropping empty ones) and does not quote them, so an argument containing a space would be split.
+///     This class quotes and escapes each argument according to those rules (the same algorithm .NET uses for
+///     <see cref="System.Diagnostics.ProcessStartInfo.ArgumentList" />), so values containing spaces, quotes or
+///     backslashes survive intact.
 /// </remarks>
 internal static class ProcessArguments
 {

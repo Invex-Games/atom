@@ -1,6 +1,6 @@
 ﻿namespace Atom.Targets;
 
-internal interface IDeployTargets : INugetHelper, IGitHubReleaseHelper, ISetupBuildInfo
+internal interface IDeployTargets : INugetHelper, IGitHubReleaseHelper, ISetupBuildInfo, IReleaseTagHelper
 {
     [ParamDefinition("nuget-push-feed", "The Nuget feed to push to.")]
     string NugetFeed => GetParam(() => NugetFeed, "https://api.nuget.org/v3/index.json");
@@ -59,6 +59,6 @@ internal interface IDeployTargets : INugetHelper, IGitHubReleaseHelper, ISetupBu
             .Executes(async () =>
             {
                 foreach (var artifact in IBuildTargets.ProjectsToPack.Concat(ITestTargets.ProjectsToTest))
-                    await UploadArtifactToRelease(artifact, ReleaseTag.For(BuildVersion));
+                    await UploadArtifactToRelease(artifact, ReleaseTagFor(BuildVersion));
             });
 }

@@ -405,6 +405,15 @@
     Members: [
       {
         Name: GetReleaseTagCommit
+      },
+      {
+        Name: ReleaseTagFor
+      },
+      {
+        Name: ReleaseTagGlob
+      },
+      {
+        Name: TryParseReleaseTag
       }
     ]
   },

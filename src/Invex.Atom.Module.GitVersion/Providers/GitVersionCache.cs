@@ -48,11 +48,12 @@ internal static class GitVersionCache
     ///     default configuration.
     /// </param>
     /// <param name="configContentHash">
-    ///     The SHA-256 hash of the configuration file's contents, or <c>null</c> for the default configuration.
+    ///     The SHA-256 hash of the configuration file's contents. For the default configuration, the hash of the
+    ///     configuration file GitVersion finds by default in the Atom root directory, or <c>null</c> if there is none.
     /// </param>
     /// <returns>
-    ///     <c>&lt;gitHash&gt;|&lt;configRelativePath&gt;|&lt;configContentHash&gt;</c>, with empty segments for the
-    ///     default configuration, so moving to another commit or editing a custom configuration invalidates the entry.
+    ///     <c>&lt;gitHash&gt;|&lt;configRelativePath&gt;|&lt;configContentHash&gt;</c>, with empty segments for values
+    ///     that are <c>null</c>, so moving to another commit or editing the configuration file invalidates the entry.
     /// </returns>
     internal static string CreateKey(string gitHash, string? configRelativePath, string? configContentHash) =>
         $"{gitHash}|{configRelativePath}|{configContentHash}";

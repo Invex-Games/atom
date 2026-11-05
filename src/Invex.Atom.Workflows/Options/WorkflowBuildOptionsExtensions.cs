@@ -193,8 +193,8 @@ public static class WorkflowBuildOptionsExtensions
             new(condition);
 
         /// <summary>
-        ///     Gets an option that runs the target's job only when a job it depends on, directly or transitively, failed
-        ///     or was cancelled.
+        ///     Gets an option that runs the target's job only when a job it depends on, directly or transitively, failed,
+        ///     or the workflow run was cancelled.
         /// </summary>
         /// <value>
         ///     A <see cref="TargetCondition" /> rendered as <c>failure() || cancelled()</c> on GitHub Actions and
@@ -212,7 +212,11 @@ public static class WorkflowBuildOptionsExtensions
         ///             When every dependency succeeds or is skipped, the gate is skipped. GitHub treats a skipped required
         ///             check as passed.
         ///         </item>
-        ///         <item>When any dependency fails or is cancelled, the gate runs, throws and fails the check.</item>
+        ///         <item>
+        ///             When any dependency fails, or the run is cancelled, the gate runs, throws and fails the check.
+        ///             <c>cancelled()</c> (GitHub) and <c>canceled()</c> (Azure DevOps) test the whole run, not the
+        ///             dependencies, so a cancelled run triggers the gate even if every dependency had succeeded.
+        ///         </item>
         ///     </list>
         ///     <para>
         ///         Branch protection then only needs to require the gate. Like any <see cref="TargetCondition" />, the
@@ -221,7 +225,7 @@ public static class WorkflowBuildOptionsExtensions
         ///     </para>
         ///     <para>
         ///         On Azure DevOps, a custom condition replaces the default <c>succeeded()</c> condition, so this
-        ///         option makes the job run only on failure or cancellation, as intended. For the same reason, other
+        ///         option makes the job run only after a failure or a cancelled run, as intended. For the same reason, other
         ///         custom conditions there (such as the product jobs' own) usually need <c>Tex.Success()</c> added
         ///         to keep skipping after an earlier failure.
         ///     </para>
