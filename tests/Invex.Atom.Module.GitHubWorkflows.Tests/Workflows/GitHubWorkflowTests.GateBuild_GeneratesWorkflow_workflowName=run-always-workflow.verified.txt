@@ -1,0 +1,54 @@
+﻿name: run-always-workflow
+
+on:
+  pull_request:
+    branches: [ main ]
+
+permissions: { }
+
+jobs:
+
+  DetectAffectedProducts:
+    runs-on: ubuntu-latest
+    outputs:
+      affected-products: ${{ steps.DetectAffectedProducts.outputs.affected-products }}
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: DetectAffectedProducts
+        id: DetectAffectedProducts
+        run: dotnet run --project AtomTest/AtomTest.csproj -- DetectAffectedProducts --skip --headless
+
+  PackAppA:
+    needs: [ DetectAffectedProducts ]
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: PackAppA
+        id: PackAppA
+        run: dotnet run --project AtomTest/AtomTest.csproj -- PackAppA --skip --headless
+
+  ReportResults:
+    needs: [ PackAppA ]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: ReportResults
+        id: ReportResults
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ReportResults --skip --headless
+

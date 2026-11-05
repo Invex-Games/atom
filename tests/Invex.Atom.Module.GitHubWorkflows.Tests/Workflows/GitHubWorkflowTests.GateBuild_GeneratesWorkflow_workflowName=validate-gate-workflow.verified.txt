@@ -1,0 +1,70 @@
+﻿name: validate-gate-workflow
+
+on:
+  pull_request:
+    branches: [ main ]
+
+permissions: { }
+
+jobs:
+
+  DetectAffectedProducts:
+    runs-on: ubuntu-latest
+    outputs:
+      affected-products: ${{ steps.DetectAffectedProducts.outputs.affected-products }}
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: DetectAffectedProducts
+        id: DetectAffectedProducts
+        run: dotnet run --project AtomTest/AtomTest.csproj -- DetectAffectedProducts --skip --headless
+
+  PackAppA:
+    needs: [ DetectAffectedProducts ]
+    if: contains(needs.DetectAffectedProducts.outputs.affected-products, ',appa,')
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: PackAppA
+        id: PackAppA
+        run: dotnet run --project AtomTest/AtomTest.csproj -- PackAppA --skip --headless
+
+  PackAppB:
+    needs: [ DetectAffectedProducts ]
+    if: contains(needs.DetectAffectedProducts.outputs.affected-products, ',appb,')
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: PackAppB
+        id: PackAppB
+        run: dotnet run --project AtomTest/AtomTest.csproj -- PackAppB --skip --headless
+
+  ValidateGate:
+    needs: [ PackAppA, PackAppB ]
+    if: failure() || cancelled()
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: ValidateGate
+        id: ValidateGate
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ValidateGate --skip --headless
+
