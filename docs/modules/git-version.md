@@ -20,7 +20,7 @@ Implement `IGitVersion` **and** enable the corresponding build options:
 [GenerateEntryPoint]
 internal partial class Build : BuildDefinition, IGitVersion
 {
-    public override IReadOnlyList<IBuildOption> Options =>
+    public IReadOnlyList<IBuildOption> Options =>
     [
         BuildOptions.GitVersion.ProvideBuildId,
         BuildOptions.GitVersion.ProvideBuildVersion,
@@ -86,4 +86,5 @@ dotnet tool install --global GitVersion.Tool --version 6.*
 
 - [Build Info](../core-concepts/build-info.md): the providers GitVersion replaces.
 - [SetupBuildInfo](../built-in-targets/setup-build-info.md): publishes the version as a variable.
+- [Monorepos](../workflows/monorepos.md): one GitVersion configuration and tag prefix per product.
 - <xref:Invex.Atom.Module.GitVersion.IGitVersion>

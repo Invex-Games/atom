@@ -11,7 +11,7 @@ All build options implement the marker interface `IBuildOption`. Options can be 
 3. **Per-target** — via `WorkflowTargetDefinition.Options`
 
 ```csharp
-public override IReadOnlyList<IBuildOption> Options =>
+public IReadOnlyList<IBuildOption> Options =>
 [
     BuildOptions.GitVersion.ProvideBuildId,
     BuildOptions.GitVersion.ProvideBuildVersion,
