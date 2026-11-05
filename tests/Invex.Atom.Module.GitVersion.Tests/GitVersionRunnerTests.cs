@@ -113,7 +113,8 @@ public sealed class GitVersionRunnerTests
         // so accepting it (an empty answer) runs the target with that version
         _processRunner.FailDefaultConfigRun = true;
 
-        using var console = new TestConsole().Interactive();
+        using var console = new TestConsole();
+        console.Interactive();
 
         for (var i = 0; i < 4; i++)
             console.Input.PushTextWithEnter(string.Empty);
