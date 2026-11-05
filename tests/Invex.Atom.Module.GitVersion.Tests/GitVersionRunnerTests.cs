@@ -67,6 +67,42 @@ public sealed class GitVersionRunnerTests
     }
 
     [Test]
+    public void BuildInfo_WithConfigAndFailingDefaultConfig_ResolvesAndUsesConfig()
+    {
+        // Arrange: the root configuration is unusable, but the selected product configuration is fine
+        _processRunner.FailDefaultConfigRun = true;
+        var host = CreateHost(AppAConfig);
+
+        // Act: resolving the build model must not fail on the default-configuration run
+        host.Services.GetRequiredService<BuildModel>();
+        var buildId = ((IBuildInfo)host.Services.GetRequiredService<IBuildDefinition>()).BuildId;
+
+        // Assert
+        buildId.ShouldBe("1.2.3-beta.4");
+        _processRunner.GitVersionCalls.ShouldContain($"dotnet gitversion /config \"{RootPath(AppAConfig)}\" /output json");
+    }
+
+    [Test]
+    public void GetOutput_WithBuildOverridingConfig_UsesOverride()
+    {
+        // Arrange: no param is given; the build definition overrides IGitVersion.GitVersionConfig
+        var runner = CreateTestHost<GitVersionOverrideTestBuild>(fileSystem: _fileSystem,
+                commandLineArgs: new(true, []),
+                configure: builder => builder.Services.AddSingleton<IProcessRunner>(_processRunner))
+            .Services
+            .GetRequiredService<GitVersionRunner>();
+
+        // Act
+        runner.GetOutput();
+
+        // Assert
+        _processRunner
+            .GitVersionCalls
+            .ShouldHaveSingleItem()
+            .ShouldBe($"dotnet gitversion /config \"{RootPath(AppAConfig)}\" /output json");
+    }
+
+    [Test]
     public void BuildInfo_WithMissingConfig_AfterBuildResolution_Throws()
     {
         // Arrange
@@ -511,16 +547,16 @@ public sealed class GitVersionRunnerTests
     {
         // Arrange
         var host = CreateHost();
-        var paramService = A.Fake<IParamService>();
+        var buildDefinition = A.Fake<IBuildDefinition>(options => options.Implements<IGitVersion>());
         var configs = new Queue<string>([AppAConfig, AppBConfig, AppAConfig, AppBConfig]);
 
         A
-            .CallTo(() => paramService.GetParam(nameof(IGitVersion.GitVersionConfig), A<string?>._))
+            .CallTo(() => ((IGitVersion)buildDefinition).GitVersionConfig)
             .ReturnsLazily(_ => configs.Dequeue());
 
         var runner = new GitVersionRunner(host.Services.GetRequiredService<IDotnetToolInstallHelper>(),
             _processRunner,
-            paramService,
+            buildDefinition,
             host.Services.GetRequiredService<IRootedFileSystem>(),
             NullLogger<GitVersionRunner>.Instance);
 

@@ -51,12 +51,14 @@ public partial interface IGitVersion : IDotnetToolInstallHelper
     ///         The value is read with the normal parameter resolution (the <c>--gitversion-config</c> argument, an
     ///         environment variable or configuration) each time a GitVersion provider is asked for a value. When
     ///         injecting it into a workflow target, use the property name
-    ///         (<c>nameof(IGitVersion.GitVersionConfig)</c>), not the argument name.
+    ///         (<c>nameof(IGitVersion.GitVersionConfig)</c>), not the argument name. The providers read this property
+    ///         on the build definition, so a build can also override it, for example to return a fixed path. The empty
+    ///         default lets an interactive run accept an empty answer at the prompt.
     ///     </para>
     /// </remarks>
     [ParamDefinition("gitversion-config",
         "Path to the GitVersion config file, relative to the repository root (default: GitVersion's own lookup)")]
-    string? GitVersionConfig => GetParam(() => GitVersionConfig);
+    string? GitVersionConfig => GetParam(() => GitVersionConfig, string.Empty);
 
     /// <summary>
     ///     Configures the host builder to register the GitVersion-based build ID and version providers.
