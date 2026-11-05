@@ -6,19 +6,15 @@
 /// <remarks>
 ///     This provider executes the GitVersion tool to extract major, minor, patch, and pre-release
 ///     tag information, which is then used to construct a semantic version.
-///     It requires the GitVersion.Tool to be installed.
+///     GitVersion is run (and the tool installed if needed) by the shared <see cref="GitVersionRunner" />, so the
+///     build ID and build version use a single GitVersion run.
 /// </remarks>
 [PublicAPI]
 internal sealed class GitVersionBuildVersionProvider(
-    IDotnetToolInstallHelper dotnetToolInstallHelper,
-    IProcessRunner processRunner,
-    IBuildOptionService buildOptionService,
-    IRootedFileSystem fileSystem,
-    ILogger<GitVersionBuildVersionProvider> logger
+    GitVersionRunner gitVersionRunner,
+    IBuildOptionService buildOptionService
 ) : IBuildVersionProvider
 {
-    private readonly Lock _lock = new();
-
     /// <summary>
     ///     Gets the semantic version of the build, derived from GitVersion's output.
     /// </summary>
@@ -36,57 +32,27 @@ internal sealed class GitVersionBuildVersionProvider(
             if (field is not null)
                 return field;
 
-            var currentGitHash = processRunner
-                .Run(new("git", "rev-parse HEAD")
-                {
-                    InvocationLogLevel = LogLevel.Debug,
-                })
-                .Output
-                .Trim();
+            var jsonOutput = gitVersionRunner.GetOutput();
 
-            lock (_lock)
-            {
-                var jsonOutput = GitVersionCache.TryRead(fileSystem, currentGitHash, logger);
+            var majorProp = jsonOutput
+                .GetProperty("Major")
+                .GetUInt32();
 
-                if (jsonOutput is null)
-                {
-                    dotnetToolInstallHelper.InstallTool("GitVersion.Tool");
+            var minorProp = jsonOutput
+                .GetProperty("Minor")
+                .GetUInt32();
 
-                    var gitVersionResult = processRunner.Run(new("dotnet", "gitversion /output json")
-                    {
-                        InvocationLogLevel = LogLevel.Debug,
-                    });
+            var patchProp = jsonOutput
+                .GetProperty("Patch")
+                .GetUInt32();
 
-                    jsonOutput = JsonSerializer.Deserialize(gitVersionResult.Output,
-                        JsonElementContext.Default.JsonElement);
+            var preReleaseTagProp = jsonOutput
+                .GetProperty("PreReleaseTag")
+                .GetString()!;
 
-                    GitVersionCache.Write(fileSystem, currentGitHash, jsonOutput.Value);
-                }
-
-                var majorProp = jsonOutput
-                    .Value
-                    .GetProperty("Major")
-                    .GetUInt32();
-
-                var minorProp = jsonOutput
-                    .Value
-                    .GetProperty("Minor")
-                    .GetUInt32();
-
-                var patchProp = jsonOutput
-                    .Value
-                    .GetProperty("Patch")
-                    .GetUInt32();
-
-                var preReleaseTagProp = jsonOutput
-                    .Value
-                    .GetProperty("PreReleaseTag")
-                    .GetString()!;
-
-                return field = preReleaseTagProp is { Length: > 0 }
-                    ? SemVer.Parse($"{majorProp}.{minorProp}.{patchProp}-{preReleaseTagProp}")
-                    : SemVer.Parse($"{majorProp}.{minorProp}.{patchProp}");
-            }
+            return field = preReleaseTagProp is { Length: > 0 }
+                ? SemVer.Parse($"{majorProp}.{minorProp}.{patchProp}-{preReleaseTagProp}")
+                : SemVer.Parse($"{majorProp}.{minorProp}.{patchProp}");
         }
     }
 }

@@ -5,18 +5,14 @@
 /// </summary>
 /// <remarks>
 ///     This provider executes the GitVersion tool to extract the full semantic version,
-///     which is then used as the build ID. It requires the GitVersion.Tool to be installed.
+///     which is then used as the build ID. GitVersion is run (and the tool installed if needed) by the shared
+///     <see cref="GitVersionRunner" />, so the build ID and build version use a single GitVersion run.
 /// </remarks>
 internal sealed class GitVersionBuildIdProvider(
-    IDotnetToolInstallHelper dotnetToolInstallHelper,
-    IProcessRunner processRunner,
-    IBuildOptionService buildOptionService,
-    IRootedFileSystem fileSystem,
-    ILogger<GitVersionBuildIdProvider> logger
+    GitVersionRunner gitVersionRunner,
+    IBuildOptionService buildOptionService
 ) : IBuildIdProvider
 {
-    private readonly Lock _lock = new();
-
     /// <summary>
     ///     Gets the build ID, derived from GitVersion's FullSemVer.
     /// </summary>
@@ -37,40 +33,12 @@ internal sealed class GitVersionBuildIdProvider(
             if (field is { Length: > 0 })
                 return field;
 
-            var currentGitHash = processRunner
-                .Run(new("git", "rev-parse HEAD")
-                {
-                    InvocationLogLevel = LogLevel.Debug,
-                })
-                .Output
-                .Trim();
+            var buildId = gitVersionRunner
+                .GetOutput()
+                .GetProperty("FullSemVer")
+                .GetString();
 
-            lock (_lock)
-            {
-                var jsonOutput = GitVersionCache.TryRead(fileSystem, currentGitHash, logger);
-
-                if (jsonOutput is null)
-                {
-                    dotnetToolInstallHelper.InstallTool("GitVersion.Tool");
-
-                    var gitVersionResult = processRunner.Run(new("dotnet", "gitversion /output json")
-                    {
-                        InvocationLogLevel = LogLevel.Debug,
-                    });
-
-                    jsonOutput = JsonSerializer.Deserialize(gitVersionResult.Output,
-                        JsonElementContext.Default.JsonElement);
-
-                    GitVersionCache.Write(fileSystem, currentGitHash, jsonOutput.Value);
-                }
-
-                var buildId = jsonOutput
-                    .Value
-                    .GetProperty("FullSemVer")
-                    .GetString();
-
-                return field = buildId ?? throw new InvalidOperationException("Failed to determine build ID");
-            }
+            return field = buildId ?? throw new InvalidOperationException("Failed to determine build ID");
         }
     }
 
