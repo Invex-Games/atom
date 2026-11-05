@@ -20,8 +20,11 @@ internal sealed class GitVersionBuildIdProvider(
     ///     Thrown if GitVersion is not enabled via <see cref="GitVersionProvideBuildIdOption" />
     ///     or if the build ID cannot be determined from GitVersion's output.
     /// </exception>
-    [field: AllowNull]
-    [field: MaybeNull]
+    /// <remarks>
+    ///     The value is not cached here: <see cref="GitVersionRunner" /> caches GitVersion's output per configuration
+    ///     file, so a value first read while the configuration parameter is not yet visible (for example while the
+    ///     build model is resolved) does not hide the configured one.
+    /// </remarks>
     public string BuildId
     {
         get
@@ -30,15 +33,12 @@ internal sealed class GitVersionBuildIdProvider(
                 throw new InvalidOperationException(
                     "GitVersion is not enabled for build ID generation. Ensure GitVersionProvideBuildIdOption is enabled.");
 
-            if (field is { Length: > 0 })
-                return field;
-
             var buildId = gitVersionRunner
                 .GetOutput()
                 .GetProperty("FullSemVer")
                 .GetString();
 
-            return field = buildId ?? throw new InvalidOperationException("Failed to determine build ID");
+            return buildId ?? throw new InvalidOperationException("Failed to determine build ID");
         }
     }
 

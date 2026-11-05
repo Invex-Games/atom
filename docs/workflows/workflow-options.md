@@ -67,9 +67,9 @@ BuildOptions.Target.RunIfWorkflowCondition(
     Tex.GitHub.Actor.Eq("dependabot[bot]"))
 ```
 
-Two presets cover common cases. `RunIfAnyDependencyFailed` runs the job only when a job it depends on failed or was
-cancelled (`failure() || cancelled()` on GitHub, `or(failed(), canceled())` on Azure DevOps), which makes a single gate
-job for branch protection. `RunAlways` runs the job whatever its dependencies did (`always()`), for example for
+Two presets cover common cases. `RunIfAnyDependencyFailed` runs the job only when a job it depends on failed, or the run
+was cancelled (`failure() || cancelled()` on GitHub, `or(failed(), canceled())` on Azure DevOps), which makes a single
+gate job for branch protection. `RunAlways` runs the job whatever its dependencies did (`always()`), for example for
 reporting:
 
 ```csharp

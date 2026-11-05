@@ -19,9 +19,12 @@
 ///     </para>
 ///     <para>
 ///         The build ID and build version share a single GitVersion run per configuration file, and its output is
-///         cached in the build project's <c>obj</c> directory until the commit or the configuration file changes.
+///         cached in the build project's <c>obj</c> directory until the commit or the configuration file's contents
+///         change. For the default configuration, that is the first of <c>GitVersion.yml</c>, <c>GitVersion.yaml</c>,
+///         <c>.GitVersion.yml</c> and <c>.GitVersion.yaml</c> in the repository root.
 ///         <c>GitVersion.Tool</c> is installed globally as the latest 6.x release when no 6.x release of at least
-///         6.8.0 is installed.
+///         6.8.0 is installed. A version pinned in a local tool manifest is used instead, and must be a 6.x release of
+///         at least 6.8.0.
 ///     </para>
 /// </remarks>
 [PublicAPI]
@@ -38,11 +41,11 @@ public partial interface IGitVersion : IBuildAccessor
     ///         <c>GitVersion.yml</c> in the repository root). Otherwise the path is resolved against the Atom root
     ///         directory and passed to GitVersion as <c>/config "&lt;absolute path&gt;"</c>. An
     ///         <see cref="InvalidOperationException" /> naming the parameter and the resolved path is thrown when the
-    ///         build ID or version is first requested and the file does not exist.
+    ///         build ID or version is requested and the file does not exist.
     ///     </para>
     ///     <para>
     ///         The value is read with the normal parameter resolution (the <c>--gitversion-config</c> argument, an
-    ///         environment variable or configuration) the first time a GitVersion provider is asked for a value. When
+    ///         environment variable or configuration) each time a GitVersion provider is asked for a value. When
     ///         injecting it into a workflow target, use the property name
     ///         (<c>nameof(IGitVersion.GitVersionConfig)</c>), not the argument name.
     ///     </para>

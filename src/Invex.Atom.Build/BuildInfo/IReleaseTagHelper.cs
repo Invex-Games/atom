@@ -1,22 +1,66 @@
 ﻿namespace Invex.Atom.Build.BuildInfo;
 
 /// <summary>
-///     Provides helper methods for creating release tags, such as finding the commit a release tag should be put on.
+///     Provides helper methods for release tags: formatting and parsing tag names with the build's release tag
+///     prefix, and finding the commit a release tag should be put on.
 /// </summary>
 /// <remarks>
-///     Use <see cref="ReleaseTag" /> to format and parse the tag names themselves.
+///     The build's release tag prefix is <see cref="ReleaseTag.DefaultPrefix" /> (<c>v</c>). To format or parse a tag
+///     with another prefix, such as a monorepo product's <c>appa/v</c>, use <see cref="ReleaseTag" />, which takes the
+///     prefix explicitly.
 /// </remarks>
 /// <example>
 ///     <code>
+/// var tag = ReleaseTagFor(BuildVersion); // "v1.2.0"
+///
 /// // Tag AppA on the latest commit that touched its paths, so GitVersion with ignore.paths can see the tag.
 /// var commit = await GetReleaseTagCommit(["src/AppA/", "src/Shared/"], cancellationToken);
-/// var tag = ReleaseTag.For(BuildVersion, "appa/v");
+/// var appATag = ReleaseTag.For(BuildVersion, "appa/v"); // "appa/v1.2.0"
 ///     </code>
 /// </example>
 /// <seealso cref="ReleaseTag" />
 [PublicAPI]
 public interface IReleaseTagHelper : IBuildAccessor
 {
+    /// <summary>
+    ///     Gets a glob pattern that matches the build's release tags, for use with <c>git tag --list &lt;pattern&gt;</c>.
+    /// </summary>
+    /// <value>The build's release tag prefix followed by <c>*</c>, for example <c>v*</c>.</value>
+    /// <remarks>
+    ///     The pattern is broader than a release tag (<c>v*</c> also matches <c>vnext</c>), so filter the listed tags
+    ///     with <see cref="TryParseReleaseTag" />. See <see cref="ReleaseTag.Glob" />.
+    /// </remarks>
+    string ReleaseTagGlob => ReleaseTag.Glob(ReleaseTag.DefaultPrefix);
+
+    /// <summary>
+    ///     Gets the release tag for a version, using the build's release tag prefix.
+    /// </summary>
+    /// <param name="version">The version to tag.</param>
+    /// <returns>
+    ///     The build's release tag prefix followed by the full version string, including any pre-release and build
+    ///     metadata components, for example <c>v1.2.0</c> or <c>v1.2.0-rc.1</c>.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="version" /> is <see langword="null" />.</exception>
+    /// <remarks>See <see cref="ReleaseTag.For" />.</remarks>
+    string ReleaseTagFor(SemVer version) =>
+        ReleaseTag.For(version, ReleaseTag.DefaultPrefix);
+
+    /// <summary>
+    ///     Tries to parse a release tag that uses the build's release tag prefix.
+    /// </summary>
+    /// <param name="tag">The tag to parse, such as <c>v1.2.0</c>. May be <see langword="null" />.</param>
+    /// <param name="version">
+    ///     When this method returns <see langword="true" />, the version that follows the prefix; otherwise,
+    ///     <see langword="null" />.
+    /// </param>
+    /// <returns>
+    ///     <see langword="true" /> if <paramref name="tag" /> starts with the build's release tag prefix (ordinal,
+    ///     case-sensitive) and the rest of the tag is a valid semantic version; otherwise, <see langword="false" />.
+    /// </returns>
+    /// <remarks>See <see cref="ReleaseTag.TryParse" />.</remarks>
+    bool TryParseReleaseTag([NotNullWhen(true)] string? tag, [NotNullWhen(true)] out SemVer? version) =>
+        ReleaseTag.TryParse(tag, ReleaseTag.DefaultPrefix, out version);
+
     /// <summary>
     ///     Gets the commit that a release tag should be put on: the latest commit that touched any of
     ///     <paramref name="paths" />, or <c>HEAD</c> if no paths are given.

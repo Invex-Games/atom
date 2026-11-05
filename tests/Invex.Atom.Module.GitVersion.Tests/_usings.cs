@@ -8,6 +8,7 @@ global using Invex.Atom.Build.BuildInfo;
 global using Invex.Atom.Build.BuildOptions;
 global using Invex.Atom.Build.Definition;
 global using Invex.Atom.Build.FileSystem;
+global using Invex.Atom.Build.Model;
 global using Invex.Atom.Build.Params;
 global using Invex.Atom.Module.Dotnet.Helpers;
 global using Invex.Atom.Module.GitVersion.Options;

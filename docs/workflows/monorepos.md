@@ -23,20 +23,21 @@ default `GitVersion.yml` and `v1.2.0` tags are simpler.
 
 ## The validation workflow with a gate
 
-GitHub branch protection and Azure DevOps branch policies need a fixed list of required checks, but product jobs that
-only run when their product changed are skipped on most pull requests. The pattern that reconciles the two is:
+GitHub branch protection needs a fixed list of required checks, but product jobs that only run when their product
+changed are skipped on most pull requests. (An Azure DevOps build validation policy requires a whole pipeline run
+instead, see [below](#the-workflow).) The pattern that reconciles the two is:
 
 1. **One always-running Validate workflow.** It has no path filters, so it runs for every pull request.
 2. **`DetectAffectedProducts`.** The first job compares the pull request with its base branch and publishes the
    affected products as a variable, for example `,appa,shared,`.
 3. **Per-product targets.** `PackAppA`, `TestAppA`, `PackAppB` and so on are separate targets. Each one runs only when
    its product is in the list.
-4. **`ValidateGate`.** One job that depends on every product job and runs only if one of them failed or was cancelled.
-   It is the only required check.
+4. **`ValidateGate`.** One job that depends on every product job and runs only if one of them failed or the run was
+   cancelled. It is the only required check.
 
 On GitHub the gate is **skipped** when every product job succeeded or was skipped, and GitHub treats a skipped required
-check as passed. It **runs and fails** when any product job failed or was cancelled. Branch protection therefore only
-needs to require `ValidateGate`.
+check as passed. It **runs and fails** when any product job failed or the run was cancelled. Branch protection
+therefore only needs to require `ValidateGate`.
 
 ### The targets
 
@@ -49,7 +50,11 @@ internal interface IProductTargets : IBuildInfo, IVariablesHelper, IReleaseTagHe
     static string[] SharedPaths => ["src/Shared/"];
     static string[] AppAPaths => ["src/AppA/", .. SharedPaths];
     static string[] AppBPaths => ["src/AppB/", .. SharedPaths];
-    static string[] GlobalPaths => ["global.json", "Directory.Build.props", "Directory.Packages.props", "_atom/", ".github/workflows/"];
+    static string[] GlobalPaths =>
+    [
+        "global.json", "Directory.Build.props", "Directory.Build.targets", "Directory.Packages.props",
+        "Directory.Packages.targets", "_atom/", ".github/workflows/",
+    ];
 
     [ParamDefinition("affected-products", "Comma-wrapped list of affected products, e.g. ',appa,shared,'")]
     string? AffectedProducts => GetParam(() => AffectedProducts);
@@ -131,8 +136,8 @@ On Azure DevOps, read the base branch from `DevOps.Variables.SystemPullRequestTa
 ### The workflow
 
 `BuildOptions.Target.RunIfWorkflowCondition` gates each product job on the variable, and
-`BuildOptions.Target.RunIfAnyDependencyFailed` makes the gate run only after a failure or cancellation. Reference the
-variable with `Tex.ParamOutput`, using the C# names of the producing target and the parameter:
+`BuildOptions.Target.RunIfAnyDependencyFailed` makes the gate run only after a failure or a cancelled run. Reference
+the variable with `Tex.ParamOutput`, using the C# names of the producing target and the parameter:
 
 ```csharp
 [BuildDefinition]
@@ -253,16 +258,17 @@ atom PackAppA --gitversion-config src/AppA/GitVersion.yml
 
 ## Release tags
 
-Product tags use the product's prefix: `appa/v1.2.0`, `appb/v2.0.1`. The
-<xref:Invex.Atom.Build.BuildInfo.ReleaseTag> helpers in `Invex.Atom.Build` format and parse them, with `v` as the
-default prefix:
+Product tags use the product's prefix: `appa/v1.2.0`, `appb/v2.0.1`. In a targets interface derived from
+<xref:Invex.Atom.Build.BuildInfo.IReleaseTagHelper>, `ReleaseTagFor`, `TryParseReleaseTag` and `ReleaseTagGlob` use
+the build's release tag prefix, `v`. For a product's tags, the <xref:Invex.Atom.Build.BuildInfo.ReleaseTag> helpers in
+`Invex.Atom.Build` take the prefix explicitly:
 
 ```csharp
-ReleaseTag.For(BuildVersion);                         // "v1.2.0"
-ReleaseTag.For(BuildVersion, "appa/v");               // "appa/v1.2.0"
-ReleaseTag.TryParse("appa/v1.2.0", out var v, "appa/v"); // true, v is 1.2.0
-ReleaseTag.TryParse("appa/v1.2.0", out _);            // false: the default prefix is "v"
-ReleaseTag.Glob("appa/v");                            // "appa/v*", for git tag --list
+ReleaseTagFor(BuildVersion);                             // "v1.2.0"
+ReleaseTag.For(BuildVersion, "appa/v");                  // "appa/v1.2.0"
+ReleaseTag.TryParse("appa/v1.2.0", "appa/v", out var v); // true, v is 1.2.0
+ReleaseTag.TryParse("appa/v1.2.0", "v", out _);          // false: the prefix does not match
+ReleaseTag.Glob("appa/v");                               // "appa/v*", for git tag --list
 ```
 
 `ReleaseTag.Glob` is broader than a release tag (`v*` also matches `vnext`), so filter listed tags with
