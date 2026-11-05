@@ -75,14 +75,17 @@ internal interface IProductTargets : IBuildInfo, IVariablesHelper, IReleaseTagHe
                     return;
                 }
 
-                var diff = await ProcessRunner.RunAsync(new("git", $"diff --name-only origin/{baseRef}...HEAD")
+                // --no-renames lists both sides of a move (a file moved out of AppA still affects AppA), and -z
+                // writes raw, NUL-separated names, so Git doesn't quote unusual file names
+                var diff = await ProcessRunner.RunAsync(
+                    new("git", $"diff --name-only --no-renames -z origin/{baseRef}...HEAD")
                     {
                         WorkingDirectory = RootedFileSystem.AtomRootDirectory,
+                        OutputLogLevel = LogLevel.Debug,
                     },
                     cancellationToken);
 
-                var changedFiles = diff.Output.Split('\n',
-                    StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                var changedFiles = diff.Output.Split('\0', StringSplitOptions.RemoveEmptyEntries);
 
                 bool Touches(string[] paths) =>
                     changedFiles.Any(file => paths

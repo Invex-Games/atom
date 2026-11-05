@@ -25,6 +25,12 @@ internal sealed class FakeGitVersionProcessRunner : IProcessRunner
     /// </summary>
     public string? LocalToolVersion { get; set; }
 
+    /// <summary>
+    ///     When <c>true</c>, a <c>dotnet gitversion</c> run without <c>/config</c> fails, as it does when the root
+    ///     configuration file is invalid.
+    /// </summary>
+    public bool FailDefaultConfigRun { get; set; }
+
     public List<string> Calls { get; } = [];
 
     public IEnumerable<string> GitVersionCalls =>
@@ -44,7 +50,9 @@ internal sealed class FakeGitVersionProcessRunner : IProcessRunner
                         : LocalToolVersion),
             ("dotnet", var args) when args.StartsWith("tool update", StringComparison.Ordinal) => Update(options),
             ("dotnet", var args) when args.StartsWith("gitversion", StringComparison.Ordinal) =>
-                new(options, 0, GitVersionJson, string.Empty),
+                FailDefaultConfigRun && !args.Contains("/config", StringComparison.Ordinal)
+                    ? throw new InvalidOperationException("GitVersion failed: invalid root configuration")
+                    : new(options, 0, GitVersionJson, string.Empty),
             _ => throw new InvalidOperationException($"Unexpected process call: {options.Name} {options.Args}"),
         };
     }
