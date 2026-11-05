@@ -6,6 +6,9 @@
 /// <remarks>
 ///     This trigger provides fine-grained control over activation conditions through branch patterns,
 ///     file path filters, and pull request event types.
+///     GitHub Actions does not allow a filter and its <c>-ignore</c> counterpart on the same event, so when both an
+///     included and an excluded list are set, the GitHub workflow writes the exclusions as negated (<c>!</c>) patterns
+///     after the inclusions.
 /// </remarks>
 /// <example>
 ///     <code>

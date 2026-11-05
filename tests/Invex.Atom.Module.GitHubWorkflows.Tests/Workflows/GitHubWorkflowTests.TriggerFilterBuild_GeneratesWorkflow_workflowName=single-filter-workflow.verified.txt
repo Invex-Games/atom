@@ -1,0 +1,28 @@
+﻿name: single-filter-workflow
+
+on:
+  pull_request:
+    branches-ignore: [ dependabot/** ]
+    paths-ignore: [ docs/**, '**.md' ]
+  push:
+    branches: [ main ]
+    tags: [ appa/v* ]
+    paths: [ src/AppA/**, src/Shared/** ]
+
+permissions: { }
+
+jobs:
+
+  TriggerFilterTarget:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: TriggerFilterTarget
+        id: TriggerFilterTarget
+        run: dotnet run --project AtomTest/AtomTest.csproj -- TriggerFilterTarget --skip --headless
+
