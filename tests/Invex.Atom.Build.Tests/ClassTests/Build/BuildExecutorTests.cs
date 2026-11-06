@@ -15,6 +15,12 @@ internal sealed class BuildExecutorTests
             DeclaringAssembly = Assembly.GetExecutingAssembly(),
         };
 
+        _buildDefinition = A.Fake<IBuildDefinition>();
+
+        A
+            .CallTo(() => _buildDefinition.AccessParam(A<string>._))
+            .Returns(null);
+
         _paramService = A.Fake<IParamService>();
         _variableService = A.Fake<IVariableService>();
         _outcomeReporters = [];
@@ -29,6 +35,8 @@ internal sealed class BuildExecutorTests
 
     private CommandLineArgs _commandLineArgs;
     private BuildModel _buildModel;
+
+    private IBuildDefinition _buildDefinition;
 
     private IParamService _paramService;
 
@@ -47,6 +55,7 @@ internal sealed class BuildExecutorTests
         // Arrange
         var buildExecutor = new BuildExecutor(_commandLineArgs,
             _buildModel,
+            _buildDefinition,
             _paramService,
             _variableService,
             _outcomeReporters,
@@ -112,6 +121,7 @@ internal sealed class BuildExecutorTests
 
         var buildExecutor = new BuildExecutor(_commandLineArgs,
             _buildModel,
+            _buildDefinition,
             _paramService,
             _variableService,
             _outcomeReporters,
@@ -194,6 +204,7 @@ internal sealed class BuildExecutorTests
 
         var buildExecutor = new BuildExecutor(_commandLineArgs,
             _buildModel,
+            _buildDefinition,
             _paramService,
             _variableService,
             _outcomeReporters,
@@ -209,6 +220,130 @@ internal sealed class BuildExecutorTests
         logOutput.ShouldContain("param-1");
         logOutput.ShouldContain("param-2");
     }
+
+    [Test]
+    public async Task Execute_WithRequiredParamWithoutStoredDefault_ReadsParamFromBuildDefinition()
+    {
+        // Arrange: the param has no stored default (it could not be computed during resolution), but the build
+        // definition can compute it now
+        var executed = false;
+        CreateSingleParamTarget(() => executed = true);
+
+        A
+            .CallTo(() => _paramService.GetParam(A<string>._, A<string?>.Ignored))
+            .Returns(null);
+
+        A
+            .CallTo(() => _paramService.CreateNoCacheScope())
+            .Returns(new ActionScope());
+
+        A
+            .CallTo(() => _buildDefinition.AccessParam("Param1"))
+            .Returns("1.2.3");
+
+        var buildExecutor = CreateExecutor();
+
+        // Act
+        await buildExecutor.Execute(CancellationToken.None);
+
+        // Assert
+        executed.ShouldBeTrue();
+    }
+
+    [Test]
+    public async Task Execute_WithRequiredParamWhoseBuildDefinitionValueThrows_ReportsMissingParam()
+    {
+        // Arrange
+        var executed = false;
+        CreateSingleParamTarget(() => executed = true);
+
+        A
+            .CallTo(() => _paramService.GetParam(A<string>._, A<string?>.Ignored))
+            .Returns(null);
+
+        A
+            .CallTo(() => _paramService.CreateNoCacheScope())
+            .Returns(new ActionScope());
+
+        A
+            .CallTo(() => _buildDefinition.AccessParam("Param1"))
+            .Throws(new InvalidOperationException("Default unavailable"));
+
+        var testLoggerProvider = new TestLoggerProvider();
+        var loggerFactory = LoggerFactory.Create(b => b.AddProvider(testLoggerProvider));
+        var buildExecutor = CreateExecutor(loggerFactory.CreateLogger<BuildExecutor>());
+
+        // Act
+        await Should.ThrowAsync<StepFailedException>(buildExecutor.Execute(CancellationToken.None));
+
+        // Assert
+        executed.ShouldBeFalse();
+
+        var logOutput = testLoggerProvider.Logger.LogContent.ToString();
+        logOutput.ShouldContain("Could not determine the value of parameter 'param-1'");
+        logOutput.ShouldContain("Missing required parameter 'param-1'");
+    }
+
+    private void CreateSingleParamTarget(Action onExecute)
+    {
+        var param = new ParamModel("Param1")
+        {
+            ArgName = "param-1",
+            Description = "Param 1",
+            DefaultValue = null,
+            Sources = ParamSource.All,
+            IsSecret = false,
+            ChainedParams = [],
+        };
+
+        _commandLineArgs = new(true, [new CommandArg("Test")]);
+
+        var target = new TargetModel("Test", null, false)
+        {
+            Tasks =
+            [
+                _ =>
+                {
+                    onExecute();
+
+                    return Task.CompletedTask;
+                },
+            ],
+            Params = [new(param, true)],
+            ConsumedArtifacts = [],
+            ProducedArtifacts = [],
+            ConsumedVariables = [],
+            ProducedVariables = [],
+            Dependencies = [],
+            DeclaringAssembly = Assembly.GetExecutingAssembly(),
+        };
+
+        _buildModel = new()
+        {
+            Targets = [target],
+            TargetStates = new Dictionary<TargetModel, TargetState>
+            {
+                {
+                    target, new(target.Name)
+                    {
+                        Status = TargetRunState.PendingRun,
+                    }
+                },
+            },
+            DeclaringAssembly = Assembly.GetExecutingAssembly(),
+        };
+    }
+
+    private BuildExecutor CreateExecutor(ILogger<BuildExecutor>? logger = null) =>
+        new(_commandLineArgs,
+            _buildModel,
+            _buildDefinition,
+            _paramService,
+            _variableService,
+            _outcomeReporters,
+            _console,
+            _reportService,
+            logger ?? _logger);
 
     [Test]
     public async Task Execute_WithSecretParams_PrefetchesSecretsOfPendingTargetsWithBuildToken()
@@ -271,6 +406,7 @@ internal sealed class BuildExecutorTests
 
         var buildExecutor = new BuildExecutor(_commandLineArgs,
             _buildModel,
+            _buildDefinition,
             _paramService,
             _variableService,
             _outcomeReporters,

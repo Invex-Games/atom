@@ -1,0 +1,70 @@
+﻿name: validate-gate-workflow
+
+trigger: none
+pr:
+  branches:
+    include: [ main ]
+
+jobs:
+
+  - job: DetectAffectedProducts
+    displayName: DetectAffectedProducts
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+      - checkout: self
+        enabled: true
+        fetchDepth: 0
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj DetectAffectedProducts --skip --headless
+        displayName: DetectAffectedProducts
+        name: DetectAffectedProducts
+
+  - job: PackAppA
+    displayName: PackAppA
+    dependsOn: [ DetectAffectedProducts ]
+    condition: and(succeeded(), contains(dependencies.DetectAffectedProducts.outputs['DetectAffectedProducts.affected-products'], ',appa,'))
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+      - checkout: self
+        enabled: true
+        fetchDepth: 0
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj PackAppA --skip --headless
+        displayName: PackAppA
+        name: PackAppA
+
+  - job: PackAppB
+    displayName: PackAppB
+    dependsOn: [ DetectAffectedProducts ]
+    condition: and(succeeded(), contains(dependencies.DetectAffectedProducts.outputs['DetectAffectedProducts.affected-products'], ',appb,'))
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+      - checkout: self
+        enabled: true
+        fetchDepth: 0
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj PackAppB --skip --headless
+        displayName: PackAppB
+        name: PackAppB
+
+  - job: ValidateGate
+    displayName: ValidateGate
+    dependsOn: [ PackAppA, PackAppB ]
+    condition: or(failed(), canceled())
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+      - checkout: self
+        enabled: true
+        fetchDepth: 0
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj ValidateGate --skip --headless
+        displayName: ValidateGate
+        name: ValidateGate

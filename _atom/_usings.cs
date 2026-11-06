@@ -2,6 +2,7 @@ global using System.Runtime.InteropServices;
 global using Atom.RepoUtils;
 global using Atom.Targets;
 global using Invex.Atom.Build;
+global using Invex.Atom.Build.BuildInfo;
 global using Invex.Atom.Build.BuildOptions;
 global using Invex.Atom.Build.Definition;
 global using Invex.Atom.Build.Exceptions;

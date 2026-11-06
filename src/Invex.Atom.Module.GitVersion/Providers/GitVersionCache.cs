@@ -1,26 +1,74 @@
 namespace Invex.Atom.Module.GitVersion.Providers;
 
 /// <summary>
-///     Reads and writes a single-file cache of GitVersion output, keyed by the current Git commit hash.
+///     Reads and writes a cache of GitVersion output, with one file per GitVersion configuration.
 /// </summary>
 /// <remarks>
-///     The cache is a single file in the build project's <c>obj</c> directory (so it is git-ignored and removed
-///     by <c>dotnet clean</c>). The first line stores the Git hash the output was generated for, and the
-///     remainder stores the raw GitVersion JSON. When the current hash no longer matches, the cache is ignored
-///     and overwritten - just like the tool's restore/build caches, which each track a single hash file rather
-///     than one file per key.
+///     <para>
+///         Each cache file lives in the build project's <c>obj</c> directory (so it is git-ignored and removed by
+///         <c>dotnet clean</c>). The default configuration (GitVersion's own lookup of <c>GitVersion.yml</c>) uses
+///         <c>.gitversioncache</c>; a custom configuration uses <c>.gitversioncache-&lt;hash&gt;</c>, where the hash
+///         is derived from the configuration's normalized, root-relative path.
+///     </para>
+///     <para>
+///         The first line of a file stores the cache key (see <see cref="CreateKey" />), and the remainder stores
+///         the raw GitVersion JSON. When the key no longer matches, the entry is ignored and overwritten - just like
+///         the tool's restore/build caches, which each track a single hash file rather than one file per key.
+///     </para>
 /// </remarks>
 internal static class GitVersionCache
 {
-    private const string CacheFileName = ".gitversioncache";
+    /// <summary>
+    ///     The cache file name for the default configuration.
+    /// </summary>
+    internal const string DefaultCacheFileName = ".gitversioncache";
 
     /// <summary>
-    ///     Returns the cached GitVersion output if it was generated for <paramref name="gitHash" />; otherwise
-    ///     <c>null</c>.
+    ///     Gets the cache file name for a configuration.
     /// </summary>
-    internal static JsonElement? TryRead(IRootedFileSystem fileSystem, string gitHash, ILogger logger)
+    /// <param name="configRelativePath">
+    ///     The configuration file's normalized path relative to the Atom root directory, or <c>null</c> for the
+    ///     default configuration.
+    /// </param>
+    /// <returns>
+    ///     <see cref="DefaultCacheFileName" /> for the default configuration; otherwise
+    ///     <c>.gitversioncache-</c> followed by the first 12 hex characters of the SHA-256 hash of the path.
+    /// </returns>
+    internal static string GetCacheFileName(string? configRelativePath) =>
+        configRelativePath is not { Length: > 0 }
+            ? DefaultCacheFileName
+            : $"{DefaultCacheFileName}-{HashPath(configRelativePath)}";
+
+    /// <summary>
+    ///     Creates the key that a cache entry must match to be used.
+    /// </summary>
+    /// <param name="gitHash">The current Git commit hash.</param>
+    /// <param name="configRelativePath">
+    ///     The configuration file's normalized path relative to the Atom root directory, or <c>null</c> for the
+    ///     default configuration.
+    /// </param>
+    /// <param name="configContentHash">
+    ///     The SHA-256 hash of the configuration file's contents. For the default configuration, the hash of the
+    ///     configuration file GitVersion finds by default in the Atom root directory, or <c>null</c> if there is none.
+    /// </param>
+    /// <returns>
+    ///     <c>&lt;gitHash&gt;|&lt;configRelativePath&gt;|&lt;configContentHash&gt;</c>, with empty segments for values
+    ///     that are <c>null</c>, so moving to another commit or editing the configuration file invalidates the entry.
+    /// </returns>
+    internal static string CreateKey(string gitHash, string? configRelativePath, string? configContentHash) =>
+        $"{gitHash}|{configRelativePath}|{configContentHash}";
+
+    /// <summary>
+    ///     Returns the cached GitVersion output stored in <paramref name="cacheFileName" /> if it was generated for
+    ///     <paramref name="key" />; otherwise <c>null</c>.
+    /// </summary>
+    /// <remarks>
+    ///     A file that cannot be read or parsed is logged as a warning, deleted on a best-effort basis and treated as
+    ///     a miss.
+    /// </remarks>
+    internal static JsonElement? TryRead(IRootedFileSystem fileSystem, string cacheFileName, string key, ILogger logger)
     {
-        var cacheFile = GetCacheFile(fileSystem);
+        var cacheFile = GetCacheFile(fileSystem, cacheFileName);
 
         if (!fileSystem.File.Exists(cacheFile))
             return null;
@@ -33,11 +81,11 @@ internal static class GitVersionCache
             if (newlineIndex < 0)
                 return null;
 
-            var cachedHash = content[..newlineIndex]
+            var cachedKey = content[..newlineIndex]
                 .Trim();
 
-            // The cached output belongs to a different commit - treat it as a miss.
-            if (!string.Equals(cachedHash, gitHash, StringComparison.OrdinalIgnoreCase))
+            // The cached output belongs to a different commit or configuration - treat it as a miss.
+            if (!string.Equals(cachedKey, key, StringComparison.OrdinalIgnoreCase))
                 return null;
 
             return JsonSerializer.Deserialize(content[(newlineIndex + 1)..], JsonElementContext.Default.JsonElement);
@@ -60,16 +108,23 @@ internal static class GitVersionCache
     }
 
     /// <summary>
-    ///     Persists the GitVersion output for <paramref name="gitHash" />, overwriting any previous entry.
+    ///     Persists the GitVersion output for <paramref name="key" /> to <paramref name="cacheFileName" />,
+    ///     overwriting any previous entry in that file.
     /// </summary>
-    internal static void Write(IRootedFileSystem fileSystem, string gitHash, JsonElement output)
+    internal static void Write(IRootedFileSystem fileSystem, string cacheFileName, string key, JsonElement output)
     {
         fileSystem.Directory.CreateDirectory(ResolveObjDirectory(fileSystem));
-        fileSystem.File.WriteAllText(GetCacheFile(fileSystem), $"{gitHash}\n{output.GetRawText()}");
+        fileSystem.File.WriteAllText(GetCacheFile(fileSystem, cacheFileName), $"{key}\n{output.GetRawText()}");
     }
 
-    private static RootedPath GetCacheFile(IRootedFileSystem fileSystem) =>
-        ResolveObjDirectory(fileSystem) / CacheFileName;
+    /// <summary>
+    ///     Gets the full path of a cache file.
+    /// </summary>
+    internal static RootedPath GetCacheFile(IRootedFileSystem fileSystem, string cacheFileName) =>
+        ResolveObjDirectory(fileSystem) / cacheFileName;
+
+    private static string HashPath(string configRelativePath) =>
+        Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(configRelativePath)))[..12];
 
     private static RootedPath ResolveObjDirectory(IRootedFileSystem fileSystem)
     {

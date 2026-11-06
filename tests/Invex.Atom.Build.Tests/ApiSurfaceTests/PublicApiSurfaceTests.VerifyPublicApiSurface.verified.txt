@@ -401,6 +401,40 @@
     ]
   },
   {
+    Name: Invex.Atom.Build.BuildInfo.IReleaseTagHelper,
+    Members: [
+      {
+        Name: GetReleaseTagCommit
+      },
+      {
+        Name: ReleaseTagFor
+      },
+      {
+        Name: ReleaseTagGlob
+      },
+      {
+        Name: TryParseReleaseTag
+      }
+    ]
+  },
+  {
+    Name: Invex.Atom.Build.BuildInfo.ReleaseTag,
+    Members: [
+      {
+        Name: DefaultPrefix
+      },
+      {
+        Name: For
+      },
+      {
+        Name: Glob
+      },
+      {
+        Name: TryParse
+      }
+    ]
+  },
+  {
     Name: Invex.Atom.Build.BuildOptions.BuildOptionExtensions,
     Members: [
       {

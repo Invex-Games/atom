@@ -5,6 +5,7 @@
 /// </summary>
 /// <param name="args">The parsed command-line arguments.</param>
 /// <param name="buildModel">The model representing the build structure and state.</param>
+/// <param name="buildDefinition">The build definition, used to read parameters whose defaults are computed.</param>
 /// <param name="paramService">The service for resolving parameters.</param>
 /// <param name="variableService">The service for managing workflow variables.</param>
 /// <param name="outcomeReporters">The collection of report writers to invoke after execution.</param>
@@ -14,6 +15,7 @@
 internal sealed class BuildExecutor(
     CommandLineArgs args,
     BuildModel buildModel,
+    IBuildDefinition buildDefinition,
     IParamService paramService,
     IVariableService variableService,
     IEnumerable<IOutcomeReportWriter> outcomeReporters,
@@ -115,7 +117,15 @@ internal sealed class BuildExecutor(
             else
             {
                 using var _ = paramService.CreateNoCacheScope();
-                value = paramService.GetParam(requiredParam.Param.Name, defaultValue);
+
+                // The stored default was computed in a default-values-only scope, so a default that depends on other
+                // parameters (such as a build version that depends on the GitVersion config) may have been
+                // unavailable there. Without one, read the parameter through the build definition, which resolves it
+                // normally and computes its default with the other parameters visible (an interactive prompt then
+                // offers that default). If that fails, fall back to resolving it without a default.
+                value = defaultValue is null && TryGetValueFromBuildDefinition(requiredParam.Param, out var definitionValue)
+                    ? definitionValue
+                    : paramService.GetParam(requiredParam.Param.Name, defaultValue);
             }
 
             if (value is { Length: > 0 })
@@ -144,6 +154,32 @@ internal sealed class BuildExecutor(
 
         buildModel.GetTargetState(target)
             .Status = TargetRunState.Failed;
+    }
+
+    /// <summary>
+    ///     Reads a parameter through the build definition, with normal parameter resolution, so that its default is
+    ///     computed in full.
+    /// </summary>
+    /// <param name="param">The parameter to read.</param>
+    /// <param name="value">The parameter's value as a string, or <c>null</c> if it has none.</param>
+    /// <returns><c>true</c> if the parameter was read; <c>false</c> if reading it threw.</returns>
+    private bool TryGetValueFromBuildDefinition(ParamModel param, out string? value)
+    {
+        try
+        {
+            value = buildDefinition
+                .AccessParam(param.Name)
+                ?.ToString();
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Could not determine the value of parameter '{ParamName}'", param.ArgName);
+            value = null;
+
+            return false;
+        }
     }
 
     /// <summary>
