@@ -1,4 +1,4 @@
-<Solution>
+﻿<Solution>
   <Folder Name="/Analyzers/">
     <Project Path="src/Invex.Atom.Build.Analyzers/Invex.Atom.Build.Analyzers.csproj" />
     <Project Path="src/Invex.Atom.Build.SourceGenerators/Invex.Atom.Build.SourceGenerators.csproj" />
@@ -19,6 +19,7 @@
     <Project Path="samples/Invex.Atom.Analyzers.Sample/Invex.Atom.Analyzers.Sample.csproj" />
     <Project Path="samples/Sample_01_HelloWorld/Sample_01_HelloWorld.csproj" />
     <Project Path="samples/Sample_02_Params/Sample_02_Params.csproj" />
+    <Project Path="samples/Sample_03_Monorepo/_atom/Sample_03_Monorepo.csproj" />
   </Folder>
   <Folder Name="/Tests/">
     <Project Path="tests/Invex.Atom.TestUtils/Invex.Atom.TestUtils.csproj" />

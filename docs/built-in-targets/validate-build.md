@@ -8,7 +8,12 @@ The `ValidateBuild` target checks the Atom build configuration for common issues
 
 1. Inspects all targets in the build model.
 2. Reports **warnings** for targets without descriptions.
-3. Reports **errors** for critical configuration problems (extensible).
+3. Reports **errors** for critical configuration problems: a target that consumes an artifact or variable its
+   producer does not produce, two parameters with the same argument name, and, in a build that implements
+   `IProductsDefinition`, invalid [monorepo products](../workflows/monorepos.md#declare-the-products) (a duplicate or
+   invalid name, no paths, an unsupported path glob, a folder named without a trailing `/`, an unknown or cyclic
+   dependency, a tag prefix that equals or starts another product's, a GitVersion configuration shared by two
+   products, or a product GitVersion configuration that is the root `GitVersion.yml`).
 4. Adds warning/error lists to the build report.
 5. Throws `StepFailedException` if any errors are found.
 

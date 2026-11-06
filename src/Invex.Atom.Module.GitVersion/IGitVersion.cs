@@ -15,7 +15,10 @@
 ///         By default GitVersion finds its configuration file itself. Set <see cref="GitVersionConfig" /> (the
 ///         <c>gitversion-config</c> parameter) to use another file, for example one per product in a monorepo. It can
 ///         be set per workflow target with
-///         <c>BuildOptions.Inject.Param(nameof(IGitVersion.GitVersionConfig), "src/AppA/GitVersion.yml")</c>.
+///         <c>BuildOptions.Inject.Param(nameof(IGitVersion.GitVersionConfig), "src/AppA/GitVersion.yml")</c>. In a
+///         build that implements <see cref="IProductsDefinition" />, the current product's
+///         <see cref="Product.GitVersionConfig" /> is the default, and <c>atom gen</c> generates each product's file
+///         from the root configuration.
 ///     </para>
 ///     <para>
 ///         The build ID and build version share a single GitVersion run per configuration file, and its output is
@@ -41,8 +44,9 @@ public partial interface IGitVersion : IDotnetToolInstallHelper
     /// </summary>
     /// <remarks>
     ///     <para>
-    ///         When <c>null</c> or empty, GitVersion finds its configuration file itself (usually
-    ///         <c>GitVersion.yml</c> in the repository root). Otherwise the path is resolved against the Atom root
+    ///         When a monorepo product is being built (see <see cref="IProductsDefinition.CurrentProduct" />), the
+    ///         default is the product's <see cref="Product.GitVersionConfig" />. When <c>null</c> or empty, GitVersion
+    ///         finds its configuration file itself (usually <c>GitVersion.yml</c> in the repository root). Otherwise the path is resolved against the Atom root
     ///         directory and passed to GitVersion as <c>/config "&lt;absolute path&gt;"</c>. An
     ///         <see cref="InvalidOperationException" /> naming the parameter and the resolved path is thrown when the
     ///         build ID or version is requested and the file does not exist.
@@ -58,19 +62,36 @@ public partial interface IGitVersion : IDotnetToolInstallHelper
     /// </remarks>
     [ParamDefinition("gitversion-config",
         "Path to the GitVersion config file, relative to the repository root (default: GitVersion's own lookup)")]
-    string? GitVersionConfig => GetParam(() => GitVersionConfig, string.Empty);
+    string? GitVersionConfig => GetParam(() => GitVersionConfig, DefaultGitVersionConfig);
+
+    /// <summary>
+    ///     Gets the default GitVersion configuration file: the current monorepo product's
+    ///     <see cref="Product.GitVersionConfig" />, or empty.
+    /// </summary>
+    private string DefaultGitVersionConfig =>
+        this is IProductsDefinition { CurrentProduct.GitVersionConfig: { } productConfig }
+            ? productConfig
+            : string.Empty;
 
     /// <summary>
     ///     Configures the host builder to register the GitVersion-based build ID and version providers.
     /// </summary>
     /// <param name="builder">The host application builder.</param>
     /// <remarks>
-    ///     Both providers use one shared, internal GitVersion runner, registered as a singleton.
+    ///     Both providers use one shared, internal GitVersion runner, registered as a singleton. A lifecycle hook writes
+    ///     (or, in headless runs, checks) the GitVersion configuration file of each monorepo product that sets
+    ///     <see cref="Product.GitVersionConfig" />.
     /// </remarks>
-    protected static partial void ConfigureHostBuilderFromIGitVersion(IHostApplicationBuilder builder) =>
+    protected static partial void ConfigureHostBuilderFromIGitVersion(IHostApplicationBuilder builder)
+    {
         builder
             .Services
             .AddSingleton<GitVersionRunner>()
             .AddSingleton<IBuildIdProvider, GitVersionBuildIdProvider>()
             .AddSingleton<IBuildVersionProvider, GitVersionBuildVersionProvider>();
+
+        builder.Services.TryAddSingleton<ProductGitVersionConfigGenerator>();
+
+        builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IAtomLifecycleHook, ProductGitVersionConfigHook>());
+    }
 }

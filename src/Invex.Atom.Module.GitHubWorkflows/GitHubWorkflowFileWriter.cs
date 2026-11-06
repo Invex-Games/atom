@@ -184,6 +184,36 @@ internal sealed class GitHubWorkflowFileWriter(
             })
             .ToList();
 
+    /// <summary>
+    ///     Builds a job's <c>if</c>: the AND of its target conditions and, in a product workflow with a release
+    ///     trigger, a guard that skips releases of other products.
+    /// </summary>
+    private static BoolExpr? BuildJobCondition(WorkflowModel workflow, WorkflowJobModel job)
+    {
+        var conditions = TargetCondition
+            .GetOptions(job.TargetStep.Options)
+            .Select(x => x.Condition)
+            .ToList();
+
+        if (ProductWorkflowOption.Get(workflow.Options) is { } product &&
+            workflow
+                .Triggers
+                .OfType<GitHubTrigger>()
+                .Any(x => x.On is On.Release))
+            conditions.Insert(0,
+                Tex.GitHub.EventName.Ne("release") ||
+                Tex.GitHub.Event["release"]["tag_name"]
+                    .AsString()
+                    .StartsWith(product.TagPrefix));
+
+        return conditions switch
+        {
+            { Count: > 1 } => Tex.All(conditions),
+            { Count: 1 } => conditions[0],
+            _ => null,
+        };
+    }
+
     private Job BuildJob(WorkflowModel workflow, WorkflowJobModel job) =>
         new()
         {
@@ -193,14 +223,7 @@ internal sealed class GitHubWorkflowFileWriter(
                 .JobDependencies
                 .Distinct()
                 .ToList(),
-            If = TargetCondition
-                    .GetOptions(job.TargetStep.Options)
-                    .ToList() switch
-                {
-                    { Count: > 1 } options => Tex.All(options.Select(x => x.Condition)),
-                    { Count: 1 } option => option[0].Condition,
-                    _ => null,
-                },
+            If = BuildJobCondition(workflow, job),
             RunsOn = GitHubRunsOn.Get(job.TargetStep.Options) is { } runsOn
                 ? new()
                 {

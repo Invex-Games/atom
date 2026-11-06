@@ -2,10 +2,11 @@
 
 This page shows how to build several independently versioned products from one repository with Atom: one always-running
 validation workflow whose product jobs run only when their product changed, one GitVersion configuration per product,
-and per-product release tags. Everything here is written by hand with the building blocks Atom has today.
+per-product release tags and, optionally, per-product build and release pipelines.
 
 The examples use a repository with three folders: `src/AppA/` (a web API), `src/AppB/` (a mobile app) and `src/Shared/`
-(code used by both).
+(code used by both). [`samples/Sample_03_Monorepo`](https://github.com/Invex-Games/atom/tree/main/samples/Sample_03_Monorepo)
+is a complete build with this layout, including the files `atom gen` generates.
 
 ## When to use it
 
@@ -16,112 +17,145 @@ products they touch, while branch protection still has a single check to require
 If everything in the repository is released together under one version, you do not need any of this: one workflow, the
 default `GitVersion.yml` and `v1.2.0` tags are simpler.
 
-> [!NOTE]
-> A product model that generates most of this page's code (product paths, the affected-products target, the gate, the
-> per-product GitVersion configuration and per-product pipelines) is planned but not available yet. Until then, the
-> pattern below is written by hand.
+## Declare the products
+
+Implement <xref:Invex.Atom.Build.IProductsDefinition> on the build and list the products:
+
+```csharp
+[BuildDefinition]
+[GenerateEntryPoint]
+internal interface IBuild : IWorkflowBuildDefinition, IGitHubWorkflows, IGitVersion, IProductTargets
+{
+    IReadOnlyList<IBuildOption> IBuildDefinition.Options =>
+    [
+        BuildOptions.GitVersion.ProvideBuildId,
+        BuildOptions.GitVersion.ProvideBuildVersion,
+    ];
+
+    IReadOnlyList<Product> IProductsDefinition.Products =>
+    [
+        // A path group: no pipelines of its own, but a change to it affects the products that depend on it
+        new("Shared") { Paths = ["src/Shared/"] },
+        new("AppA")
+        {
+            Paths = ["src/AppA/"],
+            DependsOn = ["Shared"],
+            GitVersionConfig = "src/AppA/GitVersion.yml",
+        },
+        new("AppB")
+        {
+            Paths = ["src/AppB/"],
+            DependsOn = ["Shared"],
+            GitVersionConfig = "src/AppB/GitVersion.yml",
+        },
+    ];
+}
+```
+
+A <xref:Invex.Atom.Build.BuildInfo.Product> has:
+
+| Property           | Meaning                                                                                                            |
+|--------------------|--------------------------------------------------------------------------------------------------------------------|
+| `Name`             | The product's name, such as `AppA`. Letters, digits, `.`, `-` and `_`.                                             |
+| `Id`               | The lowercase name, such as `appa`, used in the affected-products list and the default tag prefix.                 |
+| `Paths`            | The product's own paths, as globs relative to the Atom root (normally the repository root).                        |
+| `DependsOn`        | Products whose changes also affect this one, followed transitively.                                                |
+| `Directory`        | Optional. The product's folder, whose `Directory.Build.props` the default version provider reads first.          |
+| `GitVersionConfig` | The product's GitVersion configuration, which `atom gen` generates (see [below](#per-product-versions)). Needed for every product built with GitVersion. |
+| `TagPrefix`        | The release tag prefix, `<id>/v` by default (for example `appa/v`).                                                |
+
+**Paths** use a small glob dialect that GitHub, Azure DevOps, git and GitVersion all understand: `**` as a whole path
+segment matches any number of folders, and `*` matches any characters except `/`. A path ending in `/` means everything
+below that folder, so `src/AppA/` is the same as `src/AppA/**`. A path with no wildcard and no trailing `/` means one
+file, such as `global.json`. Use `/` as the separator, with no leading `/` or `./` and no `.` or `..` segments.
+Matching is case-sensitive, except in GitVersion's `ignore.paths`, which ignores case from GitVersion 6.8, so avoid
+paths that differ only in case.
+
+The platforms disagree on the rest of glob syntax, so it is rejected: `?` and `+` (GitHub treats them as quantifiers of
+the preceding character, so `src/C++/` would not match), `[...]`, `{...}` and a leading `!`. They also disagree on a
+folder written without a trailing `/`, such as `src/AppA`: git and Azure DevOps match everything below it, but GitHub
+and GitVersion only match the path itself, so `ValidateBuild` reports a path like that when the folder exists. A git
+submodule or a symbolic link is a single entry to git, so its path is written without a trailing `/`.
+
+**Global paths** affect every product. By default they are `global.json`, the root `Directory.Build.*` and
+`Directory.Packages.*` files, `_atom/**`, `.github/workflows/**` and `.devops/workflows/**`. Override
+`IProductsDefinition.GlobalPaths` to change them, for example when the build project is not in `_atom`:
+
+```csharp
+IReadOnlyList<string> IProductsDefinition.GlobalPaths => [.. IProductsDefinition.DefaultGlobalPaths, "build/**"];
+```
+
+[`ValidateBuild`](../built-in-targets/validate-build.md) checks the declarations: names, empty or unsupported paths,
+folders without a trailing `/`, unknown or cyclic dependencies, tag prefixes that equal or start another product's
+(compared ignoring case), GitVersion configurations shared by two products, and a product GitVersion configuration that
+is the root `GitVersion.yml`.
+
+### The current product
+
+The `product` parameter (`IProductsDefinition.ProductName`) selects the product being built. The generated product jobs
+set it, and locally you pass it yourself:
+
+```shell
+atom PackAppA --product AppA
+```
+
+When a product is selected:
+
+- `BuildName` defaults to the product's name.
+- The GitVersion module uses the product's `GitVersionConfig` (unless `--gitversion-config` is given).
+- Without GitVersion, the default version provider reads `<Directory>/Directory.Build.props` before the root one.
+- `ReleaseTagFor`, `TryParseReleaseTag` and `ReleaseTagGlob` use the product's tag prefix, and `GetReleaseTagCommit()`
+  finds the commit for the product's tag (see [Release tags](#release-tags)).
+
+Without the parameter, everything behaves exactly as in a build without products. Build code can read
+`CurrentProduct`, and services can inject <xref:Invex.Atom.Build.BuildInfo.IProductContext>.
+
+Like any parameter, `product` can also come from an environment variable named `ProductName`, `product` or `PRODUCT`
+(on Windows, in any case). Check that your CI environment does not set one for another purpose. In an interactive run
+(`-i`), the prompt for `product` accepts an empty answer, which selects no product.
 
 ## The validation workflow with a gate
 
 GitHub branch protection needs a fixed list of required checks, but product jobs that only run when their product
 changed are skipped on most pull requests. (An Azure DevOps build validation policy requires a whole pipeline run
-instead, see [below](#the-workflow).) The pattern that reconciles the two is:
+instead.) The pattern that reconciles the two is:
 
 1. **One always-running Validate workflow.** It has no path filters, so it runs for every pull request.
-2. **`DetectAffectedProducts`.** The first job compares the pull request with its base branch and publishes the
-   affected products as a variable, for example `,appa,shared,`.
-3. **Per-product targets.** `PackAppA`, `TestAppA`, `PackAppB` and so on are separate targets. Each one runs only when
-   its product is in the list.
-4. **`ValidateGate`.** One job that depends on every product job and runs only if one of them failed or the run was
-   cancelled. It is the only required check.
+2. **[`DetectAffectedProducts`](../built-in-targets/detect-affected-products.md).** The first job compares the pull
+   request with its base branch and publishes the affected products as a variable, for example `,appa,shared,`.
+3. **Per-product targets.** `TestAppA`, `TestAppB` and so on are separate targets. Each one runs only when its product
+   is in the list.
+4. **A gate.** One job that depends on every product job and runs only if one of them failed or the run was cancelled.
+   It is the only required check.
 
 On GitHub the gate is **skipped** when every product job succeeded or was skipped, and GitHub treats a skipped required
-check as passed. It **runs and fails** when any product job failed or the run was cancelled. Branch protection
-therefore only needs to require `ValidateGate`.
+check as passed. It **runs and fails** when any product job failed or the run was cancelled.
 
 ### The targets
 
-The affected products are a [variable](variables-in-workflows.md), so they need a backing parameter. The list is
-comma-wrapped so that a condition can match `,appa,` without also matching a product called `appa2`:
+Targets are fixed when the build compiles, so each product has its own. Each product target must depend **directly** on
+`DetectAffectedProducts`, and the gate on every product target:
 
 ```csharp
-internal interface IProductTargets : IBuildInfo, IVariablesHelper, IReleaseTagHelper
+internal interface IProductTargets : IProductsDefinition, IBuildInfo, IReleaseTagHelper
 {
-    static string[] SharedPaths => ["src/Shared/"];
-    static string[] AppAPaths => ["src/AppA/", .. SharedPaths];
-    static string[] AppBPaths => ["src/AppB/", .. SharedPaths];
-    static string[] GlobalPaths =>
-    [
-        "global.json", "Directory.Build.props", "Directory.Build.targets", "Directory.Packages.props",
-        "Directory.Packages.targets", "_atom/", ".github/workflows/",
-    ];
-
-    [ParamDefinition("affected-products", "Comma-wrapped list of affected products, e.g. ',appa,shared,'")]
-    string? AffectedProducts => GetParam(() => AffectedProducts);
-
-    Target DetectAffectedProducts =>
+    Target TestAppA =>
         t => t
-            .DescribedAs("Works out which products the change affects")
-            .ProducesVariable(nameof(AffectedProducts))
-            .Executes(async cancellationToken =>
-            {
-                // Empty for pushes, manual runs and local runs: treat everything as affected
-                var baseRef = GitHub.Variables.BaseRef;
-
-                if (baseRef.Length is 0)
-                {
-                    await WriteVariable(nameof(AffectedProducts), ",appa,appb,shared,", cancellationToken);
-
-                    return;
-                }
-
-                // --no-renames lists both sides of a move (a file moved out of AppA still affects AppA), and -z
-                // writes raw, NUL-separated names, so Git doesn't quote unusual file names. The process runner
-                // reads output line by line, so also split on the line break it appends.
-                var diff = await ProcessRunner.RunAsync(
-                    new("git", $"diff --name-only --no-renames -z origin/{baseRef}...HEAD")
-                    {
-                        WorkingDirectory = RootedFileSystem.AtomRootDirectory,
-                        OutputLogLevel = LogLevel.Debug,
-                    },
-                    cancellationToken);
-
-                var changedFiles = diff.Output.Split(['\0', '\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
-
-                bool Touches(string[] paths) =>
-                    changedFiles.Any(file => paths
-                        .Concat(GlobalPaths)
-                        .Any(path => file.StartsWith(path, StringComparison.Ordinal)));
-
-                var affected = new List<string>();
-
-                if (Touches(AppAPaths))
-                    affected.Add("appa");
-
-                if (Touches(AppBPaths))
-                    affected.Add("appb");
-
-                if (Touches(SharedPaths))
-                    affected.Add("shared");
-
-                await WriteVariable(nameof(AffectedProducts), $",{string.Join(',', affected)},", cancellationToken);
-            });
-
-    Target PackAppA =>
-        t => t
-            .DependsOn(nameof(DetectAffectedProducts)) // must be a direct dependency, see below
-            .Executes(() => { /* pack AppA */ });
-
-    Target PackAppB =>
-        t => t
+            .DescribedAs("Tests AppA")
             .DependsOn(nameof(DetectAffectedProducts))
-            .Executes(() => { /* pack AppB */ });
+            .Executes(() => { /* test AppA */ });
+
+    Target TestAppB =>
+        t => t
+            .DescribedAs("Tests AppB")
+            .DependsOn(nameof(DetectAffectedProducts))
+            .Executes(() => { /* test AppB */ });
 
     Target ValidateGate =>
         t => t
             .DescribedAs("Fails if any product job failed or was cancelled")
-            .DependsOn(nameof(PackAppA))
-            .DependsOn(nameof(PackAppB))
+            .DependsOn(nameof(TestAppA))
+            .DependsOn(nameof(TestAppB))
             .Executes(() =>
             {
                 // In CI this job only runs after a failure. Locally, the dependencies have already succeeded.
@@ -131,161 +165,205 @@ internal interface IProductTargets : IBuildInfo, IVariablesHelper, IReleaseTagHe
 }
 ```
 
-On Azure DevOps, read the base branch from `DevOps.Variables.SystemPullRequestTargetBranchName` instead of
-`GitHub.Variables.BaseRef`.
-
-`DependsOn` takes one target name, so chain one call per dependency. List each product target the gate stands for
-(`TestAppA`, `TestAppB` and so on in a real build).
+`DependsOn` takes one target name, so chain one call per dependency. `IWorkflowContext` is in
+`Invex.Atom.Workflows.WorkflowContext`.
 
 ### The workflow
 
-`BuildOptions.Target.RunIfWorkflowCondition` gates each product job on the variable, and
-`BuildOptions.Target.RunIfAnyDependencyFailed` makes the gate run only after a failure or a cancelled run. Reference
-the variable with `Tex.ParamOutput`, using the C# names of the producing target and the parameter:
+<xref:Invex.Atom.Workflows.Definition.WorkflowPresets.ProductValidate*> builds the workflow from the gate and the
+product targets:
 
 ```csharp
-[BuildDefinition]
-[GenerateEntryPoint]
-internal partial class Build : WorkflowBuildDefinition, IGitHubWorkflows, IGitVersion, IProductTargets
-{
-    public IReadOnlyList<IBuildOption> Options =>
-    [
-        BuildOptions.GitVersion.ProvideBuildId,
-        BuildOptions.GitVersion.ProvideBuildVersion,
-    ];
-
-    public override IReadOnlyList<WorkflowDefinition> Workflows =>
-    [
-        new("Validate")
-        {
-            // No path filters, so the workflow (and the gate) runs for every pull request
-            Triggers = [WorkflowTriggers.PullIntoMain, WorkflowTriggers.Manual],
-            Targets =
-            [
-                new(nameof(IProductTargets.DetectAffectedProducts)),
-                new(nameof(IProductTargets.PackAppA)) { Options = [AffectedIf("appa"), AppAConfig] },
-                new(nameof(IProductTargets.PackAppB)) { Options = [AffectedIf("appb"), AppBConfig] },
-                new(nameof(IProductTargets.ValidateGate)) { Options = [BuildOptions.Target.RunIfAnyDependencyFailed] },
-            ],
-            Types = [WorkflowTypes.GitHub.Action],
-        },
-    ];
-
-    private static WorkflowParamInjection AppAConfig =>
-        BuildOptions.Inject.Param(nameof(IGitVersion.GitVersionConfig), "src/AppA/GitVersion.yml");
-
-    private static WorkflowParamInjection AppBConfig =>
-        BuildOptions.Inject.Param(nameof(IGitVersion.GitVersionConfig), "src/AppB/GitVersion.yml");
-
-    private TargetCondition AffectedIf(string product) =>
-        BuildOptions.Target.RunIfWorkflowCondition(Tex
-            .ParamOutput(this, nameof(IProductTargets.DetectAffectedProducts), nameof(IProductTargets.AffectedProducts))
-            .Contains($",{product},"));
-}
+IReadOnlyList<WorkflowDefinition> IWorkflowBuildDefinition.Workflows =>
+[
+    WorkflowPresets.ProductValidate(this,
+        nameof(ValidateGate),
+        [
+            new("AppA", nameof(TestAppA)),
+            new("AppB", nameof(TestAppB)),
+        ]) with
+    {
+        Types = [WorkflowTypes.GitHub.Action],
+    },
+];
 ```
 
-`Tex.ParamOutput` is in `Invex.Atom.Workflows.Extensions`, and `Tex` itself in `Invex.StructuredText.Expressions`.
+It is named `Validate` and triggered by pull requests into `main` and manual runs; change either with the `name`
+argument or a `with` expression. Add options with `WithOptions(...)`, not `with { Options = [...] }`: replacing the
+options removes the wiring checks below. It:
+
+- runs `DetectAffectedProducts` first;
+- gives each product target the condition `Tex.Success() && Tex.ProductAffected("AppA")` and the `product` parameter,
+  so the job builds with the product's name, version and GitVersion configuration;
+- makes the gate run only if a product job failed or the run was cancelled
+  (`BuildOptions.Target.RunIfAnyDependencyFailed`);
+- makes `atom gen` fail if a product target does not depend directly on `DetectAffectedProducts`, a product target or
+  the gate depends on a target that is not a product target of the same product or a shared target, a shared target
+  depends on a target that is not a shared target or `DetectAffectedProducts`, the gate does not depend directly on
+  every product target, or the gate does not depend on every shared target (directly or through a product target).
+  Each of these mistakes would otherwise skip a job or hide a failure silently. A dependency on another product's target is skipped whenever only this product is affected (affected
+  products only flow from a product to the products that depend on it), which skips this job too. A dependency on an
+  unlisted target would be added as a job without a condition, the product or `needs:`.
+
+A target that does not depend on the product, such as a solution-wide compile or restore, can be a **shared target**
+that product targets depend on. Pass it in `sharedTargets`: its job runs on every pull request, without a condition or
+the product. If it fails, the product jobs that depend on it are skipped and the gate fails. A shared target can only
+depend on other shared targets (and `DetectAffectedProducts`), because a product target it waited for would be skipped
+whenever that product is not affected. A shared check that no product target needs, such as a solution-wide lint,
+must be a dependency of the gate, or its failure would not fail the gate.
+
+```csharp
+WorkflowPresets.ProductValidate(this,
+    nameof(ValidateGate),
+    [new("AppA", nameof(TestAppA)), new("AppB", nameof(TestAppB))],
+    sharedTargets: [new(nameof(Compile))])
+```
+
+A target that reads the build name or version (such as `SetupBuildInfo`, or a pack target) gets the repository's values
+there, not the product's, so make it a product target instead.
+
+A product can have several targets: list each one, for example `new("AppA", nameof(TestAppA))` and
+`new("AppA", nameof(LintAppA))`, and make the gate depend on all of them. `LintAppA` may depend on `TestAppA`, because
+both are AppA's. A target can only be listed once, so give each product its own targets. To give a target other options,
+pass a `WorkflowTargetDefinition`: `new("AppA", new WorkflowTargetDefinition(nameof(TestAppA)) { Options = [...] })`.
+
+To get the same checks in a validation workflow you build yourself, add a
+<xref:Invex.Atom.Workflows.Options.ProductValidateOption> to its options:
+`new ProductValidateOption(nameof(ValidateGate), [new("AppA", nameof(TestAppA)), new("AppB", nameof(TestAppB))])`.
+It also checks that the product targets, shared targets and gate are in the workflow's `Targets`, but not their
+conditions or `product` injections, which you then write yourself.
 
 On GitHub Actions this generates, among others:
 
 ```yaml
-  PackAppA:
+  TestAppA:
     needs: [ DetectAffectedProducts ]
-    if: contains(needs.DetectAffectedProducts.outputs.affected-products, ',appa,')
+    if: success() && contains(needs.DetectAffectedProducts.outputs.affected-products, ',appa,')
+    steps:
+      # ...
+      - name: TestAppA
+        run: dotnet run --project _atom/_atom.csproj -- TestAppA --skip --headless
+        env:
+          product: AppA
 
   ValidateGate:
-    needs: [ PackAppA, PackAppB ]
+    needs: [ TestAppA, TestAppB ]
     if: failure() || cancelled()
 ```
 
-On Azure DevOps a custom condition **replaces** the default `succeeded()` condition, so add `Tex.Success()` to the
-product conditions there, or a product job would still run after an earlier job failed:
+On Azure DevOps the product conditions render as `and(succeeded(), contains(...))`: a custom condition there replaces
+the default `succeeded()`, which is why the preset adds `Tex.Success()`. The gate renders as `or(failed(), canceled())`.
+A branch policy there already fails when any job fails, so the gate matters less than on GitHub, but it keeps the two
+platforms' workflows alike.
+
+Branch protection then only needs to require `ValidateGate`.
+
+## Per-product pipelines
+
+<xref:Invex.Atom.Workflows.Definition.WorkflowDefinition.ForProduct*> creates a product's own workflow, such as its build
+or release pipeline:
 
 ```csharp
-private TargetCondition AffectedIf(string product) =>
-    BuildOptions.Target.RunIfWorkflowCondition(Tex.Success() &&
-        Tex
-            .ParamOutput(this, nameof(IProductTargets.DetectAffectedProducts), nameof(IProductTargets.AffectedProducts))
-            .Contains($",{product},"));
+WorkflowDefinition
+    .ForProduct(this, "AppA", "Build")
+    .WithTriggers(WorkflowTriggers.Manual, WorkflowTriggers.GitHub.OnRelease()) with
+    {
+        Targets = [new(nameof(PackAppA))],
+        Types = [WorkflowTypes.GitHub.Action],
+    },
 ```
 
-The gate renders as `or(failed(), canceled())` on Azure DevOps. A branch policy there already fails when any job fails,
-so the gate matters less than on GitHub, but it keeps the two platforms' workflows alike.
+The workflow is named `AppA - Build` (and written to `AppA - Build.yml`). Add options with `WithOptions(...)`: replacing
+`Options` in a `with` expression would remove the product parameter and the release guard. It has:
 
-`BuildOptions.Target.RunAlways` (rendered as `always()`) is the counterpart for jobs that must run whatever their
-dependencies did, such as reporting. Several `TargetCondition` options on one target are combined with AND, so add
-`RunIfAnyDependencyFailed` or `RunAlways` on its own rather than next to another condition.
+- a single push trigger for `main` (or the `branches` you pass), filtered to AppA's paths, Shared's paths and the global
+  paths, so a change to AppB does not run it;
+- the `product` parameter on every job, so the name, version, GitVersion configuration and release tags are AppA's;
+- on GitHub Actions with a release trigger, the job condition
+  `github.event_name != 'release' || startsWith(github.event.release.tag_name, 'appa/v')` on every job, so publishing
+  AppB's release does not run AppA's jobs. Pushes and manual runs are unaffected. Because the guard compares prefixes,
+  `ValidateBuild` rejects a tag prefix that starts another product's, such as `v` and `vision/v`.
 
-## Per-product versions with GitVersion
+Azure DevOps has no release trigger. Pass `releaseTagTrigger: true` to add the product's tags (`appa/v*`) to the push
+trigger instead. Do not use it on GitHub together with the release trigger: creating a release also pushes its tag, so
+the workflow would run twice.
 
-Each product gets its own GitVersion configuration file, selected with the
-[`gitversion-config` parameter](../modules/git-version.md#choosing-a-configuration-file) of the GitVersion module.
-In the workflow above, `AppAConfig` injects it into AppA's targets, so `BuildVersion` and `BuildId` in those jobs come
-from AppA's configuration (unless the target consumes them as variables from `SetupBuildInfo`, see the gotchas below).
-The project needs `BuildOptions.GitVersion.ProvideBuildId` and `ProvideBuildVersion`, as in the example.
+Use `ForProduct` for a product's own pipelines only. Pull request validation for every product belongs in the one
+Validate workflow above, so that branch protection has a single check.
 
-A product's configuration does two things that the repository-wide one does not:
+## Per-product versions
 
-- **`tag-prefix`** makes GitVersion read only the product's tags, for example `appa/v1.2.0`.
-- **`ignore.paths`** makes GitVersion skip commits that did not touch the product, so a change to AppB does not bump
-  AppA's version.
+Each product with a `GitVersionConfig` gets its own GitVersion configuration file, generated by `atom gen` (and by any
+local run, like the workflow files). The file is the repository's root GitVersion configuration (the first of
+`GitVersion.yml`, `GitVersion.yaml`, `.GitVersion.yml` and `.GitVersion.yaml`) with two settings replaced:
+
+- **`tag-prefix`** is the product's tag prefix, so GitVersion reads only the product's tags, for example `appa/v1.2.0`.
+- **`ignore.paths`** makes GitVersion skip commits that touched none of the product's paths, its dependencies' paths
+  or the global paths, so a change to AppB does not bump AppA's version (but see
+  [the gotcha about an ignored `HEAD`](#gotchas)).
 
 ```yaml
-# src/AppA/GitVersion.yml
-tag-prefix: 'appa/v'
+# Generated by Atom for the product 'AppA'. Do not edit: run 'atom gen' to update it.
+# Settings: the root GitVersion.yml, with this product's tag prefix and ignored paths.
 
+mode: ContinuousDelivery
+
+branches:
+  main:
+    regex: ^main$
+    # ...
+
+tag-prefix: 'appa/v'
 ignore:
   paths:
-    # Ignore every commit whose changed files are all outside AppA, Shared and the repository-wide build files
-    - '^(?!(src/AppA/|src/Shared/|_atom/|\.github/workflows/|global\.json$|Directory\.(Build|Packages)\.(props|targets)$)).*'
-
-# Copy the rest of the repository's GitVersion.yml here (mode, bump messages, branches and so on):
-# a file passed with /config replaces GitVersion's own lookup, it is not merged with the root GitVersion.yml.
+    - '^(?!(?:src[/\\]AppA[/\\].*|src[/\\]Shared[/\\].*|global\.json|Directory\.Build\.[^/\\]*|Directory\.Packages\.[^/\\]*|_atom[/\\].*|\.github[/\\]workflows[/\\].*|\.devops[/\\]workflows[/\\].*)$).*'
 ```
 
-The single anchored negative lookahead matches every path that is **not** under one of the product's paths. The paths
-are relative to the repository root and have **no leading slash**. GitVersion's older documentation shows paths with a
-leading slash; in this regex that would never recognise the product's own files, so every commit would be ignored.
+The single anchored negative lookahead matches every path that is **not** one of the product's. Separators match both
+`/` and `\`, because GitVersion sees paths with the platform's separator. GitVersion matches paths from the git
+repository root, so when the Atom root is a subfolder of the repository (such as `samples/Monorepo`), the paths are
+anchored below that folder: `^(?!samples[/\\]Monorepo[/\\](?:...)$).*`. Any `tag-prefix` and `ignore` settings in the
+root configuration are replaced, including `ignore.sha` and `ignore.commits-before`.
 
-Keep the paths in the regex, the paths `DetectAffectedProducts` checks and the paths you pass to
-`GetReleaseTagCommit` (below) the same.
+Every product that is built with GitVersion needs a `GitVersionConfig`. Without one, GitVersion uses the root
+configuration, so it counts every commit and reads the root tag prefix, while the release tag helpers use the product's
+prefix: the product's own tags would never be read. Atom logs a warning when that happens. A path group such as
+`Shared`, which is never built on its own, does not need one.
 
-`ignore.paths` needs GitVersion 6.4.0 or later, and path matching became case-insensitive in 6.8.0. Atom requires
-`GitVersion.Tool` 6.8.0 or later and installs the latest 6.x release when no suitable version is installed, so CI
-does not silently pick up a later major version with a different configuration format.
+Atom owns these files. A headless run (CI) fails if one is missing or has been edited, and asks you to run `atom gen`,
+in the same way as for workflow files. To change shared settings such as `branches`, edit the root configuration and
+run `atom gen`.
 
-To compute a product's version locally:
+When a product is selected, the GitVersion module uses its file automatically. To compute a product's version locally:
 
 ```shell
-atom PackAppA --gitversion-config src/AppA/GitVersion.yml
+atom SetupBuildInfo --product AppA
 ```
+
+`ignore.paths` needs GitVersion 6.4.0 or later, and path matching became case-insensitive in 6.8.0. Atom requires
+`GitVersion.Tool` 6.8.0 or later and installs the latest 6.x release when no suitable version is installed.
 
 ## Release tags
 
-Product tags use the product's prefix: `appa/v1.2.0`, `appb/v2.0.1`. In a targets interface derived from
-<xref:Invex.Atom.Build.BuildInfo.IReleaseTagHelper>, `ReleaseTagFor`, `TryParseReleaseTag` and `ReleaseTagGlob` use
-the build's release tag prefix, `v`. For a product's tags, the <xref:Invex.Atom.Build.BuildInfo.ReleaseTag> helpers in
-`Invex.Atom.Build` take the prefix explicitly:
+When a product is selected, the <xref:Invex.Atom.Build.BuildInfo.IReleaseTagHelper> members use its tag prefix:
 
 ```csharp
-ReleaseTagFor(BuildVersion);                             // "v1.2.0"
-ReleaseTag.For(BuildVersion, "appa/v");                  // "appa/v1.2.0"
-ReleaseTag.TryParse("appa/v1.2.0", "appa/v", out var v); // true, v is 1.2.0
-ReleaseTag.TryParse("appa/v1.2.0", "v", out _);          // false: the prefix does not match
-ReleaseTag.Glob("appa/v");                               // "appa/v*", for git tag --list
+ReleaseTagPrefix;                    // "appa/v" (or "v" with no product)
+ReleaseTagFor(BuildVersion);         // "appa/v1.2.0"
+TryParseReleaseTag("appa/v1.2.0", out var v); // true, v is 1.2.0
+ReleaseTagGlob;                      // "appa/v*", for git tag --list
 ```
 
-`ReleaseTag.Glob` is broader than a release tag (`v*` also matches `vnext`), so filter listed tags with
-`ReleaseTag.TryParse` using the same prefix.
+For another product's tags, the <xref:Invex.Atom.Build.BuildInfo.ReleaseTag> helpers take the prefix explicitly, for
+example `ReleaseTag.For(version, "appb/v")`. `ReleaseTagGlob` is broader than a release tag (`appa/v*` also matches
+`appa/vnext`), so filter listed tags with `TryParseReleaseTag`.
 
 ### Tag the latest commit that touched the product
 
 GitVersion ignores a tag that sits on a commit excluded by `ignore.paths`. If `appa/v1.2.0` is put on a commit that only
 touched AppB, AppA cannot see the tag and keeps versioning from an older one. **Put a product's tag on the latest commit
-that touched the product's paths**, not on `HEAD`.
-
-<xref:Invex.Atom.Build.BuildInfo.IReleaseTagHelper> finds that commit. Derive your targets interface from it and call
-`GetReleaseTagCommit` with the same paths as the product's `ignore.paths` regex:
+that touched the product's paths**, not on `HEAD`. `GetReleaseTagCommit()` finds it, using the same paths as the
+generated `ignore.paths`:
 
 ```csharp
 Target TagAppA =>
@@ -293,8 +371,9 @@ Target TagAppA =>
         .DescribedAs("Tags the AppA release")
         .Executes(async cancellationToken =>
         {
-            var commit = await GetReleaseTagCommit([.. AppAPaths, .. GlobalPaths], cancellationToken);
-            var tag = ReleaseTag.For(BuildVersion, "appa/v");
+            // Run with --product AppA, which the AppA workflows inject
+            var commit = await GetReleaseTagCommit(cancellationToken);
+            var tag = ReleaseTagFor(BuildVersion);
 
             await ProcessRunner.RunAsync(new("git", $"tag {tag} {commit}")
                 {
@@ -312,51 +391,78 @@ Target TagAppA =>
 
 When you create a GitHub release instead, set its target commit to the returned hash.
 
-`GetReleaseTagCommit` runs `git log -1 --format=%H -- <paths>`, or returns `HEAD` when no paths are given. It needs the
-full history: in a shallow clone the oldest fetched commit appears to touch every file, so it fails instead of returning
-a wrong commit. Atom's generated GitHub checkout steps fetch the full history (`fetch-depth: 0`) by default.
+One history defeats any choice of commit: a merged branch whose own commits touched the product but whose merge, compared
+with its first parent, did not (the branch's changes cancelled out, or the merge kept the base's version of the files).
+GitVersion counts the branch's commits, which are not on the first-parent line, so they still count after the tag.
+Squash merges avoid this.
+
+`GetReleaseTagCommit()` runs `git log -1 --first-parent --format=%H -- <pathspecs>` with the product's paths (with its
+dependencies' and the global paths) as `:(glob)` pathspecs, or returns `HEAD` when no product is selected.
+`--first-parent` compares each commit with its first parent only, as `ignore.paths` does, so in a repository that
+merges with merge commits it finds the merge commit rather than the merged commit behind it. `GetReleaseTagCommit(paths)`
+takes the paths explicitly. Both need the full history: in a shallow clone the oldest fetched commit appears to touch
+every file, so they fail instead of returning a wrong commit. Atom's generated checkout steps fetch the full history by
+default.
 
 ## Gotchas
 
-- **Conditions don't add dependencies.** Every product target must `DependsOn(nameof(DetectAffectedProducts))`
-  **directly**. A condition that references the variable does not add the dependency, so without it the job has no
-  `needs:` on the producing job, the output is empty and the job is always skipped. Atom only logs a warning.
-- **`Inject.Param` key.** Use the C# property name (`nameof(IGitVersion.GitVersionConfig)`), not the command-line name
-  (`gitversion-config`). A key that does not match is dropped with only a warning when the workflow is generated.
-- **Azure DevOps conditions.** A custom condition replaces `succeeded()`, so add `Tex.Success()` to product conditions
-  on Azure DevOps.
+- **Direct dependencies.** Conditions don't add dependencies. Every product target in the Validate workflow must
+  `DependsOn(nameof(DetectAffectedProducts))` **directly**, and the gate must depend directly on every product target.
+  `ProductValidate` makes `atom gen` fail when they don't. In a workflow you build by hand, Atom only warns about a
+  product job that does not depend on `DetectAffectedProducts`; a gate that misses a product job gets no warning, so
+  add a `ProductValidateOption` (see [the workflow](#the-workflow)).
 - **Auto-added dependency jobs.** A dependency that is not listed in the workflow's `Targets` is still added as a job,
-  but without its target options (so without its condition) and with no `needs:`. List every product target in the
-  workflow explicitly.
-- **One version per workflow.** `SetupBuildInfo` produces one version for the whole workflow. In the combined Validate
-  workflow, inject `gitversion-config` per target instead, or add a per-product setup target (for example
-  `SetupBuildInfoAppA`) that writes the product's version to its own variable. `StoreArtifact` and `RetrieveArtifact`
-  still use the workflow-wide `BuildId`, which is fine for validation.
+  but without its target options (so without its condition or product) and with no `needs:`. `ProductValidate` rejects
+  them for product targets and the gate; in a workflow you build by hand, list every target explicitly or add a
+  `ProductValidateOption`.
+- **One version per process.** Parameters are resolved once per run, so one run builds one product. `SetupBuildInfo`
+  produces one version for the whole workflow: in the Validate workflow each product job computes its own version from
+  its `product` parameter instead. `StoreArtifact` and `RetrieveArtifact` still use the workflow-wide `BuildId`, which
+  is fine for validation.
 - **`ignore.paths` semantics.** A commit is ignored only if **all** of its changed paths (compared with its first
-  parent) match. Paths have no leading slash. Ignored commits can still change the build metadata part of `FullSemVer`.
-- **Tagging.** Tag `appa/vX` on the latest commit that touched AppA's paths (`GetReleaseTagCommit`), or GitVersion
-  cannot see the tag.
-- **Local runs.** `atom PackAppA` runs `DetectAffectedProducts` first, so it must succeed with no base branch (treat
-  everything as affected). Make the gate a no-op outside CI. One process computes one product's version, so build one
-  product per run.
+  parent) match. Ignored commits can still change the build metadata part of `FullSemVer`.
+- **Repository root.** Product paths are relative to the Atom root directory, which should be the git repository root.
+  The generated `ignore.paths` are anchored below the Atom root when it is a subfolder, but GitHub and Azure DevOps
+  path filters are always relative to the repository root, so they would not match. GitHub also only reads workflows
+  from the repository root. A headless run outside a git repository (such as a source export) skips the check of the
+  product GitVersion files, because their contents depend on where the repository root is.
+- **An ignored `HEAD`.** When the latest commit touched only other products, GitVersion versions a product from a
+  commit it ignores, and can report a different version than at the product's own latest commit. With one counted
+  commit since the product's tag, GitVersion 6.8 reported the tagged version itself. A push whose last commit touched
+  only other products usually doesn't run the product's pipeline, because of its path filters. But a push of several
+  commits (a rebase merge, or a direct push) runs it when any of them touched the product, with `HEAD` at the last one.
+  Squash or merge-commit merges avoid this; otherwise run the release from the product's latest commit.
+- **Local runs.** `DetectAffectedProducts` treats every product as affected when there is no base branch, so local runs
+  of product targets work. Make the gate a no-op outside CI, as above.
+- **Azure DevOps tag triggers.** Check whether path filters also apply to tag pushes in your Azure DevOps organisation
+  before relying on `releaseTagTrigger` together with path filters.
 
 ## Migration for an existing repo
 
 1. **Baseline tags.** For each product, create a tag `appa/v<current version>` on the latest commit that touched the
-   product's paths (use `GetReleaseTagCommit`, or `git log -1 --format=%H -- <paths>`). Existing `v*` tags no longer
-   match the product's `tag-prefix`, so without a baseline the product's version starts again from the beginning.
-2. **Product configurations.** Add a GitVersion configuration per product, such as `src/AppA/GitVersion.yml`, with its
-   `tag-prefix` and `ignore.paths`, and inject it into the product's targets with `gitversion-config`.
-3. **Validate workflow.** Add `DetectAffectedProducts`, the per-product targets and `ValidateGate`, then run `atom gen`.
-4. **Branch protection.** Require only the `ValidateGate` check, and remove the per-product checks.
+   product's paths (`GetReleaseTagCommit()` with `--product AppA`, or
+   `git log -1 --first-parent --format=%H -- ':(glob)<path>' ...` with the product's, its dependencies' and the global
+   paths). Existing
+   `v*` tags no longer match the product's tag prefix, so without a baseline the product's version starts again.
+2. **Products.** Implement `IProductsDefinition`, declare the products with their `GitVersionConfig`, and run
+   `atom gen` to generate the product configurations.
+3. **Validate workflow.** Add the per-product targets and the gate, replace the Validate workflow with
+   `WorkflowPresets.ProductValidate`, and run `atom gen`.
+4. **Branch protection.** Require only the gate check, and remove the per-product checks.
+
+If you wrote this pattern by hand with an earlier version of Atom, delete your own `AffectedProducts` parameter,
+`DetectAffectedProducts` target and path lists when you implement `IProductsDefinition`: parameter and target names must
+be unique across the build. Replace hand-written `gitversion-config` injections and `ReleaseTag.For(version, "appa/v")`
+calls with the `product` parameter and the `IReleaseTagHelper` members.
 
 ## See also
 
+- [DetectAffectedProducts](../built-in-targets/detect-affected-products.md): how the affected products are worked out.
 - [GitVersion](../modules/git-version.md): the `gitversion-config` parameter and caching.
 - [Workflow Options](workflow-options.md): conditions, injections and other per-target options.
 - [Variables in Workflows](variables-in-workflows.md): passing `AffectedProducts` between jobs.
-- [Triggers](triggers.md): pull request, push and manual triggers.
-- <xref:Invex.Atom.Build.BuildInfo.ReleaseTag>
+- <xref:Invex.Atom.Build.IProductsDefinition>
+- <xref:Invex.Atom.Build.BuildInfo.Product>
 - <xref:Invex.Atom.Build.BuildInfo.IReleaseTagHelper>
-- <xref:Invex.Atom.Module.GitVersion.IGitVersion>
-- <xref:Invex.Atom.Workflows.Options.TargetCondition>
+- <xref:Invex.Atom.Workflows.Definition.WorkflowPresets>
+- <xref:Invex.Atom.Workflows.Options.ProductWorkflowOption>

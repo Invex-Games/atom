@@ -1,0 +1,38 @@
+﻿name: AppA - Build
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - src/AppA/**
+      - src/Shared/**
+      - global.json
+      - Directory.Build.*
+      - Directory.Packages.*
+      - _atom/**
+      - .github/workflows/**
+      - .devops/workflows/**
+  release:
+    types: [ released ]
+  workflow_dispatch:
+
+permissions: { }
+
+jobs:
+
+  PackAppA:
+    if: github.event_name != 'release' || startsWith(github.event.release.tag_name, 'appa/v')
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: PackAppA
+        id: PackAppA
+        run: dotnet run --project AtomTest/AtomTest.csproj -- PackAppA --skip --headless
+        env:
+          product: AppA
+
