@@ -176,6 +176,6 @@ internal static partial class ProductValidator
     /// <summary>
     ///     Matches a valid product name.
     /// </summary>
-    [GeneratedRegex("^[A-Za-z0-9][A-Za-z0-9._-]*$")]
+    [GeneratedRegex(@"\A[A-Za-z0-9][A-Za-z0-9._-]*\z")]
     private static partial Regex NameRegex();
 }

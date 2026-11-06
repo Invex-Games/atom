@@ -356,6 +356,28 @@ public sealed class GitVersionRunnerTests
             .ShouldBe(2);
     }
 
+    [Test]
+    public void GetOutput_AfterConfigEditInTheSameRun_RunsGitVersionAgain()
+    {
+        // Arrange: as when build resolution reads a product configuration that the run then regenerates
+        var runner = CreateHost(AppAConfig)
+            .Services
+            .GetRequiredService<GitVersionRunner>();
+
+        runner.GetOutput();
+        _fileSystem.File.WriteAllText(RootPath(AppAConfig), "tag-prefix: 'appa-v'\n");
+
+        // Act
+        runner.GetOutput();
+        runner.GetOutput();
+
+        // Assert
+        _processRunner
+            .GitVersionCalls
+            .Count()
+            .ShouldBe(2);
+    }
+
     [TestCase("GitVersion.yml")]
     [TestCase("GitVersion.yaml")]
     [TestCase(".GitVersion.yml")]
