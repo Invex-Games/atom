@@ -1,5 +1,7 @@
 global using System.IO.Abstractions.TestingHelpers;
+global using Invex.Atom.Build;
 global using Invex.Atom.Build.Args;
+global using Invex.Atom.Build.BuildInfo;
 global using Invex.Atom.Build.BuildOptions;
 global using Invex.Atom.Build.Definition;
 global using Invex.Atom.Build.Exceptions;
@@ -9,6 +11,8 @@ global using Invex.Atom.TestUtils;
 global using Invex.Atom.Workflows.Definition;
 global using Invex.Atom.Workflows.Definition.Triggers;
 global using Invex.Atom.Workflows.Model;
+global using Invex.Atom.Workflows.Options;
+global using Invex.Atom.Workflows.Options.Injections;
 global using Invex.Atom.Workflows.Tests.Builds;
 global using Invex.Atom.Workflows.Tests.TestUtils;
 global using Invex.Atom.Workflows.Writer;

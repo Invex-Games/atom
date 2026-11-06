@@ -23,5 +23,34 @@ public static class AtomTexExtensions
             Tex.JobOutput(targetName,
                 buildDefinition.ParamDefinitions.FirstOrDefault(p => p.Key == paramName).Value.ArgName,
                 targetName);
+
+        /// <summary>
+        ///     Checks whether <see cref="IProductsDefinition.DetectAffectedProducts" /> found a monorepo product affected.
+        /// </summary>
+        /// <param name="productName">The product's name; it is compared by its lowercase identifier.</param>
+        /// <returns>
+        ///     A condition such as <c>contains(needs.DetectAffectedProducts.outputs.affected-products, ',appa,')</c>.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="productName" /> is null, empty or whitespace.</exception>
+        /// <remarks>
+        ///     Like <see cref="ParamOutput{T}" />, this does not add a dependency: the job that uses the condition must
+        ///     depend directly on <c>DetectAffectedProducts</c>. On Azure DevOps, combine it with <c>Tex.Success()</c>,
+        ///     because a custom condition replaces the default success check.
+        /// </remarks>
+        public static BoolExpr ProductAffected(string productName)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(productName);
+
+            return Tex
+                .JobOutput(nameof(IProductsDefinition.DetectAffectedProducts),
+                    AffectedProductsArgName,
+                    nameof(IProductsDefinition.DetectAffectedProducts))
+                .Contains($",{new Product(productName.Trim()).Id},");
+        }
     }
+
+    /// <summary>
+    ///     The argument name of <see cref="IProductsDefinition.AffectedProducts" />.
+    /// </summary>
+    private const string AffectedProductsArgName = "affected-products";
 }

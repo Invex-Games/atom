@@ -54,6 +54,7 @@ internal sealed class GitVersionRunner(
 
     private readonly Lock _lock = new();
     private readonly Dictionary<string, JsonElement> _outputs = new(StringComparer.Ordinal);
+    private readonly HashSet<string> _productsWarnedWithoutConfig = new(StringComparer.OrdinalIgnoreCase);
     private bool _toolVerified;
 
     /// <summary>
@@ -82,6 +83,16 @@ internal sealed class GitVersionRunner(
         {
             var config = ResolveConfig();
             var outputKey = config?.RelativePath ?? string.Empty;
+
+            // Before the output cache: build resolution may already have cached the output with no configuration,
+            // in its default-values-only scope where no product is visible
+            if (config is null &&
+                buildDefinition is IProductsDefinition { CurrentProduct: { } product } &&
+                _productsWarnedWithoutConfig.Add(product.Name))
+                logger.LogWarning(
+                    "Product {Product} has no GitVersion configuration (Product.GitVersionConfig), so GitVersion uses the root configuration: it counts every commit and reads the root tag prefix, not the product's tag prefix '{TagPrefix}'",
+                    product.Name,
+                    product.TagPrefix);
 
             if (_outputs.TryGetValue(outputKey, out var output))
                 return output;

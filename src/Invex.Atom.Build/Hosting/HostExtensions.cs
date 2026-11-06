@@ -84,6 +84,7 @@ public static class HostExtensions
         });
 
         builder.Services.AddSingleton(TimeProvider.System);
+        builder.Services.TryAddSingleton<IProductContext, ProductContext>();
         builder.Services.TryAddSingleton<IBuildIdProvider, DefaultBuildIdProvider>();
         builder.Services.TryAddSingleton<IBuildVersionProvider, DefaultBuildVersionProvider>();
         builder.Services.TryAddSingleton<IBuildTimestampProvider, DefaultBuildTimestampProvider>();

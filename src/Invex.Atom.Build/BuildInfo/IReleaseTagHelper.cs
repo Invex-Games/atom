@@ -5,16 +5,18 @@
 ///     prefix, and finding the commit a release tag should be put on.
 /// </summary>
 /// <remarks>
-///     The build's release tag prefix is <see cref="ReleaseTag.DefaultPrefix" /> (<c>v</c>). To format or parse a tag
-///     with another prefix, such as a monorepo product's <c>appa/v</c>, use <see cref="ReleaseTag" />, which takes the
-///     prefix explicitly.
+///     The build's release tag prefix is <see cref="ReleaseTagPrefix" />: the current monorepo product's
+///     <see cref="Product.TagPrefix" /> when one is being built (see <see cref="IProductsDefinition.CurrentProduct" />),
+///     otherwise <see cref="ReleaseTag.DefaultPrefix" /> (<c>v</c>). To format or parse a tag with another prefix, use
+///     <see cref="ReleaseTag" />, which takes the prefix explicitly.
 /// </remarks>
 /// <example>
 ///     <code>
-/// var tag = ReleaseTagFor(BuildVersion); // "v1.2.0"
+/// var tag = ReleaseTagFor(BuildVersion); // "v1.2.0", or "appa/v1.2.0" when building the product AppA
 ///
 /// // Tag AppA on the latest commit that touched its paths, so GitVersion with ignore.paths can see the tag.
-/// var commit = await GetReleaseTagCommit(["src/AppA/", "src/Shared/"], cancellationToken);
+/// var commit = await GetReleaseTagCommit(cancellationToken); // the current product's paths, with the global paths
+/// var otherCommit = await GetReleaseTagCommit(["src/AppB/", "src/Shared/"], cancellationToken); // only these paths
 /// var appATag = ReleaseTag.For(BuildVersion, "appa/v"); // "appa/v1.2.0"
 ///     </code>
 /// </example>
@@ -23,6 +25,20 @@
 public interface IReleaseTagHelper : IBuildAccessor
 {
     /// <summary>
+    ///     Gets the build's release tag prefix.
+    /// </summary>
+    /// <value>
+    ///     The current monorepo product's <see cref="Product.TagPrefix" /> (for example <c>appa/v</c>) when the build
+    ///     implements <see cref="IProductsDefinition" /> and a product is selected; otherwise
+    ///     <see cref="ReleaseTag.DefaultPrefix" /> (<c>v</c>).
+    /// </value>
+    /// <exception cref="InvalidOperationException">Thrown if the <c>product</c> parameter names an unknown product.</exception>
+    string ReleaseTagPrefix =>
+        this is IProductsDefinition { CurrentProduct: { } product }
+            ? product.TagPrefix
+            : ReleaseTag.DefaultPrefix;
+
+    /// <summary>
     ///     Gets a glob pattern that matches the build's release tags, for use with <c>git tag --list &lt;pattern&gt;</c>.
     /// </summary>
     /// <value>The build's release tag prefix followed by <c>*</c>, for example <c>v*</c>.</value>
@@ -30,7 +46,7 @@ public interface IReleaseTagHelper : IBuildAccessor
     ///     The pattern is broader than a release tag (<c>v*</c> also matches <c>vnext</c>), so filter the listed tags
     ///     with <see cref="TryParseReleaseTag" />. See <see cref="ReleaseTag.Glob" />.
     /// </remarks>
-    string ReleaseTagGlob => ReleaseTag.Glob(ReleaseTag.DefaultPrefix);
+    string ReleaseTagGlob => ReleaseTag.Glob(ReleaseTagPrefix);
 
     /// <summary>
     ///     Gets the release tag for a version, using the build's release tag prefix.
@@ -43,7 +59,7 @@ public interface IReleaseTagHelper : IBuildAccessor
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="version" /> is <see langword="null" />.</exception>
     /// <remarks>See <see cref="ReleaseTag.For" />.</remarks>
     string ReleaseTagFor(SemVer version) =>
-        ReleaseTag.For(version, ReleaseTag.DefaultPrefix);
+        ReleaseTag.For(version, ReleaseTagPrefix);
 
     /// <summary>
     ///     Tries to parse a release tag that uses the build's release tag prefix.
@@ -59,7 +75,35 @@ public interface IReleaseTagHelper : IBuildAccessor
     /// </returns>
     /// <remarks>See <see cref="ReleaseTag.TryParse" />.</remarks>
     bool TryParseReleaseTag([NotNullWhen(true)] string? tag, [NotNullWhen(true)] out SemVer? version) =>
-        ReleaseTag.TryParse(tag, ReleaseTag.DefaultPrefix, out version);
+        ReleaseTag.TryParse(tag, ReleaseTagPrefix, out version);
+
+    /// <summary>
+    ///     Gets the commit that the current product's release tag should be put on: the latest commit that touched the
+    ///     product's paths, or <c>HEAD</c> if no product is being built.
+    /// </summary>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>The full hash of the commit to tag.</returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown if the <c>product</c> parameter names an unknown product, or the product dependencies are invalid.
+    /// </exception>
+    /// <exception cref="StepFailedException">
+    ///     Thrown if a product is being built and the repository is a shallow clone, or if git finds no commit.
+    /// </exception>
+    /// <exception cref="ProcessException">Thrown if git exits with a non-zero code.</exception>
+    /// <remarks>
+    ///     When a product is being built, the paths are the ones GitVersion counts for it: its own paths, the paths of
+    ///     the products it depends on and the global paths (see <see cref="IProductsDefinition.GetProductPaths" />).
+    ///     They are passed to git as <c>:(glob)</c> pathspecs. See
+    ///     <see cref="GetReleaseTagCommit(IEnumerable{string}, CancellationToken)" />.
+    /// </remarks>
+    Task<string> GetReleaseTagCommit(CancellationToken cancellationToken = default) =>
+        GetReleaseTagCommit(this is IProductsDefinition { CurrentProduct: { } product } products
+                ? products
+                    .GetProductPaths(product)
+                    .Select(ProductPathGlob.ToGitPathspec)
+                    .ToList()
+                : [],
+            cancellationToken);
 
     /// <summary>
     ///     Gets the commit that a release tag should be put on: the latest commit that touched any of
@@ -84,11 +128,12 @@ public interface IReleaseTagHelper : IBuildAccessor
     /// </exception>
     /// <remarks>
     ///     <para>
-    ///         This runs <c>git log -1 --format=%H -- &lt;paths&gt;</c> in
+    ///         This runs <c>git log -1 --first-parent --format=%H -- &lt;paths&gt;</c> in
     ///         the Atom root directory (<c>AtomRootDirectory</c>). A product's release tag must be on the latest
     ///         commit that touched the product's paths: GitVersion ignores a tag on a commit that its
     ///         <c>ignore.paths</c> setting excludes, so a tag on a commit that touched only another product would not be
-    ///         seen.
+    ///         seen. Like <c>ignore.paths</c>, it compares each commit with its first parent, so in a repository that
+    ///         merges with merge commits it finds the merge commit, not the merged commit behind it.
     ///     </para>
     ///     <para>
     ///         When paths are given, the full history is needed. In a shallow clone the oldest fetched commit appears to
@@ -125,9 +170,11 @@ public interface IReleaseTagHelper : IBuildAccessor
                     "Fetch the full history (for example, fetch-depth: 0 for actions/checkout).");
         }
 
+        // --first-parent compares each commit with its first parent only, as GitVersion's ignore.paths does, so a
+        // merge commit that brought in a change to the paths is found rather than the merged commit behind it.
         // --no-show-signature keeps the output to the hash alone when the user's Git config sets log.showSignature
         string[] args = pathList.Count > 0
-            ? ["log", "-1", "--no-show-signature", "--format=%H", "--", ..pathList]
+            ? ["log", "-1", "--first-parent", "--no-show-signature", "--format=%H", "--", ..pathList]
             : ["log", "-1", "--no-show-signature", "--format=%H"];
 
         var logResult = await ProcessRunner.RunAsync(new("git", ProcessArguments.Join(args))

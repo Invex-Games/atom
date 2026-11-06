@@ -1,6 +1,7 @@
 global using System.Diagnostics;
 global using System.Diagnostics.CodeAnalysis;
 global using System.IO.Abstractions;
+global using System.IO.Abstractions.TestingHelpers;
 global using System.Linq.Expressions;
 global using System.Reflection;
 global using System.Runtime.CompilerServices;
@@ -21,6 +22,7 @@ global using Invex.Atom.Build.Util;
 global using Invex.Atom.Build.Util.Scope;
 global using Invex.Atom.Build.Variables;
 global using Invex.Atom.Build.Tests.BuildTests.Core;
+global using Invex.Atom.Build.Tests.BuildTests.Products;
 global using Invex.Atom.TestUtils;
 global using DiffEngine;
 global using FakeItEasy;

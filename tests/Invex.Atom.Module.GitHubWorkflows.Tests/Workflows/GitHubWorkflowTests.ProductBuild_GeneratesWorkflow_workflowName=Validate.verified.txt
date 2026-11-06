@@ -1,0 +1,75 @@
+﻿name: Validate
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions: { }
+
+jobs:
+
+  DetectAffectedProducts:
+    runs-on: ubuntu-latest
+    outputs:
+      affected-products: ${{ steps.DetectAffectedProducts.outputs.affected-products }}
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: DetectAffectedProducts
+        id: DetectAffectedProducts
+        run: dotnet run --project AtomTest/AtomTest.csproj -- DetectAffectedProducts --skip --headless
+
+  TestAppA:
+    needs: [ DetectAffectedProducts ]
+    if: success() && contains(needs.DetectAffectedProducts.outputs.affected-products, ',appa,')
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: TestAppA
+        id: TestAppA
+        run: dotnet run --project AtomTest/AtomTest.csproj -- TestAppA --skip --headless
+        env:
+          product: AppA
+
+  TestAppB:
+    needs: [ DetectAffectedProducts ]
+    if: success() && contains(needs.DetectAffectedProducts.outputs.affected-products, ',appb,')
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: TestAppB
+        id: TestAppB
+        run: dotnet run --project AtomTest/AtomTest.csproj -- TestAppB --skip --headless
+        env:
+          product: AppB
+
+  ValidateGate:
+    needs: [ TestAppA, TestAppB ]
+    if: failure() || cancelled()
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: ValidateGate
+        id: ValidateGate
+        run: dotnet run --project AtomTest/AtomTest.csproj -- ValidateGate --skip --headless
+

@@ -1,0 +1,11 @@
+# Shared GitVersion settings. atom gen copies them into each product's GitVersion.yml, with the product's own
+# tag-prefix and ignore.paths.
+mode: ContinuousDelivery
+tag-prefix: '[vV]?'
+
+branches:
+  main:
+    label: 'rc'
+    increment: Minor
+    regex: ^main$
+    is-main-branch: true

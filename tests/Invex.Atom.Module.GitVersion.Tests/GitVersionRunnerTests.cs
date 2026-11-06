@@ -655,6 +655,67 @@ public sealed class GitVersionRunnerTests
             .ShouldBe(2);
     }
 
+    [TestCase("Shared", true)]
+    [TestCase("AppA", false)]
+    public void GetOutput_WithProduct_WarnsOnlyWhenProductHasNoConfig(string product, bool expectWarning)
+    {
+        // Arrange
+        var loggerProvider = new TestLoggerProvider();
+
+        var host = CreateTestHost<GitVersionProductsTestBuild>(fileSystem: _fileSystem,
+            commandLineArgs: new(true, [new ParamArg("product", nameof(IProductsDefinition.ProductName), product)]),
+            configure: builder =>
+            {
+                builder.Services.AddSingleton<IProcessRunner>(_processRunner);
+                builder.Logging.AddProvider(loggerProvider);
+            });
+
+        // Act
+        host
+            .Services
+            .GetRequiredService<GitVersionRunner>()
+            .GetOutput();
+
+        // Assert
+        loggerProvider
+            .Logger
+            .LogContent
+            .ToString()
+            .Contains("Product Shared has no GitVersion configuration (Product.GitVersionConfig)", StringComparison.Ordinal)
+            .ShouldBe(expectWarning);
+    }
+
+    [Test]
+    public void BuildId_WithProductWithoutConfig_AfterBuildResolution_Warns()
+    {
+        // Arrange: build resolution caches GitVersion's output with no configuration and no product visible first
+        var loggerProvider = new TestLoggerProvider();
+
+        var host = CreateTestHost<GitVersionProductsTestBuild>(fileSystem: _fileSystem,
+            commandLineArgs: new(true, [new ParamArg("product", nameof(IProductsDefinition.ProductName), "Shared")]),
+            configure: builder =>
+            {
+                builder.Services.AddSingleton<IProcessRunner>(_processRunner);
+                builder.Logging.AddProvider(loggerProvider);
+            });
+
+        host.Services.GetRequiredService<BuildModel>();
+
+        // Act
+        host
+            .Services
+            .GetRequiredService<IBuildIdProvider>()
+            .BuildId
+            .ShouldBe("1.2.3-beta.4");
+
+        // Assert
+        loggerProvider
+            .Logger
+            .LogContent
+            .ToString()
+            .ShouldContain("Product Shared has no GitVersion configuration (Product.GitVersionConfig)");
+    }
+
     [TestCase(null, false)]
     [TestCase("", false)]
     [TestCase("6.7.9", false)]

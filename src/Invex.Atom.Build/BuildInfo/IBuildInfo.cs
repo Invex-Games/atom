@@ -16,9 +16,10 @@ public interface IBuildInfo : IBuildAccessor
     ///     Gets the human-readable name of the build, derived from the solution or root directory name.
     /// </summary>
     /// <remarks>
-    ///     This value can be overridden using the <c>--build-name</c> parameter. If not provided, it is automatically
-    ///     determined by searching for a <c>.slnx</c> or <c>.sln</c> file in the root directory and using its name.
-    ///     If no solution file is found, it defaults to the name of the root directory.
+    ///     This value can be overridden using the <c>--build-name</c> parameter. If not provided and a monorepo product
+    ///     is being built (see <see cref="IProductsDefinition.CurrentProduct" />), it is the product's name. Otherwise it
+    ///     is automatically determined by searching for a <c>.slnx</c> or <c>.sln</c> file in the root directory and
+    ///     using its name. If no solution file is found, it defaults to the name of the root directory.
     /// </remarks>
     [ParamDefinition("build-name", "The name of the build.")]
     string BuildName => GetParam(() => BuildName, DefaultBuildName);
@@ -76,12 +77,15 @@ public interface IBuildInfo : IBuildAccessor
     string? BuildSlice => GetParam(() => BuildSlice);
 
     /// <summary>
-    ///     Gets the default build name from the solution file or root directory.
+    ///     Gets the default build name from the current product, the solution file or the root directory.
     /// </summary>
     private string DefaultBuildName
     {
         get
         {
+            if (this is IProductsDefinition { CurrentProduct: { } product })
+                return product.Name;
+
             var solutionFile = RootedFileSystem
                                    .Directory
                                    .GetFiles(RootedFileSystem.AtomRootDirectory,
