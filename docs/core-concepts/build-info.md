@@ -10,7 +10,7 @@ The `IBuildInfo` interface exposes the following parameters. Each can be overrid
 
 | Property         | Type      | Description                                                                  |
 |------------------|-----------|------------------------------------------------------------------------------|
-| `BuildName`      | `string`  | Logical name of the build (defaults to the solution file or root directory) |
+| `BuildName`      | `string`  | Logical name of the build (defaults to the current product, the solution file or root directory) |
 | `BuildId`        | `string`  | Unique identifier for this build run                                         |
 | `BuildVersion`   | `SemVer`  | Semantic version of the build                                                |
 | `BuildTimestamp` | `long`    | Build timestamp in Unix epoch seconds                                        |
@@ -36,6 +36,10 @@ builder.Services
     .AddSingleton<IBuildIdProvider, GitVersionBuildIdProvider>()
     .AddSingleton<IBuildVersionProvider, GitVersionBuildVersionProvider>();
 ```
+
+In a [monorepo](../workflows/monorepos.md), selecting a product with `--product AppA` makes these defaults
+product-aware: `BuildName` defaults to the product's name, and the default version provider reads the product folder's
+`Directory.Build.props` before the root one.
 
 ## `SetupBuildInfo` Target
 

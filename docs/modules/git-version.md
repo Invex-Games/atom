@@ -73,6 +73,16 @@ The build ID and version share one GitVersion run per configuration file. The ou
 the commit or the configuration file's contents change. For the default configuration, Atom hashes the first of
 `GitVersion.yml`, `GitVersion.yaml`, `.GitVersion.yml` and `.GitVersion.yaml` in the repository root.
 
+### Monorepo products
+
+In a build that implements `IProductsDefinition`, the current product's `GitVersionConfig` is the default for
+`gitversion-config`, so `--product AppA` (or the `product` injection that `WorkflowDefinition.ForProduct` and
+`WorkflowPresets.ProductValidate` add) selects AppA's configuration. An explicit `--gitversion-config` still wins.
+
+`atom gen` also generates each product's configuration file from the root one, with the product's `tag-prefix` and
+`ignore.paths`, and a headless run fails if one has drifted. See
+[Per-product versions](../workflows/monorepos.md#per-product-versions).
+
 ## Prerequisites
 
 Atom installs `GitVersion.Tool` as a global .NET tool when needed. It requires a 6.x release of at least 6.8.0, and
