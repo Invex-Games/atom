@@ -1,0 +1,38 @@
+name: AppB - Build
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - src/AppB/**
+      - src/Shared/**
+      - global.json
+      - Directory.Build.*
+      - Directory.Packages.*
+      - _atom/**
+      - .github/workflows/**
+      - .devops/workflows/**
+  release:
+    types: [ released ]
+  workflow_dispatch:
+
+permissions: { }
+
+jobs:
+
+  PackAppB:
+    if: github.event_name != 'release' || startsWith(github.event.release.tag_name, 'appb/v')
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: PackAppB
+        id: PackAppB
+        run: dotnet run --project _atom/Sample_03_Monorepo.csproj -- PackAppB --skip --headless
+        env:
+          product: AppB
+

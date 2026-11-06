@@ -53,6 +53,8 @@
             href: workflows/variables-in-workflows.md
         -   name: Debugging Workflows
             href: workflows/debugging-workflows.md
+        -   name: Monorepos
+            href: workflows/monorepos.md
 -   name: Modules
     href: modules/overview.md
     items:
@@ -79,6 +81,8 @@
             href: built-in-targets/validate-build.md
         -   name: Gen (Generate Workflow Files)
             href: built-in-targets/generate-workflow-files.md
+        -   name: DetectAffectedProducts
+            href: built-in-targets/detect-affected-products.md
 -   name: Developer Guide
     href: developer-guide/writing-a-module.md
     items:

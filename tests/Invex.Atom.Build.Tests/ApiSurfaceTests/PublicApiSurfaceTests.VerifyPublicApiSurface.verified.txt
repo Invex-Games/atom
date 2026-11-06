@@ -401,6 +401,98 @@
     ]
   },
   {
+    Name: Invex.Atom.Build.BuildInfo.IProductContext,
+    Members: [
+      {
+        Name: Current
+      }
+    ]
+  },
+  {
+    Name: Invex.Atom.Build.BuildInfo.IReleaseTagHelper,
+    Members: [
+      {
+        Name: GetReleaseTagCommit
+      },
+      {
+        Name: GetReleaseTagCommit
+      },
+      {
+        Name: ReleaseTagFor
+      },
+      {
+        Name: ReleaseTagGlob
+      },
+      {
+        Name: ReleaseTagPrefix
+      },
+      {
+        Name: TryParseReleaseTag
+      }
+    ]
+  },
+  {
+    Name: Invex.Atom.Build.BuildInfo.Product,
+    Members: [
+      {
+        Name: <Clone>$
+      },
+      {
+        Name: Deconstruct
+      },
+      {
+        Name: DependsOn
+      },
+      {
+        Name: Directory
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: Equals
+      },
+      {
+        Name: GetHashCode
+      },
+      {
+        Name: GitVersionConfig
+      },
+      {
+        Name: Id
+      },
+      {
+        Name: Name
+      },
+      {
+        Name: Paths
+      },
+      {
+        Name: TagPrefix
+      },
+      {
+        Name: ToString
+      }
+    ]
+  },
+  {
+    Name: Invex.Atom.Build.BuildInfo.ReleaseTag,
+    Members: [
+      {
+        Name: DefaultPrefix
+      },
+      {
+        Name: For
+      },
+      {
+        Name: Glob
+      },
+      {
+        Name: TryParse
+      }
+    ]
+  },
+  {
     Name: Invex.Atom.Build.BuildOptions.BuildOptionExtensions,
     Members: [
       {
@@ -790,6 +882,44 @@
     Members: [
       {
         Name: Services
+      }
+    ]
+  },
+  {
+    Name: Invex.Atom.Build.IProductsDefinition,
+    Members: [
+      {
+        Name: AffectedProducts
+      },
+      {
+        Name: AffectedProductsBaseRef
+      },
+      {
+        Name: CurrentProduct
+      },
+      {
+        Name: DefaultGlobalPaths
+      },
+      {
+        Name: DetectAffectedProducts
+      },
+      {
+        Name: GetAffectedProducts
+      },
+      {
+        Name: GetProduct
+      },
+      {
+        Name: GetProductPaths
+      },
+      {
+        Name: GlobalPaths
+      },
+      {
+        Name: ProductName
+      },
+      {
+        Name: Products
       }
     ]
   },

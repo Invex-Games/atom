@@ -1,6 +1,7 @@
 ﻿global using Invex.Atom.Build;
 global using Invex.Atom.Build.Args;
 global using Invex.Atom.Build.Artifacts;
+global using Invex.Atom.Build.BuildInfo;
 global using Invex.Atom.Build.BuildOptions;
 global using Invex.Atom.Build.Definition;
 global using Invex.Atom.Build.Hosting;
@@ -12,7 +13,9 @@ global using Invex.Atom.TestUtils;
 global using Invex.Atom.Workflows;
 global using Invex.Atom.Workflows.Definition;
 global using Invex.Atom.Workflows.Definition.Triggers;
+global using Invex.Atom.Workflows.Extensions;
 global using Invex.Atom.Workflows.Options;
+global using Invex.StructuredText.Expressions;
 global using Invex.StructuredText.GithubActions.DependabotConfigModel.Model;
 global using Invex.StructuredText.GithubActions.GithubActionModel;
 global using Microsoft.Extensions.DependencyInjection;

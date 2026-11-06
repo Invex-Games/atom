@@ -1,0 +1,35 @@
+﻿name: AppA - Build
+
+trigger:
+  branches:
+    include: [ main ]
+  paths:
+    include:
+      - src/AppA/**
+      - src/Shared/**
+      - global.json
+      - Directory.Build.*
+      - Directory.Packages.*
+      - _atom/**
+      - .github/workflows/**
+      - .devops/workflows/**
+  tags:
+    include: [ appa/v* ]
+
+jobs:
+
+  - job: PackAppA
+    displayName: PackAppA
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+      - checkout: self
+        enabled: true
+        fetchDepth: 0
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj PackAppA --skip --headless
+        displayName: PackAppA
+        name: PackAppA
+        env:
+          product: AppA

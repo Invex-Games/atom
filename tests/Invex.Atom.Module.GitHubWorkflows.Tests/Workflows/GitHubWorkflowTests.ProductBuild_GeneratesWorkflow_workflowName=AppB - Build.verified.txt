@@ -1,0 +1,34 @@
+﻿name: AppB - Build
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - src/AppB/**
+      - src/Shared/**
+      - global.json
+      - Directory.Build.*
+      - Directory.Packages.*
+      - _atom/**
+      - .github/workflows/**
+      - .devops/workflows/**
+
+permissions: { }
+
+jobs:
+
+  PackAppB:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: PackAppB
+        id: PackAppB
+        run: dotnet run --project AtomTest/AtomTest.csproj -- PackAppB --skip --headless
+        env:
+          product: AppB
+

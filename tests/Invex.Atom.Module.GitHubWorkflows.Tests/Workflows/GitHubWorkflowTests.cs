@@ -464,4 +464,49 @@ internal sealed class GitHubWorkflowTests
 
         await TestContext.Out.WriteAsync(workflow);
     }
+
+    [TestCase("validate-gate-workflow")]
+    [TestCase("run-always-workflow")]
+    public async Task GateBuild_GeneratesWorkflow(string workflowName)
+    {
+        // Arrange
+        var fileSystem = FileSystemUtils.DefaultMockFileSystem;
+
+        var build = CreateTestHost<GateBuild>(fileSystem: fileSystem,
+            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]));
+
+        // Act
+        await build.RunAsync();
+
+        // Assert
+        var workflow = await fileSystem.File.ReadAllTextAsync($"{WorkflowDir}{workflowName}.yml");
+
+        await Verify(workflow)
+            .UseParameters(workflowName);
+
+        await TestContext.Out.WriteAsync(workflow);
+    }
+
+    [TestCase("Validate")]
+    [TestCase("AppA - Build")]
+    [TestCase("AppB - Build")]
+    public async Task ProductBuild_GeneratesWorkflow(string workflowName)
+    {
+        // Arrange
+        var fileSystem = FileSystemUtils.DefaultMockFileSystem;
+
+        var build = CreateTestHost<ProductBuild>(fileSystem: fileSystem,
+            commandLineArgs: new(true, [new CommandArg(nameof(IWorkflowBuildDefinition.Gen))]));
+
+        // Act
+        await build.RunAsync();
+
+        // Assert
+        var workflow = await fileSystem.File.ReadAllTextAsync($"{WorkflowDir}{workflowName}.yml");
+
+        await Verify(workflow)
+            .UseParameters(workflowName);
+
+        await TestContext.Out.WriteAsync(workflow);
+    }
 }
