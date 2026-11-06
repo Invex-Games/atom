@@ -101,7 +101,7 @@ internal sealed class ReleaseTagHelperTests
 
         calls
             .Select(c => c.Args)
-            .ShouldBe(["rev-parse --is-shallow-repository", "log -1 --no-show-signature --format=%H -- src/AppA/ src/Shared/"]);
+            .ShouldBe(["rev-parse --is-shallow-repository", "log -1 --first-parent --no-show-signature --format=%H -- src/AppA/ src/Shared/"]);
 
         calls.ShouldAllBe(c => c.Name == "git" && c.WorkingDirectory == ExpectedRoot);
     }
@@ -115,7 +115,7 @@ internal sealed class ReleaseTagHelperTests
 
         calls[^1]
             .Args
-            .ShouldBe("log -1 --no-show-signature --format=%H -- \"src/My App/\"");
+            .ShouldBe("log -1 --first-parent --no-show-signature --format=%H -- \"src/My App/\"");
     }
 
     [Test]
