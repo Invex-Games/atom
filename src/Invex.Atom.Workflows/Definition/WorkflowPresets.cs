@@ -25,7 +25,9 @@ public static class WorkflowPresets
     /// <param name="sharedTargets">
     ///     Targets that do not depend on the product, such as a solution-wide compile, that product targets may depend
     ///     on. Their jobs run on every pull request, without a condition or the product. A target that reads the build
-    ///     version or name belongs to each product instead, because it would get the repository's.
+    ///     version or name belongs to each product instead, because it would get the repository's. A shared target may
+    ///     depend only on other shared targets and <c>DetectAffectedProducts</c>, and the gate must depend on it,
+    ///     directly or through a product target.
     /// </param>
     /// <returns>
     ///     A workflow definition triggered by pull requests into <c>main</c> and manual runs. Set its
@@ -50,8 +52,10 @@ public static class WorkflowPresets
     ///     </para>
     ///     <para>
     ///         <c>atom gen</c> fails if a product target does not depend directly on <c>DetectAffectedProducts</c>,
-    ///         depends on a target that is not a product target of the same product or a shared target, or the gate
-    ///         does not depend directly on every product target (see <see cref="ProductValidateOption" />).
+    ///         depends on a target that is not a product target of the same product or a shared target, a shared target
+    ///         depends on a product target or an unlisted target, the gate does not depend directly on every product
+    ///         target, or a shared target is not among the gate's dependencies (see
+    ///         <see cref="ProductValidateOption" />).
     ///     </para>
     /// </remarks>
     /// <example>

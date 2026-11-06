@@ -88,11 +88,7 @@ internal static partial class ProductValidator
 
         errors.AddRange(products
             .Where(x => !string.IsNullOrWhiteSpace(x.GitVersionConfig))
-            .GroupBy(x => x
-                    .GitVersionConfig!
-                    .Trim()
-                    .Replace('\\', '/'),
-                StringComparer.OrdinalIgnoreCase)
+            .GroupBy(x => NormalizeRelativePath(x.GitVersionConfig!), StringComparer.OrdinalIgnoreCase)
             .Where(x => x.Count() > 1)
             .Select(x =>
                 $"Products {string.Join(", ", x.Select(p => $"'{p.Name}'"))} share the GitVersion configuration '{x.Key}'."));

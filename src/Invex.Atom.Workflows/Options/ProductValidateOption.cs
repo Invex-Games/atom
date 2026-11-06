@@ -10,7 +10,9 @@ namespace Invex.Atom.Workflows.Options;
 /// </param>
 /// <param name="SharedTargets">
 ///     The names of targets that do not depend on the product, such as a solution-wide compile, which product targets
-///     may depend on. Their jobs run on every pull request, without the product.
+///     may depend on. Their jobs run on every pull request, without the product. A shared target may depend only on
+///     other shared targets and <c>DetectAffectedProducts</c>, and the gate must depend on it, directly or through a
+///     product target.
 /// </param>
 /// <remarks>
 ///     <para>
@@ -40,9 +42,17 @@ namespace Invex.Atom.Workflows.Options;
 ///         </item>
 ///         <item>
 ///             <description>
-///                 the gate does not depend directly on every product target (it would not see that job fail), or
-///                 depends on a target that is not a product target, a shared target or
-///                 <c>DetectAffectedProducts</c>.
+///                 a shared target depends on a target that is not a shared target or
+///                 <see cref="IProductsDefinition.DetectAffectedProducts" />: a product target is skipped whenever
+///                 its product is not affected (which skips the shared target and the product targets after it),
+///                 and any other target would be added as a job without options or dependencies;
+///             </description>
+///         </item>
+///         <item>
+///             <description>
+///                 the gate does not depend directly on every product target, or on every shared target directly or
+///                 through a product target (it would not see that job fail), or depends on a target that is not a
+///                 product target, a shared target or <c>DetectAffectedProducts</c>.
 ///             </description>
 ///         </item>
 ///     </list>

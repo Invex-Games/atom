@@ -198,15 +198,19 @@ options removes the wiring checks below. It:
 - makes the gate run only if a product job failed or the run was cancelled
   (`BuildOptions.Target.RunIfAnyDependencyFailed`);
 - makes `atom gen` fail if a product target does not depend directly on `DetectAffectedProducts`, a product target or
-  the gate depends on a target that is not a product target of the same product or a shared target, or the gate does
-  not depend directly on every product target. Each of these mistakes would otherwise skip a job or hide a failure
-  silently. A dependency on another product's target is skipped whenever only this product is affected (affected
+  the gate depends on a target that is not a product target of the same product or a shared target, a shared target
+  depends on a target that is not a shared target or `DetectAffectedProducts`, the gate does not depend directly on
+  every product target, or the gate does not depend on every shared target (directly or through a product target).
+  Each of these mistakes would otherwise skip a job or hide a failure silently. A dependency on another product's target is skipped whenever only this product is affected (affected
   products only flow from a product to the products that depend on it), which skips this job too. A dependency on an
   unlisted target would be added as a job without a condition, the product or `needs:`.
 
 A target that does not depend on the product, such as a solution-wide compile or restore, can be a **shared target**
 that product targets depend on. Pass it in `sharedTargets`: its job runs on every pull request, without a condition or
-the product. If it fails, the product jobs that depend on it are skipped and the gate fails.
+the product. If it fails, the product jobs that depend on it are skipped and the gate fails. A shared target can only
+depend on other shared targets (and `DetectAffectedProducts`), because a product target it waited for would be skipped
+whenever that product is not affected. A shared check that no product target needs, such as a solution-wide lint,
+must be a dependency of the gate, or its failure would not fail the gate.
 
 ```csharp
 WorkflowPresets.ProductValidate(this,
