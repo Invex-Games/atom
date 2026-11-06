@@ -45,3 +45,33 @@ public interface IVersionTarget : IBuildInfo
                 return Task.CompletedTask;
             });
 }
+
+[BuildDefinition]
+public partial class GitVersionProductsTestBuild : BuildDefinition, IGitVersion, IProductsDefinition
+{
+    public IReadOnlyList<IBuildOption> Options =>
+    [
+        BuildOptions.GitVersion.ProvideBuildId, BuildOptions.GitVersion.ProvideBuildVersion,
+    ];
+
+    public IReadOnlyList<Product> TestProducts { get; set; } =
+    [
+        new("Shared")
+        {
+            Paths = ["src/Shared/"],
+        },
+        new("AppA")
+        {
+            Paths = ["src/AppA/**"],
+            DependsOn = ["Shared"],
+            GitVersionConfig = "src/AppA/GitVersion.yml",
+        },
+        new("App.B")
+        {
+            Paths = ["src/AppB/**"],
+            GitVersionConfig = "src/AppB/GitVersion.yml",
+        },
+    ];
+
+    IReadOnlyList<Product> IProductsDefinition.Products => TestProducts;
+}

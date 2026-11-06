@@ -3,6 +3,14 @@
 [TestFixture]
 internal sealed class ParamTests
 {
+    [SetUp]
+    public void SetUp() =>
+        Environment.ExitCode = 0;
+
+    [TearDown]
+    public void TearDown() =>
+        Environment.ExitCode = 0;
+
     [Test]
     public void Param_IsReadFromCommandLine()
     {

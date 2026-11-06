@@ -1,6 +1,7 @@
 ﻿global using Invex.Atom.Build;
 global using Invex.Atom.Build.Args;
 global using Invex.Atom.Build.Artifacts;
+global using Invex.Atom.Build.BuildInfo;
 global using Invex.Atom.Build.BuildOptions;
 global using Invex.Atom.Build.Definition;
 global using Invex.Atom.Build.Hosting;

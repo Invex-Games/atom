@@ -38,8 +38,13 @@ public interface IValidateBuild : IReportsHelper
     /// </code>
     /// </example>
     /// <remarks>
-    ///     Errors: a target consumes an artifact or variable that the named target does not produce, or two parameters
-    ///     share the same argument name. Warnings: a target has no description, or has neither tasks nor dependencies.
+    ///     Errors: a target consumes an artifact or variable that the named target does not produce, two parameters
+    ///     share the same argument name, or (in a build that implements <see cref="IProductsDefinition" />) the products
+    ///     are invalid: a duplicate or invalid name, no paths, an unsupported path glob, a path that names an existing
+    ///     folder without a trailing <c>/</c>, an unknown or cyclic dependency, a tag prefix that equals or starts
+    ///     another product's, a GitVersion configuration shared by two products, or a GitVersion configuration that is
+    ///     the root <c>GitVersion.yml</c>. Warnings: a target has no description, or has neither tasks nor
+    ///     dependencies.
     /// </remarks>
     /// <exception cref="StepFailedException">Thrown if any validation error is found.</exception>
     Target ValidateBuild =>
@@ -87,6 +92,9 @@ public interface IValidateBuild : IReportsHelper
                     .Where(x => x.Count() > 1)
                     .Select(x =>
                         $"Parameters {string.Join(", ", x.Select(p => $"'{p.Name}'"))} share the argument name '{x.Key}'."));
+
+                if (GetService<IBuildDefinition>() is IProductsDefinition productsDefinition)
+                    errors.AddRange(ProductValidator.GetErrors(productsDefinition, RootedFileSystem));
 
                 if (warnings.Count > 0)
                     AddReportData(new ListReportData(warnings)
