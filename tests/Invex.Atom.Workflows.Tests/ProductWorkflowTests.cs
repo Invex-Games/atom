@@ -211,6 +211,88 @@ internal sealed class ProductWorkflowTests
     }
 
     [Test]
+    public void Resolve_WithSharedTargetDependingOnProductTarget_Throws()
+    {
+        var (host, build) = CreateHost();
+
+        var definition = WorkflowPresets.ProductValidate(build,
+            nameof(IProductWorkflowTargets.Gate),
+            [new("AppA", nameof(IProductWorkflowTargets.TestAppA))],
+            sharedTargets: [new(nameof(IProductWorkflowTargets.CompileAfterTestAppA))]);
+
+        Should
+            .Throw<InvalidOperationException>(() => host
+                .Services
+                .GetRequiredService<WorkflowResolver>()
+                .Resolve(definition))
+            .Message
+            .ShouldContain(
+                "Shared target 'CompileAfterTestAppA' depends on product target 'TestAppA' of product 'AppA', so it is skipped whenever 'AppA' is not affected, which skips the product targets that depend on it, and the gate passes. A shared target can depend only on other shared targets and 'DetectAffectedProducts'.");
+    }
+
+    [Test]
+    public void Resolve_WithSharedTargetDependingOnUnlistedTarget_Throws()
+    {
+        var (host, build) = CreateHost();
+
+        var definition = WorkflowPresets.ProductValidate(build,
+            nameof(IProductWorkflowTargets.Gate),
+            [new("AppA", nameof(IProductWorkflowTargets.TestAppA))],
+            sharedTargets: [new(nameof(IProductWorkflowTargets.CompileAfterPack))]);
+
+        Should
+            .Throw<InvalidOperationException>(() => host
+                .Services
+                .GetRequiredService<WorkflowResolver>()
+                .Resolve(definition))
+            .Message
+            .ShouldContain(
+                "Shared target 'CompileAfterPack' depends on 'PackAppA', which is not a shared target of the workflow, so it would be added as a job without options or dependencies. List it as a shared target, or remove the dependency.");
+    }
+
+    [Test]
+    public void Resolve_WithSharedTargetOutsideTheGate_Throws()
+    {
+        var (host, build) = CreateHost();
+
+        var definition = WorkflowPresets.ProductValidate(build,
+            nameof(IProductWorkflowTargets.Gate),
+            [new("AppA", nameof(IProductWorkflowTargets.TestAppA))],
+            sharedTargets: [new(nameof(IProductWorkflowTargets.LintAll))]);
+
+        Should
+            .Throw<InvalidOperationException>(() => host
+                .Services
+                .GetRequiredService<WorkflowResolver>()
+                .Resolve(definition))
+            .Message
+            .ShouldBe(
+                "Workflow 'Validate' is not wired correctly: Gate target 'Gate' must depend on shared target 'LintAll', directly or through a product target, or the gate does not fail when that job fails.");
+    }
+
+    [Test]
+    public void Resolve_WithIndependentSharedTargetInTheGate_Succeeds()
+    {
+        var (host, build) = CreateHost();
+
+        var definition = WorkflowPresets.ProductValidate(build,
+            nameof(IProductWorkflowTargets.LintAllGate),
+            [new("AppA", nameof(IProductWorkflowTargets.TestAppA))],
+            sharedTargets: [new(nameof(IProductWorkflowTargets.LintAll))]);
+
+        host
+            .Services
+            .GetRequiredService<WorkflowResolver>()
+            .Resolve(definition)
+            .Jobs
+            .Select(x => x.Name)
+            .ShouldBe([
+                nameof(IProductsDefinition.DetectAffectedProducts), nameof(IProductWorkflowTargets.LintAll),
+                nameof(IProductWorkflowTargets.TestAppA), nameof(IProductWorkflowTargets.LintAllGate),
+            ]);
+    }
+
+    [Test]
     public void ProductValidate_WithSharedTargetAlsoAProductTarget_Throws()
     {
         var (_, build) = CreateHost();

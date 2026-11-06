@@ -107,6 +107,22 @@ internal sealed class ProductValidatorTests
                 $"The GitVersion configuration of product 'AppA' is '{config.Trim()}', which GitVersion also reads for builds without a product. Give the product its own file, such as 'src/AppA/GitVersion.yml'.",
             ]);
 
+    [TestCase("./src/versions.yml")]
+    [TestCase("src/AppB/../versions.yml")]
+    [TestCase("SRC\\versions.yml")]
+    public void GetErrors_WithSameGitVersionConfigSpelledDifferently_ReportsIt(string otherConfig) =>
+        GetErrors(new Product("AppA")
+                {
+                    Paths = ["a/"],
+                    GitVersionConfig = "src/versions.yml",
+                },
+                new Product("AppB")
+                {
+                    Paths = ["b/"],
+                    GitVersionConfig = otherConfig,
+                })
+            .ShouldBe(["Products 'AppA', 'AppB' share the GitVersion configuration 'src/versions.yml'."]);
+
     [TestCase(".")]
     [TestCase("src/../x/")]
     public void GetErrors_WithDotSegments_ReportsThem(string path) =>

@@ -69,4 +69,19 @@ public interface IProductWorkflowTargets : IProductsDefinition
     Target Gate =>
         t => t
             .DependsOn(nameof(TestAppA));
+
+    Target CompileAfterTestAppA =>
+        t => t
+            .DependsOn(nameof(TestAppA));
+
+    Target CompileAfterPack =>
+        t => t
+            .DependsOn(nameof(PackAppA));
+
+    Target LintAll => t => t;
+
+    Target LintAllGate =>
+        t => t
+            .DependsOn(nameof(TestAppA))
+            .DependsOn(nameof(LintAll));
 }
