@@ -67,7 +67,8 @@ internal sealed class GitVersionRunner(
     /// </exception>
     /// <remarks>
     ///     <para>
-    ///         Returns the in-memory result when GitVersion already ran for the same configuration in this process,
+    ///         Returns the in-memory result when GitVersion already ran for the same configuration file and contents in
+    ///         this process,
     ///         then a matching on-disk cache entry, and only otherwise installs the tool (if needed) and runs
     ///         GitVersion.
     ///     </para>
@@ -82,7 +83,11 @@ internal sealed class GitVersionRunner(
         lock (_lock)
         {
             var config = ResolveConfig();
-            var outputKey = config?.RelativePath ?? string.Empty;
+            var configContentHash = config?.ContentHash ?? GetDefaultConfigContentHash();
+
+            // Keyed on the contents too: a product configuration regenerated during the run (after build resolution
+            // read it) must not return the output computed from its old contents
+            var outputKey = $"{config?.RelativePath}|{configContentHash}";
 
             // Before the output cache: build resolution may already have cached the output with no configuration,
             // in its default-values-only scope where no product is visible
@@ -107,9 +112,7 @@ internal sealed class GitVersionRunner(
 
             var cacheFileName = GitVersionCache.GetCacheFileName(config?.RelativePath);
 
-            var cacheKey = GitVersionCache.CreateKey(currentGitHash,
-                config?.RelativePath,
-                config?.ContentHash ?? GetDefaultConfigContentHash());
+            var cacheKey = GitVersionCache.CreateKey(currentGitHash, config?.RelativePath, configContentHash);
 
             var jsonOutput = GitVersionCache.TryRead(fileSystem, cacheFileName, cacheKey, logger);
 

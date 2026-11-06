@@ -107,6 +107,17 @@ internal sealed class ProductValidatorTests
                 $"The GitVersion configuration of product 'AppA' is '{config.Trim()}', which GitVersion also reads for builds without a product. Give the product its own file, such as 'src/AppA/GitVersion.yml'.",
             ]);
 
+    [TestCase("AppA\n")]
+    [TestCase("App A")]
+    [TestCase("_AppA")]
+    public void GetErrors_WithInvalidName_ReportsIt(string name) =>
+        GetErrors(new Product(name)
+            {
+                Paths = ["a/"],
+            })
+            .ShouldContain(
+                $"Product name '{name}' is not valid. Use letters, digits, '.', '-' and '_', starting with a letter or digit.");
+
     [TestCase("./src/versions.yml")]
     [TestCase("src/AppB/../versions.yml")]
     [TestCase("SRC\\versions.yml")]
