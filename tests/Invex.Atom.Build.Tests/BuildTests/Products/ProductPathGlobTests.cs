@@ -19,6 +19,9 @@ internal sealed class ProductPathGlobTests
     [TestCase("src/App A/", "src/App A/x.cs", true)]
     [TestCase("src/AppA/**", @"src\AppA\x.cs", true)]
     [TestCase("src/AppA/**", "SRC/AppA/x.cs", false)]
+    [TestCase("src/AppA/", "src/AppA/file\nname.cs", true)]
+    [TestCase("src/**/bin", "src/a\nb/bin", true)]
+    [TestCase("global.json", "global.json\n", false)]
     public void IsMatch_FollowsTheGlobDialect(string glob, string path, bool expected) =>
         ProductPathGlob
             .IsMatch(glob, path)

@@ -144,7 +144,8 @@ internal static class ProductPathGlob
     public static bool IsMatch(string glob, string path)
     {
         var regex = MatchRegexCache.GetOrAdd(glob,
-            static g => new($"^{ToRegexBody(g, "/", "[^/]")}$", RegexOptions.CultureInvariant));
+            // Singleline and \z, because a git path can contain a newline
+            static g => new($@"\A{ToRegexBody(g, "/", "[^/]")}\z", RegexOptions.CultureInvariant | RegexOptions.Singleline));
 
         return regex.IsMatch(path.Replace('\\', '/'));
     }
