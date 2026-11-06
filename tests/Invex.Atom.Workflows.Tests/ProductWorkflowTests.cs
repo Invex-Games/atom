@@ -293,6 +293,50 @@ internal sealed class ProductWorkflowTests
     }
 
     [Test]
+    public void Resolve_WithCustomArtifactProvider_ChecksInjectedSetupBuildInfoDependency()
+    {
+        var (host, build) = CreateHost();
+
+        // The custom artifact provider makes artifact jobs depend on SetupBuildInfo, which this workflow doesn't list
+        var definition = WorkflowPresets
+            .ProductValidate(build,
+                nameof(IProductWorkflowTargets.ArtifactGate),
+                [new("AppA", nameof(IProductWorkflowTargets.PackAppAArtifact))])
+            .WithOptions(BuildOptions.Artifacts.UseCustomProvider);
+
+        Should
+            .Throw<InvalidOperationException>(() => host
+                .Services
+                .GetRequiredService<WorkflowResolver>()
+                .Resolve(definition))
+            .Message
+            .ShouldContain(
+                "Product target 'PackAppAArtifact' depends on 'SetupBuildInfo', which is not a product or shared target of the workflow");
+    }
+
+    [Test]
+    public void Resolve_WithCustomArtifactProviderAndSharedSetupBuildInfo_Succeeds()
+    {
+        var (host, build) = CreateHost();
+
+        var definition = WorkflowPresets
+            .ProductValidate(build,
+                nameof(IProductWorkflowTargets.ArtifactGate),
+                [new("AppA", nameof(IProductWorkflowTargets.PackAppAArtifact))],
+                sharedTargets: [new(nameof(ISetupBuildInfo.SetupBuildInfo))])
+            .WithOptions(BuildOptions.Artifacts.UseCustomProvider);
+
+        host
+            .Services
+            .GetRequiredService<WorkflowResolver>()
+            .Resolve(definition)
+            .Jobs
+            .Single(x => x.Name is nameof(IProductWorkflowTargets.PackAppAArtifact))
+            .JobDependencies
+            .ShouldContain(nameof(ISetupBuildInfo.SetupBuildInfo));
+    }
+
+    [Test]
     public void ProductValidate_WithSharedTargetAlsoAProductTarget_Throws()
     {
         var (_, build) = CreateHost();

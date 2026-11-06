@@ -101,7 +101,7 @@ internal sealed class WorkflowResolver(
         }
 
         if (ProductValidateOption.Get(definition.Options) is { } productValidate)
-            ValidateProductWiring(definition, productValidate);
+            ValidateProductWiring(definition, productValidate, definedCommandJobs);
 
         // Check implicit dependencies and warn if they aren't actually listed as dependencies
         foreach (var job in definedCommandJobs)
@@ -202,11 +202,31 @@ internal sealed class WorkflowResolver(
     /// </summary>
     /// <param name="definition">The workflow.</param>
     /// <param name="option">The targets to check.</param>
+    /// <param name="definedJobs">
+    ///     The workflow's jobs, whose dependencies include any the resolver injected, such as <c>SetupBuildInfo</c> for
+    ///     artifact jobs with a custom artifact provider.
+    /// </param>
     /// <exception cref="InvalidOperationException">Thrown if a dependency is missing.</exception>
     /// <exception cref="ArgumentException">Thrown if a target is unknown.</exception>
-    private void ValidateProductWiring(WorkflowDefinition definition, ProductValidateOption option)
+    private void ValidateProductWiring(
+        WorkflowDefinition definition,
+        ProductValidateOption option,
+        IReadOnlyList<WorkflowJobModel> definedJobs)
     {
         const string detectTarget = nameof(IProductsDefinition.DetectAffectedProducts);
+
+        // A job's dependencies are its target's plus any the resolver injected (such as SetupBuildInfo for artifact
+        // jobs with a custom artifact provider). A target that isn't a job of the workflow has only its target's.
+        IReadOnlyList<string> GetDependencies(string targetName) =>
+            definedJobs.FirstOrDefault(x => x.Name == targetName)
+                ?.JobDependencies ??
+            buildModel
+                .Targets
+                .FirstOrDefault(x => x.Name == targetName)
+                ?.Dependencies
+                .Select(x => x.Name)
+                .ToList() ??
+            [];
 
         var errors = new List<string>();
         var sharedTargets = (option.SharedTargets ?? []).ToHashSet(StringComparer.Ordinal);
@@ -231,63 +251,59 @@ internal sealed class WorkflowResolver(
         // Unknown targets have already failed resolution, so every target here exists
         foreach (var (targetName, productName) in productByTarget)
         {
-            var dependencies = buildModel
-                .GetTarget(targetName)
-                .Dependencies;
+            var dependencies = GetDependencies(targetName);
 
-            if (dependencies.All(x => x.Name != detectTarget))
+            if (dependencies.All(x => x != detectTarget))
                 errors.Add(
                     $"Product target '{targetName}' must depend directly on '{detectTarget}' (.DependsOn(nameof(IProductsDefinition.{detectTarget}))), or its job cannot read the affected products and is always skipped.");
 
-            foreach (var dependency in dependencies.Where(x => x.Name != detectTarget && !sharedTargets.Contains(x.Name)))
-                if (!productByTarget.TryGetValue(dependency.Name, out var dependencyProduct))
+            foreach (var dependency in dependencies.Where(x => x != detectTarget && !sharedTargets.Contains(x)).Distinct())
+                if (!productByTarget.TryGetValue(dependency, out var dependencyProduct))
                     errors.Add(
-                        $"Product target '{targetName}' depends on '{dependency.Name}', which is not a product or shared target of the workflow, so it would be added as a job without options or dependencies. List it as a product target of '{productName}' if it builds the product, as a shared target if it does not depend on the product, or remove the dependency.");
+                        $"Product target '{targetName}' depends on '{dependency}', which is not a product or shared target of the workflow, so it would be added as a job without options or dependencies. List it as a product target of '{productName}' if it builds the product, as a shared target if it does not depend on the product, or remove the dependency.");
                 else if (!string.Equals(dependencyProduct, productName, StringComparison.OrdinalIgnoreCase))
                     errors.Add(
-                        $"Product target '{targetName}' of product '{productName}' depends on product target '{dependency.Name}' of product '{dependencyProduct}', so it is skipped whenever '{productName}' is affected but '{dependencyProduct}' is not, and the gate passes. Give each product its own targets.");
+                        $"Product target '{targetName}' of product '{productName}' depends on product target '{dependency}' of product '{dependencyProduct}', so it is skipped whenever '{productName}' is affected but '{dependencyProduct}' is not, and the gate passes. Give each product its own targets.");
         }
 
         // A shared target runs on every pull request, so it must not wait for a job that can be skipped: a skipped
         // dependency skips it, and every product target that depends on it, and the gate passes
         foreach (var sharedTarget in sharedTargets)
-        foreach (var dependency in buildModel
-                     .GetTarget(sharedTarget)
-                     .Dependencies
-                     .Where(x => x.Name != detectTarget && !sharedTargets.Contains(x.Name)))
-            errors.Add(productByTarget.TryGetValue(dependency.Name, out var dependencyProduct)
-                ? $"Shared target '{sharedTarget}' depends on product target '{dependency.Name}' of product '{dependencyProduct}', so it is skipped whenever '{dependencyProduct}' is not affected, which skips the product targets that depend on it, and the gate passes. A shared target can depend only on other shared targets and '{detectTarget}'."
-                : $"Shared target '{sharedTarget}' depends on '{dependency.Name}', which is not a shared target of the workflow, so it would be added as a job without options or dependencies. List it as a shared target, or remove the dependency.");
+        foreach (var dependency in GetDependencies(sharedTarget)
+                     .Where(x => x != detectTarget && !sharedTargets.Contains(x))
+                     .Distinct())
+            errors.Add(productByTarget.TryGetValue(dependency, out var dependencyProduct)
+                ? $"Shared target '{sharedTarget}' depends on product target '{dependency}' of product '{dependencyProduct}', so it is skipped whenever '{dependencyProduct}' is not affected, which skips the product targets that depend on it, and the gate passes. A shared target can depend only on other shared targets and '{detectTarget}'."
+                : $"Shared target '{sharedTarget}' depends on '{dependency}', which is not a shared target of the workflow, so it would be added as a job without options or dependencies. List it as a shared target, or remove the dependency.");
 
-        var gate = buildModel.GetTarget(option.GateTarget);
+        var gateDependencies = GetDependencies(option.GateTarget);
 
         errors.AddRange(productByTarget
             .Keys
-            .Where(x => gate.Dependencies.All(d => d.Name != x))
+            .Where(x => gateDependencies.All(d => d != x))
             .Select(x =>
                 $"Gate target '{option.GateTarget}' must depend directly on product target '{x}', or the gate does not fail when that job fails."));
 
-        errors.AddRange(gate
-            .Dependencies
-            .Where(x => x.Name != detectTarget &&
-                        !productByTarget.ContainsKey(x.Name) &&
-                        !sharedTargets.Contains(x.Name))
+        errors.AddRange(gateDependencies
+            .Where(x => x != detectTarget &&
+                        !productByTarget.ContainsKey(x) &&
+                        !sharedTargets.Contains(x))
+            .Distinct()
             .Select(x =>
-                $"Gate target '{option.GateTarget}' depends on '{x.Name}', which is not a product or shared target of the workflow, so it would be added as a job without options or dependencies."));
+                $"Gate target '{option.GateTarget}' depends on '{x}', which is not a product or shared target of the workflow, so it would be added as a job without options or dependencies."));
 
         // The gate's condition sees a failure anywhere among its dependencies, direct or transitive, so a shared target
         // that nothing below the gate depends on could fail without failing the gate
         var reachedByGate = new HashSet<string>(StringComparer.Ordinal);
-        var pending = new Stack<string>(gate.Dependencies.Select(x => x.Name));
+        var pending = new Stack<string>(gateDependencies);
 
         while (pending.TryPop(out var targetName))
         {
             if (!reachedByGate.Add(targetName))
                 continue;
 
-            foreach (var dependency in buildModel.GetTarget(targetName)
-                         .Dependencies)
-                pending.Push(dependency.Name);
+            foreach (var dependency in GetDependencies(targetName))
+                pending.Push(dependency);
         }
 
         errors.AddRange(sharedTargets

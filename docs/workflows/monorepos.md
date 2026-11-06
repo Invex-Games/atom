@@ -415,6 +415,10 @@ default.
   but without its target options (so without its condition or product) and with no `needs:`. `ProductValidate` rejects
   them for product targets and the gate; in a workflow you build by hand, list every target explicitly or add a
   `ProductValidateOption`.
+- **Custom artifact providers.** With `BuildOptions.Artifacts.UseCustomProvider`, every job that stores or retrieves
+  artifacts also depends on `SetupBuildInfo`. In the Validate workflow, list `SetupBuildInfo` as a shared target:
+  `ProductValidate` checks these added dependencies like the others, so it fails if `SetupBuildInfo` is missing or
+  belongs to a product.
 - **One version per process.** Parameters are resolved once per run, so one run builds one product. `SetupBuildInfo`
   produces one version for the whole workflow: in the Validate workflow each product job computes its own version from
   its `product` parameter instead. `StoreArtifact` and `RetrieveArtifact` still use the workflow-wide `BuildId`, which

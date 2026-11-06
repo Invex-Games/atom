@@ -20,7 +20,7 @@ public partial class ProductWorkflowBuild : WorkflowBuildDefinition, IProductWor
     public override IReadOnlyList<WorkflowDefinition> Workflows => [];
 }
 
-public interface IProductWorkflowTargets : IProductsDefinition
+public interface IProductWorkflowTargets : IProductsDefinition, ISetupBuildInfo
 {
     Target TestAppA =>
         t => t
@@ -79,6 +79,15 @@ public interface IProductWorkflowTargets : IProductsDefinition
             .DependsOn(nameof(PackAppA));
 
     Target LintAll => t => t;
+
+    Target PackAppAArtifact =>
+        t => t
+            .DependsOn(nameof(DetectAffectedProducts))
+            .ProducesArtifact("appa");
+
+    Target ArtifactGate =>
+        t => t
+            .DependsOn(nameof(PackAppAArtifact));
 
     Target LintAllGate =>
         t => t
