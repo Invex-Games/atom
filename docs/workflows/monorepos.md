@@ -436,6 +436,13 @@ default.
   only other products usually doesn't run the product's pipeline, because of its path filters. But a push of several
   commits (a rebase merge, or a direct push) runs it when any of them touched the product, with `HEAD` at the last one.
   Squash or merge-commit merges avoid this; otherwise run the release from the product's latest commit.
+- **Release builds of a tag below the branch tip.** A release run checks out the tag, detached. GitVersion attaches it
+  to a branch only when a branch's tip is that commit, which is rarely true of a product's tag: it goes on the
+  product's latest commit, often below the tip of `main`. GitVersion then versions the checkout with the branch
+  configuration whose `regex` matches anything. If that configuration sets
+  `prevent-increment.when-current-commit-tagged: false`, the tagged commit gets a pre-release version such as
+  `1.0.0-alpha.-no-branch-.0`, not `1.0.0`, so the release build doesn't match its tag. Set it to `true` on that
+  catch-all branch configuration in the root `GitVersion.yml`, and run `atom gen`.
 - **Local runs.** `DetectAffectedProducts` treats every product as affected when there is no base branch, so local runs
   of product targets work. Make the gate a no-op outside CI, as above.
 - **Azure DevOps tag triggers.** Check whether path filters also apply to tag pushes in your Azure DevOps organisation
