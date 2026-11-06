@@ -1,11 +1,16 @@
 ﻿global using System.Diagnostics.CodeAnalysis;
+global using System.Security.Cryptography;
+global using System.Text;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
+global using Invex.Atom.Build;
 global using Invex.Atom.Build.BuildInfo;
 global using Invex.Atom.Build.BuildOptions;
 global using Invex.Atom.Build.Definition;
 global using Invex.Atom.Build.FileSystem;
 global using Invex.Atom.Build.Hosting;
+global using Invex.Atom.Build.Params;
+global using Invex.Atom.Build.Util;
 global using Invex.Atom.Module.Dotnet.Helpers;
 global using Invex.Atom.Module.GitVersion.Options;
 global using Invex.Atom.Module.GitVersion.Providers;

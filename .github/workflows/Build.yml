@@ -220,6 +220,12 @@ jobs:
           name: 'Invex.Atom.Module.GitHubWorkflows.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
           path: '${{ github.workspace }}/.github/publish/Invex.Atom.Module.GitHubWorkflows.Tests'
 
+      - name: Store Invex.Atom.Module.GitVersion.Tests
+        uses: actions/upload-artifact@v7
+        with:
+          name: 'Invex.Atom.Module.GitVersion.Tests-${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
+          path: '${{ github.workspace }}/.github/publish/Invex.Atom.Module.GitVersion.Tests'
+
       - name: Store Invex.Atom.Workflows.Tests
         uses: actions/upload-artifact@v7
         with:
@@ -781,6 +787,42 @@ jobs:
         with:
           name: Invex.Atom.Module.GitHubWorkflows.Tests-macos-latest-net10.0
           path: '${{ github.workspace }}/.github/artifacts/Invex.Atom.Module.GitHubWorkflows.Tests'
+
+      - name: Retrieve Invex.Atom.Module.GitVersion.Tests
+        uses: actions/download-artifact@v8
+        with:
+          name: Invex.Atom.Module.GitVersion.Tests-windows-latest-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/Invex.Atom.Module.GitVersion.Tests'
+
+      - name: Retrieve Invex.Atom.Module.GitVersion.Tests
+        uses: actions/download-artifact@v8
+        with:
+          name: Invex.Atom.Module.GitVersion.Tests-windows-11-arm-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/Invex.Atom.Module.GitVersion.Tests'
+
+      - name: Retrieve Invex.Atom.Module.GitVersion.Tests
+        uses: actions/download-artifact@v8
+        with:
+          name: Invex.Atom.Module.GitVersion.Tests-ubuntu-latest-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/Invex.Atom.Module.GitVersion.Tests'
+
+      - name: Retrieve Invex.Atom.Module.GitVersion.Tests
+        uses: actions/download-artifact@v8
+        with:
+          name: Invex.Atom.Module.GitVersion.Tests-ubuntu-24.04-arm-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/Invex.Atom.Module.GitVersion.Tests'
+
+      - name: Retrieve Invex.Atom.Module.GitVersion.Tests
+        uses: actions/download-artifact@v8
+        with:
+          name: Invex.Atom.Module.GitVersion.Tests-macos-15-intel-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/Invex.Atom.Module.GitVersion.Tests'
+
+      - name: Retrieve Invex.Atom.Module.GitVersion.Tests
+        uses: actions/download-artifact@v8
+        with:
+          name: Invex.Atom.Module.GitVersion.Tests-macos-latest-net10.0
+          path: '${{ github.workspace }}/.github/artifacts/Invex.Atom.Module.GitVersion.Tests'
 
       - name: Retrieve Invex.Atom.Workflows.Tests
         uses: actions/download-artifact@v8

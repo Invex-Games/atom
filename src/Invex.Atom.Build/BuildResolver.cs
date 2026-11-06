@@ -33,9 +33,7 @@ internal sealed class BuildResolver(
             {
                 ArgName = x.Value.ArgName,
                 Description = x.Value.Description,
-                DefaultValue = buildDefinition
-                    .AccessParam(x.Value.Name)
-                    ?.ToString(),
+                DefaultValue = GetDefaultValue(x.Value.Name),
                 Sources = x.Value.Sources,
                 IsSecret = x.Value.IsSecret,
                 ChainedParams = x.Value.ChainedParams,
@@ -286,5 +284,29 @@ internal sealed class BuildResolver(
 
         foreach (var chainedParam in model.ChainedParams)
             AddParamAndChildren(target, chainedParam, required, usedParams, paramModels, visited);
+    }
+
+    /// <summary>
+    ///     Gets a parameter's default value for display and prompting, or <c>null</c> if it has none.
+    /// </summary>
+    /// <remarks>
+    ///     A default that cannot be computed (for example a build version from a tool that fails with the default
+    ///     configuration) is treated as no default rather than failing resolution: the parameter is still resolved
+    ///     normally, and any error surfaces, when the build actually uses it.
+    /// </remarks>
+    private string? GetDefaultValue(string paramName)
+    {
+        try
+        {
+            return buildDefinition
+                .AccessParam(paramName)
+                ?.ToString();
+        }
+        catch (Exception ex)
+        {
+            logger.LogDebug(ex, "Could not determine the default value of parameter {ParamName}", paramName);
+
+            return null;
+        }
     }
 }

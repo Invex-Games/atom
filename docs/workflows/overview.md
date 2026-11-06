@@ -55,6 +55,7 @@ Both `IWorkflowBuildDefinition` and `WorkflowBuildDefinition` provide:
 ## Next steps
 
 - [Workflow Definitions](workflow-definitions.md): declare workflows, targets, and platforms.
+- [Monorepos](monorepos.md): validate several products in one repository behind a single required check.
 - [Base vs Workflow Build](../getting-started/base-vs-workflow-build.md): choose the right base contract.
 - <xref:Invex.Atom.Workflows.IWorkflowBuildDefinition>
 - <xref:Invex.Atom.Workflows.WorkflowBuildDefinition>

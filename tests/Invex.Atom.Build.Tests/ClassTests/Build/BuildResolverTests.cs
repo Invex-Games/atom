@@ -485,11 +485,58 @@ internal sealed class BuildResolverTests
             .ShouldBe("Param1");
     }
 
+    [Test]
+    public void Resolve_WithParamDefaultThatThrows_ResolvesWithoutDefaultValue()
+    {
+        // Arrange: computing Param1's default fails (e.g. a build version tool failing with its default configuration)
+        var buildDefinition = new TestBuildDefinitionWithParams(_services,
+            new Dictionary<string, ParamDefinition>
+            {
+                ["Param1"] = new("Param1")
+                {
+                    ArgName = "param-1",
+                    Description = "Param 1",
+                    Sources = ParamSource.All,
+                    IsSecret = false,
+                    ChainedParams = [],
+                },
+            })
+        {
+            ManualTargetDefinitions = new Dictionary<string, Target>
+            {
+                ["Target1"] = t => t
+                    .RequiresParam("Param1")
+                    .Executes(() => Task.CompletedTask),
+            },
+            ParamDefaultFactory = _ => throw new InvalidOperationException("Default unavailable"),
+        };
+
+        var commandLineArgs = new CommandLineArgs(true, [new CommandArg("Target1")]);
+        var paramService = A.Fake<IParamService>();
+        var logger = A.Fake<ILogger<BuildResolver>>();
+        var buildResolver = new BuildResolver(buildDefinition, paramService, commandLineArgs, logger);
+
+        // Act
+        var buildModel = buildResolver.Resolve();
+
+        // Assert
+        buildModel
+            .Targets
+            .First(t => t.Name == "Target1")
+            .Params
+            .ShouldHaveSingleItem()
+            .Param
+            .DefaultValue
+            .ShouldBeNull();
+    }
+
     private class TestBuildDefinitionWithParams(
         IServiceProvider services,
         IReadOnlyDictionary<string, ParamDefinition> paramDefinitions
     ) : BuildDefinition(services)
     {
+        public Func<string, object?> ParamDefaultFactory { get; init; } = _ => null;
+
         public IReadOnlyDictionary<string, Target> ManualTargetDefinitions { get; init; } =
             new Dictionary<string, Target>();
 
@@ -498,6 +545,6 @@ internal sealed class BuildResolverTests
         public override IReadOnlyDictionary<string, ParamDefinition> ParamDefinitions => paramDefinitions;
 
         public override object? AccessParam(string paramName) =>
-            null;
+            ParamDefaultFactory(paramName);
     }
 }

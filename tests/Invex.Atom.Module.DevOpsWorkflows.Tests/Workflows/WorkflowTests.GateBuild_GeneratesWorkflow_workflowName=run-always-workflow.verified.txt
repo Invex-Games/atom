@@ -1,0 +1,53 @@
+﻿name: run-always-workflow
+
+trigger: none
+pr:
+  branches:
+    include: [ main ]
+
+jobs:
+
+  - job: DetectAffectedProducts
+    displayName: DetectAffectedProducts
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+      - checkout: self
+        enabled: true
+        fetchDepth: 0
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj DetectAffectedProducts --skip --headless
+        displayName: DetectAffectedProducts
+        name: DetectAffectedProducts
+
+  - job: PackAppA
+    displayName: PackAppA
+    dependsOn: [ DetectAffectedProducts ]
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+      - checkout: self
+        enabled: true
+        fetchDepth: 0
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj PackAppA --skip --headless
+        displayName: PackAppA
+        name: PackAppA
+
+  - job: ReportResults
+    displayName: ReportResults
+    dependsOn: [ PackAppA ]
+    condition: always()
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+      - checkout: self
+        enabled: true
+        fetchDepth: 0
+
+      - script: dotnet run --project AtomTest/AtomTest.csproj ReportResults --skip --headless
+        displayName: ReportResults
+        name: ReportResults
