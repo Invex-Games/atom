@@ -424,14 +424,19 @@ its dependencies' and the global paths), matched as globs, or returns `HEAD` whe
 merges with merge commits it finds the merge commit rather than the merged commit behind it. Two overloads take the
 paths from elsewhere:
 
-- `GetReleaseTagCommit(product)` uses another product's paths, the same way, so a build can tag a product other than
-  the one selected with `--product`:
+- `GetReleaseTagCommit(product)` uses another product's paths, the same way, so a build can find the commit for a
+  product other than the one selected with `--product`, for example to list every product's next release commit:
 
   ```csharp
-  var appB = GetProduct("AppB");
-  var commit = await GetReleaseTagCommit(appB, cancellationToken);
-  var tag = ReleaseTag.For(BuildVersion, appB.TagPrefix);
+  foreach (var product in Products.Where(x => x.GitVersionConfig is not null))
+  {
+      var commit = await GetReleaseTagCommit(product, cancellationToken);
+      Logger.LogInformation("{Product}: tag {Commit} as {Prefix}<version>", product.Name, commit, product.TagPrefix);
+  }
   ```
+
+  It only picks the commit. `BuildVersion` is still the selected product's version, so get the other product's version
+  from a run with `--product` set to it before formatting its tag.
 
 - `GetReleaseTagCommit(paths)` takes files and folders below the Atom root as `RootedPath` values, such as
   `[RootedFileSystem.AtomRootDirectory / "docs"]`. They are matched literally (a folder includes everything below it),
