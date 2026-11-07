@@ -17,9 +17,9 @@
 /// // Tag a product on the latest commit that touched its paths, so GitVersion with ignore.paths can see the tag.
 /// var commit = await GetReleaseTagCommit(cancellationToken); // the current product's paths, with the global paths
 ///
-/// var appB = GetProduct("AppB"); // another product's paths, with the global paths
-/// var appBCommit = await GetReleaseTagCommit(appB, cancellationToken);
-/// var appBTag = ReleaseTag.For(BuildVersion, appB.TagPrefix); // "appb/v1.2.0"
+/// // Another product's paths, with the global paths. This only picks the commit: BuildVersion is still the current
+/// // product's version, so AppB's version comes from a run with --product AppB.
+/// var appBCommit = await GetReleaseTagCommit(GetProduct("AppB"), cancellationToken);
 ///
 /// var docsCommit = await GetReleaseTagCommit( // only these files and folders
 ///     [RootedFileSystem.AtomRootDirectory / "docs", RootedFileSystem.AtomRootDirectory / "README.md"],
