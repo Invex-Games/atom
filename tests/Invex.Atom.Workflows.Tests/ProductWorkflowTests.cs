@@ -29,10 +29,76 @@ internal sealed class ProductWorkflowTests
 
         definition
             .Options
-            .ShouldBe([
-                new WorkflowParamInjection(nameof(IProductsDefinition.ProductName), "AppA"),
-                new ProductWorkflowOption("AppA", "app-a@"),
-            ]);
+            .ShouldSatisfyAllConditions(o => o.Count.ShouldBe(2),
+                o => o[0]
+                    .ShouldBe(new WorkflowParamInjection(nameof(IProductsDefinition.ProductName), "AppA")),
+                o => o[1]
+                    .ShouldBeOfType<ProductWorkflowOption>()
+                    .Product
+                    .ShouldSatisfyAllConditions(p => p.Name.ShouldBe("AppA"),
+                        p => p.TagPrefix.ShouldBe("app-a@")));
+    }
+
+    [TestCase("AppA")]
+    [TestCase(" appa ")]
+    public void ProductAffected_WithBuildAndName_MatchesResolvedProduct(string productName)
+    {
+        var (_, build) = CreateHost();
+        IProductsDefinition products = build;
+
+        var condition = Tex.ProductAffected(build, productName);
+
+        condition
+            .ToString()
+            .ShouldBe(Tex
+                .ProductAffected(products.GetProduct("AppA"))
+                .ToString());
+
+        condition
+            .DescendantsAndSelf()
+            .ShouldSatisfyAllConditions(e => e
+                    .OfType<JobOutputRef>()
+                    .ShouldHaveSingleItem()
+                    .ShouldBe(new(nameof(IProductsDefinition.DetectAffectedProducts),
+                        "affected-products",
+                        nameof(IProductsDefinition.DetectAffectedProducts))),
+                e => e
+                    .OfType<StringLiteral>()
+                    .ShouldHaveSingleItem()
+                    .Value
+                    .ShouldBe(",appa,"));
+    }
+
+    [Test]
+    public void ProductAffected_WithUnknownProduct_Throws()
+    {
+        var (_, build) = CreateHost();
+
+        Should
+            .Throw<InvalidOperationException>(() => Tex.ProductAffected(build, "AppZ"))
+            .Message
+            .ShouldBe("Unknown product 'AppZ'. Known products: Shared, AppA.");
+    }
+
+    [Test]
+    public void ProductAffected_WithNullProduct_Throws() =>
+        Should.Throw<ArgumentNullException>(() => Tex.ProductAffected(null!));
+
+    [Test]
+    public void ProductAffected_ReadsTheAffectedProductsParamArgName()
+    {
+        var argName = typeof(IProductsDefinition)
+            .GetProperty(nameof(IProductsDefinition.AffectedProducts))!
+            .GetCustomAttribute<ParamDefinitionAttribute>()!
+            .ArgName;
+
+        Tex
+            .ProductAffected(new Product("AppA"))
+            .DescendantsAndSelf()
+            .OfType<JobOutputRef>()
+            .ShouldHaveSingleItem()
+            .Output
+            .ShouldBe(argName);
     }
 
     [Test]
@@ -88,8 +154,12 @@ internal sealed class ProductWorkflowTests
                 o => o
                     .OfType<TargetCondition>()
                     .ShouldHaveSingleItem()
-                    .TargetNames
-                    .ShouldBe([nameof(IProductsDefinition.DetectAffectedProducts)]));
+                    .ShouldSatisfyAllConditions(c => c.TargetNames.ShouldBe([nameof(IProductsDefinition.DetectAffectedProducts)]),
+                        c => c
+                            .Condition
+                            .ToString()
+                            .ShouldBe((Tex.Success() && Tex.ProductAffected(((IProductsDefinition)build).GetProduct("AppA")))
+                                .ToString())));
 
         definition
             .Options

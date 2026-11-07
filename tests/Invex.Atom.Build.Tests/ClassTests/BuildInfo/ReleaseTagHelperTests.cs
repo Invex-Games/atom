@@ -10,7 +10,7 @@ internal sealed class ReleaseTagHelperTests
         public IServiceProvider Services { get; } = services;
     }
 
-    private static (IReleaseTagHelper Helper, List<ProcessRunOptions> Calls) CreateSut(
+    private static (IReleaseTagHelper Helper, List<ProcessRunOptions> Calls, RootedPath Root) CreateSut(
         string logOutput = Commit,
         string shallowOutput = "false")
     {
@@ -33,7 +33,10 @@ internal sealed class ReleaseTagHelperTests
         var host = CreateTestHost<DefaultAtomBuild>(configure: builder =>
             builder.Services.AddSingleton(processRunner));
 
-        return (new TestReleaseTagHelper(host.Services), calls);
+        return (new TestReleaseTagHelper(host.Services), calls, host
+            .Services
+            .GetRequiredService<IRootedFileSystem>()
+            .AtomRootDirectory);
     }
 
     private static string ExpectedRoot =>
@@ -77,7 +80,7 @@ internal sealed class ReleaseTagHelperTests
     [Test]
     public async Task GetReleaseTagCommit_WithNoPaths_ReturnsHeadCommit()
     {
-        var (helper, calls) = CreateSut();
+        var (helper, calls, _) = CreateSut();
 
         var commit = await helper.GetReleaseTagCommit([]);
 
@@ -91,48 +94,81 @@ internal sealed class ReleaseTagHelperTests
     }
 
     [Test]
-    public async Task GetReleaseTagCommit_WithPaths_ChecksShallowThenLogsPaths()
+    public async Task GetReleaseTagCommit_WithPaths_ChecksShallowThenLogsLiteralPathspecs()
     {
-        var (helper, calls) = CreateSut();
+        var (helper, calls, root) = CreateSut();
 
-        var commit = await helper.GetReleaseTagCommit(["src/AppA/", "src/Shared/"]);
+        var commit = await helper.GetReleaseTagCommit([root / "src/AppA", root / "src/Shared/"]);
 
         commit.ShouldBe(Commit);
 
         calls
             .Select(c => c.Args)
-            .ShouldBe(["rev-parse --is-shallow-repository", "log -1 --first-parent --no-show-signature --format=%H -- src/AppA/ src/Shared/"]);
+            .ShouldBe([
+                "rev-parse --is-shallow-repository",
+                "log -1 --first-parent --no-show-signature --format=%H -- :(literal)src/AppA :(literal)src/Shared",
+            ]);
 
         calls.ShouldAllBe(c => c.Name == "git" && c.WorkingDirectory == ExpectedRoot);
+    }
+
+    [TestCase("src/*.cs", ":(literal)src/*.cs")]
+    [TestCase("src/**", ":(literal)src/**")]
+    [TestCase("src/AppA/../Shared", ":(literal)src/Shared")]
+    [TestCase("./README.md", ":(literal)README.md")]
+    public async Task GetReleaseTagCommit_WithPath_PassesItLiterallyRelativeToRoot(string path, string expectedPathspec)
+    {
+        var (helper, calls, root) = CreateSut();
+
+        await helper.GetReleaseTagCommit([root / path]);
+
+        calls[^1]
+            .Args
+            .ShouldBe($"log -1 --first-parent --no-show-signature --format=%H -- {expectedPathspec}");
     }
 
     [Test]
     public async Task GetReleaseTagCommit_WithPathContainingSpace_QuotesPath()
     {
-        var (helper, calls) = CreateSut();
+        var (helper, calls, root) = CreateSut();
 
-        await helper.GetReleaseTagCommit(["src/My App/"]);
+        await helper.GetReleaseTagCommit([root / "src/My App/"]);
 
         calls[^1]
             .Args
-            .ShouldBe("log -1 --first-parent --no-show-signature --format=%H -- \"src/My App/\"");
+            .ShouldBe("log -1 --first-parent --no-show-signature --format=%H -- \":(literal)src/My App\"");
+    }
+
+    [TestCase(".")]
+    [TestCase("src/..")]
+    public async Task GetReleaseTagCommit_WithAtomRoot_PassesDotPathspec(string path)
+    {
+        var (helper, calls, root) = CreateSut();
+
+        // Everything below the Atom root, which is not the whole repository when the root is a subfolder of it
+        await helper.GetReleaseTagCommit([root / path]);
+
+        calls[^1]
+            .Args
+            .ShouldBe("log -1 --first-parent --no-show-signature --format=%H -- :(literal).");
     }
 
     [Test]
     public async Task GetReleaseTagCommit_WithEmptyOutput_Throws()
     {
-        var (helper, _) = CreateSut(string.Empty);
+        var (helper, _, root) = CreateSut(string.Empty);
 
-        var exception = await Should.ThrowAsync<StepFailedException>(() => helper.GetReleaseTagCommit(["src/AppA/"]));
+        var exception =
+            await Should.ThrowAsync<StepFailedException>(() => helper.GetReleaseTagCommit([root / "src/AppA/"]));
 
-        exception.Message.ShouldContain("src/AppA/");
+        exception.Message.ShouldContain(":(literal)src/AppA");
         exception.Message.ShouldContain("fetch-depth: 0");
     }
 
     [Test]
     public async Task GetReleaseTagCommit_WithNoPathsAndEmptyOutput_Throws()
     {
-        var (helper, _) = CreateSut(string.Empty);
+        var (helper, _, _) = CreateSut(string.Empty);
 
         var exception = await Should.ThrowAsync<StepFailedException>(() => helper.GetReleaseTagCommit([]));
 
@@ -142,9 +178,10 @@ internal sealed class ReleaseTagHelperTests
     [Test]
     public async Task GetReleaseTagCommit_WithPathsInShallowClone_Throws()
     {
-        var (helper, calls) = CreateSut(shallowOutput: "true");
+        var (helper, calls, root) = CreateSut(shallowOutput: "true");
 
-        var exception = await Should.ThrowAsync<StepFailedException>(() => helper.GetReleaseTagCommit(["src/AppA/"]));
+        var exception =
+            await Should.ThrowAsync<StepFailedException>(() => helper.GetReleaseTagCommit([root / "src/AppA/"]));
 
         exception.Message.ShouldContain("shallow");
         exception.Message.ShouldContain("fetch-depth: 0");
@@ -158,7 +195,7 @@ internal sealed class ReleaseTagHelperTests
     [Test]
     public async Task GetReleaseTagCommit_WithNoPathsInShallowClone_ReturnsHeadCommit()
     {
-        var (helper, calls) = CreateSut(shallowOutput: "true");
+        var (helper, calls, _) = CreateSut(shallowOutput: "true");
 
         var commit = await helper.GetReleaseTagCommit([]);
 
@@ -166,13 +203,29 @@ internal sealed class ReleaseTagHelperTests
         calls.ShouldHaveSingleItem();
     }
 
-    [TestCase("")]
-    [TestCase(" ")]
-    public async Task GetReleaseTagCommit_WithBlankPath_Throws(string path)
+    [TestCase("..")]
+    [TestCase("../AtomOther/src")]
+    [TestCase("src/../../x")]
+    public async Task GetReleaseTagCommit_WithPathNotBelowRoot_Throws(string path)
     {
-        var (helper, calls) = CreateSut();
+        var (helper, calls, root) = CreateSut();
 
-        await Should.ThrowAsync<ArgumentException>(() => helper.GetReleaseTagCommit(["src/AppA/", path]));
+        var exception = await Should.ThrowAsync<ArgumentException>(() =>
+            helper.GetReleaseTagCommit([root / "src/AppA/", root / path]));
+
+        exception.ShouldSatisfyAllConditions(e => e.ParamName.ShouldBe("paths"),
+            e => e.Message.ShouldStartWith(
+                $"Path '{root / path}' is not at or below the Atom root directory '{root}'."));
+
+        calls.ShouldBeEmpty();
+    }
+
+    [Test]
+    public async Task GetReleaseTagCommit_WithNullPath_Throws()
+    {
+        var (helper, calls, root) = CreateSut();
+
+        await Should.ThrowAsync<ArgumentException>(() => helper.GetReleaseTagCommit([root / "src/AppA/", null!]));
 
         calls.ShouldBeEmpty();
     }
@@ -180,8 +233,32 @@ internal sealed class ReleaseTagHelperTests
     [Test]
     public async Task GetReleaseTagCommit_WithNullPaths_Throws()
     {
-        var (helper, _) = CreateSut();
+        var (helper, _, _) = CreateSut();
 
-        await Should.ThrowAsync<ArgumentNullException>(() => helper.GetReleaseTagCommit(null!));
+        await Should.ThrowAsync<ArgumentNullException>(() =>
+            helper.GetReleaseTagCommit((IEnumerable<RootedPath>)null!));
+    }
+
+    [Test]
+    public async Task GetReleaseTagCommit_WithProductOnBuildWithoutProducts_Throws()
+    {
+        var (helper, calls, _) = CreateSut();
+
+        var exception = await Should.ThrowAsync<InvalidOperationException>(() =>
+            helper.GetReleaseTagCommit(new Product("AppA")
+            {
+                Paths = ["src/AppA/"],
+            }));
+
+        exception.Message.ShouldBe("GetReleaseTagCommit(Product) requires a build that implements IProductsDefinition.");
+        calls.ShouldBeEmpty();
+    }
+
+    [Test]
+    public async Task GetReleaseTagCommit_WithNullProduct_Throws()
+    {
+        var (helper, _, _) = CreateSut();
+
+        await Should.ThrowAsync<ArgumentNullException>(() => helper.GetReleaseTagCommit((Product)null!));
     }
 }

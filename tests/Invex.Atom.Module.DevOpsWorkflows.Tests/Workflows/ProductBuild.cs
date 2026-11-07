@@ -13,7 +13,7 @@ public partial class ProductBuild : WorkflowBuildDefinition, IDevOpsWorkflows, I
         {
             Paths = ["src/AppA/**"],
             DependsOn = ["Shared"],
-            GitVersionConfig = "src/AppA/GitVersion.yml",
+            GitVersionConfig = FileSystem.AtomRootDirectory / "src/AppA/GitVersion.yml",
         },
         new("AppB")
         {

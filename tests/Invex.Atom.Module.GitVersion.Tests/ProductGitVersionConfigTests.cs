@@ -73,6 +73,15 @@ internal sealed class ProductGitVersionConfigTests
             .OfType<ProductGitVersionConfigHook>()
             .ShouldHaveSingleItem();
 
+    private static RootedPath AtomRoot(IHost host) =>
+        host
+            .Services
+            .GetRequiredService<IRootedFileSystem>()
+            .AtomRootDirectory;
+
+    private static void SetProducts(IHost host, params IReadOnlyList<Product> products) =>
+        ((GitVersionProductsTestBuild)host.Services.GetRequiredService<IBuildDefinition>()).TestProducts = products;
+
     private static string ConfigPath(MockFileSystem fileSystem, string product) =>
         fileSystem.Path.Combine(Root, "src", product, "GitVersion.yml");
 
@@ -191,15 +200,14 @@ internal sealed class ProductGitVersionConfigTests
     public async Task BeforeExecute_WithInvalidProducts_WarnsLocallyAndThrowsHeadless()
     {
         var (localHost, localFileSystem) = CreateHost();
-        ((GitVersionProductsTestBuild)localHost.Services.GetRequiredService<IBuildDefinition>()).TestProducts =
-        [
-            new("AppA")
+
+        SetProducts(localHost,
+            new Product("AppA")
             {
                 Paths = ["src/AppA/**"],
                 DependsOn = ["Missing"],
-                GitVersionConfig = "src/AppA/GitVersion.yml",
-            },
-        ];
+                GitVersionConfig = AtomRoot(localHost) / "src/AppA/GitVersion.yml",
+            });
 
         await Should.NotThrowAsync(() => GetHook(localHost)
             .BeforeExecute(CancellationToken.None));
@@ -209,15 +217,14 @@ internal sealed class ProductGitVersionConfigTests
             .ShouldBeFalse();
 
         var (headlessHost, _) = CreateHost(true);
-        ((GitVersionProductsTestBuild)headlessHost.Services.GetRequiredService<IBuildDefinition>()).TestProducts =
-        [
-            new("AppA")
+
+        SetProducts(headlessHost,
+            new Product("AppA")
             {
                 Paths = ["src/AppA/**"],
                 DependsOn = ["Missing"],
-                GitVersionConfig = "src/AppA/GitVersion.yml",
-            },
-        ];
+                GitVersionConfig = AtomRoot(headlessHost) / "src/AppA/GitVersion.yml",
+            });
 
         (await Should.ThrowAsync<AtomException>(() => GetHook(headlessHost)
                 .BeforeExecute(CancellationToken.None)))
@@ -234,14 +241,12 @@ internal sealed class ProductGitVersionConfigTests
             ? RootConfig
             : null);
 
-        ((GitVersionProductsTestBuild)host.Services.GetRequiredService<IBuildDefinition>()).TestProducts =
-        [
-            new("AppA")
+        SetProducts(host,
+            new Product("AppA")
             {
                 Paths = ["src/AppA/**"],
-                GitVersionConfig = config,
-            },
-        ];
+                GitVersionConfig = AtomRoot(host) / config,
+            });
 
         Should
             .Throw<AtomException>(() => host
@@ -251,6 +256,90 @@ internal sealed class ProductGitVersionConfigTests
             .Message
             .ShouldStartWith(
                 $"The GitVersion configuration of product 'AppA' is the root configuration file '{fileName}'.");
+    }
+
+    [Test]
+    public void GetExpectedConfigs_WhenProductConfigIsNotBelowAtomRoot_Throws()
+    {
+        var (host, fileSystem) = CreateHost();
+        var config = AtomRoot(host) / "../Other/GitVersion.yml";
+
+        SetProducts(host,
+            new Product("AppA")
+            {
+                Paths = ["src/AppA/**"],
+                GitVersionConfig = config,
+            });
+
+        Should
+            .Throw<AtomException>(() => host
+                .Services
+                .GetRequiredService<ProductGitVersionConfigGenerator>()
+                .GetExpectedConfigs())
+            .Message
+            .ShouldBe(
+                $"The GitVersion configuration of product 'AppA' is '{config}', which is not below the Atom root directory '{AtomRoot(host)}'.");
+
+        fileSystem
+            .FileExists(fileSystem.Path.GetFullPath(config))
+            .ShouldBeFalse();
+    }
+
+    [Test]
+    public async Task BeforeExecute_WithProductConfigNotBelowAtomRoot_DoesNotWriteItAndThrowsHeadless()
+    {
+        var (localHost, localFileSystem) = CreateHost();
+        var localConfig = AtomRoot(localHost) / "../Other/GitVersion.yml";
+
+        SetProducts(localHost,
+            new Product("AppA")
+            {
+                Paths = ["src/AppA/**"],
+                GitVersionConfig = localConfig,
+            });
+
+        await Should.NotThrowAsync(() => GetHook(localHost)
+            .BeforeExecute(CancellationToken.None));
+
+        localFileSystem
+            .FileExists(localFileSystem.Path.GetFullPath(localConfig))
+            .ShouldBeFalse();
+
+        var (headlessHost, _) = CreateHost(true);
+
+        SetProducts(headlessHost,
+            new Product("AppA")
+            {
+                Paths = ["src/AppA/**"],
+                GitVersionConfig = AtomRoot(headlessHost) / "../Other/GitVersion.yml",
+            });
+
+        (await Should.ThrowAsync<AtomException>(() => GetHook(headlessHost)
+                .BeforeExecute(CancellationToken.None)))
+            .Message
+            .ShouldContain("which is not below the Atom root directory");
+    }
+
+    [Test]
+    public void GetExpectedConfigs_WithDotSegmentsInProductConfig_ResolvesThem()
+    {
+        var (host, _) = CreateHost();
+
+        SetProducts(host,
+            new Product("AppA")
+            {
+                Paths = ["src/AppA/**"],
+                GitVersionConfig = AtomRoot(host) / "src/AppB/../AppA/./GitVersion.yml",
+            });
+
+        host
+            .Services
+            .GetRequiredService<ProductGitVersionConfigGenerator>()
+            .GetExpectedConfigs()
+            .ShouldHaveSingleItem()
+            .Path
+            .Path
+            .ShouldBe(ConfigPath(FileSystemUtils.DefaultMockFileSystem, "AppA"));
     }
 
     [Test]
@@ -288,6 +377,23 @@ internal sealed class ProductGitVersionConfigTests
     public void GitVersionConfig_WithProduct_DefaultsToProductConfig()
     {
         var (host, _) = CreateHost(product: "appa");
+
+        ((IGitVersion)host.Services.GetRequiredService<IBuildDefinition>())
+            .GitVersionConfig
+            .ShouldBe("src/AppA/GitVersion.yml");
+    }
+
+    [Test]
+    public void GitVersionConfig_WithProductConfigWithDotSegments_DefaultsToRootRelativePath()
+    {
+        var (host, _) = CreateHost(product: "AppA");
+
+        SetProducts(host,
+            new Product("AppA")
+            {
+                Paths = ["src/AppA/**"],
+                GitVersionConfig = AtomRoot(host) / "src/AppB/../AppA/./GitVersion.yml",
+            });
 
         ((IGitVersion)host.Services.GetRequiredService<IBuildDefinition>())
             .GitVersionConfig

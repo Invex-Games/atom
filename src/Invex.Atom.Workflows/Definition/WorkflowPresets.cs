@@ -114,10 +114,14 @@ public static class WorkflowPresets
                 nameof(targets));
 
         var productTargets = targets
-            .Select(x => x with
+            .Select(x =>
             {
-                Product = build.GetProduct(x.Product)
-                    .Name,
+                var product = build.GetProduct(x.Product);
+
+                return (Product: product, Target: x with
+                {
+                    Product = product.Name,
+                });
             })
             .ToList();
 
@@ -127,7 +131,9 @@ public static class WorkflowPresets
             Options =
             [
                 new ProductValidateOption(gateTarget,
-                    productTargets,
+                    productTargets
+                        .Select(x => x.Target)
+                        .ToList(),
                     sharedTargets
                         .Select(x => x.Name)
                         .ToList()),
@@ -136,9 +142,9 @@ public static class WorkflowPresets
             [
                 new(detectTarget),
                 .. sharedTargets,
-                .. productTargets.Select(x => x.Target.WithOptions(
+                .. productTargets.Select(x => x.Target.Target.WithOptions(
                     BuildOptions.Target.RunIfWorkflowCondition(Tex.Success() && Tex.ProductAffected(x.Product)),
-                    BuildOptions.Inject.Param(nameof(IProductsDefinition.ProductName), x.Product))),
+                    BuildOptions.Inject.Param(nameof(IProductsDefinition.ProductName), x.Product.Name))),
                 new(gateTarget)
                 {
                     Options = [BuildOptions.Target.RunIfAnyDependencyFailed],

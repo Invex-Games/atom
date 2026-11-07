@@ -44,14 +44,6 @@ internal sealed class GitVersionRunner(
     /// </summary>
     internal static readonly SemVer MinimumToolVersion = SemVer.Parse("6.8.0");
 
-    /// <summary>
-    ///     The file names GitVersion looks for, in order, when no configuration file is given.
-    /// </summary>
-    internal static readonly string[] DefaultConfigFileNames =
-    [
-        "GitVersion.yml", "GitVersion.yaml", ".GitVersion.yml", ".GitVersion.yaml",
-    ];
-
     private readonly Lock _lock = new();
     private readonly Dictionary<string, JsonElement> _outputs = new(StringComparer.Ordinal);
     private readonly HashSet<string> _productsWarnedWithoutConfig = new(StringComparer.OrdinalIgnoreCase);
@@ -174,12 +166,12 @@ internal sealed class GitVersionRunner(
 
         var rootDirectory = fileSystem.AtomRootDirectory;
 
-        var fullPath = fileSystem.Path.GetFullPath(fileSystem.Path.Combine(rootDirectory, value.Trim()));
+        var fullPath = fileSystem.CreateRootedPath(fileSystem.Path.GetFullPath(rootDirectory / value.Trim()));
 
-        if (!fileSystem.File.Exists(fullPath))
+        if (!fullPath.FileExists)
             throw new InvalidOperationException(
                 $"The GitVersion config file '{fullPath}' does not exist. The '{ConfigParamArgName}' parameter " +
-                $"is set to '{value}', which must be a path relative to the repository root '{rootDirectory}'.");
+                $"is set to '{value}', which must be a path relative to the Atom root directory '{rootDirectory}'.");
 
         var relativePath = fileSystem
             .Path
@@ -195,14 +187,15 @@ internal sealed class GitVersionRunner(
     ///     Gets the content hash of the configuration file GitVersion finds by default in the Atom root directory.
     /// </summary>
     /// <returns>
-    ///     The lowercase hex SHA-256 hash of the first of <see cref="DefaultConfigFileNames" /> that exists in the
-    ///     Atom root directory, or <c>null</c> if none exists.
+    ///     The lowercase hex SHA-256 hash of the first of <see cref="ProductValidator.RootGitVersionConfigFileNames" />
+    ///     that exists in the Atom root directory, or <c>null</c> if none exists.
     /// </returns>
     private string? GetDefaultConfigContentHash()
     {
-        foreach (var path in DefaultConfigFileNames.Select(fileName => fileSystem.AtomRootDirectory / fileName))
+        foreach (var path in ProductValidator.RootGitVersionConfigFileNames.Select(fileName =>
+                     fileSystem.AtomRootDirectory / fileName))
         {
-            if (fileSystem.File.Exists(path))
+            if (path.FileExists)
                 return Convert.ToHexStringLower(SHA256.HashData(fileSystem.File.ReadAllBytes(path)));
         }
 
@@ -261,5 +254,5 @@ internal sealed class GitVersionRunner(
     /// <param name="RelativePath">The path relative to the Atom root directory, with forward slashes.</param>
     /// <param name="FullPath">The absolute path passed to GitVersion's <c>/config</c> argument.</param>
     /// <param name="ContentHash">The lowercase hex SHA-256 hash of the file contents.</param>
-    internal sealed record ResolvedConfig(string RelativePath, string FullPath, string ContentHash);
+    internal sealed record ResolvedConfig(string RelativePath, RootedPath FullPath, string ContentHash);
 }
