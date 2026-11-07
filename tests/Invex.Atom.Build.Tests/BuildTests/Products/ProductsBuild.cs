@@ -3,27 +3,31 @@ namespace Invex.Atom.Build.Tests.BuildTests.Products;
 [BuildDefinition]
 public sealed partial class ProductsBuild : BuildDefinition, IProductsTestTargets
 {
-    public IReadOnlyList<Product> TestProducts { get; set; } =
-    [
-        new("Shared")
-        {
-            Paths = ["src/Shared/"],
-        },
-        new("AppA")
-        {
-            Paths = ["src/AppA/**"],
-            DependsOn = ["Shared"],
-            Directory = "src/AppA",
-        },
-        new("AppB")
-        {
-            Paths = ["src/AppB/**", "docs/appb/*.md"],
-            DependsOn = ["Shared"],
-            TagPrefix = "app-b-",
-        },
-    ];
+    /// <summary>
+    ///     Gets or sets the products to declare instead of the default Shared, AppA and AppB.
+    /// </summary>
+    public IReadOnlyList<Product>? TestProducts { get; set; }
 
-    IReadOnlyList<Product> IProductsDefinition.Products => TestProducts;
+    IReadOnlyList<Product> IProductsDefinition.Products =>
+        TestProducts ??
+        [
+            new("Shared")
+            {
+                Paths = ["src/Shared/"],
+            },
+            new("AppA")
+            {
+                Paths = ["src/AppA/**"],
+                DependsOn = ["Shared"],
+                Directory = FileSystem.AtomRootDirectory / "src/AppA",
+            },
+            new("AppB")
+            {
+                Paths = ["src/AppB/**", "docs/appb/*.md"],
+                DependsOn = ["Shared"],
+                TagPrefix = "app-b-",
+            },
+        ];
 
     public string? BuildNameResult { get; set; }
 

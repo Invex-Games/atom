@@ -7,7 +7,7 @@ namespace Invex.Atom.Module.GitVersion.Providers;
 /// <remarks>
 ///     <para>
 ///         Each product's file is the repository's root GitVersion configuration (the first of
-///         <see cref="GitVersionRunner.DefaultConfigFileNames" />) with its top-level <c>tag-prefix</c> and
+///         <see cref="ProductValidator.RootGitVersionConfigFileNames" />) with its top-level <c>tag-prefix</c> and
 ///         <c>ignore</c> settings replaced: <c>tag-prefix</c> becomes the product's <see cref="Product.TagPrefix" />,
 ///         and <c>ignore.paths</c> becomes one regular expression that matches every path outside the product's paths,
 ///         its dependencies' paths and the global paths, so that GitVersion only counts commits that touch them.
@@ -31,7 +31,7 @@ internal sealed class ProductGitVersionConfigGenerator(
     /// </returns>
     internal IReadOnlyList<string> GetProductErrors() =>
         buildDefinition is IProductsDefinition productsDefinition &&
-        productsDefinition.Products.Any(x => !string.IsNullOrWhiteSpace(x.GitVersionConfig))
+        productsDefinition.Products.Any(x => x.GitVersionConfig is not null)
             ? ProductValidator.GetErrors(productsDefinition, fileSystem)
             : [];
 
@@ -42,7 +42,10 @@ internal sealed class ProductGitVersionConfigGenerator(
     ///     One entry per product that sets <see cref="Product.GitVersionConfig" />; empty if the build does not
     ///     implement <see cref="IProductsDefinition" />.
     /// </returns>
-    /// <exception cref="AtomException">Thrown if a product's configuration path is a root configuration file.</exception>
+    /// <exception cref="AtomException">
+    ///     Thrown if a product's configuration path is a root configuration file or is not below the Atom root
+    ///     directory.
+    /// </exception>
     /// <exception cref="InvalidOperationException">Thrown if the product dependencies are invalid.</exception>
     internal IReadOnlyList<(Product Product, RootedPath Path, string Content)> GetExpectedConfigs()
     {
@@ -51,14 +54,14 @@ internal sealed class ProductGitVersionConfigGenerator(
 
         var products = productsDefinition
             .Products
-            .Where(x => !string.IsNullOrWhiteSpace(x.GitVersionConfig))
+            .Where(x => x.GitVersionConfig is not null)
             .ToList();
 
         if (products.Count is 0)
             return [];
 
-        var rootConfigPath = GitVersionRunner
-            .DefaultConfigFileNames
+        var rootConfigPath = ProductValidator
+            .RootGitVersionConfigFileNames
             .Select(x => fileSystem.AtomRootDirectory / x)
             .FirstOrDefault(x => fileSystem.File.Exists(x));
 
@@ -74,8 +77,8 @@ internal sealed class ProductGitVersionConfigGenerator(
         // Every name GitVersion would find by itself, whether or not it exists yet: writing a product's settings
         // there would apply them to every build without a product. Compared ignoring case, because the Windows and
         // macOS file systems do.
-        var rootConfigNames = GitVersionRunner
-            .DefaultConfigFileNames
+        var rootConfigNames = ProductValidator
+            .RootGitVersionConfigFileNames
             .Select(x => fileSystem.Path.GetFullPath(fileSystem.AtomRootDirectory / x))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
@@ -84,9 +87,12 @@ internal sealed class ProductGitVersionConfigGenerator(
 
         foreach (var product in products)
         {
-            var path = new RootedPath(fileSystem,
-                fileSystem.Path.GetFullPath(fileSystem.Path.Combine(fileSystem.AtomRootDirectory,
-                    product.GitVersionConfig!.Trim())));
+            var path = fileSystem.CreateRootedPath(fileSystem.Path.GetFullPath(product.GitVersionConfig!));
+
+            if (AtomRootPath.GetRelativePathBelowRoot(fileSystem, path) is null)
+                throw new AtomException(
+                    $"The GitVersion configuration of product '{product.Name}' is '{product.GitVersionConfig}', which " +
+                    $"is not below the Atom root directory '{fileSystem.AtomRootDirectory}'.");
 
             if (rootConfigNames.Contains(path.Path))
                 throw new AtomException(

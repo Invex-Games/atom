@@ -25,9 +25,8 @@ internal sealed partial class DefaultBuildVersionProvider(IRootedFileSystem file
     ///     <see cref="Product.Directory" /> is being built, its folder's file is tried before the root's.
     /// </remarks>
     public SemVer Version =>
-        (productContext.Current?.Directory is { } productDirectory &&
-         !string.IsNullOrWhiteSpace(productDirectory)
-            ? TryReadVersion(fileSystem.AtomRootDirectory / productDirectory.Trim() / "Directory.Build.props")
+        (productContext.Current?.Directory is { } productDirectory
+            ? TryReadVersion(productDirectory / "Directory.Build.props")
             : null) ??
         TryReadVersion(fileSystem.AtomRootDirectory / "Directory.Build.props") ??
         SemVer.One;

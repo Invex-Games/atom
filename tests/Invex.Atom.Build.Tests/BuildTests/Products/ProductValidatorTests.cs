@@ -4,23 +4,31 @@ namespace Invex.Atom.Build.Tests.BuildTests.Products;
 internal sealed class ProductValidatorTests
 {
     private static IReadOnlyList<string> GetErrors(params IReadOnlyList<Product> products) =>
+        GetErrors(null, _ => products);
+
+    /// <summary>
+    ///     Validates products built from the test host's Atom root directory.
+    /// </summary>
+    private static IReadOnlyList<string> GetErrors(Func<RootedPath, IReadOnlyList<Product>> products) =>
         GetErrors(null, products);
 
-    private static IReadOnlyList<string> GetErrors(MockFileSystem? fileSystem, params IReadOnlyList<Product> products)
+    private static IReadOnlyList<string> GetErrors(
+        MockFileSystem? fileSystem,
+        Func<RootedPath, IReadOnlyList<Product>> products)
     {
         var host = CreateTestHost<ProductsBuild>(fileSystem: fileSystem);
         var build = (ProductsBuild)host.Services.GetRequiredService<IBuildDefinition>();
-        build.TestProducts = products;
+        var rootedFileSystem = host.Services.GetRequiredService<IRootedFileSystem>();
+        build.TestProducts = products(rootedFileSystem.AtomRootDirectory);
 
-        return ProductValidator.GetErrors(build,
-            fileSystem is null
-                ? null
-                : host.Services.GetRequiredService<IRootedFileSystem>());
+        return ProductValidator.GetErrors(build, rootedFileSystem);
     }
 
     [Test]
     public void GetErrors_WithValidProducts_ReturnsNone() =>
-        GetErrors(new Product("Shared")
+        GetErrors(root =>
+            [
+                new Product("Shared")
                 {
                     Paths = ["src/Shared/"],
                 },
@@ -28,29 +36,33 @@ internal sealed class ProductValidatorTests
                 {
                     Paths = ["src/**/AppA/*.cs", "src/AppA/x.txt"],
                     DependsOn = ["shared"],
-                    GitVersionConfig = "src/AppA/GitVersion.yml",
-                })
+                    GitVersionConfig = root / "src/AppA/GitVersion.yml",
+                },
+            ])
             .ShouldBeEmpty();
 
     [Test]
     public void GetErrors_ReportsEachProblem() =>
-        GetErrors(new Product("AppA")
+        GetErrors(root =>
+            [
+                new Product("AppA")
                 {
                     Paths = [],
-                    GitVersionConfig = "src/GitVersion.yml",
+                    GitVersionConfig = root / "src/GitVersion.yml",
                 },
                 new Product("appa")
                 {
                     Paths = ["/src/AppA/**", "src\\AppA", "src/[ab]/**", "src/App**/x", "./src"],
                     DependsOn = ["Missing", "appa"],
                     TagPrefix = "appa/v",
-                    GitVersionConfig = "src\\GitVersion.yml",
+                    GitVersionConfig = root / "src/./GitVersion.yml",
                 },
                 new Product("-Bad")
                 {
                     Paths = ["x/**"],
                     TagPrefix = "",
-                })
+                },
+            ])
             .ShouldBe([
                 "Product 'AppA' has no paths.",
                 "Path '/src/AppA/**' of product 'appa' is not supported: it starts with '/'; paths are relative to the repository root.",
@@ -93,19 +105,42 @@ internal sealed class ProductValidatorTests
                 "The tag prefix 'appa/' of product 'AppC' starts the tag prefix 'APPA/v' of product 'AppB', so 'AppC' would match 'AppB''s release tags.",
             ]);
 
-    [TestCase(" gitversion.YML")]
-    [TestCase("./GitVersion.yml")]
-    [TestCase("src/../.GitVersion.yaml")]
-    [TestCase(".\\GitVersion.yml")]
-    public void GetErrors_WithRootGitVersionConfig_ReportsIt(string config) =>
-        GetErrors(new Product("AppA")
-            {
-                Paths = ["a/"],
-                GitVersionConfig = config,
-            })
+    [TestCase("gitversion.YML", "gitversion.YML")]
+    [TestCase("./GitVersion.yml", "GitVersion.yml")]
+    [TestCase("src/../.GitVersion.yaml", ".GitVersion.yaml")]
+    public void GetErrors_WithRootGitVersionConfig_ReportsIt(string config, string expectedConfig) =>
+        GetErrors(root =>
+            [
+                new Product("AppA")
+                {
+                    Paths = ["a/"],
+                    GitVersionConfig = root / config,
+                },
+            ])
             .ShouldBe([
-                $"The GitVersion configuration of product 'AppA' is '{config.Trim()}', which GitVersion also reads for builds without a product. Give the product its own file, such as 'src/AppA/GitVersion.yml'.",
+                $"The GitVersion configuration of product 'AppA' is '{expectedConfig}', which GitVersion also reads for builds without a product. Give the product its own file, such as 'src/AppA/GitVersion.yml'.",
             ]);
+
+    [TestCase("../GitVersion.yml")]
+    [TestCase("../AtomOther/GitVersion.yml")]
+    [TestCase("src/../../other/GitVersion.yml")]
+    [TestCase(".")]
+    public void GetErrors_WithGitVersionConfigNotBelowAtomRoot_ReportsIt(string config)
+    {
+        RootedPath? atomRoot = null;
+
+        GetErrors(root =>
+            [
+                new Product("AppA")
+                {
+                    Paths = ["a/"],
+                    GitVersionConfig = (atomRoot = root) / config,
+                },
+            ])
+            .ShouldBe([
+                $"The GitVersion configuration of product 'AppA' is '{atomRoot! / config}', which is not below the Atom root directory '{atomRoot}'. Use a file below it, such as 'src/AppA/GitVersion.yml'.",
+            ]);
+    }
 
     [TestCase("AppA\n")]
     [TestCase("App A")]
@@ -120,18 +155,21 @@ internal sealed class ProductValidatorTests
 
     [TestCase("./src/versions.yml")]
     [TestCase("src/AppB/../versions.yml")]
-    [TestCase("SRC\\versions.yml")]
+    [TestCase("SRC/versions.yml")]
     public void GetErrors_WithSameGitVersionConfigSpelledDifferently_ReportsIt(string otherConfig) =>
-        GetErrors(new Product("AppA")
+        GetErrors(root =>
+            [
+                new Product("AppA")
                 {
                     Paths = ["a/"],
-                    GitVersionConfig = "src/versions.yml",
+                    GitVersionConfig = root / "src/versions.yml",
                 },
                 new Product("AppB")
                 {
                     Paths = ["b/"],
-                    GitVersionConfig = otherConfig,
-                })
+                    GitVersionConfig = root / otherConfig,
+                },
+            ])
             .ShouldBe(["Products 'AppA', 'AppB' share the GitVersion configuration 'src/versions.yml'."]);
 
     [TestCase(".")]
@@ -155,10 +193,13 @@ internal sealed class ProductValidatorTests
         fileSystem.AddFile(fileSystem.Path.Combine(root, "libs", "Submodule", ".git"), new("gitdir: ../../.git/modules/x"));
 
         GetErrors(fileSystem,
-                new Product("AppA")
-                {
-                    Paths = ["src/AppA", "src/AppA.props", "src/Missing", "libs/Submodule"],
-                })
+                _ =>
+                [
+                    new Product("AppA")
+                    {
+                        Paths = ["src/AppA", "src/AppA.props", "src/Missing", "libs/Submodule"],
+                    },
+                ])
             .ShouldBe([
                 "Path 'src/AppA' of product 'AppA' names a folder; add a trailing '/', such as 'src/AppA/', to include everything below it.",
             ]);

@@ -331,6 +331,42 @@ internal sealed class ProductsTests
                 "log -1 --first-parent --no-show-signature --format=%H -- :(glob)src/AppA/** :(glob)src/Shared/** :(glob)global.json :(glob)Directory.Build.* :(glob)Directory.Packages.* :(glob)_atom/** :(glob).github/workflows/** :(glob).devops/workflows/**");
     }
 
+    [TestCase(null)]
+    [TestCase("AppA")]
+    public async Task GetReleaseTagCommit_ForAnotherProduct_UsesThatProductsPathspecs(string? currentProduct)
+    {
+        var calls = new List<ProcessRunOptions>();
+        var processRunner = A.Fake<IProcessRunner>();
+
+        A
+            .CallTo(() => processRunner.RunAsync(A<ProcessRunOptions>._, A<CancellationToken>._))
+            .ReturnsLazily((ProcessRunOptions options, CancellationToken _) =>
+            {
+                calls.Add(options);
+
+                return Task.FromResult(new ProcessRunResult(options,
+                    0,
+                    options.Args.StartsWith("rev-parse", StringComparison.Ordinal)
+                        ? "false"
+                        : "abc123",
+                    string.Empty));
+            });
+
+        var (_, build) = CreateHost(currentProduct, processRunner: processRunner);
+        IProductsDefinition products = build;
+
+        var commit = await ((IReleaseTagHelper)build).GetReleaseTagCommit(products.GetProduct("AppB"));
+
+        commit.ShouldBe("abc123");
+
+        calls
+            .Select(x => x.Args)
+            .ShouldBe([
+                "rev-parse --is-shallow-repository",
+                "log -1 --first-parent --no-show-signature --format=%H -- :(glob)src/AppB/** :(glob)docs/appb/*.md :(glob)src/Shared/** :(glob)global.json :(glob)Directory.Build.* :(glob)Directory.Packages.* :(glob)_atom/** :(glob).github/workflows/** :(glob).devops/workflows/**",
+            ]);
+    }
+
     [Test]
     public async Task GetReleaseTagCommit_WithoutProduct_UsesHead()
     {

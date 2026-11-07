@@ -134,7 +134,7 @@ public sealed record WorkflowDefinition(string Name)
             Options =
             [
                 BuildOptions.Inject.Param(nameof(IProductsDefinition.ProductName), product.Name),
-                new ProductWorkflowOption(product.Name, product.TagPrefix),
+                new ProductWorkflowOption(product),
             ],
         };
     }
