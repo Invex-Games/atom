@@ -14,10 +14,16 @@
 ///     <code>
 /// var tag = ReleaseTagFor(BuildVersion); // "v1.2.0", or "appa/v1.2.0" when building the product AppA
 ///
-/// // Tag AppA on the latest commit that touched its paths, so GitVersion with ignore.paths can see the tag.
+/// // Tag a product on the latest commit that touched its paths, so GitVersion with ignore.paths can see the tag.
 /// var commit = await GetReleaseTagCommit(cancellationToken); // the current product's paths, with the global paths
-/// var otherCommit = await GetReleaseTagCommit(["src/AppB/", "src/Shared/"], cancellationToken); // only these paths
-/// var appATag = ReleaseTag.For(BuildVersion, "appa/v"); // "appa/v1.2.0"
+///
+/// var appB = GetProduct("AppB"); // another product's paths, with the global paths
+/// var appBCommit = await GetReleaseTagCommit(appB, cancellationToken);
+/// var appBTag = ReleaseTag.For(BuildVersion, appB.TagPrefix); // "appb/v1.2.0"
+///
+/// var docsCommit = await GetReleaseTagCommit( // only these files and folders
+///     [RootedFileSystem.AtomRootDirectory / "docs", RootedFileSystem.AtomRootDirectory / "README.md"],
+///     cancellationToken);
 ///     </code>
 /// </example>
 /// <seealso cref="ReleaseTag" />
@@ -91,33 +97,76 @@ public interface IReleaseTagHelper : IBuildAccessor
     /// </exception>
     /// <exception cref="ProcessException">Thrown if git exits with a non-zero code.</exception>
     /// <remarks>
-    ///     When a product is being built, the paths are the ones GitVersion counts for it: its own paths, the paths of
-    ///     the products it depends on and the global paths (see <see cref="IProductsDefinition.GetProductPaths" />).
-    ///     They are passed to git as <c>:(glob)</c> pathspecs. See
-    ///     <see cref="GetReleaseTagCommit(IEnumerable{string}, CancellationToken)" />.
+    ///     When a product is being built, this is <see cref="GetReleaseTagCommit(Product, CancellationToken)" /> for
+    ///     <see cref="IProductsDefinition.CurrentProduct" />.
     /// </remarks>
     Task<string> GetReleaseTagCommit(CancellationToken cancellationToken = default) =>
-        GetReleaseTagCommit(this is IProductsDefinition { CurrentProduct: { } product } products
-                ? products
+        this is IProductsDefinition { CurrentProduct: { } product }
+            ? GetReleaseTagCommit(product, cancellationToken)
+            : GetReleaseTagCommitForPathspecs([], cancellationToken);
+
+    /// <summary>
+    ///     Gets the commit that a product's release tag should be put on: the latest commit that touched the
+    ///     product's paths.
+    /// </summary>
+    /// <param name="product">
+    ///     The product, such as <c>GetProduct("AppB")</c>. It need not be the product being built.
+    /// </param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>The full hash of the commit to tag.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="product" /> is <see langword="null" />.</exception>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown if the build does not implement <see cref="IProductsDefinition" />, or the product dependencies are
+    ///     invalid.
+    /// </exception>
+    /// <exception cref="StepFailedException">
+    ///     Thrown if the repository is a shallow clone, or if git finds no commit.
+    /// </exception>
+    /// <exception cref="ProcessException">Thrown if git exits with a non-zero code.</exception>
+    /// <remarks>
+    ///     <para>
+    ///         The paths are the ones GitVersion counts for the product: its own paths, the paths of the products it
+    ///         depends on and the global paths (see <see cref="IProductsDefinition.GetProductPaths" />). They are
+    ///         matched as globs, as in <see cref="Product.Paths" />, by passing them to git as <c>:(glob)</c> pathspecs.
+    ///     </para>
+    ///     <para>
+    ///         Like <see cref="GetReleaseTagCommit(IEnumerable{RootedPath}, CancellationToken)" />, this needs the full
+    ///         history and compares each commit with its first parent only.
+    ///     </para>
+    /// </remarks>
+    async Task<string> GetReleaseTagCommit(Product product, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(product);
+
+        return this is IProductsDefinition products
+            ? await GetReleaseTagCommitForPathspecs(products
                     .GetProductPaths(product)
                     .Select(ProductPathGlob.ToGitPathspec)
-                    .ToList()
-                : [],
-            cancellationToken);
+                    .ToList(),
+                cancellationToken)
+            : throw new InvalidOperationException(
+                $"GetReleaseTagCommit(Product) requires a build that implements {nameof(IProductsDefinition)}.");
+    }
 
     /// <summary>
     ///     Gets the commit that a release tag should be put on: the latest commit that touched any of
     ///     <paramref name="paths" />, or <c>HEAD</c> if no paths are given.
     /// </summary>
     /// <param name="paths">
-    ///     Git pathspecs relative to the Atom root directory (<c>AtomRootDirectory</c>), such as
-    ///     <c>src/AppA/</c>. Each one is passed to git as a single argument (quoted if it contains spaces). An empty
-    ///     collection means the whole repository, so the result is the <c>HEAD</c> commit.
+    ///     Files or folders at or below the Atom root directory, such as
+    ///     <c>RootedFileSystem.AtomRootDirectory / "src/AppA"</c>. A folder includes everything below it, so the Atom
+    ///     root directory itself means every file below it, which differs from the whole repository when the Atom root
+    ///     is a subfolder of the repository. The paths are
+    ///     matched literally, with no glob syntax; to match a product's globs, use
+    ///     <see cref="GetReleaseTagCommit(Product, CancellationToken)" />. An empty collection means the whole
+    ///     repository, so the result is the <c>HEAD</c> commit.
     /// </param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>The full hash of the commit to tag.</returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="paths" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentException">Thrown if any path is <see langword="null" />, empty or whitespace.</exception>
+    /// <exception cref="ArgumentException">
+    ///     Thrown if any path is <see langword="null" />, or is not at or below the Atom root directory.
+    /// </exception>
     /// <exception cref="StepFailedException">
     ///     Thrown if paths are given and the repository is a shallow clone, or if git finds no commit, for example
     ///     because the paths were never committed.
@@ -129,7 +178,8 @@ public interface IReleaseTagHelper : IBuildAccessor
     /// <remarks>
     ///     <para>
     ///         This runs <c>git log -1 --first-parent --format=%H -- &lt;paths&gt;</c> in
-    ///         the Atom root directory (<c>AtomRootDirectory</c>). A product's release tag must be on the latest
+    ///         the Atom root directory (<c>AtomRootDirectory</c>), passing each path relative to it as a
+    ///         <c>:(literal)</c> pathspec. A product's release tag must be on the latest
     ///         commit that touched the product's paths: GitVersion ignores a tag on a commit that its
     ///         <c>ignore.paths</c> setting excludes, so a tag on a commit that touched only another product would not be
     ///         seen. Like <c>ignore.paths</c>, it compares each commit with its first parent, so in a repository that
@@ -144,16 +194,40 @@ public interface IReleaseTagHelper : IBuildAccessor
     ///         The result is not cached; each call runs git.
     ///     </para>
     /// </remarks>
-    async Task<string> GetReleaseTagCommit(IEnumerable<string> paths, CancellationToken cancellationToken = default)
+    async Task<string> GetReleaseTagCommit(IEnumerable<RootedPath> paths, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(paths);
 
-        var pathList = paths.ToList();
+        var pathspecs = new List<string>();
 
-        if (pathList.Any(string.IsNullOrWhiteSpace))
-            throw new ArgumentException("Paths must not contain null, empty or whitespace entries.", nameof(paths));
+        foreach (var path in paths)
+        {
+            if (path is null)
+                throw new ArgumentException("Paths must not contain null entries.", nameof(paths));
 
-        if (pathList.Count > 0)
+            var relativePath = AtomRootPath.GetRelativePathAtOrBelowRoot(RootedFileSystem, path) ??
+                               throw new ArgumentException(
+                                   $"Path '{path}' is not at or below the Atom root directory '{RootedFileSystem.AtomRootDirectory}'.",
+                                   nameof(paths));
+
+            pathspecs.Add($":(literal){relativePath}");
+        }
+
+        return await GetReleaseTagCommitForPathspecs(pathspecs, cancellationToken);
+    }
+
+    /// <summary>
+    ///     Runs git to find the latest commit that touched any of <paramref name="pathspecs" />, or the <c>HEAD</c>
+    ///     commit if there are none.
+    /// </summary>
+    /// <param name="pathspecs">Git pathspecs relative to the Atom root directory, each passed as one argument.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>The full hash of the commit.</returns>
+    private async Task<string> GetReleaseTagCommitForPathspecs(
+        IReadOnlyList<string> pathspecs,
+        CancellationToken cancellationToken)
+    {
+        if (pathspecs.Count > 0)
         {
             var shallowResult = await ProcessRunner.RunAsync(new("git", ["rev-parse", "--is-shallow-repository"])
                 {
@@ -166,15 +240,15 @@ public interface IReleaseTagHelper : IBuildAccessor
             if (shallowResult.Output.Trim() is "true")
                 throw new StepFailedException(
                     "Cannot find the commit to tag because the repository is a shallow clone, so the latest commit " +
-                    $"touching '{string.Join("', '", pathList)}' cannot be determined reliably. " +
+                    $"touching '{string.Join("', '", pathspecs)}' cannot be determined reliably. " +
                     "Fetch the full history (for example, fetch-depth: 0 for actions/checkout).");
         }
 
         // --first-parent compares each commit with its first parent only, as GitVersion's ignore.paths does, so a
         // merge commit that brought in a change to the paths is found rather than the merged commit behind it.
         // --no-show-signature keeps the output to the hash alone when the user's Git config sets log.showSignature
-        string[] args = pathList.Count > 0
-            ? ["log", "-1", "--first-parent", "--no-show-signature", "--format=%H", "--", ..pathList]
+        string[] args = pathspecs.Count > 0
+            ? ["log", "-1", "--first-parent", "--no-show-signature", "--format=%H", "--", ..pathspecs]
             : ["log", "-1", "--no-show-signature", "--format=%H"];
 
         var logResult = await ProcessRunner.RunAsync(new("git", ProcessArguments.Join(args))
@@ -188,15 +262,15 @@ public interface IReleaseTagHelper : IBuildAccessor
         var commit = logResult.Output.Trim();
 
         if (commit.Length is 0)
-            throw new StepFailedException(pathList.Count > 0
-                ? $"Cannot find the commit to tag: git found no commit touching '{string.Join("', '", pathList)}'. " +
+            throw new StepFailedException(pathspecs.Count > 0
+                ? $"Cannot find the commit to tag: git found no commit touching '{string.Join("', '", pathspecs)}'. " +
                   "Check that the paths are correct and committed, and that the full history is fetched " +
                   "(for example, fetch-depth: 0 for actions/checkout)."
                 : "Cannot find the commit to tag: git found no HEAD commit. " +
                   "Check that the repository has commits and that the full history is fetched " +
                   "(for example, fetch-depth: 0 for actions/checkout).");
 
-        Logger.LogDebug("Release tag commit for paths {Paths} is {Commit}", pathList, commit);
+        Logger.LogDebug("Release tag commit for paths {Paths} is {Commit}", pathspecs, commit);
 
         return commit;
     }

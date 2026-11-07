@@ -45,9 +45,10 @@ public partial interface IGitVersion : IDotnetToolInstallHelper
     /// <remarks>
     ///     <para>
     ///         When a monorepo product is being built (see <see cref="IProductsDefinition.CurrentProduct" />), the
-    ///         default is the product's <see cref="Product.GitVersionConfig" />. When <c>null</c> or empty, GitVersion
-    ///         finds its configuration file itself (usually <c>GitVersion.yml</c> in the repository root). Otherwise the path is resolved against the Atom root
-    ///         directory and passed to GitVersion as <c>/config "&lt;absolute path&gt;"</c>. An
+    ///         default is the product's <see cref="Product.GitVersionConfig" />, relative to the Atom root directory.
+    ///         When <c>null</c> or empty, GitVersion finds its configuration file itself (usually <c>GitVersion.yml</c>
+    ///         in the repository root). Otherwise the path is resolved against the Atom root directory and passed to
+    ///         GitVersion as <c>/config "&lt;absolute path&gt;"</c>. An
     ///         <see cref="InvalidOperationException" /> naming the parameter and the resolved path is thrown when the
     ///         build ID or version is requested and the file does not exist.
     ///     </para>
@@ -66,11 +67,15 @@ public partial interface IGitVersion : IDotnetToolInstallHelper
 
     /// <summary>
     ///     Gets the default GitVersion configuration file: the current monorepo product's
-    ///     <see cref="Product.GitVersionConfig" />, or empty.
+    ///     <see cref="Product.GitVersionConfig" /> relative to the Atom root directory, with <c>/</c> as the separator;
+    ///     or empty.
     /// </summary>
     private string DefaultGitVersionConfig =>
         this is IProductsDefinition { CurrentProduct.GitVersionConfig: { } productConfig }
-            ? productConfig
+            ? RootedFileSystem
+                .Path
+                .GetRelativePath(RootedFileSystem.AtomRootDirectory, productConfig)
+                .Replace('\\', '/')
             : string.Empty;
 
     /// <summary>

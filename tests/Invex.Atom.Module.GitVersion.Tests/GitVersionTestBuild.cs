@@ -54,24 +54,28 @@ public partial class GitVersionProductsTestBuild : BuildDefinition, IGitVersion,
         BuildOptions.GitVersion.ProvideBuildId, BuildOptions.GitVersion.ProvideBuildVersion,
     ];
 
-    public IReadOnlyList<Product> TestProducts { get; set; } =
-    [
-        new("Shared")
-        {
-            Paths = ["src/Shared/"],
-        },
-        new("AppA")
-        {
-            Paths = ["src/AppA/**"],
-            DependsOn = ["Shared"],
-            GitVersionConfig = "src/AppA/GitVersion.yml",
-        },
-        new("App.B")
-        {
-            Paths = ["src/AppB/**"],
-            GitVersionConfig = "src/AppB/GitVersion.yml",
-        },
-    ];
+    /// <summary>
+    ///     Gets or sets the products to declare instead of the default Shared, AppA and App.B.
+    /// </summary>
+    public IReadOnlyList<Product>? TestProducts { get; set; }
 
-    IReadOnlyList<Product> IProductsDefinition.Products => TestProducts;
+    IReadOnlyList<Product> IProductsDefinition.Products =>
+        TestProducts ??
+        [
+            new("Shared")
+            {
+                Paths = ["src/Shared/"],
+            },
+            new("AppA")
+            {
+                Paths = ["src/AppA/**"],
+                DependsOn = ["Shared"],
+                GitVersionConfig = FileSystem.AtomRootDirectory / "src/AppA/GitVersion.yml",
+            },
+            new("App.B")
+            {
+                Paths = ["src/AppB/**"],
+                GitVersionConfig = FileSystem.AtomRootDirectory / "src/AppB/GitVersion.yml",
+            },
+        ];
 }

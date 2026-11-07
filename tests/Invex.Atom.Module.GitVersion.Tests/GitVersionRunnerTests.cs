@@ -286,6 +286,7 @@ public sealed class GitVersionRunnerTests
         // Assert
         exception.Message.ShouldContain("gitversion-config");
         exception.Message.ShouldContain(RootPath("src/Missing/GitVersion.yml"));
+        exception.Message.ShouldContain("which must be a path relative to the Atom root directory");
         _processRunner.Calls.ShouldBeEmpty();
     }
 

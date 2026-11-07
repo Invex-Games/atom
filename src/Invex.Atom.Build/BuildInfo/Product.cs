@@ -33,11 +33,17 @@ namespace Invex.Atom.Build.BuildInfo;
 ///     {
 ///         Paths = ["src/AppA/**"],
 ///         DependsOn = ["Shared"],
-///         Directory = "src/AppA",
-///         GitVersionConfig = "src/AppA/GitVersion.yml",
+///         Directory = RootedFileSystem.AtomRootDirectory / "src/AppA",
+///         GitVersionConfig = RootedFileSystem.AtomRootDirectory / "src/AppA/GitVersion.yml",
 ///     },
 /// ];
 ///     </code>
+///     <para>
+///         <see cref="Directory" /> and <see cref="GitVersionConfig" /> are built from the Atom root directory, so declare
+///         the products in a property getter rather than an initializer. An interface build uses the
+///         <c>RootedFileSystem</c> property, as above; a build class uses its generated <c>FileSystem</c> property, such as
+///         <c>FileSystem.AtomRootDirectory / "src/AppA"</c>.
+///     </para>
 /// </example>
 [PublicAPI]
 public sealed record Product(string Name)
@@ -68,28 +74,29 @@ public sealed record Product(string Name)
     public IReadOnlyList<string> DependsOn { get; init; } = [];
 
     /// <summary>
-    ///     Gets the product's folder relative to the Atom root directory, such as <c>src/AppA</c>, or
+    ///     Gets the product's folder, such as <c>RootedFileSystem.AtomRootDirectory / "src/AppA"</c>, or
     ///     <see langword="null" /> if it has none.
     /// </summary>
     /// <remarks>
     ///     When the product is being built, the default build version provider reads the version from this folder's
     ///     <c>Directory.Build.props</c> before the repository root's.
     /// </remarks>
-    public string? Directory { get; init; }
+    public RootedPath? Directory { get; init; }
 
     /// <summary>
-    ///     Gets the path of the product's GitVersion configuration file relative to the Atom root directory, such as
-    ///     <c>src/AppA/GitVersion.yml</c>, or <see langword="null" /> if the product has none.
+    ///     Gets the product's GitVersion configuration file, such as
+    ///     <c>RootedFileSystem.AtomRootDirectory / "src/AppA/GitVersion.yml"</c>, or <see langword="null" /> if the
+    ///     product has none.
     /// </summary>
     /// <remarks>
     ///     When the product is being built, the GitVersion module uses this file unless <c>--gitversion-config</c> is
     ///     given, and <c>atom gen</c> writes it from the repository's root GitVersion configuration with this product's
     ///     <see cref="TagPrefix" /> and <c>ignore.paths</c>. Set it for every product that is built with GitVersion:
     ///     without it, GitVersion uses the root configuration, which counts every commit and reads the root tag prefix
-    ///     rather than <see cref="TagPrefix" />. It must not be one of the files GitVersion finds by itself in the
-    ///     repository root, such as <c>GitVersion.yml</c>.
+    ///     rather than <see cref="TagPrefix" />. It must be below the Atom root directory, and it must not be one of the
+    ///     files GitVersion finds by itself in the repository root, such as <c>GitVersion.yml</c>.
     /// </remarks>
-    public string? GitVersionConfig { get; init; }
+    public RootedPath? GitVersionConfig { get; init; }
 
     /// <summary>
     ///     Gets the product's release tag prefix.

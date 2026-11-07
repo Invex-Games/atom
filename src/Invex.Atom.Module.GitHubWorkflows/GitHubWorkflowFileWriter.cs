@@ -195,7 +195,7 @@ internal sealed class GitHubWorkflowFileWriter(
             .Select(x => x.Condition)
             .ToList();
 
-        if (ProductWorkflowOption.Get(workflow.Options) is { } product &&
+        if (ProductWorkflowOption.Get(workflow.Options) is { Product: { } product } &&
             workflow
                 .Triggers
                 .OfType<GitHubTrigger>()
