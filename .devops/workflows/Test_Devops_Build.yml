@@ -167,6 +167,15 @@ jobs:
         003_macos-latest_net10-0:
           job-runs-on: 'macos-latest'
           test-framework: 'net10.0'
+        004_windows-latest_net11-0:
+          job-runs-on: 'windows-latest'
+          test-framework: 'net11.0'
+        005_ubuntu-latest_net11-0:
+          job-runs-on: 'ubuntu-latest'
+          test-framework: 'net11.0'
+        006_macos-latest_net11-0:
+          job-runs-on: 'macos-latest'
+          test-framework: 'net11.0'
     pool:
       vmImage: $(job-runs-on)
     steps:

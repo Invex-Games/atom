@@ -23,9 +23,7 @@ public sealed class AT0003_ConfigureHostBuilderPartialMethodNotImplementedAnalyz
             return solution.WithProjectParseOptions(projectId, updatedParseOptions);
         });
 
-        configuration.ReferenceAssemblies = new("net10.0",
-            new("Microsoft.NETCore.App.Ref", "10.0.8"),
-            Path.Combine("ref", "net10.0"));
+        configuration.ReferenceAssemblies = TestReferenceAssemblies.Current;
 
         var assemblyReference = MetadataReference.CreateFromFile(typeof(BuildDefinition).Assembly.Location);
         configuration.TestState.AdditionalReferences.AddRange([assemblyReference]);

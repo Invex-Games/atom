@@ -110,7 +110,7 @@ jobs:
           - ubuntu-24.04-arm
           - macos-15-intel
           - macos-latest
-        test-framework: [ net10.0 ]
+        test-framework: [ net10.0, net11.0 ]
     steps:
 
       - name: Checkout
