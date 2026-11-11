@@ -260,6 +260,8 @@ jobs:
     variables:
       - name: build-id
         value: $[ dependencies.SetupBuildInfo.outputs['SetupBuildInfo.build-id'] ]
+      - name: build-version
+        value: $[ dependencies.SetupBuildInfo.outputs['SetupBuildInfo.build-version'] ]
     pool:
       vmImage: ubuntu-latest
     steps:
@@ -349,5 +351,6 @@ jobs:
         name: PushToNugetDevops
         env:
           build-id: $(build-id)
+          build-version: $(build-version)
           nuget-push-api-key: $(NUGET_PUSH_API_KEY)
           nuget-dry-run: true

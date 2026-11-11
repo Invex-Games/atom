@@ -14,6 +14,9 @@ internal interface IDeployTargets : INugetHelper, IGitHubReleaseHelper, ISetupBu
             .RequiresParam(nameof(NugetFeed))
             .RequiresParam(nameof(NugetApiKey))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildId))
+            // PushProject picks each package by BuildVersion. Without this the job recomputes it, and a release run's
+            // detached tag checkout can produce a different version from the one the packages were built with.
+            .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildVersion))
             .ConsumesArtifacts(nameof(IBuildTargets.PackProjects), IBuildTargets.ProjectsToPack)
             .ConsumesArtifact(nameof(IBuildTargets.PackTool), Projects.Invex_Atom_Tool.Name, PlatformNames)
             .DependsOn(nameof(ITestTargets.TestProjects))
@@ -41,6 +44,9 @@ internal interface IDeployTargets : INugetHelper, IGitHubReleaseHelper, ISetupBu
             .RequiresParam(nameof(NugetFeed))
             .RequiresParam(nameof(NugetApiKey))
             .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildId))
+            // PushProject picks each package by BuildVersion. Without this the job recomputes it, and a release run's
+            // detached tag checkout can produce a different version from the one the packages were built with.
+            .ConsumesVariable(nameof(SetupBuildInfo), nameof(BuildVersion))
             .ConsumesArtifacts(nameof(IBuildTargets.PackProjects), IBuildTargets.ProjectsToPack)
             .ConsumesArtifact(nameof(IBuildTargets.PackTool), Projects.Invex_Atom_Tool.Name, DevOpsPlatformNames)
             .DependsOn(nameof(ITestTargets.TestProjects))
