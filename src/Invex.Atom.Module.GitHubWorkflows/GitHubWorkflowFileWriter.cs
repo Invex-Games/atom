@@ -550,7 +550,7 @@ internal sealed class GitHubWorkflowFileWriter(
                 $"Unknown additional step type: {additionalStep.GetType().FullName}"),
         };
 
-    private static Step.UsesStep BuildSetupDotnetStep(SetupDotnetStep step)
+    internal static Step.UsesStep BuildSetupDotnetStep(SetupDotnetStep step)
     {
         var with = new Dictionary<string, Template>();
 
@@ -558,8 +558,8 @@ internal sealed class GitHubWorkflowFileWriter(
         {
             with.Add("dotnet-version", step.DotnetVersion);
 
-            if (step.Quality is not null)
-                with.Add("quality", step.Quality.ToString()!.ToLowerInvariant());
+            if (step.Quality is { } quality)
+                with.Add("dotnet-quality", ToSetupDotnetQuality(quality));
         }
 
         return new()
@@ -573,6 +573,17 @@ internal sealed class GitHubWorkflowFileWriter(
                 : null,
         };
     }
+
+    // actions/setup-dotnet accepts only daily, preview and ga, and fails the step for any other value.
+    private static string ToSetupDotnetQuality(SetupDotnetStep.DotnetQuality quality) =>
+        quality switch
+        {
+            SetupDotnetStep.DotnetQuality.Daily => "daily",
+            SetupDotnetStep.DotnetQuality.Preview => "preview",
+            SetupDotnetStep.DotnetQuality.Ga => "ga",
+            _ => throw new NotSupportedException(
+                $"actions/setup-dotnet does not support the '{quality}' quality. Use Daily, Preview or Ga."),
+        };
 
     private static Step.RunStep BuildAddNugetFeedsStep(AddNugetFeedsStep step)
     {

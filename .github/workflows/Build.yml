@@ -34,6 +34,11 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Setup .NET 11.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 11.0.x
+
       - name: SetupBuildInfo
         id: SetupBuildInfo
         run: dotnet run --project _atom/_atom.csproj -- SetupBuildInfo --skip --headless
@@ -51,6 +56,11 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
+
+      - name: Setup .NET 11.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 11.0.x
 
       - name: PackProjects
         id: PackProjects
@@ -127,6 +137,11 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Setup .NET 11.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 11.0.x
+
       - name: PackTool
         id: PackTool
         run: dotnet run --project _atom/_atom.csproj -- PackTool --skip --headless
@@ -164,10 +179,16 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Setup .NET 11.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 11.0.x
+
       - name: TestProjects
         id: TestProjects
         run: dotnet run --project _atom/_atom.csproj -- TestProjects --skip --headless
         env:
+          VSTEST_DISABLE_ARTIFACTS_DIRECTORY_VERIFICATION: 1
           job-runs-on: ${{ matrix.job-runs-on }}
           test-framework: ${{ matrix.test-framework }}
           build-slice: '${{ matrix.job-runs-on }}-${{ matrix.test-framework }}'
@@ -246,6 +267,11 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Setup .NET 11.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 11.0.x
+
       - name: BuildDocs
         id: BuildDocs
         run: dotnet run --project _atom/_atom.csproj -- BuildDocs --skip --headless
@@ -274,6 +300,11 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Setup .NET 11.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 11.0.x
+
       - name: Retrieve GeneratedDocs
         uses: actions/download-artifact@v8
         with:
@@ -300,6 +331,11 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
+
+      - name: Setup .NET 11.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 11.0.x
 
       - name: Retrieve Invex.Atom.Build
         uses: actions/download-artifact@v8
@@ -409,6 +445,11 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
+
+      - name: Setup .NET 11.0.x
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 11.0.x
 
       - name: Retrieve Invex.Atom.Build
         uses: actions/download-artifact@v8

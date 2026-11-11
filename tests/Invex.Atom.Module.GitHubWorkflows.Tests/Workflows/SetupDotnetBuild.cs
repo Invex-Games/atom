@@ -12,7 +12,11 @@ public partial class SetupDotnetBuild : WorkflowBuildDefinition, IGitHubWorkflow
             [
                 new(nameof(ISetupDotnetTarget.SetupDotnetTarget))
                 {
-                    Options = [BuildOptions.Steps.SetupDotnet.Dotnet90X()],
+                    Options =
+                    [
+                        BuildOptions.Steps.SetupDotnet.Dotnet90X(),
+                        BuildOptions.Steps.SetupDotnet.From("11.0.x", SetupDotnetStep.DotnetQuality.Preview),
+                    ],
                 },
             ],
             Types = [WorkflowTypes.GitHub.Action],

@@ -42,11 +42,19 @@ internal interface IBuild : IWorkflowBuildDefinition,
         $"{Tex.GitHub.Workflow}-{Tex.GitHub.Ref}",
         true);
 
+    // The VSTest in the .NET 11 SDK refuses a test session directory that other users can access and fails the run.
+    // The ubuntu-24.04-arm runner's XDG_RUNTIME_DIR trips this, even though every test passes. Runners are single-use VMs,
+    // so the check protects nothing there.
+    static readonly IBuildOption SkipVstestArtifactsDirectoryCheck =
+        BuildOptions.Inject.EnvironmentVariable("VSTEST_DISABLE_ARTIFACTS_DIRECTORY_VERIFICATION", "1");
+
     IReadOnlyList<IBuildOption> IBuildDefinition.Options =>
     [
         BuildOptions.GitVersion.ProvideBuildId,
         BuildOptions.GitVersion.ProvideBuildVersion,
         BuildOptions.Steps.SetupDotnet.Dotnet100X(),
+        // .NET 11 SDK. The .NET 10 step above still provides the runtime for net10.0 tests.
+        BuildOptions.Steps.SetupDotnet.Dotnet110X(),
     ];
 
     IReadOnlyList<WorkflowDefinition> IWorkflowBuildDefinition.Workflows =>
@@ -90,6 +98,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     [
                         BuildOptions.Target.SuppressArtifactPublishing,
                         BuildOptions.GitHub.RunsOn.SetByMatrix,
+                        SkipVstestArtifactsDirectoryCheck,
                     ],
                 },
                 new(nameof(BuildDocs))
@@ -170,6 +179,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
                     Options =
                     [
                         BuildOptions.GitHub.RunsOn.SetByMatrix,
+                        SkipVstestArtifactsDirectoryCheck,
                     ],
                 },
                 new(nameof(BuildDocs)),
