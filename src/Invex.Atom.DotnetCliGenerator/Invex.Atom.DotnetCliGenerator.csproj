@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFrameworks>net10.0;net11.0</TargetFrameworks>
+    <!-- Single target so `dotnet run` and `atom -p` work without choosing a framework. -->
+    <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>Atom</RootNamespace>
   </PropertyGroup>
 
