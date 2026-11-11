@@ -259,6 +259,19 @@ public static class WorkflowBuildOptionsExtensions
                 };
 
             /// <summary>
+            ///     Creates a step that installs the latest .NET 11.0 SDK.
+            /// </summary>
+            /// <param name="cache">Whether to enable NuGet package caching.</param>
+            /// <param name="lockFile">An optional path to a lock file used as the cache key.</param>
+            /// <returns>A <see cref="SetupDotnetStep" /> option.</returns>
+            public SetupDotnetStep Dotnet110X(bool cache = false, string? lockFile = null) =>
+                new("11.0.x")
+                {
+                    Cache = cache,
+                    LockFile = lockFile,
+                };
+
+            /// <summary>
             ///     Creates a step that installs a custom .NET SDK version.
             /// </summary>
             /// <param name="dotnetVersion">An optional expression that resolves to the SDK version to install.</param>

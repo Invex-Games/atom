@@ -8,6 +8,7 @@
 /// </param>
 /// <param name="Quality">
 ///     The quality of the .NET SDK to install (e.g., Preview, GA). If null, the default quality is used.
+///     GitHub workflows support only Daily, Preview and Ga; generating one with Signed or Validated throws.
 /// </param>
 /// <param name="Cache">Whether to cache the installed .NET SDK.</param>
 /// <param name="LockFile">The path to the project's lock file (e.g., "**/packages.lock.json")</param>
