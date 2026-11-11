@@ -19,8 +19,9 @@ for .NET. Keep changes focused; `README.md` and `docs/` describe consumer-facing
 
 The solution is `Invex.Atom.slnx`. The repository currently requires the .NET 11 SDK; libraries,
 tests, and the build project all target `net10.0`.
-`global.json` pins SDK `11.0.100` with `rollForward: latestMajor` and `allowPrerelease: false`, so any installed stable
-SDK at 11.0.100 or later (including later majors) is used; preview SDKs are not. CI installs the .NET 10 SDK as well, for the
+`global.json` pins SDK `11.0.100` with `rollForward: latestMinor` and `allowPrerelease: false`, so any installed stable
+11.x SDK at 11.0.100 or later is used; preview SDKs are not. (`latestMajor` would make `actions/setup-dotnet` install the
+LTS SDK instead of 11, which breaks GitHub's NuGet dependency submission.) CI installs the .NET 10 SDK as well, for the
 `net10.0` runtime.
 
 ## Build, test, and cleanup
