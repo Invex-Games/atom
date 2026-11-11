@@ -31,10 +31,10 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Setup .NET 11.0.100-rc.2.26504.105
+      - name: Setup .NET 11.0.x
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 11.0.100-rc.2.26504.105
+          dotnet-version: 11.0.x
 
       - name: ApproveDependabotPr
         id: ApproveDependabotPr
