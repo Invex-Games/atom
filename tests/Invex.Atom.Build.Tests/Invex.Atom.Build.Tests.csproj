@@ -5,6 +5,8 @@
     <TargetFrameworks>net10.0;net11.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <UserSecretsId>invex.atom.tests</UserSecretsId>
+    <!-- UserSecretsVaultTests read and write one shared user-secrets store, so the two frameworks must not run at once. -->
+    <TestTfmsInParallel>false</TestTfmsInParallel>
   </PropertyGroup>
 
   <ItemGroup>
