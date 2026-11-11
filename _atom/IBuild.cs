@@ -36,6 +36,7 @@ internal interface IBuild : IWorkflowBuildDefinition,
     static readonly string[] FrameworkNames =
     [
         WorkflowLabels.Dotnet.Framework.Net_10_0,
+        WorkflowLabels.Dotnet.Framework.Net_11_0,
     ];
 
     static readonly IBuildOption CancelSupersededWorkflowRuns = BuildOptions.GitHub.Concurrency.Set(
