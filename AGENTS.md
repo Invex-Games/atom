@@ -17,12 +17,14 @@ for .NET. Keep changes focused; `README.md` and `docs/` describe consumer-facing
 | `samples/` | Small consumer examples |
 | `docs/`, `api/` | DocFX documentation source and generated API content |
 
-The solution is `Invex.Atom.slnx`. The repository currently requires the .NET 11 SDK, plus the .NET 10 runtime (or SDK); libraries,
-tests, and the build project all target `net10.0`.
+The solution is `Invex.Atom.slnx`. The repository currently requires the .NET 11 SDK, plus the .NET 10 runtime (or SDK). The libraries and
+tests target `net10.0` and `net11.0`. The analyzer and source generator projects target `netstandard2.0`. The
+`Invex.Atom.Tool` global tool, the `_atom` build project, and the samples target `net10.0` only: a Native AOT
+(RID-specific) tool package has no per-framework folder, so the tool can't be packed for two frameworks.
 `global.json` pins SDK `11.0.100` with `rollForward: latestMinor` and `allowPrerelease: false`, so any installed stable
 11.x SDK at 11.0.100 or later is used; preview SDKs are not. (`latestMajor` would make `actions/setup-dotnet` install the
 LTS SDK instead of 11, which breaks GitHub's NuGet dependency submission.) CI installs the .NET 10 SDK as well, for the
-`net10.0` runtime.
+`net10.0` runtime, and runs the tests on both `net10.0` and `net11.0`.
 
 ## Build, test, and cleanup
 

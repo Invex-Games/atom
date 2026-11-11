@@ -25,11 +25,7 @@ public sealed class AT0001_TargetRequiringParamShouldNotDirectlyReferenceParamAn
             return solution.WithProjectParseOptions(projectId, updatedParseOptions);
         });
 
-        // TODO: Use standard .NET 10.0 reference assemblies when available
-        // configuration.ReferenceAssemblies = ReferenceAssemblies.Net.Net100;
-        configuration.ReferenceAssemblies = new("net10.0",
-            new("Microsoft.NETCore.App.Ref", "10.0.8"),
-            Path.Combine("ref", "net10.0"));
+        configuration.ReferenceAssemblies = TestReferenceAssemblies.Current;
 
         var assemblyReference = MetadataReference.CreateFromFile(typeof(BuildDefinition).Assembly.Location);
         configuration.TestState.AdditionalReferences.AddRange([assemblyReference]);

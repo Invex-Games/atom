@@ -32,7 +32,7 @@ debug it like standard code, and automatically generate CI/CD configuration file
 
 ## Installation
 
-Atom build projects require the .NET 10 SDK. The libraries target `net10.0`.
+Atom build projects require the .NET 10 SDK or later. The libraries target `net10.0` and `net11.0`.
 
 Add the core package to your build project (commonly `_atom/_atom.csproj`):
 
@@ -225,7 +225,8 @@ Full documentation: [https://invex-games.github.io/atom/](https://invex-games.gi
 
 ## Development
 
-The solution is `Invex.Atom.slnx` and requires the .NET 11 SDK, plus the .NET 10 runtime (or SDK) for the `net10.0` projects:
+The solution is `Invex.Atom.slnx` and requires the .NET 11 SDK, plus the .NET 10 runtime (or SDK) for the `net10.0` targets. Libraries and tests target both
+`net10.0` and `net11.0`:
 
 ```shell
 dotnet build Invex.Atom.slnx

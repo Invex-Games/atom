@@ -6,6 +6,12 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>atom</ToolCommandName>
     <PackageId>Invex.Atom.Tool</PackageId>
+    <!--
+      Single target on purpose. A RID-specific (Native AOT) tool package stores its files under tools/any/<rid>, with
+      no framework folder, and so does the framework-dependent tools/any/any package. A second target framework
+      therefore collides when packing (NU5118). The AOT binaries are self-contained either way.
+      Invex.Atom.Tool.Tests still runs the tool's code on both net10.0 and net11.0.
+    -->
     <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
