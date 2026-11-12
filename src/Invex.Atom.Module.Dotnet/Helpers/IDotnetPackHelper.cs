@@ -136,11 +136,23 @@ public interface IDotnetPackHelper : IDotnetCliHelper, IBuildInfo
 
         await DotnetCli.Pack(projectPath, options.PackOptions, cancellationToken: cancellationToken);
 
-        var packagedFile = RootedFileSystem.CreateRootedPath(RootedFileSystem
-            .Directory
-            .GetFiles(buildDirectory, $"{projectName}.*.nupkg")
-            .OrderDescending()
-            .First());
+        var packages = RootedFileSystem.Directory.Exists(buildDirectory)
+            ? RootedFileSystem
+                .Directory
+                .GetFiles(buildDirectory, $"{projectName}.*.nupkg")
+                .OrderDescending()
+                .Select(RootedFileSystem.CreateRootedPath)
+                .ToArray()
+            : [];
+
+        var packagedFile = options.PackageFileName is { Length: > 0 } packageFileName
+            ? packages.FirstOrDefault(x => string.Equals(x.FileName, packageFileName, StringComparison.OrdinalIgnoreCase))
+            : packages.FirstOrDefault();
+
+        if (packagedFile is null)
+            throw new StepFailedException(options.PackageFileName is { Length: > 0 }
+                ? $"Package {options.PackageFileName} was not found in {buildDirectory}. Found: {(packages.Length > 0 ? string.Join(", ", packages.Select(x => x.FileName)) : "none")}."
+                : $"No {projectName}.*.nupkg package was found in {buildDirectory}.");
 
         if (!packagedFile.FileExists)
             throw new StepFailedException($"Package {packagedFile} does not exist.");
@@ -212,4 +224,19 @@ public sealed record DotnetPackAndStageOptions
     ///     and recreated before moving the new package. Defaults to <c>true</c>.
     /// </remarks>
     public bool ClearPublishDirectory { get; init; } = true;
+
+    /// <summary>
+    ///     Gets or sets the file name of the package to stage, such as <c>MyTool.linux-x64.1.2.3.nupkg</c>.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         Set this when `dotnet pack` writes more than one package for the project, for example a RID-specific tool
+    ///         that produces a top-level package and one package per runtime. The named package is staged and the others
+    ///         are left in the build directory. Staging fails if no package with this name was produced.
+    ///     </para>
+    ///     <para>
+    ///         When <c>null</c> (the default), the last <c>{project}.*.nupkg</c> file in ordinal order is staged.
+    ///     </para>
+    /// </remarks>
+    public string? PackageFileName { get; init; }
 }
