@@ -136,10 +136,15 @@ public interface IDotnetPackHelper : IDotnetCliHelper, IBuildInfo
 
         await DotnetCli.Pack(projectPath, options.PackOptions, cancellationToken: cancellationToken);
 
+        // An explicit file name may use a PackageId that differs from the project name, so search every package then.
+        var packageSearchPattern = options.PackageFileName is { Length: > 0 }
+            ? "*.nupkg"
+            : $"{projectName}.*.nupkg";
+
         var packages = RootedFileSystem.Directory.Exists(buildDirectory)
             ? RootedFileSystem
                 .Directory
-                .GetFiles(buildDirectory, $"{projectName}.*.nupkg")
+                .GetFiles(buildDirectory, packageSearchPattern)
                 .OrderDescending()
                 .Select(RootedFileSystem.CreateRootedPath)
                 .ToArray()
