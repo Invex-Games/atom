@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Interface IGitHubReleaseHelper | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Interface IGitHubReleaseHelper | Atom ">
+      
+      <meta name="description" content="Provides helper methods for interacting with GitHub Releases within Invex.Atom builds.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Module.GitHubWorkflows.Helpers.IGitHubReleaseHelper">
+
+
+
+  <h1 id="Invex_Atom_Module_GitHubWorkflows_Helpers_IGitHubReleaseHelper" data-uid="Invex.Atom.Module.GitHubWorkflows.Helpers.IGitHubReleaseHelper" class="text-break">
+Interface IGitHubReleaseHelper  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Invex</span>.<span class="xref">Atom</span>.<span class="xref">Module</span>.<a class="xref" href="Invex.Atom.Module.GitHubWorkflows.html">GitHubWorkflows</a>.<a class="xref" href="Invex.Atom.Module.GitHubWorkflows.Helpers.html">Helpers</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Module.GitHubWorkflows.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Provides helper methods for interacting with GitHub Releases within Invex.Atom builds.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IGitHubReleaseHelper : IGitHubHelper, IBuildAccessor</code></pre>
+  </div>
+
+
+
+
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="Invex.Atom.Module.GitHubWorkflows.Helpers.IGitHubHelper.html#Invex_Atom_Module_GitHubWorkflows_Helpers_IGitHubHelper_GitHubToken">IGitHubHelper.GitHubToken</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_GetService__1">IBuildAccessor.GetService&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_GetServices__1">IBuildAccessor.GetServices&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_GetParam__1_System_Linq_Expressions_Expression_System_Func___0_____0_System_Func_System_String___0__">IBuildAccessor.GetParam&lt;T&gt;(Expression&lt;Func&lt;T&gt;&gt;, T, Func&lt;string, T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_Services">IBuildAccessor.Services</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_Logger">IBuildAccessor.Logger</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_RootedFileSystem">IBuildAccessor.RootedFileSystem</a>
+    </div>
+    <div>
+      <a class="xref" href="Invex.Atom.Build.IBuildAccessor.html#Invex_Atom_Build_IBuildAccessor_ProcessRunner">IBuildAccessor.ProcessRunner</a>
+    </div>
+  </dd></dl>
+
+
+
+
+  <h2 id="Invex_Atom_Module_GitHubWorkflows_Helpers_IGitHubReleaseHelper_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>This interface extends <a class="xref" href="Invex.Atom.Module.GitHubWorkflows.Helpers.IGitHubHelper.html">IGitHubHelper</a> to provide functionality for
+uploading artifacts to a GitHub Release, leveraging the GitHub API.</p>
+</div>
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Invex_Atom_Module_GitHubWorkflows_Helpers_IGitHubReleaseHelper_UploadArtifactToRelease_" data-uid="Invex.Atom.Module.GitHubWorkflows.Helpers.IGitHubReleaseHelper.UploadArtifactToRelease*"></a>
+
+  <h3 id="Invex_Atom_Module_GitHubWorkflows_Helpers_IGitHubReleaseHelper_UploadArtifactToRelease_System_String_System_String_System_Boolean_System_Threading_CancellationToken_" data-uid="Invex.Atom.Module.GitHubWorkflows.Helpers.IGitHubReleaseHelper.UploadArtifactToRelease(System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
+  UploadArtifactToRelease(string, string, bool, CancellationToken)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Uploads a build artifact to a specified GitHub Release.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task UploadArtifactToRelease(string artifactName, string releaseTag, bool dryRunWhenNotRunningInGitHubActions = true, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>artifactName</code> <span class="xref">string</span></dt>
+    <dd><p>The name of the artifact to upload. This name should correspond to a directory within the
+Atom artifacts directory.</p>
+</dd>
+    <dt><code>releaseTag</code> <span class="xref">string</span></dt>
+    <dd><p>The tag of the GitHub Release to which the artifact should be uploaded (e.g., &quot;v1.0.0&quot;).</p>
+</dd>
+    <dt><code>dryRunWhenNotRunningInGitHubActions</code> <span class="xref">bool</span></dt>
+    <dd><p>If <code>true</code> (default), the upload operation will be simulated (logged but not executed)
+when the build is not running in a GitHub Actions environment.</p>
+</dd>
+    <dt><code>cancellationToken</code> <span class="xref">CancellationToken</span></dt>
+    <dd><p>A cancellation token to observe while waiting for the task to complete.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Task</span></dt>
+    <dd><p>A <span class="xref">System.Threading.Tasks.Task</span> representing the asynchronous operation.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GitHubWorkflows_Helpers_IGitHubReleaseHelper_UploadArtifactToRelease_System_String_System_String_System_Boolean_System_Threading_CancellationToken__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>The artifact will be zipped before uploading if it's a directory.</p>
+</div>
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><span class="xref">InvalidOperationException</span></dt>
+    <dd><p>Thrown if no release exists with the given tag.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Invex_Atom_Module_GitHubWorkflows_Helpers_IGitHubReleaseHelper_UploadAssetToRelease_" data-uid="Invex.Atom.Module.GitHubWorkflows.Helpers.IGitHubReleaseHelper.UploadAssetToRelease*"></a>
+
+  <h3 id="Invex_Atom_Module_GitHubWorkflows_Helpers_IGitHubReleaseHelper_UploadAssetToRelease_System_String_Invex_FileSystem_RootedPath_System_Boolean_System_Threading_CancellationToken_" data-uid="Invex.Atom.Module.GitHubWorkflows.Helpers.IGitHubReleaseHelper.UploadAssetToRelease(System.String,Invex.FileSystem.RootedPath,System.Boolean,System.Threading.CancellationToken)">
+  UploadAssetToRelease(string, RootedPath, bool, CancellationToken)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Uploads a generic asset (file or directory) to a specified GitHub Release.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task UploadAssetToRelease(string releaseTag, RootedPath assetPath, bool dryRunWhenNotRunningInGitHubActions = true, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>releaseTag</code> <span class="xref">string</span></dt>
+    <dd><p>The tag of the GitHub Release to which the asset should be uploaded (e.g., &quot;v1.0.0&quot;).</p>
+</dd>
+    <dt><code>assetPath</code> <span class="xref">RootedPath</span></dt>
+    <dd><p>The path to the asset (file or directory) to upload.</p>
+</dd>
+    <dt><code>dryRunWhenNotRunningInGitHubActions</code> <span class="xref">bool</span></dt>
+    <dd><p>If <code>true</code> (default), the upload operation will be simulated (logged but not executed)
+when the build is not running in a GitHub Actions environment.</p>
+</dd>
+    <dt><code>cancellationToken</code> <span class="xref">CancellationToken</span></dt>
+    <dd><p>A cancellation token to observe while waiting for the task to complete.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Task</span></dt>
+    <dd><p>A <span class="xref">System.Threading.Tasks.Task</span> representing the asynchronous operation.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Module_GitHubWorkflows_Helpers_IGitHubReleaseHelper_UploadAssetToRelease_System_String_Invex_FileSystem_RootedPath_System_Boolean_System_Threading_CancellationToken__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If <code class="paramref">assetPath</code> points to a directory, it will be zipped into a <code>.zip</code> file
+with the same name before uploading. If it points to a file that is not a <code>.zip</code> file,
+a <code>.zip</code> file containing only that file is uploaded.</p>
+</div>
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><span class="xref">InvalidOperationException</span></dt>
+    <dd><p>Thrown if no release exists with the given tag.</p>
+</dd>
+  </dl>
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom · MIT License · Invex Games
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
