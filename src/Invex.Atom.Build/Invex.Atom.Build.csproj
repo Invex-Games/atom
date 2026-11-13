@@ -5,23 +5,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Invex.FileSystem" Version="2.3.0" />
-    <PackageReference Include="Invex.Process" Version="2.3.0" />
-    <PackageReference Include="Invex.SemanticVersion" Version="2.3.0" />
+    <PackageReference Include="Invex.FileSystem" Version="2.4.0" />
+    <PackageReference Include="Invex.Process" Version="2.4.0" />
+    <PackageReference Include="Invex.SemanticVersion" Version="2.4.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.14" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.14" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.14" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="11.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="11.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="11.0.0" />
     <PackageReference Include="Spectre.Console" Version="0.57.2" />
-    <PackageReference Include="System.IO.Abstractions" Version="22.3.0" />
+    <PackageReference Include="System.IO.Abstractions" Version="23.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Invex.RepoUtils.PublicApiAnalyzers" Version="3.0.0">
+    <PackageReference Include="Invex.RepoUtils.PublicApiAnalyzers" Version="3.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.14" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="11.0.0" />
     <PackageReference Include="Roslynator.Analyzers" Version="5.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

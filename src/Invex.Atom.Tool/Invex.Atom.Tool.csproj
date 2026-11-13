@@ -38,7 +38,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" />
-    <PackageReference Include="System.IO.Abstractions" Version="22.3.0" />
+    <PackageReference Include="System.IO.Abstractions" Version="23.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,7 +61,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-    <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="10.0.14" />
+    <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="11.0.0" />
   </ItemGroup>
 
 </Project>
