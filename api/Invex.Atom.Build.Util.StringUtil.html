@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class StringUtil | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class StringUtil | Atom ">
+      
+      <meta name="description" content="Provides utility methods for string manipulation and operations.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Invex.Atom.Build.Util.StringUtil">
+
+
+
+  <h1 id="Invex_Atom_Build_Util_StringUtil" data-uid="Invex.Atom.Build.Util.StringUtil" class="text-break">
+Class StringUtil  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">Invex</span>.<span class="xref">Atom</span>.<a class="xref" href="Invex.Atom.Build.html">Build</a>.<a class="xref" href="Invex.Atom.Build.Util.html">Util</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Invex.Atom.Build.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Provides utility methods for string manipulation and operations.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class StringUtil</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">StringUtil</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Invex_Atom_Build_Util_StringUtil_GetLevenshteinDistance_" data-uid="Invex.Atom.Build.Util.StringUtil.GetLevenshteinDistance*"></a>
+
+  <h3 id="Invex_Atom_Build_Util_StringUtil_GetLevenshteinDistance_System_String_System_String_" data-uid="Invex.Atom.Build.Util.StringUtil.GetLevenshteinDistance(System.String,System.String)">
+  GetLevenshteinDistance(string?, string?)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Calculates the Levenshtein distance between two strings.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int GetLevenshteinDistance(this string? @string, string? compareTo)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>string</code> <span class="xref">string</span></dt>
+    <dd></dd>
+    <dt><code>compareTo</code> <span class="xref">string</span></dt>
+    <dd><p>The target string to compare to.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">int</span></dt>
+    <dd><p>The Levenshtein distance as an integer. Returns 0 if both strings are null or empty.
+If one string is null/empty and the other is not, returns the length of the non-empty string.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_Util_StringUtil_GetLevenshteinDistance_System_String_System_String__examples">Examples</h4>
+  <pre><code class="lang-csharp">"kitten".GetLevenshteinDistance("sitting"); // Returns 3
+"".GetLevenshteinDistance("abc"); // Returns 3
+"test".GetLevenshteinDistance("test"); // Returns 0</code></pre>
+
+
+
+
+
+
+  <a id="Invex_Atom_Build_Util_StringUtil_SanitizeForLogging_" data-uid="Invex.Atom.Build.Util.StringUtil.SanitizeForLogging*"></a>
+
+  <h3 id="Invex_Atom_Build_Util_StringUtil_SanitizeForLogging_System_String_System_Boolean_System_Int32_" data-uid="Invex.Atom.Build.Util.StringUtil.SanitizeForLogging(System.String,System.Boolean,System.Int32)">
+  SanitizeForLogging(string?, bool, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sanitizes a string for safe logging by removing or replacing problematic characters and optionally truncating it.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string? SanitizeForLogging(this string? @string, bool stripNewlines = true, int maxLength = 4096)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>string</code> <span class="xref">string</span></dt>
+    <dd></dd>
+    <dt><code>stripNewlines</code> <span class="xref">bool</span></dt>
+    <dd><p>If <code>true</code>, replaces newline characters with spaces. Defaults to <code>true</code>.</p>
+</dd>
+    <dt><code>maxLength</code> <span class="xref">int</span></dt>
+    <dd><p>The maximum length of the returned string. Defaults to 4096 characters.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd><p>The sanitized string, or <code>null</code> if the input was <code>null</code>. If truncated, the string ends with &quot;...&quot;.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+  <h4 class="section" id="Invex_Atom_Build_Util_StringUtil_SanitizeForLogging_System_String_System_Boolean_System_Int32__examples">Examples</h4>
+  <pre><code class="lang-csharp">"Hello\nWorld".SanitizeForLogging(); // Returns "Hello World"
+new string('A', 5000).SanitizeForLogging(maxLength: 100); // Returns "AAAA... (97 more A's)"
+"Normal text".SanitizeForLogging(); // Returns "Normal text"</code></pre>
+
+
+
+
+
+
+  <a id="Invex_Atom_Build_Util_StringUtil_SanitizeSecrets_" data-uid="Invex.Atom.Build.Util.StringUtil.SanitizeSecrets*"></a>
+
+  <h3 id="Invex_Atom_Build_Util_StringUtil_SanitizeSecrets_System_String_System_Collections_Generic_IEnumerable_System_String__" data-uid="Invex.Atom.Build.Util.StringUtil.SanitizeSecrets(System.String,System.Collections.Generic.IEnumerable{System.String})">
+  SanitizeSecrets(string?, IEnumerable&lt;string&gt;)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sanitizes a string by replacing specified secret substrings with asterisks or a fixed mask, ensuring that the
+secrets are not exposed in logs or outputs.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string? SanitizeSecrets(this string? @string, IEnumerable&lt;string&gt; secrets)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>string</code> <span class="xref">string</span></dt>
+    <dd></dd>
+    <dt><code>secrets</code> <span class="xref">IEnumerable</span>&lt;<span class="xref">string</span>&gt;</dt>
+    <dd><p>A list of secret substrings to be sanitized from the input string. Secrets that are null or empty
+will be ignored.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd><p>The sanitized string with secrets replaced, or <code>null</code> if the input string was <code>null</code> or empty, or if no
+valid secrets were provided. If the input string is shorter than the shortest valid secret, it will be returned
+unchanged.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom · MIT License · Invex Games
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

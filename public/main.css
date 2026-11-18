@@ -1,0 +1,6 @@
+#logo {
+  width: 32px !important;
+  height: 32px !important;
+  object-fit: contain !important;
+  margin-right: 8px !important;
+}

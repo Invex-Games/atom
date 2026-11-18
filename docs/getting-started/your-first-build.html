@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Your First Build | Atom </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Your First Build | Atom ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Invex-Games/atom/blob/main/docs/getting-started/your-first-build.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/icon.png" alt="Atom">
+            Atom
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="your-first-build">Your First Build</h1>
+
+<p>This guide walks you through creating a minimal Atom build, running it locally, and passing it a parameter. Start
+here if you have not used Atom before.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><p><a href="https://dotnet.microsoft.com/download">.NET 10 SDK</a></p>
+</li>
+<li><p>Optionally, the <code>atom</code> global tool, which finds and runs your build from any directory below it:</p>
+<pre><code class="lang-shell">dotnet tool install --global Invex.Atom.Tool
+</code></pre>
+</li>
+</ul>
+<div class="NOTE">
+<h5>Note</h5>
+<p>The examples below use <code>atom &lt;target&gt;</code>. The .NET CLI works too: <code>dotnet run --project _atom -- &lt;target&gt;</code> for a
+project-based build, or <code>dotnet run Build.cs &lt;target&gt;</code> for a file-based build. See the <a href="../reference/cli.html">CLI reference</a>.</p>
+</div>
+<h2 id="option-1-project-based-build">Option 1: project-based build</h2>
+<p>Most repositories keep their build in a dedicated project, conventionally named <code>_atom</code>.</p>
+<ol>
+<li><p>Create a .NET 10 project:</p>
+<pre><code class="lang-shell">dotnet new console -n _atom
+</code></pre>
+</li>
+<li><p>Replace the contents of <code>_atom.csproj</code>. The Worker SDK provides the hosting and logging implicit usings that
+build definitions rely on:</p>
+<pre><code class="lang-xml">&lt;Project Sdk=&quot;Microsoft.NET.Sdk.Worker&quot;&gt;
+
+  &lt;PropertyGroup&gt;
+    &lt;TargetFramework&gt;net10.0&lt;/TargetFramework&gt;
+    &lt;RootNamespace&gt;Atom&lt;/RootNamespace&gt;
+  &lt;/PropertyGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;PackageReference Include=&quot;Invex.Atom.Build&quot; Version=&quot;3.*&quot; /&gt;
+  &lt;/ItemGroup&gt;
+
+&lt;/Project&gt;
+</code></pre>
+</li>
+<li><p>Replace <code>Program.cs</code> with <code>IBuild.cs</code>. <code>[GenerateEntryPoint]</code> generates the <code>Main</code> method for you:</p>
+<pre><code class="lang-csharp">using Invex.Atom.Build.Definition;
+using Invex.Atom.Build.Hosting;
+
+namespace Atom;
+
+[BuildDefinition]
+[GenerateEntryPoint]
+internal interface IBuild : IBuildDefinition
+{
+    Target HelloWorld =&gt;
+        t =&gt; t
+            .DescribedAs(&quot;Prints a hello world message to the console&quot;)
+            .Executes(() =&gt; Logger.LogInformation(&quot;Hello, World!&quot;));
+}
+</code></pre>
+<p>The <code>using</code> lines are optional: <code>Invex.Atom.Build</code> adds its namespaces as global usings when referenced from NuGet.
+If you prefer to write the build as a class, for example to keep host hooks such as <code>OnConfigureHostBuilder</code> in the
+same type, use an <code>internal partial class Build : BuildDefinition</code> instead (see <a href="../core-concepts/build-definitions.html">Build Definitions</a>).</p>
+</li>
+<li><p>Run the build:</p>
+<pre><code class="lang-shell">atom HelloWorld
+</code></pre>
+<pre><code class="lang-text">26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
+01:16:47.552 INF Executing build
+
+HelloWorld
+
+Prints a hello world message to the console
+
+26-06-06 +10:00  HelloWorld | Atom.Build:
+01:16:47.616 INF Hello, World!
+
+
+Build Summary
+
+  HelloWorld │ Succeeded │ &lt;0.01s
+</code></pre>
+</li>
+</ol>
+<h2 id="option-2-file-based-build">Option 2: file-based build</h2>
+<p>Atom can also run as a .NET file-based app. Create <code>Atom.cs</code> anywhere on disk:</p>
+<pre><code class="lang-csharp">#:sdk Microsoft.NET.Sdk.Worker
+#:package Invex.Atom.Build@3.*
+
+using Invex.Atom.Build.Definition;
+using Invex.Atom.Build.Hosting;
+
+namespace Atom;
+
+[BuildDefinition]
+[GenerateEntryPoint]
+internal interface IBuild : IBuildDefinition
+{
+    Target HelloWorld =&gt;
+        t =&gt; t
+            .DescribedAs(&quot;Prints a hello world message to the console&quot;)
+            .Executes(() =&gt; Logger.LogInformation(&quot;Hello, World!&quot;));
+}
+</code></pre>
+<p>Run it:</p>
+<pre><code class="lang-shell">dotnet run Atom.cs HelloWorld
+</code></pre>
+<p>The <code>#:package</code> directive pulls in <code>Invex.Atom.Build</code>, <code>[GenerateEntryPoint]</code> source-generates a <code>Main</code> method, and
+the <code>HelloWorld</code> target is discovered and executed. Interface-based builds are the recommended pattern because they
+compose naturally with module interfaces.</p>
+<h2 id="adding-parameters">Adding parameters</h2>
+<p>Parameters let you pass values into targets from the command line, configuration, or environment variables. Add a
+parameter to <code>IBuild</code> and require it on the target:</p>
+<pre><code class="lang-csharp">using Invex.Atom.Build.Definition;
+using Invex.Atom.Build.Hosting;
+using Invex.Atom.Build.Params;
+
+namespace Atom;
+
+[BuildDefinition]
+[GenerateEntryPoint]
+internal interface IBuild : IBuildDefinition
+{
+    [ParamDefinition(&quot;my-name&quot;, &quot;My name&quot;)]
+    string? MyName =&gt; GetParam(() =&gt; MyName);
+
+    Target HelloWorld =&gt;
+        t =&gt; t
+            .DescribedAs(&quot;Prints a hello world message to the console&quot;)
+            .RequiresParam(nameof(MyName))
+            .Executes(() =&gt; Logger.LogInformation(&quot;Hello, World! I am {MyName}.&quot;, MyName));
+}
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p><code>.RequiresParam(nameof(...))</code> ensures the parameter is provided before the target is executed.
+<code>.UsesParam(nameof(...))</code> uses the parameter if it is provided, but does not fail the build if it is not.</p>
+</div>
+<p>Run with a parameter:</p>
+<pre><code class="lang-shell">atom HelloWorld --my-name Frodo
+</code></pre>
+<pre><code class="lang-text">26-06-06 +10:00  Invex.Atom.Build.BuildExecutor:
+01:23:25.405 INF Executing build
+
+HelloWorld
+
+Prints a hello world message to the console
+
+26-06-06 +10:00  HelloWorld | Atom.Build:
+01:23:25.467 INF Hello, World! I am Frodo.
+
+
+Build Summary
+
+  HelloWorld │ Succeeded │ &lt;0.01s
+</code></pre>
+<p>Or run interactively, and Atom prompts for any required parameters that have not been provided:</p>
+<pre><code class="lang-shell">atom HelloWorld --interactive
+</code></pre>
+<p>Parameters can also be supplied via <code>appsettings.json</code>:</p>
+<pre><code class="lang-json">{
+  &quot;Params&quot;: {
+    &quot;my-name&quot;: &quot;Frodo&quot;
+  }
+}
+</code></pre>
+<h2 id="next-steps">Next steps</h2>
+<ul>
+<li><a href="../core-concepts/secrets.html">Secrets</a>: add a secret parameter that is masked in the output.</li>
+<li><a href="../core-concepts/targets.html">Targets</a>: add a second target that depends on <code>HelloWorld</code>.</li>
+<li><a href="base-vs-workflow-build.html">Base vs Workflow Build</a>: understand when you need workflow support.</li>
+<li><a href="../workflows/workflow-definitions.html">Workflow Definitions</a>: generate a GitHub Actions workflow for this build.</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Invex-Games/atom/blob/main/docs/getting-started/your-first-build.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Atom · MIT License · Invex Games
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
