@@ -23,6 +23,7 @@ using Invex.Atom.Build;
 using Invex.Atom.Build.BuildInfo;
 using Invex.Atom.Build.BuildOptions;
 using Invex.Atom.Build.Definition;
+using Invex.Atom.Build.FileSystem;
 using Invex.Atom.Build.Hosting;
 using Invex.Atom.Module.GitHubWorkflows.Helpers;
 using Invex.Atom.Module.GitHubWorkflows.Extensions;
@@ -59,13 +60,13 @@ internal interface IBuild : IWorkflowBuildDefinition, IGitHubWorkflows, IGitVers
         {
             Paths = ["src/AppA/"],
             DependsOn = ["Shared"],
-            GitVersionConfig = "src/AppA/GitVersion.yml",
+            GitVersionConfig = RootedFileSystem.AtomRootDirectory / "src/AppA/GitVersion.yml",
         },
         new("AppB")
         {
             Paths = ["src/AppB/"],
             DependsOn = ["Shared"],
-            GitVersionConfig = "src/AppB/GitVersion.yml",
+            GitVersionConfig = RootedFileSystem.AtomRootDirectory / "src/AppB/GitVersion.yml",
         },
     ];
 

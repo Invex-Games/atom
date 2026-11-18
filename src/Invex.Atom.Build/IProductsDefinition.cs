@@ -42,8 +42,18 @@ namespace Invex.Atom.Build;
 ///     IReadOnlyList&lt;Product&gt; IProductsDefinition.Products =>
 ///     [
 ///         new("Shared") { Paths = ["src/Shared/**"] },
-///         new("AppA") { Paths = ["src/AppA/**"], DependsOn = ["Shared"], GitVersionConfig = "src/AppA/GitVersion.yml" },
-///         new("AppB") { Paths = ["src/AppB/**"], DependsOn = ["Shared"], GitVersionConfig = "src/AppB/GitVersion.yml" },
+///         new("AppA")
+///         {
+///             Paths = ["src/AppA/**"],
+///             DependsOn = ["Shared"],
+///             GitVersionConfig = RootedFileSystem.AtomRootDirectory / "src/AppA/GitVersion.yml",
+///         },
+///         new("AppB")
+///         {
+///             Paths = ["src/AppB/**"],
+///             DependsOn = ["Shared"],
+///             GitVersionConfig = RootedFileSystem.AtomRootDirectory / "src/AppB/GitVersion.yml",
+///         },
 ///     ];
 /// }
 ///     </code>

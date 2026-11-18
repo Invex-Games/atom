@@ -10,11 +10,11 @@ internal static partial class ProductValidator
     /// </summary>
     /// <param name="definition">The build.</param>
     /// <param name="fileSystem">
-    ///     The file system, used to report paths that name an existing folder without a trailing <c>/</c>; or
-    ///     <see langword="null" /> to skip that check.
+    ///     The file system, used to report paths that name an existing folder without a trailing <c>/</c> and to
+    ///     check each <see cref="Product.GitVersionConfig" /> against the Atom root directory.
     /// </param>
     /// <returns>One message per problem; empty if the declarations are valid.</returns>
-    public static IReadOnlyList<string> GetErrors(IProductsDefinition definition, IRootedFileSystem? fileSystem = null)
+    public static IReadOnlyList<string> GetErrors(IProductsDefinition definition, IRootedFileSystem fileSystem)
     {
         var errors = new List<string>();
         var products = definition.Products;
@@ -38,10 +38,17 @@ internal static partial class ProductValidator
             errors.AddRange(GetFolderErrors(product.Paths, fileSystem)
                 .Select(x => $"Path '{x}' of product '{product.Name}' names a folder; add a trailing '/', such as '{x.Trim()}/', to include everything below it."));
 
-            if (product.GitVersionConfig is { } config &&
-                RootGitVersionConfigFileNames.Contains(NormalizeRelativePath(config), StringComparer.OrdinalIgnoreCase))
-                errors.Add(
-                    $"The GitVersion configuration of product '{product.Name}' is '{config.Trim()}', which GitVersion also reads for builds without a product. Give the product its own file, such as 'src/{product.Name}/GitVersion.yml'.");
+            if (product.GitVersionConfig is { } config)
+            {
+                var relativeConfig = AtomRootPath.GetRelativePathBelowRoot(fileSystem, config);
+
+                if (relativeConfig is null)
+                    errors.Add(
+                        $"The GitVersion configuration of product '{product.Name}' is '{config}', which is not below the Atom root directory '{fileSystem.AtomRootDirectory}'. Use a file below it, such as 'src/{product.Name}/GitVersion.yml'.");
+                else if (RootGitVersionConfigFileNames.Contains(relativeConfig, StringComparer.OrdinalIgnoreCase))
+                    errors.Add(
+                        $"The GitVersion configuration of product '{product.Name}' is '{relativeConfig}', which GitVersion also reads for builds without a product. Give the product its own file, such as 'src/{product.Name}/GitVersion.yml'.");
+            }
 
             errors.AddRange(product
                 .DependsOn
@@ -87,8 +94,12 @@ internal static partial class ProductValidator
         }
 
         errors.AddRange(products
-            .Where(x => !string.IsNullOrWhiteSpace(x.GitVersionConfig))
-            .GroupBy(x => NormalizeRelativePath(x.GitVersionConfig!), StringComparer.OrdinalIgnoreCase)
+            .Select(x => (Product: x,
+                Config: x.GitVersionConfig is { } config
+                    ? AtomRootPath.GetRelativePathBelowRoot(fileSystem, config)
+                    : null))
+            .Where(x => x.Config is not null)
+            .GroupBy(x => x.Config!, x => x.Product, StringComparer.OrdinalIgnoreCase)
             .Where(x => x.Count() > 1)
             .Select(x =>
                 $"Products {string.Join(", ", x.Select(p => $"'{p.Name}'"))} share the GitVersion configuration '{x.Key}'."));
@@ -110,9 +121,10 @@ internal static partial class ProductValidator
     }
 
     /// <summary>
-    ///     The GitVersion configuration file names that GitVersion finds by itself in the repository root.
+    ///     Gets the GitVersion configuration file names that GitVersion finds by itself in the repository root, in the
+    ///     order it looks for them.
     /// </summary>
-    private static readonly string[] RootGitVersionConfigFileNames =
+    public static IReadOnlyList<string> RootGitVersionConfigFileNames { get; } =
     [
         "GitVersion.yml", "GitVersion.yaml", ".GitVersion.yml", ".GitVersion.yaml",
     ];
@@ -127,51 +139,24 @@ internal static partial class ProductValidator
     /// <remarks>
     ///     A git submodule or a symbolic link is one entry to git, so its literal path is right and is not reported.
     /// </remarks>
-    private static IEnumerable<string> GetFolderErrors(IEnumerable<string> paths, IRootedFileSystem? fileSystem) =>
-        fileSystem is null
-            ? []
-            : paths.Where(path =>
-            {
-                if (string.IsNullOrWhiteSpace(path) ||
-                    ProductPathGlob.GetError(path) is not null ||
-                    !ProductPathGlob.IsLiteral(path))
-                    return false;
-
-                var directory = fileSystem.AtomRootDirectory / path.Trim();
-
-                if (!directory.DirectoryExists)
-                    return false;
-
-                var isSubmodule = (directory / ".git").PathExists;
-                var isLink = fileSystem.DirectoryInfo.New(directory).LinkTarget is not null;
-
-                return !isSubmodule && !isLink;
-            });
-
-    /// <summary>
-    ///     Normalises a relative path for comparison: trims it, uses <c>/</c> as the separator and resolves <c>.</c>
-    ///     and <c>..</c> segments.
-    /// </summary>
-    private static string NormalizeRelativePath(string path)
-    {
-        var segments = new List<string>();
-
-        foreach (var segment in path
-                     .Trim()
-                     .Replace('\\', '/')
-                     .Split('/', StringSplitOptions.RemoveEmptyEntries))
+    private static IEnumerable<string> GetFolderErrors(IEnumerable<string> paths, IRootedFileSystem fileSystem) =>
+        paths.Where(path =>
         {
-            if (segment is ".")
-                continue;
+            if (string.IsNullOrWhiteSpace(path) ||
+                ProductPathGlob.GetError(path) is not null ||
+                !ProductPathGlob.IsLiteral(path))
+                return false;
 
-            if (segment is ".." && segments.Count > 0 && segments[^1] is not "..")
-                segments.RemoveAt(segments.Count - 1);
-            else
-                segments.Add(segment);
-        }
+            var directory = fileSystem.AtomRootDirectory / path.Trim();
 
-        return string.Join('/', segments);
-    }
+            if (!directory.DirectoryExists)
+                return false;
+
+            var isSubmodule = (directory / ".git").PathExists;
+            var isLink = fileSystem.DirectoryInfo.New(directory).LinkTarget is not null;
+
+            return !isSubmodule && !isLink;
+        });
 
     /// <summary>
     ///     Matches a valid product name.

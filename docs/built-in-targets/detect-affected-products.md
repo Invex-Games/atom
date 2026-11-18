@@ -31,8 +31,9 @@ GITHUB_BASE_REF=main atom DetectAffectedProducts
 ```
 
 In a workflow, [`WorkflowPresets.ProductValidate`](../workflows/monorepos.md#the-workflow) runs it first and conditions
-each product job on its output with `Tex.ProductAffected("AppA")`. A job that uses the output must depend on
-`DetectAffectedProducts` directly.
+each product job on its output. In a workflow you build by hand, use `Tex.ProductAffected(this, "AppA")`, which fails if
+the build declares no product of that name, or `Tex.ProductAffected(product)` for a `Product` you already have. A job
+that uses the output must depend on `DetectAffectedProducts` directly.
 
 To read the base branch from another CI system, override `IProductsDefinition.AffectedProductsBaseRef`.
 

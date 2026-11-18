@@ -4,6 +4,7 @@ global using Invex.Atom.Build.Artifacts;
 global using Invex.Atom.Build.BuildInfo;
 global using Invex.Atom.Build.BuildOptions;
 global using Invex.Atom.Build.Definition;
+global using Invex.Atom.Build.FileSystem;
 global using Invex.Atom.Build.Hosting;
 global using Invex.Atom.Build.Params;
 global using Invex.Atom.Module.DevOpsWorkflows.Extensions;

@@ -27,25 +27,48 @@ public static class AtomTexExtensions
         /// <summary>
         ///     Checks whether <see cref="IProductsDefinition.DetectAffectedProducts" /> found a monorepo product affected.
         /// </summary>
-        /// <param name="productName">The product's name; it is compared by its lowercase identifier.</param>
+        /// <param name="product">The product, such as <c>GetProduct("AppA")</c>; it is compared by its <see cref="Product.Id" />.</param>
         /// <returns>
         ///     A condition such as <c>contains(needs.DetectAffectedProducts.outputs.affected-products, ',appa,')</c>.
         /// </returns>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="productName" /> is null, empty or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="product" /> is <see langword="null" />.</exception>
         /// <remarks>
         ///     Like <see cref="ParamOutput{T}" />, this does not add a dependency: the job that uses the condition must
         ///     depend directly on <c>DetectAffectedProducts</c>. On Azure DevOps, combine it with <c>Tex.Success()</c>,
         ///     because a custom condition replaces the default success check.
         /// </remarks>
-        public static BoolExpr ProductAffected(string productName)
+        public static BoolExpr ProductAffected(Product product)
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(productName);
+            ArgumentNullException.ThrowIfNull(product);
 
             return Tex
                 .JobOutput(nameof(IProductsDefinition.DetectAffectedProducts),
                     AffectedProductsArgName,
                     nameof(IProductsDefinition.DetectAffectedProducts))
-                .Contains($",{new Product(productName.Trim()).Id},");
+                .Contains($",{product.Id},");
+        }
+
+        /// <summary>
+        ///     Checks whether <see cref="IProductsDefinition.DetectAffectedProducts" /> found a monorepo product affected,
+        ///     looking the product up by name in a build's <see cref="IProductsDefinition.Products" />.
+        /// </summary>
+        /// <param name="build">The build that declares the product, such as <c>this</c>.</param>
+        /// <param name="productName">The product's name, matched ignoring case, such as <c>AppA</c>.</param>
+        /// <returns>
+        ///     A condition such as <c>contains(needs.DetectAffectedProducts.outputs.affected-products, ',appa,')</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="build" /> is <see langword="null" />.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="productName" /> is null, empty or whitespace.</exception>
+        /// <exception cref="InvalidOperationException">
+        ///     Thrown if <paramref name="build" /> declares no product named <paramref name="productName" />.
+        /// </exception>
+        /// <remarks>See <see cref="ProductAffected(Product)" />.</remarks>
+        public static BoolExpr ProductAffected(IProductsDefinition build, string productName)
+        {
+            ArgumentNullException.ThrowIfNull(build);
+            ArgumentException.ThrowIfNullOrWhiteSpace(productName);
+
+            return ProductAffected(build.GetProduct(productName.Trim()));
         }
     }
 
