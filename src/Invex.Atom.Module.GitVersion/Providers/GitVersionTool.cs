@@ -18,5 +18,10 @@ internal static class GitVersionTool
     /// <summary>
     ///     The exact version of <see cref="PackageId" /> that the providers install and run.
     /// </summary>
-    internal const string Version = "6.8.2";
+    internal const string Version = "7.0.0";
+
+    /// <summary>
+    ///     The arguments passed to <c>dotnet</c> to run GitVersion and write its variables to standard output as JSON.
+    /// </summary>
+    internal const string OutputJsonArguments = "gitversion --output json";
 }

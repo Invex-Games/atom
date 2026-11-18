@@ -54,7 +54,7 @@ internal sealed class GitVersionBuildIdProvider(
                 {
                     dotnetToolInstallHelper.InstallTool(GitVersionTool.PackageId, GitVersionTool.Version);
 
-                    var gitVersionResult = processRunner.Run(new("dotnet", "gitversion /output json")
+                    var gitVersionResult = processRunner.Run(new("dotnet", GitVersionTool.OutputJsonArguments)
                     {
                         InvocationLogLevel = LogLevel.Debug,
                     });

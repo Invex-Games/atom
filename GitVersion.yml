@@ -1,113 +1,124 @@
-﻿assembly-informational-format: '{Major}.{Minor}.{Patch}{PreReleaseTagWithDash}'
-assembly-file-versioning-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumber ?? 0}'
-mode: ContinuousDelivery
-tag-prefix: '[vV]?'
+﻿calculation:
+  mode: ContinuousDelivery
+  tag-prefix: '[vV]?'
 
-major-version-bump-message: '^(breaking|major)\(?[A-Za-z0-9\-]*\)?:'
-minor-version-bump-message: '^(feat|feature|minor)\(?[A-Za-z0-9\-]*\)?:'
-patch-version-bump-message: '^(fix|patch)\(?[A-Za-z0-9\-]*\)?:'
-no-bump-message: '^(semver-none|semver-skip)'
+  major-version-bump-message: '^(breaking|major)\(?[A-Za-z0-9\-]*\)?:'
+  minor-version-bump-message: '^(feat|feature|minor)\(?[A-Za-z0-9\-]*\)?:'
+  patch-version-bump-message: '^(fix|patch)\(?[A-Za-z0-9\-]*\)?:'
+  no-bump-message: '^(semver-none|semver-skip)'
 
-# Tagged releases get the highest band
-tag-pre-release-weight: 6000
+  branches:
 
-branches:
+    # Prevent default GitFlow configs from matching
+    feature:
+      regex: ^$
+    release:
+      regex: ^$
+    hotfix:
+      regex: ^$
+    support:
+      regex: ^$
 
-  # Prevent default GitFlow configs from matching
-  feature:
-    regex: ^$
-  release:
-    regex: ^$
-  hotfix:
-    regex: ^$
-  support:
-    regex: ^$
+    #####################################
+    #   RELEASE BRANCHES
+    #####################################
 
-  #####################################
-  #   RELEASE BRANCHES
-  #####################################
+    patch:
+      label: 'rc'
+      increment: Patch
+      prevent-increment:
+        of-merged-branch: true
+        when-current-commit-tagged: true
+      track-merge-target: false
+      track-merge-message: true
+      regex: ^patch[/-]
+      is-release-branch: true
+      is-main-branch: false
 
-  patch:
-    label: 'rc'
-    increment: Patch
-    prevent-increment:
-      of-merged-branch: true
-      when-current-commit-tagged: true
-    track-merge-target: false
-    track-merge-message: true
-    regex: ^patch[/-]
-    is-release-branch: true
-    is-main-branch: false
-    pre-release-weight: 5000     # 5,000–5,999
+    main:
+      label: 'rc'
+      increment: Minor
+      prevent-increment:
+        of-merged-branch: true
+      track-merge-target: false
+      track-merge-message: true
+      regex: ^master$|^main$
+      is-release-branch: false
+      is-main-branch: true
 
-  main:
-    label: 'rc'
-    increment: Minor
-    prevent-increment:
-      of-merged-branch: true
-    track-merge-target: false
-    track-merge-message: true
-    regex: ^master$|^main$
-    is-release-branch: false
-    is-main-branch: true
-    pre-release-weight: 4000     # 4,000–4,999
+    #####################################
+    #   MAINLINE BRANCHES
+    #####################################
 
-  #####################################
-  #   MAINLINE BRANCHES
-  #####################################
+    develop:
+      label: 'preview'
+      increment: Minor
+      prevent-increment:
+        when-current-commit-tagged: false
+      track-merge-target: true
+      track-merge-message: true
+      regex: ^dev(elop)?(ment)?$
+      is-release-branch: false
+      is-main-branch: false
 
-  develop:
-    label: 'preview'
-    increment: Minor
-    prevent-increment:
-      when-current-commit-tagged: false
-    track-merge-target: true
-    track-merge-message: true
-    regex: ^dev(elop)?(ment)?$
-    is-release-branch: false
-    is-main-branch: false
-    pre-release-weight: 3000     # 3,000–3,999
+    #####################################
+    #   FEATURE BRANCHES
+    #####################################
 
-  #####################################
-  #   FEATURE BRANCHES
-  #####################################
+    beta-minor:
+      label: beta.{BranchType}-{BranchName}
+      increment: Minor
+      prevent-increment:
+        when-current-commit-tagged: false
+      track-merge-target: true
+      track-merge-message: true
+      regex: ^(?<BranchType>chore|feat|feature|features|fix|improvement|refactor)[/-](?<BranchName>.+)
+      is-release-branch: false
+      is-main-branch: false
 
-  beta-minor:
-    label: beta.{BranchType}-{BranchName}
-    increment: Minor
-    prevent-increment:
-      when-current-commit-tagged: false
-    track-merge-target: true
-    track-merge-message: true
-    regex: ^(?<BranchType>chore|feat|feature|features|fix|improvement|refactor)[/-](?<BranchName>.+)
-    is-release-branch: false
-    is-main-branch: false
-    pre-release-weight: 2000     # 2,000–2,999
+    #####################################
+    #   OTHER
+    #####################################
 
-  #####################################
-  #   OTHER
-  #####################################
+    alpha:
+      label: alpha.{BranchName}
+      increment: None
+      prevent-increment:
+        when-current-commit-tagged: false
+      track-merge-target: true
+      track-merge-message: true
+      regex: (?<BranchName>.+)
+      is-release-branch: false
+      is-main-branch: false
 
-  alpha:
-    label: alpha.{BranchName}
-    increment: None
-    prevent-increment:
-      when-current-commit-tagged: false
-    track-merge-target: true
-    track-merge-message: true
-    regex: (?<BranchName>.+)
-    is-release-branch: false
-    is-main-branch: false
-    pre-release-weight: 1000     # 1,000–1,999
+    pull-request:
+      label: 'pr'
+      increment: Inherit
+      prevent-increment:
+        of-merged-branch: true
+        when-current-commit-tagged: false
+      track-merge-message: true
+      regex: ^(pull|pull\-requests|pr)[/-]
+      is-release-branch: false
+      is-main-branch: false
 
-  pull-request:
-    label: 'pr'
-    increment: Inherit
-    prevent-increment:
-      of-merged-branch: true
-      when-current-commit-tagged: false
-    track-merge-message: true
-    regex: ^(pull|pull\-requests|pr)[/-]
-    is-release-branch: false
-    is-main-branch: false
-    pre-release-weight: 0        #   0–999
+output:
+  assembly-informational-format: '{Major}.{Minor}.{Patch}{PreReleaseLabelWithDash}'
+  assembly-file-versioning-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumber ?? 0}'
+
+  # Tagged releases get the highest band
+  tag-pre-release-weight: 6000
+
+  branches:
+    patch:
+      pre-release-weight: 5000     # 5,000–5,999
+    main:
+      pre-release-weight: 4000     # 4,000–4,999
+    develop:
+      pre-release-weight: 3000     # 3,000–3,999
+    beta-minor:
+      pre-release-weight: 2000     # 2,000–2,999
+    alpha:
+      pre-release-weight: 1000     # 1,000–1,999
+    pull-request:
+      pre-release-weight: 0        #   0–999
