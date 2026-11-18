@@ -47,12 +47,19 @@ from GitVersion output.
 
 ## Prerequisites
 
-The providers install and run a pinned version of the `GitVersion.Tool` global .NET tool (currently `6.8.2`), so the
+The providers install and run a pinned version of the `GitVersion.Tool` global .NET tool (currently `7.0.0`), so the
 build doesn't break when a new GitVersion major version changes its command-line arguments or output. If a different
 version is installed globally, it is replaced with the pinned version the first time GitVersion is needed.
 
 Configure it via `GitVersion.yml` in your repository root, using the configuration format of the pinned GitVersion
 version.
+
+> [!IMPORTANT]
+> GitVersion 7 nests settings under `calculation:` and `output:` and rejects the flat GitVersion 6 layout. It also
+> renames the pre-release variables: `PreReleaseTag` is now `PreReleaseLabel`, and the old `PreReleaseLabel` is now
+> `PreReleaseLabelName`. Migrate a GitVersion 6 configuration with `dotnet gitversion config migrate --in-place`, then
+> update any format strings that still use the old names, such as `{PreReleaseTagWithDash}` (now
+> `{PreReleaseLabelWithDash}`). The migration drops comments from the file.
 
 ## See also
 

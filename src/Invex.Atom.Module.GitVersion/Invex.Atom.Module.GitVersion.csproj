@@ -30,6 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Invex.Atom.Module.GitVersion.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Invex.Atom.Module.GitVersion.props" Pack="true" PackagePath="buildTransitive/" />
   </ItemGroup>
 
