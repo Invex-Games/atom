@@ -6,7 +6,7 @@
 /// <remarks>
 ///     This provider executes the GitVersion tool to extract major, minor, patch, and pre-release
 ///     tag information, which is then used to construct a semantic version.
-///     It requires the GitVersion.Tool to be installed.
+///     It installs the pinned <see cref="GitVersionTool.Version" /> of GitVersion.Tool when needed.
 /// </remarks>
 [PublicAPI]
 internal sealed class GitVersionBuildVersionProvider(
@@ -50,7 +50,7 @@ internal sealed class GitVersionBuildVersionProvider(
 
                 if (jsonOutput is null)
                 {
-                    dotnetToolInstallHelper.InstallTool("GitVersion.Tool");
+                    dotnetToolInstallHelper.InstallTool(GitVersionTool.PackageId, GitVersionTool.Version);
 
                     var gitVersionResult = processRunner.Run(new("dotnet", "gitversion /output json")
                     {

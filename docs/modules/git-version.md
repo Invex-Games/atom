@@ -47,13 +47,12 @@ from GitVersion output.
 
 ## Prerequisites
 
-GitVersion must be available as a .NET tool. Install it globally or as a local tool:
+The providers install and run a pinned version of the `GitVersion.Tool` global .NET tool (currently `6.8.2`), so the
+build doesn't break when a new GitVersion major version changes its command-line arguments or output. If a different
+version is installed globally, it is replaced with the pinned version the first time GitVersion is needed.
 
-```shell
-dotnet tool install --global GitVersion.Tool
-```
-
-Configure it via `GitVersion.yml` in your repository root.
+Configure it via `GitVersion.yml` in your repository root, using the configuration format of the pinned GitVersion
+version.
 
 ## See also
 

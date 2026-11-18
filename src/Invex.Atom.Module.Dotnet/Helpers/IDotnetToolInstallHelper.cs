@@ -16,7 +16,7 @@ public interface IDotnetToolInstallHelper : IBuildAccessor
     /// <param name="toolName">The name of the tool to install (e.g., "dotnet-format").</param>
     /// <param name="version">
     ///     Optional. The specific version of the tool to install. If not specified, the latest stable
-    ///     version is used.
+    ///     version is used. When specified, a newer installed version is downgraded to it.
     /// </param>
     /// <param name="global">
     ///     If <c>true</c>, the tool is installed globally. If <c>false</c>, it's installed locally to the
@@ -74,8 +74,10 @@ public interface IDotnetToolInstallHelper : IBuildAccessor
             }
         }
 
+        // An explicitly requested version must win over a newer installed one, which 'dotnet tool update'
+        // otherwise refuses to downgrade.
         var versionFlag = version != null
-            ? $"--version {version}"
+            ? $"--version {version} --allow-downgrade"
             : string.Empty;
 
         ProcessRunner.Run(new("dotnet", $"tool update {toolName} {versionFlag} {globalFlag}")
@@ -90,7 +92,7 @@ public interface IDotnetToolInstallHelper : IBuildAccessor
     /// <param name="toolName">The name of the tool to install (e.g., "dotnet-format").</param>
     /// <param name="version">
     ///     Optional. The specific version of the tool to install. If not specified, the latest stable
-    ///     version is used.
+    ///     version is used. When specified, a newer installed version is downgraded to it.
     /// </param>
     /// <param name="global">
     ///     If <c>true</c>, the tool is installed globally. If <c>false</c>, it's installed locally to the
@@ -157,8 +159,10 @@ public interface IDotnetToolInstallHelper : IBuildAccessor
             }
         }
 
+        // An explicitly requested version must win over a newer installed one, which 'dotnet tool update'
+        // otherwise refuses to downgrade.
         var versionFlag = version != null
-            ? $"--version {version}"
+            ? $"--version {version} --allow-downgrade"
             : string.Empty;
 
         await ProcessRunner.RunAsync(new("dotnet", $"tool update {toolName} {versionFlag} {globalFlag}")

@@ -5,7 +5,8 @@
 /// </summary>
 /// <remarks>
 ///     This provider executes the GitVersion tool to extract the full semantic version,
-///     which is then used as the build ID. It requires the GitVersion.Tool to be installed.
+///     which is then used as the build ID. It installs the pinned <see cref="GitVersionTool.Version" /> of GitVersion.Tool
+///     when needed.
 /// </remarks>
 internal sealed class GitVersionBuildIdProvider(
     IDotnetToolInstallHelper dotnetToolInstallHelper,
@@ -51,7 +52,7 @@ internal sealed class GitVersionBuildIdProvider(
 
                 if (jsonOutput is null)
                 {
-                    dotnetToolInstallHelper.InstallTool("GitVersion.Tool");
+                    dotnetToolInstallHelper.InstallTool(GitVersionTool.PackageId, GitVersionTool.Version);
 
                     var gitVersionResult = processRunner.Run(new("dotnet", "gitversion /output json")
                     {
