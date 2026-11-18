@@ -20,7 +20,8 @@ internal sealed class GitVersionBuildVersionProvider(
     private readonly Lock _lock = new();
 
     /// <summary>
-    ///     Gets the semantic version of the build, derived from GitVersion's output.
+    ///     Gets the semantic version of the build, derived from GitVersion's <c>Major</c>, <c>Minor</c>, <c>Patch</c>
+    ///     and <c>PreReleaseLabel</c> output variables.
     /// </summary>
     /// <exception cref="InvalidOperationException">
     ///     Thrown if the version information cannot be determined from GitVersion's output.
@@ -52,7 +53,7 @@ internal sealed class GitVersionBuildVersionProvider(
                 {
                     dotnetToolInstallHelper.InstallTool(GitVersionTool.PackageId, GitVersionTool.Version);
 
-                    var gitVersionResult = processRunner.Run(new("dotnet", "gitversion /output json")
+                    var gitVersionResult = processRunner.Run(new("dotnet", GitVersionTool.OutputJsonArguments)
                     {
                         InvocationLogLevel = LogLevel.Debug,
                     });
@@ -78,13 +79,13 @@ internal sealed class GitVersionBuildVersionProvider(
                     .GetProperty("Patch")
                     .GetUInt32();
 
-                var preReleaseTagProp = jsonOutput
+                var preReleaseLabelProp = jsonOutput
                     .Value
-                    .GetProperty("PreReleaseTag")
+                    .GetProperty("PreReleaseLabel")
                     .GetString()!;
 
-                return field = preReleaseTagProp is { Length: > 0 }
-                    ? SemVer.Parse($"{majorProp}.{minorProp}.{patchProp}-{preReleaseTagProp}")
+                return field = preReleaseLabelProp is { Length: > 0 }
+                    ? SemVer.Parse($"{majorProp}.{minorProp}.{patchProp}-{preReleaseLabelProp}")
                     : SemVer.Parse($"{majorProp}.{minorProp}.{patchProp}");
             }
         }
