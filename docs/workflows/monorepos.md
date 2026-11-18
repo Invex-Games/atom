@@ -40,13 +40,13 @@ internal interface IBuild : IWorkflowBuildDefinition, IGitHubWorkflows, IGitVers
         {
             Paths = ["src/AppA/"],
             DependsOn = ["Shared"],
-            GitVersionConfig = "src/AppA/GitVersion.yml",
+            GitVersionConfig = RootedFileSystem.AtomRootDirectory / "src/AppA/GitVersion.yml",
         },
         new("AppB")
         {
             Paths = ["src/AppB/"],
             DependsOn = ["Shared"],
-            GitVersionConfig = "src/AppB/GitVersion.yml",
+            GitVersionConfig = RootedFileSystem.AtomRootDirectory / "src/AppB/GitVersion.yml",
         },
     ];
 }
@@ -60,8 +60,8 @@ A <xref:Invex.Atom.Build.BuildInfo.Product> has:
 | `Id`               | The lowercase name, such as `appa`, used in the affected-products list and the default tag prefix.                 |
 | `Paths`            | The product's own paths, as globs relative to the Atom root (normally the repository root).                        |
 | `DependsOn`        | Products whose changes also affect this one, followed transitively.                                                |
-| `Directory`        | Optional. The product's folder, whose `Directory.Build.props` the default version provider reads first.          |
-| `GitVersionConfig` | The product's GitVersion configuration, which `atom gen` generates (see [below](#per-product-versions)). Needed for every product built with GitVersion. |
+| `Directory`        | Optional. The product's folder, a `RootedPath` such as `RootedFileSystem.AtomRootDirectory / "src/AppA"`, whose `Directory.Build.props` the default version provider reads first. |
+| `GitVersionConfig` | The product's GitVersion configuration file, a `RootedPath` below the Atom root, which `atom gen` generates (see [below](#per-product-versions)). Needed for every product built with GitVersion. |
 | `TagPrefix`        | The release tag prefix, `<id>/v` by default (for example `appa/v`).                                                |
 
 **Paths** use a small glob dialect that GitHub, Azure DevOps, git and GitVersion all understand: `**` as a whole path
@@ -70,6 +70,27 @@ below that folder, so `src/AppA/` is the same as `src/AppA/**`. A path with no w
 file, such as `global.json`. Use `/` as the separator, with no leading `/` or `./` and no `.` or `..` segments.
 Matching is case-sensitive, except in GitVersion's `ignore.paths`, which ignores case from GitVersion 6.8, so avoid
 paths that differ only in case.
+
+**`Directory` and `GitVersionConfig`** are locations on disk, not globs, so they are `RootedPath` values built from the
+Atom root directory. Declare the products in a property getter, as above, because the file system is not available in
+an initializer. An interface build uses `RootedFileSystem.AtomRootDirectory`; a build class uses its generated
+`FileSystem` property:
+
+```csharp
+[BuildDefinition]
+internal partial class Build : BuildDefinition, IProductsDefinition
+{
+    IReadOnlyList<Product> IProductsDefinition.Products =>
+    [
+        new("AppA")
+        {
+            Paths = ["src/AppA/"],
+            Directory = FileSystem.AtomRootDirectory / "src/AppA",
+            GitVersionConfig = FileSystem.AtomRootDirectory / "src/AppA/GitVersion.yml",
+        },
+    ];
+}
+```
 
 The platforms disagree on the rest of glob syntax, so it is rejected: `?` and `+` (GitHub treats them as quantifiers of
 the preceding character, so `src/C++/` would not match), `[...]`, `{...}` and a leading `!`. They also disagree on a
@@ -88,7 +109,7 @@ IReadOnlyList<string> IProductsDefinition.GlobalPaths => [.. IProductsDefinition
 [`ValidateBuild`](../built-in-targets/validate-build.md) checks the declarations: names, empty or unsupported paths,
 folders without a trailing `/`, unknown or cyclic dependencies, tag prefixes that equal or start another product's
 (compared ignoring case), GitVersion configurations shared by two products, and a product GitVersion configuration that
-is the root `GitVersion.yml`.
+is not below the Atom root directory or is the root `GitVersion.yml`.
 
 ### The current product
 
@@ -103,7 +124,8 @@ When a product is selected:
 
 - `BuildName` defaults to the product's name.
 - The GitVersion module uses the product's `GitVersionConfig` (unless `--gitversion-config` is given).
-- Without GitVersion, the default version provider reads `<Directory>/Directory.Build.props` before the root one.
+- Without GitVersion, the default version provider reads the `Directory.Build.props` in the product's `Directory` before
+  the root one.
 - `ReleaseTagFor`, `TryParseReleaseTag` and `ReleaseTagGlob` use the product's tag prefix, and `GetReleaseTagCommit()`
   finds the commit for the product's tag (see [Release tags](#release-tags)).
 
@@ -193,8 +215,8 @@ argument or a `with` expression. Add options with `WithOptions(...)`, not `with 
 options removes the wiring checks below. It:
 
 - runs `DetectAffectedProducts` first;
-- gives each product target the condition `Tex.Success() && Tex.ProductAffected("AppA")` and the `product` parameter,
-  so the job builds with the product's name, version and GitVersion configuration;
+- gives each product target the condition `Tex.Success() && Tex.ProductAffected(product)` for its product, and the
+  `product` parameter, so the job builds with the product's name, version and GitVersion configuration;
 - makes the gate run only if a product job failed or the run was cancelled
   (`BuildOptions.Target.RunIfAnyDependencyFailed`);
 - makes `atom gen` fail if a product target does not depend directly on `DetectAffectedProducts`, a product target or
@@ -396,13 +418,32 @@ with its first parent, did not (the branch's changes cancelled out, or the merge
 GitVersion counts the branch's commits, which are not on the first-parent line, so they still count after the tag.
 Squash merges avoid this.
 
-`GetReleaseTagCommit()` runs `git log -1 --first-parent --format=%H -- <pathspecs>` with the product's paths (with its
-dependencies' and the global paths) as `:(glob)` pathspecs, or returns `HEAD` when no product is selected.
+`GetReleaseTagCommit()` runs `git log -1 --first-parent --format=%H -- <paths>` with the current product's paths (with
+its dependencies' and the global paths), matched as globs, or returns `HEAD` when no product is selected.
 `--first-parent` compares each commit with its first parent only, as `ignore.paths` does, so in a repository that
-merges with merge commits it finds the merge commit rather than the merged commit behind it. `GetReleaseTagCommit(paths)`
-takes the paths explicitly. Both need the full history: in a shallow clone the oldest fetched commit appears to touch
-every file, so they fail instead of returning a wrong commit. Atom's generated checkout steps fetch the full history by
-default.
+merges with merge commits it finds the merge commit rather than the merged commit behind it. Two overloads take the
+paths from elsewhere:
+
+- `GetReleaseTagCommit(product)` uses another product's paths, the same way, so a build can find the commit for a
+  product other than the one selected with `--product`, for example to list every product's next release commit:
+
+  ```csharp
+  foreach (var product in Products.Where(x => x.GitVersionConfig is not null))
+  {
+      var commit = await GetReleaseTagCommit(product, cancellationToken);
+      Logger.LogInformation("{Product}: tag {Commit} as {Prefix}<version>", product.Name, commit, product.TagPrefix);
+  }
+  ```
+
+  It only picks the commit. `BuildVersion` is still the selected product's version, so get the other product's version
+  from a run with `--product` set to it before formatting its tag.
+
+- `GetReleaseTagCommit(paths)` takes files and folders below the Atom root as `RootedPath` values, such as
+  `[RootedFileSystem.AtomRootDirectory / "docs"]`. They are matched literally (a folder includes everything below it),
+  not as globs, and a path outside the Atom root is rejected.
+
+All of them need the full history: in a shallow clone the oldest fetched commit appears to touch every file, so they
+fail instead of returning a wrong commit. Atom's generated checkout steps fetch the full history by default.
 
 ## Gotchas
 
@@ -451,7 +492,7 @@ default.
 ## Migration for an existing repo
 
 1. **Baseline tags.** For each product, create a tag `appa/v<current version>` on the latest commit that touched the
-   product's paths (`GetReleaseTagCommit()` with `--product AppA`, or
+   product's paths (`GetReleaseTagCommit()` with `--product AppA`, `GetReleaseTagCommit(GetProduct("AppA"))`, or
    `git log -1 --first-parent --format=%H -- ':(glob)<path>' ...` with the product's, its dependencies' and the global
    paths). Existing
    `v*` tags no longer match the product's tag prefix, so without a baseline the product's version starts again.
