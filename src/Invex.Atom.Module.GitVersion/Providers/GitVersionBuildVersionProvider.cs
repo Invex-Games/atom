@@ -36,17 +36,11 @@ internal sealed class GitVersionBuildVersionProvider(
             if (field is not null)
                 return field;
 
-            var currentGitHash = processRunner
-                .Run(new("git", "rev-parse HEAD")
-                {
-                    InvocationLogLevel = LogLevel.Debug,
-                })
-                .Output
-                .Trim();
+            var cacheKey = GitVersionCacheKey.Compute(processRunner, fileSystem);
 
             lock (_lock)
             {
-                var jsonOutput = GitVersionCache.TryRead(fileSystem, currentGitHash, logger);
+                var jsonOutput = GitVersionCache.TryRead(fileSystem, cacheKey, logger);
 
                 if (jsonOutput is null)
                 {
@@ -60,7 +54,7 @@ internal sealed class GitVersionBuildVersionProvider(
                     jsonOutput = JsonSerializer.Deserialize(gitVersionResult.Output,
                         JsonElementContext.Default.JsonElement);
 
-                    GitVersionCache.Write(fileSystem, currentGitHash, jsonOutput.Value);
+                    GitVersionCache.Write(fileSystem, cacheKey, jsonOutput.Value);
                 }
 
                 var majorProp = jsonOutput
