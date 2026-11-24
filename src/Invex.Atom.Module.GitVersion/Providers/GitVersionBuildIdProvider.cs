@@ -42,9 +42,13 @@ internal sealed class GitVersionBuildIdProvider(
 
             lock (_lock)
             {
-                var jsonOutput = GitVersionCache.TryRead(fileSystem, cacheKey, logger);
+                JsonElement jsonOutput;
 
-                if (jsonOutput is null)
+                if (GitVersionCache.TryRead(fileSystem, cacheKey, logger) is { } cachedOutput)
+                {
+                    jsonOutput = cachedOutput;
+                }
+                else
                 {
                     dotnetToolInstallHelper.InstallTool(GitVersionTool.PackageId, GitVersionTool.Version);
 
@@ -56,11 +60,10 @@ internal sealed class GitVersionBuildIdProvider(
                     jsonOutput = JsonSerializer.Deserialize(gitVersionResult.Output,
                         JsonElementContext.Default.JsonElement);
 
-                    GitVersionCache.Write(fileSystem, cacheKey, jsonOutput.Value);
+                    GitVersionCache.Write(fileSystem, cacheKey, jsonOutput);
                 }
 
                 var buildId = jsonOutput
-                    .Value
                     .GetProperty("FullSemVer")
                     .GetString();
 

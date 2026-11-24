@@ -6,7 +6,8 @@ namespace Invex.Atom.Module.GitVersion.Providers;
 /// <remarks>
 ///     GitVersion's output depends on more than the current commit, so the key combines every input that can change
 ///     the result without moving <c>HEAD</c>: the commit hash, the checked-out branch name (renaming or switching
-///     branches changes the pre-release label), the tags pointing at <c>HEAD</c>, the contents of the repository's
+///     branches changes the pre-release label), every tag in the repository and the object it refers to (GitVersion uses
+///     tags on ancestor commits as version sources), the contents of the repository's
 ///     GitVersion configuration file, the pinned <see cref="GitVersionTool.Version" />, and the CI environment
 ///     variables GitVersion reads the branch from. The combined value is hashed so it always fits on a single line.
 /// </remarks>
@@ -35,7 +36,10 @@ internal static class GitVersionCacheKey
         // Prints 'HEAD' when detached, which is still a stable part of the key.
         var branch = RunGit(processRunner, "rev-parse --abbrev-ref HEAD");
 
-        var tags = RunGit(processRunner, "tag --points-at HEAD")
+        // GitVersion also takes version sources from tags on ancestor commits, so every tag and the object it refers to
+        // is part of the key: adding, moving or deleting any tag invalidates the cache. Prints nothing when there are
+        // no tags.
+        var tags = RunGit(processRunner, "for-each-ref refs/tags --format=%(refname)=%(objectname)")
             .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Order(StringComparer.Ordinal);
 

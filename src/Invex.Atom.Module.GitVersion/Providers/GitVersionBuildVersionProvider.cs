@@ -40,9 +40,13 @@ internal sealed class GitVersionBuildVersionProvider(
 
             lock (_lock)
             {
-                var jsonOutput = GitVersionCache.TryRead(fileSystem, cacheKey, logger);
+                JsonElement jsonOutput;
 
-                if (jsonOutput is null)
+                if (GitVersionCache.TryRead(fileSystem, cacheKey, logger) is { } cachedOutput)
+                {
+                    jsonOutput = cachedOutput;
+                }
+                else
                 {
                     dotnetToolInstallHelper.InstallTool(GitVersionTool.PackageId, GitVersionTool.Version);
 
@@ -54,26 +58,22 @@ internal sealed class GitVersionBuildVersionProvider(
                     jsonOutput = JsonSerializer.Deserialize(gitVersionResult.Output,
                         JsonElementContext.Default.JsonElement);
 
-                    GitVersionCache.Write(fileSystem, cacheKey, jsonOutput.Value);
+                    GitVersionCache.Write(fileSystem, cacheKey, jsonOutput);
                 }
 
                 var majorProp = jsonOutput
-                    .Value
                     .GetProperty("Major")
                     .GetUInt32();
 
                 var minorProp = jsonOutput
-                    .Value
                     .GetProperty("Minor")
                     .GetUInt32();
 
                 var patchProp = jsonOutput
-                    .Value
                     .GetProperty("Patch")
                     .GetUInt32();
 
                 var preReleaseTagProp = jsonOutput
-                    .Value
                     .GetProperty("PreReleaseTag")
                     .GetString()!;
 
