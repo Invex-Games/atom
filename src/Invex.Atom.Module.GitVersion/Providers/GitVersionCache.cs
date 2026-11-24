@@ -1,12 +1,12 @@
 namespace Invex.Atom.Module.GitVersion.Providers;
 
 /// <summary>
-///     Reads and writes a single-file cache of GitVersion output, keyed by the current Git commit hash.
+///     Reads and writes a single-file cache of GitVersion output, keyed by <see cref="GitVersionCacheKey" />.
 /// </summary>
 /// <remarks>
 ///     The cache is a single file in the build project's <c>obj</c> directory (so it is git-ignored and removed
-///     by <c>dotnet clean</c>). The first line stores the Git hash the output was generated for, and the
-///     remainder stores the raw GitVersion JSON. When the current hash no longer matches, the cache is ignored
+///     by <c>dotnet clean</c>). The first line stores the key of the inputs the output was generated for, and the
+///     remainder stores the raw GitVersion JSON. When the current key no longer matches, the cache is ignored
 ///     and overwritten - just like the tool's restore/build caches, which each track a single hash file rather
 ///     than one file per key.
 /// </remarks>
@@ -15,10 +15,10 @@ internal static class GitVersionCache
     private const string CacheFileName = ".gitversioncache";
 
     /// <summary>
-    ///     Returns the cached GitVersion output if it was generated for <paramref name="gitHash" />; otherwise
+    ///     Returns the cached GitVersion output if it was generated for <paramref name="key" />; otherwise
     ///     <c>null</c>.
     /// </summary>
-    internal static JsonElement? TryRead(IRootedFileSystem fileSystem, string gitHash, ILogger logger)
+    internal static JsonElement? TryRead(IRootedFileSystem fileSystem, string key, ILogger logger)
     {
         var cacheFile = GetCacheFile(fileSystem);
 
@@ -33,11 +33,11 @@ internal static class GitVersionCache
             if (newlineIndex < 0)
                 return null;
 
-            var cachedHash = content[..newlineIndex]
+            var cachedKey = content[..newlineIndex]
                 .Trim();
 
-            // The cached output belongs to a different commit - treat it as a miss.
-            if (!string.Equals(cachedHash, gitHash, StringComparison.OrdinalIgnoreCase))
+            // The cached output was generated from different inputs (commit, branch, tags, config) - treat it as a miss.
+            if (!string.Equals(cachedKey, key, StringComparison.OrdinalIgnoreCase))
                 return null;
 
             return JsonSerializer.Deserialize(content[(newlineIndex + 1)..], JsonElementContext.Default.JsonElement);
@@ -60,12 +60,12 @@ internal static class GitVersionCache
     }
 
     /// <summary>
-    ///     Persists the GitVersion output for <paramref name="gitHash" />, overwriting any previous entry.
+    ///     Persists the GitVersion output for <paramref name="key" />, overwriting any previous entry.
     /// </summary>
-    internal static void Write(IRootedFileSystem fileSystem, string gitHash, JsonElement output)
+    internal static void Write(IRootedFileSystem fileSystem, string key, JsonElement output)
     {
         fileSystem.Directory.CreateDirectory(ResolveObjDirectory(fileSystem));
-        fileSystem.File.WriteAllText(GetCacheFile(fileSystem), $"{gitHash}\n{output.GetRawText()}");
+        fileSystem.File.WriteAllText(GetCacheFile(fileSystem), $"{key}\n{output.GetRawText()}");
     }
 
     private static RootedPath GetCacheFile(IRootedFileSystem fileSystem) =>
