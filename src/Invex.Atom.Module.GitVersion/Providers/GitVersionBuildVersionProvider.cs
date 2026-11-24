@@ -36,19 +36,17 @@ internal sealed class GitVersionBuildVersionProvider(
             if (field is not null)
                 return field;
 
-            var currentGitHash = processRunner
-                .Run(new("git", "rev-parse HEAD")
-                {
-                    InvocationLogLevel = LogLevel.Debug,
-                })
-                .Output
-                .Trim();
+            var cacheKey = GitVersionCacheKey.Compute(processRunner, fileSystem);
 
             lock (_lock)
             {
-                var jsonOutput = GitVersionCache.TryRead(fileSystem, currentGitHash, logger);
+                JsonElement jsonOutput;
 
-                if (jsonOutput is null)
+                if (GitVersionCache.TryRead(fileSystem, cacheKey, logger) is { } cachedOutput)
+                {
+                    jsonOutput = cachedOutput;
+                }
+                else
                 {
                     dotnetToolInstallHelper.InstallTool(GitVersionTool.PackageId, GitVersionTool.Version);
 
@@ -60,26 +58,22 @@ internal sealed class GitVersionBuildVersionProvider(
                     jsonOutput = JsonSerializer.Deserialize(gitVersionResult.Output,
                         JsonElementContext.Default.JsonElement);
 
-                    GitVersionCache.Write(fileSystem, currentGitHash, jsonOutput.Value);
+                    GitVersionCache.Write(fileSystem, cacheKey, jsonOutput);
                 }
 
                 var majorProp = jsonOutput
-                    .Value
                     .GetProperty("Major")
                     .GetUInt32();
 
                 var minorProp = jsonOutput
-                    .Value
                     .GetProperty("Minor")
                     .GetUInt32();
 
                 var patchProp = jsonOutput
-                    .Value
                     .GetProperty("Patch")
                     .GetUInt32();
 
                 var preReleaseTagProp = jsonOutput
-                    .Value
                     .GetProperty("PreReleaseTag")
                     .GetString()!;
 
